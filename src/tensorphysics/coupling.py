@@ -48,7 +48,7 @@ class CouplingManager:
     """
 
     def __init__(self, fields: FieldStore | None = None) -> None:
-        self.fields = fields or FieldStore()
+        self.fields = fields if fields is not None else FieldStore()
         self._registrations: list[_Registration] = []
         self._sequence = 0
 
@@ -72,6 +72,10 @@ class CouplingManager:
 
     def execute(self, phase: CouplingPhase, context: CouplingContext, *,
                 solver_name: str | None = None) -> None:
+        if not isinstance(phase, CouplingPhase):
+            raise TypeError("phase must be a CouplingPhase")
+        if not isinstance(context, CouplingContext):
+            raise TypeError("context must be a CouplingContext")
         if phase is CouplingPhase.AFTER_SOLVER and not solver_name:
             raise ValueError("solver_name is required when executing AFTER_SOLVER")
         selected = [
@@ -81,4 +85,10 @@ class CouplingManager:
             )
         ]
         for item in sorted(selected, key=lambda entry: (entry.priority, entry.sequence)):
-            item.callback(context)
+            try:
+                item.callback(context)
+            except Exception as exc:
+                owner = f" for solver {solver_name!r}" if solver_name else ""
+                raise CouplingError(
+                    f"{phase.value} callback{owner} failed: {exc}"
+                ) from exc
