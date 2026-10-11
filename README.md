@@ -2,27 +2,32 @@
 
 TensorPhysics is the shared multiphysics simulation framework for the Tensor scientific-computing ecosystem.
 
-Its purpose is to coordinate specialized solvers such as TensorLBM, TensorFEM, and TensorDEM without replacing or duplicating their numerical kernels.
+Its purpose is to coordinate specialized solvers such as TensorLBM, TensorFEM, TensorDEM, and TensorFVM without replacing or duplicating their numerical kernels.
 
-## Project status
+## Current implementation
 
-The repository is at the initial architecture stage. The first milestone establishes project boundaries, the solver protocol, simulation lifecycle, configuration, diagnostics, checkpoint contracts, and verification strategy. Features will be implemented incrementally with executable tests and benchmark cases.
+The main branch now contains:
+- A deterministic solver lifecycle scheduler with explicit physical-completion and step-limit states.
+- Backend-neutral field descriptors and an in-memory field store with producer ownership, shape checks, timestamps, and freshness limits.
+- A versioned JSON checkpoint envelope with atomic local-file writes and schema/clock validation.
+- Structured diagnostics, a minimal runnable example, unit tests, and a Python 3.10–3.12 GitHub Actions test matrix.
+
+Checkpoint files persist orchestration metadata and JSON-compatible solver snapshots. They do not yet provide full restart/resume: each specialist solver still needs a defined restore API and compatibility checks. The field store does not perform unit conversion, interpolation, or physically conservative mesh/particle mapping.
 
 ## Design principles
 
-- **Solver independence:** TensorLBM, TensorFEM, and TensorDEM remain independently usable.
-- **Thin orchestration:** TensorPhysics coordinates solvers and data exchange; it does not reimplement LBM/FEM/DEM algorithms.
+- **Solver independence:** TensorLBM, TensorFEM, TensorDEM, and TensorFVM remain independently usable.
+- **Thin orchestration:** TensorPhysics coordinates solvers and data exchange; it does not reimplement numerical kernels.
 - **Explicit contracts:** units, time advancement, field exchange, errors, and checkpoint behavior are documented.
-- **Testable increments:** every feature includes automated tests or a runnable example.
-- **Optional dependencies:** the orchestration core should not require PyTorch unless a selected backend needs it.
+- **Testable increments:** each feature includes automated tests or a runnable example.
+- **Optional dependencies:** the orchestration core does not require PyTorch unless a selected backend needs it.
 
-## Initial roadmap
+## Next milestones
 
-1. Architecture decision records and module boundaries.
-2. Solver protocol and deterministic simulation scheduler.
-3. Configuration, logging, diagnostics, and checkpoint interfaces.
-4. Coupling contracts and a minimal two-component demonstration.
-5. Adapters for existing Tensor solvers after repository-level audits.
-6. Reproducible benchmarks and CI.
+1. Verify the current test matrix and harden boundary/error cases.
+2. Define explicit coupling phases and implement a deterministic conservation-checked toy coupling case.
+3. Add solver restore contracts and end-to-end checkpoint/restart tests.
+4. Audit current TensorLBM, TensorFEM, TensorDEM, and TensorFVM APIs before writing adapters.
+5. Add engineering reference cases, quantitative tolerances, and reproducible benchmark manifests.
 
-See [docs/architecture.md](docs/architecture.md) and [docs/roadmap.md](docs/roadmap.md).
+See [docs/architecture.md](docs/architecture.md), [docs/roadmap.md](docs/roadmap.md), and [docs/development.md](docs/development.md).
