@@ -9,6 +9,7 @@ TensorPhysics coordinates specialist solvers. It does not replace TensorLBM, Ten
 - **Adapters:** translate framework contracts to each solver's native API. They remain optional dependencies.
 - **Coupling operators:** own transfer maps and exchange policies. The scheduler only defines when components advance; it does not guarantee physically correct coupling.
 - **Field exchange:** `FieldDescriptor` records producer, units, location, optional shape and dtype. `FieldStore` holds references to published data and timestamps without requiring NumPy or PyTorch.
+- **Checkpoint store:** writes a versioned JSON envelope atomically. Solver payloads must be JSON-compatible; large arrays/tensors should be serialized by solver-specific code and referenced from the payload.
 
 ## Time semantics
 At each global step, solvers receive the same start-of-step time and increment, in registration order. The global clock advances only after all solvers complete successfully. Runtime failure marks the simulation FAILED; callers should close it to release resources.
@@ -17,6 +18,9 @@ The final increment is shortened when end_time is not divisible by dt. max_steps
 
 ## Field exchange semantics
 Field publication is explicit and producer-owned. Re-registering identical metadata is idempotent; conflicting metadata fails. When the data object exposes a `shape` attribute, its shape is checked against the descriptor. Reads can enforce a maximum age in global steps. The store does not copy data, convert units, validate arbitrary nested Python containers, or guarantee thread safety; these remain explicit adapter/operator responsibilities.
+
+## Checkpoint semantics
+Checkpoints include the schema version, simulation clock, time-step configuration, and per-solver `SolverState` payloads. Writes use a temporary file in the destination directory followed by atomic replacement. Unknown schema versions and clock mismatches are rejected. This is a persistence envelope, not yet a full simulation-resume API: solver-specific restore methods and compatibility checks must be designed before resuming a coupled run.
 
 ## Error handling
 Initialization failure finalizes previously initialized solvers in reverse order. Finalization attempts every initialized solver even if one finalizer fails. If cleanup also fails during initialization failure, both the initialization and cleanup errors are surfaced.
