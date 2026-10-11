@@ -11,12 +11,14 @@
 - [ ] TOML/YAML configuration loading and schema validation.
 - [ ] Checkpoint reader/writer contract and atomic local-file implementation.
 - [ ] Logging sinks and performance timers.
-- [ ] CI matrix, linting, typing, coverage, package build.
-- [ ] Edge cases: zero end time, max-step truncation, cleanup errors, retries.
+- [x] CI matrix and basic automated tests configured; confirm actual CI results.
+- [x] Edge cases: zero end time, max-step truncation, basic run argument validation.
+- [ ] Cleanup-error behavior, retry policy, linting, typing, coverage, package build.
 
 ## M2 — Coupling foundations
-- [ ] Field descriptors with units, location, shape, dtype, and ownership.
-- [ ] Data-exchange protocol and explicit coupling phases.
+- [x] Field descriptors with units, location, shape, dtype, and producer ownership.
+- [x] In-memory field publication/read API with timestamps and freshness checks.
+- [ ] Explicit coupling phases and exchange scheduling.
 - [ ] Deterministic coupled toy problem with conservation assertions.
 - [ ] Subcycling and time interpolation contracts.
 
