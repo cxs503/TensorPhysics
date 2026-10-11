@@ -14,7 +14,7 @@ The main branch contains:
 - A versioned JSON checkpoint envelope with atomic local-file writes and schema/clock validation.
 - Structured diagnostics, a minimal runnable example, and a Python 3.10–3.12 GitHub Actions test matrix.
 
-The coupling example is deliberately a contract test, not a validated CFD/DEM/FEM physical model. It demonstrates data flow and a conservation invariant only. The field store does not perform unit conversion, interpolation, or conservative mesh/particle mapping.
+The coupling example is deliberately a contract test, not a validated CFD/DEM/FEM physical model. It demonstrates data flow and a conservation invariant only. The field store supports temporal linear interpolation for data types that implement arithmetic, but does not perform unit conversion or conservative mesh/particle mapping.
 
 Checkpoint files persist orchestration metadata and JSON-compatible solver snapshots. They do not yet provide full restart/resume: each specialist solver still needs a defined restore API and compatibility checks.
 
