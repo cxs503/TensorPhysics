@@ -12,6 +12,7 @@ The main branch contains:
 - Explicit PRE_STEP, AFTER_SOLVER, and POST_STEP coupling phases with stable callback ordering.
 - A two-reservoir coupling test that checks total-mass conservation and same-step field delivery.
 - A versioned JSON checkpoint envelope with atomic local-file writes and schema/clock validation.
+- An optional TensorDEM 2-D adapter with integer-ratio subcycling, per-substep load callbacks, and strict clock checks.
 - Structured diagnostics, a minimal runnable example, and a Python 3.10–3.12 GitHub Actions test matrix.
 
 The coupling example is deliberately a contract test, not a validated CFD/DEM/FEM physical model. It demonstrates data flow and a conservation invariant only. The field store supports temporal linear interpolation for data types that implement arithmetic, but does not perform unit conversion or conservative mesh/particle mapping. Its history is bounded to two distinct-time samples by default; set `history_limit` to retain more samples for subcycling.
@@ -34,4 +35,4 @@ Checkpoint files persist orchestration metadata and JSON-compatible solver snaps
 4. Audit current TensorLBM, TensorFEM, TensorDEM, and TensorFVM APIs before writing adapters.
 5. Add engineering reference cases, quantitative tolerances, and reproducible benchmark manifests.
 
-See [docs/architecture.md](docs/architecture.md), [docs/roadmap.md](docs/roadmap.md), and [docs/development.md](docs/development.md).
+See [docs/architecture.md](docs/architecture.md), [docs/adapter-contracts.md](docs/adapter-contracts.md), [docs/roadmap.md](docs/roadmap.md), and [docs/development.md](docs/development.md).
