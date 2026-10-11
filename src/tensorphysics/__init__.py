@@ -5,12 +5,14 @@ from .coupling import CouplingContext, CouplingError, CouplingManager, CouplingP
 from .diagnostics import DiagnosticRecord, Diagnostics
 from .fields import FieldDescriptor, FieldExchangeError, FieldStore, FieldValue
 from .protocols import Solver, SolverContext, SolverState
+from .provenance import ArtifactRef, ManifestError, RunManifest, RunStatus, ValidationStatus
 from .scheduler import Simulation, SimulationError, SimulationState
 
 __all__ = [
     "Checkpoint", "CheckpointError", "CheckpointStore", "CouplingContext",
     "CouplingError", "CouplingManager", "CouplingPhase", "DiagnosticRecord",
-    "Diagnostics", "FieldDescriptor", "FieldExchangeError", "FieldStore",
+    "Diagnostics", "ArtifactRef", "ManifestError", "RunManifest", "RunStatus",
+    "ValidationStatus", "FieldDescriptor", "FieldExchangeError", "FieldStore",
     "FieldValue", "Simulation", "SimulationConfig", "SimulationError",
     "SimulationState", "Solver", "SolverContext", "SolverState",
 ]
