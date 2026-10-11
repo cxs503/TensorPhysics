@@ -2,6 +2,7 @@
 from enum import Enum
 from typing import Iterable
 from .config import SimulationConfig
+from .coupling import CouplingContext, CouplingManager, CouplingPhase
 from .diagnostics import Diagnostics
 from .protocols import Solver, SolverContext
 
@@ -21,12 +22,14 @@ class SimulationState(str, Enum):
 
 
 class Simulation:
-    """Synchronous orchestration; coupling policies remain separate components."""
+    """Synchronous orchestration with explicit optional coupling phases."""
 
     def __init__(self, config: SimulationConfig, solvers: Iterable[Solver] = (),
-                 diagnostics: Diagnostics | None = None) -> None:
+                 diagnostics: Diagnostics | None = None,
+                 coupling: CouplingManager | None = None) -> None:
         self.config = config
         self.diagnostics = diagnostics or Diagnostics()
+        self.coupling = coupling or CouplingManager()
         self.solvers: list[Solver] = []
         self.state = SimulationState.CREATED
         self.step = 0
@@ -51,6 +54,10 @@ class Simulation:
         return SolverContext(self.step, self.time,
                              self.config.dt if dt is None else dt,
                              {"simulation_state": self.state.value})
+
+    def _coupling_context(self, context: SolverContext,
+                          solver_name: str | None = None) -> CouplingContext:
+        return CouplingContext(context, self.coupling.fields, solver_name)
 
     def initialize(self) -> None:
         if self.state is not SimulationState.CREATED:
@@ -90,10 +97,22 @@ class Simulation:
                 if next_dt <= self.config.time_tolerance:
                     break
                 context = self._context(next_dt)
+                self.coupling.execute(
+                    CouplingPhase.PRE_STEP, self._coupling_context(context)
+                )
                 for solver in self.solvers:
                     solver.advance(context)
+                    self.coupling.execute(
+                        CouplingPhase.AFTER_SOLVER,
+                        self._coupling_context(context, solver.name),
+                        solver_name=solver.name,
+                    )
                 self.time += next_dt
                 self.step += 1
+                completed_context = self._context(next_dt)
+                self.coupling.execute(
+                    CouplingPhase.POST_STEP, self._coupling_context(completed_context)
+                )
                 self.diagnostics.emit("step_completed", self.step, self.time, {"dt": next_dt})
             if self.time + self.config.time_tolerance >= self.config.end_time:
                 self.state = SimulationState.FINISHED
@@ -104,7 +123,7 @@ class Simulation:
         except Exception as exc:
             self.state = SimulationState.FAILED
             self.diagnostics.emit("solver_failed", self.step, self.time, {"error": repr(exc)})
-            raise SimulationError(f"advance failed at step {self.step}, time {self.time}: {exc}") from exc
+            raise SimulationError(f"advance/coupling failed at step {self.step}, time {self.time}: {exc}") from exc
 
     def snapshots(self):
         if self.state in (SimulationState.CREATED, SimulationState.CLOSED):
