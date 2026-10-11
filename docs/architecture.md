@@ -1,7 +1,7 @@
-# Architecture and module boundaries
+# Core architecture and module boundaries
 
 ## Purpose
-TensorPhysics coordinates specialist solvers. It does not replace TensorLBM, TensorFEM, TensorDEM, or TensorFVM and must not duplicate their numerical kernels.
+TensorPhysics is the control and contract layer of an HPC + AI scientific-computing platform. It must support agent-operated engineering workflows, reproducible execution, data production, and later AI model lifecycle operations. It does not replace TensorLBM, TensorFEM, TensorDEM, or TensorFVM and must not duplicate their numerical kernels. The full platform planes and acceptance gates are specified in [hpc-ai-platform-architecture.md](hpc-ai-platform-architecture.md).
 
 ## Layers
 - **Specialist solvers:** own discretization, numerical kernels, constitutive/contact models, solver state, and performance-critical operations.
@@ -32,7 +32,11 @@ Coupling callback failures mark the simulation FAILED and are surfaced as Simula
 - Automatic unit conversion.
 - MPI/distributed execution.
 - Automatic solver discovery.
+- AI agent execution through unrestricted shell access.
+- Bulk scientific tensor storage in JSON checkpoints or unbounded in-memory history.
 - Claims of validated multiphysics coupling without benchmark evidence.
+
+These are staged platform capabilities, not reasons to couple the core to one HPC scheduler, cloud vendor, storage system, or ML framework.
 
 ## Coupling requirements
 A physically meaningful coupling operator must define exchange phases, data ownership, units, interpolation/conservation properties, convergence criteria, and failure/rollback semantics before implementation.
