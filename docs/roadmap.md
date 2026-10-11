@@ -21,7 +21,8 @@
 - [x] In-memory field publication/read API with timestamps and freshness checks.
 - [x] Explicit PRE_STEP, AFTER_SOLVER, and POST_STEP callbacks.
 - [x] Deterministic two-reservoir toy case with total-mass conservation assertion.
-- [ ] Subcycling and time interpolation contracts.
+- [x] Time interpolation contract: bracketed linear interpolation, no extrapolation, optional maximum bracket gap, and tests.
+- [ ] Solver subcycling contract.
 - [ ] Define and test rollback/partial-update policy.
 
 ## M3 — Ecosystem adapters
