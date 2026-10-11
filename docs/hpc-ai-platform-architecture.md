@@ -123,7 +123,7 @@ at once.
   policy, and resource requirements.
 - **ExecutionBackend**: submit, status, cancel, logs, metrics, artifact staging, and
   resource accounting.
-- **ArtifactStore / RunManifest**: immutable artifacts, content hashes, provenance,
+- **ArtifactStore / RunManifest**: initial RunManifest and ArtifactRef value contracts now exist in tensorphysics.provenance; next integrate lifecycle updates and storage backends. The target contract covers immutable artifacts, content hashes, provenance,
   schema/version, and validation state.
 - **Field/Geometry contracts**: units, coordinate frame, location, topology/geometry
   identity, ownership, timestamp, sampling semantics, and optional conservative
