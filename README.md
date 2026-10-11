@@ -2,6 +2,8 @@
 
 TensorPhysics is the HPC + AI scientific-computing and engineering workflow platform for the Tensor ecosystem.
 
+**System-wide entry point:** [Tensor Ecosystem System Overview](docs/SYSTEM_OVERVIEW.md) — architecture, repository boundaries, shared contracts, end-to-end lifecycle, icebreaker application roadmap, and evidence/maturity rules.
+
 Its goal is to let authorized agents drive the complete lifecycle—from engineering problem definition and solver selection, through reproducible HPC execution and data production, to dataset creation, AI/ROM training and evaluation, and delivery of engineering applications. TensorLBM, TensorFEM, TensorDEM, and TensorFVM remain independent specialist solvers; TensorPhysics provides the contracts, execution control, provenance, and validation workflow around them.
 
 ## Current implementation
