@@ -127,3 +127,46 @@ def test_clear_values_also_clears_interpolation_history():
     store.clear_values()
     with pytest.raises(FieldExchangeError, match="not been published"):
         store.read_at_time("x", 0.5)
+
+
+
+def test_field_history_is_bounded_by_default():
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    for step in range(5):
+        store.publish("x", float(step), producer="solver", step=step, time=float(step))
+    # Latest sample and previous sample are enough for adjacent-step coupling.
+    assert store.read_at_time("x", 3.5).data == pytest.approx(3.5)
+    with pytest.raises(FieldExchangeError, match="cannot extrapolate"):
+        store.read_at_time("x", 1.5)
+
+
+def test_field_history_can_be_unbounded_when_explicitly_requested():
+    store = FieldStore(history_limit=None)
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    for step in range(5):
+        store.publish("x", float(step), producer="solver", step=step, time=float(step))
+    assert store.read_at_time("x", 1.5).data == pytest.approx(1.5)
+
+
+def test_republishing_same_time_replaces_history_sample_without_losing_version():
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    store.publish("x", 1.0, producer="solver", step=0, time=0.0)
+    latest = store.publish("x", 2.0, producer="solver", step=0, time=0.0)
+    store.publish("x", 4.0, producer="solver", step=1, time=1.0)
+    assert store.read_at_time("x", 0.0).data == pytest.approx(2.0)
+    assert latest.version == 2
+
+
+@pytest.mark.parametrize("bad_time", [float("nan"), float("inf"), -float("inf")])
+def test_publish_rejects_non_finite_time(bad_time):
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    with pytest.raises(ValueError, match="finite non-negative"):
+        store.publish("x", 1.0, producer="solver", step=0, time=bad_time)
+
+
+def test_field_store_rejects_too_small_history_limit():
+    with pytest.raises(ValueError, match="history_limit"):
+        FieldStore(history_limit=1)
