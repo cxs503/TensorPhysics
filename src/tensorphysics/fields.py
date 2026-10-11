@@ -1,5 +1,6 @@
 """Solver-neutral field metadata and time-stamped data exchange."""
 from dataclasses import dataclass
+from math import isfinite
 from typing import Any
 
 
@@ -46,10 +47,19 @@ class FieldStore:
     The store deliberately does not copy arrays or convert units. A producer must
     publish at monotonically non-decreasing step/time; consumers can enforce a
     maximum step age when reading. Optional time interpolation uses the data
-    object's arithmetic operators, so tensor backends remain in control.
+    object's arithmetic operators, so tensor backends remain in control. By
+    default, only the two most recent distinct-time samples are retained to
+    prevent full-size CFD/DEM tensors accumulating without bound; pass
+    history_limit=None for an explicitly unbounded history.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, history_limit: int | None = 2) -> None:
+        if history_limit is not None and (
+            not isinstance(history_limit, int) or isinstance(history_limit, bool)
+            or history_limit < 2
+        ):
+            raise ValueError("history_limit must be an integer >= 2 or None")
+        self.history_limit = history_limit
         self._descriptors: dict[str, FieldDescriptor] = {}
         self._values: dict[str, FieldValue] = {}
         self._history: dict[str, list[FieldValue]] = {}
@@ -79,8 +89,8 @@ class FieldStore:
             )
         if not isinstance(step, int) or isinstance(step, bool) or step < 0:
             raise ValueError("step must be a non-negative integer")
-        if time < 0:
-            raise ValueError("time must be non-negative")
+        if not isinstance(time, (int, float)) or isinstance(time, bool) or not isfinite(time) or time < 0:
+            raise ValueError("time must be a finite non-negative number")
         actual_shape = getattr(data, "shape", None)
         if actual_shape is not None:
             actual_shape = tuple(int(n) for n in actual_shape)
@@ -99,7 +109,15 @@ class FieldStore:
             version = 1
         value = FieldValue(descriptor, data, step, float(time), version)
         self._values[name] = value
-        self._history[name].append(value)
+        history = self._history[name]
+        # Re-publishing at the same physical time replaces that sample; retain
+        # version increments without storing multiple full-sized tensor objects.
+        if history and history[-1].time == value.time:
+            history[-1] = value
+        else:
+            history.append(value)
+        if self.history_limit is not None:
+            del history[:-self.history_limit]
         return value
 
     def read(self, name: str, *, current_step: int | None = None,
@@ -135,10 +153,13 @@ class FieldStore:
             raise FieldExchangeError(f"unregistered field: {name}")
         if not self._history.get(name):
             raise FieldExchangeError(f"field has not been published: {name}")
-        if time < 0:
-            raise ValueError("time must be non-negative")
-        if max_gap is not None and max_gap <= 0:
-            raise ValueError("max_gap must be positive")
+        if not isinstance(time, (int, float)) or isinstance(time, bool) or not isfinite(time) or time < 0:
+            raise ValueError("time must be a finite non-negative number")
+        if max_gap is not None and (
+            not isinstance(max_gap, (int, float)) or isinstance(max_gap, bool)
+            or not isfinite(max_gap) or max_gap <= 0
+        ):
+            raise ValueError("max_gap must be a finite positive number")
 
         history = self._history[name]
         exact = [sample for sample in history if sample.time == time]
