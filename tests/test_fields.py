@@ -65,3 +65,65 @@ def test_publication_time_must_be_monotonic():
     store.publish("fluid.velocity", ArrayLike((2, 3)), producer="TensorLBM", step=2, time=0.1)
     with pytest.raises(FieldExchangeError, match="move backwards"):
         store.publish("fluid.velocity", ArrayLike((2, 3)), producer="TensorLBM", step=1, time=0.05)
+
+
+
+def test_read_at_time_interpolates_scalar_samples_and_keeps_metadata():
+    store = FieldStore()
+    store.register(FieldDescriptor(
+        name="fluid.pressure", producer="TensorLBM", units="Pa",
+        location="cell_center",
+    ))
+    store.publish("fluid.pressure", 10.0, producer="TensorLBM", step=0, time=0.0)
+    store.publish("fluid.pressure", 30.0, producer="TensorLBM", step=2, time=2.0)
+    value = store.read_at_time("fluid.pressure", 0.5)
+    assert value.data == pytest.approx(15.0)
+    assert value.time == pytest.approx(0.5)
+    assert value.step == 2
+    assert value.descriptor.units == "Pa"
+
+
+def test_read_at_time_returns_exact_sample_without_interpolation():
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    store.publish("x", 1.0, producer="solver", step=0, time=0.0)
+    exact = store.publish("x", 2.0, producer="solver", step=1, time=1.0)
+    assert store.read_at_time("x", 1.0) is exact
+
+
+@pytest.mark.parametrize("requested", [-0.1, 1.1])
+def test_read_at_time_forbids_extrapolation(requested):
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    store.publish("x", 1.0, producer="solver", step=0, time=0.0)
+    store.publish("x", 2.0, producer="solver", step=1, time=1.0)
+    with pytest.raises(FieldExchangeError, match="cannot extrapolate"):
+        store.read_at_time("x", requested)
+
+
+def test_read_at_time_enforces_maximum_interpolation_gap():
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    store.publish("x", 1.0, producer="solver", step=0, time=0.0)
+    store.publish("x", 2.0, producer="solver", step=10, time=10.0)
+    with pytest.raises(FieldExchangeError, match="exceeds max_gap"):
+        store.read_at_time("x", 5.0, max_gap=2.0)
+
+
+def test_read_at_time_reports_non_interpolable_data():
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "object", "node"))
+    store.publish("x", object(), producer="solver", step=0, time=0.0)
+    store.publish("x", object(), producer="solver", step=1, time=1.0)
+    with pytest.raises(FieldExchangeError, match="does not support linear interpolation"):
+        store.read_at_time("x", 0.5)
+
+
+def test_clear_values_also_clears_interpolation_history():
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    store.publish("x", 1.0, producer="solver", step=0, time=0.0)
+    store.publish("x", 2.0, producer="solver", step=1, time=1.0)
+    store.clear_values()
+    with pytest.raises(FieldExchangeError, match="not been published"):
+        store.read_at_time("x", 0.5)
