@@ -44,3 +44,7 @@ The complete platform architecture, development phases, and acceptance gates are
 6. Expose validated capabilities to agents with permissions, approval gates, quotas, and complete audit trails.
 
 See [docs/hpc-ai-platform-architecture.md](docs/hpc-ai-platform-architecture.md), [docs/architecture.md](docs/architecture.md), [docs/adapter-contracts.md](docs/adapter-contracts.md), [docs/roadmap.md](docs/roadmap.md), and [docs/development.md](docs/development.md).
+
+## Tensor ecosystem integration
+
+This repository's role, interface boundaries, data-exchange requirements and recommended integration path are documented in [Ecosystem Integration](docs/ecosystem-integration.md).
