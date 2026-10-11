@@ -34,3 +34,12 @@ Keep contracts explicit and versioned: SolverDescriptor, RunManifest, ArtifactRe
 - Each run captures solver versions, config hash, environment/resource metadata and artifact checksums.
 - Failed, incomplete and unvalidated runs remain distinguishable from accepted results.
 - A runnable integration test checks data delivery, conservation where applicable, restart semantics and deterministic manifest generation.
+
+## Repository map
+
+- [TensorPlatform](https://github.com/cxs503/TensorPlatform) — shared data and AI services.
+- [TensorPhysics](https://github.com/cxs503/TensorPhysics) — scientific workflow orchestration and multiphysics coordination.
+- [TensorLBM](https://github.com/cxs503/TensorLBM) — lattice Boltzmann solver.
+- [TensorFVM](https://github.com/cxs503/TensorFVM) — finite-volume solver.
+- [TensorFEM](https://github.com/cxs503/TensorFEM) — finite-element solver.
+- [TensorDEM](https://github.com/cxs503/TensorDEM) — discrete-element solver.
