@@ -27,8 +27,7 @@ applications**. Agents and AI training must not be built on untraceable numerica
 - [ ] Run the full test matrix in CI and record verified results.
 - [ ] Define solver snapshot/restore, partial-update/failure, cancellation, and cleanup
   semantics; add restart equivalence tests.
-- [ ] Integrate RunManifest creation into Simulation so each run captures its ID, immutable normalized config, Git revisions, environment identity,
-  random seeds, hardware/device details, and exit/failure reason to a RunManifest.
+- [ ] Integrate RunManifest creation and lifecycle updates into Simulation so each run captures its ID, immutable normalized config, Git revisions, environment identity, random seeds, hardware/device details, and exit/failure reason.
 - [ ] Add structured console/file logging, per-stage timings, memory/step metrics,
   and machine-readable run reports.
 - [ ] Add config loading and schema validation; fail preflight before expensive work.
@@ -81,8 +80,9 @@ provenance.
 
 ## P4 — Scientific artifact and data-production factory
 
-- [ ] Define ArtifactRef and RunManifest schemas, checksums, metadata catalog, and
-  immutable lineage.
+- [x] Define initial ArtifactRef and RunManifest contracts, checksums, provenance fields,
+  and validation status.
+- [ ] Add the metadata catalog, storage backend, and immutable cross-run lineage.
 - [ ] Separate metadata/catalog from bulk field storage; make storage pluggable.
 - [ ] Add streaming snapshots, probes, regional extracts, reductions, and derived
   quantities so agents need not load whole simulations into memory.
