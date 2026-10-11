@@ -9,7 +9,8 @@
 
 ## M1 — Reproducibility and operations
 - [ ] TOML/YAML configuration loading and schema validation.
-- [ ] Checkpoint reader/writer contract and atomic local-file implementation.
+- [x] Versioned checkpoint envelope with atomic local JSON writes and reader validation.
+- [ ] Full simulation resume API with solver restore/compatibility contracts.
 - [ ] Logging sinks and performance timers.
 - [x] CI matrix and basic automated tests configured; confirm actual CI results.
 - [x] Edge cases: zero end time, max-step truncation, basic run argument validation.
