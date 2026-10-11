@@ -5,19 +5,24 @@ from .config import SimulationConfig
 from .diagnostics import Diagnostics
 from .protocols import Solver, SolverContext
 
+
 class SimulationError(RuntimeError):
     """A solver lifecycle operation failed."""
+
 
 class SimulationState(str, Enum):
     CREATED = "created"
     INITIALIZED = "initialized"
     RUNNING = "running"
     FINISHED = "finished"
+    LIMIT_REACHED = "limit_reached"
     FAILED = "failed"
     CLOSED = "closed"
 
+
 class Simulation:
     """Synchronous orchestration; coupling policies remain separate components."""
+
     def __init__(self, config: SimulationConfig, solvers: Iterable[Solver] = (),
                  diagnostics: Diagnostics | None = None) -> None:
         self.config = config
@@ -61,18 +66,23 @@ class Simulation:
                                   {"solver_count": len(self.solvers)})
         except Exception as exc:
             self.state = SimulationState.FAILED
-            self._finalize_initialized()
-            raise SimulationError(f"initialization failed: {exc}") from exc
+            cleanup_errors = self._finalize_initialized()
+            message = f"initialization failed: {exc}"
+            if cleanup_errors:
+                message += "; cleanup errors: " + "; ".join(cleanup_errors)
+            raise SimulationError(message) from exc
 
     def run(self, steps: int | None = None) -> None:
+        if steps is not None and (not isinstance(steps, int) or isinstance(steps, bool)):
+            raise TypeError("steps must be an integer or None")
+        if steps is not None and steps < 0:
+            raise ValueError("steps must be non-negative")
         if self.state is SimulationState.CREATED:
             self.initialize()
         if self.state is not SimulationState.INITIALIZED:
             raise SimulationError(f"cannot run from state {self.state.value}")
         remaining = self.config.planned_steps - self.step
         target = remaining if steps is None else min(steps, remaining)
-        if target < 0:
-            raise ValueError("steps must be non-negative")
         self.state = SimulationState.RUNNING
         try:
             for _ in range(target):
@@ -85,8 +95,10 @@ class Simulation:
                 self.time += next_dt
                 self.step += 1
                 self.diagnostics.emit("step_completed", self.step, self.time, {"dt": next_dt})
-            if self.step >= self.config.planned_steps or self.time + self.config.time_tolerance >= self.config.end_time:
+            if self.time + self.config.time_tolerance >= self.config.end_time:
                 self.state = SimulationState.FINISHED
+            elif self.step >= self.config.planned_steps:
+                self.state = SimulationState.LIMIT_REACHED
             else:
                 self.state = SimulationState.INITIALIZED
         except Exception as exc:
