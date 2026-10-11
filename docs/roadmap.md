@@ -10,8 +10,10 @@ applications**. Agents and AI training must not be built on untraceable numerica
 - [x] Establish TensorPhysics as a solver-neutral orchestration repository.
 - [x] Document the HPC + AI platform planes, security boundaries, and acceptance gates.
 - [x] Keep specialist numerical kernels in TensorLBM/TensorDEM/TensorFEM/TensorFVM.
-- [ ] Define versioned public contracts for SolverAdapter, WorkflowSpec, RunManifest,
-  ArtifactRef, ExecutionBackend, DatasetSpec, TrainingJob, ValidationSuite, and AgentTool.
+- [ ] Define versioned public contracts for SolverAdapter, WorkflowSpec, ExecutionBackend,
+  DatasetSpec, TrainingJob, ValidationSuite, and AgentTool.
+- [x] Add initial RunManifest and ArtifactRef contracts with config digest, code revisions,
+  artifact checksums, resource/environment metadata, and validation status.
 - [ ] Add API/schema versioning and compatibility tests.
 - [ ] Publish a capability manifest for each adapter: dimensions, steady/transient,
   native clock, supported load/field interfaces, device support, restart support,
@@ -25,7 +27,7 @@ applications**. Agents and AI training must not be built on untraceable numerica
 - [ ] Run the full test matrix in CI and record verified results.
 - [ ] Define solver snapshot/restore, partial-update/failure, cancellation, and cleanup
   semantics; add restart equivalence tests.
-- [ ] Add a run ID, immutable normalized config, Git revisions, environment identity,
+- [ ] Integrate RunManifest creation into Simulation so each run captures its ID, immutable normalized config, Git revisions, environment identity,
   random seeds, hardware/device details, and exit/failure reason to a RunManifest.
 - [ ] Add structured console/file logging, per-stage timings, memory/step metrics,
   and machine-readable run reports.
