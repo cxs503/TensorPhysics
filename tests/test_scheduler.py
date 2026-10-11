@@ -48,7 +48,7 @@ def test_failed_solver_marks_simulation_failed():
         def advance(self, context):
             raise RuntimeError("intentional test failure")
     sim = Simulation(SimulationConfig(0.1, 1.0), [Broken("broken")])
-    with pytest.raises(SimulationError, match="advance failed"):
+    with pytest.raises(SimulationError, match="advance/coupling failed"):
         sim.run()
     assert sim.state is SimulationState.FAILED
 
