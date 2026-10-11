@@ -1,8 +1,8 @@
 # TensorPhysics
 
-TensorPhysics is the shared multiphysics simulation framework for the Tensor scientific-computing ecosystem.
+TensorPhysics is the HPC + AI scientific-computing and engineering workflow platform for the Tensor ecosystem.
 
-Its purpose is to coordinate specialized solvers such as TensorLBM, TensorFEM, TensorDEM, and TensorFVM without replacing or duplicating their numerical kernels.
+Its goal is to let authorized agents drive the complete lifecycle—from engineering problem definition and solver selection, through reproducible HPC execution and data production, to dataset creation, AI/ROM training and evaluation, and delivery of engineering applications. TensorLBM, TensorFEM, TensorDEM, and TensorFVM remain independent specialist solvers; TensorPhysics provides the contracts, execution control, provenance, and validation workflow around them.
 
 ## Current implementation
 
@@ -19,6 +19,12 @@ The coupling example is deliberately a contract test, not a validated CFD/DEM/FE
 
 Checkpoint files persist orchestration metadata and JSON-compatible solver snapshots. They do not yet provide full restart/resume: each specialist solver still needs a defined restore API and compatibility checks.
 
+## Platform architecture
+
+The long-term architecture has seven cooperating planes: agent/application tools; workflow and experiment control; HPC execution; specialist solvers and multiphysics; scientific data and provenance; AI model lifecycle; and verification/governance/observability. Agents operate through typed, permissioned tools and durable job/artifact IDs—not unrestricted shell access. The core remains backend-neutral and does not require one scheduler, storage provider, or ML framework.
+
+The complete platform architecture, development phases, and acceptance gates are described in [docs/hpc-ai-platform-architecture.md](docs/hpc-ai-platform-architecture.md).
+
 ## Design principles
 
 - **Solver independence:** TensorLBM, TensorFEM, TensorDEM, and TensorFVM remain independently usable.
@@ -29,10 +35,11 @@ Checkpoint files persist orchestration metadata and JSON-compatible solver snaps
 
 ## Next milestones
 
-1. Run and verify the complete Python 3.10–3.12 CI matrix.
-2. Define subcycling and time interpolation contracts, including rollback/partial-update semantics.
-3. Add solver restore contracts and end-to-end checkpoint/restart tests.
-4. Audit current TensorLBM, TensorFEM, TensorDEM, and TensorFVM APIs before writing adapters.
-5. Add engineering reference cases, quantitative tolerances, and reproducible benchmark manifests.
+1. Define versioned run manifests, artifact references, solver capabilities, and typed workflow specifications.
+2. Establish local end-to-end execution with structured logs, checksums, validation reports, and durable run IDs.
+3. Finish the first real solver adapters and quantitative engineering benchmarks.
+4. Add an execution-backend interface (local first, HPC scheduler later) with resource limits and cancellation.
+5. Build scientific artifact lineage and dataset generation before adding training/model-registry workflows.
+6. Expose validated capabilities to agents with permissions, approval gates, quotas, and complete audit trails.
 
-See [docs/architecture.md](docs/architecture.md), [docs/adapter-contracts.md](docs/adapter-contracts.md), [docs/roadmap.md](docs/roadmap.md), and [docs/development.md](docs/development.md).
+See [docs/hpc-ai-platform-architecture.md](docs/hpc-ai-platform-architecture.md), [docs/architecture.md](docs/architecture.md), [docs/adapter-contracts.md](docs/adapter-contracts.md), [docs/roadmap.md](docs/roadmap.md), and [docs/development.md](docs/development.md).
