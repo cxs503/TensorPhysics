@@ -12,6 +12,7 @@ The main branch contains:
 - Explicit PRE_STEP, AFTER_SOLVER, and POST_STEP coupling phases with stable callback ordering.
 - A two-reservoir coupling test that checks total-mass conservation and same-step field delivery.
 - A versioned JSON checkpoint envelope with atomic local-file writes and schema/clock validation.
+- Initial RunManifest and ArtifactRef contracts with canonical config hashing, code-revision provenance, artifact checksums, resource/environment metadata, and explicit validation status.
 - An optional TensorDEM 2-D adapter with integer-ratio subcycling, per-substep load callbacks, and strict clock checks.
 - Structured diagnostics, a minimal runnable example, and a Python 3.10–3.12 GitHub Actions test matrix.
 
@@ -35,7 +36,7 @@ The complete platform architecture, development phases, and acceptance gates are
 
 ## Next milestones
 
-1. Define versioned run manifests, artifact references, solver capabilities, and typed workflow specifications.
+1. Extend and validate RunManifest/ArtifactRef into versioned workflow and solver-capability contracts.
 2. Establish local end-to-end execution with structured logs, checksums, validation reports, and durable run IDs.
 3. Finish the first real solver adapters and quantitative engineering benchmarks.
 4. Add an execution-backend interface (local first, HPC scheduler later) with resource limits and cancellation.
