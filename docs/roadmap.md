@@ -12,16 +12,17 @@
 - [x] Versioned checkpoint envelope with atomic local JSON writes and reader validation.
 - [ ] Full simulation resume API with solver restore/compatibility contracts.
 - [ ] Logging sinks and performance timers.
-- [x] CI matrix and basic automated tests configured; confirm actual CI results.
+- [x] CI matrix and automated tests configured; confirm actual CI results.
 - [x] Edge cases: zero end time, max-step truncation, basic run argument validation.
 - [ ] Cleanup-error behavior, retry policy, linting, typing, coverage, package build.
 
 ## M2 — Coupling foundations
 - [x] Field descriptors with units, location, shape, dtype, and producer ownership.
 - [x] In-memory field publication/read API with timestamps and freshness checks.
-- [ ] Explicit coupling phases and exchange scheduling.
-- [ ] Deterministic coupled toy problem with conservation assertions.
+- [x] Explicit PRE_STEP, AFTER_SOLVER, and POST_STEP callbacks.
+- [x] Deterministic two-reservoir toy case with total-mass conservation assertion.
 - [ ] Subcycling and time interpolation contracts.
+- [ ] Define and test rollback/partial-update policy.
 
 ## M3 — Ecosystem adapters
 - [ ] Audit current TensorLBM, TensorFEM, TensorDEM, and TensorFVM APIs.
