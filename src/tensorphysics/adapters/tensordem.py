@@ -28,6 +28,8 @@ class TensorDEMAdapter:
 
     snapshot intentionally returns orchestration metadata only; full restart
     requires a native solver state/restore contract and is not implied here.
+    If a later substep fails, earlier native substeps are not rolled back; the
+    failed simulation must not be resumed from that partially advanced model.
     """
 
     def __init__(self, model: Any, *, name: str = "TensorDEM",
