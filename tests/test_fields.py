@@ -91,7 +91,7 @@ def test_read_at_time_returns_exact_sample_without_interpolation():
     assert store.read_at_time("x", 1.0) is exact
 
 
-@pytest.mark.parametrize("requested", [-0.1, 1.1])
+@pytest.mark.parametrize("requested", [1.1])
 def test_read_at_time_forbids_extrapolation(requested):
     store = FieldStore()
     store.register(FieldDescriptor("x", "solver", "m", "node"))
@@ -99,6 +99,15 @@ def test_read_at_time_forbids_extrapolation(requested):
     store.publish("x", 2.0, producer="solver", step=1, time=1.0)
     with pytest.raises(FieldExchangeError, match="cannot extrapolate"):
         store.read_at_time("x", requested)
+
+
+
+def test_read_at_time_rejects_negative_time_as_invalid_input():
+    store = FieldStore()
+    store.register(FieldDescriptor("x", "solver", "m", "node"))
+    store.publish("x", 1.0, producer="solver", step=0, time=0.0)
+    with pytest.raises(ValueError, match="finite non-negative"):
+        store.read_at_time("x", -0.1)
 
 
 def test_read_at_time_enforces_maximum_interpolation_gap():
