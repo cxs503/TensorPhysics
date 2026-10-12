@@ -15,7 +15,8 @@ from urllib.request import Request, urlopen
 from .provenance import RunManifest
 
 
-_MAX_MANIFEST_BYTES = 1_048_576
+# Keep this in sync with TensorPlatform's RunRegistration validator (1,000,000 bytes).
+_MAX_MANIFEST_BYTES = 1_000_000
 _RUN_STATUSES = frozenset({
     "planned", "validating", "queued", "running", "succeeded", "failed",
     "cancelled", "preempted",
@@ -83,6 +84,8 @@ class TensorPlatformRunRegistry:
         validation_status = payload_manifest.get("validation_status")
         if not isinstance(run_id, str) or not run_id.strip():
             raise ValueError("manifest.run_id must be a non-empty string")
+        if run_id != run_id.strip():
+            raise ValueError("manifest.run_id must not contain leading or trailing whitespace")
         if status not in _RUN_STATUSES:
             raise ValueError(f"manifest.status must be one of: {', '.join(sorted(_RUN_STATUSES))}")
         if validation_status not in _VALIDATION_STATUSES:
