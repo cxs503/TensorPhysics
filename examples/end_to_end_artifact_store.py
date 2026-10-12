@@ -13,8 +13,9 @@ import platform
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlsplit
 
-from tensorphysics import ArtifactRef, LocalArtifactStore, RunManifest, RunStatus, ValidationStatus
+from tensorphysics import LocalArtifactStore, RunManifest, RunStatus, ValidationStatus
 
 
 def run_workflow(output_dir: str | Path, store_root: str | Path, run_id: str) -> dict[str, Any]:
@@ -53,7 +54,9 @@ def run_workflow(output_dir: str | Path, store_root: str | Path, run_id: str) ->
         raise RuntimeError("stored manifest failed checksum verification")
 
     # Verify the persisted JSON and its referenced artifact, not only the in-memory objects.
-    persisted = json.loads(Path(manifest_ref.uri.removeprefix("file://")).read_text(encoding="utf-8"))
+    manifest_uri = urlsplit(manifest_ref.uri)
+    persisted_path = Path(unquote(manifest_uri.path))
+    persisted = json.loads(persisted_path.read_text(encoding="utf-8"))
     if persisted["run_id"] != run_id or persisted["outputs"][0]["checksum_sha256"] != history_ref.checksum_sha256:
         raise RuntimeError("persisted manifest does not match stored artifact metadata")
 
