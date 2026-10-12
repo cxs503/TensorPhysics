@@ -1,4 +1,5 @@
 """TensorPhysics: solver-neutral multiphysics orchestration."""
+from .artifact_store import ArtifactStore, ArtifactStoreError, LocalArtifactStore
 from .checkpoint import Checkpoint, CheckpointError, CheckpointStore
 from .config import SimulationConfig
 from .coupling import CouplingContext, CouplingError, CouplingManager, CouplingPhase
@@ -10,6 +11,7 @@ from .provenance import ArtifactRef, ManifestError, RunManifest, RunStatus, Vali
 from .scheduler import Simulation, SimulationError, SimulationState
 
 __all__ = [
+    "ArtifactStore", "ArtifactStoreError", "LocalArtifactStore",
     "Checkpoint", "CheckpointError", "CheckpointStore", "CouplingContext",
     "CouplingError", "CouplingManager", "CouplingPhase", "DiagnosticRecord",
     "Diagnostics", "ArtifactRef", "ManifestError", "RunManifest", "RunStatus",
