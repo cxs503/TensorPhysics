@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import json
 import platform
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -20,6 +21,7 @@ from tensorphysics import (
     SimulationConfig,
     SolverState,
     ValidationStatus,
+    TensorPlatformRunRegistry,
 )
 
 
@@ -56,7 +58,7 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def run_example(output_dir: Path) -> Path:
+def run_example(output_dir: Path, *, artifact_uri: str | None = None) -> Path:
     output_dir = output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -83,7 +85,7 @@ def run_example(output_dir: Path) -> Path:
             ])
 
         artifact = ArtifactRef(
-            uri=output_path.as_uri(),
+            uri=artifact_uri or output_path.as_uri(),
             media_type="text/csv",
             checksum_sha256=sha256_file(output_path),
             size_bytes=output_path.stat().st_size,
@@ -114,10 +116,27 @@ def run_example(output_dir: Path) -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("outputs/end_to_end_smoke"))
+    parser.add_argument(
+        "--register-platform",
+        action="store_true",
+        help="register the manifest after generating the artifact",
+    )
+    parser.add_argument(
+        "--artifact-uri",
+        help="shared URI of the already-uploaded artifact; required for remote registration",
+    )
     args = parser.parse_args()
-    manifest_path = run_example(args.output)
+    if args.register_platform and not args.artifact_uri:
+        parser.error("--register-platform requires --artifact-uri pointing to the same artifact in shared storage")
+    if args.register_platform and args.artifact_uri.startswith("file://"):
+        parser.error("--artifact-uri must be accessible to the platform, not a local file:// URI")
+    manifest_path = run_example(args.output, artifact_uri=args.artifact_uri)
     print(f"manifest={manifest_path}")
     print(f"artifact={manifest_path.parent / 'toy_history.csv'}")
+    if args.register_platform:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        result = TensorPlatformRunRegistry.from_env().register(manifest)
+        print(f"platform_registration={json.dumps(result, sort_keys=True)}")
 
 
 if __name__ == "__main__":
