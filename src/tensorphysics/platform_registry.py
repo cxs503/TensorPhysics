@@ -15,6 +15,14 @@ from urllib.request import Request, urlopen
 from .provenance import RunManifest
 
 
+_MAX_MANIFEST_BYTES = 1_048_576
+_RUN_STATUSES = frozenset({
+    "planned", "validating", "queued", "running", "succeeded", "failed",
+    "cancelled", "preempted",
+})
+_VALIDATION_STATUSES = frozenset({"not_run", "passed", "failed", "incomplete"})
+
+
 class PlatformRegistryError(RuntimeError):
     """Registration failed or the platform returned an error response."""
 
@@ -64,15 +72,36 @@ class TensorPlatformRunRegistry:
         return cls(base_url, token, organization_id, timeout=timeout)
 
     def register(self, manifest: RunManifest | Mapping[str, Any]) -> dict[str, Any]:
-        """Register one manifest; exact retries are idempotent on the platform."""
+        """Register one manifest; exact retries are idempotent on the platform.
+
+        Invalid status values and oversized metadata are rejected locally so a
+        solver workflow can fail fast without making an HTTP request.
+        """
         payload_manifest = manifest.to_dict() if isinstance(manifest, RunManifest) else dict(manifest)
         run_id = payload_manifest.get("run_id")
         status = payload_manifest.get("status")
         validation_status = payload_manifest.get("validation_status")
         if not isinstance(run_id, str) or not run_id.strip():
             raise ValueError("manifest.run_id must be a non-empty string")
-        if not isinstance(status, str) or not isinstance(validation_status, str):
-            raise ValueError("manifest must include string status and validation_status")
+        if status not in _RUN_STATUSES:
+            raise ValueError(f"manifest.status must be one of: {', '.join(sorted(_RUN_STATUSES))}")
+        if validation_status not in _VALIDATION_STATUSES:
+            raise ValueError(
+                "manifest.validation_status must be one of: "
+                f"{', '.join(sorted(_VALIDATION_STATUSES))}"
+            )
+
+        try:
+            manifest_bytes = json.dumps(
+                payload_manifest, sort_keys=True, separators=(",", ":"),
+                ensure_ascii=False, allow_nan=False,
+            ).encode("utf-8")
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"manifest must be JSON-serializable without NaN or Infinity: {exc}") from exc
+        if len(manifest_bytes) > _MAX_MANIFEST_BYTES:
+            raise ValueError(
+                f"manifest exceeds TensorPlatform's {_MAX_MANIFEST_BYTES}-byte limit"
+            )
 
         payload = {
             "run_id": run_id,
