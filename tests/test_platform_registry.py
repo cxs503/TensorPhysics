@@ -70,3 +70,57 @@ def test_http_conflict_is_reported_without_hiding_status(monkeypatch):
     with pytest.raises(PlatformRegistryError) as error:
         registry.register({"run_id": "r", "status": "succeeded", "validation_status": "not_run"})
     assert error.value.status_code == 409
+
+
+def _valid_manifest(**overrides):
+    manifest = {
+        "run_id": "validation-run",
+        "status": "succeeded",
+        "validation_status": "not_run",
+        "outputs": [],
+    }
+    manifest.update(overrides)
+    return manifest
+
+
+@pytest.mark.parametrize("status", ["complete", "SUCCESS", "", None, 3])
+def test_invalid_run_status_is_rejected_before_network(monkeypatch, status):
+    def unexpected_request(*args, **kwargs):
+        pytest.fail("invalid status must be rejected before HTTP request")
+
+    monkeypatch.setattr("tensorphysics.platform_registry.urlopen", unexpected_request)
+    registry = TensorPlatformRunRegistry("https://platform.local", "token", 1)
+    with pytest.raises(ValueError, match="manifest.status"):
+        registry.register(_valid_manifest(status=status))
+
+
+@pytest.mark.parametrize("status", ["pending", "PASSED", "", None, 7])
+def test_invalid_validation_status_is_rejected_before_network(monkeypatch, status):
+    def unexpected_request(*args, **kwargs):
+        pytest.fail("invalid validation status must be rejected before HTTP request")
+
+    monkeypatch.setattr("tensorphysics.platform_registry.urlopen", unexpected_request)
+    registry = TensorPlatformRunRegistry("https://platform.local", "token", 1)
+    with pytest.raises(ValueError, match="manifest.validation_status"):
+        registry.register(_valid_manifest(validation_status=status))
+
+
+def test_oversized_manifest_is_rejected_before_network(monkeypatch):
+    def unexpected_request(*args, **kwargs):
+        pytest.fail("oversized manifest must be rejected before HTTP request")
+
+    monkeypatch.setattr("tensorphysics.platform_registry.urlopen", unexpected_request)
+    registry = TensorPlatformRunRegistry("https://platform.local", "token", 1)
+    manifest = _valid_manifest(notes="x" * (1_048_576 + 1))
+    with pytest.raises(ValueError, match="byte limit"):
+        registry.register(manifest)
+
+
+def test_manifest_with_non_finite_number_is_rejected_before_network(monkeypatch):
+    def unexpected_request(*args, **kwargs):
+        pytest.fail("non-finite values must be rejected before HTTP request")
+
+    monkeypatch.setattr("tensorphysics.platform_registry.urlopen", unexpected_request)
+    registry = TensorPlatformRunRegistry("https://platform.local", "token", 1)
+    with pytest.raises(ValueError, match="JSON-serializable"):
+        registry.register(_valid_manifest(metric=float("nan")))
