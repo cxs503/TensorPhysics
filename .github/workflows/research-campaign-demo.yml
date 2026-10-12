@@ -1,0 +1,69 @@
+name: Bounded DEM research campaign
+
+on:
+  pull_request:
+    paths:
+      - "examples/research_campaign_dem.py"
+      - "docs/RESEARCH_CAMPAIGN_DEMO.md"
+      - ".github/workflows/research-campaign-demo.yml"
+      - "examples/research_loop_dem.py"
+      - "src/tensorphysics/**"
+  push:
+    branches: [main]
+    paths:
+      - "examples/research_campaign_dem.py"
+      - "docs/RESEARCH_CAMPAIGN_DEMO.md"
+      - ".github/workflows/research-campaign-demo.yml"
+      - "examples/research_loop_dem.py"
+      - "src/tensorphysics/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bounded-campaign:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install TensorPhysics and tests
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[test]"
+      - name: Install TensorDEM solver
+        run: python -m pip install "git+https://github.com/cxs503/TensorDEM.git"
+      - name: Execute two-run bounded campaign
+        run: >-
+          python examples/research_campaign_dem.py
+          --campaign-id ci-dem-campaign-${{ github.run_id }}
+          --nx 7 --ny 3 --steps 20
+          --work-dir outputs/research-campaign-dem
+      - name: Verify both runs and evidence chain
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("outputs/research-campaign-dem")
+          campaign = json.loads((root / "campaign_report.json").read_text())
+          assert campaign["decision"] == "bounded_campaign_complete_integrity_gates_passed", campaign
+          assert len(campaign["runs"]) == 2, campaign
+          assert [item["parameters"]["nx"] for item in campaign["runs"]] == [7, 8]
+          for item in campaign["runs"]:
+              assert item["validation_status"] == "passed", item
+              assert item["manifest_artifact"]["checksum_sha256"]
+              run_root = root / f"round-{item['round']:02d}"
+              assert json.loads((run_root / "validation_report.json").read_text())["status"] == "passed"
+              assert json.loads((run_root / "run_manifest.json").read_text())["validation_status"] == "passed"
+          print("Both bounded runs and their evidence passed integrity checks; no physical validation is implied.")
+          PY
+      - name: Upload campaign evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bounded-dem-campaign-evidence
+          path: outputs/research-campaign-dem/
+          if-no-files-found: warn
