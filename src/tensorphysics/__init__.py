@@ -9,6 +9,9 @@ from .fields import FieldDescriptor, FieldExchangeError, FieldStore, FieldValue
 from .protocols import Solver, SolverContext, SolverState
 from .platform_registry import PlatformRegistryError, TensorPlatformRunRegistry
 from .provenance import ArtifactRef, ManifestError, RunManifest, RunStatus, ValidationStatus
+from .research_contracts import (
+    ExperimentPlan, ResearchContractError, ResearchGoal, ResearchMemoryRecord, ValidationReport,
+)
 from .scheduler import Simulation, SimulationError, SimulationState
 
 __all__ = [
@@ -16,8 +19,9 @@ __all__ = [
     "Checkpoint", "CheckpointError", "CheckpointStore", "CouplingContext",
     "CouplingError", "CouplingManager", "CouplingPhase", "DiagnosticRecord",
     "Diagnostics", "ArtifactRef", "ManifestError", "RunManifest", "RunStatus",
-    "ValidationStatus", "FieldDescriptor", "FieldExchangeError", "FieldStore",
-    "FieldValue", "Simulation", "SimulationConfig", "SimulationError",
+    "ValidationStatus", "ResearchGoal", "ExperimentPlan", "ValidationReport",
+    "ResearchMemoryRecord", "ResearchContractError", "FieldDescriptor", "FieldExchangeError",
+    "FieldStore", "FieldValue", "Simulation", "SimulationConfig", "SimulationError",
     "SimulationState", "Solver", "SolverContext", "SolverState",
     "PlatformRegistryError", "TensorPlatformRunRegistry",
 ]
