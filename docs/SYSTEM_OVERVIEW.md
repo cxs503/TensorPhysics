@@ -98,6 +98,7 @@ Agents should use typed, permissioned operations rather than unrestricted shell 
 ## 9. Canonical documentation
 
 - [TensorPhysics architecture and development phases](docs/hpc-ai-platform-architecture.md)
+- [Evidence-based integration status and next acceptance gates](docs/INTEGRATION_STATUS.md)
 - [TensorPhysics ecosystem integration](docs/ecosystem-integration.md)
 - [TensorPlatform integration boundary](https://github.com/cxs503/TensorPlatform/blob/main/docs/ecosystem-integration.md)
 - [TensorLBM integration boundary](https://github.com/cxs503/TensorLBM/blob/main/docs/ecosystem-integration.md)
