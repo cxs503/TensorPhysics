@@ -17,6 +17,7 @@ from .research_runtime import (
     ResearchTask, ResearchTaskStore, TaskEvent, TaskNotFoundError, TaskStatus,
 )
 from .research_runner import ResearchTaskRunner, ResearchValidator
+from .agent_subprocess import SubprocessAgentBackend
 from .scheduler import Simulation, SimulationError, SimulationState
 
 __all__ = [
@@ -32,5 +33,6 @@ __all__ = [
     "AgentBackend", "AgentRequest", "AgentResult", "InvalidTaskTransition",
     "ResearchRuntimeError", "ResearchTask", "ResearchTaskStore", "TaskEvent",
     "TaskNotFoundError", "TaskStatus", "ResearchTaskRunner", "ResearchValidator",
+    "SubprocessAgentBackend",
 ]
 __version__ = "0.1.0"
