@@ -7,6 +7,7 @@ from tensorphysics.research_runtime import (
     ResearchTaskStore,
     TaskStatus,
 )
+from tensorphysics.research_runner import ResearchTaskRunner
 
 
 def test_task_lifecycle_is_persisted_and_audited(tmp_path):
@@ -100,3 +101,64 @@ def test_agent_request_contract_is_vendor_neutral():
                            timeout_seconds=120, allowed_tools=("read_file", "run_tests"))
     assert request.task_id == "task-1"
     assert request.allowed_tools == ("read_file", "run_tests")
+
+
+class FakeAgent:
+    name = "fake-agent"
+
+    def __init__(self, result):
+        self.result = result
+        self.calls = 0
+
+    def execute(self, request):
+        self.calls += 1
+        assert request.timeout_seconds > 0
+        return self.result
+
+
+class FakeValidator:
+    def __init__(self, report):
+        self.report = report
+        self.calls = 0
+
+    def validate(self, request, result):
+        self.calls += 1
+        assert result.outcome == "completed"
+        return self.report
+
+
+def test_runner_only_marks_succeeded_after_independent_validation():
+    store = ResearchTaskStore(":memory:")
+    store.create_task("task-run", "goal-run", {"solver": "TensorDEM"})
+    agent = FakeAgent(AgentResult("completed", "DEM run finished", ("file:///history.csv",)))
+    validator = FakeValidator({"status": "passed", "checks": [{"name": "finite_history", "passed": True}]})
+    task = ResearchTaskRunner(store, agent, validator).run_once(
+        "task-run", goal={"objective": "validate a DEM run"}, workspace="/tmp/run",
+    )
+    assert task.status is TaskStatus.SUCCEEDED
+    assert agent.calls == validator.calls == 1
+    assert task.result["validation"]["status"] == "passed"
+
+
+def test_runner_retries_failed_validation_within_budget():
+    store = ResearchTaskStore(":memory:")
+    store.create_task("task-run", "goal-run", {"solver": "TensorDEM"}, max_attempts=2)
+    agent = FakeAgent(AgentResult("completed", "Generated output"))
+    validator = FakeValidator({"status": "failed", "checks": [{"name": "energy_balance", "passed": False}]})
+    task = ResearchTaskRunner(store, agent, validator).run_once(
+        "task-run", goal={"objective": "verify"}, workspace="/tmp/run",
+    )
+    assert task.status is TaskStatus.RETRY_WAIT
+    assert task.result["validation"]["status"] == "failed"
+
+
+def test_runner_pauses_when_agent_needs_human_input():
+    store = ResearchTaskStore(":memory:")
+    store.create_task("task-run", "goal-run", {"solver": "TensorDEM"})
+    agent = FakeAgent(AgentResult("needs_input", "Need material stiffness value"))
+    validator = FakeValidator({"status": "passed"})
+    task = ResearchTaskRunner(store, agent, validator).run_once(
+        "task-run", goal={"objective": "verify"}, workspace="/tmp/run",
+    )
+    assert task.status is TaskStatus.WAITING_INPUT
+    assert validator.calls == 0

@@ -32,18 +32,19 @@ class TaskStatus(str, Enum):
     CLAIMED = "claimed"
     RUNNING = "running"
     VERIFYING = "verifying"
+    WAITING_INPUT = "waiting_input"
     RETRY_WAIT = "retry_wait"
     SUCCEEDED = "succeeded"
     FAILED = "failed"
     CANCELLED = "cancelled"
 
 
-_TERMINAL = {TaskStatus.SUCCEEDED, TaskStatus.FAILED, TaskStatus.CANCELLED}
 _ALLOWED: dict[TaskStatus, set[TaskStatus]] = {
     TaskStatus.QUEUED: {TaskStatus.CLAIMED, TaskStatus.CANCELLED},
     TaskStatus.CLAIMED: {TaskStatus.RUNNING, TaskStatus.QUEUED, TaskStatus.FAILED, TaskStatus.CANCELLED},
-    TaskStatus.RUNNING: {TaskStatus.VERIFYING, TaskStatus.RETRY_WAIT, TaskStatus.FAILED, TaskStatus.CANCELLED},
+    TaskStatus.RUNNING: {TaskStatus.VERIFYING, TaskStatus.WAITING_INPUT, TaskStatus.RETRY_WAIT, TaskStatus.FAILED, TaskStatus.CANCELLED},
     TaskStatus.VERIFYING: {TaskStatus.SUCCEEDED, TaskStatus.RETRY_WAIT, TaskStatus.FAILED, TaskStatus.CANCELLED},
+    TaskStatus.WAITING_INPUT: {TaskStatus.QUEUED, TaskStatus.CANCELLED},
     TaskStatus.RETRY_WAIT: {TaskStatus.QUEUED, TaskStatus.CANCELLED},
     TaskStatus.SUCCEEDED: set(),
     TaskStatus.FAILED: set(),
