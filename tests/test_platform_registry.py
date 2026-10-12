@@ -111,7 +111,7 @@ def test_oversized_manifest_is_rejected_before_network(monkeypatch):
 
     monkeypatch.setattr("tensorphysics.platform_registry.urlopen", unexpected_request)
     registry = TensorPlatformRunRegistry("https://platform.local", "token", 1)
-    manifest = _valid_manifest(notes="x" * (1_048_576 + 1))
+    manifest = _valid_manifest(notes="x" * (1_000_001))
     with pytest.raises(ValueError, match="byte limit"):
         registry.register(manifest)
 
@@ -124,3 +124,13 @@ def test_manifest_with_non_finite_number_is_rejected_before_network(monkeypatch)
     registry = TensorPlatformRunRegistry("https://platform.local", "token", 1)
     with pytest.raises(ValueError, match="JSON-serializable"):
         registry.register(_valid_manifest(metric=float("nan")))
+
+
+def test_run_id_with_whitespace_is_rejected_before_network(monkeypatch):
+    def unexpected_request(*args, **kwargs):
+        pytest.fail("non-canonical run IDs must be rejected before HTTP request")
+
+    monkeypatch.setattr("tensorphysics.platform_registry.urlopen", unexpected_request)
+    registry = TensorPlatformRunRegistry("https://platform.local", "token", 1)
+    with pytest.raises(ValueError, match="leading or trailing whitespace"):
+        registry.register(_valid_manifest(run_id=" run-1 "))
