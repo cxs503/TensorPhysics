@@ -12,6 +12,7 @@ import shutil
 import tempfile
 from pathlib import Path, PurePosixPath
 from typing import Protocol, runtime_checkable
+from urllib.parse import unquote, urlsplit
 
 from .provenance import ArtifactRef
 
@@ -113,13 +114,13 @@ class LocalArtifactStore:
                 pass
 
     def verify(self, artifact: ArtifactRef) -> bool:
-        """Verify local file URI, byte count, and SHA-256 without trusting metadata."""
-        from urllib.parse import unquote, urlsplit
-
+        """Verify a store-owned file URI, byte count, and SHA-256."""
         parsed = urlsplit(artifact.uri)
         if parsed.scheme != "file" or parsed.netloc not in ("", "localhost"):
             raise ValueError("LocalArtifactStore can only verify local file:// artifact references")
         path = Path(unquote(parsed.path)).resolve()
+        if path != self.root and self.root not in path.parents:
+            raise ValueError("artifact URI is outside this store's root")
         if not path.is_file():
             return False
         if artifact.size_bytes is not None and path.stat().st_size != artifact.size_bytes:
