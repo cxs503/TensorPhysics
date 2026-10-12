@@ -72,15 +72,15 @@ def run_example(output_dir: Path) -> Path:
             raise RuntimeError(f"toy simulation did not finish: {simulation.state.value}")
 
         output_path = output_dir / "toy_history.csv"
+        snapshot = simulation.snapshots()[solver.name]
         with output_path.open("w", newline="", encoding="utf-8") as stream:
             writer = csv.writer(stream)
             writer.writerow(["step", "time", "accumulated_dt"])
-            for snapshot in simulation.snapshots():
-                writer.writerow([
-                    snapshot.step,
-                    f"{snapshot.time:.12g}",
-                    f"{snapshot.state.get('accumulated_dt', 0.0):.12g}",
-                ])
+            writer.writerow([
+                snapshot.step,
+                f"{snapshot.time:.12g}",
+                f"{snapshot.payload.get('accumulated_dt', 0.0):.12g}",
+            ])
 
         artifact = ArtifactRef(
             uri=output_path.as_uri(),
