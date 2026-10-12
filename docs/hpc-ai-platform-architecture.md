@@ -1,7 +1,4 @@
 # HPC + AI scientific-computing platform architecture
-
-# HPC + AI scientific-computing platform architecture
-
 > **Position in the system:** this document details execution, HPC, data, and model lifecycle design for the [Agent-first Science Factory](SCIENCE_FACTORY_ARCHITECTURE.md). The strategic product is a lights-out research environment where authorized Agents plan and iterate on experiments under policy; this document focuses on the engineering planes that make those experiments executable, scalable, and auditable.
 
 ## 1. Product objective
