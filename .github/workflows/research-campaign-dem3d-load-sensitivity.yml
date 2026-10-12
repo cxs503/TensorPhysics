@@ -1,0 +1,73 @@
+name: DEM3D bending load sensitivity campaign
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "examples/research_campaign_dem3d_load_sensitivity.py"
+      - "tests/test_research_campaign_dem3d_load_sensitivity.py"
+      - ".github/workflows/research-campaign-dem3d-load-sensitivity.yml"
+  push:
+    branches: [main]
+    paths:
+      - "examples/research_campaign_dem3d_load_sensitivity.py"
+      - "tests/test_research_campaign_dem3d_load_sensitivity.py"
+      - ".github/workflows/research-campaign-dem3d-load-sensitivity.yml"
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: TensorPhysics
+      - uses: actions/checkout@v4
+        with:
+          repository: cxs503/TensorDEM
+          path: TensorDEM
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install projects
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e "TensorPhysics[test]"
+          python -m pip install -e TensorDEM
+      - name: Run campaign controller tests
+        working-directory: TensorPhysics
+        run: python -m pytest -q tests/test_research_campaign_dem3d_load_sensitivity.py
+      - name: Run real TensorDEM load sensitivity campaign
+        working-directory: TensorPhysics
+        run: |
+          python examples/research_campaign_dem3d_load_sensitivity.py \
+            --tensordem-root ../TensorDEM \
+            --work-dir outputs/dem3d-load-sensitivity-ci \
+            --steps 24 \
+            --loads-N 0.01 0.02 0.03
+      - name: Validate campaign evidence
+        working-directory: TensorPhysics
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          p = Path("outputs/dem3d-load-sensitivity-ci/load_sensitivity_report.json")
+          r = json.loads(p.read_text())
+          assert r["protocol"] == "dem3d-bending-load-sensitivity-v1", r
+          assert r["scientific_status"] == "exploratory_numerical_sensitivity_not_physical_validation", r
+          assert r["decision"] == "all_runs_passed_numerical_gates", r
+          assert [x["load_N"] for x in r["runs"]] == [0.01, 0.02, 0.03], r
+          assert len(r["runs"]) == 3, r
+          for x in r["runs"]:
+              assert x["returncode"] == 0 and x["verdict"] == "PASS", x
+              for key in ("peak_support_reaction_abs_N", "peak_midspan_deflection_abs_m"):
+                  assert isinstance(x[key], (int, float)) and math.isfinite(x[key]), x
+          print("PASS: three real solver runs, numerical gates, and campaign report")
+          PY
+      - name: Upload campaign evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dem3d-load-sensitivity-evidence
+          path: TensorPhysics/outputs/dem3d-load-sensitivity-ci/
+          if-no-files-found: warn
