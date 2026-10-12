@@ -1,0 +1,53 @@
+name: DEM3D bending research loop
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "examples/research_benchmark_dem3d_bending.py"
+      - "tests/test_research_benchmark_dem3d_bending.py"
+      - "src/tensorphysics/**"
+  push:
+    branches: [main]
+    paths:
+      - "examples/research_benchmark_dem3d_bending.py"
+      - "tests/test_research_benchmark_dem3d_bending.py"
+      - "src/tensorphysics/**"
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: TensorPhysics
+      - uses: actions/checkout@v4
+        with:
+          repository: cxs503/TensorDEM
+          path: TensorDEM
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install projects
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e "TensorPhysics[test]"
+          python -m pip install -e TensorDEM
+      - name: Run TensorPhysics tests
+        working-directory: TensorPhysics
+        run: python -m pytest -q
+      - name: Run bending research loop
+        working-directory: TensorPhysics
+        run: python examples/research_benchmark_dem3d_bending.py --tensordem-root ../TensorDEM --work-dir outputs/dem3d-bending-ci --run-id ci-dem3d-bending --steps 24
+      - name: Check evidence lineage
+        working-directory: TensorPhysics
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('outputs/dem3d-bending-ci'); r=json.loads((p/'demo_result.json').read_text()); m=json.loads((p/'run_manifest.json').read_text()); assert r['validation_report']['status']=='passed', r; assert m['validation_status']=='passed', m; assert len(m['outputs'])==3, m; assert r['scientific_status']=='numerical_fixture_only_not_physical_validation'; print('PASS: benchmark, independent gates, manifest and evidence lineage')"
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dem3d-bending-research-evidence
+          path: TensorPhysics/outputs/dem3d-bending-ci/
+          if-no-files-found: warn
