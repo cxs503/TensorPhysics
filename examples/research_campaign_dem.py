@@ -10,7 +10,11 @@ import json
 from pathlib import Path
 from typing import Any
 
-from research_loop_dem import run_demo
+def run_demo(*args: Any, **kwargs: Any) -> dict[str, Any]:
+    """Load the optional solver-backed demo only when a campaign actually runs."""
+    from research_loop_dem import run_demo as _run_demo
+
+    return _run_demo(*args, **kwargs)
 
 
 def run_campaign(work_dir: Path, campaign_id: str, nx: int, ny: int, steps: int) -> dict[str, Any]:
