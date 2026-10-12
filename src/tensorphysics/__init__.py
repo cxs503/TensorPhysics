@@ -16,6 +16,7 @@ from .research_runtime import (
     AgentBackend, AgentRequest, AgentResult, InvalidTaskTransition, ResearchRuntimeError,
     ResearchTask, ResearchTaskStore, TaskEvent, TaskNotFoundError, TaskStatus,
 )
+from .research_runner import ResearchTaskRunner, ResearchValidator
 from .scheduler import Simulation, SimulationError, SimulationState
 
 __all__ = [
@@ -30,6 +31,6 @@ __all__ = [
     "PlatformRegistryError", "TensorPlatformRunRegistry",
     "AgentBackend", "AgentRequest", "AgentResult", "InvalidTaskTransition",
     "ResearchRuntimeError", "ResearchTask", "ResearchTaskStore", "TaskEvent",
-    "TaskNotFoundError", "TaskStatus",
+    "TaskNotFoundError", "TaskStatus", "ResearchTaskRunner", "ResearchValidator",
 ]
 __version__ = "0.1.0"
