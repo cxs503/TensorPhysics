@@ -103,3 +103,8 @@ validation-report, and research-memory contracts live in
 
 This is a software-integrity gate, not physical validation; it does not yet
 register the run in TensorPlatform or perform an AI-driven parameter search.
+
+
+## Bounded multi-run campaign
+
+[Research Campaign Demo](docs/RESEARCH_CAMPAIGN_DEMO.md) adds a two-run, fail-closed campaign controller around the single-run demo. It varies one input parameter, independently validates each real TensorDEM run, records per-run manifest references, and stops on a failed gate. CI executes both runs. This remains a software-integrity integration exercise, not a physical sensitivity study or AI-driven research policy.
