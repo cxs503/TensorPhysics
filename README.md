@@ -6,6 +6,14 @@ TensorPhysics is the HPC + AI scientific-computing and engineering workflow plat
 
 Its goal is to let authorized agents drive the complete lifecycle—from engineering problem definition and solver selection, through reproducible HPC execution and data production, to dataset creation, AI/ROM training and evaluation, and delivery of engineering applications. TensorLBM, TensorFEM, TensorDEM, and TensorFVM remain independent specialist solvers; TensorPhysics provides the contracts, execution control, provenance, and validation workflow around them.
 
+## Mission: Agent-first lights-out science factory
+
+TensorPhysics is the **scientific execution and control plane** for a persistent research environment in which authorized Agents can plan experiments, invoke scientific tools, inspect diagnostics, trigger independent validation, and choose evidence-backed next steps. Humans define goals, budgets, constraints, and approval boundaries; the system makes each permitted experiment reproducible, observable, and auditable.
+
+It is not merely a chatbot wrapper around solvers. Its job is to turn an Agent's proposed research plan into a typed, bounded, traceable workflow and return evidence—not just a success message or a plausible explanation. Agent-generated results must pass independent checks before being promoted as validated evidence.
+
+**Canonical architecture:** [Science Factory Architecture](docs/SCIENCE_FACTORY_ARCHITECTURE.md) · [System Overview](docs/SYSTEM_OVERVIEW.md)
+
 ## Role in the Tensor ecosystem
 
 TensorPhysics is the **scientific workflow and multiphysics coordination layer** between an Agent/application and the specialist solvers. It turns approved plans into traceable execution: solver selection and lifecycle, dependency ordering, field exchange, checkpoints, run manifests, artifacts, diagnostics, and numerical acceptance gates.
