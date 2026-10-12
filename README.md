@@ -6,6 +6,19 @@ TensorPhysics is the HPC + AI scientific-computing and engineering workflow plat
 
 Its goal is to let authorized agents drive the complete lifecycle—from engineering problem definition and solver selection, through reproducible HPC execution and data production, to dataset creation, AI/ROM training and evaluation, and delivery of engineering applications. TensorLBM, TensorFEM, TensorDEM, and TensorFVM remain independent specialist solvers; TensorPhysics provides the contracts, execution control, provenance, and validation workflow around them.
 
+## Role in the Tensor ecosystem
+
+TensorPhysics is the **scientific workflow and multiphysics coordination layer** between an Agent/application and the specialist solvers. It turns approved plans into traceable execution: solver selection and lifecycle, dependency ordering, field exchange, checkpoints, run manifests, artifacts, diagnostics, and numerical acceptance gates.
+
+- **TensorPlatform** supplies shared identity, data/experiment/model lifecycle, and governance services.
+- **TensorLBM / TensorFVM / TensorFEM / TensorDEM** remain independent specialist solvers; TensorPhysics must not reimplement their numerical kernels.
+- **Agent tools** should call typed, permissioned workflow operations and durable job/artifact identifiers rather than rely on unrestricted shell execution.
+- **HPC backends** are execution targets behind adapters; orchestration contracts should remain backend-neutral.
+
+The intended loop is goal and constraints → workflow plan → solver execution and field exchange → validation and provenance → dataset curation → model training/evaluation → engineering decision. Physical correctness must be established by solver-specific verification, conservation checks, sensitivity studies, and appropriate experimental or reference data—not by successful task completion alone.
+
+**Maturity note:** the current implementation below lists concrete code-level capabilities. Coupling fixtures are contract tests unless explicitly qualified otherwise; checkpoint envelopes do not imply full solver restart/resume; and production cluster execution, complete adapters, and a validated icebreaking model remain separate milestones.
+
 ## Current implementation
 
 The main branch contains:
