@@ -2,11 +2,28 @@
 
 **Status:** architecture and integration map. This document describes the intended system and explicitly distinguishes implemented contracts from capabilities that still require end-to-end validation.
 
-## 1. Mission
+## 1. Mission: a lights-out science factory for Agent-led research
 
-The Tensor ecosystem is an engineering simulation and AI workflow system. It should let an authorized user or agent define an engineering objective, configure and execute one or more specialist solvers, validate numerical results, preserve provenance, build datasets, train/evaluate AI or reduced-order models, and package repeatable engineering applications.
+The Tensor ecosystem is being built as **research infrastructure in which authorized AI Agents can act as scientific operators**: formulate testable plans, launch computational experiments, inspect evidence, revise hypotheses, and preserve reproducible outcomes. Humans define objectives, scientific constraints, budgets, safety boundaries, and approval policies; Agents work autonomously inside those boundaries.
 
-It is not one monolithic solver. The specialist solvers remain independently usable; the platform and orchestration layers connect them through versioned contracts and reproducible artifacts.
+This is not merely a chat interface for existing solvers, nor a claim that autonomous science is already production-ready. It is a target architecture for a **lights-out science factory**: a persistent, observable, governed environment that connects scientific reasoning to real execution, trusted verification, and durable research memory.
+
+The ecosystem has six logical planes:
+
+1. **Research intent and policy** — goals, hypotheses, constraints, quantities of interest, budgets, and acceptance criteria.
+2. **Agent research actors** — planning, experiment design, tool selection, result interpretation, and next-step selection.
+3. **Research execution control** — typed workflow DAGs, queues, sandboxing, resource scheduling, checkpoints, retries, cancellation, and approvals.
+4. **Scientific instruments** — Tensor solvers, external solvers such as OpenFOAM, HPC backends, data pipelines, and (later) physical laboratory instruments.
+5. **Evidence and provenance** — numerical verification, benchmark comparison, uncertainty, immutable artifacts, run manifests, and audit.
+6. **Research memory and learning** — curated successful and failed experiments, versioned datasets, surrogate/ROM training, and evidence-grounded reuse.
+
+The defining loop is:
+
+`question / hypothesis → experiment plan → controlled execution → independent checks → evidence-backed interpretation → next experiment`
+
+A process exit code, plausible plot, generated report, or Agent self-assessment is not sufficient evidence of scientific correctness.
+
+The six repositories remain separate products with explicit boundaries. We will reuse mature open-source software where it accelerates delivery, while developing Tensor numerical kernels where direct control over algorithms, observability, coupling, GPU execution, and verification creates measurable strategic value.
 
 ## 2. Canonical repository map
 
@@ -96,6 +113,8 @@ Do not promote a feature to a higher maturity label based only on a passing unit
 Agents should use typed, permissioned operations rather than unrestricted shell access. Credentials must stay outside prompts and manifests. Expensive jobs, destructive actions and publishing require explicit policy/approval gates. Runs must be cancellable, attributable and auditable; failures and incomplete results must remain visible rather than being silently registered as accepted data.
 
 ## 9. Canonical documentation
+
+- [Agent-first Science Factory Architecture](SCIENCE_FACTORY_ARCHITECTURE.md) — target architecture, autonomy levels, shared contracts, safety and acceptance gates.
 
 - [TensorPhysics architecture and development phases](docs/hpc-ai-platform-architecture.md)
 - [Evidence-based integration status and next acceptance gates](docs/INTEGRATION_STATUS.md)

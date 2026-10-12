@@ -1,25 +1,26 @@
 # HPC + AI scientific-computing platform architecture
 
+> **Position in the system:** this document details execution, HPC, data, and model lifecycle design for the [Agent-first Science Factory](SCIENCE_FACTORY_ARCHITECTURE.md). The strategic product is a lights-out research environment where authorized Agents plan and iterate on experiments under policy; this document focuses on the engineering planes that make those experiments executable, scalable, and auditable.
+
 ## 1. Product objective
 
-TensorPhysics is the control and contract layer for an HPC + AI engineering platform.
-Its end-to-end product is not just a coupled solver. An authorized agent should be
-able to turn an engineering objective into an auditable workflow:
+TensorPhysics is the control and contract layer for an Agent-first HPC + AI science factory. It enables authorized Agents to act as research operators: propose a testable experiment plan, invoke typed scientific capabilities, inspect diagnostics, and recommend evidence-backed next steps. Human owners set the research goals, constraints, budget, and approval boundaries.
 
-1. clarify the physical question, outputs, constraints, and acceptance criteria;
-2. select a validated numerical method and compatible solver versions;
+Its end-to-end product is not just a coupled solver or a chatbot. It should turn a bounded research objective into a reproducible, auditable workflow:
+
+1. clarify the physical question, hypotheses, outputs, constraints, and acceptance criteria;
+2. select a suitable numerical method and compatible solver versions;
 3. build or configure a model, mesh/particle set, materials, and boundary conditions;
-4. run preflight checks and a small verification case;
-5. schedule production runs on local workstations, GPU nodes, or an HPC scheduler;
-6. monitor progress, detect numerical failure, and make bounded recovery decisions;
-7. publish versioned simulation data with provenance and quality labels;
-8. assemble training/validation datasets and train or evaluate AI/ROM/surrogate models;
-9. validate the model against held-out simulation or experimental evidence;
-10. package a repeatable engineering application with reports, APIs, and visualization.
+4. preflight inputs and run a cheap verification case;
+5. execute experiments on local workstations, GPUs, or an HPC scheduler;
+6. monitor progress, diagnose numerical failure, and make bounded recovery decisions;
+7. independently verify results and preserve versioned artifacts with provenance;
+8. curate datasets and train/evaluate AI, ROM, or surrogate models against held-out evidence;
+9. use verified evidence to select the next experiment or stop when criteria are met;
+10. package reproducible research results, reports, APIs, and visualization.
 
-The agent is an operator of typed, auditable capabilities, not an unrestricted shell
-script generator. Numerical correctness remains the responsibility of solvers,
-coupling operators, verification tests, and domain acceptance criteria.
+Agents act through typed, auditable capabilities, not unrestricted shell access. Numerical correctness remains the responsibility of solvers, coupling operators, independent verification tests, and domain acceptance criteria. A successful process exit or plausible plot is not scientific acceptance.
+
 
 ## 2. Architectural planes
 
