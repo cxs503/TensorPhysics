@@ -1,4 +1,5 @@
 # HPC + AI scientific-computing platform architecture
+
 > **Position in the system:** this document details execution, HPC, data, and model lifecycle design for the [Agent-first Science Factory](SCIENCE_FACTORY_ARCHITECTURE.md). The strategic product is a lights-out research environment where authorized Agents plan and iterate on experiments under policy; this document focuses on the engineering planes that make those experiments executable, scalable, and auditable.
 
 ## 1. Product objective
@@ -20,9 +21,6 @@ Its end-to-end product is not just a coupled solver or a chatbot. It should turn
 
 Agents act through typed, auditable capabilities, not unrestricted shell access. Numerical correctness remains the responsibility of solvers, coupling operators, independent verification tests, and domain acceptance criteria. A successful process exit or plausible plot is not scientific acceptance.
 
-The agent is an operator of typed, auditable capabilities, not an unrestricted shell
-script generator. Numerical correctness remains the responsibility of solvers,
-coupling operators, verification tests, and domain acceptance criteria.
 
 ## 2. Architectural planes
 
