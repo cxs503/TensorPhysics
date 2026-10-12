@@ -1,0 +1,73 @@
+name: Research loop DEM integration
+
+on:
+  pull_request:
+    paths:
+      - "src/tensorphysics/**"
+      - "examples/research_loop_dem.py"
+      - "docs/RESEARCH_LOOP_DEMO.md"
+      - ".github/workflows/research-loop-demo.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/tensorphysics/**"
+      - "examples/research_loop_dem.py"
+      - "docs/RESEARCH_LOOP_DEMO.md"
+      - ".github/workflows/research-loop-demo.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dem-research-loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install TensorPhysics and tests
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[test]"
+      - name: Install TensorDEM solver
+        run: python -m pip install "git+https://github.com/cxs503/TensorDEM.git"
+      - name: Run real bounded TensorDEM research loop
+        run: >-
+          python examples/research_loop_dem.py
+          --run-id ci-research-loop-dem-${{ github.run_id }}
+          --nx 7 --ny 3 --steps 20
+          --work-dir outputs/research-loop-dem
+      - name: Assert persisted evidence and lineage
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("outputs/research-loop-dem")
+          result = json.loads((root / "demo_result.json").read_text())
+          report = json.loads((root / "validation_report.json").read_text())
+          manifest = json.loads((root / "run_manifest.json").read_text())
+          memory = json.loads((root / "research_memory.json").read_text())
+
+          assert result["solver_returncode"] == 0
+          assert report["status"] == "passed", report
+          assert all(check["passed"] for check in report["checks"]), report
+          assert manifest["validation_status"] == "passed"
+          assert manifest["validation_report"]["checksum_sha256"]
+          assert len(manifest["outputs"]) == 2
+          assert memory["next_action"] == "run_bounded_parameter_sweep"
+          for name in ("history.csv", "trajectory.pt"):
+              path = root / "solver-output" / name
+              assert path.is_file() and path.stat().st_size > 0
+          print("Research-loop evidence verified; this is an output-integrity gate, not a physics benchmark.")
+          PY
+      - name: Upload demo evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-loop-dem-evidence
+          path: outputs/research-loop-dem/
+          if-no-files-found: warn
