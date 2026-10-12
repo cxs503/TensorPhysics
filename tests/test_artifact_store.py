@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from tensorphysics.artifact_store import ArtifactStoreError, LocalArtifactStore
+from tensorphysics.provenance import ArtifactRef
 
 
 def test_put_file_copies_bytes_and_returns_verified_reference(tmp_path: Path):
@@ -43,6 +44,16 @@ def test_verify_detects_modified_artifact(tmp_path: Path):
     Path(ref.uri.removeprefix("file://")).write_text("tampered", encoding="utf-8")
 
     assert store.verify(ref) is False
+
+
+def test_verify_rejects_uri_outside_store_root(tmp_path: Path):
+    store = LocalArtifactStore(tmp_path / "store")
+    outside = tmp_path / "private.txt"
+    outside.write_text("not a store artifact", encoding="utf-8")
+    ref = ArtifactRef(uri=outside.resolve().as_uri(), media_type="text/plain")
+
+    with pytest.raises(ValueError, match="outside this store"):
+        store.verify(ref)
 
 
 @pytest.mark.parametrize("key", ["", "/absolute/file", "../escape", "run/../../escape", "run\\escape"])
