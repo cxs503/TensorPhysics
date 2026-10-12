@@ -12,6 +12,11 @@ from .provenance import ArtifactRef, ManifestError, RunManifest, RunStatus, Vali
 from .research_contracts import (
     ExperimentPlan, ResearchContractError, ResearchGoal, ResearchMemoryRecord, ValidationReport,
 )
+from .research_runtime import (
+    AgentBackend, AgentRequest, AgentResult, InvalidTaskTransition, ResearchRuntimeError,
+    ResearchTask, ResearchTaskStore, TaskEvent, TaskNotFoundError, TaskStatus,
+)
+from .research_runner import ResearchTaskRunner, ResearchValidator
 from .scheduler import Simulation, SimulationError, SimulationState
 
 __all__ = [
@@ -24,5 +29,8 @@ __all__ = [
     "FieldStore", "FieldValue", "Simulation", "SimulationConfig", "SimulationError",
     "SimulationState", "Solver", "SolverContext", "SolverState",
     "PlatformRegistryError", "TensorPlatformRunRegistry",
+    "AgentBackend", "AgentRequest", "AgentResult", "InvalidTaskTransition",
+    "ResearchRuntimeError", "ResearchTask", "ResearchTaskStore", "TaskEvent",
+    "TaskNotFoundError", "TaskStatus", "ResearchTaskRunner", "ResearchValidator",
 ]
 __version__ = "0.1.0"
