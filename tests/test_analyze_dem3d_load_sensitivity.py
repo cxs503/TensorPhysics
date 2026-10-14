@@ -3,9 +3,12 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
+import sys
 
 import pytest
 
+EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
+sys.path.insert(0, str(EXAMPLES))
 from analyze_dem3d_load_sensitivity import analyze_campaign
 
 
