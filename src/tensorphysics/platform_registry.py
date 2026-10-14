@@ -1,4 +1,4 @@
-""""Optional client for registering run provenance with TensorPlatform.
+"""Optional client for registering run provenance with TensorPlatform.
 
 The client sends only compact metadata and artifact references; it never uploads
 solver fields or artifact bytes. The target API is TensorPlatform's
@@ -128,7 +128,7 @@ class TensorPlatformRunRegistry:
             raise ValueError("run_id must be a non-empty trimmed string")
         query = urlencode({"organization_id": self.organization_id})
         request = Request(
-            f"{self.base_url}/api/v1/tensorphysics/runs/{quote(run_id, safe="")}?{query}",
+            f"{self.base_url}/api/v1/tensorphysics/runs/{quote(run_id, safe='')}?{query}",
             headers={
                 "Authorization": f"Bearer {self._bearer_token}",
                 "Accept": "application/json",
