@@ -38,3 +38,20 @@ it does not establish calibrated ice flexural strength or experimental agreement
 The next scientific step is to implement/verify physical support and loading
 conditions, calibrate against independent material experiments, and predeclare
 quantitative acceptance thresholds before claiming physical validation.
+
+
+## Bounded load-amplitude sensitivity campaign
+
+To run three ordered load amplitudes and preserve a per-run evidence summary:
+
+```bash
+python examples/research_campaign_dem3d_load_sensitivity.py \
+  --tensordem-root ../TensorDEM \
+  --work-dir outputs/dem3d-load-sensitivity \
+  --steps 24 \
+  --loads-N 0.01 0.02 0.03
+```
+
+The controller now fails closed unless every run's report identifies the expected benchmark protocol and exact requested peak load, contains finite positive reaction/deflection metrics, a 64-character history signature, and a finite time-ordered history with nondecreasing broken-bond count. Loads must be strictly increasing to make the campaign ordering explicit. Each run's evidence gate and any failure reason are retained in `load_sensitivity_report.json`.
+
+These are provenance and numerical-integrity checks. They do not assert that force or deflection must follow a particular physical trend, and do not establish convergence, calibrated material strength, or agreement with experiments.
