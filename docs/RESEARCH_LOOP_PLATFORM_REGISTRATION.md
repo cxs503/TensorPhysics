@@ -61,6 +61,6 @@ python examples/research_campaign_dem_platform.py \
   --campaign-id ice-dem-smoke-001 --nx 7 --ny 3 --steps 20
 ```
 
-The campaign registers the baseline run first. Only if its deterministic integrity gate passes **and** TensorPlatform read-back matches does the controller launch the second run (`nx + 1`). The second manifest records the first run ID in `parent_run_ids`. Any failed validation or failed read-back stops the campaign immediately. The report is written to `outputs/research-campaign-dem-platform/<campaign-id>/campaign_report.json`.
+The campaign registers the baseline run first. Only if its deterministic integrity gate passes, TensorPlatform read-back matches, **and the read-back manifest's `parent_run_ids` exactly match the expected lineage** does the controller launch the second run (`nx + 1`). The second manifest must record the first run ID in `parent_run_ids`; a mismatch stops the campaign. The report records the lineage verification result for each run and is written to `outputs/research-campaign-dem-platform/<campaign-id>/campaign_report.json`.
 
 This two-point variation exists to test execution, lineage, artifact persistence, and fail-closed control. It is explicitly **not** a meaningful physical sensitivity study and must not be used to claim an optimal particle count or icebreaking result.

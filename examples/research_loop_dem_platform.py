@@ -103,6 +103,9 @@ def run_and_register(
     retrieved_manifest = retrieved["manifest"]
     if retrieved_manifest != manifest:
         raise RuntimeError("retrieved platform manifest differs from the submitted manifest")
+    expected_parent_run_ids = list(parent_run_ids or [])
+    actual_parent_run_ids = list(retrieved_manifest.get("parent_run_ids", []))
+    lineage_verified = actual_parent_run_ids == expected_parent_run_ids
 
     summary = {
         "run_id": run_id,
@@ -118,6 +121,8 @@ def run_and_register(
         }],
         "platform_registration": registered,
         "platform_retrieval_verified": True,
+        "parent_run_ids": actual_parent_run_ids,
+        "lineage_verified": lineage_verified,
         "work_dir": str(root),
     }
     (root / "platform_registration_result.json").write_text(
