@@ -1,8 +1,7 @@
 """Run TensorDEM, upload real artifacts to S3, and register/retrieve the run.
 
-This requires TensorDEM, the TensorPhysics test/runtime dependencies, boto3,
-S3 credentials, and an authorized TensorPlatform API token. No network calls are
-made unless this example is run explicitly.
+Requires TensorDEM, TensorPhysics, boto3, S3 credentials, and an authorized
+TensorPlatform API token. No network calls occur unless explicitly run.
 """
 from __future__ import annotations
 
@@ -10,12 +9,12 @@ import argparse
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 from typing import Any
 
 from tensorphysics import S3ArtifactStore, TensorPlatformRunRegistry
 from tensorphysics.platform_manifest import build_platform_manifest
-from tensorphysics.research_loop_dem import run_demo
 
 
 def run_and_register(
@@ -29,34 +28,43 @@ def run_and_register(
     prefix: str,
     endpoint_url: str | None = None,
 ) -> dict[str, Any]:
-    result = run_demo(work_dir, run_id, nx, ny, steps)
-    root = Path(result["work_dir"])
+    root = work_dir.expanduser().resolve()
+    root.mkdir(parents=True, exist_ok=True)
+    demo_script = Path(__file__).with_name("research_loop_dem.py")
+    command = [
+        sys.executable, str(demo_script), "--work-dir", str(root),
+        "--run-id", run_id, "--nx", str(nx), "--ny", str(ny), "--steps", str(steps),
+    ]
+    completed = subprocess.run(command, check=False, capture_output=True, text=True)
+    result_path = root / "demo_result.json"
+    if not result_path.is_file():
+        raise RuntimeError(
+            "TensorDEM research loop produced no demo_result.json; "
+            f"returncode={completed.returncode}; stderr={completed.stderr[-2000:]}"
+        )
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+
     store = S3ArtifactStore(
-        bucket,
-        prefix=prefix,
-        endpoint_url=endpoint_url,
+        bucket, prefix=prefix, endpoint_url=endpoint_url,
         region_name=os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION"),
     )
-
-    uploads: list[tuple[str, Path, str]] = []
     solver_dir = root / "solver-output"
-    history = solver_dir / "history.csv"
-    trajectory = solver_dir / "trajectory.pt"
-    if history.is_file():
-        uploads.append(("solver-history", history, "text/csv"))
-    if trajectory.is_file():
-        uploads.append(("solver-trajectory", trajectory, "application/octet-stream"))
-    report_path = root / "validation_report.json"
-    if not report_path.is_file():
-        raise RuntimeError("research loop did not write validation_report.json")
-
+    candidates = [
+        ("solver-history", solver_dir / "history.csv", "text/csv"),
+        ("solver-trajectory", solver_dir / "trajectory.pt", "application/octet-stream"),
+    ]
     uploaded_refs = []
-    for role, path, media_type in uploads:
+    for role, path, media_type in candidates:
+        if not path.is_file():
+            continue
         ref = store.put_file(path, f"{run_id}/{path.name}", media_type=media_type)
         if not store.verify(ref):
             raise RuntimeError(f"S3 verification failed for {path.name}")
         uploaded_refs.append((role, ref))
 
+    report_path = root / "validation_report.json"
+    if not report_path.is_file():
+        raise RuntimeError("research loop did not write validation_report.json")
     report_ref = store.put_file(
         report_path, f"{run_id}/validation_report.json", media_type="application/json"
     )
@@ -64,32 +72,27 @@ def run_and_register(
         raise RuntimeError("S3 verification failed for validation report")
 
     manifest = build_platform_manifest(
-        result,
-        uploaded_refs,
-        report_ref,
+        result, uploaded_refs, report_ref,
         producer_revision=os.getenv("TENSORPHYSICS_GIT_REVISION", "unknown"),
     )
     registry = TensorPlatformRunRegistry.from_env()
     registered = registry.register(manifest)
     retrieved = registry.get(run_id)
-    retrieved_manifest = retrieved.get("manifest")
-    if not isinstance(retrieved_manifest, dict) or retrieved_manifest.get("run_id") != run_id:
-        raise RuntimeError("registered run could not be retrieved with the expected manifest")
+    retrieved_manifest = retrieved["manifest"]
     if retrieved_manifest != manifest:
         raise RuntimeError("retrieved platform manifest differs from the submitted manifest")
 
     summary = {
         "run_id": run_id,
+        "solver_process_returncode": completed.returncode,
         "solver_returncode": result["solver_returncode"],
         "validation_status": manifest["validation_status"],
         "uploaded_artifacts": [
             {"role": role, "uri": ref.uri, "sha256": ref.checksum_sha256, "size_bytes": ref.size_bytes}
             for role, ref in uploaded_refs
         ] + [{
-            "role": "validation-report",
-            "uri": report_ref.uri,
-            "sha256": report_ref.checksum_sha256,
-            "size_bytes": report_ref.size_bytes,
+            "role": "validation-report", "uri": report_ref.uri,
+            "sha256": report_ref.checksum_sha256, "size_bytes": report_ref.size_bytes,
         }],
         "platform_registration": registered,
         "platform_retrieval_verified": True,
