@@ -17,6 +17,28 @@ from tensorphysics import S3ArtifactStore, TensorPlatformRunRegistry
 from tensorphysics.platform_manifest import build_platform_manifest
 
 
+def _build_demo_command(
+    demo_script: Path,
+    work_dir: Path,
+    run_id: str,
+    nx: int,
+    ny: int,
+    steps: int,
+    *,
+    parent_run_ids: list[str] | None = None,
+) -> list[str]:
+    """Build the child invocation while preserving explicit run lineage."""
+    command = [
+        sys.executable, str(demo_script), "--work-dir", str(work_dir),
+        "--run-id", run_id, "--nx", str(nx), "--ny", str(ny), "--steps", str(steps),
+    ]
+    for parent_run_id in parent_run_ids or []:
+        if not parent_run_id or parent_run_id.strip() != parent_run_id:
+            raise ValueError("parent run IDs must be non-empty and have no surrounding whitespace")
+        command.extend(["--parent-run-id", parent_run_id])
+    return command
+
+
 def run_and_register(
     work_dir: Path,
     run_id: str,
@@ -32,10 +54,9 @@ def run_and_register(
     root = work_dir.expanduser().resolve()
     root.mkdir(parents=True, exist_ok=True)
     demo_script = Path(__file__).with_name("research_loop_dem.py")
-    command = [
-        sys.executable, str(demo_script), "--work-dir", str(root),
-        "--run-id", run_id, "--nx", str(nx), "--ny", str(ny), "--steps", str(steps),
-    ]
+    command = _build_demo_command(
+        demo_script, root, run_id, nx, ny, steps, parent_run_ids=parent_run_ids
+    )
     completed = subprocess.run(command, check=False, capture_output=True, text=True)
     result_path = root / "demo_result.json"
     if not result_path.is_file():
