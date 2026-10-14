@@ -26,7 +26,7 @@ def run_campaign(
     steps: int,
     *,
     bucket: str,
-    prefix: str,
+    prefix: str = "tensorphysics-runs",
     endpoint_url: str | None = None,
     register_run: RegisterRun = run_and_register,
 ) -> dict[str, Any]:
