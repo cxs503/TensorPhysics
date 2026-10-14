@@ -45,7 +45,7 @@ def _campaign(tmp_path: Path, loads=(0.01, 0.02, 0.03)) -> Path:
         run_dir = root / f"run-{i:02d}"
         run_dir.mkdir(parents=True)
         (run_dir / "three_point_bending_report.json").write_text(
-            json.dumps(_solver_report(load, signature=hex(i)[2:] * 64)[:0] if False else _solver_report(load, signature=f"{i:064x}")),
+            json.dumps(_solver_report(load, signature=f"{i:064x}")),
             encoding="utf-8",
         )
         runs.append({
