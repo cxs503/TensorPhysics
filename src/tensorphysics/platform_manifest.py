@@ -6,6 +6,7 @@ an ArtifactStore first, and only verified references are put in the registry.
 from __future__ import annotations
 
 from typing import Any, Mapping
+from urllib.parse import urlsplit
 
 from .provenance import ArtifactRef
 
@@ -13,6 +14,11 @@ from .provenance import ArtifactRef
 def _artifact_record(ref: ArtifactRef, *, role: str) -> dict[str, Any]:
     if not ref.checksum_sha256 or ref.size_bytes is None:
         raise ValueError(f"artifact {ref.uri!r} must have checksum and size before registration")
+    parsed = urlsplit(ref.uri)
+    if not parsed.scheme or parsed.scheme == "file":
+        raise ValueError(
+            f"artifact {ref.uri!r} must use a shared remote URI, not a local file URI"
+        )
     return {
         "uri": ref.uri,
         "media_type": ref.media_type,
@@ -34,7 +40,7 @@ def build_platform_manifest(
 ) -> dict[str, Any]:
     """Build a contract-v1 manifest using only verified shared artifact refs.
 
-    `artifact_refs` contains (role, reference) pairs for solver-produced files.
+    artifact_refs contains (role, reference) pairs for solver-produced files.
     The validation report is always added as a first-class output artifact.
     """
     run = result.get("run_manifest")
@@ -59,7 +65,6 @@ def build_platform_manifest(
 
     outputs = [_artifact_record(ref, role=role) for role, ref in artifact_refs]
     report_record = _artifact_record(validation_report_ref, role="validation-report")
-    # Avoid duplicating the report output if caller already included it.
     if not any(item["uri"] == report_record["uri"] for item in outputs):
         outputs.append(report_record)
 
@@ -102,5 +107,4 @@ def build_platform_manifest(
     }
     if status == "failed":
         manifest["failure"] = {"reason": run.get("failure_reason") or validation.get("summary", "run failed")}
-    # Drop absent optional fields rather than emitting nulls.
     return {key: value for key, value in manifest.items() if value is not None}
