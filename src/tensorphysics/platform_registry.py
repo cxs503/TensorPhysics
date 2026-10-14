@@ -1,4 +1,4 @@
-"""Optional client for registering run provenance with TensorPlatform.
+""""Optional client for registering run provenance with TensorPlatform.
 
 The client sends only compact metadata and artifact references; it never uploads
 solver fields or artifact bytes. The target API is TensorPlatform's
@@ -10,6 +10,7 @@ import json
 import os
 from typing import Any, Mapping
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from .provenance import RunManifest
@@ -33,7 +34,7 @@ class PlatformRegistryError(RuntimeError):
 
 
 class TensorPlatformRunRegistry:
-    """Small stdlib-only HTTP client for the TensorPlatform run registry."""
+    """Small stdlib-only HTTP client for TensorPlatform's run registry."""
 
     def __init__(
         self,
@@ -59,7 +60,7 @@ class TensorPlatformRunRegistry:
 
     @classmethod
     def from_env(cls) -> "TensorPlatformRunRegistry":
-        """Create the client from TENSORPLATFORM_URL, API_TOKEN and ORGANIZATION_ID."""
+        """Create the client from TensorPlatform environment settings."""
         try:
             base_url = os.environ["TENSORPLATFORM_URL"]
             token = os.environ["TENSORPLATFORM_API_TOKEN"]
@@ -73,11 +74,7 @@ class TensorPlatformRunRegistry:
         return cls(base_url, token, organization_id, timeout=timeout)
 
     def register(self, manifest: RunManifest | Mapping[str, Any]) -> dict[str, Any]:
-        """Register one manifest; exact retries are idempotent on the platform.
-
-        Invalid status values and oversized metadata are rejected locally so a
-        solver workflow can fail fast without making an HTTP request.
-        """
+        """Register one manifest; exact retries are idempotent on the platform."""
         payload_manifest = manifest.to_dict() if isinstance(manifest, RunManifest) else dict(manifest)
         run_id = payload_manifest.get("run_id")
         status = payload_manifest.get("status")
@@ -102,9 +99,7 @@ class TensorPlatformRunRegistry:
         except (TypeError, ValueError) as exc:
             raise ValueError(f"manifest must be JSON-serializable without NaN or Infinity: {exc}") from exc
         if len(manifest_bytes) > _MAX_MANIFEST_BYTES:
-            raise ValueError(
-                f"manifest exceeds TensorPlatform's {_MAX_MANIFEST_BYTES}-byte limit"
-            )
+            raise ValueError(f"manifest exceeds TensorPlatform's {_MAX_MANIFEST_BYTES}-byte limit")
 
         payload = {
             "run_id": run_id,
@@ -125,13 +120,35 @@ class TensorPlatformRunRegistry:
             },
             method="POST",
         )
+        return self._read_json(request, operation="registration", expected_run_id=run_id)
+
+    def get(self, run_id: str) -> dict[str, Any]:
+        """Retrieve a run in this client's organization and verify its identity."""
+        if not isinstance(run_id, str) or not run_id.strip() or run_id != run_id.strip():
+            raise ValueError("run_id must be a non-empty trimmed string")
+        query = urlencode({"organization_id": self.organization_id})
+        request = Request(
+            f"{self.base_url}/api/v1/tensorphysics/runs/{run_id}?{query}",
+            headers={
+                "Authorization": f"Bearer {self._bearer_token}",
+                "Accept": "application/json",
+            },
+            method="GET",
+        )
+        result = self._read_json(request, operation="retrieval", expected_run_id=run_id)
+        manifest = result.get("manifest")
+        if not isinstance(manifest, dict) or manifest.get("run_id") != run_id:
+            raise PlatformRegistryError("TensorPlatform returned a run without the expected manifest")
+        return result
+
+    def _read_json(self, request: Request, *, operation: str, expected_run_id: str) -> dict[str, Any]:
         try:
             with urlopen(request, timeout=self.timeout) as response:
                 result = json.loads(response.read().decode("utf-8"))
         except HTTPError as exc:
             detail = exc.read(4096).decode("utf-8", errors="replace")
             raise PlatformRegistryError(
-                f"TensorPlatform rejected run registration (HTTP {exc.code}): {detail}",
+                f"TensorPlatform {operation} failed (HTTP {exc.code}): {detail}",
                 status_code=exc.code,
             ) from exc
         except URLError as exc:
@@ -140,7 +157,6 @@ class TensorPlatformRunRegistry:
             raise PlatformRegistryError(f"TensorPlatform request failed: {exc}") from exc
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise PlatformRegistryError("TensorPlatform returned invalid JSON") from exc
-
-        if not isinstance(result, dict) or result.get("run_id") != run_id:
-            raise PlatformRegistryError("TensorPlatform returned an unexpected registration response")
+        if not isinstance(result, dict) or result.get("run_id") != expected_run_id:
+            raise PlatformRegistryError("TensorPlatform returned an unexpected response")
         return result
