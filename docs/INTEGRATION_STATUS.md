@@ -47,3 +47,10 @@ Matching field names are not sufficient to imply matching units, discretization,
 - [Adapter contract audit](adapter-contracts.md)
 - [Ecosystem integration](ecosystem-integration.md)
 - [Core architecture](architecture.md)
+
+
+## Update: TensorPlatform remote run registration
+
+The branch `feat/platform-registered-dem-research-loop` adds an executable remote-registration path in `examples/research_loop_dem_platform.py` and a manifest-v1 adapter in `src/tensorphysics/platform_manifest.py`. It runs the existing bounded TensorDEM research-loop demo, uploads real outputs and the validation report to S3-compatible storage, registers checksum-backed remote URIs with TensorPlatform, then retrieves the record and compares the stored manifest to the submitted manifest.
+
+This is implemented code plus mocked/unit-test coverage; it is not yet evidence of a live cloud run. A live acceptance run still requires configured S3 credentials and a deployed TensorPlatform API token with `datasets:upload` and `datasets:read`. The output checks are software integrity checks, not a physical icebreaking validation.
