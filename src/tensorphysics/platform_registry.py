@@ -10,7 +10,7 @@ import json
 import os
 from typing import Any, Mapping
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
 from .provenance import RunManifest
@@ -128,7 +128,7 @@ class TensorPlatformRunRegistry:
             raise ValueError("run_id must be a non-empty trimmed string")
         query = urlencode({"organization_id": self.organization_id})
         request = Request(
-            f"{self.base_url}/api/v1/tensorphysics/runs/{run_id}?{query}",
+            f"{self.base_url}/api/v1/tensorphysics/runs/{quote(run_id, safe="")}?{query}",
             headers={
                 "Authorization": f"Bearer {self._bearer_token}",
                 "Accept": "application/json",
