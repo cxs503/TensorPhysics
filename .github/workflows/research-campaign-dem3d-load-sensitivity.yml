@@ -60,6 +60,9 @@ jobs:
           assert len(r["runs"]) == 3, r
           for x in r["runs"]:
               assert x["returncode"] == 0 and x["verdict"] == "PASS", x
+              assert x["evidence_gate"] == "passed", x
+              assert x["peak_applied_load_N"] == x["load_N"], x
+              assert len(x["signature_sha256"]) == 64, x
               for key in ("peak_support_reaction_abs_N", "peak_midspan_deflection_abs_m"):
                   assert isinstance(x[key], (int, float)) and math.isfinite(x[key]), x
           print("PASS: three real solver runs, numerical gates, and campaign report")
