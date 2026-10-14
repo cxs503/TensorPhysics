@@ -12,6 +12,9 @@ TensorPhysics is the **scientific execution and control plane** for a persistent
 
 It is not merely a chatbot wrapper around solvers. Its job is to turn an Agent's proposed research plan into a typed, bounded, traceable workflow and return evidence—not just a success message or a plausible explanation. Agent-generated results must pass independent checks before being promoted as validated evidence.
 
+
+**Runnable remote research loop:** [TensorDEM → S3 artifacts → TensorPlatform registration and retrieval](docs/RESEARCH_LOOP_PLATFORM_REGISTRATION.md).
+
 **Canonical architecture:** [Science Factory Architecture](docs/SCIENCE_FACTORY_ARCHITECTURE.md) · [System Overview](docs/SYSTEM_OVERVIEW.md)
 
 ## Role in the Tensor ecosystem
