@@ -50,3 +50,17 @@ The run is written under outputs/research-loop-dem-platform/, including demo_res
 - Running this command against a real S3 service and deployed TensorPlatform is an integration test; it requires the deployment, identity, and credentials above.
 - S3 HEAD metadata checks verify object presence, declared size and stored SHA-256 metadata. They are not a full re-download and recomputation of remote object bytes.
 - A validation_status=passed here means the deterministic output-integrity checks passed. It is not a claim of physical accuracy, benchmark agreement, convergence, fracture-law validity, or icebreaker resistance accuracy.
+
+
+## Bounded platform-registered campaign with lineage
+
+For a two-run, fail-closed integration campaign:
+
+```bash
+python examples/research_campaign_dem_platform.py \
+  --campaign-id ice-dem-smoke-001 --nx 7 --ny 3 --steps 20
+```
+
+The campaign registers the baseline run first. Only if its deterministic integrity gate passes **and** TensorPlatform read-back matches does the controller launch the second run (`nx + 1`). The second manifest records the first run ID in `parent_run_ids`. Any failed validation or failed read-back stops the campaign immediately. The report is written to `outputs/research-campaign-dem-platform/<campaign-id>/campaign_report.json`.
+
+This two-point variation exists to test execution, lineage, artifact persistence, and fail-closed control. It is explicitly **not** a meaningful physical sensitivity study and must not be used to claim an optimal particle count or icebreaking result.

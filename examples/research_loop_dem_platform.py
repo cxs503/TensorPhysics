@@ -27,6 +27,7 @@ def run_and_register(
     bucket: str,
     prefix: str,
     endpoint_url: str | None = None,
+    parent_run_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     root = work_dir.expanduser().resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -115,6 +116,8 @@ def main() -> None:
     parser.add_argument("--bucket", default=os.getenv("TENSORPHYSICS_S3_BUCKET"))
     parser.add_argument("--prefix", default=os.getenv("TENSORPHYSICS_S3_PREFIX", "tensorphysics-runs"))
     parser.add_argument("--endpoint-url", default=os.getenv("TENSORPHYSICS_S3_ENDPOINT_URL"))
+    parser.add_argument("--parent-run-id", action="append", default=[],
+                        help="parent run ID; may be supplied more than once")
     args = parser.parse_args()
     if min(args.nx, args.ny, args.steps) < 1:
         parser.error("--nx, --ny and --steps must be positive")
@@ -124,6 +127,7 @@ def main() -> None:
         result = run_and_register(
             args.work_dir, args.run_id, args.nx, args.ny, args.steps,
             bucket=args.bucket, prefix=args.prefix, endpoint_url=args.endpoint_url,
+            parent_run_ids=args.parent_run_id,
         )
     except Exception as exc:
         print(f"research-loop registration failed: {exc}", file=sys.stderr)

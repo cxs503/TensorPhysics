@@ -66,7 +66,10 @@ def _check_trajectory(path: Path) -> dict[str, Any]:
         return {"name": "trajectory_readable_and_finite", "passed": False, "detail": str(exc)}
 
 
-def run_demo(work_dir: Path, run_id: str, nx: int, ny: int, steps: int) -> dict[str, Any]:
+def run_demo(
+    work_dir: Path, run_id: str, nx: int, ny: int, steps: int,
+    *, parent_run_ids: list[str] | None = None,
+) -> dict[str, Any]:
     work_dir = work_dir.resolve()
     output = work_dir / "solver-output"
     output.mkdir(parents=True, exist_ok=True)
@@ -135,6 +138,7 @@ def run_demo(work_dir: Path, run_id: str, nx: int, ny: int, steps: int) -> dict[
         outputs=output_refs,
         validation_status=ValidationStatus.PASSED if passed else ValidationStatus.FAILED,
         validation_report=report_ref,
+        parent_run_ids=list(parent_run_ids or []),
     )
     manifest_path = work_dir / "run_manifest.json"
     manifest_path.write_text(manifest.to_json() + "\n", encoding="utf-8")
@@ -171,10 +175,15 @@ def main() -> None:
     parser.add_argument("--nx", type=int, default=7)
     parser.add_argument("--ny", type=int, default=3)
     parser.add_argument("--steps", type=int, default=20)
+    parser.add_argument("--parent-run-id", action="append", default=[],
+                        help="parent run ID; may be supplied more than once")
     args = parser.parse_args()
     if min(args.nx, args.ny, args.steps) < 1:
         parser.error("--nx, --ny and --steps must be positive")
-    result = run_demo(args.work_dir, args.run_id, args.nx, args.ny, args.steps)
+    result = run_demo(
+        args.work_dir, args.run_id, args.nx, args.ny, args.steps,
+        parent_run_ids=args.parent_run_id,
+    )
     print(json.dumps({
         "run_id": result["run_manifest"]["run_id"],
         "validation_status": result["run_manifest"]["validation_status"],
