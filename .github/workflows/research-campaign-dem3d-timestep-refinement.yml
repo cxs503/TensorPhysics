@@ -1,0 +1,79 @@
+name: DEM3D fixed-duration time-step refinement
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "examples/research_campaign_dem3d_timestep_refinement.py"
+      - "tests/test_research_campaign_dem3d_timestep_refinement.py"
+      - ".github/workflows/research-campaign-dem3d-timestep-refinement.yml"
+  push:
+    branches: [main]
+    paths:
+      - "examples/research_campaign_dem3d_timestep_refinement.py"
+      - "tests/test_research_campaign_dem3d_timestep_refinement.py"
+      - ".github/workflows/research-campaign-dem3d-timestep-refinement.yml"
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: TensorPhysics
+      - uses: actions/checkout@v4
+        with:
+          repository: cxs503/TensorDEM
+          path: TensorDEM
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install projects
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e "TensorPhysics[test]"
+          python -m pip install -e TensorDEM
+      - name: Run refinement evidence-gate tests
+        working-directory: TensorPhysics
+        run: python -m pytest -q tests/test_research_campaign_dem3d_timestep_refinement.py
+      - name: Run three-level fixed-duration refinement
+        working-directory: TensorPhysics
+        run: |
+          python examples/research_campaign_dem3d_timestep_refinement.py \
+            --tensordem-root ../TensorDEM \
+            --work-dir outputs/dem3d-timestep-refinement-ci \
+            --peak-load-N 0.02 \
+            --base-steps 24 \
+            --relative-tolerance 0.05
+      - name: Validate refinement artifacts
+        working-directory: TensorPhysics
+        run: |
+          python - <<'PY'
+          import csv, json, math
+          from pathlib import Path
+          root = Path("outputs/dem3d-timestep-refinement-ci")
+          report = json.loads((root / "timestep_refinement_report.json").read_text())
+          assert report["protocol"] == "dem3d-bending-timestep-refinement-v1", report
+          assert report["decision"] == "all_runs_passed_numerical_gates", report
+          assert report["scientific_status"] == "numerical_time_step_sensitivity_not_physical_validation", report
+          levels = report["levels"]
+          assert len(levels) == 3, report
+          assert [x["steps"] for x in levels] == [24, 48, 96], levels
+          durations = [x["simulated_duration_s"] for x in levels]
+          assert max(durations) - min(durations) <= max(durations) * 1e-9, durations
+          assert math.isclose(levels[1]["dt_s"], levels[0]["dt_s"] / 2, rel_tol=1e-9), levels
+          assert math.isclose(levels[2]["dt_s"], levels[0]["dt_s"] / 4, rel_tol=1e-9), levels
+          assert len(report["campaign_signature_sha256"]) == 64, report
+          assert len(report["comparisons"]) == 2, report
+          with (root / "timestep_refinement_metrics.csv").open(newline="") as f:
+              assert len(list(csv.DictReader(f))) == 3
+          print("PASS: fixed-duration dt, dt/2, dt/4 evidence and artifacts; convergence status =", report["convergence_status"])
+          PY
+      - name: Upload time-step refinement evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dem3d-timestep-refinement-evidence
+          path: TensorPhysics/outputs/dem3d-timestep-refinement-ci/
+          if-no-files-found: warn
