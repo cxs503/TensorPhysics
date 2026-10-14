@@ -65,16 +65,24 @@ def run_campaign(
             "parameters": {"nx": design["nx"], "ny": ny, "steps": steps, "device": "cpu"},
             "validation_status": status,
             "platform_retrieval_verified": bool(result.get("platform_retrieval_verified")),
+            "lineage_verified": bool(result.get("lineage_verified")),
+            "registered_parent_run_ids": result.get("parent_run_ids", []),
             "uploaded_artifacts": result.get("uploaded_artifacts", []),
             "work_dir": result.get("work_dir"),
         })
         # Only a passing prior run may authorize spending the next run's budget.
-        if status != "passed" or not result.get("platform_retrieval_verified"):
+        if (
+            status != "passed"
+            or not result.get("platform_retrieval_verified")
+            or not result.get("lineage_verified")
+        ):
             break
         parent_run_ids = [run_id]
 
     completed = len(runs) == len(designs) and all(
-        run["validation_status"] == "passed" and run["platform_retrieval_verified"]
+        run["validation_status"] == "passed"
+        and run["platform_retrieval_verified"]
+        and run["lineage_verified"]
         for run in runs
     )
     report = {
