@@ -5,13 +5,17 @@ on:
   pull_request:
     paths:
       - "examples/research_campaign_dem3d_load_sensitivity.py"
+      - "examples/analyze_dem3d_load_sensitivity.py"
       - "tests/test_research_campaign_dem3d_load_sensitivity.py"
+      - "tests/test_analyze_dem3d_load_sensitivity.py"
       - ".github/workflows/research-campaign-dem3d-load-sensitivity.yml"
   push:
     branches: [main]
     paths:
       - "examples/research_campaign_dem3d_load_sensitivity.py"
+      - "examples/analyze_dem3d_load_sensitivity.py"
       - "tests/test_research_campaign_dem3d_load_sensitivity.py"
+      - "tests/test_analyze_dem3d_load_sensitivity.py"
       - ".github/workflows/research-campaign-dem3d-load-sensitivity.yml"
 
 jobs:
@@ -34,9 +38,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e "TensorPhysics[test]"
           python -m pip install -e TensorDEM
-      - name: Run campaign controller tests
+      - name: Run campaign and quantitative analyzer tests
         working-directory: TensorPhysics
-        run: python -m pytest -q tests/test_research_campaign_dem3d_load_sensitivity.py
+        run: |
+          python -m pytest -q tests/test_research_campaign_dem3d_load_sensitivity.py tests/test_analyze_dem3d_load_sensitivity.py
       - name: Run real TensorDEM load sensitivity campaign
         working-directory: TensorPhysics
         run: |
@@ -45,27 +50,43 @@ jobs:
             --work-dir outputs/dem3d-load-sensitivity-ci \
             --steps 24 \
             --loads-N 0.01 0.02 0.03
-      - name: Validate campaign evidence
+      - name: Derive quantitative response metrics
+        working-directory: TensorPhysics
+        run: |
+          python examples/analyze_dem3d_load_sensitivity.py \
+            --work-dir outputs/dem3d-load-sensitivity-ci
+      - name: Validate campaign evidence and derived metrics
         working-directory: TensorPhysics
         run: |
           python - <<'PY'
-          import json, math
+          import csv, json, math
           from pathlib import Path
-          p = Path("outputs/dem3d-load-sensitivity-ci/load_sensitivity_report.json")
-          r = json.loads(p.read_text())
-          assert r["protocol"] == "dem3d-bending-load-sensitivity-v1", r
-          assert r["scientific_status"] == "exploratory_numerical_sensitivity_not_physical_validation", r
-          assert r["decision"] == "all_runs_passed_numerical_gates", r
-          assert [x["load_N"] for x in r["runs"]] == [0.01, 0.02, 0.03], r
-          assert len(r["runs"]) == 3, r
-          for x in r["runs"]:
-              assert x["returncode"] == 0 and x["verdict"] == "PASS", x
-              assert x["evidence_gate"] == "passed", x
-              assert x["peak_applied_load_N"] == x["load_N"], x
-              assert len(x["signature_sha256"]) == 64, x
+          root = Path("outputs/dem3d-load-sensitivity-ci")
+          campaign = json.loads((root / "load_sensitivity_report.json").read_text())
+          derived = json.loads((root / "quantitative_response_report.json").read_text())
+          assert campaign["protocol"] == "dem3d-bending-load-sensitivity-v1", campaign
+          assert campaign["scientific_status"] == "exploratory_numerical_sensitivity_not_physical_validation", campaign
+          assert campaign["decision"] == "all_runs_passed_numerical_gates", campaign
+          assert [x["load_N"] for x in campaign["runs"]] == [0.01, 0.02, 0.03], campaign
+          assert len(campaign["runs"]) == 3, campaign
+          for run in campaign["runs"]:
+              assert run["returncode"] == 0 and run["verdict"] == "PASS", run
+              assert run["evidence_gate"] == "passed", run
+              assert run["peak_applied_load_N"] == run["load_N"], run
+              assert len(run["signature_sha256"]) == 64, run
               for key in ("peak_support_reaction_abs_N", "peak_midspan_deflection_abs_m"):
-                  assert isinstance(x[key], (int, float)) and math.isfinite(x[key]), x
-          print("PASS: three real solver runs, numerical gates, and campaign report")
+                  assert isinstance(run[key], (int, float)) and math.isfinite(run[key]), run
+          assert derived["protocol"] == "dem3d-bending-quantitative-response-v1", derived
+          assert derived["run_count"] == 3, derived
+          assert len(derived["campaign_signature_sha256"]) == 64, derived
+          assert len(derived["metrics"]) == 3, derived
+          for row in derived["metrics"]:
+              for key in ("load_transfer_ratio", "relative_force_balance_residual",
+                          "final_midspan_deflection_abs_m", "secant_compliance_m_per_N"):
+                  assert isinstance(row[key], (int, float)) and math.isfinite(row[key]), row
+          with (root / "response_metrics.csv").open(newline="") as handle:
+              assert len(list(csv.DictReader(handle))) == 3
+          print("PASS: real solver campaign, evidence gates, derived metrics, CSV, and stable signature")
           PY
       - name: Upload campaign evidence
         if: always()
