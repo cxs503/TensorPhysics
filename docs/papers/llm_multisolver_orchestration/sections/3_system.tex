@@ -1,0 +1,62 @@
+\section{System: platform and mission protocol}\label{sec:system}
+
+\subsection{Six-repository research ecosystem}
+\sysname{} spans six co-developed repositories: TensorLBM
+(lattice-Boltzmann fluid dynamics in PyTorch), TensorFVM (finite-volume
+flows), TensorFEM (structural analysis), TensorDEM (discrete-element
+media), TensorPhysics (scenario orchestration, validation vocabulary,
+run manifests, artifact stores), and TensorPlatform (the FastAPI/Vue
+platform hosting the mission system). A shared workspace lock governs
+local checkouts; every scenario run records the code revisions of all
+participating repositories in its run manifest.
+
+\subsection{Mission protocol}
+A \emph{mission} is a durable task object with a goal, a primary
+repository and base ref, optional \emph{co-repositories} for
+cross-project composition, a budget triple (tool calls, wall seconds,
+tokens), a pinned model, and an origin (owner or agent). Its life cycle:
+
+\begin{itemize}
+\item \textbf{Claim.} Resident daemons poll a claim endpoint; a single
+SQL \texttt{UPDATE\ ...\ WHERE id = (SELECT ... FOR UPDATE SKIP
+LOCKED)} atomically moves the oldest eligible queued mission to
+\texttt{claimed} and mints a one-time claim token. Claims whose
+heartbeat went silent for more than 90\,s are lazily reaped as
+\texttt{agent\_lost}.
+\item \textbf{Execute.} The claiming daemon prepares jailed per-mission
+git worktrees (one per repository in $\{repo\} \cup co\_repos$, branch
+\texttt{agent/m<id>}, push disabled via per-worktree \texttt{pushurl}),
+then drives an OpenHands SDK conversation with a sanitized environment
+whitelist. Bridge tools (\S\ref{sec:method}) expose commit, test runs,
+literature search, URL fetch with domain and private-IP guards,
+acceptance requests, and orchestration.
+\item \textbf{Heartbeat.} A watcher thread reports progress (tool count,
+elapsed seconds, HEAD commit) every 15\,s and enforces the budget; a
+watchdog escalates a wedged pause by process exit, relying on the flock
+wrapper for restart and the reaper for cleanup.
+\item \textbf{Terminal acceptance.} An agent may only finish by
+requesting acceptance, which parks the mission in
+\texttt{awaiting\_acceptance} and opens an approval row; an administrator
+(owner) approves or rejects. Approval decisions never rest with agents.
+All agent--platform interactions append immutable events (plan, tool
+call/result, commit, web search, approval, decision) to a per-session
+event stream.
+\end{itemize}
+
+\subsection{Model-pinned daemon fleet}
+Seven relay-accessible backbone models each run a dedicated daemon
+behind a per-model lock. The claim endpoint filters the queue by the
+daemon's pinned model; exactly one designated daemon additionally claims
+legacy missions with no model pin. Execution always uses the mission's
+own pinned model, so claim routing and execution model are separable
+concerns. Roles (\S\ref{sec:method}) resolve to models through an
+owner-editable mapping file re-read on every dispatch.
+
+\subsection{Research-run console}
+The same platform operates a scenario execution service with the same
+claim/reap discipline for solver runs (the stage ladder of
+\S\ref{sec:case}), so \emph{development} missions and \emph{research}
+executions share one audit substrate: append-only events, approval
+chains, artifact checksums, and executor heartbeats. This unification is
+what later allows the fleet's behavior to be studied with the same rigor
+as the physics it produces (\S\ref{sec:ablation}).

@@ -1,0 +1,53 @@
+\section{Related work}\label{sec:related}
+
+\paragraph{Agent harnesses for software engineering.}
+SWE-agent~\cite{yang2024sweagent} established the executable
+agent--computer interface for repository-level tasks; OpenHands~\cite{wang2024openhands}
+(open formerly OpenDevin) generalizes this into an event-sourced agent
+SDK with pluggable tools, and is the harness our daemon fleet embeds.
+Commercial CLI agents (Claude Code, Codex CLI) demonstrated long-horizon
+terminal-driven development but are single-tenant by design. Our work
+does not propose a new harness; it contributes the \emph{multi-model,
+multi-repository mission layer} above such a harness, with routing,
+envelopes, and gates that the harnesses themselves do not provide.
+
+\paragraph{Multi-agent LLM systems.}
+AutoGen~\cite{wu2023autogen}, CAMEL~\cite{li2023camel}, and
+LangGraph-style graph runtimes let developers script conversations among
+LLM roles. MetaGPT~\cite{hong2024metagpt} encodes a software-team SOP
+with role specialization. These systems orchestrate \emph{within} one
+process graph; agents exchange messages, not auditable task objects with
+budgets and acceptance chains. \sysname{} missions are durable rows with
+claim tokens, heartbeats, and human-terminal acceptance, which is what
+shared research infrastructure requires (crash recovery, cost control,
+auditability), and our roles map to \emph{different backbone models}
+rather than different prompts over one model.
+
+\paragraph{LLM agents for science.}
+Recent surveys~\cite{lu2024aiscientist,baek2024researchagent} catalog
+autonomous hypothesis generation and tool use in natural sciences;
+coscientist~\cite{boiko2023autonomous} drives wet-lab chemistry, and
+ML-agent benchmarks evaluate ML engineering autonomy. Closest to us are
+systems that couple LLM agents to numerical solvers or HPC
+pipelines~\pending{cite specific 2025--2026 works at submission}. The
+differentiator here is the \emph{co-development} setting: agents modify
+the solver repositories themselves, under conservation gates, rather
+than steering fixed solvers.
+
+\paragraph{Coupled multiphysics integration.}
+Partitioned multiphysics coupling (e.g., preCICE~\cite{bungartz2016precice})
+standardizes field exchange, time stepping, and convergence acceleration
+between separate solver codes. That literature defines \emph{what} must
+hold at an interface (conservation, geometric and temporal consistency);
+we adopt such identities directly as machine-checkable promotion gates
+(S1 impulse/bond-energy ledgers, S2 conjugate force/work matching, S3
+total-force conservation with temporal alignment, S4 clock
+synchronization with sub-cycling, rollback, and checkpointing).
+
+\paragraph{Pre-registration and auditability.}
+Our append-only event stream and pre-registered per-stage criteria
+follow the discipline of clinical preregistration adapted to
+computational campaigns: hypotheses and machine criteria are committed
+before execution, and outcomes---including honest failures---are
+recorded immutably. This contrasts with post-hoc cherry-picking risks
+in agent benchmarks and provides the raw data for \S\ref{sec:ablation}.

@@ -1,0 +1,25 @@
+\section{Fleet measurements and ablation}\label{sec:ablation}
+
+\subsection{Seven-model bake-off (identical goal)}
+Seven relay models (MiniMax-M2.5-AWQ, Qwen3.8-27B, deepseek-v4-flash,
+glm-5.1, glm-5.2, qwen3.6-plus, qwen3.7-plus) received the same
+development mission---implement lattice-weights tables with unit tests
+in the fluid repository and commit---under identical budgets (40 tool
+calls, 2700\,s wall), each pinned to its own daemon. Metrics recorded
+by the platform, not by the agents: acceptance outcome, tool calls to
+terminal state, wall clock, event-stream shape (plan adherence,
+nudges, abort-resumes), and token consumption.
+\pending{bake-off table; statistical reading; role-assignment proposal
+conditioned on results.}
+
+\subsection{Envelope and fleet behavior}
+From the append-only event stream we extract: dispatch fan-out per
+orchestrator, envelope rejections (whitelist, depth, clamps) by
+category, await-time distributions, deadlock absence under the
+model-required rule, and reclaim behavior after terminal states.
+\pending{distributions and counts once the S1--S4 campaign completes.}
+
+\subsection{Ablations}
+\pending{role-routing ablation (best-performing single model vs.\
+data-driven role assignment) and envelope-tightening ablation, to be
+run after the ladder completes.}
