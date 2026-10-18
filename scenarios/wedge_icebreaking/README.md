@@ -14,7 +14,7 @@
 | 级 | 链路 | 状态 |
 |---|---|---|
 | **S0** | 四库冒烟：各求解器在统一 fail-closed 控制器下跑自己的分钟级已验证入口，RunManifest/ArtifactRef 全链 | `s0.py`（本目录） |
-| **S1** | DEM 冰层 + 预设楔形船体（`tensordem --hull-profile`），反力冲量/断键能账本门 | 计划 |
+| **S1** | DEM 冰层 + 预设楔形船体（`tensordem --hull-profile`），反力冲量/断键能账本门 | `s1.py`（本目录） |
 | **S2** | +FEM 结构单向（S1 冰-船反力历史 → TensorFEM 梁/壳准静态），力/力矩/功共轭门 | 计划 |
 | **S3** | +流体载荷单向（TensorFVM 壁面力 / TensorLBM 力历史回放），总力守恒+时间对齐门 | 计划 |
 | **S4** | 闭环双向交换，时钟同步+子循环（TensorDEMAdapter 模式），守恒+回滚+检查点链 | 计划 |
