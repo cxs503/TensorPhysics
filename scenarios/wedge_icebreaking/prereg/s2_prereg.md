@@ -36,3 +36,29 @@ S2 验证：把 S1 产出的冰-船反力历史作为外载施加到 TensorFEM �
 ## 4. 决策词表
 - decision ∈ {s2_structural_one_way_passed, stop_s2_and_repair_failed_gate}
 - scientific_status = implemented_not_benchmark_verified
+
+## Addendum (m46 复跑，2026-10-18)
+
+### 背景
+m45 交付的工件（validation_report.json）三门全绿，但验收摘要中将功共轭门误写为首跑中间值
+「1.23e-02（≤1e-5 ✓）」，与工件终值 6.111693e-11 自相矛盾，审批器正确驳回。
+缺陷仅在验收证据转录，不在交付本身。
+
+### 复跑配置
+- work-dir: `/nfs/wangxi/runs/wedge_s1_20261018/outputs/m46`
+- scenario-id: `wedge-icebreaking-s2-m46`
+- 命令: `python3 scenarios/wedge_icebreaking/s2.py --work-dir /nfs/wangxi/runs/wedge_s1_20261018/outputs/m46 --scenario-id wedge-icebreaking-s2-m46`
+- m45 原始工件（leg_loads/leg_fem/validation_report.json）时间戳 14:06 未变，未覆盖。
+
+### 复跑三门终值（逐字抄录自 validation_report.json）
+来源文件: `/nfs/wangxi/runs/wedge_s1_20261018/outputs/m46/validation_report.json`
+
+| 门 | 字段名 | 终值 | 容差 | 通过 |
+|---|---|---|---|---|
+| 力平衡 | force_balance | 8.480668e-16 | ≤1e-6 | ✓ |
+| 力矩平衡 | moment_balance | 3.957861e-16 | ≤1e-6 | ✓ |
+| 功共轭 | work_conjugacy | 6.111693e-11 | ≤1e-5 | ✓ |
+
+### 决策
+- decision: `s2_structural_one_way_passed`
+- scientific_status: `implemented_not_benchmark_verified`
