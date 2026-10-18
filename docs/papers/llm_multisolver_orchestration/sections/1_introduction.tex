@@ -1,0 +1,69 @@
+\section{Introduction}\label{sec:intro}
+
+Multiphysics simulation platforms fail integration, not physics. Each
+solver---fluid, structure, discrete media---is individually validated,
+yet coupling them requires cross-repository contracts: field exchange
+formats, time-step and sub-cycling discipline, momentum and energy
+bookkeeping across interfaces, and regression gates that detect when one
+repository's change silently breaks another's conservation properties.
+Maintaining these contracts is an orchestration burden that scales with
+the number of repositories and the frequency of change.
+
+Large language model agents have recently demonstrated single-repository
+software engineering competence (SWE-bench-class tasks), raising the
+question of whether \emph{fleets} of such agents can carry the
+cross-repository orchestration burden for scientific codes. Three gaps
+separate current agent practice from that setting:
+
+\begin{enumerate}
+\item \textbf{Heterogeneous models, homogeneous harnesses.} Production
+relays expose many backbone models with different planning styles,
+latency profiles, and cost. Practice picks one model per deployment;
+no protocol assigns \emph{roles} to \emph{models} within one mission
+system, or measures whether that assignment matters.
+\item \textbf{Autonomy without envelopes.} An agent that spawns work for
+other agents needs privilege to create tasks. Na\"ive designs hand the
+agent an elevated account; research platforms instead need dispatch with
+server-enforced caps so that no agent can exhaust compute, escape a repo
+whitelist, or recurse task trees without bound.
+\item \textbf{Self-report versus gates.} Agent frameworks typically
+accept an agent's own claim of success. Coupled physics requires
+machine-checkable conservation and bookkeeping gates as the \emph{only}
+promotion criterion, with human approval reserved for terminal
+acceptance.
+\end{enumerate}
+
+\sysname{} addresses the three gaps with (i) model-pinned mission
+routing over a persistent daemon fleet, (ii) a claim-token dispatch
+endpoint with a hard envelope, and (iii) a staged coupling ladder whose
+every gate is a conservation or ledger identity checked by scripts, not
+by an LLM. The entire process---hypotheses, pre-registered criteria,
+budgets, tool-call event streams, approval decisions---is captured
+append-only by the platform, so the development campaign doubles as a
+controlled experiment on the agent fleet itself.
+
+\paragraph{Research questions.}
+\textbf{RQ1} Can a fleet of heterogeneous LLM agents, organized by
+role, drive a coupled multiphysics integration ladder end-to-end with
+machine-checkable gates? \textbf{RQ2} Do backbone models differ
+measurably on identical development missions (acceptance rate, tool
+economy, wall clock), and does role assignment conditioned on those
+differences improve fleet outcomes? \textbf{RQ3} What envelope
+parameters (budget caps, tree depth, dispatch quotas) keep autonomous
+dispatch safe in a shared research-computing environment?
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item A mission protocol with atomic claiming (SKIP LOCKED), lazy
+reaping, heartbeats, bounded budgets, and terminal human acceptance,
+extended with per-model routing and cross-repository worktree
+composition (\S\ref{sec:system}).
+\item A dispatch envelope and orchestration tool bridge enabling
+agent-to-agent delegation under a read-only agent account
+(\S\ref{sec:method}).
+\item A wedge-icebreaking integration ladder S0--S4 with gate
+definitions and pre-registration discipline (\S\ref{sec:case}).
+\item A seven-model bake-off under an identical goal, and fleet-level
+measurements from the append-only event stream (\S\ref{sec:ablation};
+\pending{results}).
+\end{itemize}

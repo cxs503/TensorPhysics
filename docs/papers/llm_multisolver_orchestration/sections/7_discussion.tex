@@ -1,0 +1,33 @@
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{Limitations.}
+The fleet writes code but never pushes: integration to shared remotes
+remains human-gated, so measured autonomy covers worktree-to-acceptance,
+not publication. Gate scripts themselves are authored by agents and
+could be gamed; the protocol mitigates this by pre-registering criteria
+append-only before execution and requiring the verifier role to run
+gates from a different mission than the implementer that wrote the
+code under test. The relay models are a convenience sample of what a
+production relay exposes; findings are about the \emph{protocol}, not a
+leaderboard of models.
+
+\paragraph{Safety posture.}
+Three properties hold by construction: the agent platform account is
+read-only (dispatch authority derives from claim tokens, not role
+elevation); no worktree can push to a remote; and every promotion and
+acceptance decision terminates with a human owner. Envelope parameters
+are policy, tunable by the owner without code changes.
+
+\paragraph{Reproducibility.}
+Mission rows, event streams, approval chains, run manifests, and
+artifact checksums are exported directly from the platform database;
+the paper's empirical sections will cite only exported artifacts,
+never hand-copied numbers. Campaign artifacts and analysis scripts
+accompany the submission.
+
+\paragraph{Research-process framing.}
+Treating development as research is not rhetorical: each mission is a
+unit with pre-registered criteria, bounded budget, immutable event
+trail, and adjudicated outcome. The same substrate that audits the
+physics audits the fleet, which is precisely what makes RQ2 answerable
+without new instrumentation.

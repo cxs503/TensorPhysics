@@ -1,0 +1,29 @@
+\begin{abstract}
+Coupled multiphysics simulation codes---lattice-Boltzmann fluid solvers,
+finite-volume and finite-element structural solvers, discrete-element ice
+models---are developed as separate repositories whose integration is
+traditionally a human orchestration problem: wiring process boundaries,
+field exchange, time stepping, and conservation bookkeeping across code
+bases that evolve concurrently. We present \sysname{}, a platform in which
+fleets of autonomous LLM agents, each backed by a different backbone model
+and pinned to a persistent daemon, develop such solvers jointly under a
+mission protocol designed for research-grade auditability. Contributions:
+(1) a \emph{mission protocol} (atomic claim, heartbeat, bounded budget,
+terminal acceptance) with \emph{model-pinned routing} that turns seven
+concurrently available LLMs into role-specialized workers without
+privilege escalation; (2) a \emph{server-enforced dispatch envelope} that
+lets a running orchestrator agent spawn sub-missions across six solver
+repositories under hard caps (repo whitelist, budget clamps, tree depth,
+daily quotas) while the agent account itself remains read-only;
+(3) a \emph{machine-checkable stage ladder} for coupled-solver
+integration in which every promotion is decided by conservation and
+bookkeeping gates, never by agent self-report; and (4) a
+\emph{development-as-research protocol}: hypotheses, criteria, budgets,
+event streams, and approval chains are registered append-only before
+execution, making every agent interaction a reproducible experimental
+record. We instantiate the approach on a two-dimensional wedge
+icebreaking ladder (S0 four-solver smoke through S4 closed-loop
+bidirectional coupling) and report a seven-model bake-off under an
+identical goal. \pending{final numbers: stage-gate outcomes, bake-off
+table, fleet wall-clock and token economics}.
+\end{abstract}
