@@ -43,6 +43,7 @@ DEFAULT_VENV_ECO = Path("/nfs/wangxi/venvs/tensor_eco/bin/python")
 
 def _generate_wedge_hull_csv(work_dir: Path) -> Path:
     """Generate a preset wedge hull polyline CSV (≥3 vertices) inline."""
+    work_dir.mkdir(parents=True, exist_ok=True)
     hull_path = work_dir / "wedge_hull.csv"
     # Simple wedge: 3 vertices forming a wedge shape
     # Vertex 1: front tip (0.0, 0.0)
@@ -113,9 +114,22 @@ def _check_impulse_ledger(accounting_path: Path, trajectory_path: Path) -> dict[
     sum_impulse_x = tool_impulse[0] + support_impulse[0] + drag_impulse[0] + external_impulse[0]
     sum_impulse_y = tool_impulse[1] + support_impulse[1] + drag_impulse[1] + external_impulse[1]
 
-    # Calculate Δp = m * (v_final - v_initial), summed over all particles
-    delta_p_x = total_mass_kg * float((v_final[:, 0] - v_initial[:, 0]).sum())
-    delta_p_y = total_mass_kg * float((v_final[:, 1] - v_initial[:, 1]).sum())
+    # Calculate Δp = Σ_i m_i * (v_final_i - v_initial_i)
+    # trajectory.pt has no per-particle mass field; this scenario uses an equal-mass
+    # 21x5 particle grid, so we derive m_i = total_mass_kg / N.  The DEM accounting
+    # ledger itself is balanced (verified independently); only the checker formula
+    # was wrong (it multiplied total_mass_kg by the *sum* over particles, effectively
+    # counting each particle mass as total_mass_kg instead of total_mass_kg/N).
+    n_particles = v_final.shape[0]
+    if "masses" in traj:
+        # Future-proof: use per-particle masses if the trajectory ever carries them.
+        masses = traj["masses"]  # (N,)
+    else:
+        masses = torch.full((n_particles,), total_mass_kg / n_particles,
+                            dtype=v_final.dtype, device=v_final.device)
+    delta_v = v_final - v_initial  # (N, 2)
+    delta_p_x = float((masses * delta_v[:, 0]).sum())
+    delta_p_y = float((masses * delta_v[:, 1]).sum())
 
     # Check balance per component: |Σimpulse - Δp| / max(|Σimpulse|, |Δp|, 1e-12) ≤ 1e-3
     tol = 1e-3
