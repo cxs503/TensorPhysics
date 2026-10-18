@@ -1,0 +1,43 @@
+\section{Case study: wedge icebreaking ladder S0--S4}\label{sec:case}
+
+\subsection{Scenario}
+A two-dimensional wedge bow advancing through a broken-ice field is the
+2D slice of the target application (icebreaker--water--ice closed loop).
+Every constituent has an independently validated implementation in the
+six repositories; a single ladder iteration costs seconds to minutes,
+and all criteria are machine-adjudicable. The ladder therefore tests
+\emph{integration machinery}---process invocation, field exchange,
+clocks, manifests, registration---before physics accuracy.
+
+\subsection{Ladder}
+\begin{itemize}
+\item \textbf{S0 (completed).} Four solvers run their validated
+minute-scale entries under a fail-closed controller; per-leg integrity
+checks (exit code, parseable outputs, finite values, monotone time)
+feed validation reports, checksum-addressed artifact stores, and run
+manifests recording both repositories' revisions. Twelve checks across
+four legs, all green.
+\item \textbf{S1.} DEM ice sheet with a preset wedge hull
+(\texttt{--hull-profile}); gates: reaction-force impulse and
+broken-bond energy ledgers closed.
+\item \textbf{S2.} One-way coupling to FEM: the S1 ice--ship reaction
+history drives a quasi-static beam/shell model; gates: force, moment,
+and work conjugacy.
+\item \textbf{S3.} One-way fluid loading (FVM wall forces / LBM force
+history replay); gates: total-force conservation and temporal
+alignment.
+\item \textbf{S4.} Closed-loop bidirectional exchange with clock
+synchronization and sub-cycling; gates: conservation, rollback, and
+checkpoint chains.
+\end{itemize}
+
+\subsection{Agent campaign protocol}
+Each stage follows the same fleet choreography: an \textit{architect}
+mission reads the ladder README and the previous stage report, then
+dispatches 2--4 \textit{implementer} sub-missions (one per repository
+concern) and one \textit{integration} mission; the integration mission
+runs the gate scripts, diagnoses failures, and either dispatches repair
+sub-missions or reports; promotion flows through the platform's
+stage-approval chain to the owner. Pre-registration is append-only per
+stage. \pending{per-stage outcomes: gate evidence, sub-mission trees,
+budgets consumed, interventions required, honest failures.}

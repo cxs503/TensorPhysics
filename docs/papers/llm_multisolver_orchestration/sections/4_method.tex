@@ -1,0 +1,72 @@
+\section{Method: roles, dispatch envelope, and gates}\label{sec:method}
+
+\subsection{Role specialization over heterogeneous backbones}
+Roles decouple \emph{what a sub-mission needs} from \emph{which model
+runs it}. Four roles are defined initially---\textit{architect}
+(decomposition, coupling and gate design), \textit{implementer}
+(module development and self-test), \textit{verifier} (integration
+runs, gate evidence, failure diagnosis), \textit{documenter}
+(documentation and paper material)---each bound to a backbone model in
+an owner-editable \texttt{roles.json}. The mapping is data-driven: a
+seven-model bake-off on an identical goal (\S\ref{sec:ablation})
+measures acceptance, tool economy, and wall clock per model, and the
+owner ratifies the initial assignment.
+
+\subsection{Agent-driven dispatch under a hard envelope}
+A running orchestrator mission dispatches sub-missions through two
+bridge tools. \texttt{dispatch\_sub\_mission(goal, repo, role|model,
+budget)} queues a child mission; \texttt{await\_children(timeout)}
+polls until every child reaches a terminal status (success, failure,
+stop, or \emph{awaiting acceptance}---an orchestrator does not block on
+the owner's terminal decision) and returns per-child summaries. While
+awaiting, the orchestrator's heartbeat thread keeps its own liveness
+current, and await time is bounded (default 25\,min, hard cap 60\,min)
+so a stuck child cannot silently consume the orchestrator's budget.
+
+Crucially, the agent's platform account is \emph{read-only}: it cannot
+create missions through the ordinary endpoint. Instead the dispatch
+endpoint authenticates the \emph{parent's claim token} and enforces a
+server-side envelope:
+
+\begin{itemize}
+\item \textbf{Repository whitelist.} Children may only target the six
+project repositories (plus whitelisted co-repositories).
+\item \textbf{Model requirement.} Every child must pin a model; a
+model-null child could queue forever behind a default daemon busy
+running its own orchestrator (deadlock by construction).
+\item \textbf{Budget clamps.} Child budgets are clamped to caps
+(80 tool calls, 7200\,s wall, $3{\times}10^6$ tokens at time of
+writing) regardless of requested values.
+\item \textbf{Fan-out and rate limits.} At most 8 children per
+orchestrator; at most 24 agent-originated missions per rolling 24\,h.
+\item \textbf{Tree depth.} Missions form a forest of depth at most 2:
+children cannot dispatch, bounding recursion structurally.
+\end{itemize}
+
+The envelope is enforced in one transaction on the dispatch path;
+nothing relies on agent cooperation. Children inherit the parent's
+organization scope, so the owner's mission list displays the whole tree,
+and each dispatch appends events to both parent and child sessions.
+
+\subsection{Cross-repository worktrees}
+A mission's worktree set covers its primary repository plus any
+co-repositories, checked out sibling under one mission directory; the
+agent's workspace root then spans the coupled solvers, while commit and
+test tools remain anchored to the primary repository with explicit
+\texttt{git -C} for co-repositories. Push is disabled in every
+worktree; integration to shared remotes happens only through human
+review, preserving a single write path.
+
+\subsection{Machine-checkable stage gates}
+Promotion on the coupling ladder is decided exclusively by gates
+scripts evaluate: impulse and broken-bond energy ledgers closed to
+tolerance (S1), force/moment/work conjugacy between ice--ship reaction
+history and structural response (S2), total-force conservation with
+temporal alignment for one-way fluid loading (S3), and clock
+synchronization with sub-cycling, conservation, rollback, and
+checkpoint identities in the closed loop (S4). An agent's summary can
+never substitute for a gate; the verifier role assembles gate evidence,
+the platform registers runs and artifacts with checksums, and the owner
+approves promotion through the same approval chain used for acceptance.
+Each stage pre-registers its hypothesis and criteria in an append-only
+file before execution.
