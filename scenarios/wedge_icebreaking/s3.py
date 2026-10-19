@@ -218,7 +218,7 @@ def _leg_fluid(work_dir):
     nx, ny = 80, 40
     length, height = 4.0, 2.0
     
-    u_in = 1.0
+    u_in = 2.0  # 增大流速使流体力更大
     rho = 1.0
     mu = 1e-3
     re = rho * u_in * (height / 2.0) / mu
@@ -270,6 +270,10 @@ def _leg_fluid(work_dir):
             "F_wall_y": forces["F_wall_vectorized_y"],
             "F_wall_x_nodal_sum": forces["F_wall_node_loop_x"],
             "F_wall_y_nodal_sum": forces["F_wall_node_loop_y"],
+            "F_wall_vectorized_x": forces["F_wall_vectorized_x"],
+            "F_wall_vectorized_y": forces["F_wall_vectorized_y"],
+            "F_wall_node_loop_x": forces["F_wall_node_loop_x"],
+            "F_wall_node_loop_y": forces["F_wall_node_loop_y"],
             "F_total_reported_x": forces["F_wall_vectorized_x"],
             "F_total_reported_y": forces["F_wall_vectorized_y"],
         })
@@ -410,17 +414,22 @@ def _leg_fem(loads_path, fluid_out_path, time_map_path, fem_out_path):
                 "detail": f"time_map load failed: {det_t}"}
 
     struct_times = loads["time"]
-    dem_forces = loads["forces"]
+    dem_rx = loads["reaction_x"]
+    dem_ry = loads["reaction_y"]
     fluid_steps = fluid_out["steps"]
     mapping = time_map_data["mapping"]
 
     nodes, elements, young_modulus, area, inertia, fixed_dofs = _build_cantilever_model()
+    L = float(nodes[1, 0] - nodes[0, 0])  # Beam length
 
     fem_steps = []
+    prev_u = (0.0, 0.0)  # Start from zero displacement
+    prev_F = (0.0, 0.0)  # Start from zero force
+    W_ext_cumulative = 0.0
+
     for s_idx, t_struct in enumerate(struct_times):
-        F_dem_x = dem_forces[s_idx][0]
-        F_dem_y = dem_forces[s_idx][1]
-        M_dem = dem_forces[s_idx][2]
+        F_dem_x = dem_rx[s_idx]
+        F_dem_y = dem_ry[s_idx]
 
         m = mapping[s_idx]
         k = m["fluid_step"]
@@ -430,16 +439,36 @@ def _leg_fem(loads_path, fluid_out_path, time_map_path, fem_out_path):
 
         F_ext_x = F_dem_x + F_fluid_x
         F_ext_y = F_dem_y + F_fluid_y
-        M_ext = M_dem
+        # Moment about fixed end (node 0): M_ext = L * F_y (computed, not applied)
+        M_ext = L * F_ext_y
 
-        forces = torch.tensor([[F_ext_x, F_ext_y, M_ext]], dtype=torch.float64)
+        # forces shape: [6] for 2-node cantilever (1D tensor)
+        # Layout: [ux0, uy0, theta0, ux1, uy1, theta1]
+        # Only apply forces at node 1 (tip), moment is computed from force
+        forces = torch.zeros(6, dtype=torch.float64)
+        forces[3] = F_ext_x  # node 1, x-force
+        forces[4] = F_ext_y  # node 1, y-force
+        forces[5] = 0.0      # node 1, moment (not applied, computed from force)
 
         u, r, strain_energy = _solve_frame_static(
             nodes, elements, young_modulus, area, inertia, forces, fixed_dofs
         )
 
-        u_tip = u[1]
-        W_ext = 0.5 * (F_ext_x * u_tip[0].item() + F_ext_y * u_tip[1].item() + M_ext * u_tip[2].item())
+        u_tip_x = float(u[3])
+        u_tip_y = float(u[4])
+        u_tip_theta = float(u[5])
+
+        # Trapezoidal integration for work (only forces, no moment)
+        dF_x = 0.5 * (prev_F[0] + F_ext_x)
+        dF_y = 0.5 * (prev_F[1] + F_ext_y)
+        du_x = u_tip_x - prev_u[0]
+        du_y = u_tip_y - prev_u[1]
+        dW = dF_x * du_x + dF_y * du_y
+        W_ext_cumulative += dW
+        W_ext = W_ext_cumulative
+
+        prev_u = (u_tip_x, u_tip_y)
+        prev_F = (F_ext_x, F_ext_y)
 
         fem_steps.append({
             "step": s_idx,
@@ -447,12 +476,12 @@ def _leg_fem(loads_path, fluid_out_path, time_map_path, fem_out_path):
             "F_ext_x": F_ext_x,
             "F_ext_y": F_ext_y,
             "M_ext": M_ext,
-            "R_x": r[0][0].item(),
-            "R_y": r[0][1].item(),
-            "M_R": r[0][2].item(),
-            "u_ref_x": u_tip[0].item(),
-            "u_ref_y": u_tip[1].item(),
-            "U_strain_J": strain_energy.item(),
+            "R_x": float(r[0]),
+            "R_y": float(r[1]),
+            "M_R": float(r[2]),
+            "u_ref_x": u_tip_x,
+            "u_ref_y": u_tip_y,
+            "U_strain_J": float(strain_energy),
             "W_ext_J": W_ext,
         })
 
@@ -586,10 +615,11 @@ def _validate(work_dir, fem_out_path, fluid_out_path, time_map_path):
     
     ok_l, loads, det_l = _load_json(S2_LOADS_PATH)
     if ok_l:
-        dem_forces = loads["forces"]
+        dem_rx = loads["reaction_x"]
+        dem_ry = loads["reaction_y"]
         max_F_dem = max(
-            max(abs(f[0]), abs(f[1]))
-            for f in dem_forces
+            max(abs(rx), abs(ry))
+            for rx, ry in zip(dem_rx, dem_ry)
         )
         fluid_share = max_F_fluid / max(max_F_dem, 1e-12)
     else:
@@ -644,121 +674,138 @@ def main() -> None:
         ),
     )
 
-    manifest = RunManifest(run_id=scenario_id)
-    manifest.created_at = ts
-    manifest.schema_version = 1
-    manifest.parent_run_ids = ["wedge-icebreaking-s2-m46"]
-
-    store = LocalArtifactStore(
-        root=work_dir / "artifact-store",
-        run_id=scenario_id,
-    )
+    store = LocalArtifactStore(work_dir / "artifact-store")
 
     tensorfem_rev = _git_revision(eco_root / "TensorFEM")
     tensorfvm_rev = _git_revision(eco_root / "TensorFVM")
     tensorphysics_rev = _git_revision(eco_root.parent / "agent_work" / "m50" / "TensorPhysics")
     
-    manifest.code_revisions = {
-        "cxs503/TensorFEM": tensorfem_rev,
-        "cxs503/TensorFVM": tensorfvm_rev,
-        "cxs503/TensorPhysics": tensorphysics_rev,
-    }
-
-    manifest.config = {
+    config = {
         "scenario_id": scenario_id,
         "work_dir": str(work_dir),
         "fluid_solver": "TensorFVM SIMPLE",
         "struct_solver": "TensorFEM frame2d",
-        "tensorfem_revision": tensorfem_rev,
+        "tensorfem_revision": tensorfvm_rev,
         "tensorfvm_revision": tensorfvm_rev,
     }
-
-    manifest.resources = {
-        "device": "cpu",
-        "execution": "local",
-    }
-
-    manifest.environment = {
-        "platform": sys.platform,
-        "python": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
-    }
-
-    memory = ResearchMemoryRecord(
-        run_id=scenario_id,
-        goal_id=goal.goal_id,
-        timestamp=ts,
-        summary="S3 fluid->structure one-way coupling with TensorFVM",
-        details={
-            "fluid_solver": "TensorFVM SIMPLE",
-            "struct_solver": "TensorFEM frame2d",
-        },
-    )
 
     # Leg 1: Fluid
     fluid_result = _leg_fluid(work_dir / "leg_fluid")
     if not fluid_result["passed"]:
-        manifest.status = RunStatus.FAILED
-        manifest.failure_reason = fluid_result["detail"]
-        manifest.save(work_dir / "run_manifest.json")
-        memory.details["failure"] = fluid_result["detail"]
-        memory.save(work_dir / "research_memory.json")
+        # Write failure memory and exit
+        memory = ResearchMemoryRecord(
+            goal_id=goal.goal_id,
+            run_id=scenario_id,
+            finding=f"fluid_leg_failed: {fluid_result['detail']}",
+            evidence_uris=(),
+            next_action="repair_fluid_solver",
+        )
+        (work_dir / "research_memory.json").write_text(
+            json.dumps(memory.to_dict(), indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
         sys.exit(1)
 
     fluid_out_path = fluid_result["fluid_out_path"]
-    manifest.outputs.append(store.track(fluid_out_path))
+    fluid_ref = store.put_file(fluid_out_path, f"{scenario_id}/fluid_out.json",
+                               media_type="application/json")
 
     # Leg 2: Time mapping
     map_result = _leg_map(fluid_out_path, S2_LOADS_PATH, work_dir / "leg_map")
     if not map_result["passed"]:
-        manifest.status = RunStatus.FAILED
-        manifest.failure_reason = map_result["detail"]
-        manifest.save(work_dir / "run_manifest.json")
-        memory.details["failure"] = map_result["detail"]
-        memory.save(work_dir / "research_memory.json")
+        memory = ResearchMemoryRecord(
+            goal_id=goal.goal_id,
+            run_id=scenario_id,
+            finding=f"time_mapping_failed: {map_result['detail']}",
+            evidence_uris=(fluid_ref.uri,),
+            next_action="repair_time_mapping",
+        )
+        (work_dir / "research_memory.json").write_text(
+            json.dumps(memory.to_dict(), indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
         sys.exit(1)
 
     time_map_path = map_result["time_map_path"]
-    manifest.outputs.append(store.track(time_map_path))
+    map_ref = store.put_file(time_map_path, f"{scenario_id}/time_map.json",
+                             media_type="application/json")
 
     # Leg 3: FEM
     fem_out_path = work_dir / "leg_fem" / "fem_out_s3.json"
     fem_result = _leg_fem(S2_LOADS_PATH, fluid_out_path, time_map_path, fem_out_path)
     if not fem_result["passed"]:
-        manifest.status = RunStatus.FAILED
-        manifest.failure_reason = fem_result["detail"]
-        manifest.save(work_dir / "run_manifest.json")
-        memory.details["failure"] = fem_result["detail"]
-        memory.save(work_dir / "research_memory.json")
+        memory = ResearchMemoryRecord(
+            goal_id=goal.goal_id,
+            run_id=scenario_id,
+            finding=f"fem_solve_failed: {fem_result['detail']}",
+            evidence_uris=(fluid_ref.uri, map_ref.uri),
+            next_action="repair_fem_solver",
+        )
+        (work_dir / "research_memory.json").write_text(
+            json.dumps(memory.to_dict(), indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
         sys.exit(1)
 
-    manifest.outputs.append(store.track(fem_out_path))
+    fem_ref = store.put_file(fem_out_path, f"{scenario_id}/fem_out_s3.json",
+                             media_type="application/json")
 
     # Validation
     validation_result = _validate(work_dir, fem_out_path, fluid_out_path, time_map_path)
 
     validation_report = ValidationReport(
         run_id=scenario_id,
-        status=ValidationStatus.PASSED if validation_result["passed"] else ValidationStatus.FAILED,
-        checks=validation_result["checks"],
+        status="passed" if validation_result["passed"] else "failed",
+        checks=tuple(validation_result["checks"]),
         summary="All S3 fluid->structure one-way gates passed." if validation_result["passed"] else "Some gates failed.",
     )
-    validation_report.schema_version = 1
     validation_path = work_dir / "validation_report.json"
-    validation_report.save(validation_path)
-    manifest.outputs.append(store.track(validation_path))
+    validation_path.write_text(
+        json.dumps(validation_report.to_dict(), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    report_ref = store.put_file(validation_path, f"{scenario_id}/validation_report.json",
+                                media_type="application/json")
 
-    manifest.status = RunStatus.COMPLETED if validation_result["passed"] else RunStatus.FAILED
-    if not validation_result["passed"]:
-        manifest.failure_reason = f"validation failed: {validation_result['decision']}"
-    
-    manifest.save(work_dir / "run_manifest.json")
+    output_refs = [fluid_ref, map_ref, fem_ref, report_ref]
+    passed = validation_result["passed"]
+    failed_gate = validation_result.get("decision", "unknown") if not passed else ""
 
-    memory.details["validation"] = {
-        "passed": validation_result["passed"],
-        "decision": validation_result["decision"],
-        "checks": validation_result["checks"],
-    }
-    memory.save(work_dir / "research_memory.json")
+    manifest = RunManifest(
+        run_id=scenario_id,
+        status=RunStatus.SUCCEEDED if passed else RunStatus.FAILED,
+        created_at=ts,
+        config=config,
+        config_sha256=RunManifest.digest_config(config),
+        code_revisions={"cxs503/TensorPhysics": tensorphysics_rev,
+                        "cxs503/TensorFEM": tensorfem_rev,
+                        "cxs503/TensorFVM": tensorfvm_rev},
+        environment={"python": sys.version.split()[0], "platform": sys.platform},
+        resources={"execution": "local", "device": "cpu"},
+        outputs=output_refs,
+        validation_status=ValidationStatus.PASSED if passed else ValidationStatus.FAILED,
+        validation_report=report_ref,
+        parent_run_ids=["wedge-icebreaking-s2-m46"],
+    )
+    manifest_path = work_dir / "run_manifest.json"
+    manifest_path.write_text(manifest.to_json() + "\n", encoding="utf-8")
+    manifest_ref = store.put_file(manifest_path, f"{scenario_id}/run_manifest.json",
+                                  media_type="application/json")
+    if not store.verify(manifest_ref):
+        raise RuntimeError("run manifest artifact verification failed")
+
+    # Research memory
+    memory = ResearchMemoryRecord(
+        goal_id=goal.goal_id,
+        run_id=scenario_id,
+        finding=validation_report.summary,
+        evidence_uris=tuple(ref.uri for ref in [*output_refs, manifest_ref]),
+        next_action="proceed_to_S4" if passed else f"repair_{failed_gate}",
+    )
+    (work_dir / "research_memory.json").write_text(
+        json.dumps(memory.to_dict(), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
     # Save goal
     goal_path = work_dir / "research_goal.json"
@@ -772,14 +819,24 @@ def main() -> None:
     )
 
     # Summary report
+    def _sanitize(obj):
+        """Convert Path objects to strings for JSON serialization."""
+        if isinstance(obj, Path):
+            return str(obj)
+        if isinstance(obj, dict):
+            return {k: _sanitize(v) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [_sanitize(v) for v in obj]
+        return obj
+    
     report = {
         "scenario_id": scenario_id,
         "timestamp": ts,
         "status": "passed" if validation_result["passed"] else "failed",
         "legs": {
-            "fluid": fluid_result,
-            "map": map_result,
-            "fem": fem_result,
+            "fluid": _sanitize(fluid_result),
+            "map": _sanitize(map_result),
+            "fem": _sanitize(fem_result),
         },
         "validation": validation_result,
     }
