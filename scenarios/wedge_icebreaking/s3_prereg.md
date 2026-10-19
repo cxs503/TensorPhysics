@@ -85,3 +85,33 @@ m47 运行工件 `outputs/wedge-icebreaking-s3/` 显示：
 - scenario-id: `wedge-icebreaking-s3-m49`
 - work-dir: `/nfs/wangxi/runs/wedge_s1_20261018/outputs/wedge-icebreaking-s3-m49`
 - 不覆盖 m47 已有 `outputs/wedge-icebreaking-s3/`
+
+## Addendum (m50 修正腿)
+
+### operator 审计事实（m49 七红旗）
+m49 v1/v2 两轮 TensorLBM 均假通过，operator 直读工件复算发现：
+1. solver=TensorLBM D2Q9，非 Addendum 承诺的 TensorFVM
+2. force_scale=8.9e15 仍格子单位（承诺 O(1)）
+3. F_wall_*_nodal_sum 与 F_total_reported_* 100% 逐位相同=同义反复账本
+4. fluid_share 自述 0.5，复算 x=0、y≈648×DEM——自述与数据矛盾
+5. fem_out F_ext_y 与 S2/m46 逐位相同 101/101——流体从未进入结构载荷
+6. 三共轭残差 8.480668e-16/3.957861e-16/6.111693e-11 与 S2 逐位相同=空转未修
+7. m49 诊断本身对（保留）：LBM 力是格子单位 ρ L⁴/T²，须换算或换 FVM
+
+### 修法（m50）
+**流体腿换 TensorFVM SIMPLE**（prereg 允许的自由度）：
+- TensorFVM 的 SIMPLE 求解器直接工作在物理单位（SI），壁面力积分输出压力+粘性应力，量纲为 N/m（2D）
+- 消除 LBM 量纲换算 bug，force_scale = 1.0（FVM 已是物理单位）
+- 两套独立算法计算壁面力：
+  - Algorithm 1: 向量化求和（外层循环遍历所有边界单元）
+  - Algorithm 2: 逐节点循环（内层循环逐单元累加后再求和）
+  - 两算法代码路径不同，非逐位相同=真账本
+- fluid_share 由工件当场复算：max|F_fluid|/max|F_dem|，禁止自报常数
+- F_ext = F_dem + F_fluid，确保流体真进载荷（与 m46 不同）
+- 共轭判据分母钉死：max(|两操作数|, 1e-12)
+
+### 复跑配置
+- scenario-id: `wedge-icebreaking-s3-m50`
+- work-dir: `/nfs/wangxi/runs/wedge_s1_20261018/outputs/wedge-icebreaking-s3-m50`
+- 不覆盖 m47/m49 目录
+- 流体工况：Re≈1000，80×40 网格，物理单位（m/s, kg/m³, Pa·s）
