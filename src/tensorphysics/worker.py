@@ -150,6 +150,7 @@ def process_one(
             task.task_id, goal=goal, workspace=str(workspace),
             timeout_seconds=timeout_seconds, allowed_tools=allowed_tools,
         )
+        LOG.info("task=%s status=%s attempt=%s", result.task_id, result.status.value, result.attempt)
     except ValueError as exc:
         # Invalid plans must not remain queued forever.
         try:
@@ -161,7 +162,6 @@ def process_one(
         except Exception:
             LOG.exception("Could not mark invalid task %s as cancelled", task.task_id)
         LOG.error("Rejected task=%s: %s", task.task_id, exc)
-        LOG.info("task=%s status=%s attempt=%s", result.task_id, result.status.value, result.attempt)
     except Exception:
         LOG.exception("Failed to process task %s", task.task_id)
     return True
