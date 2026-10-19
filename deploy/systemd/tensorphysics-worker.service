@@ -1,0 +1,28 @@
+# Template for /etc/systemd/system/tensorphysics-worker.service
+# Adjust User, WorkingDirectory, and venv path to your deployment.
+[Unit]
+Description=TensorPhysics persistent research task worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tensorphysics
+Group=tensorphysics
+WorkingDirectory=/opt/tensorphysics
+EnvironmentFile=/etc/tensorphysics/worker.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/tensorphysics/.venv/bin/python -m tensorphysics.worker worker --database /var/lib/tensorphysics/research.sqlite3 --workspace-root /var/lib/tensorphysics/workspaces
+Restart=always
+RestartSec=3
+TimeoutStopSec=30
+KillSignal=SIGTERM
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/tensorphysics /var/log/tensorphysics
+
+[Install]
+WantedBy=multi-user.target
