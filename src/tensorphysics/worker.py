@@ -149,6 +149,20 @@ def process_one(
     return True
 
 
+def requeue_retryable(store: ResearchTaskStore) -> int:
+    """Requeue retryable attempts without exceeding each task's budget."""
+    count = 0
+    for task in store.list_tasks(status=TaskStatus.RETRY_WAIT, limit=10000):
+        if task.attempt < task.max_attempts:
+            store.transition(
+                task.task_id, expected_status=TaskStatus.RETRY_WAIT,
+                new_status=TaskStatus.QUEUED, event_type="retry_requeued",
+                payload={"attempt": task.attempt, "max_attempts": task.max_attempts},
+            )
+            count += 1
+    return count
+
+
 def worker_loop(
     database: str,
     *,
@@ -186,17 +200,11 @@ def worker_loop(
         recovered = store.recover_interrupted()
         for task in recovered:
             LOG.warning("Recovered interrupted task=%s new_status=%s", task.task_id, task.status.value)
-        # RETRY_WAIT is only requeued when its retry budget still allows another attempt.
-        for task in store.list_tasks(status=TaskStatus.RETRY_WAIT, limit=10000):
-            if task.attempt < task.max_attempts:
-                store.transition(
-                    task.task_id, expected_status=TaskStatus.RETRY_WAIT,
-                    new_status=TaskStatus.QUEUED, event_type="retry_requeued",
-                    payload={"attempt": task.attempt, "max_attempts": task.max_attempts},
-                )
+        requeue_retryable(store)
         runner = ResearchTaskRunner(store, agent, validator)
         LOG.info("worker_started database=%s workspace_root=%s poll_seconds=%s", database, root, poll_seconds)
         while not stop:
+            requeue_retryable(store)
             did_work = process_one(
                 store, runner, root, timeout_seconds=timeout_seconds, allowed_tools=allowed_tools,
             )
