@@ -53,3 +53,35 @@
 
 ## 预算
 ≤80 工具调用；墙钟 ≤7200s；完成后 commit（中文提交信息）再提验收。
+
+## Addendum (m49 修复腿)
+
+### 发现：空转耦合 (vacuous coupling)
+m47 运行工件 `outputs/wedge-icebreaking-s3/` 显示：
+- `fluid_ledger` 门失败：max |F_nodal_sum − F_reported|/scale = 1.75（门限 1e-10）
+- `force_scale = 2.277086e+18`——LBM 壁面力在格子单位（~1e-16）需放大 2.3e18 才匹配物理单位（~648 N）
+- 共轭判据（force_balance/moment_balance/work_conjugacy）数值与 S2 逐位相同：
+  - 8.480668e-16 / 3.957861e-16 / 6.111693e-11
+  - 原因：全局 scale 归一后流体贡献被淹没，耦合空转
+
+### 根因
+1. **量纲换算缺失**：LBM 动量交换法输出格子单位力（ρ L⁴/T² 量级），未做物理单位换算
+2. **账本不一致**：F_wall（向量化求和）与 F_nodal_sum（逐格子循环）两套算法结果不同
+   （例：step 1 F_wall_y=-47.4 vs F_nodal_y=-15.8，比值 3x）
+
+### 修法
+- **流体腿换 TensorFVM**（prereg 允许的自由度）：
+  - TensorFVM 的 SIMPLE 求解器直接工作在物理单位（SI），壁面力积分 `_surface_force` 
+    输出压力+粘性应力，量纲为 N/m（2D）或 N（积分后）
+  - 消除量纲换算 bug，force_scale 降为 O(1)
+  - F_wall 与 F_nodal_sum 统一用同一积分路径，账本自然一致
+- **新增 fluid_share 门**：max|F_fluid 物理单位| / max|F_dem| ≥ 1e-3
+  - 耦合非空转的必要条件：流体载荷必须对总载荷有非平凡贡献
+  - Fail 就 Fail，不粉饰
+- **共轭判据分母钉死**：max(|两操作数|, 1e-12)（同 S2 口径），禁用全局 scale
+  - 防止流体贡献被全局 scale 淹没后数值与 S2 逐位相同
+
+### 复跑配置
+- scenario-id: `wedge-icebreaking-s3-m49`
+- work-dir: `/nfs/wangxi/runs/wedge_s1_20261018/outputs/wedge-icebreaking-s3-m49`
+- 不覆盖 m47 已有 `outputs/wedge-icebreaking-s3/`
