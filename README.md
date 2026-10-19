@@ -102,7 +102,9 @@ checks history/trajectory readability and finite values, stores outputs and
 validation evidence through `LocalArtifactStore`, emits a typed `RunManifest`,
 and recommends a next action based on the checks. Versioned goal, plan,
 validation-report, and research-memory contracts live in
-`tensorphysics.research_contracts`.
+`tensorphysics.research_contracts`. The deterministic, fail-closed next-action
+policy is implemented in `tensorphysics.research_policy` and documented in
+[Executable Research Methodology](docs/EXECUTABLE_RESEARCH_METHODOLOGY.md).
 
 This is a software-integrity gate, not physical validation; it does not yet
 register the run in TensorPlatform or perform an AI-driven parameter search.
