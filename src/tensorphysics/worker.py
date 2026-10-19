@@ -11,7 +11,6 @@ import json
 import logging
 import os
 from pathlib import Path
-import shlex
 import signal
 import sys
 import time
@@ -63,7 +62,6 @@ class JsonCommandValidator:
             text=True,
             encoding="utf-8",
             errors="replace",
-            stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             timeout=self.timeout_seconds,
