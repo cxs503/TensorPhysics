@@ -210,8 +210,9 @@ def worker_loop(
             )
             if once:
                 return 0
-            if not did_work:
-                time.sleep(poll_seconds)
+            # A small delay after every claimed task prevents a failing task
+            # from burning through its retry budget in a tight CPU loop.
+            time.sleep(poll_seconds)
     LOG.info("worker_stopped")
     return 0
 
