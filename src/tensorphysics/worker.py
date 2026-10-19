@@ -83,9 +83,15 @@ class JsonCommandValidator:
         checks = report.get("checks")
         if not isinstance(checks, list) or not checks:
             raise ValueError("validator report must include a non-empty checks list")
-        if report["status"] == "passed" and any(
-            not isinstance(check, dict) or check.get("passed") is not True for check in checks
-        ):
+        for index, check in enumerate(checks):
+            if (
+                not isinstance(check, dict)
+                or not isinstance(check.get("name"), str)
+                or not check["name"].strip()
+                or not isinstance(check.get("passed"), bool)
+            ):
+                raise ValueError(f"validator checks[{index}] requires a non-empty name and boolean passed")
+        if report["status"] == "passed" and any(check["passed"] is not True for check in checks):
             raise ValueError("validator cannot pass when any check is absent or failed")
         return report
 
@@ -139,10 +145,22 @@ def process_one(
         return True
     workspace.mkdir(parents=True, exist_ok=True)
     try:
+        goal = _goal_for(task)
         result = runner.run_once(
-            task.task_id, goal=_goal_for(task), workspace=str(workspace),
+            task.task_id, goal=goal, workspace=str(workspace),
             timeout_seconds=timeout_seconds, allowed_tools=allowed_tools,
         )
+    except ValueError as exc:
+        # Invalid plans must not remain queued forever.
+        try:
+            store.transition(
+                task.task_id, expected_status=TaskStatus.QUEUED,
+                new_status=TaskStatus.CANCELLED, event_type="invalid_task_plan",
+                payload={"error": str(exc)},
+            )
+        except Exception:
+            LOG.exception("Could not mark invalid task %s as cancelled", task.task_id)
+        LOG.error("Rejected task=%s: %s", task.task_id, exc)
         LOG.info("task=%s status=%s attempt=%s", result.task_id, result.status.value, result.attempt)
     except Exception:
         LOG.exception("Failed to process task %s", task.task_id)
