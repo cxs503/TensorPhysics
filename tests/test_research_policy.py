@@ -7,10 +7,15 @@ from tensorphysics.research_policy import decide_next_action
 REQUIRED = ("finite_values", "time_monotonic", "mass_balance")
 
 
-def report(status="passed", checks=None):
+def report(status=None, checks=None):
     if checks is None:
         checks = tuple({"name": name, "passed": True} for name in REQUIRED)
-    return ValidationReport("run-001", status, tuple(checks), "test report")
+    checks = tuple(checks)
+    if status is None:
+        # ValidationReport forbids a "passed" report that contains a failed
+        # check, so the status follows the checks unless a test overrides it.
+        status = "passed" if all(check["passed"] for check in checks) else "failed"
+    return ValidationReport("run-001", status, checks, "test report")
 
 
 def decide(r, **kwargs):
@@ -73,3 +78,14 @@ def test_invalid_budgets_are_rejected(runs, max_runs):
 def test_empty_required_checks_are_rejected():
     with pytest.raises(ResearchContractError, match="required_checks"):
         decide_next_action(report(), required_checks=(), runs_completed=1, max_runs=3)
+
+
+def test_a_passed_report_cannot_contain_a_failed_check():
+    """The contract rejects the combination directly, not just via the policy.
+
+    Guards the helper above: a report that claims "passed" while carrying a
+    failed check must never be constructible.
+    """
+    checks = tuple({"name": name, "passed": False} for name in REQUIRED)
+    with pytest.raises(ResearchContractError, match="cannot contain failed checks"):
+        ValidationReport("run-001", "passed", checks, "test report")
