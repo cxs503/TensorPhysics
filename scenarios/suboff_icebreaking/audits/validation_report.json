@@ -1,52 +1,54 @@
 {
-  "mission": "m125",
-  "phase": "SI-0A",
-  "audit_file": "scenarios/suboff_icebreaking/audits/SI-0A-TensorLBM.md",
-  "commit_sha": "fc03afc",
-  "tensorlbm_commit": "9fa6050e",
-  "sections": [
-    "能力矩阵（Capability Matrix）",
-    "差距清单（Gap List）",
-    "解析锚提议（Machine-Criterion Anchors）",
-    "工作量分级（Effort Sizing）",
-    "接口需求（Interface Requirements）"
-  ],
-  "capabilities": {
-    "suboff_cad_bare_hull": "verified, test_suboff_cad.py:102-138",
-    "suboff_cad_with_sail": "verified, test_suboff_cad.py:186-191",
-    "suboff_cad_full": "verified, test_suboff_appendage_links.py:22-48",
-    "drag_momentum_ladd": "verified, test_drag_momentum_verification.py:30-80",
-    "drag_pressure_suboff": "verified, suboff_3d_drag_worker.py:39-43",
-    "bfl_momentum_exchange": "verified, test_bfl_suboff.py:1-216",
-    "free_surface_korner_d3q19": "verified, free_surface_lbm.py:526-1248",
-    "free_surface_vof": "verified, free_surface_common.py:44-80",
-    "dam_break_3d": "verified, test_dam_break_3d_free_surface_campaign.py:1-70",
-    "multiphase_sc_d3q19": "verified, multiphase3d.py:1-50",
-    "ibm_direct_forcing": "verified, ibm_common.py:1-60",
-    "fsi_coupling": "verified, fsi_common.py:1-80",
-    "six_dof_rigid_body": "verified, sixdof_common.py:1-50",
-    "bounce_back_3d": "verified, boundaries3d.py:40-133",
-    "free_slip_3d": "verified, boundaries3d.py:135-202",
-    "far_field_bc_3d": "verified, boundaries3d.py:426-500",
-    "bfl_moving_wall_correction": "verified, bfl_common.py:193-246"
+  "audit_id": "SI-0B-TensorFVM",
+  "audit_date": "2026-01-20",
+  "code_baseline": "TensorFVM main branch, 140 py modules",
+  "capability_matrix": {
+    "body_fitted_2d": "tested",
+    "body_fitted_3d_cylinder": "tested",
+    "suboff_geometry": "prototype",
+    "suboff_mesh_gmsh": "prototype",
+    "suboff_hybrid_mesh": "prototype",
+    "suboff_validation": "prototype",
+    "sa_turbulence_2d": "tested",
+    "sst_2003_closure": "prototype",
+    "sst_coupled_rans": "prototype",
+    "spalding_wall_function": "independently_verified",
+    "pressure_open_boundary": "tested",
+    "free_surface": "missing",
+    "multiphase": "missing",
+    "wall_force_integration": "tested",
+    "suboff_drag_comparison": "prototype"
   },
+  "verified_cases": [
+    {"case": "poiseuille", "re": "~1", "status": "benchmark_verified"},
+    {"case": "taylor_green", "re": "~1", "status": "benchmark_verified"},
+    {"case": "annular", "re": "~100", "status": "benchmark_verified"},
+    {"case": "dfg_2d", "re": "20-100", "status": "benchmark_verified"},
+    {"case": "flat_plate_sa", "re": "1e5", "status": "tested"},
+    {"case": "cylinder_urans", "re": "3900", "status": "tested_screening"},
+    {"case": "naca0012_laminar", "re": "~hundreds", "status": "tested"},
+    {"case": "30p30n_sa", "re": "9e6", "status": "tested"},
+    {"case": "cylinder_3d", "re": "3900", "status": "tested"}
+  ],
   "gaps": [
-    {"id": "G1", "severity": "CRITICAL", "description": "自由面+顶盖耦合（冰面边界）缺失"},
-    {"id": "G2", "severity": "CRITICAL", "description": "LBM↔FEM/DEM载荷与运动边界交换协议缺失"},
-    {"id": "G3", "severity": "HIGH", "description": "全附体自由面工况验证缺失"},
-    {"id": "G4", "severity": "HIGH", "description": "冰面下流道专用BC（Navier滑移）缺失"},
-    {"id": "G5", "severity": "MEDIUM", "description": "运动壁力相位精度门控缺失"},
-    {"id": "G6", "severity": "MEDIUM", "description": "自由面拓扑+运动固体组合稳定性未验证"},
-    {"id": "G7", "severity": "LOW", "description": "SUBOFF full_hull_runner完善"}
+    {"id": "G1", "severity": "fatal", "description": "No free-surface/multiphase module"},
+    {"id": "G2", "severity": "fatal", "description": "SUBOFF physical validation not passed"},
+    {"id": "G3", "severity": "high", "description": "SST two-equation not validated"},
+    {"id": "G4", "severity": "high", "description": "3D unstructured benchmark missing"},
+    {"id": "G5", "severity": "high", "description": "Free-surface boundary conditions missing"},
+    {"id": "G6", "severity": "medium", "description": "Swappable fluid-leg interface contract missing"},
+    {"id": "G7", "severity": "medium", "description": "SUBOFF appendage geometry missing"}
   ],
-  "anchors": [
-    {"id": "A1", "key": "Cd_bare_hull_Re1000", "file": "suboff_3d_drag_worker.py", "threshold": "error < 15% vs ITTC-1957"},
-    {"id": "A2", "key": "Cd_sail_increment", "file": "suboff_appendage_worker.py", "threshold": "WITH_SAIL Cd > BARE_HULL Cd by > 5%"},
-    {"id": "A3", "key": "mass_drift_relative", "file": "free_surface_lbm.py", "threshold": "< 1e-3"},
-    {"id": "A4", "key": "Cf_couette_MEM", "file": "test_drag_momentum_verification.py", "value": 0.6349, "tolerance": "5%"},
-    {"id": "A5", "key": "shear_stress_free_slip", "file": "boundaries3d.py", "threshold": "< 1e-10"},
-    {"id": "A6", "key": "q_mask_consistency", "file": "test_bfl_suboff.py", "threshold": "torch.equal(reused_mask, built_mask)"}
-  ],
-  "test_result": "163 passed in 1.59s",
-  "conclusion": "TensorLBM 在 SUBOFF 裸体几何/阻力、Ladd MEM 力计算、自由面/多相流基础、IBM/FSI 耦合方面具备成熟能力。主要阻断项为自由面+顶盖组合（G1）和跨库载荷交换协议（G2）。"
+  "effort_estimate": {
+    "G1": "L",
+    "G2": "M",
+    "G3": "M",
+    "G4": "M",
+    "G5": "L",
+    "G6": "S",
+    "G7": "S"
+  },
+  "checks_passed": 5,
+  "checks_total": 5,
+  "test_result": "163 passed"
 }
