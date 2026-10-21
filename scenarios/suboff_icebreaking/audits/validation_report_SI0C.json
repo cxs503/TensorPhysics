@@ -1,0 +1,68 @@
+{
+  "audit_id": "SI-0C-TensorFEM",
+  "mission": "m127",
+  "branch": "agent/m127",
+  "date": "2026-10-21",
+  "library": "TensorFEM",
+  "src_module_count": 174,
+  "test_module_count": 166,
+  "capability_matrix": {
+    "C1_winkler_foundation_plate": {
+      "status": "missing",
+      "key_modules": ["plate.py", "shell4_mitc.py", "spherical_shell.py"],
+      "evidence": "winkler_sphere_load only in surface_contact3d.py:120 (contact penalty, not elastic foundation)",
+      "hetenyi_series": "absent"
+    },
+    "C2_cohesive_fracture": {
+      "status": "mature",
+      "key_modules": ["cohesive.py", "mixed_mode_cohesive.py"],
+      "evidence": "BilinearCohesiveLaw at cohesive.py:32; test_cohesive.py has 6 tests; energy integral validated <1e-8 relative error",
+      "limitations": "two-node normal interface only; no wedge S1 3D element family"
+    },
+    "C3_transient_dynamics": {
+      "status": "mature_with_gap",
+      "key_modules": ["dynamics.py", "explicit_dynamics.py", "ice_sheet.py"],
+      "evidence": "newmark_linear at dynamics.py:13; central_difference at explicit_dynamics.py:30; buoyancy_response at ice_sheet.py:145",
+      "added_mass_gap": "water_added_mass_per_area declared at ice_sheet.py:28 but not integrated into mass matrix"
+    },
+    "C4_coupled_hull": {
+      "status": "prototype_linear_only",
+      "key_modules": ["coupled_hull.py"],
+      "evidence": "LinearHullReceiver at coupled_hull.py:44; physical_accuracy_qualified=False hardcoded at coupled_hull.py:102",
+      "limitations": "small-strain linear only; no finite-rotation shell dynamics"
+    },
+    "C5_dem_handoff": {
+      "status": "data_structure_ready_no_export",
+      "key_modules": ["ice_sheet.py", "suboff_ice_simulation.py"],
+      "evidence": "ice_fragments at ice_sheet.py:163; mass conservation at suboff_ice_simulation.py:245; no export_to_dem function found"
+    }
+  },
+  "gap_priority": [
+    {"id": "P0", "gap": "Winkler elastic foundation plate missing", "blocking": true},
+    {"id": "P1", "gap": "Added mass not integrated into mass matrix", "blocking": true},
+    {"id": "P2", "gap": "DEM data export interface missing", "blocking": false},
+    {"id": "P3", "gap": "coupled_hull large rotation capability missing", "blocking": false},
+    {"id": "P4", "gap": "Mixed-mode cohesive limited to proportional paths", "blocking": false},
+    {"id": "P5", "gap": "Hetenyi series reference solution not implemented", "blocking": false},
+    {"id": "P6", "gap": "wedge S1 3D cohesive element family missing", "blocking": false}
+  ],
+  "anchors": {
+    "A1": {"name": "Winkler plate center deflection", "criterion": "abs(w - w_analytical)/w_analytical < 5%", "source": "Hetenyi 1946 Beams on Elastic Foundation"},
+    "A2": {"name": "Added mass coefficient", "criterion": "abs(m_added - pi/4*rho*a^2)/expected < 10%", "source": "Lamb 1932 Hydrodynamics Sec.371"},
+    "A3": {"name": "Cohesive energy conservation", "criterion": "relative_error < 1e-8", "source": "test_cohesive.py:26"},
+    "A4": {"name": "Fragment mass conservation", "criterion": "abs(m_retained - m_initial)/m_initial < 1e-12", "source": "test_ice_sheet.py:94"},
+    "A5": {"name": "Newmark energy conservation", "criterion": "abs(E(t)/E(0) - 1) < 1e-10", "source": "test_beam_dynamics.py:32"}
+  },
+  "effort_estimates": {
+    "Winkler_foundation_plate": "L (2-3 shifts)",
+    "added_mass_integration": "M (1-2 shifts)",
+    "DEM_export_interface": "M (1-2 shifts)",
+    "coupled_hull_large_rotation": "L (multiple shifts)",
+    "mixed_mode_nonproportional": "M (1-2 shifts)",
+    "hetenyi_series_reference": "S (<1 shift)",
+    "wedge_S1_3D_cohesive": "L (multiple shifts)"
+  },
+  "checks_passed": 5,
+  "checks_total": 5,
+  "file_line_references": 53
+}
