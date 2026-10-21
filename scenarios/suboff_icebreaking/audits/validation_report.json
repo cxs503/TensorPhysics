@@ -1,0 +1,54 @@
+{
+  "audit_id": "SI-0B-TensorFVM",
+  "audit_date": "2026-01-20",
+  "code_baseline": "TensorFVM main branch, 140 py modules",
+  "capability_matrix": {
+    "body_fitted_2d": "tested",
+    "body_fitted_3d_cylinder": "tested",
+    "suboff_geometry": "prototype",
+    "suboff_mesh_gmsh": "prototype",
+    "suboff_hybrid_mesh": "prototype",
+    "suboff_validation": "prototype",
+    "sa_turbulence_2d": "tested",
+    "sst_2003_closure": "prototype",
+    "sst_coupled_rans": "prototype",
+    "spalding_wall_function": "independently_verified",
+    "pressure_open_boundary": "tested",
+    "free_surface": "missing",
+    "multiphase": "missing",
+    "wall_force_integration": "tested",
+    "suboff_drag_comparison": "prototype"
+  },
+  "verified_cases": [
+    {"case": "poiseuille", "re": "~1", "status": "benchmark_verified"},
+    {"case": "taylor_green", "re": "~1", "status": "benchmark_verified"},
+    {"case": "annular", "re": "~100", "status": "benchmark_verified"},
+    {"case": "dfg_2d", "re": "20-100", "status": "benchmark_verified"},
+    {"case": "flat_plate_sa", "re": "1e5", "status": "tested"},
+    {"case": "cylinder_urans", "re": "3900", "status": "tested_screening"},
+    {"case": "naca0012_laminar", "re": "~hundreds", "status": "tested"},
+    {"case": "30p30n_sa", "re": "9e6", "status": "tested"},
+    {"case": "cylinder_3d", "re": "3900", "status": "tested"}
+  ],
+  "gaps": [
+    {"id": "G1", "severity": "fatal", "description": "No free-surface/multiphase module"},
+    {"id": "G2", "severity": "fatal", "description": "SUBOFF physical validation not passed"},
+    {"id": "G3", "severity": "high", "description": "SST two-equation not validated"},
+    {"id": "G4", "severity": "high", "description": "3D unstructured benchmark missing"},
+    {"id": "G5", "severity": "high", "description": "Free-surface boundary conditions missing"},
+    {"id": "G6", "severity": "medium", "description": "Swappable fluid-leg interface contract missing"},
+    {"id": "G7", "severity": "medium", "description": "SUBOFF appendage geometry missing"}
+  ],
+  "effort_estimate": {
+    "G1": "L",
+    "G2": "M",
+    "G3": "M",
+    "G4": "M",
+    "G5": "L",
+    "G6": "S",
+    "G7": "S"
+  },
+  "checks_passed": 5,
+  "checks_total": 5,
+  "test_result": "163 passed"
+}
