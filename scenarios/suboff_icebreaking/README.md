@@ -62,3 +62,22 @@ owner 指令（2026-10-21）：围绕完整的 SUBOFF 破冰，把 TensorLBM / T
   SI-3 的直接前置**，随本战役重启（中继恢复后重派）。
 - **suboff_sail**：SUBOFF 几何与 LBM 流体基础的 verified 来源（SI-A 复用）。
 - **B 线 benchmark closure**：互不阻断（GPU 排队协调）。
+
+## 定向修订（2026-10-21，owner）：库优先——以破冰带动求解器深度开发
+
+**原则**：SUBOFF 破冰战役的目的是带动四个求解器库的深度开发，不是停留在纸面案例。每个 SI 阶段的求解器能力必须落在对应库的 `src/` + `tests/`（TensorFEM/TensorDEM/TensorLBM/TensorFVM）；TensorPhysics 场景目录只允许薄编排、双账本与验证锚。与求解器相关的开发（性能/规模化/数值稳健性/文档）都在战役范围内。
+
+**SI-1 矫正（SI-1b，待 PR #46 合后执行）**：场景内 `plate_response.py` 板单元升库 TensorFEM（`src/tensorfem/plate_mindlin.py`），场景改为 import 库，消除场景内副本；SI-1 三锚全绿重跑。
+
+**SI-2 重切（2026-10-21 生效）**：拆两库开发腿并行——
+- **SI-2/FEM 腿**（TensorFEM，m153）：Mindlin-Reissner 板升库 + cohesive 失效判据 + 断裂能量账本 + 冻结接口 `failure_faces.json`；
+- **SI-2/DEM 腿**（TensorDEM，m154）：`failure_faces.json` → 键结颗粒冰场生成 + 质量/断裂能量账本（对齐该库 `docs/icebreaking_development_roadmap.md`）；
+- **SI-2/场景腿**（TensorPhysics，两腿合入后）：薄编排三锚（质量守恒/断裂能量守恒/解析枚举），零求解器代码。
+
+**接口冻结**：`failure_faces.json = {"faces": [{"id", "area", "normal"[3], "centroid"[3], "G", "released_energy"}], "units": "SI"}`——FEM 腿产出、DEM 腿消费，任何改动须双侧同步改样例测试。
+
+**锚升级原则**：机器精度账本门保留为回归纪律；物理正确性锚须对照文献/实验（冰板穿透载荷、挠度-载荷曲线等公开数据），不接受纯自证闭环。
+
+**工件纪律**：PR 入库只留 `validation_report.json` + 必要图，禁止全量 npz/json 结果工件入库（SI-1 教训：20 个工件进 PR）。
+
+**后续阶梯同规则**：SI-3（DEM×流体双向，wedge S4 前置）、SI-4（全链演示）、SI-5（FVM 对照腿）均按「库能力 PR + 场景薄编排 + 物理锚」交付。TensorFVM 两相能力为四库最大空缺（Phase 0 审计），单列深度开发线。
