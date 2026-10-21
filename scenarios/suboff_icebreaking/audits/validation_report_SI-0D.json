@@ -1,0 +1,56 @@
+{
+  "mission": "m128",
+  "phase": "SI-0D",
+  "audit_file": "scenarios/suboff_icebreaking/audits/SI-0D-TensorDEM.md",
+  "commit_sha": "0dd2c0d",
+  "tensordem_repo": "/nfs/wangxi/tensor_eco/TensorDEM",
+  "sections": [
+    "能力矩阵（Capability Matrix）",
+    "差距清单（Gap List）",
+    "解析锚提议（Machine-Criterion Anchors）",
+    "工作量分级（Effort Sizing）",
+    "接口需求（Interface Requirements）"
+  ],
+  "capabilities": {
+    "dem3d_bonded_sphere_3d": "verified, dem3d.py:104-520, test_dem3d.py:1-90",
+    "dem3d_fracture_tension_shear": "verified, dem3d.py:27-28,304-319, test_dem3d.py:40-48",
+    "dem3d_contact_spatial_search": "verified, dem3d.py:227-260",
+    "dem3d_platen_boundaries": "verified, dem3d.py:41-46,110",
+    "dem3d_energy_audit": "verified, dem3d_energy.py:1-100, test_dem3d_energy_audit.py",
+    "hull_contact_polyline_2d": "verified, hull_contact.py:1-62, test_hull_contact.py:1-48",
+    "dem_hull_integration": "verified, dem.py:84-86,279-281, test_hull_contact_integration.py",
+    "dem3d_wedge_bow": "verified, dem3d_wedge.py:17-135, test_dem3d_moving_wedge_bow.py",
+    "calibrated_wet_coupling_2d": "verified, calibrated_wet_coupling.py:6-66, test_calibrated_wet_coupling.py",
+    "calibrated_dem_per_bond": "verified, calibrated_dem.py:12-96, test_calibrated_dem.py",
+    "continuum_boundary_network": "verified, continuum_boundary_dem.py:1-96, test_continuum_boundary.py",
+    "moving_plane_boundary": "verified, moving_plane_boundary.py:1-60, test_moving_plane.py",
+    "material_calibration": "verified, material_calibration.py:1-80, test_material_calibration.py",
+    "verification_campaigns": "verified, verification.py:1-200, test_verification.py",
+    "sensitivity_analysis": "verified, sensitivity.py:1-60, test_sensitivity.py",
+    "run_manifest_provenance": "verified, run_manifest.py:1-100, test_run_manifest.py"
+  },
+  "gaps": [
+    {"id": "G1", "severity": "CRITICAL", "description": "无 3D DEM↔流体双向耦合框架（dem3d 无 exchange_state，无 TensorLBM 3D 耦合层）"},
+    {"id": "G2", "severity": "CRITICAL", "description": "无浮力/湿耦合模型（无浮力计算、无水体密度、无冰-水密度比浮稳态）"},
+    {"id": "G3", "severity": "CRITICAL", "description": "无全附体 SUBOFF 曲面接触（仅 wedge 理想楔形+2D polyline，无三角网格曲面导入）"},
+    {"id": "G4", "severity": "HIGH", "description": "无切向摩擦/滚动阻力/恢复系数标定映射（仅法向弹簧阻尼）"},
+    {"id": "G5", "severity": "HIGH", "description": "continuum→DEM 断裂碎片传递机制缺失"},
+    {"id": "G6", "severity": "MEDIUM", "description": "CPU cell list 在 GPU 下可能同步阻塞"},
+    {"id": "G7", "severity": "MEDIUM", "description": "无大规模颗粒压测（基准最大 ~105 颗粒）"},
+    {"id": "G8", "severity": "LOW", "description": "无 GPU 原生空间搜索"}
+  ],
+  "anchors": [
+    {"id": "A1", "key": "exchange_state_exists_3d", "file": "dem3d.py", "threshold": "method exists → False (grep empty)"},
+    {"id": "A2", "key": "buoyancy_formula", "file": "TBD", "threshold": "single-sphere half-submerged buoyancy error < 1% vs rho_water*g*V"},
+    {"id": "A3", "key": "restitution_damping_mapping", "file": "TBD", "threshold": "v_after/v_before vs target e=0.3 error < 5%"},
+    {"id": "A4", "key": "fragment_mass_conservation", "file": "TBD", "threshold": "continuum→DEM mass error < 0.1%"},
+    {"id": "A5", "key": "gpu_cell_list_ratio", "file": "TBD", "threshold": "cell list build < 20% of step time on GPU"},
+    {"id": "A6", "key": "scale_test_no_oom", "file": "TBD", "threshold": "10k/50k/100k particles run without OOM"}
+  ],
+  "effort_sizing": {
+    "G1": "L", "G2": "M", "G3": "L", "G4": "M",
+    "G5": "M", "G6": "M", "G7": "M", "G8": "M"
+  },
+  "test_result": "214 passed, 1 skipped, 64 subtests passed in 18.35s",
+  "conclusion": "TensorDEM 在 3D 键合球体 DEM、断裂本构、2D hull 接触、wedge 破冰线、2D 流-固耦合方面有成熟能力。三大阻断项：3D 流-固耦合缺失（G1）、浮力/湿耦合缺失（G2）、SUBOFF 曲面接触缺失（G3）。"
+}
