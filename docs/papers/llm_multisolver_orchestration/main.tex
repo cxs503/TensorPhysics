@@ -1,0 +1,41 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+% minimal local texlive: natbib+ bibtex (switch back to biblatex at submission)
+\usepackage[numbers,sort&compress]{natbib}
+
+% status markers for the synchronous-writing protocol: every empirical claim
+% is either backed by an exported platform artifact or marked DATA-PENDING.
+\newcommand{\pending}[1]{\textcolor{red}{[DATA-PENDING: #1]}}
+\newcommand{\sysname}{\textsc{TensorEco}}
+
+\title{Role-Specialized LLM Agent Fleets for Coupled Multiphysics
+Solver Co-Development:\\ Protocol, Platform, and an Icebreaking Case Study}
+
+\author{Anonymous Author(s)} % authorship decided by the project owner at submission
+
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\input{sections/0_abstract}
+\input{sections/1_introduction}
+\input{sections/2_related}
+\input{sections/3_system}
+\input{sections/4_method}
+\input{sections/5_casestudy}
+\input{sections/6_ablation}
+\input{sections/7_discussion}
+\input{sections/8_conclusion}
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
