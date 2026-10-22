@@ -1,0 +1,83 @@
+{
+  "mission": "m174",
+  "phase": "SI-3",
+  "title": "LBM×FEM 双向耦合——wedge S4 技术移植到 SUBOFF 破冰场景",
+  "description": "SUBOFF 破冰 Phase 2 第三阶：在 SI-1 单向耦合基础上升级为双向耦合，移植 wedge S4 的守恒账本范式",
+  "timestamp": "2026-10-22T10:00:00Z",
+  "prerequisites": {
+    "SI-1": "PR #46 (LBM×FEM 单向耦合) - 已合 main",
+    "wedge-S4": "PR #45 (双向流固耦合) - 已合 main"
+  },
+  "anchors": [
+    {
+      "id": "anchor_1",
+      "name": "双向耦合闭环",
+      "description": "流体→结构（LBM 载荷→FEM 板挠度）+ 结构→流体（板挠度→LBM 浸入边界）",
+      "criterion": "每耦合步双向数据交换完整，无单向退化",
+      "rationale": "双向耦合必须两个方向都有非零数据流",
+      "reference_source": "coupling_loop.py 双向交换日志"
+    },
+    {
+      "id": "anchor_2",
+      "name": "动量守恒账本",
+      "description": "流体给结构的冲量 = 结构动量变化 + 固定端反力冲量",
+      "criterion": "相对残差 ≤ 1e-12（机器精度）",
+      "rationale": "移植 S4 双账本范式，SUBOFF 场景同标尺",
+      "reference_source": "conservation_ledger.py 动量账本"
+    },
+    {
+      "id": "anchor_3",
+      "name": "能量守恒账本",
+      "description": "流体对结构做功 = 结构应变能 + 结构动能",
+      "criterion": "相对残差 ≤ 1e-12（机器精度）",
+      "rationale": "移植 S4 双账本范式，SUBOFF 场景同标尺",
+      "reference_source": "conservation_ledger.py 能量账本"
+    },
+    {
+      "id": "anchor_4",
+      "name": "与 SI-1 单向基线对照",
+      "description": "双向耦合 vs 单向耦合的挠度/载荷差异定量",
+      "criterion": "差异可量化，物理解释清晰",
+      "rationale": "证明双向耦合的物理意义，非静默升级",
+      "reference_source": "comparison_report.json 对照表"
+    }
+  ],
+  "data_flow": {
+    "step_1": {
+      "module": "lbm_load_extract.py (复用 SI-1)",
+      "input": "TensorLBM 流场快照 (npz)",
+      "output": "ledger_a.json (LBM 侧节点力)",
+      "description": "从 LBM 流场提取冰板底面节点载荷"
+    },
+    "step_2": {
+      "module": "plate_response.py (复用 SI-1)",
+      "input": "ledger_a.json (节点载荷)",
+      "output": "ledger_b.json (FEM 收到节点力) + 板挠度场",
+      "description": "FEM 弹性地基板求解"
+    },
+    "step_3": {
+      "module": "immersed_boundary.py (新增)",
+      "input": "板挠度场",
+      "output": "浸入边界修正量",
+      "description": "板挠度→LBM 浸入边界回写（结构→流体反馈）"
+    },
+    "step_4": {
+      "module": "coupling_loop.py (新增)",
+      "input": "双向交换数据",
+      "output": "exchange_log.json + conservation_ledger.json",
+      "description": "双向耦合主循环 + 守恒账本"
+    }
+  },
+  "validation": {
+    "script": "tests/test_si3_two_way_coupling.py",
+    "output": "validation_report.json",
+    "anchors_to_verify": ["anchor_1", "anchor_2", "anchor_3", "anchor_4"]
+  },
+  "constraints": {
+    "compute": "CPU only (B 线算力在飞)",
+    "precision": "float64 for all numerical operations",
+    "gpu_policy": "如确需 GPU 只可用 GPU5 (CUDA_VISIBLE_DEVICES=5) 并先查 nvidia-smi",
+    "sub_steps": "每耦合步流体子步数 n_sub = 5（S4 范式）",
+    "coupling_steps": "耦合步数 n_coupling = 10（S4 范式）"
+  }
+}

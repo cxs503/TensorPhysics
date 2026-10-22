@@ -1,0 +1,38 @@
+{
+  "ledger_type": "conservation",
+  "description": "双向耦合守恒账本（力平衡 + 能量增量一致性）",
+  "schema_version": 1,
+  "coupling_step": 6,
+  "momentum_balance": {
+    "F_fluid": [
+      14.40000000000001,
+      7.200000000000005,
+      -1440.0000000000002
+    ],
+    "R": [
+      -14.40000000000001,
+      -7.200000000000005,
+      1440.0000000000002
+    ],
+    "force_balance": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "residual": 0.0,
+    "scale": 1440.089997187676,
+    "relative_residual": 0.0
+  },
+  "energy_balance": {
+    "U_strain_J": 0.0015861543408331466,
+    "delta_U_strain_J": 0.0,
+    "incremental_work_J": 0.0,
+    "residual_J": 0.0,
+    "scale_J": 1e-12,
+    "relative_residual": 0.0
+  },
+  "momentum_passed": true,
+  "energy_passed": true,
+  "passed": true,
+  "timestamp": "2026-10-22T08:32:46Z"
+}
