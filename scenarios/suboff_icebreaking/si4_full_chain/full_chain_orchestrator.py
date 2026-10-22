@@ -429,6 +429,23 @@ def run_full_chain(
         plate_velocity = plate_velocity_new
         current_snapshot = str(new_snapshot_path)
 
+        # === 保存 FEM 快照 ===
+        fem_snapshot_path = output_path / f"fem_snapshot_step{k}.npz"
+        np.savez(
+            fem_snapshot_path,
+            nodes=plate_nodes_2d,
+            elements=elements,
+            displacement=fem_result.displacement,
+            reaction=fem_result.reaction,
+            force=fem_result.force,
+            plate_deflection=plate_deflection_new,
+            plate_velocity=plate_velocity_new,
+            young=young,
+            poisson=poisson,
+            thickness=thickness,
+            foundation_coefficient=1e5,
+        )
+
         print(f"    SI-3 动量残差: {si3_momentum_res:.2e}, "
               f"能量残差: {si3_energy_res:.2e}")
 
@@ -588,6 +605,37 @@ def run_full_chain(
         else:
             print("    无新破坏面，跳过颗粒生成")
 
+        # === 保存断裂快照 ===
+        fracture_snapshot_path = output_path / f"fracture_snapshot_step{k}.json"
+        fracture_data = {
+            "chain_step": k,
+            "n_failed_total": n_failed_total,
+            "n_new_failed": n_new_failed,
+            "n_total_faces": cohesive_result.n_total_faces,
+            "sigma_c": sigma_c,
+            "G_c": G_c,
+            "failed_faces": [
+                {
+                    "face_id": f.face_id,
+                    "node_i": f.node_i,
+                    "node_j": f.node_j,
+                    "element_left": f.element_left,
+                    "element_right": f.element_right,
+                    "length": f.length,
+                    "normal": f.normal.tolist(),
+                    "sigma_n": f.sigma_n,
+                    "sigma_c": f.sigma_c,
+                    "area": f.area,
+                    "released_energy": f.released_energy,
+                }
+                for f in cohesive_result.failed_faces
+            ],
+            "n_particles_generated": n_particles_this_step,
+            "n_bonds_generated": n_bonds_this_step,
+        }
+        with open(fracture_snapshot_path, "w") as ff:
+            json.dump(fracture_data, ff, indent=2, ensure_ascii=False)
+
         # === 阶段 4: DEM 键结颗粒场推进 ===
         print(f"  [4/5] DEM 键结颗粒场推进 {n_dem_substeps} 步...")
 
@@ -605,6 +653,53 @@ def run_full_chain(
         print("  [5/5] 颗粒场→流场边界回写...")
         # 简化模型：记录 DEM 状态，实际修改在 SI-3 IBM
         # 全链演示：体现数据流闭环
+
+        # === 保存 DEM 快照 ===
+        dem_snapshot_path = output_path / f"dem_snapshot_step{k}.json"
+        if dem_field is not None:
+            dem_snapshot_data = {
+                "chain_step": k,
+                "n_particles": len(dem_field.particles),
+                "n_bonds": len(dem_field.bonds),
+                "n_bonds_broken_total": dem_field.n_bonds_broken_total,
+                "total_mass_kg": dem_field.total_mass,
+                "kinetic_energy_J": dem_field.total_kinetic_energy,
+                "bond_energy_J": dem_field.total_bond_energy,
+                "potential_energy_J": dem_field.total_potential_energy,
+                "external_work_J": dem_field.external_work_accumulated,
+                "dt_dem": dem_field.dt_dem,
+                "particles": [
+                    {
+                        "particle_id": p["particle_id"],
+                        "position": p["position"],
+                        "velocity": p["velocity"],
+                        "radius": p["radius"],
+                        "mass": p["mass"],
+                    }
+                    for p in dem_field.particles
+                ],
+                "bonds": [
+                    {
+                        "bond_id": b["bond_id"],
+                        "particle_i": b["particle_i"],
+                        "particle_j": b["particle_j"],
+                        "stiffness": b["stiffness"],
+                        "strength": b["strength"],
+                        "initial_length": b["initial_length"],
+                        "status": dem_field.bond_status[bi] if bi < len(dem_field.bond_status) else "intact",
+                    }
+                    for bi, b in enumerate(dem_field.bonds)
+                ],
+            }
+        else:
+            dem_snapshot_data = {
+                "chain_step": k,
+                "n_particles": 0,
+                "n_bonds": 0,
+                "note": "DEM 场尚未初始化（无断裂颗粒）",
+            }
+        with open(dem_snapshot_path, "w") as df:
+            json.dump(dem_snapshot_data, df, indent=2, ensure_ascii=False)
 
         # === 阶段 6: 全链双账本门 ===
         if dem_field is not None:
