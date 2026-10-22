@@ -1,0 +1,347 @@
+{
+  "scenario": "SI-4: 全链演示——LBM⇄FEM 双向 × cohesive 断裂 × DEM 键结颗粒",
+  "timestamp": "2026-10-22T17:19:15Z",
+  "n_chain_steps": 5,
+  "n_dem_substeps": 3,
+  "chain_history": [
+    {
+      "chain_step": 0,
+      "si3_momentum_residual": 0.0,
+      "si3_energy_residual": 0.0,
+      "si2_mass_conservation": 0.0,
+      "si2_energy_conservation": 0.0,
+      "n_failed_faces": 12,
+      "n_particles_generated": 12,
+      "n_bonds_generated": 30,
+      "dem_kinetic_energy_J": 0.0,
+      "dem_bond_energy_J": 0.0,
+      "dem_potential_energy_J": -0.0,
+      "dem_external_work_J": 0.0,
+      "full_chain_ledger": {
+        "chain_step": 0,
+        "timestamp": "2026-10-22T17:19:15Z",
+        "si3_coupling": {
+          "momentum_residual": 0.0,
+          "energy_residual": 0.0,
+          "passed": true
+        },
+        "si2_fracture": {
+          "mass_conservation": 0.0,
+          "energy_conservation": 0.0,
+          "passed": true
+        },
+        "dem_field": {
+          "total_mass_kg": 6.8775,
+          "total_energy_J": 0.0,
+          "external_work_J": 0.0
+        },
+        "full_chain_conservation": {
+          "mass_relative_residual": 0.0,
+          "energy_relative_residual": 0.0,
+          "mass_passed": true,
+          "energy_passed": true
+        },
+        "all_gates_passed": true
+      }
+    },
+    {
+      "chain_step": 1,
+      "si3_momentum_residual": 0.0,
+      "si3_energy_residual": 0.0,
+      "si2_mass_conservation": 0.0,
+      "si2_energy_conservation": 0.0,
+      "n_failed_faces": 0,
+      "n_particles_generated": 0,
+      "n_bonds_generated": 0,
+      "dem_kinetic_energy_J": 0.0,
+      "dem_bond_energy_J": 0.0,
+      "dem_potential_energy_J": -0.0,
+      "dem_external_work_J": 0.0,
+      "full_chain_ledger": {
+        "chain_step": 1,
+        "timestamp": "2026-10-22T17:19:15Z",
+        "si3_coupling": {
+          "momentum_residual": 0.0,
+          "energy_residual": 0.0,
+          "passed": true
+        },
+        "si2_fracture": {
+          "mass_conservation": 0.0,
+          "energy_conservation": 0.0,
+          "passed": true
+        },
+        "dem_field": {
+          "total_mass_kg": 6.8775,
+          "total_energy_J": 0.0,
+          "external_work_J": 0.0
+        },
+        "full_chain_conservation": {
+          "mass_relative_residual": 0.0,
+          "energy_relative_residual": 0.0,
+          "mass_passed": true,
+          "energy_passed": true
+        },
+        "all_gates_passed": true
+      }
+    },
+    {
+      "chain_step": 2,
+      "si3_momentum_residual": 0.0,
+      "si3_energy_residual": 0.0,
+      "si2_mass_conservation": 0.0,
+      "si2_energy_conservation": 0.0,
+      "n_failed_faces": 0,
+      "n_particles_generated": 0,
+      "n_bonds_generated": 0,
+      "dem_kinetic_energy_J": 0.0,
+      "dem_bond_energy_J": 0.0,
+      "dem_potential_energy_J": -0.0,
+      "dem_external_work_J": 0.0,
+      "full_chain_ledger": {
+        "chain_step": 2,
+        "timestamp": "2026-10-22T17:19:15Z",
+        "si3_coupling": {
+          "momentum_residual": 0.0,
+          "energy_residual": 0.0,
+          "passed": true
+        },
+        "si2_fracture": {
+          "mass_conservation": 0.0,
+          "energy_conservation": 0.0,
+          "passed": true
+        },
+        "dem_field": {
+          "total_mass_kg": 6.8775,
+          "total_energy_J": 0.0,
+          "external_work_J": 0.0
+        },
+        "full_chain_conservation": {
+          "mass_relative_residual": 0.0,
+          "energy_relative_residual": 0.0,
+          "mass_passed": true,
+          "energy_passed": true
+        },
+        "all_gates_passed": true
+      }
+    },
+    {
+      "chain_step": 3,
+      "si3_momentum_residual": 0.0,
+      "si3_energy_residual": 0.0,
+      "si2_mass_conservation": 0.0,
+      "si2_energy_conservation": 0.0,
+      "n_failed_faces": 0,
+      "n_particles_generated": 0,
+      "n_bonds_generated": 0,
+      "dem_kinetic_energy_J": 0.0,
+      "dem_bond_energy_J": 0.0,
+      "dem_potential_energy_J": -0.0,
+      "dem_external_work_J": 0.0,
+      "full_chain_ledger": {
+        "chain_step": 3,
+        "timestamp": "2026-10-22T17:19:15Z",
+        "si3_coupling": {
+          "momentum_residual": 0.0,
+          "energy_residual": 0.0,
+          "passed": true
+        },
+        "si2_fracture": {
+          "mass_conservation": 0.0,
+          "energy_conservation": 0.0,
+          "passed": true
+        },
+        "dem_field": {
+          "total_mass_kg": 6.8775,
+          "total_energy_J": 0.0,
+          "external_work_J": 0.0
+        },
+        "full_chain_conservation": {
+          "mass_relative_residual": 0.0,
+          "energy_relative_residual": 0.0,
+          "mass_passed": true,
+          "energy_passed": true
+        },
+        "all_gates_passed": true
+      }
+    },
+    {
+      "chain_step": 4,
+      "si3_momentum_residual": 0.0,
+      "si3_energy_residual": 0.0,
+      "si2_mass_conservation": 0.0,
+      "si2_energy_conservation": 0.0,
+      "n_failed_faces": 0,
+      "n_particles_generated": 0,
+      "n_bonds_generated": 0,
+      "dem_kinetic_energy_J": 0.0,
+      "dem_bond_energy_J": 0.0,
+      "dem_potential_energy_J": -0.0,
+      "dem_external_work_J": 0.0,
+      "full_chain_ledger": {
+        "chain_step": 4,
+        "timestamp": "2026-10-22T17:19:15Z",
+        "si3_coupling": {
+          "momentum_residual": 0.0,
+          "energy_residual": 0.0,
+          "passed": true
+        },
+        "si2_fracture": {
+          "mass_conservation": 0.0,
+          "energy_conservation": 0.0,
+          "passed": true
+        },
+        "dem_field": {
+          "total_mass_kg": 6.8775,
+          "total_energy_J": 0.0,
+          "external_work_J": 0.0
+        },
+        "full_chain_conservation": {
+          "mass_relative_residual": 0.0,
+          "energy_relative_residual": 0.0,
+          "mass_passed": true,
+          "energy_passed": true
+        },
+        "all_gates_passed": true
+      }
+    }
+  ],
+  "conservation_ledgers": [
+    {
+      "chain_step": 0,
+      "timestamp": "2026-10-22T17:19:15Z",
+      "si3_coupling": {
+        "momentum_residual": 0.0,
+        "energy_residual": 0.0,
+        "passed": true
+      },
+      "si2_fracture": {
+        "mass_conservation": 0.0,
+        "energy_conservation": 0.0,
+        "passed": true
+      },
+      "dem_field": {
+        "total_mass_kg": 6.8775,
+        "total_energy_J": 0.0,
+        "external_work_J": 0.0
+      },
+      "full_chain_conservation": {
+        "mass_relative_residual": 0.0,
+        "energy_relative_residual": 0.0,
+        "mass_passed": true,
+        "energy_passed": true
+      },
+      "all_gates_passed": true
+    },
+    {
+      "chain_step": 1,
+      "timestamp": "2026-10-22T17:19:15Z",
+      "si3_coupling": {
+        "momentum_residual": 0.0,
+        "energy_residual": 0.0,
+        "passed": true
+      },
+      "si2_fracture": {
+        "mass_conservation": 0.0,
+        "energy_conservation": 0.0,
+        "passed": true
+      },
+      "dem_field": {
+        "total_mass_kg": 6.8775,
+        "total_energy_J": 0.0,
+        "external_work_J": 0.0
+      },
+      "full_chain_conservation": {
+        "mass_relative_residual": 0.0,
+        "energy_relative_residual": 0.0,
+        "mass_passed": true,
+        "energy_passed": true
+      },
+      "all_gates_passed": true
+    },
+    {
+      "chain_step": 2,
+      "timestamp": "2026-10-22T17:19:15Z",
+      "si3_coupling": {
+        "momentum_residual": 0.0,
+        "energy_residual": 0.0,
+        "passed": true
+      },
+      "si2_fracture": {
+        "mass_conservation": 0.0,
+        "energy_conservation": 0.0,
+        "passed": true
+      },
+      "dem_field": {
+        "total_mass_kg": 6.8775,
+        "total_energy_J": 0.0,
+        "external_work_J": 0.0
+      },
+      "full_chain_conservation": {
+        "mass_relative_residual": 0.0,
+        "energy_relative_residual": 0.0,
+        "mass_passed": true,
+        "energy_passed": true
+      },
+      "all_gates_passed": true
+    },
+    {
+      "chain_step": 3,
+      "timestamp": "2026-10-22T17:19:15Z",
+      "si3_coupling": {
+        "momentum_residual": 0.0,
+        "energy_residual": 0.0,
+        "passed": true
+      },
+      "si2_fracture": {
+        "mass_conservation": 0.0,
+        "energy_conservation": 0.0,
+        "passed": true
+      },
+      "dem_field": {
+        "total_mass_kg": 6.8775,
+        "total_energy_J": 0.0,
+        "external_work_J": 0.0
+      },
+      "full_chain_conservation": {
+        "mass_relative_residual": 0.0,
+        "energy_relative_residual": 0.0,
+        "mass_passed": true,
+        "energy_passed": true
+      },
+      "all_gates_passed": true
+    },
+    {
+      "chain_step": 4,
+      "timestamp": "2026-10-22T17:19:15Z",
+      "si3_coupling": {
+        "momentum_residual": 0.0,
+        "energy_residual": 0.0,
+        "passed": true
+      },
+      "si2_fracture": {
+        "mass_conservation": 0.0,
+        "energy_conservation": 0.0,
+        "passed": true
+      },
+      "dem_field": {
+        "total_mass_kg": 6.8775,
+        "total_energy_J": 0.0,
+        "external_work_J": 0.0
+      },
+      "full_chain_conservation": {
+        "mass_relative_residual": 0.0,
+        "energy_relative_residual": 0.0,
+        "mass_passed": true,
+        "energy_passed": true
+      },
+      "all_gates_passed": true
+    }
+  ],
+  "final_state": {
+    "n_particles": 12,
+    "n_bonds": 30,
+    "n_bonds_broken": 0,
+    "total_mass_kg": 6.8775,
+    "total_energy_J": 0.0
+  }
+}
