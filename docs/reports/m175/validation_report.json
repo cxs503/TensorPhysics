@@ -1,0 +1,53 @@
+{
+  "mission": "m175",
+  "phase": "SI-5 收尾",
+  "title": "m166 交付物落盘收口验证报告",
+  "timestamp": "2026-10-22T12:00:00Z",
+  "overall_status": "PASS",
+  "checks": [
+    {
+      "anchor": "锚1：agent/m166 分支干净",
+      "criterion": "git status 无未提交变更",
+      "value": "clean",
+      "passed": true,
+      "detail": "工作树干净，无未跟踪/未暂存/未提交文件",
+      "timestamp": "2026-10-22T12:00:00Z"
+    },
+    {
+      "anchor": "锚2：gates 4/4 绿",
+      "criterion": "validation_report.json 4/4 PASS",
+      "value": "4/4",
+      "passed": true,
+      "detail": "锚1=0.000e+00, 锚2=1.667e-02, 锚3=4.461e-17, 锚4=1.119e-06",
+      "source_file": "benchmarks/icebreaking/si5_fvm_exchange_output/validation_report.json",
+      "timestamp": "2026-10-22T12:00:00Z"
+    },
+    {
+      "anchor": "锚3：PR 描述就绪",
+      "criterion": "PR 描述文件存在且包含关键信息",
+      "value": "docs/reports/m175/pr_description.md",
+      "passed": true,
+      "detail": "PR 描述含：m166 收尾说明、停因=交付物未 commit、内容主体归 m166、merge 留 owner",
+      "timestamp": "2026-10-22T12:00:00Z"
+    },
+    {
+      "anchor": "锚4：报告与 validation_report 数字一致",
+      "criterion": "报告所有数字与 validation_report.json 对得上",
+      "value": "8/8 核对通过",
+      "passed": true,
+      "detail": "锚1值、锚2值、锚3值、锚4值、w_LBM、w_FVM、|Δw|、总体状态 全部一致",
+      "timestamp": "2026-10-22T12:00:00Z"
+    }
+  ],
+  "summary": {
+    "total_checks": 4,
+    "passed_checks": 4,
+    "failed_checks": 0
+  },
+  "notes": [
+    "m166 核心 commit 630875d 未重写",
+    "m175 新增 commit 40dd5c2 仅 git add 遗留交付物",
+    "无 numpy 环境，gates 通过直读 validation_report.json 确认",
+    "PR 需 owner 手动创建（环境无 gh CLI，push 已禁用）"
+  ]
+}
