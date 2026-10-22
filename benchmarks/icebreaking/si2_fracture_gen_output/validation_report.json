@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-10-22T05:55:38Z",
+  "scenario": "SI-2: FEM→DEM 断裂生成",
+  "description": "cohesive 破坏面→DEM 颗粒集生成管线验证",
+  "anchors": [
+    {
+      "anchor": "锚1：质量守恒",
+      "criterion": "|Δm|/Σm ≤ 1e-12",
+      "value": 0.0,
+      "ledger_a_mass": 13.754999999999992,
+      "ledger_b_mass": 13.754999999999992,
+      "passed": true,
+      "source_file": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_fracture_gen_output/consistency_report.json",
+      "source_key": "mass_conservation.relative_error"
+    },
+    {
+      "anchor": "锚2：断裂能量守恒",
+      "criterion": "|ΔE|/ΣE ≤ 1e-12",
+      "value": 0.0,
+      "ledger_a_energy": 6.0,
+      "ledger_b_energy": 6.0,
+      "passed": true,
+      "source_file": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_fracture_gen_output/consistency_report.json",
+      "source_key": "energy_conservation.relative_error"
+    },
+    {
+      "anchor": "锚3：解析枚举锚",
+      "criterion": "破坏 face 计数精确相等、总面积与总释放能 vs 闭式值 ≤1e-12",
+      "mesh_res": 3,
+      "side": 1.0,
+      "thickness": 0.01,
+      "sigma_x": 200000.0,
+      "sigma_c": 100000.0,
+      "G_c": 100.0,
+      "n_total_faces_expected": 12,
+      "n_total_faces_actual": 12,
+      "n_failed_expected": 6,
+      "n_failed_actual": 6,
+      "count_match": true,
+      "total_area_expected": 0.019999999999999997,
+      "total_area_actual": 0.02,
+      "area_rel_error": 1.7347234759768073e-16,
+      "total_energy_expected": 1.9999999999999998,
+      "total_energy_actual": 2.0,
+      "energy_rel_error": 1.1102230246251568e-16,
+      "passed": true,
+      "source_file": "analytical",
+      "source_key": "closed_form"
+    }
+  ],
+  "summary": {
+    "total_anchors": 3,
+    "passed_anchors": 3,
+    "failed_anchors": 0
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-10-22T05:55:20Z",
+  "pipeline": "SI-2: FEM cohesive \u7834\u574f \u2192 DEM \u952e\u7ed3\u9897\u7c92\u51b0\u573a",
+  "steps": {
+    "fem_solve": {
+      "n_nodes": 25,
+      "max_deflection": 807.3775601651199
+    },
+    "cohesive_failure": {
+      "n_total_faces": 24,
+      "n_failed": 24
+    },
+    "particle_generation": {
+      "n_particles": 24,
+      "total_mass": 13.754999999999992,
+      "total_fracture_energy": 6.0
+    },
+    "ledger_consistency": {
+      "mass_rel_error": 0.0,
+      "energy_rel_error": 0.0,
+      "status": "PASS"
+    },
+    "bonded_ice_field": {
+      "n_particles": 24,
+      "n_bonds": 70
+    }
+  },
+  "output_files": {
+    "failed_faces": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_end_to_end_output/failed_faces.json",
+    "particles": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_end_to_end_output/particles.json",
+    "ledger_a": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_end_to_end_output/ledger_a.json",
+    "ledger_b": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_end_to_end_output/ledger_b.json",
+    "consistency_report": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_end_to_end_output/consistency_report.json",
+    "bonded_ice_field": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si2_end_to_end_output/bonded_ice_field.json"
+  }
+}
