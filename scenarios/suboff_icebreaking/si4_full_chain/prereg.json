@@ -1,0 +1,89 @@
+{
+  "mission": "m188",
+  "phase": "SI-4",
+  "title": "全链演示——LBM⇄FEM 双向 × cohesive 断裂 × DEM 键结颗粒四库全链",
+  "description": "SUBOFF 破冰 Phase 2 终阶：编排 SI-1/2/3 管线，新增 DEM 键结颗粒场推进与全链双账本门",
+  "timestamp": "2026-10-22T20:00:00Z",
+  "prerequisites": {
+    "SI-1": "PR #46 (LBM×FEM 单向耦合) - 已合 main",
+    "SI-2": "PR #48 (FEM→DEM 断裂生成) - 已合 main",
+    "SI-3": "PR #50 (LBM×FEM 双向耦合) - 已合 main"
+  },
+  "anchors": [
+    {
+      "id": "anchor_1",
+      "name": "四库全链闭环",
+      "description": "LBM→FEM→DEM→LBM 数据流完整，每全链步内五阶段顺序执行",
+      "criterion": "每步五阶段均有非零数据产出，无阶段跳过",
+      "rationale": "全链演示必须体现四库协同，非简单串联",
+      "reference_source": "full_chain_orchestrator.py chain_history"
+    },
+    {
+      "id": "anchor_2",
+      "name": "全链质量守恒账本",
+      "description": "跨四库质量守恒：|Δm|/m_0 ≤ 1e-12",
+      "criterion": "相对残差 ≤ 1e-12（S4/SI-2 同标尺）",
+      "rationale": "全链质量必须守恒，DEM 颗粒质量来自 FEM 核销",
+      "reference_source": "compute_full_chain_ledger 质量账本"
+    },
+    {
+      "id": "anchor_3",
+      "name": "全链能量守恒账本",
+      "description": "跨四库能量守恒：|ΔE|/E_0 ≤ 1e-12",
+      "criterion": "相对残差 ≤ 1e-12（S4/SI-2 同标尺）",
+      "rationale": "全链能量必须守恒，DEM 键结能来自 FEM 断裂释放",
+      "reference_source": "compute_full_chain_ledger 能量账本"
+    },
+    {
+      "id": "anchor_4",
+      "name": "子步循环与账本登记",
+      "description": "每全链步内：SI-3 双向耦合 → SI-2 破坏判定 → 颗粒生成 → DEM 推进 → 边界回写，账本逐步步登记",
+      "criterion": "≥3 个全链步，每步均有完整账本记录",
+      "rationale": "全链演示必须有时序循环，非单步快照",
+      "reference_source": "chain_history + conservation_ledgers"
+    }
+  ],
+  "data_flow": {
+    "step_1": {
+      "module": "SI-3 双向耦合（复用）",
+      "input": "LBM 快照 + 板配置",
+      "output": "板挠度场 + 浸入边界修正 + SI-3 账本",
+      "description": "LBM→FEM 载荷提取 + FEM 板响应 + 结构→流体反馈"
+    },
+    "step_2": {
+      "module": "SI-2 cohesive 破坏（复用）",
+      "input": "FEM 位移场",
+      "output": "failed_faces_data + SI-2 账本",
+      "description": "从 FEM 应力场识别破坏面"
+    },
+    "step_3": {
+      "module": "断裂颗粒生成（复用 SI-2）",
+      "input": "failed_faces_data",
+      "output": "particles + bonds",
+      "description": "破坏面 → DEM 颗粒集（等体积球映射）"
+    },
+    "step_4": {
+      "module": "DEM 键结颗粒场推进（新增）",
+      "input": "particles + bonds",
+      "output": "DEM 状态更新 + DEM 账本",
+      "description": "显式 Euler 推进，键结力 + 重力"
+    },
+    "step_5": {
+      "module": "颗粒场→流场边界回写（简化）",
+      "input": "DEM 颗粒位置",
+      "output": "流场边界修正（记录）",
+      "description": "DEM→LBM 反馈（全链演示，实际修改在 SI-3 IBM）"
+    }
+  },
+  "validation": {
+    "script": "tests/test_si4_full_chain.py",
+    "output": "validation_report.json",
+    "anchors_to_verify": ["anchor_1", "anchor_2", "anchor_3", "anchor_4"]
+  },
+  "constraints": {
+    "compute": "CPU only (GPU5 被 WB2 线占)",
+    "precision": "float64 for all numerical operations",
+    "chain_steps": "≥3 个全链步",
+    "dem_substeps": "每全链步 2 个 DEM 子步"
+  }
+}
