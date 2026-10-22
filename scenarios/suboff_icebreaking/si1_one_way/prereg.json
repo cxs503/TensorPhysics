@@ -1,0 +1,67 @@
+{
+  "mission": "m147",
+  "phase": "SI-1",
+  "title": "LBM×FEM 单向耦合——流载→冰板响应",
+  "description": "SUBOFF 破冰 Phase 2 第一阶：TensorLBM 流场压力/剪切→TensorFEM 弹性地基板挠度的单向传递管线",
+  "timestamp": "2026-10-21T16:30:00Z",
+  "prerequisities": {
+    "SI-A": "PR #385 (TensorLBM 自由面/顶盖能力) - 已合 main",
+    "SI-C": "PR #10 (TensorFEM 弹性地基板+cohesive 断裂) - 已合 main"
+  },
+  "anchors": [
+    {
+      "id": "anchor_1",
+      "name": "传递守恒账本",
+      "description": "账本 A (LBM 发出) 与账本 B (FEM 收到) 逐节点力对比",
+      "criterion": "max|A−B| ≤ 1e-12",
+      "rationale": "单向纯传递不允许任何物理/数值漂移，机器精度级守恒",
+      "reference_source": "coupling_ledger.py 双账本对账"
+    },
+    {
+      "id": "anchor_2",
+      "name": "Hetényi 耦合态复现",
+      "description": "均匀载荷经完整 LBM→FEM 链传递后，板中点挠度 vs Hetényi 级数解",
+      "criterion": "相对误差 < 2%",
+      "rationale": "证明传递管线不破坏单库已验锚",
+      "reference_source": "TensorFEM hetenyi_reference.py 级数解 (SI-C 同口径)"
+    },
+    {
+      "id": "anchor_3",
+      "name": "线性叠加性",
+      "description": "f1、f2、f1+f2 三次过链，验证叠加原理",
+      "criterion": "max|w(f1+f2)−w(f1)−w(f2)| ≤ 1e-10",
+      "rationale": "adapter 无非线性串扰",
+      "reference_source": "plate_response.py 线性求解器"
+    }
+  ],
+  "data_flow": {
+    "step_1": {
+      "module": "lbm_load_extract.py",
+      "input": "TensorLBM 流场快照 (npz: 压力/剪切/节点位置)",
+      "output": "ledger_a.json (账本 A: LBM 侧发出的节点力)",
+      "description": "从 LBM 流场提取冰板底面节点载荷分布"
+    },
+    "step_2": {
+      "module": "plate_response.py",
+      "input": "ledger_a.json (节点载荷)",
+      "output": "ledger_b.json (账本 B: FEM 收到的节点力) + 板挠度场",
+      "description": "接收节点载荷驱动 TensorFEM 弹性地基板求解"
+    },
+    "step_3": {
+      "module": "coupling_ledger.py",
+      "input": "ledger_a.json + ledger_b.json",
+      "output": "对账报告",
+      "description": "双账本对账，验证传递守恒"
+    }
+  },
+  "validation": {
+    "script": "benchmarks/icebreaking/si1_one_way.py",
+    "output": "validation_report.json",
+    "anchors_to_verify": ["anchor_1", "anchor_2", "anchor_3"]
+  },
+  "constraints": {
+    "compute": "CPU only (B 线算力在飞)",
+    "precision": "float64 for all numerical operations",
+    "gpu_policy": "如确需 GPU 只可用 GPU5 (CUDA_VISIBLE_DEVICES=5) 并先查 nvidia-smi"
+  }
+}
