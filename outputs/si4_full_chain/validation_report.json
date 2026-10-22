@@ -103,5 +103,55 @@
   
   "validation_status": "PASS",
   "gate_threshold": "质量/能量残差 ≤ 1e-12",
-  "actual_residuals": "全部 0.00e+00（严格守恒）"
+  "actual_residuals": "全部 0.00e+00（严格守恒）",
+  
+  "four_library_snapshots": {
+    "description": "四库快照文件清单（每步落盘）",
+    "LBM": [
+      "lbm_snapshot_initial.npz",
+      "lbm_snapshot_step0.npz",
+      "lbm_snapshot_step1.npz",
+      "lbm_snapshot_step2.npz",
+      "lbm_snapshot_step3.npz",
+      "lbm_snapshot_step4.npz"
+    ],
+    "FEM": [
+      "fem_snapshot_step0.npz",
+      "fem_snapshot_step1.npz",
+      "fem_snapshot_step2.npz",
+      "fem_snapshot_step3.npz",
+      "fem_snapshot_step4.npz"
+    ],
+    "fracture": [
+      "fracture_snapshot_step0.json",
+      "fracture_snapshot_step1.json",
+      "fracture_snapshot_step2.json",
+      "fracture_snapshot_step3.json",
+      "fracture_snapshot_step4.json"
+    ],
+    "DEM": [
+      "dem_snapshot_step0.json",
+      "dem_snapshot_step1.json",
+      "dem_snapshot_step2.json",
+      "dem_snapshot_step3.json",
+      "dem_snapshot_step4.json"
+    ]
+  },
+  
+  "prereg_freeze_sequence": {
+    "description": "prereg 冻结时序证据（git log 顺序）",
+    "prereg_commit": "8e09120 2026-10-23 01:03:33 +0800 SI-4 脚手架落盘：从 m188 继承前任编排器雏形+测试+prereg，准备修复",
+    "outputs_commit": "cdfa4d3 2026-10-23 01:20:39 +0800 SI-4 全链演示完成：修复 4 处缺陷，双账本门全绿（5 步 × 质量/能量残差 0.00e+00）",
+    "sequence_verified": true,
+    "note": "prereg.json 先于 outputs 落盘，符合冻结时序要求"
+  },
+  
+  "runtime_disclosure": {
+    "description": "运行时序披露",
+    "execution_mode": "smoke 级演示规模",
+    "timing": "5 步 × 3 DEM 子步于同秒完成（< 1 秒）",
+    "scale_note": "本演示为小规模验证（25 节点 × 16 单元板，12 颗粒 × 30 键结），用于证明四库全链数据流闭环与账本门机制。论文级报告阶段将使用工程规模网格与长时间序列，另行披露。",
+    "compute_platform": "CPU only",
+    "total_wall_time_seconds": "< 1"
+  }
 }
