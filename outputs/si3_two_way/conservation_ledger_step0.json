@@ -1,0 +1,40 @@
+{
+  "ledger_type": "conservation",
+  "description": "双向耦合守恒账本（动量 + 能量）",
+  "schema_version": 1,
+  "coupling_step": 0,
+  "momentum_balance": {
+    "fluid_impulse": [
+      0.09,
+      0.045,
+      -9.0
+    ],
+    "struct_momentum_change": [
+      0.0,
+      0.0,
+      -0.9690705773907359
+    ],
+    "reaction_impulse": [
+      -0.09,
+      -0.045,
+      9.0
+    ],
+    "residual_vector": [
+      0.18,
+      0.09,
+      -17.030929422609262
+    ],
+    "residual_magnitude": 17.032118394313077,
+    "scale": 9.000562482422973,
+    "relative_residual": 1.892339331855623
+  },
+  "energy_balance": {
+    "fluid_work_J": 0.11181583585277721,
+    "struct_strain_energy_change_J": 0.05590791792638861,
+    "struct_kinetic_energy_change_J": 0.5395966127049937,
+    "residual_J": -0.4836886947786051,
+    "residual_abs_J": 0.4836886947786051,
+    "scale_J": 0.5395966127049937,
+    "relative_residual": 0.8963894201519861
+  },
+  "momentum_passed": 
