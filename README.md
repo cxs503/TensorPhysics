@@ -102,7 +102,9 @@ checks history/trajectory readability and finite values, stores outputs and
 validation evidence through `LocalArtifactStore`, emits a typed `RunManifest`,
 and recommends a next action based on the checks. Versioned goal, plan,
 validation-report, and research-memory contracts live in
-`tensorphysics.research_contracts`.
+`tensorphysics.research_contracts`. The deterministic, fail-closed next-action
+policy is implemented in `tensorphysics.research_policy` and documented in
+[Executable Research Methodology](docs/EXECUTABLE_RESEARCH_METHODOLOGY.md).
 
 This is a software-integrity gate, not physical validation; it does not yet
 register the run in TensorPlatform or perform an AI-driven parameter search.
@@ -113,3 +115,15 @@ register the run in TensorPlatform or perform an AI-driven parameter search.
 [Research Campaign Demo](docs/RESEARCH_CAMPAIGN_DEMO.md) adds a two-run, fail-closed campaign controller around the single-run demo. It varies one input parameter, independently validates each real TensorDEM run, records per-run manifest references, and stops on a failed gate. CI executes both runs. This remains a software-integrity integration exercise, not a physical sensitivity study or AI-driven research policy.
 
 - **Platform-backed campaign:** [TensorDEM → S3 artifacts → TensorPlatform registration, read-back, and parent-run lineage](docs/RESEARCH_LOOP_PLATFORM_REGISTRATION.md).
+
+
+## Persistent worker deployment
+
+The durable task ledger is now paired with a standalone polling worker that can
+run independently of an interactive Agent terminal. It supports task submission
+and status inspection, restart recovery, bounded retries, structured event
+history, and a separate fail-closed validation command. Deploy and configure it
+using [Persistent Research Worker](docs/PERSISTENT_RESEARCH_WORKER.md). This
+is execution infrastructure: production use still requires a real authenticated
+Agent CLI, an independent domain validator, persistent storage, and operating
+system isolation. A running worker alone does not prove scientific correctness.
