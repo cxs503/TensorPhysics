@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-10-22T05:52:25Z",
+  "scenario": "SI-1: LBM×FEM 单向耦合",
+  "description": "流载→冰板响应单向耦合管线验证",
+  "anchors": [
+    {
+      "anchor": "锚1：传递守恒账本",
+      "criterion": "max|A−B| ≤ 1e-12",
+      "value": 0.0,
+      "passed": true,
+      "source_file": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si1_one_way_output/ledger_a_test.json",
+      "source_key": "forces"
+    },
+    {
+      "anchor": "锚2：Hetényi 耦合态复现",
+      "criterion": "|w_FEM - w_Hetényi| / w_Hetényi < 0.02",
+      "value": 0.016667081782891186,
+      "w_hetenyi": 4.574545299056148e-05,
+      "w_fem": 4.650789619675057e-05,
+      "passed": true,
+      "source_file": "/nfs/wangxi/tensor_eco/agent_work/m165/TensorPhysics/benchmarks/icebreaking/si1_one_way_output/ledger_b_hetenyi.json",
+      "source_key": "forces"
+    },
+    {
+      "anchor": "锚3：线性叠加性",
+      "criterion": "max|w(f1+f2)−w(f1)−w(f2)| ≤ 1e-10",
+      "value": 2.570643350963131e-16,
+      "passed": true,
+      "source_file": "N/A",
+      "source_key": "N/A"
+    }
+  ],
+  "summary": {
+    "total_anchors": 3,
+    "passed_anchors": 3,
+    "failed_anchors": 0
+  }
+}

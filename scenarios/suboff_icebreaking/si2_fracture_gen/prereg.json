@@ -1,0 +1,71 @@
+{
+  "mission": "m165",
+  "phase": "SI-2",
+  "title": "FEM→DEM 断裂生成——cohesive 破坏单元→DEM 颗粒",
+  "description": "SUBOFF 破冰 Phase 2 第二阶：TensorFEM cohesive 破坏面→TensorDEM 颗粒集生成管线",
+  "timestamp": "2026-10-22T06:00:00Z",
+  "depends_on": "PR #46 (SI-1: LBM×FEM 单向耦合管线)",
+  "prerequisites": {
+    "SI-1": "PR #46 (LBM×FEM 单向耦合) - 已合 main",
+    "TensorFEM #11": "cohesive 失效判据+断裂能量账本 - 已合 main",
+    "TensorDEM #70": "破坏面→键结颗粒冰场生成 - 已合 main",
+    "SI-C": "PR #10 (TensorFEM 弹性地基板+cohesive 断裂) - 已合 main"
+  },
+  "anchors": [
+    {
+      "id": "anchor_1",
+      "name": "质量守恒账本",
+      "description": "破坏单元核销质量 vs 生成颗粒质量之和",
+      "criterion": "|Δ|/Σ ≤ 1e-12",
+      "rationale": "FEM→DEM 质量传递必须机器精度级守恒，无物理/数值漂移",
+      "reference_source": "fracture_ledger.py 双账本对账"
+    },
+    {
+      "id": "anchor_2",
+      "name": "断裂能量守恒账本",
+      "description": "cohesive face 释放能 ∑G·A vs 账本记录断裂能量",
+      "criterion": "|Δ|/Σ ≤ 1e-12",
+      "rationale": "断裂能量释放必须机器精度级守恒，能量账本闭环",
+      "reference_source": "fracture_ledger.py 双账本对账"
+    },
+    {
+      "id": "anchor_3",
+      "name": "解析枚举锚",
+      "description": "预设均匀应力场 + 给定强度阈值——破坏 face 集合可解析手算",
+      "criterion": "破坏 face 计数精确相等（整数）、总面积与总释放能 vs 闭式值 ≤1e-12 相对",
+      "rationale": "证明判据实现零任意性，cohesive 判据无黑箱",
+      "reference_source": "cohesive_failure.py 破坏判据实现"
+    }
+  ],
+  "data_flow": {
+    "step_1": {
+      "module": "cohesive_failure.py",
+      "input": "SI-1 板单元应力场 (PlateResult)",
+      "output": "破坏面清单 (failed_faces.json)",
+      "description": "读 SI-1 板单元应力场，按 cohesive 强度判据逐内 face 判定破坏"
+    },
+    "step_2": {
+      "module": "fracture_gen.py",
+      "input": "破坏面清单 (failed_faces.json)",
+      "output": "DEM 颗粒文件 (particles.json) + ledger_a.json (FEM 侧账本)",
+      "description": "破坏 cohesive face → DEM 颗粒集（等体积球映射），输出 TensorDEM 可初始化的颗粒文件"
+    },
+    "step_3": {
+      "module": "fracture_ledger.py",
+      "input": "ledger_a.json (FEM 侧) + ledger_b.json (DEM 侧)",
+      "output": "对账报告 (consistency_report.json)",
+      "description": "双账本对账（质量、断裂能量各一对）"
+    }
+  },
+  "validation": {
+    "script": "benchmarks/icebreaking/si2_fracture_gen.py",
+    "output": "validation_report.json",
+    "anchors_to_verify": ["anchor_1", "anchor_2", "anchor_3"]
+  },
+  "constraints": {
+    "compute": "CPU only (B 线算力在飞)",
+    "precision": "float64 for all numerical operations",
+    "gpu_policy": "如确需 GPU 只可用 GPU5 (CUDA_VISIBLE_DEVICES=5) 并先查 nvidia-smi",
+    "mapping_strategy": "等体积球映射（破坏面体积→等体积球体颗粒）"
+  }
+}
