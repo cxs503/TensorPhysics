@@ -1,0 +1,418 @@
+{
+  "timestamp": "2026-10-22T05:54:26Z",
+  "n_total_faces": 24,
+  "n_failed": 24,
+  "sigma_c": 1.0,
+  "G_c": 100.0,
+  "thickness": 0.01,
+  "failed_faces": [
+    {
+      "face_id": 0,
+      "node_i": 1,
+      "node_j": 6,
+      "element_left": 0,
+      "element_right": 1,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -40778724.84075869,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 1,
+      "node_i": 2,
+      "node_j": 7,
+      "element_left": 1,
+      "element_right": 2,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -57669825.72607001,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 2,
+      "node_i": 3,
+      "node_j": 8,
+      "element_left": 2,
+      "element_right": 3,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -40778724.840760075,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 3,
+      "node_i": 5,
+      "node_j": 6,
+      "element_left": 0,
+      "element_right": 4,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -40778724.84077551,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 4,
+      "node_i": 6,
+      "node_j": 7,
+      "element_left": 1,
+      "element_right": 5,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -98448550.56682757,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 5,
+      "node_i": 6,
+      "node_j": 11,
+      "element_left": 4,
+      "element_right": 5,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -98448550.56687397,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 6,
+      "node_i": 7,
+      "node_j": 8,
+      "element_left": 2,
+      "element_right": 6,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -98448550.56683859,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 7,
+      "node_i": 7,
+      "node_j": 12,
+      "element_left": 5,
+      "element_right": 6,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -139227275.40760016,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 8,
+      "node_i": 8,
+      "node_j": 9,
+      "element_left": 3,
+      "element_right": 7,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -40778724.84075311,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 9,
+      "node_i": 8,
+      "node_j": 13,
+      "element_left": 6,
+      "element_right": 7,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -98448550.56682798,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 10,
+      "node_i": 10,
+      "node_j": 11,
+      "element_left": 4,
+      "element_right": 8,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -57669825.72610678,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 11,
+      "node_i": 11,
+      "node_j": 12,
+      "element_left": 5,
+      "element_right": 9,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -139227275.4076143,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 12,
+      "node_i": 11,
+      "node_j": 16,
+      "element_left": 8,
+      "element_right": 9,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -98448550.56686215,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 13,
+      "node_i": 12,
+      "node_j": 13,
+      "element_left": 6,
+      "element_right": 10,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -139227275.40760577,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 14,
+      "node_i": 12,
+      "node_j": 17,
+      "element_left": 9,
+      "element_right": 10,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -139227275.40760824,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 15,
+      "node_i": 13,
+      "node_j": 14,
+      "element_left": 7,
+      "element_right": 11,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -57669825.72606763,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 16,
+      "node_i": 13,
+      "node_j": 18,
+      "element_left": 10,
+      "element_right": 11,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -98448550.5668319,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 17,
+      "node_i": 15,
+      "node_j": 16,
+      "element_left": 8,
+      "element_right": 12,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -40778724.840768225,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 18,
+      "node_i": 16,
+      "node_j": 17,
+      "element_left": 9,
+      "element_right": 13,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -98448550.56684957,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 19,
+      "node_i": 16,
+      "node_j": 21,
+      "element_left": 12,
+      "element_right": 13,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -40778724.84077144,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 20,
+      "node_i": 17,
+      "node_j": 18,
+      "element_left": 10,
+      "element_right": 14,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -98448550.56684762,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 21,
+      "node_i": 17,
+      "node_j": 22,
+      "element_left": 13,
+      "element_right": 14,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -57669825.7260832,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 22,
+      "node_i": 18,
+      "node_j": 19,
+      "element_left": 11,
+      "element_right": 15,
+      "length": 0.25,
+      "normal": [
+        -0.0,
+        1.0
+      ],
+      "sigma_n": -40778724.840761326,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    },
+    {
+      "face_id": 23,
+      "node_i": 18,
+      "node_j": 23,
+      "element_left": 14,
+      "element_right": 15,
+      "length": 0.25,
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "sigma_n": -40778724.84075915,
+      "sigma_c": 1.0,
+      "area": 0.0025,
+      "G": 100.0,
+      "released_energy": 0.25
+    }
+  ]
+}
