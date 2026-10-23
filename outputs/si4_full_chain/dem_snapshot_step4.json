@@ -1,0 +1,466 @@
+{
+  "chain_step": 4,
+  "n_particles": 12,
+  "n_bonds": 30,
+  "n_bonds_broken_total": 0,
+  "total_mass_kg": 6.8775,
+  "kinetic_energy_J": 0.0,
+  "bond_energy_J": 0.0,
+  "potential_energy_J": -0.0,
+  "external_work_J": 0.0,
+  "dt_dem": 1e-05,
+  "particles": [
+    {
+      "particle_id": 0,
+      "position": [
+        0.375,
+        0.25,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 1,
+      "position": [
+        0.25,
+        0.375,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 2,
+      "position": [
+        0.625,
+        0.25,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 3,
+      "position": [
+        0.5,
+        0.375,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 4,
+      "position": [
+        0.75,
+        0.375,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 5,
+      "position": [
+        0.375,
+        0.5,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 6,
+      "position": [
+        0.25,
+        0.625,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 7,
+      "position": [
+        0.625,
+        0.5,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 8,
+      "position": [
+        0.5,
+        0.625,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 9,
+      "position": [
+        0.75,
+        0.625,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 10,
+      "position": [
+        0.375,
+        0.75,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    },
+    {
+      "particle_id": 11,
+      "position": [
+        0.625,
+        0.75,
+        0.0
+      ],
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "radius": 0.053039220897352767,
+      "mass": 0.573125
+    }
+  ],
+  "bonds": [
+    {
+      "bond_id": 0,
+      "particle_i": 0,
+      "particle_j": 1,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 1,
+      "particle_i": 0,
+      "particle_j": 2,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 2,
+      "particle_i": 0,
+      "particle_j": 3,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 3,
+      "particle_i": 0,
+      "particle_j": 5,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 4,
+      "particle_i": 1,
+      "particle_j": 3,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 5,
+      "particle_i": 1,
+      "particle_j": 5,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 6,
+      "particle_i": 1,
+      "particle_j": 6,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 7,
+      "particle_i": 2,
+      "particle_j": 3,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 8,
+      "particle_i": 2,
+      "particle_j": 4,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 9,
+      "particle_i": 2,
+      "particle_j": 7,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 10,
+      "particle_i": 3,
+      "particle_j": 4,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 11,
+      "particle_i": 3,
+      "particle_j": 5,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 12,
+      "particle_i": 3,
+      "particle_j": 7,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 13,
+      "particle_i": 3,
+      "particle_j": 8,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 14,
+      "particle_i": 4,
+      "particle_j": 7,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 15,
+      "particle_i": 4,
+      "particle_j": 9,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 16,
+      "particle_i": 5,
+      "particle_j": 6,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 17,
+      "particle_i": 5,
+      "particle_j": 7,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 18,
+      "particle_i": 5,
+      "particle_j": 8,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 19,
+      "particle_i": 5,
+      "particle_j": 10,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 20,
+      "particle_i": 6,
+      "particle_j": 8,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 21,
+      "particle_i": 6,
+      "particle_j": 10,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 22,
+      "particle_i": 7,
+      "particle_j": 8,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 23,
+      "particle_i": 7,
+      "particle_j": 9,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 24,
+      "particle_i": 7,
+      "particle_j": 11,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 25,
+      "particle_i": 8,
+      "particle_j": 9,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    },
+    {
+      "bond_id": 26,
+      "particle_i": 8,
+      "particle_j": 10,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 27,
+      "particle_i": 8,
+      "particle_j": 11,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 28,
+      "particle_i": 9,
+      "particle_j": 11,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.1767766952966369,
+      "status": "intact"
+    },
+    {
+      "bond_id": 29,
+      "particle_i": 10,
+      "particle_j": 11,
+      "stiffness": 1000000.0,
+      "strength": 10000.0,
+      "initial_length": 0.25,
+      "status": "intact"
+    }
+  ]
+}
