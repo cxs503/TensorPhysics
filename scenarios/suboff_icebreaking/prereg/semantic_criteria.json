@@ -1,0 +1,292 @@
+{
+  "schema": "tensorphysics-suboff-sir0-semantic-criteria-v1",
+  "created_utc": "2026-10-25T05:10:21Z",
+  "spec_alignment": {
+    "platform_spec": "TensorPlatform/docs/specs/semantic_gate_spec.md（PL-SEM-1/2，分支 agent/m300）",
+    "spec_sections": [
+      "§3 semantic-criteria 块",
+      "§4 三类判据",
+      "§5 总判定",
+      "§9 四级验证映射"
+    ],
+    "note": "category 用平台三类（provenance/physics_switch/scale_realism）+ 本战役扩展 field_integrity；assertion.type 除平台三种（no_synthetic_marker/config_key_true/numeric_lower_bound）外，扩展 numeric_nonzero/abs_lower_bound/monotone_nondecreasing/field_present/no_uncited_reference，均为可机裁断言，接入语义门时按 type 分派。"
+  },
+  "gates": {
+    "SIR-1": [
+      {
+        "id": "sir1_provenance_load_source",
+        "category": "provenance",
+        "description": "SIR-1 的流体载荷必须来自真实流场工件，不得由 generate_synthetic_*/seed 生成",
+        "assertion": {
+          "type": "no_synthetic_marker",
+          "scan_targets": [
+            "benchmarks/icebreaking/sir1_load_precision/**/*.json",
+            "benchmarks/icebreaking/sir1_load_precision/**/*.py",
+            "outputs/sir1*/**/*.json"
+          ],
+          "markers": [
+            "generate_synthetic",
+            "synthetic",
+            "seed=",
+            "placeholder"
+          ]
+        }
+      },
+      {
+        "id": "sir1_physics_tau_frozen_non_singular",
+        "category": "physics_switch",
+        "description": "τ 必须来自冻结公式表且非近奇异（tau-0.5>0），三元组可复算",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "benchmarks/icebreaking/sir1_load_precision/**/validation_report.json",
+            "key_path": "tau_table.min_tau_minus_half"
+          },
+          "lower_bound": 0.0,
+          "unit": "lattice"
+        }
+      }
+    ],
+    "SIR-2": [
+      {
+        "id": "sir2_provenance_load_source",
+        "category": "provenance",
+        "description": "SIR-2 载荷源=流场文件；场景源码不得残留合成载荷调用",
+        "assertion": {
+          "type": "no_synthetic_marker",
+          "scan_targets": [
+            "scenarios/suboff_icebreaking/sir2*/**/*.py",
+            "outputs/sir2*/**/*.json"
+          ],
+          "markers": [
+            "generate_synthetic",
+            "seed=",
+            "placeholder",
+            "mock_"
+          ]
+        }
+      },
+      {
+        "id": "sir2_physics_hull_geometry_in_chain",
+        "category": "physics_switch",
+        "description": "SUBOFF 几何必须在链内真实在场（掩码实体单元 >0），否则只是空壳链路",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "outputs/sir2*/**/run_summary.json",
+            "key_path": "hull_mask.solid_cells"
+          },
+          "lower_bound": 1,
+          "unit": "count"
+        }
+      }
+    ],
+    "SIR-3": [
+      {
+        "id": "sir3_physics_gravity_enabled",
+        "category": "physics_switch",
+        "description": "goal 声明破冰演化，重力必须在链内开启（对照 SI-4 的 gravity=[0,0,0]）",
+        "assertion": {
+          "type": "config_key_true",
+          "physics_type": "gravity",
+          "config_files": [
+            "outputs/sir3*/**/run_summary.json"
+          ],
+          "key_path": "gravity_enabled",
+          "expected": true,
+          "grep_fallback": {
+            "files": [
+              "scenarios/suboff_icebreaking/sir3*/**/*.py"
+            ],
+            "patterns": [
+              "gravity\\s*=\\s*\\[0(?:\\.0*)?,\\s*0(?:\\.0*)?,\\s*0(?:\\.0*)?\\]"
+            ],
+            "match_means": "fail"
+          }
+        }
+      },
+      {
+        "id": "sir3_physics_buoyancy_nonzero",
+        "category": "physics_switch",
+        "description": "浮力项必须非零（否则静水浮态物理未入链）",
+        "assertion": {
+          "type": "numeric_abs_lower_bound",
+          "source": {
+            "file": "outputs/sir3*/**/run_summary.json",
+            "key_path": "buoyancy_net_force_N"
+          },
+          "lower_bound": 1e-06,
+          "unit": "N"
+        }
+      },
+      {
+        "id": "sir3_physics_free_surface_present",
+        "category": "field_integrity",
+        "description": "自由面必须在场（界面单元数 >0）",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "outputs/sir3*/**/run_summary.json",
+            "key_path": "n_interface_cells"
+          },
+          "lower_bound": 1,
+          "unit": "count"
+        }
+      }
+    ],
+    "SIR-4": [
+      {
+        "id": "sir4_physics_hull_motion",
+        "category": "physics_switch",
+        "description": "hull 必须有真实运动学（速度/位移时间序列非零），而非固定边界",
+        "assertion": {
+          "type": "numeric_abs_lower_bound",
+          "source": {
+            "file": "outputs/sir4*/**/run_summary.json",
+            "key_path": "hull.max_abs_velocity_m_s"
+          },
+          "lower_bound": 1e-09,
+          "unit": "m/s"
+        }
+      },
+      {
+        "id": "sir4_physics_contact_present",
+        "category": "field_integrity",
+        "description": "船-冰接触对必须非零且随步非降（顶升过程已开始）",
+        "assertion": {
+          "type": "numeric_monotone_nondecreasing",
+          "source": {
+            "file": "outputs/sir4*/**/contact_history.json",
+            "key_path": "n_contact_pairs"
+          },
+          "lower_bound": 1,
+          "unit": "count"
+        }
+      }
+    ],
+    "SIR-5": [
+      {
+        "id": "sir5_physics_fracture_progressive",
+        "category": "field_integrity",
+        "description": "断裂面数必须随链步渐进递增（对照 SI-4 一步断 12 面其余 0）",
+        "assertion": {
+          "type": "numeric_monotone_nondecreasing",
+          "source": {
+            "file": "outputs/sir5*/**/fracture_history.json",
+            "key_path": "n_failed_faces_cumulative"
+          },
+          "lower_bound": 30,
+          "unit": "count",
+          "min_increasing_steps": 3
+        }
+      },
+      {
+        "id": "sir5_physics_bond_breakage",
+        "category": "physics_switch",
+        "description": "键断裂必须真实发生（对照 SI-4 终态 n_bonds_broken=0）",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "outputs/sir5*/**/run_summary.json",
+            "key_path": "n_bonds_broken_total"
+          },
+          "lower_bound": 10,
+          "unit": "count"
+        }
+      }
+    ],
+    "SIR-6": [
+      {
+        "id": "sir6_scale_physical_duration",
+        "category": "scale_realism",
+        "description": "物理时长必须达破冰演化量级（≥1 s，id=51 为毫秒量级）",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "outputs/sir6*/**/run_summary.json",
+            "key_path": "total_physical_time_s"
+          },
+          "lower_bound": 1.0,
+          "unit": "s"
+        }
+      },
+      {
+        "id": "sir6_scale_grid_resolution",
+        "category": "scale_realism",
+        "description": "板单元数必须达物理尺度（≥1e4，id=51 为 16）",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "outputs/sir6*/**/run_summary.json",
+            "key_path": "n_elements"
+          },
+          "lower_bound": 10000,
+          "unit": "count"
+        }
+      },
+      {
+        "id": "sir6_scale_particle_count",
+        "category": "scale_realism",
+        "description": "颗粒数必须达碎冰场量级（≥1e3，id=51 为 12）",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "outputs/sir6*/**/run_summary.json",
+            "key_path": "n_particles"
+          },
+          "lower_bound": 1000,
+          "unit": "count"
+        }
+      }
+    ],
+    "SIR-7": [
+      {
+        "id": "sir7_provenance_reference_cited",
+        "category": "provenance",
+        "description": "每个参考数值必须带出处（DOI/报告号+页码+表号）并三元组可复算；无出处判 FAIL",
+        "assertion": {
+          "type": "no_uncited_reference",
+          "scan_targets": [
+            "benchmarks/icebreaking/sir7_reference/sir7_reference.csv"
+          ],
+          "required_columns": [
+            "doi_or_report",
+            "page",
+            "table_or_figure",
+            "triple_file",
+            "triple_key"
+          ],
+          "markers": [
+            "TBD",
+            "TODO",
+            "待补",
+            "unknown"
+          ]
+        }
+      },
+      {
+        "id": "sir7_physics_peak_load_captured",
+        "category": "physics_switch",
+        "description": "P-h 曲线峰值载荷必须被捕获（非吹爆/非缺失），否则不构成承载力对照",
+        "assertion": {
+          "type": "numeric_lower_bound",
+          "source": {
+            "file": "outputs/sir7*/**/run_summary.json",
+            "key_path": "ph_curve.peak_load_N"
+          },
+          "lower_bound": 1.0,
+          "unit": "N"
+        }
+      }
+    ]
+  },
+  "verdict_contract": {
+    "output_location": "<leg>/validation_report.json → semantic_gate",
+    "overall_verdict_enum": [
+      "compliant",
+      "partial_compliant",
+      "non_compliant"
+    ],
+    "blocking_rule": "语义门失败不阻断交付，但阻断「succeeded=目标达成」表述；差距入报告交 owner"
+  }
+}
