@@ -1,0 +1,167 @@
+{
+  "schema": "tensorphysics-suboff-sir-dependency-graph-v1",
+  "created_utc": "2026-10-25T05:10:21Z",
+  "description": "SIR 战役腿间依赖（DAG）。depends_on 为该腿的硬前置（必须已完成），parallel_with 为可同波并行腿（仅为提示，DAG 以 depends_on 为准）。",
+  "nodes": {
+    "SIR-0": {
+      "title": "契约冻结（README Phase 3 + prereg 骨架）",
+      "gap": null,
+      "depends_on": [],
+      "parallel_with": [],
+      "prereg": "prereg/sir0_prereg.md",
+      "effort": "M",
+      "compute": "CPU"
+    },
+    "SIR-1": {
+      "title": "G1 流体载荷精度封口",
+      "gap": "G1",
+      "depends_on": [
+        "SIR-0"
+      ],
+      "parallel_with": [
+        "SIR-2",
+        "SIR-3",
+        "SIR-5"
+      ],
+      "prereg": "prereg/sir1_prereg.md",
+      "effort": "L",
+      "compute": "GPU5"
+    },
+    "SIR-2": {
+      "title": "G2 真流场入链",
+      "gap": "G2",
+      "depends_on": [
+        "SIR-0"
+      ],
+      "parallel_with": [
+        "SIR-1",
+        "SIR-3",
+        "SIR-5"
+      ],
+      "prereg": "prereg/sir2_prereg.md",
+      "effort": "L",
+      "compute": "GPU5"
+    },
+    "SIR-3": {
+      "title": "G3 重力/浮力/自由面入链",
+      "gap": "G3",
+      "depends_on": [
+        "SIR-0"
+      ],
+      "parallel_with": [
+        "SIR-1",
+        "SIR-2",
+        "SIR-5"
+      ],
+      "prereg": "prereg/sir3_prereg.md",
+      "effort": "M",
+      "compute": "CPU锚优先"
+    },
+    "SIR-4": {
+      "title": "G4 船体上浮运动 + 船-冰接触",
+      "gap": "G4",
+      "depends_on": [
+        "SIR-2",
+        "SIR-3"
+      ],
+      "parallel_with": [],
+      "prereg": "prereg/sir4_prereg.md",
+      "effort": "L",
+      "compute": "CPU锚优先"
+    },
+    "SIR-5": {
+      "title": "G5 断裂传播",
+      "gap": "G5",
+      "depends_on": [
+        "SIR-0"
+      ],
+      "parallel_with": [
+        "SIR-1",
+        "SIR-2",
+        "SIR-3"
+      ],
+      "prereg": "prereg/sir5_prereg.md",
+      "effort": "M",
+      "compute": "CPU锚优先"
+    },
+    "SIR-6": {
+      "title": "G6 规模化",
+      "gap": "G6",
+      "depends_on": [
+        "SIR-1",
+        "SIR-2",
+        "SIR-3",
+        "SIR-4",
+        "SIR-5"
+      ],
+      "parallel_with": [],
+      "prereg": "prereg/sir6_prereg.md",
+      "effort": "XL",
+      "compute": "GPU5长算+launch-harvest"
+    },
+    "SIR-7": {
+      "title": "G7 文献/实验对照",
+      "gap": "G7",
+      "depends_on": [
+        "SIR-5",
+        "SIR-6"
+      ],
+      "parallel_with": [],
+      "prereg": "prereg/sir7_prereg.md",
+      "effort": "S",
+      "compute": "CPU"
+    }
+  },
+  "parallel_groups": [
+    {
+      "wave": "W1",
+      "legs": [
+        "SIR-1",
+        "SIR-2",
+        "SIR-3",
+        "SIR-5"
+      ],
+      "rationale": "四腿互不依赖（均只需 SIR-0）；按 §3.5 分配 GPU5 与 CPU 锚"
+    },
+    {
+      "wave": "W2",
+      "legs": [
+        "SIR-4"
+      ],
+      "rationale": "需 SIR-2 真流场 + SIR-3 浮力，串行咽喉"
+    },
+    {
+      "wave": "W3",
+      "legs": [
+        "SIR-6"
+      ],
+      "rationale": "需 SIR-1..SIR-5 全部可运行；只放大尺度"
+    },
+    {
+      "wave": "W4",
+      "legs": [
+        "SIR-7"
+      ],
+      "rationale": "需 SIR-5 断裂演化 + SIR-6 规模产出"
+    }
+  ],
+  "topological_order": [
+    "SIR-0",
+    "SIR-1",
+    "SIR-2",
+    "SIR-3",
+    "SIR-5",
+    "SIR-4",
+    "SIR-6",
+    "SIR-7"
+  ],
+  "gaps_covered": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "G6",
+    "G7"
+  ]
+}
