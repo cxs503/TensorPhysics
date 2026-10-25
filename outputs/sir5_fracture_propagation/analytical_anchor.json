@@ -1,0 +1,21 @@
+{
+ "params": {
+  "mesh_res": 3,
+  "side_m": 1.0,
+  "thickness_m": 0.01,
+  "sigma_x_Pa": 200000.0,
+  "sigma_c_Pa": 100000.0,
+  "G_c_J_m2": 100.0
+ },
+ "n_total_faces_expected": 12,
+ "n_total_faces_actual": 12,
+ "n_failed_expected": 6,
+ "n_failed_actual": 6,
+ "count_match": true,
+ "total_area_expected": 0.02,
+ "total_area_actual": 0.02,
+ "area_rel_error": 0.0,
+ "total_energy_expected": 2.0,
+ "total_energy_actual": 2.0,
+ "energy_rel_error": 0.0
+}
