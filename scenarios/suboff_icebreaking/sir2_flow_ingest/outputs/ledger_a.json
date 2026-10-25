@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-10-25T06:37:39.178404+00:00",
+  "snapshot_path": "/nfs/wangxi/tensor_eco/agent_work/m307/TensorPhysics/scenarios/suboff_icebreaking/sir2_flow_ingest/outputs/real_lbm_snapshot.npz",
+  "snapshot_sha256": "8adf9ea4cd1afdddd4535478677657b9885c3e8008ea145f0d84d49042ea44dd",
+  "hull_stats": {
+    "obstacle_cells": 17,
+    "total_cells": 348480,
+    "fluid_cells": 348463,
+    "length_m": 4.356,
+    "diameter_m": 0.508,
+    "L_D_ratio": 8.574803149606298
+  },
+  "physics": {
+    "Re": 1000.0000000000001,
+    "tau": 0.5024,
+    "u_lb": 0.05,
+    "Ma": 0.08660254037844385,
+    "density": 1000.0,
+    "viscosity": 1e-06,
+    "inlet_velocity": 0.00022956841138659323
+  },
+  "solver": {
+    "resolution": 16,
+    "max_steps": 50,
+    "device": "cpu",
+    "domain_lu": [
+      80,
+      66,
+      66
+    ]
+  }
+}
