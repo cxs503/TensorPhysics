@@ -1,0 +1,188 @@
+{
+  "mission": "m302",
+  "phase": "SIR-0（Phase 3 真实化战役契约冻结）",
+  "title": "SUBOFF 破冰真实化战役契约冻结：腿阶梯 SIR-1..SIR-7 + prereg 骨架 + 内容符合判据",
+  "timestamp": "2026-10-25T05:10:21Z",
+  "branch": "agent/m302",
+  "scope": "TensorPhysics 场景薄编排腿（零求解器代码）",
+  "deliverables": {
+    "readme_phase3_contract": "scenarios/suboff_icebreaking/README.md（Phase 3 节）",
+    "prereg_dir": "scenarios/suboff_icebreaking/prereg/",
+    "contract_selftest": "tests/test_sir_phase3_contract.py",
+    "baseline_triples": "scenarios/suboff_icebreaking/prereg/sir0_baseline.json",
+    "semantic_criteria": "scenarios/suboff_icebreaking/prereg/semantic_criteria.json",
+    "dependency_graph": "scenarios/suboff_icebreaking/prereg/dependency_graph.json"
+  },
+  "summary": {
+    "checks_passed": 17,
+    "checks_total": 17,
+    "all_passed": true,
+    "baseline_triple_count": 21,
+    "semantic_criteria_count": 16,
+    "legs": [
+      "SIR-1",
+      "SIR-2",
+      "SIR-3",
+      "SIR-4",
+      "SIR-5",
+      "SIR-6",
+      "SIR-7"
+    ],
+    "test_suite": {
+      "contract_selftest": "25 passed in 0.02s",
+      "full_suite": "239 passed in 2.79s"
+    }
+  },
+  "checks": [
+    {
+      "check": "交付1：prereg 骨架齐全",
+      "criterion": "八个 sirN_prereg.md + 三个 JSON + README 全在 prereg/ 下",
+      "value": 8,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/",
+      "detail": "files=README.md,dependency_graph.json,semantic_criteria.json,sir0_baseline.json,sir0_prereg.md,sir1_prereg.md,sir2_prereg.md,sir3_prereg.md,sir4_prereg.md,sir5_prereg.md,sir6_prereg.md,sir7_prereg.md"
+    },
+    {
+      "check": "交付2：README Phase 3 契约节",
+      "criterion": "README 含 Phase 3 契约（SIR-0..SIR-7 全列）",
+      "value": 33438,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/README.md"
+    },
+    {
+      "check": "锚1：基线三元组全量复算",
+      "criterion": "sir0_baseline.json 全部值-文件-键三元组当场文件复算一致",
+      "value": 21,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/sir0_baseline.json",
+      "detail": "由 tests/test_sir_phase3_contract.py::TestBaselineTriples::test_every_triple_recomputes 机器复算"
+    },
+    {
+      "check": "锚2：腿间依赖图合法 DAG",
+      "criterion": "8 节点（SIR-0..SIR-7）+ 无环 + 拓扑序满足全部前置 + 四波并行分组",
+      "value": 8,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/dependency_graph.json",
+      "detail": "waves=W1:SIR-1+SIR-2+SIR-3+SIR-5,W2:SIR-4,W3:SIR-6,W4:SIR-7"
+    },
+    {
+      "check": "锚3：内容符合判据可机裁",
+      "criterion": "七腿各 ≥1 条判据；category 在允许集；assertion.type 全登记；平台三类全覆盖",
+      "value": 16,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/semantic_criteria.json",
+      "detail": "categories=field_integrity,physics_switch,provenance,scale_realism"
+    },
+    {
+      "check": "锚4：G1-G7 全部有承接腿",
+      "criterion": "dependency_graph.gaps_covered == {G1..G7} 且每缺口恰一腿",
+      "value": 7,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/dependency_graph.json",
+      "detail": "腿→缺口=SIR-1->G1,SIR-2->G2,SIR-3->G3,SIR-4->G4,SIR-5->G5,SIR-6->G6,SIR-7->G7"
+    },
+    {
+      "check": "基线1：G5 断裂传播现状",
+      "criterion": "SI-4 一步断 12 面、终态 0 键断（SIR-5 判据起点，机器直读）",
+      "value": {
+        "n_failed_faces_step0": 12,
+        "n_bonds_broken": 0
+      },
+      "passed": true,
+      "source_file": "outputs/si4_full_chain/",
+      "detail": "SIR-5 M5.1/M5.2 以此为对照"
+    },
+    {
+      "check": "基线2：G6 规模现状",
+      "criterion": "SI-4 12 颗粒 / 16 单元板 / 毫秒量级（SIR-6 下限起点，机器直读）",
+      "value": {
+        "n_particles": 12,
+        "n_chain_steps": 5
+      },
+      "passed": true,
+      "source_file": "outputs/si4_full_chain/validation_report.json",
+      "detail": "SIR-6 下限：颗粒≥1e3、单元≥1e4、时长≥1s、断键>0"
+    },
+    {
+      "check": "基线3：G3 重力禁用现状",
+      "criterion": "SI-4 显式禁重力（SIR-3 判据起点，机器直读工件原文）",
+      "value": "DEM 场初始化时 gravity=[0,0,0] 以确保严格能量守恒",
+      "passed": true,
+      "source_file": "outputs/si4_full_chain/validation_report.json",
+      "detail": "SIR-3 M3.1 要求 gravity_enabled=true 且 gravity≠[0,0,0]"
+    },
+    {
+      "check": "基线4：G1 honest-FAIL 保留",
+      "criterion": "suboff_sail G1 门 FAIL / OVERALL=FAIL 事实不改写（SIR-1 M1.3）",
+      "value": {
+        "err_finest_pct": 9.208536396882106,
+        "G1_pass": false,
+        "OVERALL": "FAIL"
+      },
+      "passed": true,
+      "source_file": "/nfs/wangxi/runs/suboff_sail_20261008/verdict.json",
+      "detail": "SIR-1 只允许 append-only 追加新档"
+    },
+    {
+      "check": "锚5：物理锚复用清单",
+      "criterion": "≥10 条已 verified 锚/文献锚登记（Hetényi/ITTC-1957/Blasius/ADA359226/阿基米德/自由面/接触/cohesive/恢复系数/几何/MT Uikku）",
+      "value": 12,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/sir0_baseline.json",
+      "detail": "anchors=archimedes_buoyancy,blasius_flat_plate,cohesive_bilinear,contact_penalty_analytic,free_surface_mass_ledger,hetenyi_plate_series,hull_contact_action_reaction,ittc_1957,restitution_damping_map,ship_ice_reference_transcribed,suboff_experimental_resistance,suboff_geometry"
+    },
+    {
+      "check": "门1：契约自检测试",
+      "criterion": "tests/test_sir_phase3_contract.py 全绿（三元组复算/DAG/语义判据/骨架齐备）",
+      "value": "25 passed in 0.02s",
+      "passed": true,
+      "source_file": "tests/test_sir_phase3_contract.py",
+      "detail": "interpreter=/nfs/wangxi/venvs/tensor_eco/bin/python, PYTHONPATH=src:.（等同 CI 的 pip install -e .）"
+    },
+    {
+      "check": "门2：全仓测试不回退",
+      "criterion": "整套测试全绿（无回归）",
+      "value": "239 passed in 2.79s",
+      "passed": true,
+      "source_file": "tests/",
+      "detail": "interpreter=/nfs/wangxi/venvs/tensor_eco/bin/python, PYTHONPATH=src:."
+    },
+    {
+      "check": "门3：契约测试非假绿（变异验证）",
+      "criterion": "注入值漂移/DAG 成环/非法 assertion.type 三处变异，测试均转红，复原后转绿",
+      "value": "mutations=3 all_detected=true",
+      "passed": true,
+      "source_file": "tests/test_sir_phase3_contract.py",
+      "detail": "变异1 颗粒数 12→13 触发「三元组值不符」；变异2 SIR-0←SIR-7 触发环检测；变异3 vibes_check 触发类型未登记"
+    },
+    {
+      "check": "红线1：薄编排零求解器代码",
+      "criterion": "本交付只改 TensorPhysics scenarios/tests/README（无四库 src 改动）",
+      "value": "repo=TensorPhysics only",
+      "passed": true,
+      "source_file": ".",
+      "detail": "交付面：README、prereg/、tests/test_sir_phase3_contract.py"
+    },
+    {
+      "check": "红线2：时间戳 UTC Z",
+      "criterion": "全部 prereg 时间戳 YYYY-MM-DDTHH:MM:SSZ 形式",
+      "value": "2026-10-25T05:10:21Z",
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/"
+    },
+    {
+      "check": "红线3：锚有出处",
+      "criterion": "每条物理锚给 DOI/报告号/页码 或库内 file:line / 库测试名",
+      "value": 12,
+      "passed": true,
+      "source_file": "scenarios/suboff_icebreaking/prereg/sir0_baseline.json"
+    }
+  ],
+  "source_report_id": 51,
+  "limitations": [
+    "本班次只冻结契约与判据，不跑任何 SIR 腿的计算——七腿的物理结果为零，符合 SIR-0 定义（契约冻结腿）。",
+    "SIR-7 的 P-h 具体参考数值未在本班次写入：骨架期凭记忆写数字即手抄，违反红线；prereg 中只冻结「必须有出处+必须三元组化+必须有误差门」的纪律。",
+    "语义门判据 schema 与平台 PL-SEM（TensorPlatform agent/m300 分支）对齐声明在此，但平台侧 semantic_gate.py 尚未接入本仓 CI（平台集成方案留 owner，PL-SEM-1/2 原文纪律）。",
+    "TensorFVM 两相/VOF 能力在库内仍未落地（grep 仅 overset_exchange.py 注释提及单相限制），SIR-3 的自由面腿目前只能走 TensorLBM Korner/VOF；FVM 侧需另开库开发腿，本契约在 SIR-3 物理锚 A3.2 已如实指向 LBM 实现。"
+  ]
+}
