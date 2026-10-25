@@ -1,0 +1,68 @@
+{
+  "leg_id": "SIR-3",
+  "gap_id": "G3",
+  "title": "重力/浮力/自由面入链",
+  "timestamp": "2026-10-25T06:45:00Z",
+  "status": "PARTIAL_FAIL",
+  "summary": "SIR-3 部分完成：TensorFEM 浮力响应成功调用（F_b=502.76N，与阿基米德解析解一致），但 TensorLBM 自由面仿真因 API 不匹配未完成。重力开关已在配置中开启，但自由面在场门未通过。",
+  
+  "physical_anchors": [
+    {
+      "id": "A3.1",
+      "description": "阿基米德浮力 F_b = ρ_w g V_sub",
+      "analytical_N": 502.762500,
+      "computed_N": 502.762500,
+      "relative_error": 0.0,
+      "source": "TensorFEM ice_sheet.buoyancy_response",
+      "verified": true
+    }
+  ],
+  
+  "machine_gates": [
+    {
+      "id": "M3.1",
+      "name": "重力开关门",
+      "result": "PASS",
+      "evidence": "IceSimulationConfig(hydrostatic_buoyancy=True, gravity=9.81)"
+    },
+    {
+      "id": "M3.2",
+      "name": "浮力项非零门",
+      "result": "PASS",
+      "evidence": "F_b_computed=502.762500 N ≥ 1e-6 N"
+    },
+    {
+      "id": "M3.3",
+      "name": "自由面在场门",
+      "result": "FAIL",
+      "evidence": "TensorLBM free_surface_step API 调用失败，n_interface_cells 未获取"
+    },
+    {
+      "id": "M3.4",
+      "name": "质量双账本",
+      "result": "FAIL",
+      "evidence": "自由面仿真未完成，质量守恒未验证"
+    },
+    {
+      "id": "M3.5",
+      "name": "浮力对阿基米德解析解",
+      "result": "PASS",
+      "evidence": "relative_error=0.0 < 0.01"
+    }
+  ],
+  
+  "checks_passed": 3,
+  "checks_total": 5,
+  
+  "limitations": [
+    "TensorLBM free_surface_lbm.free_surface_step API 调用失败（参数不匹配）",
+    "自由面仿真未完成，M3.3/M3.4 门未通过",
+    "需要后续班次修正 free_surface_step 调用签名"
+  ],
+  
+  "todo": [
+    "修正 free_surface_step 调用：检查 f 参数是否必需，或改用 GeneralSimEngine 的 free_surface 模式",
+    "完成 500 步自由面演化，提取 n_interface_cells 和质量守恒误差",
+    "重新运行 SIR-3 验证全部 5 个机器门"
+  ]
+}
