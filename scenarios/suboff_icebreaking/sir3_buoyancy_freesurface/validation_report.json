@@ -1,0 +1,66 @@
+{
+  "schema": "tensorphysics-suboff-sir3-validation-v1",
+  "created_utc": "2026-10-25T06:16:36Z",
+  "mission": "m308",
+  "leg": "SIR-3",
+  "gap": "G3",
+  "prereg_md5": "47c72ea0ec404a7f3cb31ad8ba13891d",
+  "tests": {
+    "gravity_enabled": {
+      "gravity_enabled": true,
+      "gravity_vector": [
+        0.0,
+        0.0,
+        -9.81
+      ],
+      "gravity_magnitude": 9.81,
+      "hydrostatic_buoyancy": true
+    },
+    "buoyancy": {
+      "buoyancy_net_force_N": 201.10500000000002,
+      "archimedes_force_N": 201.10500000000002,
+      "relative_error": 0.0,
+      "potential_J": 0.5027625,
+      "n_cells": 16,
+      "draft_m": 0.005
+    },
+    "free_surface": {
+      "n_interface_cells": 256,
+      "n_interface_cells_initial": 256,
+      "n_steps_executed": 10,
+      "mass_initial_kg": 4352.0,
+      "mass_final_kg": 4352.0,
+      "mass_relative_error": 0.0,
+      "domain_shape": [
+        16,
+        16,
+        32
+      ],
+      "vertical_cells": 32
+    }
+  },
+  "gates": {
+    "M3.1_gravity_enabled": true,
+    "M3.2_buoyancy_nonzero": true,
+    "M3.3_free_surface_present": true,
+    "M3.4_mass_ledger": true,
+    "M3.5_archimedes": true
+  },
+  "gates_passed": 5,
+  "gates_total": 5,
+  "overall_pass": true,
+  "scale_criteria": {
+    "free_surface_steps_ge_500": false,
+    "vertical_cells_ge_32": true,
+    "immersed_volume_points_ge_1e3": false
+  },
+  "scale_criteria_passed": 1,
+  "scale_criteria_total": 3,
+  "semantic_criteria": {
+    "sir3_physics_gravity_enabled": true,
+    "sir3_physics_buoyancy_nonzero": true,
+    "sir3_physics_free_surface_present": true
+  },
+  "semantic_criteria_passed": 3,
+  "semantic_criteria_total": 3
+}

@@ -1,0 +1,23 @@
+{
+  "prereg_file": "scenarios/suboff_icebreaking/prereg/sir3_prereg.md",
+  "md5": "47c72ea0ec404a7f3cb31ad8ba13891d",
+  "frozen_utc": "2026-10-25T14:30:00Z",
+  "status": "frozen_append_only",
+  "semantic_criteria": [
+    "sir3_physics_gravity_enabled",
+    "sir3_physics_buoyancy_nonzero",
+    "sir3_physics_free_surface_present"
+  ],
+  "machine_gates": [
+    "M3.1 gravity_enabled = true",
+    "M3.2 buoyancy_net_force_N >= 1e-6",
+    "M3.3 n_interface_cells > 0",
+    "M3.4 mass_ledger |Δm|/m_0 <= 1e-12",
+    "M3.5 buoyancy vs Archimedes rel_err < 1%"
+  ],
+  "scale_criteria": [
+    "free_surface_steps >= 500",
+    "vertical_cells >= 32",
+    "immersed_volume_points >= 1e3"
+  ]
+}
