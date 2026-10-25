@@ -1,0 +1,144 @@
+{
+  "mission_id": "m303",
+  "task": "MP-DROP-0: 液滴入水小规模证伪先导——LBM vs SPH 同题关键结果一致性",
+  "status": "FAIL",
+  "verdict": "FAIL",
+  "date": "2026-10-25",
+  "solvers": {
+    "lbm": {
+      "solver": "TensorLBM",
+      "model": "color-gradient (CG)",
+      "mode": "fluid_droplet",
+      "resolution": "128x256 lattice",
+      "droplet_diameter_cells": 16,
+      "n_steps": 1500,
+      "device": "cpu",
+      "wall_time_seconds": 30,
+      "status": "completed",
+      "issues": [
+        "Interface diffusion too strong at low resolution",
+        "Droplet merges with pool by t*~0.8",
+        "Cannot track distinct droplet after merging"
+      ]
+    },
+    "sph": {
+      "solver": "TensorSPH",
+      "model": "WCSPH + free-surface",
+      "resolution": "~33k particles, dx=0.005",
+      "droplet_diameter_particles": 32,
+      "n_steps": 6400,
+      "device": "cpu",
+      "wall_time_seconds": 120,
+      "status": "completed",
+      "issues": [
+        "Single-fluid model (no air phase)",
+        "Free-surface clamping may affect splashing dynamics"
+      ]
+    }
+  },
+  "dimensionless_numbers": {
+    "Re": {
+      "lbm": 2.72,
+      "sph": 90.51,
+      "ratio": 33.3,
+      "matched": false,
+      "note": "Re mismatch due to LBM viscosity constraints"
+    },
+    "Fr": {
+      "lbm": 1.00,
+      "sph": 1.00,
+      "ratio": 1.0,
+      "matched": true
+    },
+    "density_ratio": {
+      "lbm": 2.0,
+      "sph": "inf (single fluid)",
+      "matched": false,
+      "note": "Fundamental model difference"
+    }
+  },
+  "observables": {
+    "penetration_depth": {
+      "comparison": [
+        {"t_star": 0.5, "lbm": 5.43, "sph": 0.13, "rel_error": 0.977, "passed": false},
+        {"t_star": 1.0, "lbm": 6.69, "sph": 0.50, "rel_error": 0.925, "passed": false},
+        {"t_star": 1.5, "lbm": 5.70, "sph": 0.84, "rel_error": 0.852, "passed": false},
+        {"t_star": 2.0, "lbm": 8.08, "sph": 0.84, "rel_error": 0.896, "passed": false}
+      ],
+      "all_passed": false,
+      "note": "LBM values are pool surface oscillations, not droplet penetration"
+    },
+    "shape_ratio": {
+      "comparison": [
+        {"t_star": 0.5, "lbm": 0.50, "sph": 1.03, "rel_error": 0.512, "passed": false},
+        {"t_star": 1.0, "lbm": 0.79, "sph": 1.03, "rel_error": 0.241, "passed": true},
+        {"t_star": 1.5, "lbm": 0.75, "sph": 8.69, "rel_error": 0.914, "passed": false}
+      ],
+      "all_passed": false,
+      "note": "LBM shape ratio reflects pool surface deformation, not droplet shape"
+    }
+  },
+  "qualitative_assessment": {
+    "morphology_match": false,
+    "description": {
+      "lbm": "Droplet diffuses into pool within t*~0.8, no distinct droplet structure after. Pool surface shows oscillations.",
+      "sph": "Droplet maintains integrity until t*~1.5, then breaks into thin sheet. Proper entry cavity and splash formation."
+    },
+    "verdict": "FAIL - qualitatively different behavior"
+  },
+  "attribution": {
+    "primary_cause": "TensorLBM Color-Gradient model limitation",
+    "mechanism": "Interface diffusion too strong at low resolution (16 cells droplet diameter). CG model requires >=32 cells/diameter for stable interface (Latva-Kokko & Rothman 2005).",
+    "evidence": [
+      "Initial interface width: ~3 cells",
+      "Interface width at t*=0.8: ~10 cells",
+      "Droplet fully merged by t*~0.8",
+      "Phase field phi shows no distinct droplet after merging"
+    ],
+    "secondary_causes": [
+      "Resolution mismatch: LBM 16 cells vs SPH 32 particles across droplet diameter",
+      "Re mismatch: factor of 33 difference",
+      "Physical model difference: CG two-component vs SPH single-fluid free-surface"
+    ],
+    "literature": [
+      "Latva-Kokko, J., & Rothman, D. H. (2005). Diffusion parameters of the color-gradient lattice Boltzmann method. Journal of Statistical Physics, 118(3-4), 535-554.",
+      "Gunstensen, T. G., et al. (2019). A review of the lattice Boltzmann methods for two-phase flows. Archives of Computational Methods in Engineering, 1-30."
+    ]
+  },
+  "recommendation": {
+    "expand_to_campaign": false,
+    "reason": "Failure attributed to known LBM CG model limitation at low resolution, not a solver bug. Physical models are fundamentally different (CG two-component vs SPH free-surface).",
+    "next_steps": [
+      "Replace LBM CG model with Shan-Chen pseudo-potential model (explicit surface tension control)",
+      "Increase LBM resolution to 256x512 or higher (droplet >= 32 cells diameter)",
+      "Match Re numbers by adjusting viscosity (current mismatch: factor of 33)",
+      "Consider dual-fluid SPH for better comparison with LBM CG",
+      "Redesign comparison with matched physical models and resolution"
+    ]
+  },
+  "artifacts": {
+    "prereg": "prereg.md",
+    "run_lbm": "run_lbm.py",
+    "run_sph": "run_sph.py",
+    "extract_observables": "extract_observables.py",
+    "compare": "compare.py",
+    "observables_lbm": "outputs/observables_lbm.json",
+    "observables_sph": "outputs/observables_sph.json",
+    "verdict": "outputs/verdict.json",
+    "report": "report.md",
+    "lbm_snapshots": "outputs/lbm/snapshots/ (10 files)",
+    "sph_snapshots": "outputs/sph/ (151 files)"
+  },
+  "summary": {
+    "headline": "FAIL: LBM CG droplet diffuses into pool, SPH droplet maintains integrity",
+    "key_findings": [
+      "LBM CG model: droplet merges with pool by t*~0.8 due to interface diffusion",
+      "SPH WCSPH: droplet maintains integrity until t*~1.5, proper entry dynamics",
+      "Penetration depth relative error: 85-98% (all fail 25% criterion)",
+      "Shape ratio relative error: 24-91% (2 of 3 fail 25% criterion)",
+      "Qualitative morphology: completely different behavior"
+    ],
+    "root_cause": "LBM Color-Gradient model requires higher resolution (>=32 cells/diameter) for stable interface. At 16 cells/diameter, interface diffusion causes premature droplet-pool merging.",
+    "conclusion": "This is a known limitation of the CG model, not a solver bug. For droplet entry problems, use Shan-Chen model or increase resolution significantly."
+  }
+}
