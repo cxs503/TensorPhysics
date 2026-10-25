@@ -1,0 +1,86 @@
+{
+  "verdict": "FAIL",
+  "dimensionless_numbers": {
+    "Re": {
+      "lbm": 2.7152900397563426,
+      "sph": 90.50966799187808,
+      "match": false
+    },
+    "Fr": {
+      "lbm": 1.0,
+      "sph": 1.0,
+      "match": true
+    }
+  },
+  "penetration_depth": [
+    {
+      "t_star": 0.5,
+      "lbm": 5.43119822786529,
+      "sph": 0.1251844157737549,
+      "rel_error": 0.9769508659927962,
+      "passed": false
+    },
+    {
+      "t_star": 1.0,
+      "lbm": 6.693174326795763,
+      "sph": 0.5002805689692663,
+      "rel_error": 0.9252551114698417,
+      "passed": false
+    },
+    {
+      "t_star": 1.5,
+      "lbm": 5.699896525488548,
+      "sph": 0.8432612189765661,
+      "rel_error": 0.8520567495908553,
+      "passed": false
+    },
+    {
+      "t_star": 2.0,
+      "lbm": 8.078873704369245,
+      "sph": 0.8411001807741066,
+      "rel_error": 0.8958889306167492,
+      "passed": false
+    }
+  ],
+  "shape_ratio": [
+    {
+      "t_star": 0.5,
+      "lbm": 0.503968253968254,
+      "sph": 1.0333333015441895,
+      "rel_error": 0.512288771478539,
+      "passed": false
+    },
+    {
+      "t_star": 1.0,
+      "lbm": 0.7850998223036973,
+      "sph": 1.0336457489122586,
+      "rel_error": 0.24045561728485293,
+      "passed": true
+    },
+    {
+      "t_star": 1.5,
+      "lbm": 0.7515291666342261,
+      "sph": 8.689919681672503,
+      "rel_error": 0.913517133165311,
+      "passed": false
+    }
+  ],
+  "all_penetration_passed": false,
+  "all_shape_passed": false,
+  "attribution": {
+    "primary": "TensorLBM",
+    "reason": "CG interface diffusion at low resolution causes droplet to merge with pool prematurely",
+    "literature": "Color-gradient method requires O(32) cells per droplet diameter for stable interface (Latva-Kokko & Rothman 2005)",
+    "secondary": "Resolution mismatch (LBM 16 cells vs SPH 32 particles across diameter)"
+  },
+  "recommendation": {
+    "expand_to_campaign": false,
+    "reason": "Failure attributed to known LBM CG limitation at low resolution, not a solver bug",
+    "next_steps": [
+      "Increase LBM resolution to 256x512 or higher (droplet >= 32 cells)",
+      "Consider Shan-Chen model with explicit surface tension control",
+      "Match Re numbers by adjusting viscosity",
+      "Add free-surface treatment to SPH for better comparison"
+    ]
+  }
+}
