@@ -55,3 +55,44 @@ cohesive 与键断裂演化如有改动 → 落 TensorFEM/TensorDEM `src/` + `te
 ## Addendum 记录
 
 （暂无）
+
+## Addendum 2026-10-25T07:40:00Z —— 执行口径冻结（SIR-5 开腿）
+
+本节只**追加**判据的执行口径，不改写 §1-§7 任何条款。冻结后的判据仍以 §3/§4/§5 为准，
+本节说明「用哪两个兄弟库接口、按什么参数落地」，以免跑后回填。
+
+### 执行装置（薄编排，零求解器代码）
+
+| 阶段 | 兄弟库接口（只读引用） | 承载的锚/门 |
+|---|---|---|
+| FEM 渐进开裂 | `TensorFEM/src/tensorfem/suboff_ice_collision.py` `simulate_impact` + `IceImpactConfig` | A5.1、M5.1、M5.3(FEM 侧) |
+| SUBOFF 几何 | `TensorLBM/src/tensorlbm/suboff_cad.py` `suboff_radius_profile` → `tensorfem.suboff_geometry.closed_revolved_mesh` | G2 语义（几何进链，接口沿用冻结语义） |
+| cohesive 律 | `TensorFEM/src/tensorfem/cohesive.py:33` `BilinearCohesiveLaw`（A5.1 已验证锚） | A5.1、A5.3 |
+| DEM 键断裂 | `TensorDEM/src/tensordem/dem3d.py` `IceDEM3D` + `DEM3DConfig(top_platen_*)` | A5.4、M5.2、M5.4 |
+| 解析枚举锚 | 场景内 SI-2 冻结件 `si2_fracture_gen/cohesive_failure.py` `identify_failed_faces_uniform_stress` | A5.2、M5.5 |
+
+### 参数（跑前冻结）
+
+- FEM 阶段：`length=1.0 m`、`axial=12`、`circum=16`（SUBOFF 外包络，`r_over_l` 由库内 `SuboffConfig` 给）、
+  `IceImpactConfig(ice_nx=12, ice_ny=4, duration=0.006 s)`，其余取库默认。
+- DEM 阶段：`DEM3DConfig(nx=15, ny=9, nz=3, breaking_strain=0.004, shear_breaking_strain=0.03,
+  top_platen_enabled=True, top_platen_velocity=-0.06 m/s, top_platen_gap=5e-4, fix_bottom=True)`，
+  推进 2000 步。
+- 解析锚：`mesh_res=3, side=1.0 m, thickness=0.01 m, σ_x=2e5 Pa, σ_c=1e5 Pa, G_c=100 J/m²`
+  （与 SI-2 冻结锚同口径：期望总面 12 / 坏面 6 → 本口径下总面 12、坏面 6）。
+
+### 双账本口径
+
+- FEM 断裂能量：账本 A = 库侧 `metrics.fracture_dissipation_J`；账本 B = 场景侧按 A5.1
+  双线性律逐点独立复算 `Σ (梯形积分 − 当前存能) · A_face`。
+- DEM 键断裂能量：账本 A = 逐键 `0.5·k_bond·extension²`（A5.4）复算；账本 B = 库侧
+  `failure_energy_J.sum()`。
+- 质量：DEM 侧颗粒数 × 单颗粒质量，初末对比（本模型无质量损失机制，残差应为机器零）。
+
+### 已知限制（跑前声明，不许跑后拿来解释失败）
+
+1. FEM 侧裂纹沿库内预设 cohesive 缝格扩展，不在单元内部任意取向开裂 —— 这是库能力边界，
+   本腿的「渐进性」只主张**缝格尺度**的渐进传播。
+2. FEM 与 DEM 是两套独立损伤变量（缝格 cohesive vs 键结颗粒），两侧账本各自闭合，
+   **不是**跨库统一账本；跨库统一留给后续定向修订单。
+3. 规模判据「裂纹路径长度 ≥ 2 倍板厚」以「破坏缝数 × 冰厚」为长度代理（每道缝贯通板厚）。
