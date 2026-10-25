@@ -1,0 +1,222 @@
+{
+  "schema": "tensorphysics-suboff-sir0-baseline-v1",
+  "created_utc": "2026-10-25T05:10:21Z",
+  "description": "SIR-0 基线三元组：全部 v 由本生成脚本机器直读工件得到（零手抄），由 tests/test_sir_phase3_contract.py 复算。",
+  "source_report": "TensorPlatform tensor_reports id=51（SI-4 全链演示收官）",
+  "gaps": {
+    "g5_fracture_propagation": {
+      "why": "SI-4 一步断 12 面、其余链步 0、终态断键 0——断裂传播路径未被演练（id=51 局限 L-1）",
+      "evidence": [
+        {
+          "v": 12,
+          "f": "outputs/si4_full_chain/full_chain_summary.json",
+          "k": "chain_history[0].n_failed_faces"
+        },
+        {
+          "v": 0,
+          "f": "outputs/si4_full_chain/validation_report.json",
+          "k": "final_state.n_bonds_broken"
+        },
+        {
+          "v": 30,
+          "f": "outputs/si4_full_chain/validation_report.json",
+          "k": "final_state.n_bonds"
+        }
+      ]
+    },
+    "g6_scale": {
+      "why": "SI-4 为 smoke 规模（5 链步 / 12 颗粒 / DEM dt 1e-5 s），远低于物理量级（id=51 局限 L-1）",
+      "evidence": [
+        {
+          "v": 5,
+          "f": "outputs/si4_full_chain/validation_report.json",
+          "k": "chain_execution.n_chain_steps"
+        },
+        {
+          "v": 15,
+          "f": "outputs/si4_full_chain/validation_report.json",
+          "k": "chain_execution.total_dem_substeps"
+        },
+        {
+          "v": 12,
+          "f": "outputs/si4_full_chain/validation_report.json",
+          "k": "final_state.n_particles"
+        },
+        {
+          "v": 6.8775,
+          "f": "outputs/si4_full_chain/validation_report.json",
+          "k": "final_state.total_mass_kg"
+        },
+        {
+          "v": 1e-05,
+          "f": "outputs/si4_full_chain/dem_snapshot_step0.json",
+          "k": "dt_dem"
+        }
+      ]
+    },
+    "g3_gravity_disabled": {
+      "why": "全链禁用重力以确保严格能量守恒（id=51 局限 L-3 的物理面）",
+      "evidence": [
+        {
+          "v": "DEM 场初始化时 gravity=[0,0,0] 以确保严格能量守恒",
+          "f": "outputs/si4_full_chain/validation_report.json",
+          "k": "key_fixes_applied[3].fix"
+        }
+      ]
+    },
+    "g1_fluid_load_precision": {
+      "why": "suboff_sail honest-FAIL 遗留：G1 门（最细档 |err| ≤ 3%）未过，OVERALL=FAIL",
+      "evidence": [
+        {
+          "v": 9.208536396882106,
+          "f": "/nfs/wangxi/runs/suboff_sail_20261008/verdict.json",
+          "k": "G1_err_finest_pct"
+        },
+        {
+          "v": false,
+          "f": "/nfs/wangxi/runs/suboff_sail_20261008/verdict.json",
+          "k": "G1_pass"
+        },
+        {
+          "v": "FAIL",
+          "f": "/nfs/wangxi/runs/suboff_sail_20261008/verdict.json",
+          "k": "OVERALL"
+        },
+        {
+          "v": 0.04199504732703608,
+          "f": "/nfs/wangxi/runs/suboff_sail_20261008/verdict.json",
+          "k": "cf_ref_recomputed"
+        },
+        {
+          "v": "Cf_ref = 0.041995047327036084",
+          "f": "/nfs/wangxi/runs/suboff_sail_20261008/prereg.md",
+          "k": "grep:Cf_ref = 0.041995047327036084"
+        }
+      ]
+    },
+    "g7_reference_anchors": {
+      "why": "Phase 2 未做文献/实验 P-h 对照；可复用的已转录参考与掩码事实在此登记",
+      "evidence": [
+        {
+          "v": 126,
+          "f": "/nfs/wangxi/runs/suboff_sail_20261008/e5_verdict.json",
+          "k": "arms_L128.mrt.mask.appendage_solid_cells"
+        },
+        {
+          "v": 4315.0,
+          "f": "/nfs/wangxi/runs/suboff_sail_20261008/e5_verdict.json",
+          "k": "arms_L128.mrt.wall_clock_s"
+        }
+      ]
+    }
+  },
+  "reused_verified_anchors": {
+    "hetenyi_plate_series": {
+      "citation": "M. Hetényi, Beams on Elastic Foundation, Univ. of Michigan Press, 1946",
+      "library_path": "TensorFEM/src/tensorfem/hetenyi_reference.py（SI-C 腿 f5e90d4；入 main 前锚路径=分支 agent/m136）",
+      "scene_path": "benchmarks/icebreaking/si1_one_way.py:39 hetenyi_plate_series_center_deflection",
+      "evidence": [
+        {
+          "v": 4.574545299056148e-05,
+          "f": "benchmarks/icebreaking/si1_one_way_output/validation_report.json",
+          "k": "anchors[1].w_hetenyi"
+        },
+        {
+          "v": 0.016667081782891186,
+          "f": "benchmarks/icebreaking/si1_one_way_output/validation_report.json",
+          "k": "anchors[1].value"
+        },
+        {
+          "v": true,
+          "f": "benchmarks/icebreaking/si1_one_way_output/validation_report.json",
+          "k": "anchors[1].passed"
+        }
+      ]
+    },
+    "ittc_1957": {
+      "citation": "ITTC Recommended Procedures 7.5-02-02-01（1957 船模-实船换算式）",
+      "library_path": "TensorLBM/src/tensorlbm/hydrodynamics.py:23 ittc57_friction_coefficient",
+      "formula": "Cf = 0.075/(log10(Re)-2)**2"
+    },
+    "blasius_flat_plate": {
+      "citation": "Blasius 层流平板 Cf = 1.328/sqrt(Re)（复用 suboff_re1000 同族口径）",
+      "path": "TensorLBM/benchmarks/pending/suboff_re1000/README.md"
+    },
+    "suboff_experimental_resistance": {
+      "citation": "H.-L. Liu & T. T. Huang, Summary of DARPA Suboff Experimental Program Data, CRDKNSWC/HD-1298-11, ADA359226, Table 14, p.23",
+      "doi": "10.21236/ADA359226",
+      "path": "TensorLBM/docs/suboff_experimental_resistance_validation_2026-08-01.md"
+    },
+    "archimedes_buoyancy": {
+      "library_path": "TensorFEM/src/tensorfem/ice_sheet.py:145 buoyancy_response",
+      "test_anchor": "TensorFEM/tests/test_ice_sheet.py:40 test_clipped_buoyancy_matches_archimedes_and_potential_gradient",
+      "constants": "rho_water=1025 kg/m3, g=9.81 m/s2 (ice_sheet.py:26-27)"
+    },
+    "free_surface_mass_ledger": {
+      "library_path": "TensorLBM/src/tensorlbm/free_surface_lbm.py + free_surface_ownership_ledger.py",
+      "test_anchor": "TensorLBM/tests/test_dam_break_3d_free_surface_campaign.py:18"
+    },
+    "contact_penalty_analytic": {
+      "citation": "线性罚函数接触闭式解 penetration=(P-k*g0)/(k+k_p), lambda=k_p*penetration",
+      "path": "TensorFEM/docs/contact-validation.md:21"
+    },
+    "hull_contact_action_reaction": {
+      "library_path": "TensorDEM/src/tensordem/hull_contact.py:7 polyline_contact_forces",
+      "test_anchor": "TensorDEM/tests/test_hull_contact.py（4 测试）"
+    },
+    "cohesive_bilinear": {
+      "library_path": "TensorFEM/src/tensorfem/cohesive.py:33 BilinearCohesiveLaw",
+      "closed_form": "failure_opening = 2*fracture_energy/peak_traction (cohesive.py:39)",
+      "test_anchor": "TensorFEM/tests/test_cohesive.py（6 测试）",
+      "evidence": [
+        {
+          "v": 12,
+          "f": "benchmarks/icebreaking/si2_fracture_gen_output/validation_report.json",
+          "k": "anchors[2].n_total_faces_expected"
+        },
+        {
+          "v": 6,
+          "f": "benchmarks/icebreaking/si2_fracture_gen_output/validation_report.json",
+          "k": "anchors[2].n_failed_actual"
+        }
+      ]
+    },
+    "restitution_damping_map": {
+      "citation": "Hunt & Crossley 1975 / Thornton 1997：e = exp(-eta*pi/sqrt(4mk-eta^2))",
+      "library_field": "TensorDEM/src/tensordem/dem3d.py contact_damping"
+    },
+    "suboff_geometry": {
+      "library_path": "TensorLBM/src/tensorlbm/suboff_cad.py:19（L=14.292 ft=4.356 m）; :716 build_suboff_mask",
+      "dimensions": "L=4.356 m, D=0.508 m"
+    },
+    "ship_ice_reference_transcribed": {
+      "citation": "Hu & Zhou, Further study on level ice resistance and channel resistance for an icebreaking vessel, IJNAOE 8(2), 169-176 (2016)",
+      "doi": "10.1016/j.ijnaoe.2016.01.004",
+      "path": "TensorDEM/benchmarks/dem3d/ship_ice_validation/mt_uikku_level_ice.csv"
+    }
+  },
+  "derived_frozen_table": {
+    "note": "由 /nfs/wangxi/runs/suboff_sail_20261008/prereg.md 冻结公式 tau=3*u_lb*L/1000+0.5 (u_lb=0.05) 当场复算，非手抄存储值",
+    "u_lb": 0.05,
+    "tiers": [
+      {
+        "L": 112,
+        "nu": 0.005600000000000001,
+        "tau": 0.5168,
+        "tau_minus_half": 0.016800000000000002
+      },
+      {
+        "L": 144,
+        "nu": 0.0072,
+        "tau": 0.5216,
+        "tau_minus_half": 0.0216
+      },
+      {
+        "L": 176,
+        "nu": 0.0088,
+        "tau": 0.5264,
+        "tau_minus_half": 0.0264
+      }
+    ]
+  }
+}
