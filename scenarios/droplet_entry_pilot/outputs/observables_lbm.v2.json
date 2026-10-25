@@ -1,0 +1,257 @@
+{
+  "solver": "TensorLBM",
+  "extractor": "v2",
+  "D": 16.0,
+  "U": 0.0282842712474619,
+  "Re": 2.7152900397563426,
+  "Fr": 1.0,
+  "contact_t_star": 0.9212014878049224,
+  "contact_source": "kinematic",
+  "kinematic_contact_t_star": 0.9212014878049224,
+  "empirical_contact_t_star": 0.5303300858899106,
+  "field_purity": {
+    "air_monitor_box": [
+      170,
+      250,
+      0,
+      40
+    ],
+    "air_mean_max": 0.5437306761741638,
+    "threshold": 0.15000000000000002,
+    "pure": false
+  },
+  "penetration_depth": [
+    {
+      "t_star": 0.5,
+      "d/D": null,
+      "post_contact": null,
+      "note": "no valid samples"
+    },
+    {
+      "t_star": 1.0,
+      "d/D": null,
+      "post_contact": null,
+      "note": "no valid samples"
+    },
+    {
+      "t_star": 1.5,
+      "d/D": null,
+      "post_contact": null,
+      "note": "no valid samples"
+    },
+    {
+      "t_star": 2.0,
+      "d/D": null,
+      "post_contact": null,
+      "note": "no valid samples"
+    }
+  ],
+  "shape_ratio": [
+    {
+      "t_star": 0.5,
+      "lambda": 0.27247099602436575,
+      "post_contact": false
+    },
+    {
+      "t_star": 1.0,
+      "lambda": 2.585886595613,
+      "post_contact": true
+    },
+    {
+      "t_star": 1.5,
+      "lambda": 1.0432696750279584,
+      "post_contact": true
+    }
+  ],
+  "raw": {
+    "air_mean_series": [
+      {
+        "t_star": 0.2651650429449553,
+        "air_mean": 0.21278758347034454
+      },
+      {
+        "t_star": 0.5303300858899106,
+        "air_mean": 0.2217627316713333
+      },
+      {
+        "t_star": 0.795495128834866,
+        "air_mean": 0.07413463294506073
+      },
+      {
+        "t_star": 1.0606601717798212,
+        "air_mean": 0.25986960530281067
+      },
+      {
+        "t_star": 1.3258252147247767,
+        "air_mean": 0.2873648703098297
+      },
+      {
+        "t_star": 1.590990257669732,
+        "air_mean": 0.22355400025844574
+      },
+      {
+        "t_star": 1.8561553006146874,
+        "air_mean": 0.36447852849960327
+      },
+      {
+        "t_star": 2.1213203435596424,
+        "air_mean": 0.4320284128189087
+      },
+      {
+        "t_star": 2.386485386504598,
+        "air_mean": 0.44690191745758057
+      },
+      {
+        "t_star": 2.6516504294495533,
+        "air_mean": 0.5437306761741638
+      }
+    ],
+    "penetration_depth": [
+      {
+        "step": 150,
+        "t_star": 0.2651650429449553,
+        "d/D": -5.587289915966387,
+        "valid": false,
+        "air_mean": 0.21278758347034454,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 300,
+        "t_star": 0.5303300858899106,
+        "d/D": -4.074698275862069,
+        "valid": false,
+        "air_mean": 0.2217627316713333,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 450,
+        "t_star": 0.795495128834866,
+        "d/D": -7.71875,
+        "valid": false,
+        "air_mean": 0.07413463294506073,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 600,
+        "t_star": 1.0606601717798212,
+        "d/D": -1.9525602409638552,
+        "valid": false,
+        "air_mean": 0.25986960530281067,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 750,
+        "t_star": 1.3258252147247767,
+        "d/D": -5.0619650499286735,
+        "valid": false,
+        "air_mean": 0.2873648703098297,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 900,
+        "t_star": 1.590990257669732,
+        "d/D": -7.184808209959623,
+        "valid": false,
+        "air_mean": 0.22355400025844574,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 1050,
+        "t_star": 1.8561553006146874,
+        "d/D": -0.7518825301204828,
+        "valid": false,
+        "air_mean": 0.36447852849960327,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 1200,
+        "t_star": 2.1213203435596424,
+        "d/D": -5.8823360184119675,
+        "valid": false,
+        "air_mean": 0.4320284128189087,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 1350,
+        "t_star": 2.386485386504598,
+        "d/D": -6.275879514321295,
+        "valid": false,
+        "air_mean": 0.44690191745758057,
+        "reason": "\u6c14\u76f8\u7eaf\u5ea6\u95e8\u672a\u8fc7\uff1a\u76d1\u6d4b\u6846\u5747\u503c\u5cf0\u503c 0.544 > 0.150\uff08\u9608\u503c=0.25\u00d7\u754c\u9762\u9608\u503c\uff09\u2014\u2014\u6c34\u7ec4\u5206\u5df2\u6c61\u67d3\u6c14\u76f8\uff0c\u300e\u6db2\u6ef4\u533a\u57df\u300f\u8bed\u4e49\u4e0d\u53ef\u4fe1"
+      },
+      {
+        "step": 1500,
+        "t_star": 2.6516504294495533,
+        "d/D": null,
+        "valid": false,
+        "air_mean": 0.5437306761741638,
+        "reason": "above-surface region 2px < 10% of initial droplet"
+      }
+    ],
+    "shape_ratio": [
+      {
+        "step": 150,
+        "t_star": 0.2651650429449553,
+        "lambda": 0.4,
+        "W": 32.0,
+        "H": 80.0
+      },
+      {
+        "step": 300,
+        "t_star": 0.5303300858899106,
+        "lambda": 0.256,
+        "W": 32.0,
+        "H": 125.0
+      },
+      {
+        "step": 450,
+        "t_star": 0.795495128834866,
+        "lambda": 6.4,
+        "W": 32.0,
+        "H": 5.0
+      },
+      {
+        "step": 600,
+        "t_star": 1.0606601717798212,
+        "lambda": 1.4545454545454546,
+        "W": 16.0,
+        "H": 11.0
+      },
+      {
+        "step": 750,
+        "t_star": 1.3258252147247767,
+        "lambda": 0.256,
+        "W": 32.0,
+        "H": 125.0
+      },
+      {
+        "step": 900,
+        "t_star": 1.590990257669732,
+        "lambda": 1.4545454545454546,
+        "W": 32.0,
+        "H": 22.0
+      },
+      {
+        "step": 1050,
+        "t_star": 1.8561553006146874,
+        "lambda": 1.3333333333333333,
+        "W": 16.0,
+        "H": 12.0
+      },
+      {
+        "step": 1200,
+        "t_star": 2.1213203435596424,
+        "lambda": 0.256,
+        "W": 32.0,
+        "H": 125.0
+      },
+      {
+        "step": 1350,
+        "t_star": 2.386485386504598,
+        "lambda": 0.6530612244897959,
+        "W": 32.0,
+        "H": 49.0
+      }
+    ]
+  }
+}

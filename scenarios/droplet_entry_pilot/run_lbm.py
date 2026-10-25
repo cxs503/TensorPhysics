@@ -173,6 +173,7 @@ def run_with_snapshots(output_dir: Path):
             "density_ratio": rho_water / rho_air,
             "tau": tau,
             "g": g_lattice,
+            "u0": abs(float(vy_init)),  # 液滴初始下落速度（格子/步），v2 抽取器运动学接触时刻用
             "n_steps": n_steps,
             "output_interval": output_interval,
         },
