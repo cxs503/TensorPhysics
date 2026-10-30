@@ -1,0 +1,321 @@
+# ice_anchor → SIR 七腿输出量映射表（机器可读 YAML）
+# 版本: 1.0.0 (m598)
+# 生成时间: 2026-01-01
+#
+# SIR 七腿定义:
+#   SIR-1: 流场/水动力（Flow/Hydrodynamics）
+#   SIR-2: 流场摄入（Flow Ingest）
+#   SIR-3: 浮力/自由面（Buoyancy/Free Surface）
+#   SIR-4: 冰-船相互作用（Ice-Ship Interaction）
+#   SIR-5: 断裂传播（Fracture Propagation）
+#   SIR-6: 冰载荷统计（Ice Load Statistics）
+#   SIR-7: 总体性能评估（Overall Performance）
+
+mapping_version: "1.0.0"
+mission_id: 598
+generated_at: "2026-01-01T00:00:00Z"
+
+sir_legs:
+  SIR-1:
+    name: "流场/水动力"
+    description: "LBM 流场求解、水动力载荷"
+    output_quantities:
+      - "velocity_field"
+      - "pressure_field"
+      - "hydrodynamic_resistance"
+  SIR-2:
+    name: "流场摄入"
+    description: "LBM 流场快照提取与传递"
+    output_quantities:
+      - "lbm_snapshot"
+      - "nodal_forces"
+      - "ledger_a"
+  SIR-3:
+    name: "浮力/自由面"
+    description: "浮力计算、自由面追踪"
+    output_quantities:
+      - "buoyancy_force"
+      - "free_surface_elevation"
+      - "draft_change"
+  SIR-4:
+    name: "冰-船相互作用"
+    description: "冰载荷、冰-船接触力"
+    output_quantities:
+      - "ice_resistance_total"
+      - "ice_pressure_distribution"
+      - "contact_force_history"
+  SIR-5:
+    name: "断裂传播"
+    description: "渐进裂纹扩展、键断裂演化"
+    output_quantities:
+      - "crack_propagation_path"
+      - "bond_breakage_history"
+      - "fracture_dissipation"
+  SIR-6:
+    name: "冰载荷统计"
+    description: "冰载荷极值、概率分布"
+    output_quantities:
+      - "peak_ice_load"
+      - "load_probability_distribution"
+      - "return_period_load"
+  SIR-7:
+    name: "总体性能评估"
+    description: "航速-冰厚曲线、功率需求"
+    output_quantities:
+      - "speed_ice_curve"
+      - "required_power"
+      - "performance_index"
+
+# 锚点 → SIR 腿映射
+anchor_to_sir:
+  A1:
+    anchor_id: "A1"
+    name: "Lindqvist (1989) 平整冰总阻力"
+    category: "resistance"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "benchmark"
+        notes: "Lindqvist 总阻力 vs LBM 水动力阻力对标"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "primary"
+        notes: "直接对标冰阻力总值"
+      - leg: "SIR-7"
+        output: "speed_ice_curve"
+        calibration_type: "validation"
+        notes: "航速-冰厚曲线验证"
+  A2:
+    anchor_id: "A2"
+    name: "Keinonen (1983) 破冰阻力半经验式"
+    category: "resistance"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "benchmark"
+        notes: "Keinonen 阻力 vs LBM 水动力阻力对标"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "secondary"
+        notes: "辅助对标冰阻力"
+  A3:
+    anchor_id: "A3"
+    name: "Huang et al. (2014) 冰阻力修正公式"
+    category: "resistance"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "benchmark"
+        notes: "Huang 修正阻力 vs LBM 对标"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "primary"
+        notes: "修正后冰阻力对标"
+      - leg: "SIR-7"
+        output: "speed_ice_curve"
+        calibration_type: "validation"
+        notes: "航速-冰厚曲线验证"
+  A4:
+    anchor_id: "A4"
+    name: "Enkvist (1972) 早期冰阻力公式"
+    category: "resistance"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "baseline"
+        notes: "历史基准对比"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "secondary"
+        notes: "辅助对标"
+  A5:
+    anchor_id: "A5"
+    name: "Riska (1997) 双作用船冰阻力"
+    category: "resistance"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "benchmark"
+        notes: "DAS 前进/倒退模式对标"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "primary"
+        notes: "双模式冰阻力对标"
+      - leg: "SIR-7"
+        output: "speed_ice_curve"
+        calibration_type: "validation"
+        notes: "双模式航速-冰厚曲线"
+  A6:
+    anchor_id: "A6"
+    name: "冰压溃强度典型值（ITTC/ISO 19906）"
+    category: "strength"
+    sir_legs:
+      - leg: "SIR-4"
+        output: "ice_pressure_distribution"
+        calibration_type: "material"
+        notes: "压溃强度用于接触压力标定"
+      - leg: "SIR-5"
+        output: "fracture_dissipation"
+        calibration_type: "material"
+        notes: "压溃强度影响断裂耗散"
+      - leg: "SIR-6"
+        output: "peak_ice_load"
+        calibration_type: "material"
+        notes: "压溃强度决定峰值载荷上限"
+  A7:
+    anchor_id: "A7"
+    name: "冰弯曲强度典型值（ITTC/ISO 19906）"
+    category: "strength"
+    sir_legs:
+      - leg: "SIR-4"
+        output: "ice_pressure_distribution"
+        calibration_type: "material"
+        notes: "弯曲强度用于冰板响应标定"
+      - leg: "SIR-5"
+        output: "crack_propagation_path"
+        calibration_type: "material"
+        notes: "弯曲强度决定裂纹起始"
+      - leg: "SIR-6"
+        output: "peak_ice_load"
+        calibration_type: "material"
+        notes: "弯曲强度影响载荷统计"
+  A8:
+    anchor_id: "A8"
+    name: "冰压痕强度（Riska 压痕模型）"
+    category: "strength"
+    sir_legs:
+      - leg: "SIR-4"
+        output: "contact_force_history"
+        calibration_type: "primary"
+        notes: "压痕力-位移关系对标"
+      - leg: "SIR-5"
+        output: "fracture_dissipation"
+        calibration_type: "secondary"
+        notes: "压痕过程能量耗散"
+      - leg: "SIR-6"
+        output: "peak_ice_load"
+        calibration_type: "primary"
+        notes: "压痕峰值载荷对标"
+  A9:
+    anchor_id: "A9"
+    name: "破冰弯曲断裂厚度-线载荷关系（Nevel/Kerr）"
+    category: "fracture"
+    sir_legs:
+      - leg: "SIR-5"
+        output: "crack_propagation_path"
+        calibration_type: "primary"
+        notes: "径向/环向裂纹起始线载荷对标"
+      - leg: "SIR-6"
+        output: "peak_ice_load"
+        calibration_type: "secondary"
+        notes: "断裂载荷统计"
+  A10:
+    anchor_id: "A10"
+    name: "ACECRC 模型试验数据集"
+    category: "dataset"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "experimental"
+        notes: "ACECRC 试验阻力 vs 计算阻力"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "experimental"
+        notes: "试验冰阻力对标"
+      - leg: "SIR-6"
+        output: "load_probability_distribution"
+        calibration_type: "experimental"
+        notes: "试验载荷分布对标"
+      - leg: "SIR-7"
+        output: "speed_ice_curve"
+        calibration_type: "experimental"
+        notes: "试验航速-冰厚曲线对标"
+  A11:
+    anchor_id: "A11"
+    name: "HSVA 冰水池试验数据集"
+    category: "dataset"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "experimental"
+        notes: "HSVA 试验阻力 vs 计算阻力"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "experimental"
+        notes: "试验冰阻力对标"
+      - leg: "SIR-6"
+        output: "load_probability_distribution"
+        calibration_type: "experimental"
+        notes: "试验载荷分布对标"
+      - leg: "SIR-7"
+        output: "speed_ice_curve"
+        calibration_type: "experimental"
+        notes: "试验航速-冰厚曲线对标"
+  A12:
+    anchor_id: "A12"
+    name: "Arctech 冰池试验数据集"
+    category: "dataset"
+    sir_legs:
+      - leg: "SIR-1"
+        output: "hydrodynamic_resistance"
+        calibration_type: "experimental"
+        notes: "Arctech 试验阻力 vs 计算阻力"
+      - leg: "SIR-4"
+        output: "ice_resistance_total"
+        calibration_type: "experimental"
+        notes: "试验冰阻力对标"
+      - leg: "SIR-6"
+        output: "load_probability_distribution"
+        calibration_type: "experimental"
+        notes: "试验载荷分布对标"
+      - leg: "SIR-7"
+        output: "speed_ice_curve"
+        calibration_type: "experimental"
+        notes: "试验航速-冰厚曲线对标"
+  A13:
+    anchor_id: "A13"
+    name: "冰热物理性质（导热系数/比热）"
+    category: "thermal"
+    sir_legs:
+      - leg: "SIR-3"
+        output: "buoyancy_force"
+        calibration_type: "material"
+        notes: "热物理性质影响冰浮力计算"
+      - leg: "SIR-4"
+        output: "ice_pressure_distribution"
+        calibration_type: "material"
+        notes: "温度相关强度影响压力分布"
+  A14:
+    anchor_id: "A14"
+    name: "冰密度-盐度关系（Cox & Weeks / UNESCO）"
+    category: "thermal"
+    sir_legs:
+      - leg: "SIR-3"
+        output: "buoyancy_force"
+        calibration_type: "material"
+        notes: "冰密度直接影响浮力"
+      - leg: "SIR-4"
+        output: "ice_pressure_distribution"
+        calibration_type: "material"
+        notes: "密度影响冰板惯性载荷"
+
+# 覆盖矩阵（锚点 × SIR 腿）
+coverage_matrix:
+  # rows = anchors, cols = SIR legs
+  # 1 = covered, 0 = not covered
+  headers: ["anchor", "SIR-1", "SIR-2", "SIR-3", "SIR-4", "SIR-5", "SIR-6", "SIR-7"]
+  rows:
+    - ["A1", 1, 0, 0, 1, 0, 0, 1]
+    - ["A2", 1, 0, 0, 1, 0, 0, 0]
+    - ["A3", 1, 0, 0, 1, 0, 0, 1]
+    - ["A4", 1, 0, 0, 1, 0, 0, 0]
+    - ["A5", 1, 0, 0, 1, 0, 0, 1]
+    - ["A6", 0, 0, 0, 1, 1, 1, 0]
+    - ["A7", 0, 0, 0, 1, 1, 1, 0]
+    - ["A8", 0, 0, 0, 1, 1, 1, 0]
+    - ["A9", 0, 0, 0, 0, 1, 1, 0]
+    - ["A10", 1, 0, 0, 1, 0, 1, 1]
+    - ["A11", 1, 0, 0, 1, 0, 1, 1]
+    - ["A12", 1, 0, 0, 1, 0, 1, 1]
+    - ["A13", 0, 0, 1, 1, 0, 0, 0]
+    - ["A14", 0, 0, 1, 1, 0, 0, 0]
