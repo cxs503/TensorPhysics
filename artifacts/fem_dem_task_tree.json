@@ -1,0 +1,323 @@
+{
+  "schema_version": "1.0.0",
+  "mission_id": "m605",
+  "title": "FEM/DEM 成组开发任务树",
+  "created_utc": "2026-10-31T00:00:00Z",
+  "owner": "2026-10-31",
+  "context": {
+    "sir_line": "m579 G4 在跑（两自由度刚体+FEM船体+DEM冰层断裂-再接触）",
+    "wedge_status": "S1-S4 已收官",
+    "m598_status": "破冰锚库刚成",
+    "g5_g6_status": "G5/G6 未派，G6 规模化等 G4 终态",
+    "constraint": "本树不重复 G4 在跑范围；不塞已覆盖能力；每节点必须有可失败判据"
+  },
+  "layers": {
+    "L1_foundation": "基础能力层 — FEM/DEM 内核补齐",
+    "L2_validation": "验证锚层 — 解析解/守恒/收敛基准",
+    "L3_integration": "应用集成层 — SIR/G6 规模化闭环"
+  },
+  "nodes": [
+    {
+      "id": "F01",
+      "layer": "L1_foundation",
+      "title": "Winkler 弹性地基板连续模型",
+      "goal": "在 TensorFEM ice_sheet 模块实现 Winkler 弹性地基板：k_w 参数化、板中心挠度与 Hetényi 解析解对比",
+      "gap_refs": ["GAP-FEM-P0", "GAP-DEAL-WINKLER"],
+      "acceptance_criteria": [
+        "center_deflection 与 Hetényi(1946) Sec.4.1 解析解相对误差 < 5%",
+        "k_w=0 退化到无地基自由板，误差 < 1e-10",
+        "pytest test_winkler_plate.py 全绿"
+      ],
+      "budget_hours": 16,
+      "depends_on": [],
+      "parallel_group": "A",
+      "blocks_m579": false,
+      "risk": "low"
+    },
+    {
+      "id": "F02",
+      "layer": "L1_foundation",
+      "title": "板-水附加质量集成到 FEM 质量矩阵",
+      "goal": "将 ice_sheet.py:28 water_added_mass_per_area 从占位零值接入动力学质量矩阵，使破冰频率/周期物理正确",
+      "gap_refs": ["GAP-FEM-P1", "GAP-FEM-ADDED-MASS"],
+      "acceptance_criteria": [
+        "附加质量修正后固有频率与流固耦合解析值误差 < 5%",
+        "质量矩阵正定性检验通过（所有特征值 > 0）",
+        "pytest test_added_mass_integration.py 全绿"
+      ],
+      "budget_hours": 12,
+      "depends_on": ["F01"],
+      "parallel_group": "B",
+      "blocks_m579": true,
+      "risk": "medium"
+    },
+    {
+      "id": "F03",
+      "layer": "L1_foundation",
+      "title": "FEM→DEM 碎片数据导出接口",
+      "goal": "实现 ice_fragments() 输出到 DEM 可消费格式的序列化：JSON schema + 质量守恒门",
+      "gap_refs": ["GAP-FEM-P2", "GAP-FEM-EXPORT"],
+      "acceptance_criteria": [
+        "导出 JSON 可被 TensorDEM 直接加载为初始颗粒场",
+        "导出前后总质量守恒误差 < 1e-12 kg",
+        "round-trip 测试：FEM碎片→DEM→FEM碎片 质量/动能守恒"
+      ],
+      "budget_hours": 10,
+      "depends_on": [],
+      "parallel_group": "A",
+      "blocks_m579": true,
+      "risk": "low"
+    },
+    {
+      "id": "F04",
+      "layer": "L1_foundation",
+      "title": "3D 船体曲面接触（STL/OBJ 三角网格）",
+      "goal": "在 TensorDEM 实现三角网格曲面接触检测，替代当前仅 wedge/polyline 的局限",
+      "gap_refs": ["GAP-DEM-G3", "GAP-DEM-SUBOFF"],
+      "acceptance_criteria": [
+        "SUBOFF 几何 STL 导入后接触力与解析球面接触误差 < 10%",
+        "接触检测 O(N) 复杂度（cell list 或 BVH）",
+        "pytest test_hull_mesh_contact.py 全绿"
+      ],
+      "budget_hours": 24,
+      "depends_on": [],
+      "parallel_group": "A",
+      "blocks_m579": true,
+      "risk": "high"
+    },
+    {
+      "id": "F05",
+      "layer": "L1_foundation",
+      "title": "DEM 切向摩擦与滚动阻力模型",
+      "goal": "在 dem3d.py 接触本构中增加 Coulomb 摩擦 + 滚动阻力矩，含恢复系数→阻尼映射",
+      "gap_refs": ["GAP-DEM-G4", "GAP-DEM-FRICTION"],
+      "acceptance_criteria": [
+        "斜面静止角测试：μ=0.3 时静止角 = atan(0.3) ± 2°",
+        "恢复系数 e 与 damping 映射误差 < 5%",
+        "能量耗散率单调非增"
+      ],
+      "budget_hours": 16,
+      "depends_on": [],
+      "parallel_group": "A",
+      "blocks_m579": false,
+      "risk": "medium"
+    },
+    {
+      "id": "F06",
+      "layer": "L1_foundation",
+      "title": "3D DEM↔流体双向耦合框架",
+      "goal": "为 dem3d.py 实现 exchange_state() 接口，对接 TensorLBM 3D 流场",
+      "gap_refs": ["GAP-DEM-G1", "GAP-DEM-COUPLING3D"],
+      "acceptance_criteria": [
+        "单颗粒沉降终端速度与 Stokes 解析解误差 < 10%",
+        "动量交换守恒：流体动量变化 = 颗粒动量变化（反号）",
+        "subcycling 整数比约束 + 时钟同步检查"
+      ],
+      "budget_hours": 20,
+      "depends_on": ["F05"],
+      "parallel_group": "B",
+      "blocks_m579": true,
+      "risk": "high"
+    },
+    {
+      "id": "F07",
+      "layer": "L1_foundation",
+      "title": "DEM 浮力与湿耦合模型",
+      "goal": "实现冰-水密度差浮力 + 浸水面积相关湿阻力，替代全局粘性阻尼",
+      "gap_refs": ["GAP-DEM-G2", "GAP-DEM-BUOYANCY"],
+      "acceptance_criteria": [
+        "自由浮冰稳态：浸没深度/总厚度 = rho_ice/rho_water ± 1%",
+        "湿阻力与浸水面积成正比（非全局 drag）",
+        "能量账本：浮力势能纳入总机械能"
+      ],
+      "budget_hours": 14,
+      "depends_on": ["F06"],
+      "parallel_group": "C",
+      "blocks_m579": false,
+      "risk": "medium"
+    },
+    {
+      "id": "F08",
+      "layer": "L1_foundation",
+      "title": "coupled_hull 大转动几何非线性",
+      "goal": "将 coupled_hull.py 从线弹性小应变升级到 co-rotational 壳，支持大转动",
+      "gap_refs": ["GAP-FEM-P3", "GAP-FEM-LARGE-ROTATION"],
+      "acceptance_criteria": [
+        "悬臂梁端部大转动（>90°）载荷-位移与文献误差 < 5%",
+        "刚体运动零应变能测试",
+        "physical_accuracy_qualified 可置 True"
+      ],
+      "budget_hours": 24,
+      "depends_on": ["F02"],
+      "parallel_group": "C",
+      "blocks_m579": true,
+      "risk": "high"
+    },
+    {
+      "id": "V01",
+      "layer": "L2_validation",
+      "title": "Hetényi 级数解验证锚",
+      "goal": "实现 Hetényi (1946) 级数解作为 Winkler 板的独立参考解，用于 F01 交叉验证",
+      "gap_refs": ["GAP-FEM-P5", "GAP-VALIDATION-HETENYI"],
+      "acceptance_criteria": [
+        "级数截断 N=50 项时与 FEM 解误差 < 3%",
+        "收敛性：N 加倍后解变化 < 0.1%",
+        "pytest test_hetenyi_series.py 全绿"
+      ],
+      "budget_hours": 8,
+      "depends_on": ["F01"],
+      "parallel_group": "B",
+      "blocks_m579": false,
+      "risk": "low"
+    },
+    {
+      "id": "V02",
+      "layer": "L2_validation",
+      "title": "DEM 大规模颗粒压测基准（10k-100k）",
+      "goal": "建立 >10k 颗粒的碎冰场基准，验证 cell list 性能与物理守恒",
+      "gap_refs": ["GAP-DEM-G7", "GAP-DEM-SCALE"],
+      "acceptance_criteria": [
+        "10k 颗粒 1000 步 wall-time < 60s（单核 CPU）",
+        "质量/动量/能量守恒残差 < 1e-10",
+        "cell list 邻居搜索时间占比 < 30%"
+      ],
+      "budget_hours": 12,
+      "depends_on": ["F05"],
+      "parallel_group": "B",
+      "blocks_m579": false,
+      "risk": "medium"
+    },
+    {
+      "id": "V03",
+      "layer": "L2_validation",
+      "title": "GPU cell list 原生空间搜索",
+      "goal": "将 dem3d.py CPU cell hashing 迁移到 GPU 原生实现，消除同步阻塞",
+      "gap_refs": ["GAP-DEM-G6", "GAP-DEM-G8", "GAP-DEM-GPU-SEARCH"],
+      "acceptance_criteria": [
+        "GPU cell list vs CPU 结果一致（力/位移误差 < 1e-12）",
+        "10k 颗粒 GPU 加速比 > 5x vs CPU",
+        "无 CUDA 同步阻塞（nsight 验证）"
+      ],
+      "budget_hours": 20,
+      "depends_on": ["V02"],
+      "parallel_group": "C",
+      "blocks_m579": false,
+      "risk": "high"
+    },
+    {
+      "id": "V04",
+      "layer": "L2_validation",
+      "title": "Mixed-Mode cohesive 非比例路径验证",
+      "goal": "扩展 Benzeggagh-Kenane 准则到非比例加载路径，验证混合断裂能量守恒",
+      "gap_refs": ["GAP-FEM-P4", "GAP-FEM-MIXED-MODE"],
+      "acceptance_criteria": [
+        "非比例路径 G_total = G_I + G_II 误差 < 3%",
+        "BK 准则裂纹扩展方向与实验定性一致",
+        "pytest test_mixed_mode_nonproportional.py 全绿"
+      ],
+      "budget_hours": 10,
+      "depends_on": [],
+      "parallel_group": "A",
+      "blocks_m579": false,
+      "risk": "low"
+    },
+    {
+      "id": "I01",
+      "layer": "L3_integration",
+      "title": "SIR 七腿船冰耦合全链集成",
+      "goal": "将 F01-F08 能力集成到 SIR 七腿场景：FEM船体+DEM冰层+流体耦合+断裂-再接触闭环",
+      "gap_refs": ["GAP-INTEGRATION-SIR7"],
+      "acceptance_criteria": [
+        "七腿同时接触力平衡残差 < 1%",
+        "全链质量/能量守恒门 ≤ 1e-10",
+        "连续运行 1000 步无崩溃"
+      ],
+      "budget_hours": 32,
+      "depends_on": ["F02", "F03", "F04", "F06", "F07", "F08"],
+      "parallel_group": "D",
+      "blocks_m579": true,
+      "risk": "high",
+      "note": "依赖 m579 G4 终态确认接口"
+    },
+    {
+      "id": "I02",
+      "layer": "L3_integration",
+      "title": "G6 规模化碎冰场（100k+ 颗粒）",
+      "goal": "在 GPU 加速 + 大规模 cell list 基础上，实现 100k+ 颗粒碎冰场仿真",
+      "gap_refs": ["GAP-INTEGRATION-G6-SCALE"],
+      "acceptance_criteria": [
+        "100k 颗粒 100 步 wall-time < 300s（GPU）",
+        "物理守恒门全绿",
+        "内存占用 < 16 GB"
+      ],
+      "budget_hours": 24,
+      "depends_on": ["V03", "V02", "I01"],
+      "parallel_group": "E",
+      "blocks_m579": false,
+      "risk": "high",
+      "note": "等 G4 终态后启动"
+    },
+    {
+      "id": "I03",
+      "layer": "L3_integration",
+      "title": "FEM cohesive→DEM 断裂碎片交接闭环",
+      "goal": "将 F03 导出接口 + V04 混合断裂 + FEM 碎片分析串联，实现连续→离散无缝交接",
+      "gap_refs": ["GAP-INTEGRATION-FEM-DEM-HANDOFF"],
+      "acceptance_criteria": [
+        "FEM 板断裂后碎片质量 = DEM 颗粒总质量（误差 < 1e-12）",
+        "碎片动能 = DEM 颗粒动能（误差 < 1e-10）",
+        "端到端 pytest 全绿"
+      ],
+      "budget_hours": 16,
+      "depends_on": ["F03", "V04"],
+      "parallel_group": "D",
+      "blocks_m579": true,
+      "risk": "medium"
+    },
+    {
+      "id": "I04",
+      "layer": "L3_integration",
+      "title": "破冰力时间序列与实验对标",
+      "goal": "用完整集成链路与模型试验/文献数据对标破冰力时历",
+      "gap_refs": ["GAP-INTEGRATION-VALIDATION"],
+      "acceptance_criteria": [
+        "峰值破冰力与文献误差 < 15%",
+        "力时历主频与实验 FFT 主频误差 < 10%",
+        "至少 3 个工况对标"
+      ],
+      "budget_hours": 20,
+      "depends_on": ["I01", "I03"],
+      "parallel_group": "E",
+      "blocks_m579": false,
+      "risk": "high"
+    }
+  ],
+  "parallel_groups": {
+    "A": "可立即启动（无依赖）：F01, F03, F04, F05, V04",
+    "B": "依赖 A 组部分完成：F02, F06, V01, V02",
+    "C": "依赖 B 组：F07, F08, V03",
+    "D": "集成层第一批：I01, I03",
+    "E": "集成层第二批（等 G4 终态）：I02, I04"
+  },
+  "dag_edges": [
+    ["F01", "F02"], ["F01", "V01"],
+    ["F02", "F08"],
+    ["F03", "I03"],
+    ["F04", "I01"],
+    ["F05", "F06"], ["F05", "V02"],
+    ["F06", "F07"],
+    ["F06", "I01"],
+    ["F07", "I01"],
+    ["F08", "I01"],
+    ["F02", "I01"], ["F03", "I01"],
+    ["V02", "V03"],
+    ["V03", "I02"], ["V02", "I02"],
+    ["I01", "I02"],
+    ["V04", "I03"],
+    ["I01", "I04"], ["I03", "I04"]
+  ],
+  "total_nodes": 16,
+  "total_budget_hours": 278,
+  "m579_blocking_nodes": ["F02", "F03", "F04", "F06", "F08", "I01", "I03"],
+  "g4_wait_nodes": ["I02", "I04"]
+}
