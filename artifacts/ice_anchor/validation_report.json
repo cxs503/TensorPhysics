@@ -1,0 +1,132 @@
+{
+  "mission_id": 598,
+  "timestamp": "2026-10-30T23:14:19Z",
+  "n_anchors": 14,
+  "standard_case": {
+    "h": 1.0,
+    "B": 20.0,
+    "L": 120.0,
+    "phi": 30.0,
+    "V": 3.0,
+    "sigma_f": 500000.0,
+    "sigma_c": 5000000.0,
+    "rho_i": 900.0,
+    "T_C": -10.0
+  },
+  "anchor_results": [
+    {
+      "anchor_id": "A1",
+      "R_total_kN": 10885.509487990106,
+      "R_c_kN": 10779.015758355796,
+      "R_f_kN": 35.64337217256083,
+      "R_s_kN": 70.85035746174796
+    },
+    {
+      "anchor_id": "A2",
+      "R_total_kN": 2736.7938551896154
+    },
+    {
+      "anchor_id": "A3",
+      "R_total_kN": 10921.79451961674,
+      "C_B": 1.0033333333333334,
+      "C_phi": 1.0,
+      "C_h": 1.0
+    },
+    {
+      "anchor_id": "A4",
+      "R_total_kN": 2626.699597134232
+    },
+    {
+      "anchor_id": "A5",
+      "R_total_kN": 8698.960876063853,
+      "mode": "ahead"
+    },
+    {
+      "anchor_id": "A6",
+      "sigma_c_MPa": 4.8
+    },
+    {
+      "anchor_id": "A7",
+      "sigma_f_kPa": 575.0
+    },
+    {
+      "anchor_id": "A8",
+      "F_kN": 29068.88370749727,
+      "p_MPa": 1.1180339887498947
+    },
+    {
+      "anchor_id": "A9",
+      "q_kN_per_m": 23.27503237481629,
+      "l_m": 14.60792812335169
+    },
+    {
+      "anchor_id": "A10",
+      "n_data_points": 25,
+      "basin": "ACECRC Ice Tank, Hobart"
+    },
+    {
+      "anchor_id": "A11",
+      "n_data_points": 36,
+      "basin": "HSVA Ice Tank, Hamburg"
+    },
+    {
+      "anchor_id": "A12",
+      "n_data_points": 36,
+      "basin": "Arctech Ice Tank, Helsinki"
+    },
+    {
+      "anchor_id": "A13",
+      "k_W_mK": 2.3100000000000005,
+      "c_J_kgK": 2180.0
+    },
+    {
+      "anchor_id": "A14",
+      "rho_kg_m3": 917.0
+    }
+  ],
+  "deviation_table": [
+    {
+      "anchor_id": "A2",
+      "R_total_kN": 2736.79,
+      "R_base_kN": 10885.51,
+      "relative_deviation_pct": -74.86,
+      "within_15pct": false
+    },
+    {
+      "anchor_id": "A3",
+      "R_total_kN": 10921.79,
+      "R_base_kN": 10885.51,
+      "relative_deviation_pct": 0.33,
+      "within_15pct": true
+    },
+    {
+      "anchor_id": "A4",
+      "R_total_kN": 2626.7,
+      "R_base_kN": 10885.51,
+      "relative_deviation_pct": -75.87,
+      "within_15pct": false
+    },
+    {
+      "anchor_id": "A5",
+      "R_total_kN": 8698.96,
+      "R_base_kN": 10885.51,
+      "relative_deviation_pct": -20.09,
+      "within_15pct": false
+    }
+  ],
+  "figures": {
+    "coverage_heatmap": "/root/tp-agent/work/m598/artifacts/ice_anchor/coverage_heatmap.png",
+    "resistance_comparison": "/root/tp-agent/work/m598/artifacts/ice_anchor/resistance_comparison.png",
+    "fracture_load_vs_thickness": "/root/tp-agent/work/m598/artifacts/ice_anchor/fracture_load_vs_thickness.png",
+    "strength_vs_temperature": "/root/tp-agent/work/m598/artifacts/ice_anchor/strength_vs_temperature.png",
+    "architecture_diagram": "/root/tp-agent/work/m598/artifacts/ice_anchor/architecture_diagram.png"
+  },
+  "coverage_summary": {
+    "total_anchors": 14,
+    "resistance_anchors": 5,
+    "strength_anchors": 3,
+    "fracture_anchors": 1,
+    "dataset_anchors": 3,
+    "thermal_anchors": 2
+  }
+}
