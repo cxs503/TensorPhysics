@@ -20,6 +20,13 @@ from .research_runner import ResearchTaskRunner, ResearchValidator
 from .research_policy import ResearchDecision, decide_next_action
 from .agent_subprocess import SubprocessAgentBackend
 from .scheduler import Simulation, SimulationError, SimulationState
+from .ice_sheet import (
+    WinklerPlateParams,
+    navier_center_deflection,
+    navier_deflection_field,
+    solve_winkler_plate_fd,
+    winkler_kw_parametric,
+)
 
 __all__ = [
     "ArtifactStore", "ArtifactStoreError", "LocalArtifactStore", "S3ArtifactStore",
@@ -35,5 +42,7 @@ __all__ = [
     "ResearchRuntimeError", "ResearchTask", "ResearchTaskStore", "TaskEvent",
     "TaskNotFoundError", "TaskStatus", "ResearchTaskRunner", "ResearchValidator",
     "SubprocessAgentBackend",
+    "WinklerPlateParams", "navier_center_deflection", "navier_deflection_field",
+    "solve_winkler_plate_fd", "winkler_kw_parametric",
 ]
 __version__ = "0.1.0"

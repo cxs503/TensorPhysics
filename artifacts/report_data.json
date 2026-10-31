@@ -1,0 +1,42 @@
+{
+  "params": {
+    "a": 100.0,
+    "b": 100.0,
+    "h": 2.0,
+    "E": 5000000000.0,
+    "nu": 0.33,
+    "k_w": 10055.25,
+    "q": 1000.0,
+    "D": 3740695021.1349263,
+    "char_length": 24.6967529411908
+  },
+  "navier_center_deflection_m": 0.06326851001336477,
+  "navier_center_deflection_mm": 63.26851001336477,
+  "fd_center_deflection_m": 0.06324647042237705,
+  "fd_center_deflection_mm": 63.24647042237705,
+  "center_deflection_relative_error": 0.000348350087319315,
+  "kw0_free_plate_error_m": 0.0,
+  "convergence": {
+    "grids": [
+      11,
+      21,
+      31,
+      41,
+      51,
+      61
+    ],
+    "relative_errors": [
+      0.008722529036005766,
+      0.002178131722108839,
+      0.0009677858412943897,
+      0.0005443229786950164,
+      0.0003483496370698671,
+      0.00024190297913422094
+    ]
+  },
+  "acceptance": {
+    "center_deflection_relative_error_lt_0.05": true,
+    "kw0_free_plate_error_lt_1e10": true,
+    "pytest_test_winkler_plate_PASS": true
+  }
+}
