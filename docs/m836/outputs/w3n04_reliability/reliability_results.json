@@ -1,0 +1,1101 @@
+{
+  "node": "W3-N04",
+  "title": "Structural reliability of a polar ship midship ice belt: FORM/SORM with ISO 19906 limit states",
+  "generated_utc": "2026-10-31T13:12:52+00:00",
+  "repository": "TensorPhysics",
+  "module": "tensorphysics.structural",
+  "branch": "agent/m791",
+  "criteria": {
+    "items": [
+      {
+        "id": "a",
+        "criterion": "closed-form linear/exponential beta vs analytic (max rel. error)",
+        "value": "0.2790%",
+        "limit": "< 0.5%",
+        "passed": true,
+        "detail": "linear: 0.0000%; exponential_lsf: 0.0000%; exponential_marginal: 0.2790%"
+      },
+      {
+        "id": "b",
+        "criterion": "FORM beta vs Monte Carlo 1e6 (max rel. difference over 3 limit states)",
+        "value": "0.8132%",
+        "limit": "< 2%",
+        "passed": true,
+        "detail": "yield: 0.31%; buckling: 0.81%; fatigue: 0.36%"
+      },
+      {
+        "id": "c1",
+        "criterion": "SORM beta vs Monte Carlo 1e6 on strongly nonlinear surface",
+        "value": "1.5565%",
+        "limit": "< 3%",
+        "passed": true,
+        "detail": "FORM error 15.207% vs SORM 1.647% against the quadrature reference"
+      },
+      {
+        "id": "c2",
+        "criterion": "SORM better than FORM on the nonlinear surface",
+        "value": "SORM 1.647% vs FORM 15.207%",
+        "limit": "SORM < FORM",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "id": "d",
+        "criterion": "design-point d beta / d theta vs central difference (h = 1e-4)",
+        "value": "0.0129%",
+        "limit": "< 1%",
+        "passed": true,
+        "detail": "18 non-zero parameter sensitivities over 3 limit states"
+      },
+      {
+        "id": "e",
+        "criterion": "pytest suite of the structural reliability module",
+        "value": "52 passed, 0 failed",
+        "limit": ">= 18 passed",
+        "passed": true,
+        "detail": "52 passed, 1 warning in 13.35s"
+      },
+      {
+        "id": "design",
+        "criterion": "target beta = 4.0 back-solved plate thickness (system)",
+        "value": "42.61 mm (achieved beta 4.001)",
+        "limit": "|beta - 4.0| <= 0.01",
+        "passed": true,
+        "detail": "nominal thickness 34.0 mm gives beta 2.501"
+      },
+      {
+        "id": "system",
+        "criterion": "Ditlevsen bounds bracket the simulated 1e6-sample union probability",
+        "value": "bounds [6.1949e-03, 6.1949e-03] vs simulated 6.2670e-03",
+        "limit": "within 10%",
+        "passed": true,
+        "detail": "simulation / upper bound - 1 = +1.16%"
+      }
+    ],
+    "all_passed": true,
+    "count": 8
+  },
+  "closed_form": {
+    "linear": {
+      "limit_state": "g = R - S, R~N(400,40), S~N(200,30)",
+      "reference": "beta = (mu_R - mu_S)/sqrt(sR^2 + sS^2)",
+      "reference_beta": 4.0,
+      "form_beta": 3.9999999999999996,
+      "form_pf": 3.1671241833120046e-05,
+      "relative_error": 1.1102230246251565e-16,
+      "design_point": [
+        272.0000000045475,
+        272.0000000045475
+      ],
+      "iterations": 2,
+      "converged": true
+    },
+    "exponential_lsf": {
+      "limit_state": "g = exp(2) - exp(X), X~N(1,0.5)  (failure iff X > 2)",
+      "reference": "beta = (ln(a)/b - mu_X)/sigma_X",
+      "reference_beta": 2.0,
+      "form_beta": 2.0,
+      "form_pf": 0.02275013194817922,
+      "relative_error": 0.0,
+      "design_point": [
+        2.0
+      ],
+      "iterations": 2,
+      "converged": true
+    },
+    "exponential_marginal": {
+      "limit_state": "g = R - E, R~N(3,0.3), E~Exp(rate=1)",
+      "reference": "Pf = int_0^inf exp(-e) Phi((e-3)/0.3) de  (Simpson, 12000 panels)",
+      "reference_beta": 1.625024581699128,
+      "reference_pf": 0.052078660575872494,
+      "form_beta": 1.6295576959552087,
+      "form_pf": 0.051597505746609665,
+      "relative_error": 0.0027895665746427577,
+      "mc_beta": 1.6216514484274673,
+      "mc_pf": 0.052439,
+      "mc_relative_error": 0.0020757429208447505,
+      "iterations": 4,
+      "converged": true
+    }
+  },
+  "sorm_case": {
+    "limit_state": "g = 3.0 - u1 + 1.0*(u2^2 - 1) in standard normal space",
+    "reference": "Pf = int phi(u2) Phi(-(a + c(u2^2-1))) du2  (Simpson, 40000 panels)",
+    "reference_beta": 2.35869910073123,
+    "reference_pf": 0.009169559559776897,
+    "form_beta": 2.0,
+    "form_pf": 0.02275013194817922,
+    "sorm_beta": 2.319862132961208,
+    "sorm_pf": 0.010174168306530736,
+    "sorm_curvatures": [
+      2.000000000055511
+    ],
+    "sorm_valid": true,
+    "form_relative_error": 0.15207497243714907,
+    "sorm_relative_error": 0.01646541848342682,
+    "sorm_vs_mc_relative_difference": 0.015564968431937137,
+    "form_vs_mc_relative_difference": 0.15129867626101356,
+    "mc_beta": 2.356541629025536,
+    "mc_pf": 0.009223,
+    "mc_samples": 1000000,
+    "design_point_u": [
+      2.0,
+      -0.0
+    ],
+    "a": 3.0,
+    "c": 1.0
+  },
+  "design": {
+    "thicknesses": [
+      28.0,
+      30.0,
+      32.0,
+      34.0,
+      36.0,
+      38.0,
+      40.0,
+      42.0,
+      44.0,
+      46.0,
+      50.0,
+      55.0,
+      60.0
+    ],
+    "beta_curves": {
+      "yield": [
+        1.4941890446421204,
+        1.9154717746569474,
+        2.3019397300194995,
+        2.660944171991123,
+        2.998011853809801,
+        3.317235693250572,
+        3.62164437818791,
+        3.9135002731403987,
+        4.194519955652562,
+        4.4660304097266454,
+        4.98450144271448,
+        5.593935764277706,
+        6.167742423083962
+      ],
+      "buckling": [
+        -Infinity,
+        0.3024284602673185,
+        1.578277015754753,
+        2.778146546345443,
+        3.906186439512191,
+        4.9657701505820215,
+        5.952442872851335,
+        6.627166406365898,
+        7.082320415984722,
+        7.421599348017196,
+        7.902213810787952,
+        8.295403971709671,
+        8.562036169420386
+      ],
+      "fatigue": [
+        -Infinity,
+        0.6671160232129237,
+        1.9831320394924952,
+        3.228953537747261,
+        4.410356244497178,
+        5.532648155047835,
+        6.600669817078866,
+        7.618812824083281,
+        8.591048683597975,
+        9.52096268032146,
+        11.266446546161701,
+        13.261523959511852,
+        15.081106549481182
+      ]
+    },
+    "system_curve": [
+      -Infinity,
+      0.29435569366496983,
+      1.5321081001667185,
+      2.500843206396052,
+      2.990612837184799,
+      3.317128114665163,
+      3.621643831426541,
+      3.9135002655017206,
+      4.194519954957782,
+      4.466030409552736,
+      4.984501442650687,
+      5.5939357641596406,
+      6.167742422418051
+    ],
+    "target_beta": 4.0,
+    "design_table": {
+      "3.0": {
+        "yield": {
+          "t_required": 36.0205078125,
+          "beta_achieved": 3.001369727114393,
+          "iterations": 10
+        },
+        "buckling": {
+          "t_required": 34.390869140625,
+          "beta_achieved": 3.004136413152201,
+          "iterations": 12
+        },
+        "fatigue": {
+          "t_required": 33.621826171875,
+          "beta_achieved": 2.998492911691055,
+          "iterations": 12
+        },
+        "system": {
+          "t_required": 36.05712890625,
+          "beta_achieved": 3.000713508417204,
+          "iterations": 11
+        },
+        "plt_gain": {
+          "yield": 0.05942670036764697,
+          "buckling": 0.011496151194853033,
+          "fatigue": -0.011122759650735281,
+          "system": 0.06050379136029416
+        }
+      },
+      "3.5": {
+        "yield": {
+          "t_required": 39.169921875,
+          "beta_achieved": 3.4969417570880195,
+          "iterations": 9
+        },
+        "buckling": {
+          "t_required": 35.269775390625,
+          "beta_achieved": 3.502423330338867,
+          "iterations": 12
+        },
+        "fatigue": {
+          "t_required": 34.44580078125,
+          "beta_achieved": 3.4976730344375926,
+          "iterations": 11
+        },
+        "system": {
+          "t_required": 39.169921875,
+          "beta_achieved": 3.496935866361124,
+          "iterations": 9
+        },
+        "plt_gain": {
+          "yield": 0.15205652573529416,
+          "buckling": 0.03734633501838225,
+          "fatigue": 0.013111787683823595,
+          "system": 0.15205652573529416
+        }
+      },
+      "4.0": {
+        "yield": {
+          "t_required": 42.6123046875,
+          "beta_achieved": 4.000618188759472,
+          "iterations": 10
+        },
+        "buckling": {
+          "t_required": 36.1669921875,
+          "beta_achieved": 3.997234597719766,
+          "iterations": 10
+        },
+        "fatigue": {
+          "t_required": 35.2880859375,
+          "beta_achieved": 3.9968682133101106,
+          "iterations": 10
+        },
+        "system": {
+          "t_required": 42.6123046875,
+          "beta_achieved": 4.000618185576285,
+          "iterations": 10
+        },
+        "plt_gain": {
+          "yield": 0.25330307904411775,
+          "buckling": 0.06373506433823528,
+          "fatigue": 0.03788488051470584,
+          "system": 0.25330307904411775
+        }
+      },
+      "4.5": {
+        "yield": {
+          "t_required": 46.2744140625,
+          "beta_achieved": 4.502602551122005,
+          "iterations": 10
+        },
+        "buckling": {
+          "t_required": 37.100830078125,
+          "beta_achieved": 4.497674357397046,
+          "iterations": 12
+        },
+        "fatigue": {
+          "t_required": 36.148681640625,
+          "beta_achieved": 4.495759790780897,
+          "iterations": 12
+        },
+        "system": {
+          "t_required": 46.2744140625,
+          "beta_achieved": 4.502602550969825,
+          "iterations": 10
+        },
+        "plt_gain": {
+          "yield": 0.3610121783088236,
+          "buckling": 0.09120088465073528,
+          "fatigue": 0.06319651884191169,
+          "system": 0.3610121783088236
+        }
+      }
+    },
+    "correlation_curve": [
+      {
+        "rho": -0.5,
+        "beta_yield": 3.3573322623869113,
+        "beta_buckling": 2.9710361670873624,
+        "beta_fatigue": 3.2289535377472567,
+        "natanf_rho0_load_pair": -0.5217295181304216
+      },
+      {
+        "rho": -0.25,
+        "beta_yield": 3.065403081393675,
+        "beta_buckling": 2.9185514451341197,
+        "beta_fatigue": 3.228953537747255,
+        "natanf_rho0_load_pair": -0.2596844796091319
+      },
+      {
+        "rho": 0.0,
+        "beta_yield": 2.8408446389017796,
+        "beta_buckling": 2.8545634262484314,
+        "beta_fatigue": 3.2289535377472625,
+        "natanf_rho0_load_pair": 0.0
+      },
+      {
+        "rho": 0.25,
+        "beta_yield": 2.660944171991123,
+        "beta_buckling": 2.778146546345443,
+        "beta_fatigue": 3.228953537747261,
+        "natanf_rho0_load_pair": 0.2573626845180989
+      },
+      {
+        "rho": 0.5,
+        "beta_yield": 2.5125879938813087,
+        "beta_buckling": 2.691935109379037,
+        "beta_fatigue": 3.2289535377472616,
+        "natanf_rho0_load_pair": 0.5124415636807678
+      },
+      {
+        "rho": 0.75,
+        "beta_yield": 2.3875375479633174,
+        "beta_buckling": 2.6015486600905415,
+        "beta_fatigue": 3.228953537747264,
+        "natanf_rho0_load_pair": 0.7652738977968694
+      }
+    ]
+  },
+  "fatigue_damage": {
+    "mean": 0.19079790002546737,
+    "p95": 0.30425733366377694,
+    "p99": 0.37615299550889575,
+    "pf_exceed": 0.000612,
+    "damage_allow": 0.5,
+    "samples": 1000000
+  },
+  "pytest": {
+    "command": "python -m pytest tests/test_structural_distributions.py tests/test_structural_reliability.py tests/test_structural_ice_reliability.py -q --tb=no",
+    "passed": 52,
+    "failed": 0,
+    "returncode": 0,
+    "summary_line": "52 passed, 1 warning in 13.35s",
+    "targets": [
+      "tests/test_structural_distributions.py",
+      "tests/test_structural_reliability.py",
+      "tests/test_structural_ice_reliability.py"
+    ]
+  },
+  "payload": {
+    "generated_utc": "2026-10-31T13:12:25+00:00",
+    "geometry": {
+      "t_nom_mm": 34.0,
+      "stiffener_spacing_mm": 350.0,
+      "frame_spacing_mm": 2400.0,
+      "alpha_bending": 0.5,
+      "k_buckling": 4.0,
+      "E_MPa": 206000.0,
+      "nu": 0.3,
+      "sigma_global_MPa": 95.0,
+      "psi_membrane": 1.5,
+      "sn_log_a": 11.764,
+      "sn_slope": 3.0,
+      "cycles": 500000.0,
+      "pressure_amplitude_MPa": 1.0,
+      "damage_allow": 0.5
+    },
+    "variables": [
+      {
+        "name": "p_ice",
+        "distribution": "gumbel_max",
+        "mean": 2.5,
+        "std": 0.7000000000000001,
+        "cov": 0.28,
+        "parameters": {
+          "loc": 2.184962754718014,
+          "scale": 0.5457877608635733
+        },
+        "units": "MPa"
+      },
+      {
+        "name": "fy",
+        "distribution": "lognormal",
+        "mean": 355.00000000000006,
+        "std": 28.399999999999917,
+        "cov": 0.07999999999999975,
+        "parameters": {
+          "mu_ln": 5.8689279859933965,
+          "sigma_ln": 0.07987244183095311
+        },
+        "units": "MPa"
+      },
+      {
+        "name": "dt_corr",
+        "distribution": "normal",
+        "mean": 2.0,
+        "std": 0.5,
+        "cov": 0.25,
+        "parameters": {
+          "mu": 2.0,
+          "sigma": 0.5
+        },
+        "units": "mm"
+      },
+      {
+        "name": "k_mod",
+        "distribution": "lognormal",
+        "mean": 1.0,
+        "std": 0.10000000000000005,
+        "cov": 0.10000000000000005,
+        "parameters": {
+          "mu_ln": -0.004975165426584045,
+          "sigma_ln": 0.0997513451195927
+        },
+        "units": "-"
+      }
+    ],
+    "correlation": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.25
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.25,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "natanf_rho0": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.2573626845180989
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.2573626845180989,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "nominal_stresses": {
+      "t_net": 32.0,
+      "bending_stress": 149.5361328125,
+      "applied_membrane_stress": 98.75,
+      "elastic_buckling_stress": 132.3981119494934,
+      "buckling_capacity": 132.3981119494934,
+      "fatigue_stress_range": 214002.28433776647,
+      "fatigue_damage": 0.1842419041882104,
+      "damage_allow": 0.5,
+      "yield_strength": 355.00000000000006
+    },
+    "components": {
+      "yield": {
+        "form_beta": 2.660944171991123,
+        "form_pf": 0.0038960937959192058,
+        "sorm_beta": 2.6601836331757918,
+        "sorm_pf": 0.0039049029253853665,
+        "sorm_curvatures": [
+          -0.0013744826997787152,
+          -0.0003203508582123019,
+          -4.838733980579137e-10
+        ],
+        "sorm_valid": true,
+        "mc_beta": 2.6528302565246356,
+        "mc_pf": 0.003991,
+        "mc_samples": 1000000,
+        "mc_failures": 3991,
+        "mc_std_error": 6.304817141678258e-05,
+        "form_vs_mc_relative": 0.0030585882555173465,
+        "sorm_vs_mc_relative": 0.0027718986667430298,
+        "is_beta": 2.6606860851620233,
+        "is_pf": 0.0038990811527239407,
+        "is_std_error": 1.3848437636684814e-05,
+        "is_vs_form_relative": 9.699069669185772e-05,
+        "design_point_x": [
+          4.934230213416171,
+          337.62634757678853,
+          2.115500836176393,
+          1.1357167433596247
+        ],
+        "design_point_u": [
+          2.485384769713261,
+          -0.5882902972491011,
+          0.23100167235278593,
+          0.7099571722742599
+        ],
+        "alpha": [
+          0.9340236431521358,
+          -0.22108329193293008,
+          0.0868119199051503,
+          0.2668064890951719
+        ],
+        "g_design": 5.684341886080802e-14,
+        "iterations": 4,
+        "converged": true,
+        "gradient_norm": 121.9768379204423,
+        "history": [
+          {
+            "iteration": 1,
+            "beta": 2.8385764258902806,
+            "g": -5.684341886080802e-14,
+            "step": 2.8385764258902806,
+            "alpha": [
+              0.7912497623028072,
+              -0.5449819361792113,
+              0.08553151153032974,
+              0.2638235460102949
+            ]
+          },
+          {
+            "iteration": 2,
+            "beta": 2.6609451112839184,
+            "g": 0.0,
+            "step": 0.17763131460636217,
+            "alpha": [
+              0.933723055012566,
+              -0.22156670696206782,
+              0.087017823800677,
+              0.26738988246562373
+            ]
+          },
+          {
+            "iteration": 3,
+            "beta": 2.660944171993002,
+            "g": 0.0,
+            "step": 9.392909166017205e-07,
+            "alpha": [
+              0.934023305884443,
+              -0.22108372488893474,
+              0.08681283630624702,
+              0.2668070128508519
+            ]
+          },
+          {
+            "iteration": 4,
+            "beta": 2.6609441719911233,
+            "g": 0.0,
+            "step": 1.878497357665765e-12,
+            "alpha": [
+              0.934023642584084,
+              -0.2210832922128927,
+              0.08681192340644073,
+              0.26680648971256715
+            ]
+          },
+          {
+            "iteration": 5,
+            "beta": 2.660944171991123,
+            "g": 5.684341886080802e-14,
+            "step": 0.0,
+            "alpha": [
+              0.9340235547734779,
+              -0.221083271428132,
+              0.08681191524496892,
+              0.2668064646292197
+            ],
+            "polish": true
+          }
+        ]
+      },
+      "buckling": {
+        "form_beta": 2.778146546345443,
+        "form_pf": 0.002733497779182572,
+        "sorm_beta": 2.7571524935188405,
+        "sorm_pf": 0.0029153576249553496,
+        "sorm_curvatures": [
+          -0.03981809297885241,
+          -0.004147653814629393,
+          0.0
+        ],
+        "sorm_valid": true,
+        "mc_beta": 2.7557373495416955,
+        "mc_pf": 0.002928,
+        "mc_samples": 1000000,
+        "mc_failures": 2928,
+        "mc_std_error": 5.4031720461225365e-05,
+        "form_vs_mc_relative": 0.008131833321297655,
+        "sorm_vs_mc_relative": 0.0005135264350865624,
+        "is_beta": 2.7551102770687463,
+        "is_pf": 0.002933617818942938,
+        "is_std_error": 1.0674995060156568e-05,
+        "is_vs_form_relative": 0.008291956127008563,
+        "design_point_x": [
+          3.147805906263181,
+          353.86942388032446,
+          2.4039892728868533,
+          1.2943646048785769
+        ],
+        "design_point_u": [
+          1.0049490164846888,
+          0.0,
+          0.8079785457737062,
+          2.4607613408876077
+        ],
+        "alpha": [
+          0.3617342554905435,
+          -0.0,
+          0.2908335812265911,
+          0.8857562624309342
+        ],
+        "g_design": -8.117240213323385e-11,
+        "iterations": 5,
+        "converged": true,
+        "gradient_norm": 14.046545717035137,
+        "history": [
+          {
+            "iteration": 1,
+            "beta": 2.791951893109405,
+            "g": 8.526512829121202e-14,
+            "step": 2.791951893109405,
+            "alpha": [
+              0.3175253994519778,
+              -0.0,
+              0.38014924201360184,
+              0.8687140924949622
+            ]
+          },
+          {
+            "iteration": 2,
+            "beta": 2.778180200122647,
+            "g": 0.0,
+            "step": 0.013771692986757955,
+            "alpha": [
+              0.35698728658614676,
+              -0.0,
+              0.2924621905479965,
+              0.8871448271368817
+            ]
+          },
+          {
+            "iteration": 3,
+            "beta": 2.7781469384737267,
+            "g": 0.0,
+            "step": 3.326164892047956e-05,
+            "alpha": [
+              0.36120937978184936,
+              -0.0,
+              0.29091590315849336,
+              0.8859434074742527
+            ]
+          },
+          {
+            "iteration": 4,
+            "beta": 2.7781465511329566,
+            "g": -5.684341886080802e-14,
+            "step": 3.873407701249221e-07,
+            "alpha": [
+              0.361676266103083,
+              -0.0,
+              0.29084155015488405,
+              0.8857773259918296
+            ]
+          },
+          {
+            "iteration": 5,
+            "beta": 2.778146546397607,
+            "g": 0.0,
+            "step": 4.735349445894599e-09,
+            "alpha": [
+              0.3617279108474625,
+              -0.0,
+              0.29083443978456336,
+              0.8857585715922424
+            ]
+          },
+          {
+            "iteration": 6,
+            "beta": 2.778146546345443,
+            "g": -8.117240213323385e-11,
+            "step": 0.0,
+            "alpha": [
+              0.3617267171776103,
+              -0.0,
+              0.29083348005684445,
+              0.8857556486679351
+            ],
+            "polish": true
+          }
+        ]
+      },
+      "fatigue": {
+        "form_beta": 3.228953537747261,
+        "form_pf": 0.0006212203923249061,
+        "sorm_beta": 3.2269216246904593,
+        "sorm_pf": 0.0006256486472922033,
+        "sorm_curvatures": [
+          -0.0043684831569675425,
+          0.0,
+          2.19698429308762e-10
+        ],
+        "sorm_valid": true,
+        "mc_beta": 3.217307121269811,
+        "mc_pf": 0.000647,
+        "mc_samples": 1000000,
+        "mc_failures": 647,
+        "mc_std_error": 2.5427964743565304e-05,
+        "form_vs_mc_relative": 0.003619926863821911,
+        "sorm_vs_mc_relative": 0.0029883697944427592,
+        "is_beta": 3.2269374761452903,
+        "is_pf": 0.0006256139888663054,
+        "is_std_error": 2.4741270299408794e-06,
+        "is_vs_form_relative": 0.0006243699633341327,
+        "design_point_x": [
+          2.961449765124293,
+          353.86942388032446,
+          2.489464160963267,
+          1.3525048065753744
+        ],
+        "design_point_u": [
+          0.791901269017023,
+          0.0,
+          0.9789283219265341,
+          2.973336958635849
+        ],
+        "alpha": [
+          0.24525012770053245,
+          -0.0,
+          0.303172018021596,
+          0.9208360887539029
+        ],
+        "g_design": -3.1086244689504383e-15,
+        "iterations": 3,
+        "converged": true,
+        "gradient_norm": 0.15701688443971937,
+        "history": [
+          {
+            "iteration": 1,
+            "beta": 3.2289847072662696,
+            "g": 0.0,
+            "step": 3.2289847072662696,
+            "alpha": [
+              0.24559300142785195,
+              -0.0,
+              0.2989521423287419,
+              0.9221234701745286
+            ]
+          },
+          {
+            "iteration": 2,
+            "beta": 3.2289535439470156,
+            "g": 0.0,
+            "step": 3.1163319254012833e-05,
+            "alpha": [
+              0.2452549972533585,
+              -0.0,
+              0.30311254469567317,
+              0.9208543704464722
+            ]
+          },
+          {
+            "iteration": 3,
+            "beta": 3.228953537748476,
+            "g": 0.0,
+            "step": 6.1985394594898935e-09,
+            "alpha": [
+              0.24525019621458646,
+              -0.0,
+              0.30317117932189924,
+              0.9208363466356417
+            ]
+          },
+          {
+            "iteration": 4,
+            "beta": 3.228953537747261,
+            "g": -3.1086244689504383e-15,
+            "step": 0.0,
+            "alpha": [
+              0.24525012752376435,
+              -0.0,
+              0.30317109440829726,
+              0.9208360887234904
+            ],
+            "polish": true
+          }
+        ]
+      }
+    },
+    "system": {
+      "limit_states": [
+        "yield",
+        "buckling",
+        "fatigue"
+      ],
+      "betas": [
+        2.660944171991123,
+        2.778146546345443,
+        3.228953537747261
+      ],
+      "pf_component": [
+        0.0038960937959192058,
+        0.002733497779182572,
+        0.0006212203923249061
+      ],
+      "bimodal_rho": [
+        [
+          1.0,
+          0.599441687298633,
+          0.5010734065769104
+        ],
+        [
+          0.599441687298633,
+          1.0,
+          0.9925243083678033
+        ],
+        [
+          0.5010734065769104,
+          0.9925243083678033,
+          1.0
+        ]
+      ],
+      "bimodal_pf": [
+        [
+          0.0,
+          0.00043469789733048835,
+          9.277937937312604e-05
+        ],
+        [
+          0.00043469789733048835,
+          0.0,
+          0.0006212059084514811
+        ],
+        [
+          9.277937937312604e-05,
+          0.0006212059084514811,
+          0.0
+        ]
+      ],
+      "pf_lower": 0.006194893677771289,
+      "pf_upper": 0.006194908161644714,
+      "beta_lower": 2.500842792367449,
+      "beta_upper": 2.5008436204250826,
+      "beta_point": 2.500843206396052,
+      "pf_point": 0.006194900919708001,
+      "simulated_union_pf": 0.006267,
+      "simulated_union_beta": 2.496742318530864,
+      "simulated_samples": 1000000,
+      "simulated_component_pf": {
+        "yield": 0.003796,
+        "buckling": 0.002952,
+        "fatigue": 0.000649
+      },
+      "bounds_contain_simulation_10pct": true,
+      "simulation_vs_upper_bound_relative": 0.011637273140163239
+    },
+    "sensitivities": {
+      "yield": {
+        "p_ice.loc": {
+          "analytic": -0.5609698906830091,
+          "finite_difference": -0.5609698908938818,
+          "relative_error": 3.759074544252614e-10
+        },
+        "p_ice.scale": {
+          "analytic": -2.825743588174317,
+          "finite_difference": -2.8257436009140022,
+          "relative_error": 4.508436399736835e-09
+        },
+        "fy.mu_ln": {
+          "analytic": 2.7679545894044932,
+          "finite_difference": 2.767954641667087,
+          "relative_error": 1.8881304274811978e-08
+        },
+        "fy.sigma_ln": {
+          "analytic": -1.62836082817278,
+          "finite_difference": -1.6283608201902449,
+          "relative_error": 4.902190582340441e-09
+        },
+        "dt_corr.mu": {
+          "analytic": -0.1736238398103006,
+          "finite_difference": -0.17362383956442962,
+          "relative_error": 1.416113080156655e-09
+        },
+        "dt_corr.sigma": {
+          "analytic": -0.040107397356491645,
+          "finite_difference": -0.04010739723003809,
+          "relative_error": 3.1528736515727516e-09
+        },
+        "k_mod.mu_ln": {
+          "analytic": -2.767954582473469,
+          "finite_difference": -2.7679545834401216,
+          "relative_error": 3.49229912072082e-10
+        },
+        "k_mod.sigma_ln": {
+          "analytic": -3.669442725798498,
+          "finite_difference": -3.669915787070056,
+          "relative_error": 0.00012890248687032468
+        }
+      },
+      "buckling": {
+        "p_ice.loc": {
+          "analytic": -0.13822237454140568,
+          "finite_difference": -0.13822236658686973,
+          "relative_error": 5.754883339808733e-08
+        },
+        "p_ice.scale": {
+          "analytic": -0.24384289326482372,
+          "finite_difference": -0.24384333443194317,
+          "relative_error": 1.8092236167735536e-06
+        },
+        "fy.mu_ln": {
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "relative_error": 0.0
+        },
+        "fy.sigma_ln": {
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "relative_error": 0.0
+        },
+        "dt_corr.mu": {
+          "analytic": -0.5816671624531822,
+          "finite_difference": -0.5816671407132823,
+          "relative_error": 3.7375155580634946e-08
+        },
+        "dt_corr.sigma": {
+          "analytic": -0.46997458804324044,
+          "finite_difference": -0.4699744149494478,
+          "relative_error": 3.6830471431332456e-07
+        },
+        "k_mod.mu_ln": {
+          "analytic": -9.189180944829737,
+          "finite_difference": -9.189180612042435,
+          "relative_error": 3.621512251913732e-08
+        },
+        "k_mod.sigma_ln": {
+          "analytic": -24.227336928052527,
+          "finite_difference": -24.227573712051967,
+          "relative_error": 9.773326964342954e-06
+        }
+      },
+      "fatigue": {
+        "p_ice.loc": {
+          "analytic": -1.0111994575012773e-10,
+          "finite_difference": 0.0,
+          "relative_error": 0.0
+        },
+        "p_ice.scale": {
+          "analytic": -1.438623664640204e-10,
+          "finite_difference": 0.0,
+          "relative_error": 0.0
+        },
+        "fy.mu_ln": {
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "relative_error": 0.0
+        },
+        "fy.sigma_ln": {
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "relative_error": 0.0
+        },
+        "dt_corr.mu": {
+          "analytic": -0.606344036043192,
+          "finite_difference": -0.6063440367543027,
+          "relative_error": 1.1727842326379608e-09
+        },
+        "dt_corr.sigma": {
+          "analytic": -0.5935673497139239,
+          "finite_difference": -0.5935673737011982,
+          "relative_error": 4.041204982076305e-08
+        },
+        "k_mod.mu_ln": {
+          "analytic": -9.55311274556041,
+          "finite_difference": -9.553112740922769,
+          "relative_error": 4.854586675363188e-10
+        },
+        "k_mod.sigma_ln": {
+          "analytic": -29.394790208669637,
+          "finite_difference": -29.394790288789835,
+          "relative_error": 2.725659808712848e-09
+        }
+      }
+    }
+  },
+  "figures": [
+    {
+      "name": "fig1_limit_state_fields.png",
+      "path": "docs/reports/w3n04/figures/fig1_limit_state_fields.png",
+      "caption": "Safety-margin fields g(p_ice, t_nom) for the three limit states with the remaining random variables frozen at their design-point values; the black curve is g = 0, the star is the design point projected on the nominal thickness line."
+    },
+    {
+      "name": "fig2_beta_vs_thickness.png",
+      "path": "docs/reports/w3n04/figures/fig2_beta_vs_thickness.png",
+      "caption": "Component and series-system reliability index versus as-built plating thickness; the intersection with the beta = 4.0 target defines the required thickness."
+    },
+    {
+      "name": "fig3_form_sorm_mc.png",
+      "path": "docs/reports/w3n04/figures/fig3_form_sorm_mc.png",
+      "caption": "Reliability indices from FORM, Breitung SORM and Monte Carlo (1e6 samples) for the three ice-belt limit states and the strongly nonlinear parabolic verification case."
+    },
+    {
+      "name": "fig4_convergence.png",
+      "path": "docs/reports/w3n04/figures/fig4_convergence.png",
+      "caption": "Convergence of the radial HL-RF iteration: |g| falls to the 1e-13 level within a few iterations for all three limit states."
+    },
+    {
+      "name": "fig5_sensitivity.png",
+      "path": "docs/reports/w3n04/figures/fig5_sensitivity.png",
+      "caption": "Design-point sensitivities of the yield-mode reliability index with respect to all eight distribution parameters, analytic versus central differences."
+    },
+    {
+      "name": "fig6_correlation.png",
+      "path": "docs/reports/w3n04/figures/fig6_correlation.png",
+      "caption": "Reliability index versus the physical correlation between the ice-pressure extreme and the load-model bias; the Nataf transformation re-solves the Gaussian-copula correlation at every point."
+    },
+    {
+      "name": "fig7_fatigue_damage.png",
+      "path": "docs/reports/w3n04/figures/fig7_fatigue_damage.png",
+      "caption": "Monte Carlo distribution of the Miner damage at the nominal thickness; the tail beyond D_allow is the fatigue failure probability."
+    },
+    {
+      "name": "fig8_sorm_geometry.png",
+      "path": "docs/reports/w3n04/figures/fig8_sorm_geometry.png",
+      "caption": "Parabolic limit-state surface in standard normal space: FORM replaces the surface by its tangent at the design point, SORM corrects with the principal curvature kappa = 2c."
+    }
+  ]
+}
