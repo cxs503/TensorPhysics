@@ -13,6 +13,7 @@ dependencies = []
 
 [project.optional-dependencies]
 test = ["pytest>=7.4"]
+physics = ["numpy>=1.24", "scipy>=1.10"]
 s3 = ["boto3>=1.34"]
 torch = ["torch>=2.1"]
 ice = ["numpy>=1.26"]
