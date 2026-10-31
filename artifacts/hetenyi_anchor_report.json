@@ -1,0 +1,77 @@
+{
+  "mission_id": 721,
+  "scenario_key": "SIR-PC2|V01",
+  "title": "Het\u00e9nyi (1946) Series Solution Anchor \u2013 Simply-Supported Square Plate on Winkler Foundation",
+  "timestamp": "2026-10-31T00:00:00Z",
+  "parameters": {
+    "a": 1.0,
+    "b": 1.0,
+    "E": 1000000000.0,
+    "nu": 0.3,
+    "h": 0.1,
+    "k_w": 100000.0,
+    "q": 10000.0,
+    "D": 91575.0915750916,
+    "char_length": 0.978237574896145,
+    "relative_stiffness": 1.0222465642931016
+  },
+  "acceptance_criteria": {
+    "series_truncation_100_error": {
+      "value": 1.0082795559537004e-11,
+      "threshold": 0.01,
+      "passed": true
+    },
+    "convergence_monotone": {
+      "value": true,
+      "threshold": true,
+      "passed": true
+    },
+    "pytest_test_hetenyi_anchor": {
+      "value": true,
+      "threshold": true,
+      "passed": true
+    }
+  },
+  "convergence_data": {
+    "n_terms": [
+      1,
+      2,
+      3,
+      5,
+      10,
+      20,
+      50,
+      100,
+      200,
+      500
+    ],
+    "w_center": [
+      0.00045307274390315376,
+      0.00044158152036658264,
+      0.0004424763333649467,
+      0.00044235305592144904,
+      0.00044234001573807257,
+      0.00044234043044326214,
+      0.00044234044408353226,
+      0.0004423404442214861,
+      0.000442340444225804,
+      0.0004423404442259461
+    ],
+    "relative_error": [
+      0.02426253311742305,
+      0.0017157008120555692,
+      0.00030720487076045945,
+      2.8511287329815992e-05,
+      9.686834634718888e-07,
+      3.115854351190337e-08,
+      3.2195531822328096e-10,
+      1.0082795559537004e-11,
+      3.213337298640626e-13,
+      0.0
+    ]
+  },
+  "reference": {
+    "n_terms": 500,
+    "w_center": 0.0004423404442259461
+  }
+}
