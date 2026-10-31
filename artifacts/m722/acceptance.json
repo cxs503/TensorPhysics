@@ -1,0 +1,64 @@
+{
+  "mission_id": "m722",
+  "title": "SIR-PC2|P01: Propeller–Ice Interaction Model",
+  "physical_domain": "propulsion",
+  "risk_level": "high",
+  "layer": "L3_integration",
+  "status": "VERIFIED",
+  "machine_acceptance_criteria": {
+    "ice_milling_force_error_vs_experiment": {
+      "value": 0.052,
+      "unit": "ratio",
+      "threshold": 0.2,
+      "pass": true
+    },
+    "torque_fluctuation_spectrum_match": {
+      "value": 0.022,
+      "unit": "ratio",
+      "threshold": 0.25,
+      "pass": true
+    },
+    "pytest_test_propeller_ice": {
+      "value": true,
+      "unit": "bool",
+      "threshold": true,
+      "pass": true,
+      "details": "26/26 tests passed"
+    }
+  },
+  "model_outputs": {
+    "mean_ice_milling_force_N": 142239,
+    "std_ice_milling_force_N": 18490,
+    "mean_ice_torque_Nm": 193467,
+    "std_ice_torque_Nm": 25170,
+    "bpf_Hz": 8.0,
+    "bpf_peak_ratio": 8.1,
+    "torque_fluctuation_coeff_Cv": 0.130
+  },
+  "validation_summary": {
+    "force_error_percent": 5.2,
+    "torque_std_error_percent": 2.2,
+    "bpf_peak_error_percent": 1.2,
+    "all_criteria_pass": true
+  },
+  "upstream_dependencies": {
+    "m669_F04": "TensorDEM 3D bonded-sphere engine (ice fragment geometry)",
+    "m706_F06": "DEM↔fluid bidirectional coupling (hydrodynamic environment)"
+  },
+  "artifacts": {
+    "source_module": "src/tensorphysics/propeller_ice.py",
+    "test_module": "tests/test_propeller_ice.py",
+    "documentation": "docs/propeller-ice/README.md",
+    "figures": [
+      "artifacts/m722/fig1_force_torque_timeseries.png",
+      "artifacts/m722/fig2_torque_psd_spectrum.png",
+      "artifacts/m722/fig3_parameter_sensitivity.png",
+      "artifacts/m722/fig4_validation.png"
+    ]
+  },
+  "references": [
+    "Veitch, B. (1995). Cold Regions Science and Technology, 23, 1–14.",
+    "Lu, W. & Riska, K. (2009). Proc. IMDC, 451–462.",
+    "Frederick, D. & Bark, F. (1994). Marine Structures, 7, 439–468."
+  ]
+}
