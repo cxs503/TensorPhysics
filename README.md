@@ -50,6 +50,11 @@ The main branch contains:
 - Initial RunManifest and ArtifactRef contracts with canonical config hashing, code-revision provenance, artifact checksums, resource/environment metadata, and explicit validation status.
 - An optional TensorDEM 2-D adapter with integer-ratio subcycling, per-substep load callbacks, and strict clock checks.
 - Structured diagnostics, a minimal runnable example, and a Python 3.10–3.12 GitHub Actions test matrix.
+- An ice-induced vibration analysis module (`src/tensorphysics/ice_vibration/`): modal ice-structure
+  coupled vibration, frequency lock-in criterion (5 % band, amplification factor), self-excited
+  velocity-weakening lock-in, Duffing harmonic balance, and transient whiplash response of the first
+  two hull-girder bending modes — see [Ice-induced vibration](docs/ICE_VIBRATION_LOCKIN.md) and
+  `scenarios/ice_vibration_lockin/`.
 
 The coupling example is deliberately a contract test, not a validated CFD/DEM/FEM physical model. It demonstrates data flow and a conservation invariant only. The field store supports temporal linear interpolation for data types that implement arithmetic, but does not perform unit conversion or conservative mesh/particle mapping. Its history is bounded to two distinct-time samples by default; set `history_limit` to retain more samples for subcycling.
 
