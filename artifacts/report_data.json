@@ -1,0 +1,48 @@
+{
+  "mission_id": 709,
+  "scenario_key": "SIR-PC2|F02",
+  "parameters": {
+    "a": 100.0,
+    "b": 100.0,
+    "h": 2.0,
+    "E": 5000000000.0,
+    "nu": 0.33,
+    "rho_i": 917.0,
+    "rho_w": 1025.0,
+    "g": 9.81,
+    "H": null
+  },
+  "results": {
+    "k1": 0.044428829381583664,
+    "D": 3740695021.1349263,
+    "k_w": 10055.25,
+    "m_struct_per_area": 1834.0,
+    "m_added_per_area": 23070.605601525844,
+    "added_mass_ratio": 12.57939236724419,
+    "omega_ref": 0.994478798099671,
+    "omega_fem": 0.9985768440977085,
+    "f_ref_Hz": 0.15827621651764961,
+    "f_fem_Hz": 0.15892844079525525,
+    "natural_frequency_error": 0.0041207977544301675,
+    "mass_matrix_positive_definite": true,
+    "min_eigenvalue": 70893.37391506262,
+    "pytest_passed": true
+  },
+  "acceptance_criteria": {
+    "natural_frequency_error_vs_fluid_solid": {
+      "value": 0.0041207977544301675,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "mass_matrix_positive_definite": {
+      "value": true,
+      "threshold": true,
+      "pass": true
+    },
+    "pytest_test_added_mass_integration": {
+      "value": "PASS",
+      "threshold": "PASS",
+      "pass": true
+    }
+  }
+}
