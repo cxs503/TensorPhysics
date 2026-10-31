@@ -1,0 +1,62 @@
+{
+  "mission_id": 668,
+  "task": "SIR-PC2|F03|FEM\u2192DEM ice fragment data export interface",
+  "schema_version": "1.0.0",
+  "acceptance_criteria": {
+    "dem_loadable": {
+      "required": true,
+      "actual": true,
+      "unit": "bool",
+      "pass": true
+    },
+    "mass_conservation_error": {
+      "required": "< 1e-12",
+      "actual_kg": 0.0,
+      "unit": "kg",
+      "pass": true
+    },
+    "round_trip_energy_conservation": {
+      "required": "< 1e-08",
+      "actual_ratio": 0.0,
+      "unit": "ratio",
+      "pass": true
+    }
+  },
+  "overall_pass": true,
+  "test_cases": {
+    "single_face": {
+      "status": "PASS",
+      "dem_loadable": true,
+      "mass_conservation_error_kg": 0.0,
+      "round_trip_energy_conservation": 0.0,
+      "n_fragments": 1,
+      "total_mass_kg": 9.17,
+      "total_energy_J": 1.0,
+      "round_trip_mass_match": true,
+      "round_trip_energy_match": true
+    },
+    "simple_6face": {
+      "status": "PASS",
+      "dem_loadable": true,
+      "mass_conservation_error_kg": 0.0,
+      "round_trip_energy_conservation": 0.0,
+      "n_fragments": 2,
+      "total_mass_kg": 4.585,
+      "total_energy_J": 1.0,
+      "round_trip_mass_match": true,
+      "round_trip_energy_match": true
+    },
+    "large_20face": {
+      "status": "PASS",
+      "dem_loadable": true,
+      "mass_conservation_error_kg": 0.0,
+      "round_trip_energy_conservation": 0.0,
+      "n_fragments": 12,
+      "total_mass_kg": 55.02,
+      "total_energy_J": 24.0,
+      "round_trip_mass_match": true,
+      "round_trip_energy_match": true
+    }
+  },
+  "pytest_result": "39 passed in 0.32s"
+}
