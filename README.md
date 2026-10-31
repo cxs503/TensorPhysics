@@ -38,6 +38,15 @@ The main branch contains:
 - Explicit PRE_STEP, AFTER_SOLVER, and POST_STEP coupling phases with stable callback ordering.
 - A two-reservoir coupling test that checks total-mass conservation and same-step field delivery.
 - A versioned JSON checkpoint envelope with atomic local-file writes and schema/clock validation.
+- An ice-structure domain module (`src/tensorphysics/ice/`): adfreeze (freeze-bond)
+  shear-strength model calibrated on the Frederking (1984) four-temperature data
+  (max residual 3.3 %, < 15 % acceptance), Stefan-problem contact-time kinetics,
+  three bond-degradation mechanisms (mechanical peel with a cohesive law, thermal
+  melting, brine/salinity), and a beset-vessel breakout criterion
+  `F = tau*A_contact + mu*p_n*A_contact` compared against bollard thrust for three
+  vessel classes. Report: [docs/reports/m789/w3n02_adfreeze_bond_report.md](docs/reports/m789/w3n02_adfreeze_bond_report.md),
+  artifacts: `artifacts/adfreeze_bond/`, tests: `tests/test_ice_adfreeze.py`.
+  Evidence grade: REAL (no mock/stub paths).
 - Initial RunManifest and ArtifactRef contracts with canonical config hashing, code-revision provenance, artifact checksums, resource/environment metadata, and explicit validation status.
 - An optional TensorDEM 2-D adapter with integer-ratio subcycling, per-substep load callbacks, and strict clock checks.
 - Structured diagnostics, a minimal runnable example, and a Python 3.10–3.12 GitHub Actions test matrix.
