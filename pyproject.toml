@@ -13,6 +13,8 @@ dependencies = []
 
 [project.optional-dependencies]
 test = ["pytest>=7.4"]
+physics = ["numpy>=1.24"]
+plots = ["matplotlib>=3.7"]
 s3 = ["boto3>=1.34"]
 torch = ["torch>=2.1"]
 
