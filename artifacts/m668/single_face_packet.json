@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "timestamp": "2026-10-31T03:43:34Z",
+  "packet_id": "7877da56e798b383",
+  "material": {
+    "density_kg_m3": 917.0,
+    "fracture_energy_density_J_m2": 100.0
+  },
+  "conservation": {
+    "fem_total_mass_kg": 9.17,
+    "dem_total_mass_kg": 9.17,
+    "mass_conservation_error_kg": 0.0,
+    "fem_total_energy_J": 1.0,
+    "dem_total_energy_J": 1.0,
+    "round_trip_energy_ratio": 0.0
+  },
+  "fragments": [
+    {
+      "fragment_id": 0,
+      "position_m": [
+        1.0,
+        0.5,
+        0.0
+      ],
+      "radius_m": 0.13365046175719758,
+      "mass_kg": 9.17,
+      "velocity_m_s": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_face_id": 0,
+      "source_volume_m3": 0.01,
+      "fracture_energy_J": 1.0
+    }
+  ]
+}
