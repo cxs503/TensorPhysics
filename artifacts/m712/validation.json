@@ -1,0 +1,211 @@
+{
+  "mission_id": 712,
+  "node": "SIR-PC2|F08",
+  "title": "coupled_hull 大转动几何非线性（冰区横摇 15 deg）",
+  "repo": "TensorPhysics",
+  "branch": "agent/m712",
+  "module": "src/tensorphysics/structure/",
+  "gates": {
+    "large_rotation_energy_conservation": {
+      "value": 0.0003655898215221682,
+      "unit": "ratio",
+      "threshold": 0.01,
+      "comparison": "<",
+      "pass": true,
+      "definition": "max_t |E(t)-E0|/E0 of the rolling section transient, E = T + U_strain + V_rollspring + V_gravity",
+      "roll_amplitude_deg": 20.00720047413496
+    },
+    "roll_angle_15deg_stress_error": {
+      "value": 0.022726589805328545,
+      "unit": "ratio",
+      "threshold": 0.1,
+      "comparison": "<",
+      "pass": true,
+      "definition": "|sigma_FEM - sigma_analytic| / sigma_analytic at 15 deg roll, sigma_analytic = |N|/A + |M|/W from exact global statics on the rigidly rolled section"
+    },
+    "pytest_test_geometric_nonlinear": {
+      "value": "PASS",
+      "unit": "bool",
+      "pass": true,
+      "definition": "pytest tests/test_geometric_nonlinear.py (8 tests)"
+    }
+  },
+  "case_parameters": {
+    "roll_deg": 15.0,
+    "ice_force_kN": 50.0,
+    "attached_mass_t": 20.0,
+    "n_elements": 8,
+    "belt_offset_y_m": 10.0,
+    "side_height_m": 8.0,
+    "section": {
+      "A_m2": 0.034,
+      "I_m4": 0.0008,
+      "E_Pa": 206000000000.0,
+      "W_m3": 0.004,
+      "c_m": 0.2,
+      "rho_kg_m3": 7850.0
+    },
+    "gravity_m_s2": 9.80665,
+    "energy_case": {
+      "initial_roll_deg": 20.0,
+      "roll_spring_n_m_per_rad": 6000000.0,
+      "attached_mass_t": 20.0,
+      "n_elements": 2,
+      "dt_s": 0.00015,
+      "n_steps": 20000,
+      "duration_s": 2.9999999999999996
+    }
+  },
+  "evidence": {
+    "stress_15deg": {
+      "sigma_fe_MPa": 207.93047618884077,
+      "sigma_analytic_MPa": 203.3099346995754,
+      "sigma_frozen_geometry_MPa": 105.76861764705883,
+      "frozen_geometry_error_ratio": 0.47976660460124715,
+      "root_moment_fe_MNm": 0.8109837029052934,
+      "root_moment_analytic_MNm": 0.7924739767003689,
+      "equilibrium_closure_ratio": 0.00015374962269976123,
+      "rigid_roll_strain_energy_J": 0.0,
+      "newton_iterations": 16,
+      "newton_residual": 0.0006161123680365208
+    },
+    "small_roll_1deg": {
+      "sigma_fe_MPa": 115.34837002398199,
+      "stress_error_ratio": 0.024655515154291412,
+      "frozen_geometry_error_ratio": 0.06044274938803304
+    },
+    "stress_vs_roll": {
+      "roll_deg": [
+        0.0,
+        1.0,
+        2.5,
+        5.0,
+        7.5,
+        10.0,
+        12.5,
+        15.0,
+        17.5,
+        20.0,
+        25.0
+      ],
+      "fe_mpa": [
+        108.37961249945778,
+        115.34837002398199,
+        125.72983269719997,
+        142.822341652219,
+        159.62232684671434,
+        176.09570727874976,
+        192.20921548441814,
+        207.93047618884077,
+        223.22808131375237,
+        238.07166108398496,
+        266.28085464141134
+      ],
+      "analytic_mpa": [
+        105.76861764705883,
+        112.57282893423256,
+        122.71420580582635,
+        139.4262004992229,
+        155.872789495502,
+        172.0226657777462,
+        187.84508713855328,
+        203.3099346995754,
+        218.38777024451556,
+        233.04989225644576,
+        261.01619941387236
+      ],
+      "frozen_mpa": [
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883,
+        105.76861764705883
+      ]
+    },
+    "energy": {
+      "energy0_J": 2661114.768782163,
+      "kinetic_max_J": 261178.72692689532,
+      "strain_max_J": 365540.9037440503,
+      "potential_min_J": 2295122.389542165,
+      "drift_ratio": 0.0003655898215221682,
+      "roll_amplitude_deg": 20.00720047413496,
+      "initial_strain_energy_J": 7.165470121155333e-22
+    },
+    "pure_moment_arc": {
+      "15": {
+        "rotation_deg": 14.999999999999996,
+        "sigma_max_MPa": 44.94222823900123,
+        "tip_error_ratio_fe": 1.9832138582860254e-05,
+        "tip_error_ratio_linear": 0.01144112848288504
+      },
+      "45": {
+        "rotation_deg": 45.0,
+        "sigma_max_MPa": 134.8266847167448,
+        "tip_error_ratio_fe": 0.00017850907219703942,
+        "tip_error_ratio_linear": 0.10428616156390377
+      },
+      "60": {
+        "rotation_deg": 59.999999999999986,
+        "sigma_max_MPa": 179.7689129554514,
+        "tip_error_ratio_fe": 0.00031738030641475265,
+        "tip_error_ratio_linear": 0.18750289085610405
+      }
+    },
+    "mesh_convergence": [
+      {
+        "n_elements": 2,
+        "sigma_mpa": 207.90826547915637,
+        "stress_error_ratio": 0.02261734423541962,
+        "equilibrium_closure_ratio": 7.067375077704499e-05
+      },
+      {
+        "n_elements": 4,
+        "sigma_mpa": 207.92311384122317,
+        "stress_error_ratio": 0.02269037737120192,
+        "equilibrium_closure_ratio": 0.00012328383353943517
+      },
+      {
+        "n_elements": 8,
+        "sigma_mpa": 207.93047618884077,
+        "stress_error_ratio": 0.022726589805328545,
+        "equilibrium_closure_ratio": 0.00015374962269976123
+      },
+      {
+        "n_elements": 16,
+        "sigma_mpa": 207.93411421384445,
+        "stress_error_ratio": 0.022744483790730918,
+        "equilibrium_closure_ratio": 0.0001699964578863916
+      }
+    ]
+  },
+  "artifacts": {
+    "validation_json": "artifacts/m712/validation.json",
+    "figures": [
+      "artifacts/m712/fig1_stress_vs_roll.png",
+      "artifacts/m712/fig2_energy_ledger.png",
+      "artifacts/m712/fig3_section_field_15deg.png",
+      "artifacts/m712/fig4_large_rotation_arc.png"
+    ],
+    "module": [
+      "src/tensorphysics/structure/finite_rotation.py",
+      "src/tensorphysics/structure/corotational_beam.py",
+      "src/tensorphysics/structure/hull_roll.py"
+    ],
+    "tests": "tests/test_geometric_nonlinear.py",
+    "runner": "scenarios/hull_roll_15deg/run_case.py"
+  },
+  "limitations": [
+    "二维横剖面理想化（横摇平面内的有限转动）；不含三维弯扭耦合与舷侧板格屈曲",
+    "舷侧桁材以等效梁（A, I, W）表示，未离散板格与加强筋的局部屈曲/塑性",
+    "材料线弹性；应力超过屈服（>355 MPa）的工况超出适用范围（纯弯矩算例已限制）",
+    "暂态算例为干结构（无附加质量/水阻尼/冰接触），横摇复原刚度以根部广义弹簧代表",
+    "15 deg 应力判据的参考解为刚体滚转几何上的精确静力学；2.3% 残差来自弹性变形后力臂变化（非离散误差，网格收敛证据见 evidence.mesh_convergence）"
+  ],
+  "pytest_test_geometric_nonlinear": "PASS"
+}
