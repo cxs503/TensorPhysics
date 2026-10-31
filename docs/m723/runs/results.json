@@ -1,0 +1,39 @@
+{
+  "model_parameters": {
+    "propeller_diameter_m": 4.0,
+    "num_blades": 4,
+    "pitch_ratio": 0.8,
+    "rotational_speed_rps": 2.0,
+    "ship_speed_m_s": 6.17,
+    "ice_thickness_m": 0.8,
+    "ice_concentration": 0.7
+  },
+  "computed_statistics": {
+    "mean_torque": 129519.43337431531,
+    "rms_fluctuation": 34701.549183487805,
+    "rms_ratio": 0.2679254246210236,
+    "peak_fluctuation": 97855.31349390287,
+    "peak_factor": 2.8199119577193343,
+    "std_deviation": 34701.549183487805,
+    "skewness": 0.0043677666947329954,
+    "kurtosis": 2.9781666443261683,
+    "max_torque": 227374.74686821818,
+    "min_torque": 50382.58788386985
+  },
+  "computed_dominant_frequency_hz": 8.0,
+  "reference_statistics": {
+    "mean_torque": 80000.0,
+    "rms_ratio": 0.28,
+    "peak_factor": 3.5
+  },
+  "reference_dominant_frequency_hz": 8.0,
+  "validation": {
+    "torque_RMS_error": 0.043123483496344414,
+    "peak_factor_error": 0.19431086922304733,
+    "dominant_frequency_match": 0.0,
+    "rms_pass": true,
+    "peak_factor_pass": true,
+    "frequency_pass": true,
+    "all_pass": true
+  }
+}
