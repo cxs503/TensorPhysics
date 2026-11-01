@@ -1,0 +1,49 @@
+{
+  "a_impact_stress_vs_beam_analytic": {
+    "value": 0.006165224156187007,
+    "threshold": 0.05,
+    "pass": true,
+    "detail": "max rel. error of RK4-modal and FD routes vs closed-form simply-supported beam impulse solution"
+  },
+  "b_hydro_alternating_stress": {
+    "value": 0.06839213552495288,
+    "threshold": 0.15,
+    "pass": true,
+    "detail": "pipeline unsteady-BEMT vs analytic Sears gust reference, 2 OPs"
+  },
+  "c_miner_crack_initiation": {
+    "value": {
+      "D_window": [
+        7.42697562295817e-16,
+        1.5219524728724787e-12,
+        3.353389949881847e-11
+      ],
+      "D_exact": [
+        3.791770543262626e-09,
+        1.9935401239428248e-06,
+        0.00012998428705946792
+      ],
+      "life_hours_exact": [
+        21098323088707.805,
+        40129616173.35093,
+        615459005.1596
+      ]
+    },
+    "threshold": "D monotone in severity, finite life at D=1",
+    "pass": true
+  },
+  "d_sn_fit": {
+    "value": {
+      "NAB": 0.04125897968597967,
+      "AL6082": 0.05108493477073745
+    },
+    "threshold": 0.1,
+    "pass": true
+  },
+  "e_fatigue_safety_factor": {
+    "value": 501620.20216688665,
+    "threshold": 1.0,
+    "pass": true,
+    "detail": "SF = N_allowable/N_actual = 1/D at the 20-year design exposure"
+  }
+}
