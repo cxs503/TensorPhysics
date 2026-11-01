@@ -1,0 +1,131 @@
+{
+  "title": "W7-N07 \u87ba\u65cb\u6868\u53f6\u7247\u51b0-\u6c34\u52a8\u529b\u8026\u5408\u75b2\u52b3\u5bff\u547d\uff1a\u51b0\u51b2\u51fb\u8c31 + \u4ea4\u53d8\u5e94\u529b + Miner \u635f\u4f24 + S-N \u840c\u751f\u5bff\u547d",
+  "summary": "\u5efa\u7acb\u51b0\u51b2\u51fb\uff08\u94e3\u524a\u7834\u788e\u6a21\u578b + \u76f8\u4f4d\u9501\u5b9a\u51b2\u51fb\u8c31\uff09\u4e0e\u6c34\u52a8\u529b\u4ea4\u53d8\uff08\u4f34\u6d41\u8c10\u6ce2 + Sears \u975e\u5b9a\u5e38\u4fee\u6b63\uff09\u8026\u5408\u7684\u53f6\u7247\u75b2\u52b3\u94fe\uff1a\u5e94\u529b\u53e0\u52a0\u2192\u96e8\u6d41\u8ba1\u6570\u2192Miner/Goodman\u2192D=1 \u840c\u751f\u5bff\u547d\u30025 \u9879\u673a\u5668\u5224\u636e\u5168\u90e8\u901a\u8fc7\uff1a\u51b2\u51fb\u5e94\u529b vs \u7b80\u652f\u6881\u95ed\u5f0f\u89e3\u8bef\u5dee 0.62%\uff08FD\uff09/0.00%\uff08RK4\uff09\uff1b\u6c34\u52a8\u529b\u4ea4\u53d8\u5e94\u529b vs Sears \u89e3\u6790 2.58%/6.84%\uff082 \u5de5\u51b5\uff09\uff1bS-N \u62df\u5408 4.13%/5.11%\uff1b\u8bbe\u8ba1\u51b0\u7ea7 SF=5.0e5\u3001\u91cd\u51b0\u51b5 SF=7.7e3\u3002\u5173\u952e\u5de5\u7a0b\u7ed3\u8bba\uff1a\u635f\u4f24\u7531\u6781\u7a00\u6709\u5f3a\u51b2\u51fb\u4e3b\u5bfc(m=10.15)\uff0c\u03ba \u5bb9\u8bb8\u5e94\u529b\u653e\u5927\u7cfb\u6570\u8bbe\u8ba1\u51b0\u7ea7 3.64\u3001\u91cd\u51b0\u51b5 2.41\uff1b\u7b2c\u4e09\u9636\u53f6\u9891 26.0 Hz \u8ddd\u6c34\u4e2d\u4e00\u9636\u5f2f\u66f2\u9891\u7387 24.47 Hz \u4ec5 6.3%\uff0c\u5171\u632f\u65f6\u635f\u4f24\u653e\u5927\u7ea6 6e8 \u500d\uff0c\u51b0\u533a\u6868\u5fc5\u987b\u9519\u9891\u3002\u5c40\u9650\uff1aW7-N06 \u5305\u7edc\u5de5\u4ef6\u7f3a\u5931\uff08\u6309\u540c\u4e00\u7269\u7406\u6a21\u578b\u91cd\u5efa\uff09\u3001\u6c34\u52a8\u529b\u53c2\u8003\u4e3a\u89e3\u6790\u8584\u7ffc\u800c\u975e RANS/LES\u3001\u7ed3\u6784\u4e3a\u7b49\u6548\u60ac\u81c2\u6881\u3002",
+  "criteria": {
+    "a_impact_stress_vs_beam_analytic": {
+      "value": 0.006165224156187007,
+      "threshold": 0.05,
+      "pass": true,
+      "detail": "max rel. error of RK4-modal and FD routes vs closed-form simply-supported beam impulse solution"
+    },
+    "b_hydro_alternating_stress": {
+      "value": 0.06839213552495288,
+      "threshold": 0.15,
+      "pass": true,
+      "detail": "pipeline unsteady-BEMT vs analytic Sears gust reference, 2 OPs"
+    },
+    "c_miner_crack_initiation": {
+      "value": {
+        "D_window": [
+          7.42697562295817e-16,
+          1.5219524728724787e-12,
+          3.353389949881847e-11
+        ],
+        "D_exact": [
+          3.791770543262626e-09,
+          1.9935401239428248e-06,
+          0.00012998428705946792
+        ],
+        "life_hours_exact": [
+          21098323088707.805,
+          40129616173.35093,
+          615459005.1596
+        ]
+      },
+      "threshold": "D monotone in severity, finite life at D=1",
+      "pass": true
+    },
+    "d_sn_fit": {
+      "value": {
+        "NAB": 0.04125897968597967,
+        "AL6082": 0.05108493477073745
+      },
+      "threshold": 0.1,
+      "pass": true
+    },
+    "e_fatigue_safety_factor": {
+      "value": 501620.20216688665,
+      "threshold": 1.0,
+      "pass": true,
+      "detail": "SF = N_allowable/N_actual = 1/D at the 20-year design exposure"
+    }
+  },
+  "margins": {
+    "exponent_m": 10.149214542372796,
+    "zeta": 0.02,
+    "cases": {
+      "light": {
+        "SF_nominal": 263729038.60884756,
+        "D_life": 3.791770543262626e-09,
+        "life_hours": 21098323088707.805,
+        "sigma_a_eq_Pa": 5338556.842615008,
+        "kappa_capacity": 6.756704771000706,
+        "SF_kappa2": 232241.5610029811,
+        "SF_kappa5": 21.240337778825566,
+        "life_hours_kappa5": 1699227.0223060453
+      },
+      "design": {
+        "SF_nominal": 501620.20216688665,
+        "D_life": 1.9935401239428248e-06,
+        "life_hours": 40129616173.35093,
+        "sigma_a_eq_Pa": 18659170.34883702,
+        "kappa_capacity": 3.6446578659803364,
+        "SF_kappa2": 441.7301158658244,
+        "SF_kappa5": 0.04039973219069704,
+        "life_hours_kappa5": 3231.9785752557627
+      },
+      "heavy": {
+        "SF_nominal": 7693.237564495001,
+        "D_life": 0.00012998428705946792,
+        "life_hours": 615459005.1596,
+        "sigma_a_eq_Pa": 20286669.07863602,
+        "kappa_capacity": 2.414890963770222,
+        "SF_kappa2": 6.774716620398554,
+        "SF_kappa5": 0.0006196017144891727,
+        "life_hours_kappa5": 49.56813715913381
+      }
+    },
+    "f1_in_water_Hz": 24.465318466881286,
+    "shaft_rate_Hz": 2.1666666666666665,
+    "blade_rate_Hz": 8.666666666666666,
+    "f1_over_blade_rate": 2.8229213615632256,
+    "harmonic_amplification": [
+      {
+        "harmonic": 1,
+        "f_Hz": 8.666666666666666,
+        "f_over_f1": 0.35424295328093675,
+        "amplification": 1.1433449022866127,
+        "damage_amplification": 3.894515985572775
+      },
+      {
+        "harmonic": 2,
+        "f_Hz": 17.333333333333332,
+        "f_over_f1": 0.7084859065618735,
+        "amplification": 2.0045971811272265,
+        "damage_amplification": 1162.3528664452542
+      },
+      {
+        "harmonic": 3,
+        "f_Hz": 26.0,
+        "f_over_f1": 1.0627288598428102,
+        "amplification": 7.342333738473227,
+        "damage_amplification": 613106968.8510606
+      },
+      {
+        "harmonic": 4,
+        "f_Hz": 34.666666666666664,
+        "f_over_f1": 1.416971813123747,
+        "amplification": 0.9906859059351754,
+        "damage_amplification": 0.9093968277776456
+      }
+    ]
+  },
+  "figures": [
+    "fig1_stress_history.png",
+    "fig2_rainflow_damage.png",
+    "fig3_sn_curves.png",
+    "fig4_dlf.png",
+    "fig5_sears.png",
+    "fig6_life.png"
+  ]
+}
