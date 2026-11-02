@@ -3,7 +3,7 @@
 **Tensor ecosystem vision and boundary contract:** [AI-era ecosystem vision](https://github.com/cxs503/TensorPlatform/blob/main/docs/architecture/TENSOR_ECOSYSTEM_AI_ERA_VISION.md). Read this before adding cross-project features.
 **Project charter:** [TensorPhysics — scientific domain charter](docs/PROJECT_CHARTER.md) — ownership, non-goals, integration contract, and quality gates.
 
-TensorPhysics is the HPC + AI scientific-computing and engineering workflow platform for the Tensor ecosystem.
+TensorPhysics is the scientific workflow, solver-coordination, and validation layer for the Tensor ecosystem.
 
 **System-wide entry point:** [Tensor Ecosystem System Overview](docs/SYSTEM_OVERVIEW.md) — architecture, repository boundaries, shared contracts, end-to-end lifecycle, icebreaker application roadmap, and evidence/maturity rules.
 
@@ -63,9 +63,9 @@ The coupling example is deliberately a contract test, not a validated CFD/DEM/FE
 
 Checkpoint files persist orchestration metadata and JSON-compatible solver snapshots. They do not yet provide full restart/resume: each specialist solver still needs a defined restore API and compatibility checks.
 
-## Platform architecture
+## Scientific workflow architecture
 
-The long-term architecture has seven cooperating planes: agent/application tools; workflow and experiment control; HPC execution; specialist solvers and multiphysics; scientific data and provenance; AI model lifecycle; and verification/governance/observability. Agents operate through typed, permissioned tools and durable job/artifact IDs—not unrestricted shell access. The core remains backend-neutral and does not require one scheduler, storage provider, or ML framework.
+The scientific workflow coordinates seven cooperating concerns: agent/application interfaces; experiment control; HPC execution; specialist solvers and multiphysics; scientific data and provenance; AI model lifecycle; and scientific verification. TensorPhysics owns the domain-specific workflow and acceptance semantics, while TensorPlatform supplies shared domain-neutral runtime, governance, and lifecycle services. Agents should operate through typed, permissioned workflow tools and durable job/artifact IDs—not unrestricted shell access. Execution backends remain replaceable.
 
 The complete platform architecture, development phases, and acceptance gates are described in [docs/hpc-ai-platform-architecture.md](docs/hpc-ai-platform-architecture.md).
 
