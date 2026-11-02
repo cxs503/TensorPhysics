@@ -1,5 +1,8 @@
 # TensorPhysics
 
+**Tensor ecosystem vision and boundary contract:** [AI-era ecosystem vision](https://github.com/cxs503/TensorPlatform/blob/main/docs/architecture/TENSOR_ECOSYSTEM_AI_ERA_VISION.md). Read this before adding cross-project features.
+**Project charter:** [TensorPhysics — scientific domain charter](docs/PROJECT_CHARTER.md) — ownership, non-goals, integration contract, and quality gates.
+
 TensorPhysics is the HPC + AI scientific-computing and engineering workflow platform for the Tensor ecosystem.
 
 **System-wide entry point:** [Tensor Ecosystem System Overview](docs/SYSTEM_OVERVIEW.md) — architecture, repository boundaries, shared contracts, end-to-end lifecycle, icebreaker application roadmap, and evidence/maturity rules.
