@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -78,17 +79,42 @@ def walk_key(doc, key: str):
     return rec(doc, key)
 
 
+# 外部证据根：SIR 战役的求解器产物（SUBOFF 破冰真实化）落在集群 NFS 上，
+# 研发容器内通常不可见。三元组因此分两类（m1830 测试基线漂移巡更引入）：
+#   repo     —— 工件在仓内，任何环境都必须当场复算，值不符=真红；
+#   external —— 工件在外部证据根，仅当文件可见时复算；不可见时登记为环境红
+#               （由 test_external_evidence_recomputes 显式报告，不算代码红）。
+# 设 TP_STRICT_EXTERNAL_EVIDENCE=1（集群/CI 严格模式）时，外部证据不可见亦判红。
+EXTERNAL_EVIDENCE_ROOTS = ("/nfs/",)
+STRICT_EXTERNAL_ENV = "TP_STRICT_EXTERNAL_EVIDENCE"
+
+
 def resolve(path_str: str) -> Path:
     p = Path(path_str)
     return p if p.is_absolute() else ROOT / p
 
 
-def verify_triple(triple: dict) -> None:
-    """复算一个三元组；任何不一致直接断言失败（=手抄）。"""
+def is_external(path: Path) -> bool:
+    """工件是否位于外部证据根（不在本仓库工作树内）。"""
+    text = str(path)
+    return any(text.startswith(prefix) for prefix in EXTERNAL_EVIDENCE_ROOTS)
+
+
+def verify_triple(triple: dict) -> str:
+    """复算一个三元组，返回证据类别（'repo' / 'external'）。
+
+    值不符、键缺失、grep 未命中等一律 AssertionError（=真红）。
+    仅「外部证据根不可见」抛 LookupError，由调用方按环境红处置。
+    """
     for field in ("v", "f", "k"):
         assert field in triple, f"三元组缺字段 {field}: {triple}"
     path = resolve(triple["f"])
-    assert path.is_file(), f"三元组文件不存在: {triple['f']}"
+    external = is_external(path)
+    kind = "external" if external else "repo"
+    if not path.is_file():
+        if external:
+            raise LookupError(f"外部证据不可见: {triple['f']}")
+        assert False, f"三元组文件不存在: {triple['f']}"
     key = triple["k"]
     if key.startswith("grep:"):
         needle = key[len("grep:"):]
@@ -96,7 +122,7 @@ def verify_triple(triple: dict) -> None:
         text = path.read_text(encoding="utf-8")
         assert needle in text, f"grep 未命中: {needle!r} in {triple['f']}"
         assert triple["v"] == needle, f"grep 三元组值应为命中串: {triple}"
-        return
+        return kind
     doc = json.loads(path.read_text(encoding="utf-8"))
     found, value = walk_key(doc, key)
     assert found, f"键路径不存在: {key} in {triple['f']}"
@@ -104,6 +130,7 @@ def verify_triple(triple: dict) -> None:
         f"三元组值不符（手抄嫌疑）: {triple['f']} :: {key} "
         f"文件={value!r} 声明={triple['v']!r}"
     )
+    return kind
 
 
 def iter_triples(node):
@@ -146,9 +173,41 @@ def criteria():
 
 class TestBaselineTriples:
     def test_every_triple_recomputes(self, baseline):
+        """仓内三元组硬复算；外部三元组可见即复算，不可见不判代码红。"""
         triples = list(iter_triples(baseline))
         assert len(triples) >= 15, f"基线三元组过少（{len(triples)}），契约未覆盖七缺口"
+        repo_verified = 0
         for triple in triples:
+            try:
+                kind = verify_triple(triple)
+            except LookupError:
+                continue  # 外部证据根不可见：由 test_external_evidence_recomputes 显式登记
+            repo_verified += kind == "repo"
+        # 反空心门：外部证据缺席不得稀释仓内强制复算的覆盖面。
+        # 基线 21 组中 14 组在仓内（2026-11-02 复算）；此处要求 >= 12 组硬校验。
+        assert repo_verified >= 12, (
+            f"仓内可复算三元组过少（{repo_verified} < 12）：外部证据不得成为基线主体"
+        )
+
+    def test_external_evidence_recomputes(self, baseline):
+        """外部（集群 NFS）证据：可见即复算；不可见时显式记为环境红并报告清单。"""
+        triples = list(iter_triples(baseline))
+        external = [t for t in triples if is_external(resolve(t["f"]))]
+        if not external:
+            pytest.skip("基线未登记外部证据三元组（口径变更需同步更新本测试）")
+        missing = sorted({t["f"] for t in external if not resolve(t["f"]).is_file()})
+        if missing:
+            keys_per_file = {p: sum(1 for t in external if t["f"] == p) for p in missing}
+            msg = (
+                f"环境红（非代码红）：外部证据根 {EXTERNAL_EVIDENCE_ROOTS} 不可见，"
+                f"{len(missing)}/{len({t['f'] for t in external})} 个外部工件无法打开，"
+                f"涉及 {sum(keys_per_file.values())}/{len(external)} 个外部三元组本次未执行；"
+                f"missing={missing}"
+            )
+            if os.environ.get(STRICT_EXTERNAL_ENV, "").strip():
+                pytest.fail(msg + f"（{STRICT_EXTERNAL_ENV} 严格模式：判红）")
+            pytest.skip(msg)
+        for triple in external:
             verify_triple(triple)
 
     def test_all_seven_gaps_have_evidence(self, baseline):
