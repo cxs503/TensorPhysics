@@ -1,12 +1,19 @@
 """Single-attempt research task runner with independent validation."""
 from __future__ import annotations
 
+import logging
+
 from typing import Any, Mapping, Protocol
 
 from .research_runtime import (
     AgentBackend, AgentRequest, AgentResult, ResearchTask, ResearchTaskStore,
     TaskStatus,
 )
+
+
+from .platform_reporting import register_run_outcome
+
+logger = logging.getLogger(__name__)
 
 
 class ResearchValidator(Protocol):
@@ -22,10 +29,13 @@ class ResearchTaskRunner:
     not loop indefinitely: one call invokes the Agent at most once.
     """
 
-    def __init__(self, store: ResearchTaskStore, agent: AgentBackend, validator: ResearchValidator):
+    def __init__(self, store: ResearchTaskStore, agent: AgentBackend, validator: ResearchValidator,
+                 platform_registry: Any = None):
         self.store = store
         self.agent = agent
         self.validator = validator
+        # Optional injected registry for tests; production resolves from env.
+        self.platform_registry = platform_registry
 
     def run_once(
         self,
@@ -88,11 +98,15 @@ class ResearchTaskRunner:
                 raise ValueError("validator report status must be passed, failed, or incomplete")
             report_payload = {**result_payload, "validation": report}
             if status == "passed":
-                return self.store.transition(
+                succeeded = self.store.transition(
                     task_id, expected_status=TaskStatus.VERIFYING, new_status=TaskStatus.SUCCEEDED,
                     event_type="validation_passed", payload={"validation_status": status},
                     result=report_payload,
                 )
+                self._register_platform_outcome(
+                    succeeded, status="succeeded", validation_status="passed",
+                    result=report_payload)
+                return succeeded
             return self._retry_or_fail(
                 task, f"independent validation status: {status}", result=report_payload,
                 expected_status=TaskStatus.VERIFYING,
@@ -112,9 +126,47 @@ class ResearchTaskRunner:
         expected_status: TaskStatus = TaskStatus.RUNNING,
     ) -> ResearchTask:
         target = TaskStatus.RETRY_WAIT if task.attempt < task.max_attempts else TaskStatus.FAILED
-        return self.store.transition(
+        transitioned = self.store.transition(
             task.task_id, expected_status=expected_status, new_status=target,
             event_type="attempt_failed" if target is TaskStatus.RETRY_WAIT else "task_failed",
             payload={"error": error, "attempt": task.attempt},
             result=result, error=error,
         )
+        if target is TaskStatus.FAILED:
+            validation = (result or {}).get("validation")
+            vstatus = validation.get("status") if isinstance(validation, Mapping) else None
+            self._register_platform_outcome(
+                transitioned, status="failed",
+                validation_status=vstatus or "not_run", result=result)
+        return transitioned
+
+    def _register_platform_outcome(
+        self, task: ResearchTask, *, status: str, validation_status: str,
+        result: Mapping[str, Any] | None,
+    ) -> None:
+        """Best-effort TensorPlatform registration of a terminal outcome.
+
+        The outcome record (registered/skipped/failed + reason) is appended to
+        the task's event stream; registration problems never alter task state.
+        """
+        agent_block = (result or {}).get("agent") or {}
+        manifest = {
+            "schema_version": 1,
+            "registered_by": "tensorphysics.research_runner",
+            "goal_id": task.goal_id,
+            "agent": agent_block.get("name"),
+            "attempt": task.attempt,
+            "max_attempts": task.max_attempts,
+            "summary": agent_block.get("summary"),
+            "artifact_uris": list(agent_block.get("artifact_uris") or []),
+            "validation": (result or {}).get("validation"),
+        }
+        outcome = register_run_outcome(
+            run_id=task.task_id, status=status, validation_status=validation_status,
+            manifest=manifest, registry=self.platform_registry,
+        )
+        try:
+            self.store.append_event(task.task_id, "platform_registration", outcome)
+        except Exception:
+            logger.exception("failed to append platform_registration event for %s",
+                             task.task_id)

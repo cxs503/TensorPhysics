@@ -346,6 +346,29 @@ class ResearchTaskStore:
             for row in rows
         ]
 
+    def append_event(
+        self, task_id: str, event_type: str, payload: Mapping[str, Any] | None = None
+    ) -> None:
+        """Append a non-transition event to the task's append-only log.
+
+        For provenance records (e.g. platform registration outcomes) that
+        belong after a completed transition without changing task state.
+        """
+        with self._lock:
+            try:
+                self._db.execute("BEGIN IMMEDIATE")
+                row = self._db.execute(
+                    "SELECT status FROM research_tasks WHERE task_id = ?", (task_id,)
+                ).fetchone()
+                if row is None:
+                    raise TaskNotFoundError(f"task not found: {task_id}")
+                status = TaskStatus(row["status"])
+                self._event(task_id, status, status, event_type, dict(payload or {}))
+                self._db.commit()
+            except Exception:
+                self._db.rollback()
+                raise
+
     def _event(
         self,
         task_id: str,
