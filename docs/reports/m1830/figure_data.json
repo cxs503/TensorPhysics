@@ -1,0 +1,129 @@
+{
+  "junits": [
+    "junit_20261102T001632Z.xml",
+    "junit_20261102T002014Z.xml"
+  ],
+  "status_counts": {
+    "passed": [
+      262,
+      262
+    ],
+    "env_red": [
+      1,
+      1
+    ],
+    "failed": [
+      0,
+      0
+    ],
+    "skipped": [
+      0,
+      0
+    ]
+  },
+  "triple_classification": {
+    "total": 21,
+    "repo": 14,
+    "external": 7,
+    "sections": {
+      "g5_fracture_propagation": {
+        "repo": 3,
+        "external": 0
+      },
+      "g6_scale": {
+        "repo": 5,
+        "external": 0
+      },
+      "g3_gravity_disabled": {
+        "repo": 1,
+        "external": 0
+      },
+      "g1_fluid_load_precision": {
+        "repo": 0,
+        "external": 5
+      },
+      "g7_reference_anchors": {
+        "repo": 0,
+        "external": 2
+      },
+      "reused_verified_anchors": {
+        "repo": 5,
+        "external": 0
+      }
+    }
+  },
+  "slowest_top15_run1": [
+    {
+      "test": "tests.test_si1_one_way_coupling::test_linear_superposition",
+      "s": 103.34
+    },
+    {
+      "test": "tests.test_si1_one_way_coupling::test_plate_sine_load",
+      "s": 22.14
+    },
+    {
+      "test": "tests.test_si3_two_way_coupling::test_two_way_coupling_integration",
+      "s": 12.4
+    },
+    {
+      "test": "tests.test_si4_full_chain.TestFullChainOrchestration::test_full_chain_runs_three_steps",
+      "s": 5.62
+    },
+    {
+      "test": "tests.test_si4_full_chain.TestFullChainOrchestration::test_full_chain_dual_ledger_gates",
+      "s": 5.4
+    },
+    {
+      "test": "tests.test_si4_full_chain.TestFullChainOrchestration::test_full_chain_four_libraries_participate",
+      "s": 4.2
+    },
+    {
+      "test": "tests.test_end_to_end_example::test_end_to_end_example_writes_checksummed_artifact_and_manifest",
+      "s": 0.48
+    },
+    {
+      "test": "tests.test_end_to_end_example::test_platform_registration_requires_shared_artifact_uri",
+      "s": 0.28
+    },
+    {
+      "test": "tests.test_end_to_end_example::test_platform_registration_rejects_local_file_uri",
+      "s": 0.27
+    },
+    {
+      "test": "tests.test_agent_subprocess::test_logs_are_persisted_as_artifacts_and_task_id_is_sanitized",
+      "s": 0.16
+    },
+    {
+      "test": "tests.test_agent_subprocess::test_timeout_is_bounded_and_reported",
+      "s": 0.11
+    },
+    {
+      "test": "tests.test_worker::test_validator_rejects_pass_with_failed_check",
+      "s": 0.07
+    },
+    {
+      "test": "tests.test_agent_subprocess::test_subprocess_backend_runs_without_shell_and_passes_structured_prompt",
+      "s": 0.07
+    },
+    {
+      "test": "tests.test_agent_subprocess::test_nonzero_exit_is_a_failure_not_success",
+      "s": 0.07
+    },
+    {
+      "test": "tests.test_worker::test_validator_accepts_passed_report_only_with_all_checks_true",
+      "s": 0.07
+    }
+  ],
+  "prefix_probe": {
+    "passed": 25,
+    "failed": 1,
+    "skipped": 0,
+    "env_red": 0,
+    "total": 26
+  },
+  "figures": [
+    "fig_suite_status.png",
+    "fig_triple_availability.png",
+    "fig_top_durations.png"
+  ]
+}
