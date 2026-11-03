@@ -12,6 +12,7 @@ from .research_runtime import (
 
 
 from .platform_reporting import register_run_outcome
+from . import status_map
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +105,7 @@ class ResearchTaskRunner:
                     result=report_payload,
                 )
                 self._register_platform_outcome(
-                    succeeded, status="succeeded", validation_status="passed",
+                    succeeded, status=TaskStatus.SUCCEEDED, validation_status="passed",
                     result=report_payload)
                 return succeeded
             return self._retry_or_fail(
@@ -136,19 +137,27 @@ class ResearchTaskRunner:
             validation = (result or {}).get("validation")
             vstatus = validation.get("status") if isinstance(validation, Mapping) else None
             self._register_platform_outcome(
-                transitioned, status="failed",
+                transitioned, status=TaskStatus.FAILED,
                 validation_status=vstatus or "not_run", result=result)
         return transitioned
 
     def _register_platform_outcome(
-        self, task: ResearchTask, *, status: str, validation_status: str,
+        self, task: ResearchTask, *, status: "TaskStatus | str", validation_status: str,
         result: Mapping[str, Any] | None,
     ) -> None:
         """Best-effort TensorPlatform registration of a terminal outcome.
 
-        The outcome record (registered/skipped/failed + reason) is appended to
-        the task's event stream; registration problems never alter task state.
+        The registration status is derived through ``status_map`` (contract
+        mission_task_status_map.v1.json), never a hand-written literal; states
+        that are not terminal on the platform are refused here. The outcome
+        record (registered/skipped/failed + reason) is appended to the task's
+        event stream; registration problems never alter task state.
         """
+        platform_status = status_map.to_platform(status)
+        if not status_map.is_terminal_on_platform(status):
+            logger.warning(
+                "refusing platform registration of non-terminal task status %s", status)
+            return
         agent_block = (result or {}).get("agent") or {}
         manifest = {
             "schema_version": 1,
@@ -162,7 +171,7 @@ class ResearchTaskRunner:
             "validation": (result or {}).get("validation"),
         }
         outcome = register_run_outcome(
-            run_id=task.task_id, status=status, validation_status=validation_status,
+            run_id=task.task_id, status=platform_status, validation_status=validation_status,
             manifest=manifest, registry=self.platform_registry,
         )
         try:
