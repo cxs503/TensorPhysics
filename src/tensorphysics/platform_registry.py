@@ -16,13 +16,14 @@ from urllib.request import Request, urlopen
 from .provenance import RunManifest
 
 
-# Keep this in sync with TensorPlatform's RunRegistration validator (1,000,000 bytes).
-_MAX_MANIFEST_BYTES = 1_000_000
-_RUN_STATUSES = frozenset({
-    "planned", "validating", "queued", "running", "succeeded", "failed",
-    "cancelled", "preempted",
-})
-_VALIDATION_STATUSES = frozenset({"not_run", "passed", "failed", "incomplete"})
+# G-C: vocabulary derived from the embedded contract copy -- the single source
+# of truth is TensorPlatform backend/contracts/research_run_status_vocab.v1.json
+# (the hand-kept frozensets above were the drift source this replaces).
+from .contracts import research_run_contract as _rrc_contract
+
+_MAX_MANIFEST_BYTES = _rrc_contract()["max_manifest_bytes"]
+_RUN_STATUSES = frozenset(_rrc_contract()["run_statuses"])
+_VALIDATION_STATUSES = frozenset(_rrc_contract()["validation_statuses"])
 
 
 class PlatformRegistryError(RuntimeError):
