@@ -49,6 +49,7 @@ from .miz import (
     fit_attenuation_coefficient,
     effective_medium_properties,
     sweep_attenuation,
+    power_law_exponents,
     LITERATURE_ALPHA_BAND,
 )
 
@@ -79,5 +80,6 @@ __all__ = [
     "fit_attenuation_coefficient",
     "effective_medium_properties",
     "sweep_attenuation",
+    "power_law_exponents",
     "LITERATURE_ALPHA_BAND",
 ]
