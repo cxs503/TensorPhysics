@@ -26,6 +26,9 @@ plot = ["matplotlib>=3.7", "numpy>=1.26"]
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+tensorphysics = ["contracts/*.json"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
