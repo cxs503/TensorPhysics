@@ -262,6 +262,58 @@ def fit_attenuation_coefficient(
     }
 
 
+def power_law_exponents(
+    concentrations: Iterable[float],
+    ice_thicknesses: Iterable[float],
+    alpha_grid: Any,
+) -> dict[str, Any]:
+    """Exponents of ``alpha ~ n_c^p h_i^q`` fitted on the whole calibration grid.
+
+    ``alpha_grid`` is indexed ``[thickness, concentration]``.  Returns the joint
+    two-regressor log-log least-squares exponents ``p`` and ``q`` (the estimate to
+    quote when the statement is a *global* power law), their standard errors, the
+    log-space R^2 / RMSE, and the spread of the single-slice exponents.  The
+    spread is the honest error bar on any single-slice value: ``alpha`` is not a
+    separable power law, so a slice-local slope is not a global exponent.
+    """
+    n_list = np.asarray([float(v) for v in concentrations], dtype=float)
+    h_list = np.asarray([float(v) for v in ice_thicknesses], dtype=float)
+    grid = np.asarray(alpha_grid, dtype=float)
+    if grid.shape != (h_list.size, n_list.size):
+        raise MIZError(
+            f"alpha_grid must be (n_thickness, n_concentration) = "
+            f"{(h_list.size, n_list.size)}, got {grid.shape}"
+        )
+    ln_n = np.tile(np.log(n_list), h_list.size)
+    ln_h = np.repeat(np.log(h_list), n_list.size)
+    ln_a = np.log(grid).reshape(-1)
+    if not np.all(np.isfinite(ln_a)):
+        raise MIZError("alpha_grid must be strictly positive for a log-log fit")
+    design = np.column_stack([np.ones_like(ln_a), ln_n, ln_h])
+    coef, *_ = np.linalg.lstsq(design, ln_a, rcond=None)
+    resid = ln_a - design @ coef
+    sigma2 = float(resid @ resid) / max(ln_a.size - 3, 1)
+    stderr = np.sqrt(np.diag(sigma2 * np.linalg.inv(design.T @ design)))
+    ss_tot = float(((ln_a - ln_a.mean()) ** 2).sum())
+
+    def _slice(xs: np.ndarray, ys: np.ndarray) -> float:
+        return float(np.polyfit(np.log(xs), np.log(ys), 1)[0])
+
+    p_slices = [_slice(n_list, grid[i, :]) for i in range(h_list.size)]
+    q_slices = [_slice(h_list, grid[:, j]) for j in range(n_list.size)]
+    return {
+        "concentration_exponent": float(coef[1]),
+        "concentration_stderr": float(stderr[1]),
+        "thickness_exponent": float(coef[2]),
+        "thickness_stderr": float(stderr[2]),
+        "r2_log": float(1.0 - float(resid @ resid) / ss_tot) if ss_tot > 0.0 else 1.0,
+        "rmse_log": float(np.sqrt(sigma2)),
+        "n_points": int(ln_a.size),
+        "concentration_slice_range": [min(p_slices), max(p_slices)],
+        "thickness_slice_range": [min(q_slices), max(q_slices)],
+    }
+
+
 def sweep_attenuation(
     concentrations: Iterable[float],
     ice_thicknesses: Iterable[float],
@@ -273,8 +325,12 @@ def sweep_attenuation(
     """Tabulate ``alpha`` versus ice concentration and ice thickness.
 
     Also returns the fitted power-law exponents ``alpha ~ n_c^p`` and
-    ``alpha ~ h_i^q`` (log-log least squares) for the calibration requested by the
-    campaign node.
+    ``alpha ~ h_i^q`` for the calibration requested by the campaign node.  These
+    two are **single-slice local** log-log slopes (at the middle thickness and the
+    middle concentration respectively); the slice values are returned alongside in
+    ``concentration_exponent_slice_thickness`` / ``thickness_exponent_slice_*``,
+    and the whole-grid joint estimate in ``joint_exponents`` (see
+    :func:`power_law_exponents`).
     """
     n_list = [float(v) for v in concentrations]
     h_list = [float(v) for v in ice_thicknesses]
@@ -311,7 +367,37 @@ def sweep_attenuation(
     p_n = _exponent(np.array(n_list), grid[i_mid, :])
     j_mid = len(n_list) // 2
     q_h = _exponent(np.array(h_list), grid[:, j_mid])
+
+    # The two values above are LOCAL slopes of a single slice each, not global
+    # power-law exponents: ``alpha`` is not a separable power law in (n_c, h), so
+    # the slope drifts with the slice held fixed.  Ship the basis explicitly
+    # together with a joint two-regressor fit of the whole grid, so a reader (or
+    # an independent reviewer) can reproduce -- or deliberately reject -- the
+    # reported numbers without guessing the convention.  See the W5-N05 erratum
+    # (docs/papers/w5n05_ice_wave/ERRATA.md) for a case where exactly this
+    # ambiguity cost two review rounds.
+    joint = power_law_exponents(n_list, h_list, grid)
     return {
+        "concentration_exponent_slice_thickness": float(h_list[i_mid]),
+        "thickness_exponent_slice_concentration": float(n_list[j_mid]),
+        "concentration_exponent_slices": [
+            {"fixed_thickness": float(h_i), "exponent": _exponent(np.array(n_list), grid[i, :])}
+            for i, h_i in enumerate(h_list)
+        ],
+        "thickness_exponent_slices": [
+            {"fixed_concentration": float(n_c), "exponent": _exponent(np.array(h_list), grid[:, j])}
+            for j, n_c in enumerate(n_list)
+        ],
+        "joint_exponents": joint,
+        "exponent_note": (
+            "alpha_vs_concentration_exponent / alpha_vs_thickness_exponent are "
+            "single-slice LOCAL log-log slopes (slices named by the *_slice_* "
+            "keys), not global exponents; use joint_exponents for the separable "
+            "two-regressor estimate, and quote its stderr because alpha is not "
+            "strictly separable: the per-slice exponents spread over "
+            f"{joint['concentration_slice_range']} in p and "
+            f"{joint['thickness_slice_range']} in q."
+        ),
         "concentrations": n_list,
         "ice_thicknesses": h_list,
         "period": float(period),
