@@ -44,9 +44,17 @@ class TestEmbeddedContracts:
 
     def test_mission_vocab_shape(self):
         c = mission_status_contract()
-        assert len(c["statuses"]) == 10
+        assert len(c["statuses"]) == 11
         assert set(c["terminal"]) <= set(c["statuses"])
         assert set(c["platform_only"]) <= set(c["statuses"])
+
+    def test_mission_vocab_v2_pr_merge_gate(self):
+        """v2 (owner 2026-11-05): awaiting_pr_merge 非终态、platform_only。"""
+        c = mission_status_contract()
+        assert c["version"] >= 2
+        assert "awaiting_pr_merge" in c["statuses"]
+        assert "awaiting_pr_merge" in c["platform_only"]
+        assert "awaiting_pr_merge" not in c["terminal"]
 
     def test_cross_repo_diff_opt_in(self):
         """Byte-compare against TensorPlatform main (opt-in; honest skip)."""
