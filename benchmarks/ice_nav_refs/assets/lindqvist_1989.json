@@ -1,0 +1,234 @@
+{
+  "assets": [
+    {
+      "applicable_regime": {
+        "bow_angle_deg": [
+          15.0,
+          60.0
+        ],
+        "friction_coefficient": [
+          0.05,
+          0.2
+        ],
+        "ice_regime": "level_first_year_ice",
+        "ice_thickness_m": [
+          0.3,
+          1.5
+        ],
+        "ship_length_m": [
+          50.0,
+          250.0
+        ],
+        "speed_m_s": [
+          0.5,
+          6.0
+        ]
+      },
+      "asset_id": "LIN_C_CRUSH_PHI30",
+      "evidence_tier": "published_formula",
+      "family": "lindqvist_1989",
+      "formula": "C_c = 0.5 * (tan(alpha) + mu/cos(alpha)), alpha = 90deg - phi/2",
+      "primary_source_verified": false,
+      "reference_condition": {
+        "bow_angle_deg": 30.0,
+        "mu": 0.15
+      },
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Lindqvist, G. (1989) 'A straightforward method for calculation of ice resistance of ships', POAC'89, Lulea, Vol. 2, pp. 722-735 -- crushing-list coefficient C_c = 0.5[tan(90-phi/2) + mu/cos(90-phi/2)]",
+      "tolerance": {
+        "mode": "relative",
+        "note": "closed-form evaluation of the cited expression; tolerance covers only rounding of the stored number",
+        "value": 0.001
+      },
+      "units": {
+        "C_c": "1",
+        "alpha_deg": "deg"
+      },
+      "value_sha256": "d9165ac8dfd6f37210cde51eaa7775b33827e9b41a1378124fceaf52a2502b2b",
+      "values": {
+        "C_c": 2.1558031516711593,
+        "alpha_deg": 75.0
+      },
+      "verification_note": "Expression re-derived symbolically and dimension-checked (dimensionless); the primary POAC'89 paper could not be opened in the build environment, so the coefficient form is taken from the repository transcription (ice_anchor/anchors.py::lindqvist_1989) and from the standard quotation of Lindqvist's method in the ice-resistance literature."
+    },
+    {
+      "applicable_regime": {
+        "bow_angle_deg": [
+          15.0,
+          60.0
+        ],
+        "friction_coefficient": [
+          0.05,
+          0.2
+        ],
+        "ice_regime": "level_first_year_ice",
+        "ice_thickness_m": [
+          0.3,
+          1.5
+        ],
+        "ship_length_m": [
+          50.0,
+          250.0
+        ],
+        "speed_m_s": [
+          0.5,
+          6.0
+        ]
+      },
+      "asset_id": "LIN_C_SPEED_FR",
+      "evidence_tier": "published_formula",
+      "family": "lindqvist_1989",
+      "formula": "C_s = 0.15 + 0.3*(V/sqrt(g*h))",
+      "primary_source_verified": false,
+      "reference_condition": {
+        "V_m_s": 2.0,
+        "h_m": 1.0
+      },
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Lindqvist, G. (1989) POAC'89, Vol. 2, pp. 722-735 -- speed coefficient C_s = 0.15 + 0.3*Fr_h with Froude number Fr_h = V/sqrt(g h)",
+      "tolerance": {
+        "mode": "relative",
+        "note": "arithmetic evaluation at the documented reference condition",
+        "value": 0.001
+      },
+      "units": {
+        "C_s": "1",
+        "Fr_h": "1"
+      },
+      "value_sha256": "916b2cb9d39c3f5f2fac282243fa408d0db4e003af1ef1051efb4688a13ebba8",
+      "values": {
+        "C_s": 0.34156525704423024,
+        "Fr_h": 0.638550856814101
+      },
+      "verification_note": "Dimensionless by construction (V/sqrt(g h)); coefficient pair (0.15, 0.3) taken from the repository transcription of Lindqvist (1989), primary paper not accessible for direct transcription."
+    },
+    {
+      "applicable_regime": {
+        "bow_angle_deg": [
+          15.0,
+          60.0
+        ],
+        "friction_coefficient": [
+          0.05,
+          0.2
+        ],
+        "ice_regime": "level_first_year_ice",
+        "ice_thickness_m": [
+          0.2,
+          2.0
+        ],
+        "ship_length_m": [
+          50.0,
+          250.0
+        ],
+        "speed_m_s": [
+          0.5,
+          6.0
+        ],
+        "surface": "painted_steel"
+      },
+      "asset_id": "LIN_ICE_STEEL_FRICTION_BAND",
+      "evidence_tier": "literature_band",
+      "family": "lindqvist_1989",
+      "primary_source_verified": false,
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Lindqvist (1989) POAC'89 pp. 722-735 and ISO 19906 (2010) Annex A friction guidance -- ice/steel kinetic friction coefficient in the 0.05-0.20 band, 0.15 used as the design mid-value",
+      "tolerance": {
+        "lower": 0.05,
+        "mode": "band",
+        "note": "band width of the published ice/steel friction scatter",
+        "upper": 0.2,
+        "value": 0.15
+      },
+      "units": {
+        "mu_lower": "1",
+        "mu_nominal": "1",
+        "mu_upper": "1"
+      },
+      "value_sha256": "956bec55f1a4e6f218f62f91f81ca08014f71a750d744773de0f20ca0a62d065",
+      "values": {
+        "mu_lower": 0.05,
+        "mu_nominal": 0.15,
+        "mu_upper": 0.2
+      },
+      "verification_note": "Band transcribed from the engineering consensus for ice-on-steel friction (0.05-0.20, temperature and sliding-speed dependent); the exact table of the cited standards was not accessible, only the band as quoted in the literature."
+    },
+    {
+      "applicable_regime": {
+        "bow_angle_deg": [
+          15.0,
+          60.0
+        ],
+        "friction_coefficient": [
+          0.05,
+          0.2
+        ],
+        "ice_regime": "level_first_year_ice",
+        "ice_thickness_m": [
+          0.3,
+          1.5
+        ],
+        "ship_length_m": [
+          50.0,
+          250.0
+        ],
+        "speed_m_s": [
+          0.5,
+          6.0
+        ]
+      },
+      "asset_id": "LIN_RESISTANCE_COMPONENTS",
+      "evidence_tier": "repo_transcription",
+      "family": "lindqvist_1989",
+      "formula": "R_c = C_c*s_c*h^2 ; R_f = C_f*rho*g*h ; R_s = C_s*rho*V^2*h*B",
+      "known_defects": [
+        "R_c omits the ship-breadth factor (force scales as sigma_c*h^2 only)",
+        "R_f is C_f*rho*g*h with C_f containing B, so R_f is dimensionally a force per unit breadth times B/h-dependent factor -- breadth handling differs from R_s"
+      ],
+      "primary_source_verified": false,
+      "reference_condition": {
+        "B_m": 20.0,
+        "L_m": 150.0,
+        "V_m_s": 2.0,
+        "bow_angle_deg": 30.0,
+        "h_m": 1.0,
+        "mu": 0.15,
+        "rho_kg_m3": 900.0,
+        "sigma_c_MPa": 5.0
+      },
+      "role": "regression_anchor",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Lindqvist, G. (1989) POAC'89, Vol. 2, pp. 722-735 (components R_c, R_f, R_s) as transcribed in TensorPhysics ice_anchor/anchors.py::lindqvist_1989",
+      "tolerance": {
+        "mode": "relative",
+        "note": "regression drift budget for the repository transcription; NOT an accuracy claim against ice-tank data",
+        "value": 0.05
+      },
+      "units": {
+        "C_c": "1",
+        "C_f_m": "m",
+        "C_s": "1",
+        "R_c_N": "N",
+        "R_f_N": "N",
+        "R_s_N": "N",
+        "R_total_kN": "kN"
+      },
+      "value_sha256": "b404e165c4da9a20d763ab6960a76e0e567d4bcddee9f8f9b537d0a94298d867",
+      "values": {
+        "C_c": 2.1558031516711593,
+        "C_f_m": 4.03707919045881,
+        "C_s": 0.34156525704423024,
+        "R_c_N": 10779015.758355796,
+        "R_f_N": 35643.372172560834,
+        "R_s_N": 24592.698507184577,
+        "R_total_kN": 10839.25182903554
+      },
+      "verification_note": "Frozen value of this repository's documented transcription; the crushing and buoyancy terms as transcribed carry no explicit breadth factor in R_c and a breadth-bearing coefficient C_f in R_f, i.e. the component set is not dimensionally homogeneous across breadth. Recorded as a regression anchor only: do not quote R_total_kN as validated absolute resistance. See docs/ICE_NAV_REFS_CORPUS.md, section 'Known defects caught by this corpus'."
+    }
+  ],
+  "family": "lindqvist_1989",
+  "schema": "ice_nav_refs.v1"
+}
