@@ -1,0 +1,142 @@
+{
+  "assets": [
+    {
+      "applicable_regime": {
+        "ice_regime": "level_first_year_ice_polar_class",
+        "ice_thickness_m": [
+          0.8,
+          1.5
+        ],
+        "location": "ice_belt_shell_plating",
+        "panel_area_m2": [
+          0.25,
+          8.0
+        ],
+        "polar_class": [
+          "PC6"
+        ]
+      },
+      "asset_id": "IACS_PC6_DESIGN_ICE_THICKNESS",
+      "evidence_tier": "literature_band",
+      "family": "iacs_ur_i_pc6",
+      "primary_source_verified": false,
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "IACS Polar Class design ice thickness for PC6 (UR I1 Polar Class descriptions): h = 1.2 m nominal, recorded as the band 1.0-1.4 m",
+      "tolerance": {
+        "lower": 1.0,
+        "mode": "band",
+        "note": "band of the design-thickness value quoted for PC6 in secondary sources",
+        "upper": 1.4,
+        "value": 0.4
+      },
+      "units": {
+        "h_lower_m": "m",
+        "h_nominal_m": "m",
+        "h_upper_m": "m"
+      },
+      "value_sha256": "ab5076f32555e8cec34aae84f6af7d9ed57cc018c0596a5a695598da510fa5ce",
+      "values": {
+        "h_lower_m": 1.0,
+        "h_nominal_m": 1.2,
+        "h_upper_m": 1.4
+      },
+      "verification_note": "PC6 design thickness is quoted as a band because the primary UR I1 table was not available; secondary sources give 1.0-1.4 m with 1.2 m as the usual nominal. Do not use as a verbatim class-rule value."
+    },
+    {
+      "applicable_regime": {
+        "ice_regime": "level_first_year_ice_polar_class",
+        "ice_thickness_m": [
+          0.8,
+          1.5
+        ],
+        "location": "ice_belt_shell_plating",
+        "panel_area_m2": [
+          0.25,
+          8.0
+        ],
+        "polar_class": [
+          "PC6"
+        ]
+      },
+      "asset_id": "IACS_PC6_PANEL_PRESSURE_TABLE",
+      "evidence_tier": "derived_from_rule_form",
+      "family": "iacs_ur_i_pc6",
+      "formula": "p(A) = 2.5 MPa * A^-0.45 over ice-belt panel areas 0.5-8 m^2",
+      "primary_source_verified": false,
+      "reference_condition": {
+        "exponent": 0.45,
+        "p0_MPa": 2.5,
+        "p0_band_MPa": [
+          2.0,
+          3.0
+        ]
+      },
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "IACS Unified Requirement I2 (Polar Class hull structures, 2016) local ice pressure on shell plating p = p0*A^-0.45 applied at PC6 with nominal reference pressure p0 = 2.5 MPa at A = 1 m^2",
+      "tolerance": {
+        "mode": "relative",
+        "note": "p0 for PC6 recorded as the band 2.0-3.0 MPa; 25% covers the band plus the exponent scatter",
+        "value": 0.25
+      },
+      "units": {
+        "p_A0.5_MPa": "MPa",
+        "p_A1_MPa": "MPa",
+        "p_A2_MPa": "MPa",
+        "p_A4_MPa": "MPa",
+        "p_A8_MPa": "MPa"
+      },
+      "value_sha256": "ab63eac82a959d0565939db843b95ab233109da9594648ecb7fc3d670f94452d",
+      "values": {
+        "p_A0.5_MPa": 3.4151006418859886,
+        "p_A1_MPa": 2.5,
+        "p_A2_MPa": 1.8301071199320318,
+        "p_A4_MPa": 1.3397168281703664,
+        "p_A8_MPa": 0.9807301223709385
+      },
+      "verification_note": "The UR I2 pressure-area form is public and reproduced here; the PC6 reference pressure magnitude is given as a band (2.0-3.0 MPa) because the IACS document could not be downloaded in the build environment and the class-dependent reference pressure was therefore not transcribed verbatim. This asset must be re-verified against UR I2 before being used as a scantling-level datum."
+    },
+    {
+      "applicable_regime": {
+        "ice_regime": "level_first_year_ice_polar_class",
+        "ice_thickness_m": [
+          0.8,
+          1.5
+        ],
+        "location": "ice_belt_shell_plating",
+        "panel_area_m2": [
+          0.25,
+          8.0
+        ],
+        "polar_class": [
+          "PC6"
+        ]
+      },
+      "asset_id": "IACS_PC6_PATCH_GEOMETRY",
+      "evidence_tier": "repo_transcription",
+      "family": "iacs_ur_i_pc6",
+      "primary_source_verified": false,
+      "role": "regression_anchor",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "IACS UR I ice-load patch geometry as transcribed in TensorPhysics plate_buckling/loads.py and docs/papers/W3-N03/report.md: patch height = 0.6*h_ice, patch aspect ratio 4:1",
+      "tolerance": {
+        "mode": "relative",
+        "note": "geometric ratio transcribed from the rule; drift budget only",
+        "value": 0.02
+      },
+      "units": {
+        "patch_aspect_ratio": "1",
+        "patch_height_factor": "1"
+      },
+      "value_sha256": "e21d531cc5451a531533606c5d3c5cc972ed117b57275a9662cfd3567d09108d",
+      "values": {
+        "patch_aspect_ratio": 4.0,
+        "patch_height_factor": 0.6
+      },
+      "verification_note": "Patch geometry as already transcribed and used by the plate-buckling line of this repository; the UR I clause text was not re-read for this build."
+    }
+  ],
+  "family": "iacs_ur_i_pc6",
+  "schema": "ice_nav_refs.v1"
+}
