@@ -1,0 +1,153 @@
+{
+  "assets": [
+    {
+      "applicable_regime": {
+        "bow_angle_deg": [
+          20.0,
+          45.0
+        ],
+        "channel_type": "repeated_navigation_channel",
+        "ice_regime": "brash_ice_channel",
+        "ice_thickness_m": [
+          0.3,
+          1.0
+        ],
+        "ship_length_m": [
+          50.0,
+          250.0
+        ],
+        "speed_m_s": [
+          0.5,
+          5.0
+        ]
+      },
+      "asset_id": "KEI_BRASH_COEFF_BAND",
+      "evidence_tier": "literature_band",
+      "family": "keinonen_brash",
+      "primary_source_verified": false,
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Keinonen (1983) POAC'83 pp. 429-444 semi-empirical coefficient scatter for fragmented/brash ice; recorded as the uncertainty band of C0 and C1",
+      "tolerance": {
+        "mode": "relative",
+        "note": "coefficient-band half-width; brash ice is the least repeatable ice regime",
+        "value": 0.3
+      },
+      "units": {
+        "C0_lower": "1",
+        "C0_nominal": "1",
+        "C0_upper": "1",
+        "C1_lower": "1",
+        "C1_upper": "1"
+      },
+      "value_sha256": "ecb04ab7621fc965265f463c9f3e8acfa6aed4a013519b2ae18fe76cc51adf45",
+      "values": {
+        "C0_lower": 1.5,
+        "C0_nominal": 1.8,
+        "C0_upper": 2.2,
+        "C1_lower": 0.15,
+        "C1_upper": 0.35
+      },
+      "verification_note": "Bands are the engineering uncertainty of the semi-empirical coefficient set for brash ice, not a digitised table: no single published value exists for the fragmented regime. Wide by construction; use only for plausibility windows."
+    },
+    {
+      "applicable_regime": {
+        "bow_angle_deg": [
+          20.0,
+          45.0
+        ],
+        "ice_regime": "brash_ice_channel",
+        "ice_thickness_m": [
+          0.3,
+          1.2
+        ],
+        "ship_length_m": [
+          50.0,
+          250.0
+        ],
+        "speed_m_s": [
+          0.5,
+          5.0
+        ]
+      },
+      "asset_id": "KEI_COEFFICIENTS",
+      "evidence_tier": "repo_transcription",
+      "family": "keinonen_brash",
+      "formula": "R = C0*sigma_f*h^1.5*B^0.5*(1 + C1*Fr_h)*f(phi)",
+      "primary_source_verified": false,
+      "role": "regression_anchor",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Keinonen, A. (1983) 'Icebreaking model testing -- a review of recent developments', POAC'83, Helsinki, pp. 429-444; coefficient family restated in Keinonen (1996) ice-resistance formulations for brash/fragmented ice",
+      "tolerance": {
+        "mode": "relative",
+        "note": "transcription tolerance for the published coefficient pair",
+        "value": 0.02
+      },
+      "units": {
+        "C0": "1",
+        "C1": "1"
+      },
+      "value_sha256": "4852cd5dd4dea3ed49320817ec43155e569bd965bd08e224e5c3c569b470148d",
+      "values": {
+        "C0": 1.8,
+        "C1": 0.25
+      },
+      "verification_note": "Coefficient pair taken from the repository transcription of Keinonen (1983). The 1996 consolidated source named in the campaign brief was not accessible in the build environment, so the 1996 attribution of this coefficient set remains unverified; treat C0/C1 as a regression anchor until a primary source is read."
+    },
+    {
+      "applicable_regime": {
+        "bow_angle_deg": [
+          20.0,
+          45.0
+        ],
+        "ice_regime": "brash_ice_channel",
+        "ice_thickness_m": [
+          0.3,
+          1.2
+        ],
+        "ship_length_m": [
+          50.0,
+          250.0
+        ],
+        "speed_m_s": [
+          0.5,
+          5.0
+        ]
+      },
+      "asset_id": "KEI_RESISTANCE_REF",
+      "evidence_tier": "repo_transcription",
+      "family": "keinonen_brash",
+      "formula": "R = C0*sigma_f*h^1.5*B^0.5*(1 + C1*Fr_h)*(sin(phi/2) + 0.3cos(phi/2))",
+      "primary_source_verified": false,
+      "reference_condition": {
+        "B_m": 20.0,
+        "V_m_s": 2.0,
+        "bow_angle_deg": 30.0,
+        "h_m": 0.6,
+        "sigma_f_MPa": 0.5
+      },
+      "role": "regression_anchor",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Keinonen (1983) POAC'83 pp. 429-444 evaluation at a Baltic brash-ice reference condition (h = 0.6 m, B = 20 m, V = 2 m/s, bow angle 30 deg)",
+      "tolerance": {
+        "mode": "relative",
+        "note": "regression drift budget for the semi-empirical evaluation",
+        "value": 0.1
+      },
+      "units": {
+        "Fr_h": "1",
+        "R_kN": "kN",
+        "f_phi": "1"
+      },
+      "value_sha256": "2f25c8072bed7495abab57051d0ab71bdd8156a0bcf75d687b2fd8b35b139841",
+      "values": {
+        "Fr_h": 0.8243656113824966,
+        "R_kN": 1237.7070624878215,
+        "f_phi": 0.5485967929892412
+      },
+      "verification_note": "Value evaluated here from the transcribed closed form, not measured values from a brash-ice model test; absolute accuracy against Keinonen's tank data is not established by this repository."
+    }
+  ],
+  "family": "keinonen_brash",
+  "schema": "ice_nav_refs.v1"
+}

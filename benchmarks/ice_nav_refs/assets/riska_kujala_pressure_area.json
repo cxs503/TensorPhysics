@@ -1,0 +1,156 @@
+{
+  "assets": [
+    {
+      "applicable_regime": {
+        "contact_area_m2": [
+          5.0,
+          200.0
+        ],
+        "ice_regime": "level_first_year_ice_contact",
+        "ice_thickness_m": [
+          0.3,
+          3.0
+        ],
+        "polar_class": [
+          "PC4",
+          "PC7"
+        ]
+      },
+      "asset_id": "RA_GLOBAL_PRESSURE_TABLE",
+      "evidence_tier": "derived_from_rule_form",
+      "family": "riska_kujala_pressure_area",
+      "formula": "p_G(h) = 1.2 MPa * (h/1.0 m)^-0.5",
+      "primary_source_verified": false,
+      "reference_condition": {
+        "exponent": -0.5,
+        "h_ref_m": 1.0,
+        "p_ref_MPa": 1.2
+      },
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "ISO 19906 / IACS Polar Class global ice pressure decreasing with contact area: p_G = p_ref*(h/h_ref)^-0.5 with p_ref = 1.2 MPa at h_ref = 1.0 m, as implemented in TensorPhysics hullgirder/ice_load.py::global_ice_pressure",
+      "tolerance": {
+        "mode": "relative",
+        "note": "rule-form pressure used as an order-of-magnitude global level",
+        "value": 0.15
+      },
+      "units": {
+        "pG_h0.5_MPa": "MPa",
+        "pG_h1.5_MPa": "MPa",
+        "pG_h1_MPa": "MPa",
+        "pG_h2_MPa": "MPa",
+        "pG_h3_MPa": "MPa"
+      },
+      "value_sha256": "96987ac5ab695e975327afdf5bb73efecbb2bd65117ea3085a019f74b3b767d9",
+      "values": {
+        "pG_h0.5_MPa": 1.697056274847714,
+        "pG_h1.5_MPa": 0.9797958971132712,
+        "pG_h1_MPa": 1.2,
+        "pG_h2_MPa": 0.848528137423857,
+        "pG_h3_MPa": 0.6928203230275508
+      },
+      "verification_note": "Anchored to the ISO 19906 / Polar Class global-pressure level as transcribed in this repository (p_ref = 1.2 MPa at 1 m); the standard clause was not read during this build, so both the 1.2 MPa level and the -0.5 thickness exponent are repo-transcribed values with rule-level (not experimental) authority."
+    },
+    {
+      "applicable_regime": {
+        "contact_area_m2": [
+          0.25,
+          10.0
+        ],
+        "ice_regime": "level_first_year_ice_contact",
+        "ice_thickness_m": [
+          0.3,
+          2.0
+        ],
+        "polar_class": [
+          "PC4",
+          "PC7"
+        ]
+      },
+      "asset_id": "RA_LOCAL_PRESSURE_TABLE",
+      "evidence_tier": "derived_from_rule_form",
+      "family": "riska_kujala_pressure_area",
+      "formula": "p(A) = 3.0 MPa * A^-0.45",
+      "primary_source_verified": false,
+      "reference_condition": {
+        "exponent": 0.45,
+        "p0_MPa": 3.0,
+        "p0_band_MPa": [
+          2.4,
+          3.6
+        ]
+      },
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "Riska/Kujala pressure-area family p = p0*A^-0.45 (ISO 19906 Annex A form) with reference pressure p0 = 3.0 MPa at A = 1 m^2 for first-year ice",
+      "tolerance": {
+        "mode": "relative",
+        "note": "covers the p0 reference-pressure band (2.4-3.6 MPa) and the exponent band",
+        "value": 0.2
+      },
+      "units": {
+        "p_A0.25_MPa": "MPa",
+        "p_A0.5_MPa": "MPa",
+        "p_A10_MPa": "MPa",
+        "p_A1_MPa": "MPa",
+        "p_A2_MPa": "MPa",
+        "p_A5_MPa": "MPa"
+      },
+      "value_sha256": "98851dd4e58440f9ba8630305651f94a6268ebc3ddde76ddd9435b8582fdaec2",
+      "values": {
+        "p_A0.25_MPa": 5.598197949220845,
+        "p_A0.5_MPa": 4.098120770263186,
+        "p_A10_MPa": 1.0644401677007265,
+        "p_A1_MPa": 3.0,
+        "p_A2_MPa": 2.196128543918438,
+        "p_A5_MPa": 1.454068119985592
+      },
+      "verification_note": "Power law is the cited rule form; the reference pressure p0 = 3.0 MPa is the nominal first-year local pressure used in this repository (ice_plasticity/iso19906.py::typical_ice_belt_params), i.e. a nominal engineering value with a 2.4-3.6 MPa band, not a measured datum."
+    },
+    {
+      "applicable_regime": {
+        "contact_area_m2": [
+          0.25,
+          10.0
+        ],
+        "ice_regime": "level_first_year_ice_contact",
+        "ice_thickness_m": [
+          0.3,
+          2.0
+        ],
+        "polar_class": [
+          "PC4",
+          "PC7"
+        ]
+      },
+      "asset_id": "RA_PRESSURE_AREA_EXPONENT",
+      "evidence_tier": "standards_clause",
+      "family": "riska_kujala_pressure_area",
+      "primary_source_verified": false,
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "ISO 19906 (2010) Annex A pressure-area relation p = p0*A^-ex with ex = 0.45 for first-year ice, as used by the Riska/Kujala pressure-area family and transcribed in TensorPhysics ice_plasticity/iso19906.py",
+      "tolerance": {
+        "lower": 0.4,
+        "mode": "band",
+        "note": "exponent band quoted for first-year ice local pressure",
+        "upper": 0.55,
+        "value": 0.15
+      },
+      "units": {
+        "ex_first_year": "1",
+        "ex_lower": "1",
+        "ex_upper": "1"
+      },
+      "value_sha256": "9f05d348ca9fa95ccbef8b1fd5603493992a6142e011269a896ca24f87028519",
+      "values": {
+        "ex_first_year": 0.45,
+        "ex_lower": 0.4,
+        "ex_upper": 0.55
+      },
+      "verification_note": "Exponent 0.45 is the value used in this repository and in the ISO 19906-derived pressure-area practice; the ISO document itself is paywalled and was not opened, so the band 0.40-0.55 is the literature scatter, not a verbatim table."
+    }
+  ],
+  "family": "riska_kujala_pressure_area",
+  "schema": "ice_nav_refs.v1"
+}
