@@ -1,0 +1,132 @@
+{
+  "assets": [
+    {
+      "applicable_regime": {
+        "ice_regime": "any_polar_operation",
+        "ice_thickness_m": [
+          0.0,
+          3.0
+        ],
+        "latitude_band_deg": [
+          60.0,
+          90.0
+        ],
+        "polar_ship_category": [
+          "I-A"
+        ]
+      },
+      "asset_id": "PC_CATEGORY_TO_POLAR_CLASS",
+      "evidence_tier": "standards_clause",
+      "family": "polar_code_i_a",
+      "primary_source_verified": false,
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "IMO Polar Code (resolution MSC.385(94)), Part I-A, ship categories: A = at least medium first-year ice (PC1-PC5 or equivalent), B = at least thin first-year ice (PC6-PC7 or equivalent), C = open water or less severe ice conditions",
+      "tolerance": {
+        "mode": "exact",
+        "note": "categorical requirement",
+        "value": 0.0
+      },
+      "units": {
+        "category_A_polar_classes": "text",
+        "category_B_polar_classes": "text",
+        "category_C_ice_strengthening": "text"
+      },
+      "value_sha256": "c33dfd205120395c4bf4677b6906499d64c5f85be204265765107a6ee5720118",
+      "values": {
+        "category_A_polar_classes": "PC1-PC5",
+        "category_B_polar_classes": "PC6-PC7",
+        "category_C_ice_strengthening": "none required or equivalent light ice class"
+      },
+      "verification_note": "Category definitions and the category-to-Polar-Class mapping are the widely reproduced content of Polar Code Part I-A; the IMO resolution text itself could not be retrieved in the build environment, so the mapping is high-confidence but not primary-verified."
+    },
+    {
+      "applicable_regime": {
+        "ice_regime": "any_polar_operation",
+        "ice_thickness_m": [
+          0.0,
+          3.0
+        ],
+        "latitude_band_deg": [
+          60.0,
+          90.0
+        ],
+        "polar_ship_category": [
+          "I-A"
+        ]
+      },
+      "asset_id": "PC_I_A_CATEGORY_THICKNESS",
+      "evidence_tier": "standards_clause",
+      "family": "polar_code_i_a",
+      "primary_source_verified": false,
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "IMO Polar Code Part I-A categories mapped onto WMO sea-ice thickness nomenclature: medium first-year ice 0.7-1.2 m, thin first-year ice 0.3-0.7 m, category C up to 0.3 m",
+      "tolerance": {
+        "mode": "relative",
+        "note": "nomenclature band edges; 15% covers the WMO definition rounding",
+        "value": 0.15
+      },
+      "units": {
+        "A_max_m": "m",
+        "A_min_m": "m",
+        "B_max_m": "m",
+        "B_min_m": "m",
+        "C_max_m": "m"
+      },
+      "value_sha256": "5eb2eb177b987fa28b27dcedf052b04439a6e40facc12cbfb83f0d9708db2ac5",
+      "values": {
+        "A_max_m": 1.2,
+        "A_min_m": 0.7,
+        "B_max_m": 0.7,
+        "B_min_m": 0.3,
+        "C_max_m": 0.3
+      },
+      "verification_note": "WMO ice-thickness class boundaries are quoted from the sea-ice nomenclature that the Polar Code category descriptions refer to; the WMO document was not opened during this build, so the numbers carry standard-reported, not verbatim, status."
+    },
+    {
+      "applicable_regime": {
+        "ice_regime": "any_polar_operation",
+        "ice_thickness_m": [
+          0.0,
+          3.0
+        ],
+        "latitude_band_deg": [
+          60.0,
+          90.0
+        ],
+        "polar_ship_category": [
+          "I-A"
+        ]
+      },
+      "asset_id": "PC_I_A_PST_BAND",
+      "evidence_tier": "literature_band",
+      "family": "polar_code_i_a",
+      "primary_source_verified": false,
+      "role": "accuracy_reference",
+      "schema": "ice_nav_refs.v1",
+      "source_citation": "IMO Polar Code Part I-A section 3 (polar service temperature, PST, derived from the lowest mean daily low temperature of the intended area and season): representative Arctic PST -30 degC within the -40..-20 degC band",
+      "tolerance": {
+        "lower": -40.0,
+        "mode": "band",
+        "note": "PST is area/season specific; -30 degC is a representative Arctic value",
+        "upper": -20.0,
+        "value": 20.0
+      },
+      "units": {
+        "pst_lower_C": "degC",
+        "pst_nominal_C": "degC",
+        "pst_upper_C": "degC"
+      },
+      "value_sha256": "821bbacb0e6e184ae7cde34f4b42d8996d75627baec6507a4550921ddd0761f6",
+      "values": {
+        "pst_lower_C": -40.0,
+        "pst_nominal_C": -30.0,
+        "pst_upper_C": -20.0
+      },
+      "verification_note": "The PST definition (LMDLT of intended area and season) is the Polar Code content; the -30 degC value is a representative engineering value for Arctic seasonal operation, not a clause verbatim. Use the band for equipment/material ratings."
+    }
+  ],
+  "family": "polar_code_i_a",
+  "schema": "ice_nav_refs.v1"
+}

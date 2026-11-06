@@ -1,0 +1,86 @@
+{
+  "aggregate_rule": "sha256 over the sorted 'relative_path:sha256' lines of 'files'",
+  "aggregate_sha256": "64fbdb4e89c0e8b01726c08051dade7c35bf912d559201751ad00436b76462b9",
+  "asset_count": 16,
+  "description": "sha256-anchored reference-value corpus for the ice-navigation performance chain (level-ice resistance components, brash-ice coefficients, ice pressure-area, Polar Class local panel pressure, Polar Code I-A requirements).",
+  "families": {
+    "iacs_ur_i_pc6": 3,
+    "keinonen_brash": 3,
+    "lindqvist_1989": 4,
+    "polar_code_i_a": 3,
+    "riska_kujala_pressure_area": 3
+  },
+  "family_count": 5,
+  "files": {
+    "assets/iacs_ur_i_pc6.json": {
+      "asset_ids": [
+        "IACS_PC6_DESIGN_ICE_THICKNESS",
+        "IACS_PC6_PANEL_PRESSURE_TABLE",
+        "IACS_PC6_PATCH_GEOMETRY"
+      ],
+      "bytes": 5055,
+      "family": "iacs_ur_i_pc6",
+      "sha256": "1ffbebf421778d8be97d41f332b3498693dcdcddc1c283946e5003597c344c34"
+    },
+    "assets/keinonen_brash.json": {
+      "asset_ids": [
+        "KEI_BRASH_COEFF_BAND",
+        "KEI_COEFFICIENTS",
+        "KEI_RESISTANCE_REF"
+      ],
+      "bytes": 5054,
+      "family": "keinonen_brash",
+      "sha256": "5034ef8bf0773529db5b23a8678c780ef5c8c0e7e1309089e08f9e2aabc874b2"
+    },
+    "assets/lindqvist_1989.json": {
+      "asset_ids": [
+        "LIN_C_CRUSH_PHI30",
+        "LIN_C_SPEED_FR",
+        "LIN_ICE_STEEL_FRICTION_BAND",
+        "LIN_RESISTANCE_COMPONENTS"
+      ],
+      "bytes": 7913,
+      "family": "lindqvist_1989",
+      "sha256": "34e75a5fdcdf0462f611388bc7ab9d394ce3c2667d49b393317da556041b14ec"
+    },
+    "assets/polar_code_i_a.json": {
+      "asset_ids": [
+        "PC_CATEGORY_TO_POLAR_CLASS",
+        "PC_I_A_CATEGORY_THICKNESS",
+        "PC_I_A_PST_BAND"
+      ],
+      "bytes": 4858,
+      "family": "polar_code_i_a",
+      "sha256": "00c0afa8920dceb7bcf263ae2e7720542dae829c8abc904fda5a0cbc0b9c4c64"
+    },
+    "assets/riska_kujala_pressure_area.json": {
+      "asset_ids": [
+        "RA_GLOBAL_PRESSURE_TABLE",
+        "RA_LOCAL_PRESSURE_TABLE",
+        "RA_PRESSURE_AREA_EXPONENT"
+      ],
+      "bytes": 5542,
+      "family": "riska_kujala_pressure_area",
+      "sha256": "4cc6c6b92a994a09000681ce0ef6105b018f3346fbe123ffd22a3b94dd71b321"
+    }
+  },
+  "generated_by": "benchmarks/ice_nav_refs/build_corpus.py",
+  "reference_condition_global": {
+    "ice": {
+      "E_GPa": 5.0,
+      "h_m": 1.0,
+      "mu_ice_steel": 0.15,
+      "nu": 0.3,
+      "rho_kg_m3": 900.0,
+      "rho_water_kg_m3": 1025.0,
+      "sigma_c_MPa": 5.0,
+      "sigma_f_MPa": 0.5
+    },
+    "ship": {
+      "B_m": 20.0,
+      "L_m": 150.0,
+      "bow_angle_deg": 30.0
+    }
+  },
+  "schema": "ice_nav_refs.v1"
+}
