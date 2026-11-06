@@ -14,6 +14,9 @@ References
 * Assur (1958) / Cox & Weeks (1983): seawater liquidus (freezing point
   depression), brine salinity vs temperature.
 * Stefan problem: ``h = sqrt(2 k dT t / (rho L))`` for the freezing water film.
+* Ice resistance (three-state, full-spectrum): Lindqvist (1989) level ice,
+  brash-ice coverage decay law and Keinonen-anchored ridge ramming -- see
+  :mod:`tensorphysics.ice.resistance` and ``benchmarks/ice_resistance``.
 """
 
 from .adfreeze import (
@@ -48,6 +51,23 @@ from .breakout import (
     required_debonded_area,
     waterline_half_breadth,
 )
+from .resistance import (
+    DomainLimits,
+    IceDomainError,
+    IceState,
+    ShipGeometry as IceResistanceShipGeometry,
+    brash_ice_resistance,
+    coefficient_sensitivity,
+    coverage_decay,
+    delivered_power_MW,
+    ice_resistance,
+    level_ice_resistance,
+    ram_capacity,
+    ridge_field_mean_resistance,
+    ridge_penetration_work,
+    ridge_resistance,
+    speed_for_power,
+)
 from .degradation import (
     DEFAULT_INTERFACE_G_C,
     DegradationState,
@@ -72,6 +92,21 @@ __all__ = [
     "BreakoutResult",
     "DEFAULT_FRICTION_COEFF",
     "DEFAULT_INTERFACE_G_C",
+    "DomainLimits",
+    "IceDomainError",
+    "IceResistanceShipGeometry",
+    "IceState",
+    "brash_ice_resistance",
+    "coefficient_sensitivity",
+    "coverage_decay",
+    "delivered_power_MW",
+    "ice_resistance",
+    "level_ice_resistance",
+    "ram_capacity",
+    "ridge_field_mean_resistance",
+    "ridge_penetration_work",
+    "ridge_resistance",
+    "speed_for_power",
     "DEFAULT_NORMAL_PRESSURE_PA",
     "DegradationState",
     "FREDERKING_ADFREEZE",
