@@ -7,6 +7,11 @@ be reproducible:
 
 * :mod:`tensorphysics.campaign.clock` -- M12 master/sub clock ratio and exchange
   cadence on an exact integer time lattice.
+* :mod:`tensorphysics.campaign.clock_rational` -- the same contract for arbitrary
+  **rational** step ratios: GCD atom lattice, LCM exchange cadence and a causality
+  gate that refuses future data.
+* :mod:`tensorphysics.campaign.multirate` -- multi-rate two-integrator cross-check
+  against a closed-form reference, with declared in-interval error bands.
 * :mod:`tensorphysics.campaign.ledger` -- dual mass / energy / impulse books and
   their machine-precision reconciliation.
 * :mod:`tensorphysics.campaign.geometry` -- ``geom_pc6`` consumer registration
@@ -25,6 +30,24 @@ from .clock import (
     clock_drift,
     expected_exchange_count,
     verify_alignment,
+)
+from .clock_rational import (
+    COUPLING_CLOCK_RATIONAL_V1,
+    CausalityViolation,
+    RationalClockError,
+    RationalClockSpec,
+    RationalCouplingClock,
+    RationalExchangeEvent,
+    TimedSample,
+    as_fraction,
+    assert_causal_hold,
+    artifact_digest as rational_clock_artifact_digest,
+    build_causal_buffer,
+    causality_audit,
+    expected_exchange_count as expected_rational_exchange_count,
+    fraction_gcd,
+    fraction_lcm,
+    verify_gcd_cadence,
 )
 from .geometry import (
     CLOSURE_RTOL,
@@ -57,6 +80,21 @@ from .ledger import (
     reconcile_books,
     verify_same_batch,
 )
+from .multirate import (
+    BAND_LINEAR_COEF,
+    BAND_ZOH_COEF,
+    ORDER_WINDOW,
+    ORDER_WINDOW_SECOND,
+    MultirateResult,
+    TwoIntegratorModel,
+    band_scan,
+    interpolation_band,
+    interpolation_scan,
+    measure_order,
+    refinement_scan,
+    signal_amplitude,
+    simulate_multirate,
+)
 from .schema import (
     SchemaError,
     canonical_json,
@@ -74,6 +112,35 @@ from .schema_defs import (
 )
 
 __all__ = [
+    "BAND_LINEAR_COEF",
+    "BAND_ZOH_COEF",
+    "COUPLING_CLOCK_RATIONAL_V1",
+    "CausalityViolation",
+    "MultirateResult",
+    "ORDER_WINDOW",
+    "ORDER_WINDOW_SECOND",
+    "RationalClockError",
+    "RationalClockSpec",
+    "RationalCouplingClock",
+    "RationalExchangeEvent",
+    "TimedSample",
+    "TwoIntegratorModel",
+    "assert_causal_hold",
+    "as_fraction",
+    "band_scan",
+    "build_causal_buffer",
+    "causality_audit",
+    "expected_rational_exchange_count",
+    "fraction_gcd",
+    "fraction_lcm",
+    "interpolation_band",
+    "interpolation_scan",
+    "measure_order",
+    "rational_clock_artifact_digest",
+    "refinement_scan",
+    "signal_amplitude",
+    "simulate_multirate",
+    "verify_gcd_cadence",
     "ARTIFACT_SCHEMAS",
     "CLOSURE_RTOL",
     "DEFAULT_ATOL_ULPS",
