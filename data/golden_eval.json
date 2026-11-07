@@ -1,0 +1,1470 @@
+{
+  "metrics": {
+    "n": 60,
+    "per_class": {
+      "C1": {
+        "support": 16,
+        "tp": 7,
+        "fp": 5,
+        "fn": 9,
+        "precision": 0.5833,
+        "recall": 0.4375,
+        "f1": 0.5
+      },
+      "C2": {
+        "support": 8,
+        "tp": 2,
+        "fp": 7,
+        "fn": 6,
+        "precision": 0.2222,
+        "recall": 0.25,
+        "f1": 0.2353
+      },
+      "C3": {
+        "support": 8,
+        "tp": 5,
+        "fp": 1,
+        "fn": 3,
+        "precision": 0.8333,
+        "recall": 0.625,
+        "f1": 0.7143
+      },
+      "C4": {
+        "support": 8,
+        "tp": 5,
+        "fp": 5,
+        "fn": 3,
+        "precision": 0.5,
+        "recall": 0.625,
+        "f1": 0.5556
+      },
+      "C5": {
+        "support": 8,
+        "tp": 6,
+        "fp": 7,
+        "fn": 2,
+        "precision": 0.4615,
+        "recall": 0.75,
+        "f1": 0.5714
+      },
+      "C6": {
+        "support": 12,
+        "tp": 5,
+        "fp": 5,
+        "fn": 7,
+        "precision": 0.5,
+        "recall": 0.4167,
+        "f1": 0.4545
+      }
+    },
+    "macro_f1": 0.5052,
+    "accuracy": 0.5,
+    "confusion": {
+      "C1": {
+        "C1": 7,
+        "C2": 3,
+        "C3": 0,
+        "C4": 2,
+        "C5": 1,
+        "C6": 3,
+        "NONE": 0
+      },
+      "C2": {
+        "C1": 4,
+        "C2": 2,
+        "C3": 0,
+        "C4": 0,
+        "C5": 2,
+        "C6": 0,
+        "NONE": 0
+      },
+      "C3": {
+        "C1": 0,
+        "C2": 0,
+        "C3": 5,
+        "C4": 1,
+        "C5": 1,
+        "C6": 1,
+        "NONE": 0
+      },
+      "C4": {
+        "C1": 0,
+        "C2": 1,
+        "C3": 1,
+        "C4": 5,
+        "C5": 1,
+        "C6": 0,
+        "NONE": 0
+      },
+      "C5": {
+        "C1": 0,
+        "C2": 0,
+        "C3": 0,
+        "C4": 1,
+        "C5": 6,
+        "C6": 1,
+        "NONE": 0
+      },
+      "C6": {
+        "C1": 1,
+        "C2": 3,
+        "C3": 0,
+        "C4": 1,
+        "C5": 2,
+        "C6": 5,
+        "NONE": 0
+      },
+      "NONE": {
+        "C1": 0,
+        "C2": 0,
+        "C3": 0,
+        "C4": 0,
+        "C5": 0,
+        "C6": 0,
+        "NONE": 0
+      }
+    },
+    "classes_below_threshold": [
+      "C1",
+      "C2",
+      "C4",
+      "C5",
+      "C6"
+    ]
+  },
+  "metrics_alt_precedence": {
+    "n": 60,
+    "per_class": {
+      "C1": {
+        "support": 16,
+        "tp": 9,
+        "fp": 9,
+        "fn": 7,
+        "precision": 0.5,
+        "recall": 0.5625,
+        "f1": 0.5294
+      },
+      "C2": {
+        "support": 8,
+        "tp": 2,
+        "fp": 9,
+        "fn": 6,
+        "precision": 0.1818,
+        "recall": 0.25,
+        "f1": 0.2105
+      },
+      "C3": {
+        "support": 8,
+        "tp": 5,
+        "fp": 1,
+        "fn": 3,
+        "precision": 0.8333,
+        "recall": 0.625,
+        "f1": 0.7143
+      },
+      "C4": {
+        "support": 8,
+        "tp": 4,
+        "fp": 4,
+        "fn": 4,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5
+      },
+      "C5": {
+        "support": 8,
+        "tp": 4,
+        "fp": 3,
+        "fn": 4,
+        "precision": 0.5714,
+        "recall": 0.5,
+        "f1": 0.5333
+      },
+      "C6": {
+        "support": 12,
+        "tp": 5,
+        "fp": 5,
+        "fn": 7,
+        "precision": 0.5,
+        "recall": 0.4167,
+        "f1": 0.4545
+      }
+    },
+    "macro_f1": 0.4903,
+    "accuracy": 0.4833,
+    "confusion": {
+      "C1": {
+        "C1": 9,
+        "C2": 3,
+        "C3": 0,
+        "C4": 1,
+        "C5": 0,
+        "C6": 3,
+        "NONE": 0
+      },
+      "C2": {
+        "C1": 5,
+        "C2": 2,
+        "C3": 0,
+        "C4": 0,
+        "C5": 1,
+        "C6": 0,
+        "NONE": 0
+      },
+      "C3": {
+        "C1": 1,
+        "C2": 0,
+        "C3": 5,
+        "C4": 1,
+        "C5": 0,
+        "C6": 1,
+        "NONE": 0
+      },
+      "C4": {
+        "C1": 0,
+        "C2": 2,
+        "C3": 1,
+        "C4": 4,
+        "C5": 1,
+        "C6": 0,
+        "NONE": 0
+      },
+      "C5": {
+        "C1": 2,
+        "C2": 0,
+        "C3": 0,
+        "C4": 1,
+        "C5": 4,
+        "C6": 1,
+        "NONE": 0
+      },
+      "C6": {
+        "C1": 1,
+        "C2": 4,
+        "C3": 0,
+        "C4": 1,
+        "C5": 1,
+        "C6": 5,
+        "NONE": 0
+      },
+      "NONE": {
+        "C1": 0,
+        "C2": 0,
+        "C3": 0,
+        "C4": 0,
+        "C5": 0,
+        "C6": 0,
+        "NONE": 0
+      }
+    },
+    "classes_below_threshold": [
+      "C1",
+      "C2",
+      "C4",
+      "C5",
+      "C6"
+    ]
+  },
+  "rows": [
+    {
+      "report_id": "5148",
+      "mission_id": 4721,
+      "gold": "C1",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=6 min_err_pct=7.8e-05",
+        "n_external_rows=4 min_external_err=0.0029",
+        "reference_kinds=experiment",
+        "gate_pass=3 gate_fail=1",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=7",
+        "infra_markers=2 units=3",
+        "verif_names=1",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5464",
+      "mission_id": 4886,
+      "gold": "C1",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=13 min_err_pct=0.3378",
+        "n_external_rows=11 min_external_err=0.3378",
+        "reference_kinds=analytic,experiment,literature",
+        "gate_pass=12 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=8",
+        "infra_markers=4 units=3",
+        "verif_names=7",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5626",
+      "mission_id": 4951,
+      "gold": "C1",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=21 min_err_pct=1.453e-14",
+        "n_external_rows=20 min_external_err=1.453e-14",
+        "reference_kinds=analytic",
+        "gate_pass=9 gate_fail=0",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=1 sections=13",
+        "infra_markers=6 units=15",
+        "verif_names=3",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5640",
+      "mission_id": 4973,
+      "gold": "C1",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=9 min_err_pct=0.001722",
+        "n_external_rows=8 min_external_err=0.001722",
+        "reference_kinds=analytic",
+        "gate_pass=10 gate_fail=1",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=1",
+        "doc_shape=0 sections=7",
+        "infra_markers=3 units=1",
+        "verif_names=7",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5688",
+      "mission_id": 4990,
+      "gold": "C1",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=24 min_err_pct=0.00172179",
+        "n_external_rows=21 min_external_err=0.00172179",
+        "reference_kinds=analytic,literature",
+        "gate_pass=8 gate_fail=0",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=8",
+        "infra_markers=3 units=1",
+        "verif_names=5",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5776",
+      "mission_id": 5068,
+      "gold": "C1",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=1 min_err_pct=0.01",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=18 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=0",
+        "doc_shape=0 sections=16",
+        "infra_markers=3 units=11",
+        "verif_names=10",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5794",
+      "mission_id": 5072,
+      "gold": "C1",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=24 min_err_pct=0.58",
+        "n_external_rows=22 min_external_err=0.58",
+        "reference_kinds=literature,experiment",
+        "gate_pass=8 gate_fail=0",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=7",
+        "doc_shape=0 sections=15",
+        "infra_markers=1 units=57",
+        "verif_names=5",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5800",
+      "mission_id": 5043,
+      "gold": "C1",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=21 min_err_pct=1e-13",
+        "n_external_rows=1 min_external_err=1e-13",
+        "reference_kinds=analytic,cross_discretization",
+        "gate_pass=6 gate_fail=0",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=1",
+        "doc_shape=1 sections=10",
+        "infra_markers=1 units=0",
+        "verif_names=6",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5806",
+      "mission_id": 5083,
+      "gold": "C1",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=7 min_err_pct=0.19",
+        "n_external_rows=7 min_external_err=0.19",
+        "reference_kinds=literature",
+        "gate_pass=8 gate_fail=3",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=8",
+        "infra_markers=3 units=26",
+        "verif_names=4",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5818",
+      "mission_id": 5082,
+      "gold": "C1",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=12 min_err_pct=2.4e-08",
+        "n_external_rows=12 min_external_err=2.4e-08",
+        "reference_kinds=analytic,cross_discretization,literature",
+        "gate_pass=2 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=3",
+        "doc_shape=0 sections=11",
+        "infra_markers=4 units=27",
+        "verif_names=1",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5924",
+      "mission_id": 5205,
+      "gold": "C1",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=34 min_err_pct=1e-13",
+        "n_external_rows=33 min_external_err=1e-13",
+        "reference_kinds=literature,analytic",
+        "gate_pass=3 gate_fail=13",
+        "level_up=0",
+        "defect_markers=5 correction=0 gate_lock=True",
+        "failure_verdict=2 negative=13",
+        "doc_shape=0 sections=11",
+        "infra_markers=2 units=14",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=结论：C2 FAIL"
+      ]
+    },
+    {
+      "report_id": "5938",
+      "mission_id": 5197,
+      "gold": "C1",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=7 min_err_pct=0.02",
+        "n_external_rows=5 min_external_err=0.02",
+        "reference_kinds=analytic,experiment",
+        "gate_pass=10 gate_fail=2",
+        "level_up=0",
+        "defect_markers=4 correction=0 gate_lock=True",
+        "failure_verdict=0 negative=3",
+        "doc_shape=0 sections=23",
+        "infra_markers=4 units=15",
+        "verif_names=6",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "6001",
+      "mission_id": 5262,
+      "gold": "C1",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=11 min_err_pct=0.0429",
+        "n_external_rows=1 min_external_err=3.196",
+        "reference_kinds=analytic",
+        "gate_pass=1 gate_fail=0",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=1",
+        "doc_shape=0 sections=19",
+        "infra_markers=2 units=31",
+        "verif_names=10",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "6018",
+      "mission_id": 5290,
+      "gold": "C1",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=2 min_err_pct=1.0",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=8 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=7",
+        "infra_markers=1 units=2",
+        "verif_names=0",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "6033",
+      "mission_id": 5255,
+      "gold": "C1",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=35 min_err_pct=2e-12",
+        "n_external_rows=35 min_external_err=2e-12",
+        "reference_kinds=analytic,cross_discretization,experiment",
+        "gate_pass=38 gate_fail=0",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=3",
+        "doc_shape=0 sections=12",
+        "infra_markers=5 units=4",
+        "verif_names=10",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5230",
+      "mission_id": 4747,
+      "gold": "C1",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=15 min_err_pct=0.0001",
+        "n_external_rows=15 min_external_err=0.0001",
+        "reference_kinds=experiment,analytic,internal_baseline",
+        "gate_pass=4 gate_fail=3",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=1 negative=4",
+        "doc_shape=0 sections=7",
+        "infra_markers=1 units=11",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=honest-FAIL"
+      ]
+    },
+    {
+      "report_id": "5395",
+      "mission_id": 4858,
+      "gold": "C2",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=7 min_err_pct=3.41",
+        "n_external_rows=1 min_external_err=15.0",
+        "reference_kinds=literature",
+        "gate_pass=3 gate_fail=3",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=False",
+        "failure_verdict=1 negative=4",
+        "doc_shape=0 sections=6",
+        "infra_markers=2 units=94",
+        "verif_names=4",
+        "correction_snippet=-",
+        "verdict_snippet=证伪"
+      ]
+    },
+    {
+      "report_id": "5534",
+      "mission_id": 4909,
+      "gold": "C2",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=5 min_err_pct=0.082",
+        "n_external_rows=3 min_external_err=0.082",
+        "reference_kinds=literature",
+        "gate_pass=18 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=True",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=11",
+        "infra_markers=4 units=6",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5750",
+      "mission_id": 5044,
+      "gold": "C2",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=22 min_err_pct=8.9678e-06",
+        "n_external_rows=20 min_external_err=8.9678e-06",
+        "reference_kinds=experiment,literature,analytic",
+        "gate_pass=6 gate_fail=1",
+        "level_up=1",
+        "defect_markers=0 correction=0 gate_lock=True",
+        "failure_verdict=0 negative=3",
+        "doc_shape=0 sections=8",
+        "infra_markers=18 units=14",
+        "verif_names=6",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5781",
+      "mission_id": 5076,
+      "gold": "C2",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=10 min_err_pct=5.3099999999999996e-14",
+        "n_external_rows=9 min_external_err=1.53",
+        "reference_kinds=literature",
+        "gate_pass=16 gate_fail=0",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=8",
+        "doc_shape=0 sections=26",
+        "infra_markers=7 units=27",
+        "verif_names=3",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5816",
+      "mission_id": 5071,
+      "gold": "C2",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=6 min_err_pct=3.6e-12",
+        "n_external_rows=6 min_external_err=3.6e-12",
+        "reference_kinds=literature",
+        "gate_pass=15 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=3",
+        "doc_shape=0 sections=11",
+        "infra_markers=8 units=25",
+        "verif_names=0",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5835",
+      "mission_id": 5103,
+      "gold": "C2",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=6 min_err_pct=0.56",
+        "n_external_rows=6 min_external_err=0.56",
+        "reference_kinds=cross_discretization,literature",
+        "gate_pass=0 gate_fail=3",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=3 negative=6",
+        "doc_shape=0 sections=9",
+        "infra_markers=8 units=11",
+        "verif_names=1",
+        "correction_snippet=-",
+        "verdict_snippet=判定（WITHHELD"
+      ]
+    },
+    {
+      "report_id": "5941",
+      "mission_id": 5186,
+      "gold": "C2",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=2 min_err_pct=5.445e-14",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=14 gate_fail=0",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=False",
+        "failure_verdict=1 negative=1",
+        "doc_shape=0 sections=7",
+        "infra_markers=0 units=19",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=证伪"
+      ]
+    },
+    {
+      "report_id": "6007",
+      "mission_id": 5243,
+      "gold": "C2",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=19 min_err_pct=0.24",
+        "n_external_rows=18 min_external_err=0.24",
+        "reference_kinds=analytic",
+        "gate_pass=3 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=13",
+        "infra_markers=5 units=38",
+        "verif_names=6",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5206",
+      "mission_id": 4760,
+      "gold": "C3",
+      "pred": "C3",
+      "trace": [
+        "n_error_rows=20 min_err_pct=3.33e-09",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=0 gate_fail=2",
+        "level_up=0",
+        "defect_markers=18 correction=13 gate_lock=True",
+        "failure_verdict=0 negative=8",
+        "doc_shape=3 sections=22",
+        "infra_markers=5 units=4",
+        "verif_names=0",
+        "correction_snippet=勘误",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5294",
+      "mission_id": 4804,
+      "gold": "C3",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=1 min_err_pct=1.0000000000000001e-07",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=18 gate_fail=5",
+        "level_up=0",
+        "defect_markers=6 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=3",
+        "doc_shape=0 sections=7",
+        "infra_markers=28 units=17",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "6031",
+      "mission_id": 5277,
+      "gold": "C3",
+      "pred": "C3",
+      "trace": [
+        "n_error_rows=20 min_err_pct=1.46",
+        "n_external_rows=20 min_external_err=1.46",
+        "reference_kinds=cross_discretization,experiment,literature,internal_baseline",
+        "gate_pass=4 gate_fail=6",
+        "level_up=0",
+        "defect_markers=5 correction=1 gate_lock=False",
+        "failure_verdict=2 negative=11",
+        "doc_shape=3 sections=18",
+        "infra_markers=4 units=1",
+        "verif_names=7",
+        "correction_snippet=假设 0.5 →",
+        "verdict_snippet=判定 → WITHHELD"
+      ]
+    },
+    {
+      "report_id": "5397",
+      "mission_id": 4854,
+      "gold": "C3",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=10 min_err_pct=9.999999999999999e-06",
+        "n_external_rows=9 min_external_err=9.999999999999999e-06",
+        "reference_kinds=experiment,analytic",
+        "gate_pass=12 gate_fail=3",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=1 negative=2",
+        "doc_shape=0 sections=7",
+        "infra_markers=11 units=0",
+        "verif_names=3",
+        "correction_snippet=-",
+        "verdict_snippet=证伪"
+      ]
+    },
+    {
+      "report_id": "5944",
+      "mission_id": 5204,
+      "gold": "C3",
+      "pred": "C3",
+      "trace": [
+        "n_error_rows=44 min_err_pct=0.0005",
+        "n_external_rows=41 min_external_err=0.0005",
+        "reference_kinds=literature,experiment",
+        "gate_pass=10 gate_fail=2",
+        "level_up=0",
+        "defect_markers=15 correction=2 gate_lock=False",
+        "failure_verdict=1 negative=17",
+        "doc_shape=0 sections=22",
+        "infra_markers=8 units=53",
+        "verif_names=5",
+        "correction_snippet=旧链把全浸潜艇按水面船算（兴波项 + 船型湿面积 + 商",
+        "verdict_snippet=honest-FAIL"
+      ]
+    },
+    {
+      "report_id": "5314",
+      "mission_id": 4811,
+      "gold": "C3",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=11 min_err_pct=15.0",
+        "n_external_rows=11 min_external_err=15.0",
+        "reference_kinds=experiment,analytic",
+        "gate_pass=22 gate_fail=6",
+        "level_up=0",
+        "defect_markers=16 correction=0 gate_lock=False",
+        "failure_verdict=1 negative=7",
+        "doc_shape=1 sections=6",
+        "infra_markers=17 units=21",
+        "verif_names=8",
+        "correction_snippet=-",
+        "verdict_snippet=不成立"
+      ]
+    },
+    {
+      "report_id": "5067",
+      "mission_id": 4687,
+      "gold": "C3",
+      "pred": "C3",
+      "trace": [
+        "n_error_rows=4 min_err_pct=1.9",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=5 gate_fail=0",
+        "level_up=0",
+        "defect_markers=5 correction=1 gate_lock=False",
+        "failure_verdict=2 negative=2",
+        "doc_shape=0 sections=7",
+        "infra_markers=9 units=35",
+        "verif_names=3",
+        "correction_snippet=代数纠正",
+        "verdict_snippet=判据不成立"
+      ]
+    },
+    {
+      "report_id": "5551",
+      "mission_id": 4917,
+      "gold": "C3",
+      "pred": "C3",
+      "trace": [
+        "n_error_rows=2 min_err_pct=0.566",
+        "n_external_rows=2 min_external_err=0.566",
+        "reference_kinds=analytic",
+        "gate_pass=3 gate_fail=1",
+        "level_up=0",
+        "defect_markers=2 correction=1 gate_lock=False",
+        "failure_verdict=0 negative=3",
+        "doc_shape=1 sections=7",
+        "infra_markers=0 units=4",
+        "verif_names=4",
+        "correction_snippet=算错",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5420",
+      "mission_id": 4867,
+      "gold": "C4",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=1 min_err_pct=0.28",
+        "n_external_rows=1 min_external_err=0.28",
+        "reference_kinds=literature",
+        "gate_pass=0 gate_fail=1",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=True",
+        "failure_verdict=0 negative=1",
+        "doc_shape=3 sections=8",
+        "infra_markers=6 units=5",
+        "verif_names=3",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5564",
+      "mission_id": 4925,
+      "gold": "C4",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=7 min_err_pct=0.071",
+        "n_external_rows=6 min_external_err=0.071",
+        "reference_kinds=literature,internal_baseline",
+        "gate_pass=4 gate_fail=6",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=0",
+        "doc_shape=2 sections=21",
+        "infra_markers=0 units=0",
+        "verif_names=12",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5613",
+      "mission_id": 4978,
+      "gold": "C4",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=1 min_err_pct=25.0",
+        "n_external_rows=1 min_external_err=25.0",
+        "reference_kinds=literature",
+        "gate_pass=6 gate_fail=4",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=8",
+        "doc_shape=6 sections=22",
+        "infra_markers=14 units=19",
+        "verif_names=5",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5893",
+      "mission_id": 5196,
+      "gold": "C4",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=5 min_err_pct=0.0158",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=2 gate_fail=2",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=True",
+        "failure_verdict=7 negative=8",
+        "doc_shape=2 sections=11",
+        "infra_markers=0 units=3",
+        "verif_names=1",
+        "correction_snippet=-",
+        "verdict_snippet=honest FAIL"
+      ]
+    },
+    {
+      "report_id": "6011",
+      "mission_id": 5265,
+      "gold": "C4",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=0 min_err_pct=None",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=5 gate_fail=11",
+        "level_up=1",
+        "defect_markers=7 correction=2 gate_lock=True",
+        "failure_verdict=5 negative=15",
+        "doc_shape=3 sections=8",
+        "infra_markers=12 units=0",
+        "verif_names=2",
+        "correction_snippet=错误数值",
+        "verdict_snippet=结论** | 显式证伪/判决 FAIL"
+      ]
+    },
+    {
+      "report_id": "6095",
+      "mission_id": 5317,
+      "gold": "C4",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=6 min_err_pct=0.98",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=6 gate_fail=6",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=True",
+        "failure_verdict=5 negative=4",
+        "doc_shape=6 sections=10",
+        "infra_markers=10 units=586",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=判决是 honest FAIL"
+      ]
+    },
+    {
+      "report_id": "5353",
+      "mission_id": 4827,
+      "gold": "C4",
+      "pred": "C3",
+      "trace": [
+        "n_error_rows=5 min_err_pct=5.21e-16",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=4 gate_fail=1",
+        "level_up=0",
+        "defect_markers=2 correction=1 gate_lock=False",
+        "failure_verdict=0 negative=0",
+        "doc_shape=3 sections=11",
+        "infra_markers=6 units=23",
+        "verif_names=8",
+        "correction_snippet=写错",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5333",
+      "mission_id": 4819,
+      "gold": "C4",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=5 min_err_pct=5.2e-16",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=7 gate_fail=0",
+        "level_up=0",
+        "defect_markers=4 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=1",
+        "doc_shape=4 sections=8",
+        "infra_markers=7 units=25",
+        "verif_names=4",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5607",
+      "mission_id": 4972,
+      "gold": "C5",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=5 min_err_pct=0.071",
+        "n_external_rows=1 min_external_err=3.0",
+        "reference_kinds=experiment,literature",
+        "gate_pass=9 gate_fail=10",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=4 negative=4",
+        "doc_shape=1 sections=7",
+        "infra_markers=1 units=0",
+        "verif_names=1",
+        "correction_snippet=-",
+        "verdict_snippet=结论 FAIL"
+      ]
+    },
+    {
+      "report_id": "5683",
+      "mission_id": 4996,
+      "gold": "C5",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=14 min_err_pct=0.0006",
+        "n_external_rows=1 min_external_err=1.0",
+        "reference_kinds=internal_baseline,experiment,literature",
+        "gate_pass=3 gate_fail=0",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=True",
+        "failure_verdict=1 negative=3",
+        "doc_shape=0 sections=10",
+        "infra_markers=0 units=2",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=不成立"
+      ]
+    },
+    {
+      "report_id": "5805",
+      "mission_id": 5075,
+      "gold": "C5",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=55 min_err_pct=6.137313e-09",
+        "n_external_rows=54 min_external_err=6.137313e-09",
+        "reference_kinds=experiment,analytic,cross_discretization,literature",
+        "gate_pass=46 gate_fail=17",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=5 negative=3",
+        "doc_shape=0 sections=19",
+        "infra_markers=2 units=1",
+        "verif_names=11",
+        "correction_snippet=-",
+        "verdict_snippet=判决 **FAIL"
+      ]
+    },
+    {
+      "report_id": "5682",
+      "mission_id": 4997,
+      "gold": "C5",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=3 min_err_pct=10.0",
+        "n_external_rows=3 min_external_err=10.0",
+        "reference_kinds=literature,experiment",
+        "gate_pass=0 gate_fail=11",
+        "level_up=0",
+        "defect_markers=9 correction=0 gate_lock=True",
+        "failure_verdict=5 negative=13",
+        "doc_shape=0 sections=9",
+        "infra_markers=5 units=0",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=结论为 **FAIL"
+      ]
+    },
+    {
+      "report_id": "5365",
+      "mission_id": 4848,
+      "gold": "C5",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=11 min_err_pct=1.0000000000000001e-11",
+        "n_external_rows=11 min_external_err=1.0000000000000001e-11",
+        "reference_kinds=experiment,literature",
+        "gate_pass=2 gate_fail=3",
+        "level_up=0",
+        "defect_markers=5 correction=0 gate_lock=False",
+        "failure_verdict=1 negative=7",
+        "doc_shape=0 sections=6",
+        "infra_markers=4 units=7",
+        "verif_names=0",
+        "correction_snippet=-",
+        "verdict_snippet=honest-FAIL"
+      ]
+    },
+    {
+      "report_id": "5226",
+      "mission_id": 4751,
+      "gold": "C5",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=9 min_err_pct=2.16",
+        "n_external_rows=9 min_external_err=2.16",
+        "reference_kinds=analytic,experiment",
+        "gate_pass=0 gate_fail=4",
+        "level_up=0",
+        "defect_markers=4 correction=0 gate_lock=False",
+        "failure_verdict=8 negative=14",
+        "doc_shape=1 sections=11",
+        "infra_markers=6 units=19",
+        "verif_names=4",
+        "correction_snippet=-",
+        "verdict_snippet=verdict.rows[0]` → 账本 FAIL"
+      ]
+    },
+    {
+      "report_id": "6056",
+      "mission_id": 5291,
+      "gold": "C5",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=4 min_err_pct=2.4",
+        "n_external_rows=4 min_external_err=2.4",
+        "reference_kinds=cross_discretization",
+        "gate_pass=1 gate_fail=5",
+        "level_up=0",
+        "defect_markers=4 correction=0 gate_lock=True",
+        "failure_verdict=4 negative=8",
+        "doc_shape=0 sections=7",
+        "infra_markers=2 units=11",
+        "verif_names=3",
+        "correction_snippet=-",
+        "verdict_snippet=结论（含 honest-FAIL"
+      ]
+    },
+    {
+      "report_id": "5573",
+      "mission_id": 4924,
+      "gold": "C5",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=4 min_err_pct=1.012",
+        "n_external_rows=4 min_external_err=1.012",
+        "reference_kinds=experiment",
+        "gate_pass=12 gate_fail=0",
+        "level_up=0",
+        "defect_markers=2 correction=0 gate_lock=False",
+        "failure_verdict=4 negative=2",
+        "doc_shape=3 sections=10",
+        "infra_markers=6 units=153",
+        "verif_names=7",
+        "correction_snippet=-",
+        "verdict_snippet=退役**并把结论"
+      ]
+    },
+    {
+      "report_id": "5059",
+      "mission_id": 4672,
+      "gold": "C6",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=0 min_err_pct=None",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=6 gate_fail=0",
+        "level_up=0",
+        "defect_markers=3 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=5",
+        "doc_shape=0 sections=7",
+        "infra_markers=8 units=2",
+        "verif_names=0",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5092",
+      "mission_id": 4697,
+      "gold": "C6",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=1 min_err_pct=3.0",
+        "n_external_rows=1 min_external_err=3.0",
+        "reference_kinds=analytic,experiment,literature",
+        "gate_pass=31 gate_fail=1",
+        "level_up=0",
+        "defect_markers=3 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=4",
+        "doc_shape=0 sections=6",
+        "infra_markers=21 units=4",
+        "verif_names=0",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5139",
+      "mission_id": 4727,
+      "gold": "C6",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=0 min_err_pct=None",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=39 gate_fail=3",
+        "level_up=0",
+        "defect_markers=3 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=7",
+        "infra_markers=20 units=3",
+        "verif_names=4",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5379",
+      "mission_id": 4849,
+      "gold": "C6",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=0 min_err_pct=None",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=6 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=5 negative=16",
+        "doc_shape=0 sections=12",
+        "infra_markers=11 units=0",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=verdict=PASS），但派生证据等级为 WITHH"
+      ]
+    },
+    {
+      "report_id": "5595",
+      "mission_id": 4934,
+      "gold": "C6",
+      "pred": "C1",
+      "trace": [
+        "n_error_rows=3 min_err_pct=1e-14",
+        "n_external_rows=2 min_external_err=1e-14",
+        "reference_kinds=experiment,literature",
+        "gate_pass=8 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=True",
+        "failure_verdict=0 negative=1",
+        "doc_shape=0 sections=16",
+        "infra_markers=60 units=29",
+        "verif_names=0",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5717",
+      "mission_id": 5023,
+      "gold": "C6",
+      "pred": "C4",
+      "trace": [
+        "n_error_rows=1 min_err_pct=3.0",
+        "n_external_rows=1 min_external_err=3.0",
+        "reference_kinds=analytic",
+        "gate_pass=4 gate_fail=0",
+        "level_up=0",
+        "defect_markers=5 correction=0 gate_lock=False",
+        "failure_verdict=2 negative=3",
+        "doc_shape=1 sections=18",
+        "infra_markers=13 units=0",
+        "verif_names=7",
+        "correction_snippet=-",
+        "verdict_snippet=证伪"
+      ]
+    },
+    {
+      "report_id": "5748",
+      "mission_id": 5039,
+      "gold": "C6",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=3 min_err_pct=0.006",
+        "n_external_rows=3 min_external_err=0.006",
+        "reference_kinds=experiment",
+        "gate_pass=0 gate_fail=0",
+        "level_up=0",
+        "defect_markers=1 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=2",
+        "doc_shape=0 sections=15",
+        "infra_markers=31 units=10",
+        "verif_names=1",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5911",
+      "mission_id": 5176,
+      "gold": "C6",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=2 min_err_pct=0.003",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=2 gate_fail=0",
+        "level_up=0",
+        "defect_markers=5 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=5",
+        "doc_shape=0 sections=8",
+        "infra_markers=16 units=16",
+        "verif_names=1",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "6004",
+      "mission_id": 5251,
+      "gold": "C6",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=1 min_err_pct=42.0",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=10 gate_fail=55",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=2 negative=54",
+        "doc_shape=0 sections=12",
+        "infra_markers=9 units=0",
+        "verif_names=13",
+        "correction_snippet=-",
+        "verdict_snippet=判决且无更新支撑 | WITHHELD"
+      ]
+    },
+    {
+      "report_id": "6010",
+      "mission_id": 5274,
+      "gold": "C6",
+      "pred": "C2",
+      "trace": [
+        "n_error_rows=1 min_err_pct=4.77",
+        "n_external_rows=1 min_external_err=4.77",
+        "reference_kinds=literature",
+        "gate_pass=13 gate_fail=3",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=0 negative=17",
+        "doc_shape=0 sections=8",
+        "infra_markers=8 units=14",
+        "verif_names=6",
+        "correction_snippet=-",
+        "verdict_snippet=-"
+      ]
+    },
+    {
+      "report_id": "5881",
+      "mission_id": 5112,
+      "gold": "C6",
+      "pred": "C5",
+      "trace": [
+        "n_error_rows=4 min_err_pct=0.016",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=0 gate_fail=0",
+        "level_up=0",
+        "defect_markers=27 correction=0 gate_lock=True",
+        "failure_verdict=1 negative=6",
+        "doc_shape=0 sections=16",
+        "infra_markers=14 units=11",
+        "verif_names=5",
+        "correction_snippet=-",
+        "verdict_snippet=不成立"
+      ]
+    },
+    {
+      "report_id": "6091",
+      "mission_id": 5303,
+      "gold": "C6",
+      "pred": "C6",
+      "trace": [
+        "n_error_rows=0 min_err_pct=None",
+        "n_external_rows=0 min_external_err=None",
+        "reference_kinds=-",
+        "gate_pass=2 gate_fail=0",
+        "level_up=0",
+        "defect_markers=0 correction=0 gate_lock=False",
+        "failure_verdict=18 negative=1",
+        "doc_shape=0 sections=11",
+        "infra_markers=5 units=0",
+        "verif_names=2",
+        "correction_snippet=-",
+        "verdict_snippet=判决：**HONEST_FAIL"
+      ]
+    }
+  ]
+}
