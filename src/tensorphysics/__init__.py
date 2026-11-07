@@ -20,6 +20,13 @@ from .research_runner import ResearchTaskRunner, ResearchValidator
 from .research_policy import ResearchDecision, decide_next_action
 from .agent_subprocess import SubprocessAgentBackend
 from .scheduler import Simulation, SimulationError, SimulationState
+from .campaign import (
+    CouplingClock, CouplingClockSpec, ExchangeEvent, FailureFace, FailureFacePacket,
+    FailureFaceV1, GeometryContractRegistry, GeometryHandle, LedgerEntry, PrincipalDimensions,
+    QuantityKind, ReferenceFluxes, SideLedger, build_reference_dual_ledgers, clock_drift,
+    reconcile, reconcile_books, schema_fingerprints, tetrahedron_face_packet,
+    verify_alignment, verify_same_batch,
+)
 from .ice_sheet import (
     WinklerPlateParams,
     navier_center_deflection,
@@ -44,5 +51,10 @@ __all__ = [
     "SubprocessAgentBackend",
     "WinklerPlateParams", "navier_center_deflection", "navier_deflection_field",
     "solve_winkler_plate_fd", "winkler_kw_parametric",
+    "CouplingClock", "CouplingClockSpec", "ExchangeEvent", "FailureFace",
+    "FailureFacePacket", "FailureFaceV1", "GeometryContractRegistry", "GeometryHandle",
+    "LedgerEntry", "PrincipalDimensions", "QuantityKind", "ReferenceFluxes", "SideLedger",
+    "build_reference_dual_ledgers", "clock_drift", "reconcile", "reconcile_books",
+    "schema_fingerprints", "tetrahedron_face_packet", "verify_alignment", "verify_same_batch",
 ]
 __version__ = "0.1.0"
