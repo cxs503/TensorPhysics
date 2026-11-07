@@ -46,10 +46,35 @@ GATE_REJECT = "GATE_REJECT"
 TOLERANCES: dict[str, float] = {
     "cad_volume_rel": 1e-3,
     "cad_surface_rel": 3e-3,
+    # third CAD route (isoparametric surface tessellation) against the slice route
+    "cad_isoparametric_rel": 1e-3,
+    # CAD integrals against the delivered / published reference values
+    "cad_reference_rel": 1e-3,
     "discrete_volume_rel": 5e-3,
     "discrete_surface_rel": 1e-2,
     "discrete_cb_abs": 1e-3,
+    "principal_rel": 5e-3,
     "panel_closure_rel": 1e-12,
+}
+
+#: How each family integrates the geometry it was handed (carried by the contract
+#: so a consumer can see *which* discrete integration produced the numbers).
+INTEGRATION_METHODS: dict[str, dict[str, str]] = {
+    "fvm": {
+        "volume": "hexahedral cell decomposition into six tetrahedra (exact for the generated mesh)",
+        "surface": "faceted hull-face set, two-triangle quad quadrature",
+        "principal": "mesh bounding box of the node set",
+    },
+    "lbm": {
+        "volume": "sum of the immersed-boundary volume fractions x cell volume",
+        "surface": "height field |y| = b(x, z) on the lattice (exact wall-normal, second order in x, z)",
+        "principal": "bounding box of the cells with fraction > 0.5 (quantised to one lattice spacing)",
+    },
+    "bem": {
+        "volume": "divergence theorem 1/3 oint x . n dA over the closed panel set",
+        "surface": "sum of panel triangle areas (sides + transom)",
+        "principal": "panel vertex extents",
+    },
 }
 
 MC_SAMPLES = 1_000_000
@@ -140,6 +165,30 @@ def evaluate_gate(contract: Mapping[str, Any]) -> dict[str, Any]:
     checks.append(
         _check("cad_surface_consistency", srf_res, tol["cad_surface_rel"], srf_res <= tol["cad_surface_rel"])
     )
+    # third, structurally independent route: isoparametric surface tessellation
+    iso_vol = cad.get("nabla_isoparametric_m3")
+    if iso_vol is not None:
+        iso_v_res = abs(iso_vol - cad["nabla_slice_m3"]) / cad["nabla_m3"]
+        checks.append(
+            _check("cad_isoparametric_volume", iso_v_res, tol["cad_isoparametric_rel"], iso_v_res <= tol["cad_isoparametric_rel"])
+        )
+    iso_area = cad.get("s_isoparametric_m2")
+    if iso_area is not None:
+        iso_s_res = abs(iso_area - cad["s_quadrature_m2"]) / cad["s_wetted_m2"]
+        checks.append(
+            _check("cad_isoparametric_surface", iso_s_res, tol["cad_isoparametric_rel"], iso_s_res <= tol["cad_isoparametric_rel"])
+        )
+    # agreement with the delivered / published reference geometry
+    reference = cad.get("reference") or {}
+    for key, label in (("nabla_m3", "volume"), ("s_wetted_m2", "surface"), ("cb", "cb")):
+        if key not in reference:
+            continue
+        value = reference[key]
+        measured = cad["cb"] if key == "cb" else cad[key]
+        rel = abs(measured - value) / abs(value)
+        checks.append(
+            _check(f"cad_reference_{label}", rel, tol["cad_reference_rel"], rel <= tol["cad_reference_rel"])
+        )
 
     for family in sorted(solvers):
         record = solvers[family]
@@ -156,8 +205,10 @@ def evaluate_gate(contract: Mapping[str, Any]) -> dict[str, Any]:
                     0.0,
                     1.0,
                     True,
-                    "wetted area WITHHELD: voxel estimator not yet inside the 1 % band, "
-                    "volume and Cb of this family are admitted instead",
+                    "wetted area WITHHELD: the lattice height field cannot resolve a section "
+                    "with a vertical tangent (keel of a fine form, polar lines of a body of "
+                    "revolution), so the reconstruction bias is resolution independent; volume "
+                    "and Cb of this family are admitted instead",
                 )
             )
         else:
@@ -165,6 +216,20 @@ def evaluate_gate(contract: Mapping[str, Any]) -> dict[str, Any]:
                 _check(f"{family}_surface", ds, tol["discrete_surface_rel"], ds <= tol["discrete_surface_rel"])
             )
         checks.append(_check(f"{family}_cb", dcb, tol["discrete_cb_abs"], dcb <= tol["discrete_cb_abs"]))
+        # principal dimensions first: a grid that cannot even reproduce L and B has
+        # no business reporting a displacement
+        extras = record.get("extras") or {}
+        quantum = float(extras.get("principal_quantum_rel", 0.0))
+        for key, label, exact in (
+            ("L_measured_m", "length", contract["principal"]["L_m"]),
+            ("B_measured_m", "breadth", contract["principal"]["B_m"]),
+        ):
+            measured = extras.get(key)
+            if measured is None:
+                continue
+            rel = abs(float(measured) - exact) / exact
+            limit = max(tol["principal_rel"], 3.0 * quantum)
+            checks.append(_check(f"{family}_{label}", rel, limit, rel <= limit))
         closure = record.get("extras", {}).get("panel_closure_rel")
         if closure is not None:
             checks.append(
@@ -202,10 +267,14 @@ def build_contract(
     """Assemble the contract for one hull and its solver records."""
     if not solvers:
         raise GeometryFidelityError("at least one solver record is required")
+    from .cad_routes import surface_isoparametric, volume_isoparametric
+
     slice_volume = hull.cad_volume_slice(n_x, n_s)
     quad_area = hull.cad_surface_area(n_x, n_s)
     mc_volume = hull.cad_volume_monte_carlo(mc_samples, seed)
     mc_area = hull.cad_surface_monte_carlo(mc_samples, seed)
+    iso_volume = volume_isoparametric(hull, n_x, n_s)
+    iso_area = surface_isoparametric(hull, n_x, n_s)
     waterplane = hull.cad_waterplane_area(n_x)
     volume_denominator = hull.length_m * hull.breadth_m * hull.draught_m
     cad = {
@@ -215,11 +284,21 @@ def build_contract(
         "s_wetted_m2": quad_area,
         "s_quadrature_m2": quad_area,
         "s_monte_carlo_m2": mc_area,
+        "nabla_isoparametric_m3": iso_volume,
+        "s_isoparametric_m2": iso_area,
         "cb": slice_volume / volume_denominator,
         "cwp": waterplane / (hull.length_m * hull.breadth_m),
         "integration": {
-            "volume": ["transverse_slice_simpson", "stratified_monte_carlo"],
-            "surface": ["parametric_quadrature_grid", "stratified_monte_carlo"],
+            "volume": [
+                "transverse_slice_simpson",
+                "isoparametric_surface_tessellation_divergence",
+                "stratified_monte_carlo",
+            ],
+            "surface": [
+                "parametric_quadrature_grid",
+                "isoparametric_surface_tessellation",
+                "stratified_monte_carlo",
+            ],
             "n_x": n_x,
             "n_s": n_s,
             "mc_samples": int(mc_samples),
@@ -243,7 +322,10 @@ def build_contract(
         "cad": cad,
         "grid": {
             "generator": "geofid-mesh-2026.11",
-            "solvers": {name: rec.as_dict() for name, rec in sorted(solvers.items())},
+            "solvers": {
+                name: dict(rec.as_dict(), integration=INTEGRATION_METHODS.get(name, {}))
+                for name, rec in sorted(solvers.items())
+            },
         },
         "provenance": {
             "cad_sha256": cad_sha256(hull, n_x, n_s),
