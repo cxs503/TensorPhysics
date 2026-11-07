@@ -175,7 +175,13 @@ def fvm_mesh(
         cb=volume / (hull.length_m * hull.breadth_m * hull.draught_m),
         resolution={"n_x": n_x, "n_s": n_s, "n_y": n_y, "cells": 2 * n_x * n_s * n_y},
         grid_sha256=_sha(np.round(nodes, 9).tobytes()),
-        extras={"facet_side_area_m2": side, "stern_area_m2": stern},
+        extras={
+            "facet_side_area_m2": side,
+            "stern_area_m2": stern,
+            "L_measured_m": float(xs[-1] - xs[0]) * (1.0 / stretch),
+            "B_measured_m": float(2.0 * ys.max()) * (1.0 / stretch),
+            "principal_quantum_rel": 0.0,
+        },
     )
 
 
@@ -197,95 +203,30 @@ def _box3(field):
 
 def lbm_grid(
     hull: HullForm,
-    n_x: int = 480,
+    n_x: int = 600,
     drop_top_layers: int = 0,
     half_cell_shift: bool = False,
     smooth_passes: int = 2,
+    subcells: int = 3,
 ) -> SolverRecord:
-    """Uniform lattice LBM grid: voxel volume + IBM wetted-surface reconstruction.
+    """Uniform cubic lattice LBM grid: volume fraction + reconstructed wetted area.
 
-    ``drop_top_layers`` deletes solid voxel layers at the waterline and
-    ``half_cell_shift`` samples the occupancy at the lattice *nodes* instead of
-    the cell centres (an off-by-one-half-cell stencil misalignment).  Both are
-    negative controls: the numbers stay plausible but the geometry no longer
-    closes.
+    The lattice geometry is handled by :mod:`tensorphysics.geometry_fidelity.
+    reconstruct`: the displacement comes from the volume-fraction field (the
+    immersed-boundary input an LBM cut-cell solver consumes, second order) and the
+    wetted area from the height field the lattice carries.  ``drop_top_layers``
+    deletes solid layers at the waterline and ``half_cell_shift`` samples the
+    occupancy at the lattice nodes instead of the cell centres -- the two
+    negative controls; ``smooth_passes`` is kept for API compatibility.
     """
-    np = _np()
-    dx = hull.length_m / n_x
-    n_y = max(8, int(round(hull.breadth_m / dx)))
-    n_z = max(8, int(round(hull.draught_m / dx)))
-    dy = hull.breadth_m / n_y
-    dz = hull.draught_m / n_z
-    x = (np.arange(n_x) + 0.5) * dx
-    y = -0.5 * hull.breadth_m + (np.arange(n_y) + 0.5) * dy
-    z = (np.arange(n_z) + 0.5) * dz
-    if half_cell_shift:
-        x = np.arange(n_x) * dx
-        y = -0.5 * hull.breadth_m + np.arange(n_y) * dy
-        z = np.arange(n_z) * dz
-    half = _half_breadth_field(hull, x, y, z)
-    solid = np.abs(y)[None, :, None] <= half
-    if drop_top_layers:
-        solid[:, :, n_z - drop_top_layers :] = False
-    volume = float(np.count_nonzero(solid)) * dx * dy * dz
+    from .reconstruct import lbm_record
 
-    # IBM wet-surface reconstruction.  The staircase boundary of the voxel body
-    # over-estimates a smooth surface by the factor sum_d |n_d| (a tilted plane
-    # exposes |n_d| A / dx^2 faces in direction d).  The portal area P is exact
-    # for the digitised set, and sum_d |n_d| is measured from the reconstructed
-    # normal field, so A = P / <sum_d |n_d|> is unbiased for a plane and
-    # first-order accurate on a curved surface.
-    field = solid.astype(float)
-    for _ in range(max(1, smooth_passes)):
-        field = _box3(field)
-
-    # dithered voxel volume: the staircase count is first order and its error
-    # oscillates with the lattice alignment, so the count is averaged over three
-    # lattices offset by +-dx/4, which cancels the leading O(dx) term.
-    counts = [float(np.count_nonzero(solid))] if not half_cell_shift else []
-    for shift in (0.25, -0.25):
-        xd = (np.arange(n_x) + 0.5 + shift) * dx
-        yd = -0.5 * hull.breadth_m + (np.arange(n_y) + 0.5 + shift) * dy
-        zd = (np.arange(n_z) + 0.5 + shift) * dz
-        half_d = _half_breadth_field(hull, xd, yd, zd)
-        solid_d = np.abs(yd)[None, :, None] <= half_d
-        if drop_top_layers:
-            solid_d[:, :, n_z - drop_top_layers :] = False
-        counts.append(float(np.count_nonzero(solid_d)))
-    volume = float(np.mean(counts)) * dx * dy * dz
-
-    gz, gy, gx = np.gradient(field, dz, dy, dx)
-    grad = np.sqrt(gx * gx + gy * gy + gz * gz)
-    dn = np.abs(gx) + np.abs(gy) + np.abs(gz)
-    interface = grad > 1e-12
-    mean_directionality = float(np.sum(dn[interface])) / max(float(np.sum(grad[interface])), 1e-30)
-
-    blk = solid
-    portal = 0.0
-    face_area = {0: dy * dz, 1: dx * dz, 2: dx * dy}
-    for axis in range(3):
-        for sign in (1, -1):
-            sl_a = [slice(None)] * 3
-            sl_b = [slice(None)] * 3
-            sl_a[axis] = slice(None, -1) if sign > 0 else slice(1, None)
-            sl_b[axis] = slice(1, None) if sign > 0 else slice(None, -1)
-            faces = blk[tuple(sl_a)] & ~blk[tuple(sl_b)]
-            if axis == 2 and sign > 0:  # free surface z = T is not wetted steel
-                top = np.broadcast_to(z[None, None, :-1], faces.shape) > hull.draught_m - 1.5 * dz
-                faces = faces & ~top
-            portal += float(np.count_nonzero(faces)) * face_area[axis]
-    area = portal / max(mean_directionality, 1e-30)
-    return SolverRecord(
-        family="lbm",
-        nabla_m3=volume,
-        s_wetted_m2=area,
-        cb=volume / (hull.length_m * hull.breadth_m * hull.draught_m),
-        resolution={"n_x": n_x, "n_y": n_y, "n_z": n_z, "cells": int(solid.size)},
-        grid_sha256=_sha(np.packbits(solid).tobytes()),
-        extras={"dx_m": dx, "solid_voxels": float(np.count_nonzero(solid))},
-        # the voxel wet-surface estimator implemented here is first order with a
-        # documented bias; volume and Cb are admitted, the area is withheld
-        surface_evidence="WITHHELD",
+    return lbm_record(
+        hull,
+        n_x=n_x,
+        drop_top_layers=drop_top_layers,
+        half_cell_shift=half_cell_shift,
+        subcells=subcells,
     )
 
 
@@ -400,7 +341,7 @@ def bem_panels(hull: HullForm, n_x: int = 120, n_s: int = 40) -> SolverRecord:
         volume += area * float(np.dot(centroid, normal)) / 3.0
     volume = abs(volume)
     closure = float(np.linalg.norm(momentum)) / max(area_total, 1e-30)
-    coords = np.concatenate([t.ravel() for t in tris])
+    coords = np.concatenate([t.reshape(-1, 3) for t in tris])
     return SolverRecord(
         family="bem",
         nabla_m3=volume,
@@ -414,6 +355,9 @@ def bem_panels(hull: HullForm, n_x: int = 120, n_s: int = 40) -> SolverRecord:
             "side_area_m2": area_by_set["side"],
             "transom_area_m2": area_by_set["transom"],
             "deck_area_m2": area_by_set["deck"],
+            "L_measured_m": float(coords[:, 0].max() - coords[:, 0].min()),
+            "B_measured_m": float(coords[:, 1].max() - coords[:, 1].min()),
+            "principal_quantum_rel": 0.0,
         },
     )
 
@@ -447,10 +391,11 @@ def good_records(hull: HullForm) -> dict[str, SolverRecord]:
     panel family is deliberately *not* part of the SUBOFF contract: the gate is
     not asked a question it cannot answer honestly.  See the report, limitation 3.
     """
-    records = {"fvm": fvm_mesh(hull), "lbm": lbm_grid(hull, n_x=600)}
-    if hull.family != "revolution":
-        records["bem"] = bem_panels(hull)
-    return records
+    return {
+        "fvm": fvm_mesh(hull),
+        "lbm": lbm_grid(hull, n_x=600),
+        "bem": bem_panels(hull, n_x=(240 if hull.family == "revolution" else 120)),
+    }
 
 
 def coarse_records(hull: HullForm) -> dict[str, SolverRecord]:
