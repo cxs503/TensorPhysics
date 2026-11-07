@@ -210,7 +210,13 @@ def _obs_payload(levels, expected_order=None, validation=None):
 def test_cli_passes_a_clean_study(tmp_path, capsys):
     path = _write(tmp_path, "obs.json", _obs_payload(
         [(1.0, 3.5), (0.5, 3.125), (0.25, 3.03125)], expected_order=2.0))
+    # conservative default: the noise floor of a three-grid study is not certified
     code = cli_main(["--obs", str(path), "--json"])
+    record = json.loads(capsys.readouterr().out)
+    assert code == 1
+    assert record["status"] == "WARN"
+    # explicit opt-out (documented) restores the unqualified PASS
+    code = cli_main(["--obs", str(path), "--json", "--allow-undeclared-noise"])
     record = json.loads(capsys.readouterr().out)
     assert code == 0
     assert record["status"] == "PASS"
@@ -245,7 +251,8 @@ def test_cli_validation_blocks_are_honoured(tmp_path, capsys):
 
 def test_cli_reads_native_benchmark_documents(tmp_path, capsys):
     fem = _write(tmp_path, "evidence.json", FEM_DOC)
-    code = cli_main(["--benchmark", str(fem), "--study", "manufactured", "--json"])
+    code = cli_main(["--benchmark", str(fem), "--study", "manufactured", "--json",
+                     "--allow-undeclared-noise"])
     record = json.loads(capsys.readouterr().out)
     assert code == 0
     assert record["adapter"]["repo"] == "tensorfem"
