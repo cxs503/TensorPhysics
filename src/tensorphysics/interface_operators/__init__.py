@@ -29,6 +29,14 @@ from .operators import (ConservativeScatter, LBMDEMMomentumExchange,
 from .acceptance import (P_MIN, RESOLUTIONS, TOL_C1, TOL_C3, TOL_C4, TOL_C5,
                          fvm_lbm_chain, lbm_dem_chain, negative_control_suite,
                          operator_suite, run_acceptance)
+from .mortar_nd import (FIELD_2D, FIELD_3D, MortarProjection2D,
+                        SurfaceMortarProjection, analytic_surface_area,
+                        bulged_surface, faceted_surface_area,
+                        local_conservation_fix, overlap_measure_closure)
+from .polygons import (PolygonMesh, SurfacePatchMesh, axisymmetric_mesh,
+                       cartesian_mesh, clip_convex, convex_hull,
+                       convex_intersection, fan_mesh, polygon_area,
+                       polygon_centroid, triangulated_mesh)
 
 __all__ = [
     "InterfaceOperator", "OperatorReport", "OrderEstimate", "SymmetryFlip",
@@ -38,4 +46,11 @@ __all__ = [
     "run_acceptance", "operator_suite", "negative_control_suite",
     "fvm_lbm_chain", "lbm_dem_chain",
     "TOL_C1", "TOL_C3", "TOL_C4", "TOL_C5", "P_MIN", "RESOLUTIONS",
+    # IN50-N08: 2D polygon / 3D surface mortar + local conservation fix
+    "MortarProjection2D", "SurfaceMortarProjection", "FIELD_2D", "FIELD_3D",
+    "PolygonMesh", "SurfacePatchMesh", "cartesian_mesh", "triangulated_mesh",
+    "fan_mesh", "axisymmetric_mesh", "clip_convex", "convex_hull",
+    "convex_intersection", "polygon_area", "polygon_centroid",
+    "local_conservation_fix", "overlap_measure_closure", "bulged_surface",
+    "analytic_surface_area", "faceted_surface_area",
 ]

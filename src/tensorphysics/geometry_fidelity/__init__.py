@@ -28,6 +28,9 @@ from .contract import (
     physics_chain,
     validate_contract,
 )
+from .gate import (C1_TOLERANCES, GateReport, GeometryGate, bulk_carrier_hull,
+                  corrupted_discretisation, discretise, gate_corpus,
+                  series60_hull)
 from .hulls import HullForm, contract_hulls, kcs_hull, kvlcc2_hull, suboff_area_envelope, suboff_hull
 from .mesh import (
     CORRUPTIONS,
@@ -46,6 +49,14 @@ __all__ = [
     "CORRUPTIONS",
     "GATE_PASS",
     "GATE_REJECT",
+    "C1_TOLERANCES",
+    "GateReport",
+    "GeometryGate",
+    "discretise",
+    "corrupted_discretisation",
+    "gate_corpus",
+    "series60_hull",
+    "bulk_carrier_hull",
     "TOLERANCES",
     "ContractSchemaError",
     "GeometryFidelityError",
