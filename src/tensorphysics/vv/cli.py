@@ -1,11 +1,24 @@
 """Command line front end of the V&V machine gate.
 
+Three output formats share one computation:
+
+* ``--format text``  (default) human-readable report;
+* ``--format json``  machine-readable verdict (the ``--json`` alias is kept);
+* ``--format table`` fixed-width ASCII tables (metrics + checks) for reports;
+* ``--format plot``  PNG figure (``--plot-out``) of the convergence study.
+
+``--table path.json`` is a *data source* (an ASME V&V 20 table); ``--format
+table`` is an *output format*.  They are independent and can be combined.
+
 Examples
 --------
 ``python -m tensorphysics.vv.gci --obs obs.json``
-``python -m tensorphysics.vv.gci --benchmark evidence.json --repo tensorfem \
-      --study manufactured --expected-order 2 --json``
-``python -m tensorphysics.vv.gci --table vv20_table.json --json``
+``python -m tensorphysics.vv.gci --benchmark evidence.json --repo tensorfem \\
+      --study manufactured --expected-order 2 --format json``
+``python -m tensorphysics.vv.gci --obs obs.json --format table``
+``python -m tensorphysics.vv.gci --obs obs.json --format plot --plot-out gci.png``
+``python -m tensorphysics.vv.gci --table vv20_table.json --format plot \\
+      --plot-out vv20.png``
 
 Exit codes: ``0`` PASS, ``1`` WARN, ``2`` FAIL, ``64`` usage / input error.
 """
@@ -23,6 +36,7 @@ from .validation import evaluate_validation_table
 
 EXIT_CODES = {PASS: 0, WARN: 1, FAIL: 2}
 EXIT_USAGE = 64
+FORMATS = ("text", "json", "table", "plot")
 
 
 def _load_json(path: str) -> Any:
@@ -58,7 +72,10 @@ def _policy_from_args(args: argparse.Namespace, expected_order: float | None = N
         "order_tolerance": args.order_tolerance,
         "assumed_order": args.assumed_order,
         "strict": True if args.strict else None,
+        "gci_absolute": True if getattr(args, "gci_absolute", False) else None,
     }
+    if getattr(args, "allow_undeclared_noise", False):
+        overrides["pass_requires_noise_certificate"] = False
     return policy.merged(**overrides)
 
 
@@ -107,6 +124,169 @@ def _render(verdict, policy: GatePolicy) -> str:
     return "\n".join(lines)
 
 
+# ---------------------------------------------------------------------------
+# table renderer
+# ---------------------------------------------------------------------------
+
+
+def _table(title: str, header: Sequence[str], rows: Sequence[Sequence[Any]]) -> str:
+    """Render a fixed-width ASCII table (values formatted by ``_fmt``)."""
+    cells = [[_fmt(c) for c in row] for row in rows]
+    widths = [len(h) for h in header]
+    for row in cells:
+        for i, cell in enumerate(row):
+            widths[i] = max(widths[i], len(cell))
+    sep = "+" + "+".join("-" * (w + 2) for w in widths) + "+"
+    out = [title, sep, "| " + " | ".join(h.ljust(w) for h, w in zip(header, widths)) + " |", sep]
+    for row in cells:
+        out.append("| " + " | ".join(c.ljust(w) for c, w in zip(row, widths)) + " |")
+    out.append(sep)
+    return "\n".join(out)
+
+
+def _render_table(verdict, policy: GatePolicy) -> str:
+    """ASCII tables: study metrics, then the individual gate checks."""
+    study = verdict.study
+    parts: list[str] = []
+    if study is not None:
+        metric_rows = [
+            ("levels", study.n_levels, ""),
+            ("uniform refinement", study.uniform_refinement,
+             ", ".join(f"{r:.6g}" for r in study.refinement_ratios)),
+            ("observed order p", study.order_p, study.order_source),
+            ("Richardson f_exact", study.f_extrapolated, "extrapolated"),
+            ("finest-grid value", study.f_fine, study.levels[-1].label),
+            ("GCI_fine", study.gci_fine,
+             f"Fs={study.safety_factor}, " + ("relative" if study.gci_is_relative else "absolute")),
+            ("convergence ratio R", study.convergence_ratio, study.convergence_type),
+            ("power-law residual", study.fit_residual_rel, "relative"),
+            ("triplet order spread", study.order_spread, "order consistency"),
+            ("noise/signal", study.noise_ratio, "declared sigma"),
+            ("noise certified", study.noise_certified, "certificate"),
+            ("GCI monotone", study.gci_monotone, "GCI vs refinement"),
+        ]
+        parts.append(_table(f"V&V gate - {verdict.quantity} - study", ("metric", "value", "note"), metric_rows))
+    check_rows = [(c["status"], c["check"], c["detail"]) for c in verdict.checks]
+    parts.append(_table("gate checks", ("status", "check", "detail"), check_rows or [("-", "-", "-")]))
+    if verdict.validation is not None:
+        v = verdict.validation
+        parts.append(
+            _table(
+                "ASME V&V 20 validation",
+                ("f_sim", "f_exp", "U_num", "U_input", "U_val", "E", "|E|/U_val", "status"),
+                [(v.f_sim, v.f_exp, v.u_num, v.u_input, v.u_val, v.error, v.ratio, v.status)],
+            )
+        )
+    parts.append(f"VERDICT: {verdict.status}")
+    return "\n".join(parts)
+
+
+def _render_vv20_table(record: dict[str, Any]) -> str:
+    rows = [
+        (r["label"] or "-", r["f_sim"], r["f_exp"], r["u_num"], r["u_input"], r["u_val"],
+         r["error"], r["ratio"], r["status"])
+        for r in record["rows"]
+    ]
+    body = _table(
+        f"ASME V&V 20 table: {record['source']}",
+        ("label", "f_sim", "f_exp", "U_num", "U_input", "U_val", "E", "|E|/U_val", "status"),
+        rows,
+    )
+    return f"{body}\nPASS={record['n_pass']} FAIL={record['n_fail']}"
+
+
+# ---------------------------------------------------------------------------
+# plot renderer
+# ---------------------------------------------------------------------------
+
+
+def _pyplot():
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except ImportError as exc:  # pragma: no cover - depends on the environment
+        raise RuntimeError(
+            "plot output needs matplotlib (pip install 'tensorphysics[plots]')"
+        ) from exc
+    return plt
+
+
+def _render_plot(verdict, path: str) -> str:
+    """PNG figure: convergence of the observable, Richardson limit and GCI trend."""
+    plt = _pyplot()
+    study = verdict.study
+    if study is None:  # pragma: no cover - evaluate always builds a study
+        raise RuntimeError("no study to plot")
+    levels = study.levels
+    h = [lvl.h for lvl in levels]
+    f = [lvl.f for lvl in levels]
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.2))
+    ax = axes[0]
+    ax.plot(h, f, "o-", color="#1f4e79", lw=1.6, ms=7, label="discrete levels")
+    if study.f_extrapolated is not None:
+        ax.axhline(study.f_extrapolated, color="#c00000", ls="--", lw=1.4,
+                   label=f"Richardson f_exact={study.f_extrapolated:.10g}")
+        ax.plot([min(h)], [study.f_extrapolated], "s", color="#c00000", ms=7)
+    ax.set_xscale("log")
+    ax.set_xlabel("grid length h")
+    ax.set_ylabel("observable f")
+    order = "-" if study.order_p is None else f"{study.order_p:.4f}"
+    ax.set_title(f"observed order p = {order} ({study.order_source})")
+    ax.grid(True, which="both", alpha=0.3)
+    ax.legend(fontsize=8)
+    ax = axes[1]
+    if study.gci_pairs:
+        idx = list(range(1, len(study.gci_pairs) + 1))
+        ax.bar(idx, study.gci_pairs, color="#2e75b6", alpha=0.85)
+        ax.set_xticks(idx)
+        ax.set_xticklabels([f"pair {i}-{i + 1}" for i in idx], rotation=0, fontsize=8)
+        ax.set_ylabel("GCI")
+        ax.set_yscale("log")
+        ax.set_title(
+            f"GCI per grid pair (Fs={study.safety_factor}), "
+            f"monotone={study.gci_monotone}"
+        )
+    else:  # pragma: no cover - a two-level study still has one pair
+        ax.text(0.5, 0.5, "no GCI pairs", ha="center", va="center")
+    for a in axes:
+        a.tick_params(labelsize=8)
+    fig.suptitle(f"V&V gate: {verdict.quantity} -> {verdict.status}")
+    fig.tight_layout()
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=140)
+    plt.close(fig)
+    return f"V&V gate plot written to {path} (verdict {verdict.status})"
+
+
+def _render_vv20_plot(record: dict[str, Any], path: str) -> str:
+    """PNG figure of |E|/U_val per table row with the acceptance line at 1."""
+    plt = _pyplot()
+    rows = record["rows"]
+    labels = [r["label"] or f"row{i + 1}" for i, r in enumerate(rows)]
+    ratios = [r["ratio"] for r in rows]
+    colors = ["#2e7d32" if r["status"] == PASS else "#c62828" for r in rows]
+    fig, ax = plt.subplots(figsize=(max(6.0, 0.55 * len(rows) + 2.0), 3.8))
+    ax.bar(range(len(rows)), ratios, color=colors)
+    ax.axhline(1.0, color="k", ls="--", lw=1.2, label="|E|/U_val = 1 (acceptance)")
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=8)
+    ax.set_ylabel("|E| / U_val")
+    ax.set_title("ASME V&V 20 table: comparison error vs validation uncertainty")
+    ax.legend(fontsize=8)
+    fig.tight_layout()
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=140)
+    plt.close(fig)
+    return f"ASME V&V 20 plot written to {path} (PASS={record['n_pass']} FAIL={record['n_fail']})"
+
+
+# ---------------------------------------------------------------------------
+# argument parsing / dispatch
+# ---------------------------------------------------------------------------
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m tensorphysics.vv.gci",
@@ -115,7 +295,8 @@ def build_parser() -> argparse.ArgumentParser:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--obs", help="gate observation JSON (schema tensorphysics.vv.observations/1) or '-'")
     source.add_argument("--benchmark", help="native benchmark JSON from a solver repository")
-    source.add_argument("--table", help="ASME V&V 20 table JSON: {\"rows\": [...]}")
+    source.add_argument("--table", "--vv20-table", dest="table",
+                        help="input ASME V&V 20 table JSON: {\"rows\": [...]}")
     parser.add_argument("--repo", default="auto",
                         help="benchmark dialect: auto|tensorlbm|tensorfvm|tensorfem|tensordem|tensorbem")
     parser.add_argument("--study", default=None, help="sub-study of an evidence document")
@@ -130,14 +311,32 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--assumed-order", type=float, default=None, help="order for a two-grid study")
     parser.add_argument("--p-min", type=float, default=None)
     parser.add_argument("--p-max", type=float, default=None)
+    parser.add_argument("--gci-absolute", action="store_true",
+                        help="report the absolute GCI band (correct for error-norm "
+                             "observables, whose relative band is unbounded)")
     parser.add_argument("--strict", action="store_true",
                         help="a three-grid certificate cannot PASS (needs >=4 grids or per-level sigma)")
-    parser.add_argument("--json", action="store_true", help="emit machine-readable JSON")
+    parser.add_argument("--allow-undeclared-noise", action="store_true",
+                        help="restore an unqualified PASS for a study whose noise floor is not "
+                             "certified (default: such a study is capped at WARN)")
+    parser.add_argument("--format", choices=FORMATS, default=None,
+                        help="output format: text (default), json, table, plot")
+    parser.add_argument("--json", action="store_true", help="alias of --format json")
+    parser.add_argument("--plot-out", default=None,
+                        help="PNG path for --format plot (default: vv_gate.png)")
     parser.add_argument("--out", default=None, help="write the JSON verdict to this path")
     return parser
 
 
-def _run_table(path: str, as_json: bool) -> int:
+def _resolve_format(args: argparse.Namespace) -> str:
+    if args.format:
+        return args.format
+    if args.json:
+        return "json"
+    return "text"
+
+
+def _run_table(path: str, fmt: str, plot_out: str | None) -> int:
     payload = _load_json(path)
     rows = payload["rows"] if isinstance(payload, dict) else payload
     results = evaluate_validation_table(rows)
@@ -148,26 +347,26 @@ def _run_table(path: str, as_json: bool) -> int:
         "n_pass": sum(1 for r in results if r.passed),
         "n_fail": sum(1 for r in results if not r.passed),
     }
-    if as_json:
-        print(json.dumps(record, indent=2))
-    else:
-        print(f"ASME V&V 20 table: {path}")
-        print(f"{'label':<16}{'f_sim':>12}{'f_exp':>12}{'U_num':>12}{'U_input':>12}{'U_val':>12}{'|E|':>12}{'ratio':>9}  status")
-        for r in results:
-            print(
-                f"{r.label or '-':<16}{r.f_sim:>12.6g}{r.f_exp:>12.6g}{r.u_num:>12.6g}"
-                f"{r.u_input:>12.6g}{r.u_val:>12.6g}{abs(r.error):>12.6g}{r.ratio:>9.4f}  {r.status}"
-            )
-        print(f"PASS={record['n_pass']} FAIL={record['n_fail']}")
+    try:
+        if fmt == "json":
+            print(json.dumps(record, indent=2))
+        elif fmt == "plot":
+            print(_render_vv20_plot(record, plot_out or "vv20_table.png"))
+        else:
+            print(_render_vv20_table(record))
+    except RuntimeError as exc:  # plotting dependency missing
+        print(f"error: {exc}", file=sys.stderr)
+        return EXIT_USAGE
     return EXIT_CODES[FAIL] if record["n_fail"] else EXIT_CODES[PASS]
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    fmt = _resolve_format(args)
     try:
         if args.table:
-            return _run_table(args.table, args.json)
+            return _run_table(args.table, fmt, args.plot_out)
         payload = _load_json(args.obs or args.benchmark)
         levels, quantity, extra = _observations_from_payload(payload, args)
         validation_block = extra.get("validation") or {}
@@ -189,16 +388,28 @@ def main(argv: Sequence[str] | None = None) -> int:
     except (adapters.AdapterError, ValueError, OSError, KeyError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return EXIT_USAGE
+    except RuntimeError as exc:  # plotting dependency missing
+        print(f"error: {exc}", file=sys.stderr)
+        return EXIT_USAGE
 
     record = verdict.as_dict()
     if extra.get("source"):
         record["adapter"] = extra["source"]
     if args.out:
         Path(args.out).write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
-    if args.json:
-        print(json.dumps(record, indent=2))
-    else:
-        print(_render(verdict, policy))
+    try:
+        if fmt == "json":
+            print(json.dumps(record, indent=2))
+        elif fmt == "table":
+            print(_render_table(verdict, policy))
+        elif fmt == "plot":
+            print(_render_plot(verdict, args.plot_out or "vv_gate.png"))
+            print(_render(verdict, policy))
+        else:
+            print(_render(verdict, policy))
+    except RuntimeError as exc:  # plotting dependency missing
+        print(f"error: {exc}", file=sys.stderr)
+        return EXIT_USAGE
     return EXIT_CODES[verdict.status]
 
 

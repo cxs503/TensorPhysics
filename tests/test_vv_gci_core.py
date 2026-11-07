@@ -52,7 +52,14 @@ def test_three_grid_recovers_second_order_exactly():
     assert abs(study.f_extrapolated - 3.0) < 1e-6
     assert study.convergence_type == "monotone"
     assert study.convergence_ratio == pytest.approx(0.25, rel=1e-12)
-    assert verdict.status == PASS, verdict.reasons
+    # conservative default: three levels without per-level sigma cannot certify
+    # the noise floor, so the numerical PASS is capped at WARN ...
+    assert verdict.status == WARN, verdict.reasons
+    assert any("noise" in r for r in verdict.reasons)
+    # ... and an explicit opt-out restores the unqualified PASS.
+    relaxed = evaluate(levels, quantity="f",
+                       policy=GatePolicy(pass_requires_noise_certificate=False))
+    assert relaxed.status == PASS, relaxed.reasons
 
 
 def test_gci_matches_hand_computation():
@@ -146,7 +153,8 @@ def test_stagnant_sequence_fails():
 def test_order_outside_the_band_fails():
     # f(h) = h**0.01 : observed order 0.01 < p_min, genuinely non-asymptotic
     func = lambda h: 1.0 + h**0.5  # noqa: E731  -> p = 0.5, admissible
-    assert evaluate(uniform_levels(func, HS)).status == PASS
+    assert evaluate(uniform_levels(func, HS),
+                    policy=GatePolicy(pass_requires_noise_certificate=False)).status == PASS
     func_bad = lambda h: 1.0 + h**20  # noqa: E731  -> p = 20 > p_max
     verdict = evaluate(uniform_levels(func_bad, HS))
     assert verdict.status == FAIL
@@ -229,6 +237,26 @@ def test_three_grid_noise_detection_limit_is_explicit():
 # ---------------------------------------------------------------------------
 
 
+def test_conservative_default_caps_an_uncertified_noise_floor_at_warn():
+    """A three-grid study without per-level sigma must not PASS unqualified.
+
+    Regression for the maturation of the gate (mission IN57-N07): a 1 % noise
+    floor on three grids is invisible to a three-parameter fit, so the default
+    policy caps such a study at WARN instead of emitting a silent PASS.
+    """
+    levels = uniform_levels(quadratic, HS)
+    default = evaluate(levels)
+    assert default.status == WARN
+    assert any(c["check"] == "noise-certificate" and c["status"] == WARN
+               for c in default.checks)
+    # declaring per-level sigma (round-off scale) certifies the noise floor
+    declared = evaluate([Observation(h=l.h, f=l.f, sigma=1e-12) for l in levels])
+    assert declared.status == PASS, declared.reasons
+    # opt-out is explicit and documented
+    relaxed = evaluate(levels, policy=GatePolicy(pass_requires_noise_certificate=False))
+    assert relaxed.status == PASS
+
+
 def test_two_grid_study_needs_an_assumed_order_and_uses_fs_three():
     levels = uniform_levels(quadratic, (1.0, 0.5))
     verdict = evaluate(levels)
@@ -242,7 +270,8 @@ def test_two_grid_study_needs_an_assumed_order_and_uses_fs_three():
 
 
 def test_expected_order_mismatch_is_flagged():
-    ok = evaluate(uniform_levels(quadratic, HS), policy=GatePolicy(expected_order=2.0))
+    ok = evaluate(uniform_levels(quadratic, HS),
+                  policy=GatePolicy(expected_order=2.0, pass_requires_noise_certificate=False))
     assert ok.status == PASS
     soft = evaluate(uniform_levels(quadratic, HS), policy=GatePolicy(expected_order=2.3))
     assert soft.status == WARN
@@ -254,7 +283,8 @@ def test_validation_block_uses_gci_as_numerical_uncertainty():
     levels = uniform_levels(quadratic, HS)
     study = evaluate(levels).study
     u_num = study.gci_fine * abs(study.f_fine)
-    passing = evaluate(levels, f_exp=2.999, u_input=0.05)
+    passing = evaluate(levels, f_exp=2.999, u_input=0.05,
+                       policy=GatePolicy(pass_requires_noise_certificate=False))
     assert passing.validation is not None
     assert passing.validation.u_num == pytest.approx(u_num, rel=1e-12)
     assert passing.status == PASS, passing.reasons
