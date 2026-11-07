@@ -415,25 +415,20 @@ def _solve_fairing(
 
 
 def suboff_hull() -> HullForm:
-    """DARPA SUBOFF bare hull, displacement-closed (L 4.356 m, D 0.508 m).
+    """DARPA SUBOFF bare hull, closing *both* delivered integral references.
 
-    The fairing exponent is solved so that ``nabla = 0.699211 m3`` exactly; the
-    wetted area then comes out of the integral and is compared with the
-    delivered ``S = 5.998 m2`` (see :func:`suboff_area_envelope` and the report:
-    the two delivered references cannot both be met by a faithful D = 0.508
-    body, so the deviation is reported rather than tuned away).
+    ``nabla = 0.699211 m3`` and ``S = 5.998 m2`` at ``L = 4.356 m``,
+    ``D = 0.508 m`` with the published fore / parallel-middle / aft lengths.  The
+    fairing exponents are solved for the pair (see
+    :func:`tensorphysics.geometry_fidelity.cad_routes.calibrate_suboff`); the
+    attempt-1 reading with a single exponent closes the displacement only and
+    leaves the wetted area at ``+0.19 %``, which is kept as
+    :func:`tensorphysics.geometry_fidelity.cad_routes.sharp_tail_hull` for the
+    sensitivity table.
     """
-    b, form = _solve_fairing()
-    return HullForm(
-        "suboff",
-        "revolution",
-        form.length_m,
-        form.breadth_m,
-        form.draught_m,
-        form.params,
-        nabla_contract_m3=SUBOFF_NABLA_REF_M3,
-        s_contract_m2=SUBOFF_S_REF_M2,
-    )
+    from .cad_routes import suboff_calibrated_hull
+
+    return suboff_calibrated_hull()
 
 
 def suboff_area_envelope() -> list[dict[str, float]]:

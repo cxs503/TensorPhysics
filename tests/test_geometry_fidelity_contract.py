@@ -133,18 +133,18 @@ def test_c3_suboff_displacement_matches_reference(hulls):
     assert abs(nabla - 0.699211) / 0.699211 <= 1e-3
 
 
-def test_c3_suboff_wetted_area_is_reported_honestly(hulls):
-    """The delivered pair (nabla = 0.699211, S = 5.998) cannot both be met at 0.1 %.
+def test_c3_suboff_closes_both_delivered_references(hulls):
+    """Isoparametric route: the calibrated truth source hits (nabla, S) of SUBOFF.
 
-    The displacement is closed by construction, so the wetted area is a genuine
-    prediction of the closed geometry.  The measured deviation is recorded in the
-    report instead of being tuned away; here we only pin that it stays inside the
-    0.5 % band used for the "near miss" statement.
+    The attempt-1 reading (one common fairing exponent) closed the displacement
+    and missed the wetted area by +0.19 %.  Two independent exponents restore the
+    freedom and close both; the sharp-tail sensitivity case is asserted in
+    ``tests/test_geometry_fidelity_m6242.py``.
     """
-    area = hulls["suboff"].cad_integrals()["s_wetted_m2"]
-    deviation = abs(area - 5.998) / 5.998
-    assert deviation <= 5e-3
-    assert deviation > 1e-3, "if this ever passes the 0.1 % criterion the report must be updated"
+    hull = hulls["suboff"]
+    integrals = hull.cad_integrals(480, 200)
+    assert abs(integrals["nabla_m3"] - 0.699211) / 0.699211 <= 1e-3
+    assert abs(integrals["s_wetted_m2"] - 5.998) / 5.998 <= 1e-3
 
 
 def test_c3_suboff_area_envelope_brackets_the_reference(hulls):
