@@ -83,9 +83,13 @@ def negative_controls() -> dict:
 
     model = lambda h: 3.0 + 0.5 * h * h  # noqa: E731
     noise = {"rel_noise": 0.01, "seeds": 25, "cases": {}}
-    for name, hs, declare_sigma in (
-        ("three_grid_declared_sigma", HS3, True),
-        ("five_grid_undeclared_sigma", HS5, False),
+    for name, hs, declare_sigma, design_order in (
+        ("three_grid_declared_sigma", HS3, True, None),
+        ("five_grid_undeclared_sigma", HS5, False, None),
+        # a verification study always knows the design order of the scheme; when
+        # it is declared, the three-grid fit has a testable consequence (p has to
+        # come out at that order) even though the power-law residual is zero.
+        ("three_grid_undeclared_sigma_design_order", HS3, False, 2.0),
     ):
         statuses, orders, ratios = [], [], []
         for seed in range(noise["seeds"]):
@@ -96,13 +100,15 @@ def negative_controls() -> dict:
                 perturbed = f * (1.0 + rng.uniform(-0.01, 0.01))
                 levels.append(Observation(h=h, f=perturbed,
                                           sigma=0.01 * f if declare_sigma else None))
-            verdict = evaluate(levels, quantity=f"noise_{name}")
+            policy = GatePolicy(expected_order=design_order)
+            verdict = evaluate(levels, quantity=f"noise_{name}", policy=policy)
             statuses.append(verdict.status)
             orders.append(verdict.study.order_p)
             ratios.append(verdict.study.noise_ratio)
         noise["cases"][name] = {
             "grids": len(hs),
             "declared_sigma": declare_sigma,
+            "declared_design_order": design_order,
             "status_counts": {s: statuses.count(s) for s in ("PASS", "WARN", "FAIL")},
             "silent_pass": statuses.count("PASS"),
             "order_min": min(orders), "order_max": max(orders),
