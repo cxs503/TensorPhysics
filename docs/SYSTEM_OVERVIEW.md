@@ -83,6 +83,8 @@ The cross-repository contract surface should be versioned and tested. Names belo
 
 No interface should silently assume all solvers advance in the same way: steady SIMPLE iterations, transient LBM steps, DEM subcycling and FEM equilibrium/dynamics need explicit clock/lifecycle semantics. Unit conversion, mesh/particle remapping and conservative transfer must be explicit operations, not implied by a matching field name.
 
+> **Clock semantics — implementation status (IN16-K8, M12).** The requirement above is no longer documentation-only. `tensorphysics.campaign.clock` fixes the master/sub ratio and exchange cadence on an exact integer sub-step lattice (integer ratios); `tensorphysics.campaign.clock_rational` extends the same disposition M12 contract to arbitrary **rational** ratios: the time base is the GCD atom lattice, the exchange cadence is the LCM of the two step sizes (machine-verified as the *coarsest* common period), and a causality gate refuses future data instead of extrapolating. `tensorphysics.campaign.multirate` cross-checks the semantics with a two-integrator multirate run against a closed-form modal solution, with declared in-interval error bands (`err/A <= C*omega_max*h`, C = 1.0, measured first order in the exchange interval). Denominators are exact `fractions.Fraction` values, so a campaign restart cannot drift; the v1 artifact schema and its fingerprint pin are untouched.
+
 ## 6. First system-level application: ship–water–ice interaction
 
 A staged engineering path is recommended:
