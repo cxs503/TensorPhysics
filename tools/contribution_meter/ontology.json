@@ -1,0 +1,139 @@
+{
+  "version": "1.1.0",
+  "name": "Scientific Contribution Unit (SCU) ontology for the Tensor agent ecosystem",
+  "date": "2026-11-07",
+  "problem": "Top-journal draft §7.1 threat: 'a mission is not a scientific contribution unit'. Missions are budget/threads; they are heterogeneous, they can produce nothing, and they can produce infrastructure instead of knowledge. Counting missions (M_mission) as output therefore has no construct validity. This ontology replaces M_mission with six falsifiable contribution classes, each with a minimum evidence gate that a machine can check against the published mission report.",
+  "unit_definition": "One contribution unit = one mission whose report satisfies at least one class gate below. Exactly one primary class is assigned per mission, by the precedence rules in 'precedence'. Weighted sum in SCU (scientific contribution units) is defined in 'weights'; 1.0 SCU == one reproducible verification case against a reference the code under test does not own.",
+  "labels": ["C1", "C2", "C3", "C4", "C5", "C6", "NONE"],
+  "classes": {
+    "C1": {
+      "name": "verified-case",
+      "one_line": "A new reproducible comparison of a computed quantity against a reference the code under test does not own, with a quantified error that meets the published accuracy bar.",
+      "minimum_evidence_gate": [
+        ">=1 quantified error row extracted from the report text (percent, or unitless relative error in an error context)",
+        "the error row's reference kind is external: analytic / experimental / cross-discretization (independent implementation or grid family) / literature; 'internal baseline' alone does NOT qualify",
+        "min |error| <= 15% (platform accuracy bar)",
+        ">=1 acceptance-gate PASS on a judgement line",
+        ">=1 reproducible artefact name (verified/ benchmark/ script/ test file) so the comparison can be re-run",
+        ">=3 dimensional quantities printed (the object must be physics, not bookkeeping)"
+      ],
+      "counterexamples": [
+        "Comparing two variants of the same code (internal baseline) and calling it verification -> C6/C2",
+        "Re-running an already-verified case and re-publishing the same numbers (no new case) -> C6",
+        "Comparing a dashboard number with the SQL query that produced it (self-consistency) -> C6",
+        "A round-trip identity (forward then inverse) printed to 1e-16 -> capability self-consistency, C2",
+        "A test asserting an internal implementation equals another internal implementation -> C6"
+      ],
+      "why_it_counts": "It is the only class that adds falsifiable, externally anchored knowledge about nature (or about a solver's error)."
+    },
+    "C2": {
+      "name": "capability-delta",
+      "one_line": "A capability that was MOCK / STUB / absent / doc-only / WITHHELD becomes REAL (implemented first-principles) and is exercised under a gate.",
+      "minimum_evidence_gate": [
+        "an evidence-level transition is stated: MOCK|STUB|NOT_SUPPORTED|WITHHELD|absent|作废 -> REAL|PROVISIONAL|落地, or a new first-principles implementation is delivered where the pool previously had none",
+        ">=1 gate PASS proving the new capability is exercised",
+        "no external-reference error table: if the mission establishes a new externally anchored error table it is C1, not C2"
+      ],
+      "counterexamples": [
+        "A new module whose acceptance is only self-consistency (round trip, conservation, contract shape) with no external anchor -> C2 is correct, but calling it C1 is the error to avoid",
+        "Re-grading existing capabilities into a ledger without changing the implementation -> C6",
+        "Deleting a MOCK and replacing it with a different MOCK -> not a delta (must be first-principles/REAL)"
+      ]
+    },
+    "C3": {
+      "name": "defect-fix",
+      "one_line": "A known-wrong number produced by an existing implementation is corrected, the corrected value is shown against a reference, and a regression gate locks it so it cannot silently regress.",
+      "minimum_evidence_gate": [
+        "a correction pattern in the text: old value -> new value, or '旧链/旧实现/此前/UNGUARDED' + new measured value, or an errata table with E1/E2 rows",
+        "a defect/fix marker (修复/修正/勘误/根因/off-by/符号错/差一个量级)",
+        "the corrected quantity is compared to a reference (analytic/experimental/literature) or the correction is quantified before/after",
+        "a lock: regression test, gate PASS after the fix, or PINNED/锁死 language"
+      ],
+      "counterexamples": [
+        "Fixing a 500/NameError/CI-red with no wrong numeric value at stake -> C6 (availability defect)",
+        "A CI runner outage triaged as 'not a code failure' -> C6",
+        "Restoring a lost artefact blob without changing any computed number -> C6",
+        "Writing a new verified case while incidentally fixing a typo -> C1 (correction is not the contribution)"
+      ]
+    },
+    "C4": {
+      "name": "method-doc",
+      "one_line": "A durable methodological or documentary artefact whose value is the reusable procedure/definition itself: ontology, classifier, validation protocol, tutorial, manuscript draft, campaign proposal, adjudication framework.",
+      "minimum_evidence_gate": [
+        "the deliverable is document/method-shaped (title/summary contains 教程/tutorial/文档/docs/稿/paper/manuscript/提案/proposal/评审/review/本体/ontology/分类器/classifier/方法/框架/协议/protocol/规范) OR the report presents >=3 formulas and >=3 sections of method text",
+        "it is not primarily a correction (else C3) and does not establish a new external error table (else C1)"
+      ],
+      "counterexamples": [
+        "A tutorial that merely re-runs an existing verified case: the unit is the tutorial (C4), not a new C1",
+        "A proposal document with machine-cut criteria but no results -> C4, not C2",
+        "A manuscript draft that aggregates existing evidence -> C4 (no new knowledge is added)"
+      ]
+    },
+    "C5": {
+      "name": "negative-result",
+      "one_line": "A valuable negative conclusion: a previously believed claim/model/criterion is shown to be false, ill-posed, or out of its validity domain, with quantitative backing and a stated consequence.",
+      "minimum_evidence_gate": [
+        "an explicit failure verdict applied to the science: honest-FAIL / FAIL / WITHHELD-as-verdict / 不满足 / 未达标 / 证伪 / 不可行 / 不成立 / 判据被证 ill-posed / 退役 / 撤回",
+        "quantitative backing: >=1 error row whose magnitude is the reason for the verdict, or a criteria table with FAIL rows",
+        "a stated consequence: the criterion/model is retired, bounded, re-classified, or its validity domain is narrowed",
+        "the mission is not primarily a correction (C3) or a successful verification (C1)"
+      ],
+      "counterexamples": [
+        "A report with one honest FAIL among ten PASS on a new verified case -> C1 (the unit is the verified case)",
+        "A campaign-level gate that reports WITHHELD because nothing finished yet -> C6 (no scientific claim was falsified)",
+        "Vague negation vocabulary ('无效' as an adjective) without a falsified claim -> not C5",
+        "An adversarial peer review that recomputes numbers and finds no exaggeration -> C6 or C5 only if it retires a claim"
+      ],
+      "operational_status_note": "C5 is the weakest class in practice: its evidence is prose-shaped ('we could not', 'the criterion is ill-posed') rather than table-shaped. It is therefore gated on an explicit verdict token AND a quantitative FAIL row AND a consequence statement; if the per-class F1 falls below 0.70 the class MUST be declared '该类本体不可操作' in the report rather than re-tuned on the gold set."
+    },
+    "C6": {
+      "name": "infra",
+      "one_line": "Pure infrastructure: schedulers, gates, ledgers, CI, report plumbing, contract/schema work, availability fixes. Necessary, but it does not add scientific knowledge.",
+      "minimum_evidence_gate": [
+        "infra vocabulary dominates (调度/daemon/dispatcher/harness/CI/pytest/权限/审计/契约/schema/账本) or the report prints almost no dimensional quantities",
+        "no class C1..C5 gate is satisfied"
+      ],
+      "counterexamples": [
+        "A report full of error tables that are all self-consistency or ledger checks -> still C6 (the classic 'looks like C1' trap)",
+        "A capability-audit CLI that prints 'error N% <= 3%' criteria for *other* missions -> C6",
+        "A 44/44 SQL-to-dashboard reconciliation -> C6",
+        "CI runner capacity triage with local pytest evidence -> C6"
+      ]
+    },
+    "NONE": {
+      "name": "no-measurable-contribution",
+      "one_line": "No class gate is satisfied, or the mission published no report at all. This is the numerator of the zero-contribution ratio.",
+      "minimum_evidence_gate": ["all of C1..C6 fail, or the mission has no report in the window"],
+      "counterexamples": ["Do not silently fold NONE into C6: report-less missions are unmeasurable, not infra."]
+    }
+  },
+  "precedence": {
+    "description": "Single-label assignment. The precedence depends on the shape of the deliverable because the same mission can satisfy several gates; the order encodes which unit type is the *primary* knowledge gain.",
+    "correction_pattern": ["C3", "C2", "C5", "C4", "C1", "C6"],
+    "doc_or_method_shaped": ["C4", "C2", "C5", "C1", "C3", "C6"],
+    "default": ["C1", "C2", "C3", "C5", "C4", "C6"],
+    "sensitivity_check": "The report recomputes the gold-set macro F1 under a single flat precedence C1>C2>C3>C5>C4>C6 to show the metric is not an artefact of this choice."
+  },
+  "weights": {
+    "description": "SCU weights. The unit is calibrated so that one reproducible externally anchored verification case = 1.0 SCU. Capability deltas are worth 3/4 of a case (they enable future cases), corrections 0.6 (they protect existing stock), negative results 0.5 (they prevent future waste), method/doc 0.3 (they amplify but do not by themselves add knowledge), infra 0.05 (necessary, near-zero knowledge content).",
+    "C1": 1.0, "C2": 0.75, "C3": 0.6, "C4": 0.3, "C5": 0.5, "C6": 0.05, "NONE": 0.0
+  },
+  "thresholds": {
+    "accuracy_bar_pct": 15.0,
+    "min_dimensioned_quantities": 3,
+    "min_gate_pass": 1,
+    "gold_macro_f1": 0.85,
+    "gold_per_class_f1": 0.70
+  },
+  "falsifiability": {
+    "test_1": "Gold-set macro F1 >= 0.85 and every class F1 >= 0.70 on 60 hand-annotated real reports; any class below 0.70 must be declared '该类本体不可操作'.",
+    "test_2": "Zero-contribution ratio must be enumerable: every mission id in the window appears in exactly one class bucket, and the enumeration is re-derived by the CLI (report subcommand).",
+    "test_3": "M_mission -> SCU conversion table must be recomputable from the same window; the ratio must be stable across the 48 h and 96 h windows within the reported bounds.",
+    "test_4": "An adversarial subset (>=10 items) of error-table-bearing infrastructure reports ('looks like C1, is C6') must be classified C6, otherwise C1 precision is inflated."
+  },
+  "known_limits": [
+    "Report text is the only evidence source: a mission that did real verification but wrote no report is counted NONE -> the meter measures documented contribution, not actual work.",
+    "Single annotator gold set: no inter-annotator agreement statistic; boundaries C1/C2 and C3/C1 are judgement calls documented per item.",
+    "The classifier reads the published report, so a mission that overstates results is classified by its claims, not by re-running its code; the meter is not an anti-fraud device (that is the peer-review/gate layer)."
+  ]
+}
