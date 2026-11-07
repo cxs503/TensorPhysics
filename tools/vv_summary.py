@@ -48,6 +48,27 @@ def _gate_file(path: Path) -> dict | None:
     }
 
 
+def mms_runs() -> list[dict]:
+    """TensorFVM manufactured-solution study, one entry per observable."""
+    runs = []
+    for path in sorted(ART.glob("gate_tensorfvm_mms_*.json")):
+        gate = _gate_file(path)
+        if gate is None:
+            continue
+        runs.append({
+            "repo": "TensorFVM",
+            "case": "native_order3d/manufactured_solution_study",
+            "observable": path.stem[len("gate_tensorfvm_mms_"):],
+            "grids": [lvl.get("label", lvl.get("h")) for lvl in gate["levels"]],
+            "expected_order": 2.0,
+            "source": "artifacts/vv_gate/tensorfvm_mms_raw.json",
+            **{k: gate[k] for k in ("status", "order_p", "order_source", "gci_fine",
+                                    "f_extrapolated", "convergence_type",
+                                    "convergence_ratio", "reasons")},
+        })
+    return runs
+
+
 def cross_repo_runs() -> list[dict]:
     runs = []
     lbm_raw = _load(ART / "tensorlbm_poiseuille_raw.json")
@@ -91,13 +112,15 @@ def main(argv: list[str] | None = None) -> int:
     positive = _load(ART / "controls" / "positive_control.json")
     negative = _load(ART / "controls" / "negative_controls.json")
     vv20 = _load(ART / "controls" / "vv20_table.json")
-    runs = cross_repo_runs()
+    runs = cross_repo_runs() + mms_runs()
     fem_evidence = _load(ART / "tensorfem_hconv" / "evidence.json") or {}
 
     noise3 = negative["one_percent_noise"]["cases"]["three_grid_declared_sigma"]
     noise5 = negative["one_percent_noise"]["cases"]["five_grid_undeclared_sigma"]
     lbm_runs = [r for r in runs if r["repo"] == "TensorLBM"]
     fem_runs = [r for r in runs if r["repo"] == "TensorFEM"]
+    fvm_runs = [r for r in runs if r["repo"] == "TensorFVM"]
+    fvm_primary = next((r for r in fvm_runs if r["observable"] == "l2_interior"), None)
     fem_best = max((r["order_p"] or -9 for r in fem_runs), default=None)
     lbm_best = max((r["order_p"] or -9 for r in lbm_runs), default=None)
 
@@ -143,6 +166,20 @@ def main(argv: list[str] | None = None) -> int:
             "target": "manufactured solution recovers p = 2 within 0.2",
             "met": any(abs((r["order_p"] or 0) - 2.0) < 0.2 for r in fem_runs),
         },
+        "c_cross_repo_fvm_mms": {
+            "value": {"orders": {r["observable"]: r["order_p"] for r in fvm_runs},
+                      "primary_observable": "l2_interior",
+                      "abs_deviation": None if fvm_primary is None
+                      else abs(fvm_primary["order_p"] - 2.0)},
+            "target": "|p - 2| < 0.2 on TensorFVM's own manufactured-solution case",
+            "met": bool(fvm_primary is not None
+                        and abs(fvm_primary["order_p"] - 2.0) < 0.2),
+            "note": "l2_interior excludes the wall-adjacent layer whose Dirichlet "
+                    "closure is lower order; l2_global / linf_global stay below 2 "
+                    "and are reported as FAIL rather than hidden.",
+            "evidence": "artifacts/vv_gate/tensorfvm_mms_raw.json, "
+                        "artifacts/vv_gate/gate_tensorfvm_mms_l2_interior.json",
+        },
         "d_vv20_table": {
             "value": {"n_rows": vv20["n_rows"], "n_agree": vv20["n_agree"]},
             "target": "10/10 rows agree with the hand computation",
@@ -166,6 +203,7 @@ def main(argv: list[str] | None = None) -> int:
         "acceptance": criteria,
         "controls": {"positive": positive, "negative": negative, "vv20": vv20},
         "cross_repo": runs,
+        "cross_repo_mms": fvm_runs,
         "tensorfem_repo_claims": {
             "manufactured_l2_orders": (fem_evidence.get("manufactured") or {}).get("l2_observed_orders"),
             "manufactured_mean_order": (((fem_evidence.get("manufactured") or {}).get("energy_study") or {})
