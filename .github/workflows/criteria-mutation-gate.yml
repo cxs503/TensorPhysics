@@ -1,0 +1,70 @@
+name: criteria-mutation-gate
+
+# Falsifiability gate for acceptance criteria (node IN50-W3-N08).
+#
+# Two checks, both machine-decided:
+#   1. tests/test_criteria_mutation.py  -- the ledger KPI, the M1 eps-ladder, the
+#      tautological negative control (0/5) and the red/green merge-gate evidence;
+#   2. the merge gate itself: regenerate the ledger from source and compare it
+#      with artifacts/criteria_mutation/baseline_ledger.json.  Every criterion
+#      that is NEW relative to the baseline must kill >= 1 mutant, otherwise the
+#      job exits non-zero and the PR cannot merge.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "tools/audit/criteria_mutation.py"
+      - "tests/test_criteria_mutation.py"
+      - "artifacts/criteria_mutation/**"
+      - "src/tensorphysics/vv/**"
+      - "src/tensorphysics/campaign/p20_gate/**"
+      - ".github/workflows/criteria-mutation-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "tools/audit/criteria_mutation.py"
+      - "tests/test_criteria_mutation.py"
+      - "artifacts/criteria_mutation/**"
+      - "src/tensorphysics/vv/**"
+      - "src/tensorphysics/campaign/p20_gate/**"
+
+jobs:
+  falsifiability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[test]"
+
+      - name: ledger unit + acceptance tests
+        run: python -m pytest tests/test_criteria_mutation.py -q
+
+      - name: regenerate the ledger from source
+        run: |
+          python tools/audit/criteria_mutation.py \
+            --json-out "$RUNNER_TEMP/ledger.json" \
+            --md-out "$RUNNER_TEMP/ledger.md" \
+            --no-figures
+
+      - name: merge gate -- new criteria must carry a killer test
+        run: |
+          python tools/audit/criteria_mutation.py --pr-check \
+            --ledger "$RUNNER_TEMP/ledger.json" \
+            --baseline-ledger artifacts/criteria_mutation/baseline_ledger.json \
+            --pr-json-out "$RUNNER_TEMP/pr_gate.json"
+
+      - name: upload ledger artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: criteria-mutation-ledger
+          path: |
+            ${{ runner.temp }}/ledger.json
+            ${{ runner.temp }}/ledger.md
+            ${{ runner.temp }}/pr_gate.json
