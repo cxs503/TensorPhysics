@@ -258,3 +258,25 @@ python tools/vv_crossrepo_tensorlbm.py          # real TensorLBM 3-grid run
 python tools/vv_summary.py && python tools/vv_figures.py
 python tools/vv_publish.py --mission 5389        # build + post the report (env credentials)
 ```
+## 8. Addendum — mission IN48-N03 (maturity pass)
+
+The TensorFVM limitation of §6 item 5 is closed: a **real manufactured-solution
+run** of `tensorfvm.verification.native_order3d` on three grids (`n = 4, 8, 16`,
+executed on the 外协方 cluster) now recovers
+
+| observable | `p` | `|p - 2|` | verdict |
+|---|---|---|---|
+| `l2_interior` (wall layer excluded) | **2.1317** | 0.132 | PASS |
+| `l2_global` | 1.7531 | 0.247 | FAIL |
+| `linf_global` | 1.3877 | 0.612 | FAIL |
+
+so criterion (c) is met on a genuine MMS case, while the wall-contaminated norms
+are reported as FAIL instead of hidden. The TensorLBM Poiseuille FAIL of §5 was
+diagnosed rather than reinterpreted: the discrete profile is parabolic to `1e-5`
+of `u_max`, but the effective wall sits `~0.57` cells away from the half-way
+bounce-back position (constant in cell units, hence an `O(h)` error) and the
+amplitude error decays as `h^0.787` — both reproduced by
+`tools/vv_lbm_profile_fit.py`. New code: `tools/vv_crossrepo_mms.py`,
+`tools/vv_lbm_profile_fit.py`, `tests/test_vv_mms_crossrepo.py`; new evidence
+`artifacts/vv_gate/*mms*`, `artifacts/vv_gate/lbm_poiseuille_profile_fit.json`;
+full record in `docs/VV_GATE_MATURITY_IN48_N03.md`.

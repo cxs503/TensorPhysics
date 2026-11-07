@@ -32,11 +32,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "tools"))
 
-from tensorphysics.vv import Observation, evaluate  # noqa: E402
+from tensorphysics.vv import GatePolicy, Observation, evaluate  # noqa: E402
 
 LBM_RAW = ROOT / "artifacts" / "vv_gate" / "tensorlbm_poiseuille_raw.json"
 CONTROLS = ROOT / "artifacts" / "vv_gate" / "controls"
 FEM_EVIDENCE = ROOT / "artifacts" / "vv_gate" / "tensorfem_hconv" / "evidence.json"
+MMS_RAW = ROOT / "artifacts" / "vv_gate" / "tensorfvm_mms_raw.json"
 
 
 def _load(path: Path):
@@ -221,6 +222,42 @@ def fig_lbm_error_field(out: Path) -> Path | None:
     return target
 
 
+
+def fig_fvm_mms(out: Path) -> Path | None:
+    """TensorFVM manufactured-solution study: error norms, fitted orders, h^2 rail."""
+    if not MMS_RAW.exists():
+        return None
+    raw = _load(MMS_RAW)
+    hs = [row["h"] for row in raw["levels"]]
+    fig, ax = plt.subplots(figsize=(6.4, 4.2))
+    styles = (("l2_interior", "interior L2 (wall layer excluded)", "#1a4f9c", "o"),
+              ("l2_global", "global L2 (all cells)", "#c00000", "s"),
+              ("linf_global", "global L-infinity", "#6b6b6b", "^"))
+    h0 = min(hs)
+    anchor = None
+    for obs, label, colour, marker in styles:
+        fs = [row[obs] for row in raw["levels"]]
+        verdict = evaluate([Observation(h=h, f=f) for h, f in zip(hs, fs)],
+                           quantity=obs, policy=GatePolicy(expected_order=2.0))
+        p = verdict.study.order_p
+        ax.loglog(hs, fs, marker + "-", color=colour, lw=1.6, ms=5,
+                  label=f"{label}: p = {p:.3f}, gate {verdict.status}")
+        if anchor is None:
+            anchor = fs[-1] / h0 ** 2
+    hh = [h0, max(hs)]
+    ax.loglog(hh, [anchor * h ** 2 for h in hh], "k--", lw=1.0, label="slope h^2 (design order)")
+    ax.set_xlabel("cell size h = 1/n (n^3 hexahedral box)")
+    ax.set_ylabel("error norm (m/s)")
+    ax.set_title("TensorFVM manufactured solution: gate-measured order vs design order 2")
+    ax.grid(alpha=0.3, which="both")
+    ax.legend(frameon=False, fontsize=7.5)
+    fig.tight_layout()
+    target = out / "fig_fvm_mms.png"
+    fig.savefig(target, dpi=170)
+    plt.close(fig)
+    return target
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", default="artifacts/vv_gate/figures")
@@ -228,7 +265,7 @@ def main(argv: list[str] | None = None) -> int:
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     made = []
-    for fn in (fig_gci_vs_r, fig_order_comparison, fig_convergence, fig_vv20, fig_lbm_error_field):
+    for fn in (fig_gci_vs_r, fig_order_comparison, fig_convergence, fig_vv20, fig_lbm_error_field, fig_fvm_mms):
         try:
             target = fn(out)
         except Exception as exc:  # pragma: no cover - figure best effort
