@@ -136,6 +136,8 @@ class GatePolicy:
     noise_fail_ratio: float = 0.25
     require_monotone: bool = True
     strict: bool = False
+    pass_requires_noise_certificate: bool = True
+    gci_absolute: bool = False
     gci_increase_tolerance: float = 0.05
 
     def merged(self, **overrides: Any) -> "GatePolicy":
@@ -362,18 +364,24 @@ def gci(
     fine: Observation,
     p: float,
     safety_factor: float = 1.25,
+    force_absolute: bool = False,
 ) -> tuple[float, bool]:
     """Roache grid convergence index of one pair.
 
     Returns ``(value, is_relative)``.  The relative form is used whenever
     ``|f_fine|`` is not negligible, otherwise the absolute form is returned so
     that a vanishing observable (e.g. an error norm) stays well defined.
+    ``force_absolute=True`` always returns the absolute band; that is the
+    correct form for an error norm, because a relative band around a vanishing
+    quantity is unbounded by construction.
     """
     rho = refinement_ratio(coarse, fine)
     denom = rho**p - 1.0
     if denom <= 0.0:
         raise ValueError("degenerate GCI denominator: rho**p <= 1 (order must be positive)")
     delta = abs(fine.f - coarse.f)
+    if force_absolute:
+        return safety_factor * delta / denom, False
     scale = abs(fine.f) if abs(fine.f) > 1.0e-300 else abs(coarse.f)
     if scale > 1.0e-300:
         return safety_factor * delta / scale / denom, True
@@ -489,7 +497,8 @@ def grid_convergence_study(
     if order is not None and order > 0.0:
         for coarse, fine in zip(ordered, ordered[1:]):
             try:
-                value, is_rel = gci(coarse, fine, order, safety_factor=safety_factor)
+                value, is_rel = gci(coarse, fine, order, safety_factor=safety_factor,
+                                    force_absolute=policy.gci_absolute)
             except ValueError:
                 continue
             gci_pairs.append(value)
@@ -814,7 +823,20 @@ def evaluate(
             )
         )
 
-    # 9. ASME V&V 20 validation (optional)
+    # 9. noise certificate (default conservative policy)
+    if policy.pass_requires_noise_certificate and not study.noise_certified:
+        checks.append(
+            _check(
+                "noise-certificate",
+                WARN,
+                "the noise floor of this study is not certified (three levels without "
+                "per-level sigma): the numbers may be a PASS, but an undeclared noise "
+                "floor cannot be excluded, so the pass is capped at WARN",
+                n_levels=study.n_levels,
+            )
+        )
+
+    # 10. ASME V&V 20 validation (optional)
     validation = None
     if f_exp is not None:
         if study.gci_fine is None:

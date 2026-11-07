@@ -18,11 +18,21 @@ from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, Sequence
 
 __all__ = [
+    "BOUNDARY_SLACK",
     "ValidationResult",
     "evaluate_validation_table",
     "validation_uncertainty",
     "validate",
 ]
+
+
+#: Relative slack on the ``|E| <= U_val`` acceptance boundary.  ``U_val`` and
+#: ``E`` are both computed from floating point numbers, so an exact boundary
+#: case (``|E|`` *equal* to ``U_val`` by construction) can land a few ulp on
+#: either side; the slack keeps such a case a PASS without loosening anything
+#: measurable (1e-12 relative is ~4 orders below the 1e-8 precision of the
+#: inputs themselves).  The reported ``ratio`` is *not* slacked.
+BOUNDARY_SLACK = 1e-12
 
 
 @dataclass(frozen=True)
@@ -93,7 +103,7 @@ def validate(
         passed = error == 0.0
     else:
         ratio = abs(error) / u_val
-        passed = abs(error) <= u_val
+        passed = abs(error) <= u_val + BOUNDARY_SLACK * max(u_val, abs(error))
     return ValidationResult(
         f_sim=f_sim,
         f_exp=f_exp,
