@@ -181,3 +181,64 @@ def rainflow_histogram(result: RainflowResult, n_bins: int = 20,
             bin_means[i] = (bin_edges[i] + bin_edges[i + 1]) / 2.0
 
     return bin_edges, bin_counts, bin_means
+
+
+def rainflow_counting_stack(signal: np.ndarray) -> RainflowResult:
+    """O(N) stack implementation of the ASTM E1049-85 four-point rule.
+
+    Numerically identical to :func:`rainflow_counting` (same ranges, means and
+    0.5/1.0 cycle weights) but linear in the number of extrema instead of
+    quadratic: ``rainflow_counting`` deletes from the middle of a Python list,
+    which is fine for a few thousand points but impractical for the 1e6-sample
+    records used in spectral-fatigue Monte-Carlo studies.
+
+    Algorithm
+    ---------
+    Push each extremum.  For the last four stack entries (A, B, C, D) the middle
+    range B-C is a closed cycle when ``|C-B| <= |B-A|`` and ``|C-B| <= |D-C|``:
+    record the full cycle and drop B and C.  Repeat.  Whatever remains at the
+    end is counted as half cycles between consecutive points (residue).
+    """
+    if len(signal) < 2:
+        return RainflowResult(ranges=np.array([]), means=np.array([]),
+                              counts=np.array([]))
+
+    pv = _find_peaks_valleys(np.asarray(signal, dtype=float))
+    if len(pv) < 3:
+        return RainflowResult(ranges=np.array([]), means=np.array([]),
+                              counts=np.array([]))
+
+    stack = []
+    ranges = []
+    means = []
+    counts = []
+    for x in pv:
+        stack.append(float(x))
+        while len(stack) >= 4:
+            a, b, c, d = stack[-4], stack[-3], stack[-2], stack[-1]
+            r_bc = abs(c - b)
+            if r_bc <= abs(b - a) and r_bc <= abs(d - c):
+                ranges.append(r_bc)
+                means.append(0.5 * (b + c))
+                counts.append(1.0)
+                del stack[-3:-1]
+            else:
+                break
+
+    n_full = len(ranges)
+    n_half = 0
+    for j in range(len(stack) - 1):
+        r = abs(stack[j + 1] - stack[j])
+        if r > 0:
+            ranges.append(r)
+            means.append(0.5 * (stack[j + 1] + stack[j]))
+            counts.append(0.5)
+            n_half += 1
+
+    return RainflowResult(
+        ranges=np.array(ranges),
+        means=np.array(means),
+        counts=np.array(counts),
+        n_full=n_full,
+        n_half=n_half,
+    )
