@@ -1,0 +1,314 @@
+{
+  "corpus_version": "1.0.0",
+  "mission_id": 4911,
+  "name": "L2 ice-resistance anchor corpus (full-spectrum, three-state)",
+  "evidence_level": "L2",
+  "evidence_level_meaning": "解析恒等式 + 已发表定律的标度关系 + 多条独立文献半经验律交叉一致性 + 推进功率量级带。无实尺度数字化测量记录，绝对精度判据为 WITHHELD（见报告 §6）。",
+  "reference_ship": {
+    "name": "PC6 reference ship",
+    "L_pp_m": 150.0,
+    "B_m": 24.0,
+    "T_m": 8.5,
+    "bow_angle_deg": 30.0,
+    "flare_deg": 25.0,
+    "displacement_t": 21000.0,
+    "installed_power_MW": 22.0,
+    "eta_D": 0.55
+  },
+  "anchors": [
+    {
+      "id": "IR-L01",
+      "group": "level",
+      "check": "level_superposition",
+      "statement": "R_total = R_crush + R_break + R_submersion（Lindqvist 三分量叠加恒等式）",
+      "source": "Lindqvist (1989) POAC'89 722-735: R = R_C + R_B + R_S",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "identity"
+    },
+    {
+      "id": "IR-L02",
+      "group": "level",
+      "check": "level_crush_speed_independent",
+      "statement": "压溃分量与航速无关（半静态压溃），V=0.5 与 V=5 m/s 的 R_crush 相等",
+      "source": "Lindqvist (1989): R_C 仅含 sigma_c、h、角度与 mu，无速度项",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "analytic_property"
+    },
+    {
+      "id": "IR-L03",
+      "group": "level",
+      "check": "level_submersion_loglog_slope",
+      "statement": "R_submersion 对数-对数斜率 = (2+3x)/(1+x)，x = 2·Fr_h（R_s ∝ 0.15V²+0.3V³/√(gh) 的解析导数）",
+      "source": "Lindqvist (1989) 浸水分量 R_S = (0.15+0.3 Fr_h) rho_i V^2 h B；解析求导",
+      "tolerance": 1e-06,
+      "tolerance_type": "rel",
+      "kind": "analytic_derivative"
+    },
+    {
+      "id": "IR-L04",
+      "group": "level",
+      "check": "level_crush_scaling",
+      "statement": "R_crush ∝ sigma_c·h²（对 sigma_c 的一次、对 h 的二次标度）",
+      "source": "Lindqvist (1989) 压溃分量定义式",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "scaling_law"
+    },
+    {
+      "id": "IR-L05",
+      "group": "level",
+      "check": "level_break_scaling",
+      "statement": "R_break ∝ sigma_f·h·B（冰尖弯曲分量对标度各一次）",
+      "source": "Lindqvist (1989) 冰尖弯曲概念；本实现 R_b = 0.5 sigma_f h B (sin(phi/2)+mu cos(phi/2))/k_bend",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "scaling_law"
+    },
+    {
+      "id": "IR-L06",
+      "group": "level",
+      "check": "level_monotonicity",
+      "statement": "R_total 对 h、V、B、phi（艏越钝）、alpha（外飘越陡）、mu 均单调递增",
+      "source": "冰阻力物理方向性（厚度/速度/宽度/钝度/摩擦均增大阻力）",
+      "tolerance": 0.0,
+      "tolerance_type": "sign",
+      "kind": "physics_sign"
+    },
+    {
+      "id": "IR-L07",
+      "group": "level",
+      "check": "level_cross_law",
+      "statement": "在 h={0.5,0.75,1.0} m、V=3 m/s 时本模型总阻力落在两条独立文献律（Keinonen 1983 / Enkvist 1972）均值的 ±25% 内",
+      "source": "Keinonen (1983) POAC'83；Enkvist (1972) Acta Polytechnica Scand. 24；±25% 为文献同类半经验律之间的典型散布（半经验律固有不确定性）",
+      "tolerance": 0.25,
+      "tolerance_type": "rel",
+      "kind": "cross_law"
+    },
+    {
+      "id": "IR-L08",
+      "group": "level",
+      "check": "level_power_plausibility",
+      "statement": "1.0 m 平整冰、5 kn 时所需交付功率落在 5–20 MW（冰级船实船推进量级带）",
+      "source": "波罗的海 1A/PC6 级冰区船 1 m 平整冰 5 kn 量级通常 8–15 MW 轴功率（设计经验带，取 5–20 MW 宽容带）",
+      "tolerance": 0.0,
+      "tolerance_type": "interval",
+      "kind": "order_of_magnitude"
+    },
+    {
+      "id": "IR-L09",
+      "group": "level",
+      "check": "level_domain_accept_inside",
+      "statement": "h = 0.999·h_limit（h_limit = min(0.03L, 0.10B)）在 strict 模式下被接受且无截断标志",
+      "source": "经验律适用域：h ≤ 0.03L 且 h ≤ 0.10B（超出即进入堆积/卡冰域，律不适用）",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "domain"
+    },
+    {
+      "id": "IR-B01",
+      "group": "brash",
+      "check": "brash_endpoint_full",
+      "statement": "覆盖率 c=1 时碎冰阻力严格退化为同厚度平整冰总阻力",
+      "source": "碎冰覆盖衰减律端点约束（连续性）",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "endpoint"
+    },
+    {
+      "id": "IR-B02",
+      "group": "brash",
+      "check": "brash_endpoint_zero",
+      "statement": "覆盖率 c=0 时冰阻力严格为 0（开水域）",
+      "source": "碎冰覆盖衰减律端点约束",
+      "tolerance": 1e-09,
+      "tolerance_type": "abs_N",
+      "kind": "endpoint"
+    },
+    {
+      "id": "IR-B03",
+      "group": "brash",
+      "check": "brash_clearing_linearity",
+      "statement": "清除区（c ≤ 0.6）衰减因子 D(c)=c 精确线性",
+      "source": "碎冰通道自由清道区：阻力 ∝ 覆盖率（浮冰遭遇次数）",
+      "tolerance": 1e-12,
+      "tolerance_type": "abs",
+      "kind": "decay_law"
+    },
+    {
+      "id": "IR-B04",
+      "group": "brash",
+      "check": "brash_monotone_in_coverage",
+      "statement": "衰减律 D(c) 在 [0,1] 上单调不减（101 点网格）",
+      "source": "物理单调性：覆盖越多阻力越大",
+      "tolerance": 0.0,
+      "tolerance_type": "sign",
+      "kind": "decay_law"
+    },
+    {
+      "id": "IR-B05",
+      "group": "brash",
+      "check": "brash_bounded_by_level",
+      "statement": "对任意 c<1，碎冰阻力 < 同厚度平整冰阻力（D(c) ≤ 1）",
+      "source": "碎冰无法比完整冰盖提供更大阻力（同厚度）",
+      "tolerance": 0.0,
+      "tolerance_type": "sign",
+      "kind": "physics_bound"
+    },
+    {
+      "id": "IR-B06",
+      "group": "brash",
+      "check": "brash_packing_amplification",
+      "statement": "堆积区（c>0.6）衰减律局部斜率 > 1：(D(0.9)-D(0.6))/0.3 ≥ 1.05",
+      "source": "碎冰覆盖率约 0.6 后通道无法清空、阻力陡增（冰池/实船观察）",
+      "tolerance": 0.05,
+      "tolerance_type": "abs_slope",
+      "kind": "decay_law"
+    },
+    {
+      "id": "IR-R01",
+      "group": "ridge",
+      "check": "ridge_keel_scaling",
+      "statement": "冰脊浮力排开项 R_keel ∝ h_k²（R(2h_k)/R(h_k)=4），碎块动量项 ∝ h_k（质量流量 ρ(1-e)h_k B V）",
+      "source": "Keinonen (1983) 冰脊冲撞经验项；排开固体冰体积随 h_k² 增长",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "scaling_law"
+    },
+    {
+      "id": "IR-R02",
+      "group": "ridge",
+      "check": "ridge_porosity_scaling",
+      "statement": "冰脊阻力 ∝ (1-e)（孔隙率 e 越大固体冰越少、阻力越小）",
+      "source": "Keinonen (1983)；冰脊孔隙率 0.25–0.40（Timco & Weeks 2010）",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "scaling_law"
+    },
+    {
+      "id": "IR-R03",
+      "group": "ridge",
+      "check": "ridge_breadth_scaling",
+      "statement": "冰脊阻力 ∝ B（宽度）",
+      "source": "Keinonen (1983) 经验两项均含船宽 B",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "scaling_law"
+    },
+    {
+      "id": "IR-R04",
+      "group": "ridge",
+      "check": "ridge_momentum_speed_scaling",
+      "statement": "碎块动量项 ∝ V²（速度加倍该项 4 倍）",
+      "source": "动量通量标度 rho_i h_k B V²",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "scaling_law"
+    },
+    {
+      "id": "IR-R05",
+      "group": "ridge",
+      "check": "ridge_work_consistency",
+      "statement": "穿脊功 W(h_k)=∫R dh_k 的中点求积与闭式解相对差 < 1e-4",
+      "source": "内部一致性（数值积分 vs 解析 ∫C1(1-e)rho g B h² + C2(1-e)rho B V² h dh）",
+      "tolerance": 0.0001,
+      "tolerance_type": "rel",
+      "kind": "identity"
+    },
+    {
+      "id": "IR-R06",
+      "group": "ridge",
+      "check": "ridge_field_mean_identity",
+      "statement": "冰脊场平均阻力 R_mean = R_level(1-w_r/s) + R_ridge(w_r/s) 恒等式（s=200 m、h_bg=0.5 m、w_r=3h_k）",
+      "source": "航程加权：船在冰脊内航行距离比例 w_r/s，其余为背景平整冰",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "identity"
+    },
+    {
+      "id": "IR-R07",
+      "group": "ridge",
+      "check": "ridge_field_spacing_monotone",
+      "statement": "冰脊场平均阻力随间距 s 单调递减（h_k=3.5 m、背景平整冰 0.2 m、s=100/200/400 m）",
+      "source": "能量摊薄：间距越大单位航程做功越少",
+      "tolerance": 0.0,
+      "tolerance_type": "sign",
+      "kind": "physics_sign"
+    },
+    {
+      "id": "IR-P01",
+      "group": "power",
+      "check": "power_identity",
+      "statement": "交付功率恒等式 P_D = R·V/eta_D 及其逆运算 R = P_D·eta_D/V",
+      "source": "功率-阻力查表定义（report §3 的 VP 表由该恒等式逐点生成）",
+      "tolerance": 1e-12,
+      "tolerance_type": "rel",
+      "kind": "identity"
+    },
+    {
+      "id": "IR-P02",
+      "group": "power",
+      "check": "power_inverse_consistency",
+      "statement": "speed_for_power(22 MW) 求得的 V* 代回功率链，残差 |P(V*)-P_target|/P_target < 1e-8",
+      "source": "单调二分求逆的自洽性",
+      "tolerance": 1e-08,
+      "tolerance_type": "rel",
+      "kind": "numerical"
+    },
+    {
+      "id": "IR-P03",
+      "group": "power",
+      "check": "power_monotone_in_speed",
+      "statement": "P_D(V) 在域内单调递增（网格 0.5–5 m/s）",
+      "source": "R(V) 单调 + P=R V/eta",
+      "tolerance": 0.0,
+      "tolerance_type": "sign",
+      "kind": "physics_sign"
+    }
+  ],
+  "negative_controls": [
+    {
+      "id": "IR-N01",
+      "check": "neg_h_over_03L_strict",
+      "statement": "h=5.0 m > 0.03L(=4.5 m)（且 > 0.10B）时 strict 模式必须拒绝外推",
+      "expected": "IceDomainError"
+    },
+    {
+      "id": "IR-N02",
+      "check": "neg_froude_strict",
+      "statement": "V=12 m/s 超 Fr_L ≤ 0.25 上限（v_limit≈9.59 m/s）必须拒绝",
+      "expected": "IceDomainError"
+    },
+    {
+      "id": "IR-N03",
+      "check": "neg_coverage_out_of_range",
+      "statement": "覆盖率 c=1.35 越界必须拒绝",
+      "expected": "IceDomainError"
+    },
+    {
+      "id": "IR-N04",
+      "check": "neg_ridge_keel_strict",
+      "statement": "冰脊龙骨 6.0 m > min(0.15B, 4.0 m)=3.6 m 时 strict 必须拒绝",
+      "expected": "IceDomainError"
+    },
+    {
+      "id": "IR-N05",
+      "check": "neg_negative_thickness",
+      "statement": "冰厚 h=-0.1 m 负值必须拒绝",
+      "expected": "IceDomainError"
+    },
+    {
+      "id": "IR-N06",
+      "check": "neg_porosity_range",
+      "statement": "冰脊孔隙率 e=0.9 超出实测区间 [0.05,0.60] 必须拒绝",
+      "expected": "IceDomainError"
+    },
+    {
+      "id": "IR-N07",
+      "check": "neg_lenient_truncation_flags",
+      "statement": "非 strict 模式对 h=5.0 m 必须如实截断到 h_limit 并打 H_TRUNCATED 标志（禁止静默外推）",
+      "expected": "truncated+flagged"
+    }
+  ]
+}
