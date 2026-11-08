@@ -6,6 +6,7 @@ This module provides:
 - Aitken dynamic relaxation for stability enhancement
 - Stability domain scanner (mu vs omega)
 - Analytical spectral radius computation
+- Systematic stability scan and error envelope quantification (IN66-N07)
 
 References
 ----------
@@ -37,6 +38,15 @@ from .aitken import (
     AitkenRelaxation,
     DynamicRelaxation,
 )
+from .stability_scan import (
+    run_stability_scan,
+    StabilityScanResult,
+    ScanPoint,
+    ErrorEnvelopePoint,
+    generate_figures,
+    generate_report_json,
+    run_full_campaign,
+)
 
 __all__ = [
     # Models
@@ -57,4 +67,12 @@ __all__ = [
     # Relaxation
     "AitkenRelaxation",
     "DynamicRelaxation",
+    # Stability Scan (IN66-N07)
+    "run_stability_scan",
+    "StabilityScanResult",
+    "ScanPoint",
+    "ErrorEnvelopePoint",
+    "generate_figures",
+    "generate_report_json",
+    "run_full_campaign",
 ]

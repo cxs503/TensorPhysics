@@ -13,8 +13,8 @@ The instability mechanism:
 - Structure solves: (m_s + m_a) * a = F_ext + F_ice
 - Ice solves: F_ice = -m_a * a (reaction to structural acceleration)
 - In partitioned scheme, a is lagged, creating a feedback loop
-- Spectral radius of this loop: rho ≈ mu * omega for simple schemes
-- Stability requires rho < 1, hence mu < 1/omega (approximately)
+- Spectral radius of this loop: rho ≈ |1 - omega*(1+mu)| for fixed relaxation
+- Stability requires rho < 1, hence mu < (2-omega)/omega
 """
 from __future__ import annotations
 
@@ -180,7 +180,8 @@ class PartitionedCoupling:
         
         diverged = False
         converged = True
-        residual_history = []  # For spectral radius estimation
+        # Per-step spectral radius estimates
+        step_spectral_radii = []
         
         # Newmark parameters (unconditionally stable)
         gamma = 0.5
@@ -203,6 +204,7 @@ class PartitionedCoupling:
                 
                 x, v, a = x_new, v_new, a_new
                 iterations[n+1] = 1
+                step_spectral_radii.append(0.0)  # No iteration, rho=0
                 
             else:
                 # Iterative coupling
@@ -215,6 +217,9 @@ class PartitionedCoupling:
                 x_trial = x_pred
                 n_it = 0
                 a_lagged = a_old  # Start with lagged acceleration
+                
+                # Per-step residual history for spectral radius estimation
+                step_residuals = []
                 
                 for it in range(self.max_iter):
                     n_it = it + 1
@@ -231,7 +236,7 @@ class PartitionedCoupling:
                     # Residual
                     resid = x_new - x_trial
                     resid_norm = abs(resid)
-                    residual_history.append(resid_norm)
+                    step_residuals.append(resid_norm)
                     
                     # Check convergence
                     if resid_norm < self.tol * max(abs(x_trial), 1e-14):
@@ -242,9 +247,9 @@ class PartitionedCoupling:
                         x_trial = x_trial + self.omega * resid
                     else:  # AITKEN
                         # Simple adaptive relaxation
-                        if len(residual_history) >= 2:
-                            r_prev = residual_history[-2]
-                            r_curr = residual_history[-1]
+                        if len(step_residuals) >= 2:
+                            r_prev = step_residuals[-2]
+                            r_curr = step_residuals[-1]
                             delta_r = r_curr - r_prev
                             if abs(delta_r) > 1e-14:
                                 omega_ait = -self.omega * r_prev / delta_r
@@ -264,6 +269,10 @@ class PartitionedCoupling:
                 if n_it >= self.max_iter:
                     converged = False
                 
+                # Estimate spectral radius for this step
+                step_rho = self._estimate_spectral_radius_from_step(step_residuals)
+                step_spectral_radii.append(step_rho)
+                
                 # Final update
                 x = x_trial
                 v = v_old + dt * ((1 - gamma) * a_old + gamma * a_trial)
@@ -279,8 +288,8 @@ class PartitionedCoupling:
                 converged = False
                 break
         
-        # Estimate spectral radius from residual history
-        spectral_radius = self._estimate_spectral_radius(residual_history)
+        # Overall spectral radius: max across all steps
+        spectral_radius = max(step_spectral_radii) if step_spectral_radii else 0.0
         
         return CouplingResult(
             t=t,
@@ -295,21 +304,32 @@ class PartitionedCoupling:
             omega=self.omega,
         )
     
-    def _estimate_spectral_radius(self, residual_history: List[float]) -> float:
-        """Estimate spectral radius from residual history.
+    @staticmethod
+    def _estimate_spectral_radius_from_step(residuals: List[float]) -> float:
+        """Estimate spectral radius from residuals within a single coupling step.
         
         Uses the ratio of consecutive residuals to estimate the
         asymptotic convergence rate.
+        
+        Parameters
+        ----------
+        residuals : list
+            Residual norms from consecutive iterations within one step
+            
+        Returns
+        -------
+        float
+            Estimated spectral radius (0 if not enough data)
         """
-        if len(residual_history) < 2:
+        if len(residuals) < 2:
             return 0.0
         
-        # Filter out zero residuals
-        non_zero = [r for r in residual_history if r > 1e-14]
+        # Filter out zero/tiny residuals
+        non_zero = [r for r in residuals if r > 1e-14]
         if len(non_zero) < 2:
             return 0.0
         
-        # Compute ratios
+        # Compute ratios of consecutive residuals
         ratios = []
         for i in range(1, len(non_zero)):
             if non_zero[i-1] > 1e-14:
