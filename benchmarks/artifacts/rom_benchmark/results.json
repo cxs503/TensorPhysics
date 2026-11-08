@@ -1,0 +1,56 @@
+{
+  "criteria": {
+    "C1_FOM": {
+      "pass": true,
+      "value": 0.0037978157211749587,
+      "threshold": 0.01
+    },
+    "C1_ROM": {
+      "pass": true,
+      "value": 0.11689913275091797,
+      "threshold": 0.5
+    },
+    "C2": {
+      "pass": true,
+      "value": 0.9907293269410032,
+      "threshold": 0.99
+    },
+    "C3": {
+      "pass": true,
+      "value": 0.040821866908645324,
+      "threshold": 0.1
+    },
+    "C4": {
+      "pass": false,
+      "value": 0.8640315413888003,
+      "threshold": 1.0
+    },
+    "C5": {
+      "pass": true,
+      "value": 3.472828784309022e-09,
+      "threshold": 1e-10
+    },
+    "C6": {
+      "pass": false,
+      "value": 0.889097494927749,
+      "threshold": 0.9
+    },
+    "C7": {
+      "honest_fail": false,
+      "value": 0.10033539096819558,
+      "threshold": 0.15
+    }
+  },
+  "parameters": {
+    "nx": 32,
+    "ny": 32,
+    "nu": 0.05,
+    "k_star": 3,
+    "n_snapshots": 101,
+    "dt": 0.005
+  },
+  "summary": {
+    "all_pass": false,
+    "c7_honest_fail": false
+  }
+}
