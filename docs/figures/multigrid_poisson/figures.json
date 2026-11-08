@@ -1,0 +1,37 @@
+[
+  {
+    "name": "fig1_solution_error_field.png",
+    "path": "docs/figures/multigrid_poisson/fig1_solution_error_field.png",
+    "caption": "Fig.1 Multigrid solution, discretisation error field and centre-line comparison with the analytic solution (N=128)."
+  },
+  {
+    "name": "fig2_residual_history.png",
+    "path": "docs/figures/multigrid_poisson/fig2_residual_history.png",
+    "caption": "Fig.2 Residual reduction per cycle: V-/W-cycle and red-black GS multigrid vs 400 Jacobi sweeps (N=256)."
+  },
+  {
+    "name": "fig3_rho_vs_omega.png",
+    "path": "docs/figures/multigrid_poisson/fig3_rho_vs_omega.png",
+    "caption": "Fig.3 Measured V-/W-cycle convergence factors versus the Jacobi damping parameter and the closed-form two-level-analysis curve."
+  },
+  {
+    "name": "fig4_grid_independence.png",
+    "path": "docs/figures/multigrid_poisson/fig4_grid_independence.png",
+    "caption": "Fig.4 Convergence factors vs grid size N: the multigrid rate is essentially independent of N (h-independent)."
+  },
+  {
+    "name": "fig5_lowmode_stagnation.png",
+    "path": "docs/figures/multigrid_poisson/fig5_lowmode_stagnation.png",
+    "caption": "Fig.5 Negative control C7: the pure lowest mode is stagnating under Jacobi (rate $\\cos\\pi h$) while the multigrid cycle damps it immediately."
+  },
+  {
+    "name": "fig6_tla_heatmap.png",
+    "path": "docs/figures/multigrid_poisson/fig6_tla_heatmap.png",
+    "caption": "Fig.6 Left: two-grid symbol spectral radius over the low-frequency square, maximum = $\\rho_{TLA}$. Right: difference between the eigenvalue and closed-form-quartic evaluations (C4, ~1e-15)."
+  },
+  {
+    "name": "fig7_complexity.png",
+    "path": "docs/figures/multigrid_poisson/fig7_complexity.png",
+    "caption": "Fig.7 Complexity (C3): per-cycle cost scales with the number of unknowns while the cycle count stays constant, giving 36x - 1300x measured speed-up over Jacobi."
+  }
+]
