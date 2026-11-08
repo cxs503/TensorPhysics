@@ -139,8 +139,24 @@ class SpectralMoments:
 
     @property
     def nu0(self) -> float:
-        """Mean up-crossing rate m1/m0 (Hz) - cycle rate of the narrow-band model."""
+        """Mean frequency ``m1/m0`` (Hz).
+
+        Note: this is *not* the zero up-crossing rate of a Gaussian process -
+        that is :attr:`nu_zero` = ``(1/2pi) sqrt(m2/m0)``.  The two coincide only
+        in the narrow-band limit (``alpha1 -> 1``); for a wide-band spectrum
+        ``m1/m0 = alpha1 * nu_zero`` and they differ by up to a factor of two.
+        """
         return float(self.m1 / self.m0)
+
+    @property
+    def nu_zero(self) -> float:
+        """Zero up-crossing rate ``(1/2pi) sqrt(m2/m0)`` (Hz), Rice (1944).
+
+        This is the cycle rate of the Rayleigh narrow-band damage model: every
+        upward zero crossing produces one stress cycle whose range is Rayleigh
+        distributed with scale ``2 sqrt(2) sigma``.
+        """
+        return float(np.sqrt(self.m2 / self.m0))
 
     @property
     def nup(self) -> float:
@@ -580,10 +596,20 @@ def rayleigh_damage_rate(mom: SpectralMoments, C: float = 1.0,
     Derivation: for a narrow-band Gaussian process the range is
     ``S = 2 * amplitude`` with the amplitude Rayleigh distributed with scale
     ``sigma = sqrt(m0)``; hence ``E[S^m] = (2 sqrt(2) sigma)^m Gamma(1+m/2)`` and
-    the cycle rate is the mean up-crossing rate ``nu0 = m1/m0``.
+    the cycle rate is the zero **up-crossing** rate ``nu0 = (1/2pi) sqrt(m2/m0)``
+    (Rice 1944), *not* the mean frequency ``m1/m0``.
+
+    .. note::
+       Until the P27W3 integration audit this function used ``m1/m0`` (the mean
+       frequency).  The two rates are equal in the narrow-band limit, so the
+       narrow-band regression tests did not notice; on the wide-band contract
+       spectrum of the ``stress-psd-v1`` payload (``alpha1 = 0.653``) the two
+       differ by 34.7 %, which the cross-repo comparison against the ship
+       platform surfaced.  ``tests/test_p27w3_integration_contracts.py`` pins the
+       corrected convention.
     """
     _check_sn(C, m)
-    return float(mom.nu0 / C * rayleigh_expected_range_power(mom, m))
+    return float(mom.nu_zero / C * rayleigh_expected_range_power(mom, m))
 
 
 def rayleigh_expected_range_power(mom: SpectralMoments, m: float = 3.0) -> float:
