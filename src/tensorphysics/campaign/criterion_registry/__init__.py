@@ -3,6 +3,8 @@
 Provides three properties for campaign node acceptance criteria:
 (a) pre-freeze (before execution), (b) post-audit (after execution),
 (c) drift detection (threshold changes between freeze and audit).
+The freeze is anchored durably on disk by ``store.py`` so that freeze and
+audit may happen in different processes.
 
 Fail-closed: unparseable criteria → 'unregistered', never 'pass'.
 
@@ -39,6 +41,17 @@ from .registration import (
     register_goal,
     audit_delivery,
 )
+from .store import (
+    FrozenBundle,
+    PreregistrationConflict,
+    StoreCorruptError,
+    STORE_SCHEMA,
+    audit_from_store,
+    bundle_path,
+    freeze_to_store,
+    load_bundle,
+    load_registrations,
+)
 
 __all__ = [
     "CriterionManifest",
@@ -60,4 +73,13 @@ __all__ = [
     "DeliveryAudit",
     "register_goal",
     "audit_delivery",
+    "FrozenBundle",
+    "PreregistrationConflict",
+    "StoreCorruptError",
+    "STORE_SCHEMA",
+    "audit_from_store",
+    "bundle_path",
+    "freeze_to_store",
+    "load_bundle",
+    "load_registrations",
 ]

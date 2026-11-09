@@ -378,14 +378,16 @@ def extract_criteria_from_goal(goal_text: str) -> list[CriterionManifest]:
 def freeze_manifest(
     manifest: CriterionManifest,
     frozen_by: str,
-    frozen_at: Optional[datetime] = None,
+    frozen_at: Optional[Any] = None,
 ) -> CriterionManifest:
     """Freeze a criterion manifest with sha256 hash.
 
     Args:
         manifest: The criterion to freeze
         frozen_by: Identifier of who/what is freezing (e.g., agent id, timestamp)
-        frozen_at: Optional timestamp (defaults to now UTC)
+        frozen_at: Optional timestamp (datetime, or an ISO-8601 string kept
+            as-is so that a freeze can be reproduced across processes;
+            defaults to now UTC)
 
     Returns:
         New CriterionManifest with status='registered', sha256 set, frozen_at/by set.
@@ -393,7 +395,10 @@ def freeze_manifest(
     if frozen_at is None:
         frozen_at = datetime.now(timezone.utc)
 
-    frozen_at_str = frozen_at.isoformat()
+    if isinstance(frozen_at, datetime):
+        frozen_at_str = frozen_at.isoformat()
+    else:
+        frozen_at_str = str(frozen_at)
 
     # Compute sha256 of canonical JSON
     canonical = manifest.to_canonical_json()

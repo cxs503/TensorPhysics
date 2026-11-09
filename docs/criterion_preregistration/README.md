@@ -126,6 +126,69 @@ print(f"unregistered_rate: {kpi.unregistered_rate:.3f}")
 print(f"loosened_rate: {kpi.loosened_rate:.3f}")
 ```
 
+## Durable freeze store (cross-process pre-registration)
+
+The in-memory cycle above only proves pre-registration *within one process*.
+A campaign node's freeze happens at mission creation (dispatcher) while the
+audit happens when the delivery report lands (pr-gate, possibly another host and
+day), so the frozen manifests need a durable anchor. `store.py` adds one:
+
+```python
+from tensorphysics.campaign.criterion_registry import (
+    freeze_to_store, load_bundle, load_registrations, audit_from_store,
+    CriterionLedger,
+)
+
+# process 1 — at mission creation, before any work starts
+bundle = freeze_to_store("runs/freeze_store", "m9001", goal_text,
+                         frozen_by="agent/m8695",
+                         frozen_at="2026-11-09T00:00:00+00:00")
+print(bundle.bundle_sha256, bundle.registered_ids)
+
+# process 2 — at delivery, days later, no shared memory
+audit = audit_from_store("runs/freeze_store", "m9001", report_text,
+                         ledger=CriterionLedger(storage_path=Path("runs/criterion_ledger.jsonl")))
+print(audit.failed_closed, audit.kpi.loosened_rate)
+```
+
+On-disk layout — one canonical JSON file per mission
+(`<store>/<mission_id>.json`, atomic `tmp` + `os.replace`, mission ids are
+validated as path-safe `[A-Za-z0-9][A-Za-z0-9._-]*`):
+
+```json
+{"schema": "criterion_freeze_store/v1", "mission_id": "m9001",
+ "frozen_by": "agent/m8695", "frozen_at": "2026-11-09T00:00:00+00:00",
+ "criteria": [{"criterion_id": "criterion_001", "fields": {...},
+               "status": "registered", "sha256": "..."}],
+ "bundle_sha256": "..."}
+```
+
+Two digest layers, both fail-closed:
+
+| layer | scope | detection |
+|---|---|---|
+| per-criterion `sha256` | six canonical fields | threshold edited after freeze → criterion loads as status `tampered` (never `registered`), audit classification `tampered`, `failed_closed=True` |
+| `bundle_sha256` | whole payload incl. metadata | file hand-edited / truncated / unknown `schema` → `StoreCorruptError` |
+
+Guarantees:
+
+* **Fail-closed**: a goal without a numeric level writes **nothing** (no file
+  exists, so nothing can later be audited as "registered"), and a mission with
+  no bundle audits as `unregistered`, never `unchanged`.
+* **Idempotent**: re-freezing the identical criterion set (compared by
+  `(criterion_id, field sha256)` pairs, so timestamps are irrelevant) returns
+  the stored bundle and does not rewrite the file.
+* **No silent re-registration**: a *different* criterion set for an already
+  frozen mission raises `PreregistrationConflict`; the original level stays
+  frozen (a post-hoc loosening cannot be laundered into a fresh registration).
+* **Tamper visibility**: `audit_delivery` now propagates a non-registered
+  status such as `tampered` into the ledger event instead of flattening it to
+  `unregistered`, so tampering is countable in the KPI view.
+
+`store.py` carries only mission ids, actor ids, timestamps and the six
+structural fields — zero domain semantics (guarded by
+`tests/test_criterion_freeze_store.py::test_store_has_zero_domain_semantics`).
+
 ## Verification
 
 See `tests/test_criterion_preregistration.py` for comprehensive tests covering:
@@ -142,4 +205,7 @@ See `tests/test_criterion_preregistration.py` for comprehensive tests covering:
 - `drift.py`: Drift classification
 - `ledger.py`: Event ledger with persistence
 - `kpi.py`: KPI computation
+- `registration.py`: fail-closed `register_goal` / `audit_delivery` cycle
+- `store.py`: durable cross-process freeze store (two digest layers)
+- `bench.py`: synthetic-corpus drift benchmark
 - `__init__.py`: Public API exports
