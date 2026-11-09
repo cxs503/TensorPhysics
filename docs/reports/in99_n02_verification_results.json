@@ -1,0 +1,43 @@
+{
+  "campaign": "IN99-N02",
+  "mission_id": 7336,
+  "criteria": {
+    "C1_point_load": {
+      "w_fem_m": 3.1067961165046087,
+      "w_ref_m": 3.106796116504854,
+      "error_pct": 7.893685705084863e-12,
+      "pass": "True"
+    },
+    "C1_udl": {
+      "w_fem_m": 1.165048543689229,
+      "w_ref_m": 1.16504854368932,
+      "error_pct": 7.815970093361102e-12,
+      "pass": "True"
+    },
+    "C2_convergence": {
+      "slope_bending_moment_l2": 1.999999999989276,
+      "pass": true
+    },
+    "C3_plate": {
+      "w_fem_m": 0.0021124016933957612,
+      "w_ref_m": 0.002153441885747112,
+      "error_pct": 1.9057952119804766,
+      "pass": true
+    },
+    "C4_shell_buckling": {
+      "sigma_classical_Pa": 498707486.9190932,
+      "sigma_analytical_Pa": 522788060.1363566,
+      "m_crit": 13,
+      "n_crit": 14,
+      "error_pct": 4.8285966922269274,
+      "pass": true
+    },
+    "C5_negative_control": {
+      "beam_cond": 1.3869683641935803e+17,
+      "plate_cond": 1.7400088671525603e+17,
+      "shell_cond": 276521741545.33484,
+      "pass": true
+    }
+  },
+  "all_pass": true
+}
