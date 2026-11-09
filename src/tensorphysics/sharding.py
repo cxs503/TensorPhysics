@@ -9,6 +9,9 @@ Provides:
   keys or missing shards (fail-closed).
 - Float audit utilities: naive vs Kahan-compensated summation with
   theoretical error bound K·eps·n·Σ|x|.
+- validate_manifest_set: cross-manifest validation for boundary/overlap checks.
+- ShardContract: high-level wrapper for the full shard→aggregate→verify workflow.
+- run_cluster integration helpers.
 """
 
 from __future__ import annotations
@@ -19,7 +22,7 @@ import math
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -164,6 +167,79 @@ class Manifest:
 
 
 # ---------------------------------------------------------------------------
+# Cross-manifest validation
+# ---------------------------------------------------------------------------
+
+def validate_manifest_set(
+    manifests: Sequence[Manifest],
+    expected_n: Optional[int] = None,
+    expected_keys: Optional[Set[str]] = None,
+) -> List[str]:
+    """Validate a set of manifests for cross-shard consistency.
+
+    Checks:
+    - Shard indices are unique and in range [0, shard_n).
+    - No key appears in more than one manifest (boundary overlap).
+    - If expected_keys is given, the union of all param_keys matches exactly.
+    - If expected_n is given, the number of manifests matches.
+    - All manifests have consistent shard_n.
+
+    Returns list of error strings (empty = valid).
+    """
+    errors: List[str] = []
+
+    if not manifests:
+        errors.append("empty manifest set")
+        return errors
+
+    # Check consistent shard_n
+    shard_ns = {m.shard_n for m in manifests}
+    if len(shard_ns) > 1:
+        errors.append(f"inconsistent shard_n values: {shard_ns}")
+
+    expected_shard_n = expected_n if expected_n is not None else manifests[0].shard_n
+
+    # Check shard count
+    if len(manifests) != expected_shard_n:
+        errors.append(
+            f"expected {expected_shard_n} manifests, got {len(manifests)}"
+        )
+
+    # Check shard indices are unique and in range
+    seen_indices: Set[int] = set()
+    for m in manifests:
+        if m.shard_i in seen_indices:
+            errors.append(f"duplicate shard_i={m.shard_i}")
+        seen_indices.add(m.shard_i)
+        if m.shard_i < 0 or m.shard_i >= m.shard_n:
+            errors.append(f"shard_i={m.shard_i} out of range [0, {m.shard_n})")
+
+    # Check boundary overlap (no key in multiple manifests)
+    key_to_shards: Dict[str, List[int]] = {}
+    all_keys: Set[str] = set()
+    for m in manifests:
+        for key in m.param_keys:
+            if key in key_to_shards:
+                errors.append(
+                    f"boundary overlap: key '{key}' in shard {key_to_shards[key][0]} "
+                    f"and shard {m.shard_i}"
+                )
+            key_to_shards.setdefault(key, []).append(m.shard_i)
+            all_keys.add(key)
+
+    # Check coverage against expected keys
+    if expected_keys is not None:
+        missing = expected_keys - all_keys
+        extra = all_keys - expected_keys
+        if missing:
+            errors.append(f"missing keys: {sorted(missing)[:5]}{'...' if len(missing) > 5 else ''}")
+        if extra:
+            errors.append(f"extra keys: {sorted(extra)[:5]}{'...' if len(extra) > 5 else ''}")
+
+    return errors
+
+
+# ---------------------------------------------------------------------------
 # Aggregator
 # ---------------------------------------------------------------------------
 
@@ -179,6 +255,11 @@ class ShardConflictError(AggregationError):
 
 class IncompleteShardError(AggregationError):
     """Raised when expected shards are missing."""
+    pass
+
+
+class BoundaryViolationError(AggregationError):
+    """Raised when manifest set validation detects boundary violations."""
     pass
 
 
@@ -205,6 +286,7 @@ def aggregate(
     shard_results: Dict[str, Any],
     manifests: Sequence[Manifest],
     expected_n: Optional[int] = None,
+    expected_keys: Optional[Set[str]] = None,
 ) -> AggregationResult:
     """Aggregate shard results into a single result set.
 
@@ -212,29 +294,34 @@ def aggregate(
         shard_results: {param_key: result_payload} from all shards combined.
         manifests: list of per-shard manifests.
         expected_n: if given, verify that exactly expected_n shards are present.
+        expected_keys: if given, verify that the union of manifest param_keys
+            matches this set exactly (coverage + no extra keys).
 
     Returns:
         AggregationResult with merged results and per-key counts.
 
     Raises:
+        BoundaryViolationError: if cross-manifest validation fails.
         ShardConflictError: if any param_key appears in more than one shard.
         IncompleteShardError: if expected_n is given and shard count differs.
         AggregationError: on manifest validation failure.
     """
-    # Validate manifests
+    # Cross-manifest validation (boundary checks)
+    set_errors = validate_manifest_set(
+        manifests, expected_n=expected_n, expected_keys=expected_keys
+    )
+    if set_errors:
+        raise BoundaryViolationError(
+            f"Manifest set validation failed: {'; '.join(set_errors)}"
+        )
+
+    # Validate individual manifests
     all_errors: List[str] = []
     for m in manifests:
         errs = m.validate()
         all_errors.extend(errs)
     if all_errors:
         raise AggregationError(f"Manifest validation failed: {'; '.join(all_errors)}")
-
-    # Check shard count
-    if expected_n is not None:
-        if len(manifests) != expected_n:
-            raise IncompleteShardError(
-                f"Expected {expected_n} shards, got {len(manifests)}"
-            )
 
     # Merge with conflict detection
     merged: Dict[str, Any] = {}
@@ -248,7 +335,7 @@ def aggregate(
                 raise ShardConflictError(
                     f"Duplicate param_key '{key}' found in multiple shards"
                 )
-            counts[key] = 1  # FIX: first insert sets count to 1
+            counts[key] = 1
             if key in shard_results:
                 merged[key] = shard_results[key]
 
@@ -289,13 +376,13 @@ def kahan_sum(values: Sequence[float]) -> float:
     return s
 
 
-def theoretical_float_error_bound(values: Sequence[float], n_terms: int) -> float:
+def theoretical_float_error_bound(values: Sequence[float], n_terms: int,
+                                   K: float = 1.0) -> float:
     """Theoretical upper bound on naive summation error: K·eps·n·Σ|x|.
 
     For IEEE 754 double precision, K=1 is a conservative bound for
     summation without catastrophic cancellation.
     """
-    K = 1.0
     abs_sum = sum(abs(v) for v in values)
     return K * FLOAT64_EPS * n_terms * abs_sum
 
@@ -303,7 +390,7 @@ def theoretical_float_error_bound(values: Sequence[float], n_terms: int) -> floa
 def audit_float_summation(
     values_all: Sequence[float],
     n_shards: int = 8,
-) -> Dict[str, float]:
+) -> Dict[str, Any]:
     """Compare naive and Kahan summation: single-pass vs sharded.
 
     The same set of values is summed two ways:
@@ -312,13 +399,12 @@ def audit_float_summation(
       sums are added together
 
     Returns dict with:
-        naive_1: naive sum of all values (single pass)
-        naive_n: naive sum via sharded approach
-        kahan_1: Kahan sum of all values (single pass)
-        kahan_n: Kahan sum via sharded approach
-        rel_diff_naive: |naive_1 - naive_n| / |naive_1| (or 0 if naive_1==0)
-        rel_diff_kahan: |kahan_1 - kahan_n| / |kahan_1| (or 0 if kahan_1==0)
+        naive_1, naive_n, kahan_1, kahan_n: the four summation results
+        rel_diff_naive: |naive_1 - naive_n| / |naive_1|
+        rel_diff_kahan: |kahan_1 - kahan_n| / |kahan_1|
         theoretical_bound: K·eps·n·Σ|x| for the full set
+        naive_err: |naive_1 - naive_n|
+        kahan_err: |kahan_1 - kahan_n|
         naive_within_bound: bool
         kahan_within_bound: bool
     """
@@ -346,12 +432,12 @@ def audit_float_summation(
     denom_1 = abs(naive_1) if naive_1 != 0 else 1.0
     denom_k = abs(kahan_1) if kahan_1 != 0 else 1.0
 
-    rel_diff_naive = abs(naive_1 - naive_n) / denom_1
-    rel_diff_kahan = abs(kahan_1 - kahan_n) / denom_k
-
-    bound = theoretical_float_error_bound(values, n_total)
     naive_err = abs(naive_1 - naive_n)
     kahan_err = abs(kahan_1 - kahan_n)
+    rel_diff_naive = naive_err / denom_1
+    rel_diff_kahan = kahan_err / denom_k
+
+    bound = theoretical_float_error_bound(values, n_shards)
 
     return {
         "naive_1": naive_1,
@@ -360,9 +446,9 @@ def audit_float_summation(
         "kahan_n": kahan_n,
         "rel_diff_naive": rel_diff_naive,
         "rel_diff_kahan": rel_diff_kahan,
-        "theoretical_bound": bound,
         "naive_err": naive_err,
         "kahan_err": kahan_err,
+        "theoretical_bound": bound,
         "naive_within_bound": naive_err <= bound,
         "kahan_within_bound": kahan_err <= bound,
     }
@@ -441,8 +527,17 @@ def tamper_manifest(
     manifest: Manifest,
     tamper_git_sha: bool = False,
     tamper_result_hash: bool = False,
+    tamper_param_keys: bool = False,
 ) -> Manifest:
-    """Create a tampered copy of a manifest for integrity testing."""
+    """Create a tampered copy of a manifest for integrity testing.
+
+    Args:
+        manifest: original manifest
+        tamper_git_sha: if True, replace git_sha with obviously wrong value
+        tamper_result_hash: if True, corrupt the first result hash
+        tamper_param_keys: if True, add a spurious key to param_keys
+            (simulates boundary tampering — shard claims a key it shouldn't)
+    """
     new_sha = manifest.git_sha
     if tamper_git_sha:
         new_sha = "0" * 40  # obviously wrong
@@ -452,12 +547,189 @@ def tamper_manifest(
         first_key = next(iter(new_hashes))
         new_hashes[first_key] = "deadbeef" * 8
 
+    new_keys = list(manifest.param_keys)
+    if tamper_param_keys:
+        # Add a spurious key that doesn't belong to this shard
+        spurious = "__tampered_boundary_key__"
+        if spurious not in new_keys:
+            new_keys.append(spurious)
+            new_hashes[spurious] = "spurious_hash_" + "0" * 48
+
     return Manifest(
         shard_i=manifest.shard_i,
         shard_n=manifest.shard_n,
-        param_keys=manifest.param_keys,
+        param_keys=tuple(new_keys),
         tool_version=manifest.tool_version,
         git_sha=new_sha,
         result_hashes=new_hashes,
         param_ranges=manifest.param_ranges,
     )
+
+
+# ---------------------------------------------------------------------------
+# ShardContract: high-level workflow wrapper
+# ---------------------------------------------------------------------------
+
+@dataclass
+class ShardContract:
+    """High-level wrapper for the full shard→aggregate→verify workflow.
+
+    Usage:
+        contract = ShardContract.from_param_keys(param_keys, n_shards=8)
+        # Each shard worker calls:
+        shard_results_i, manifest_i = contract.execute_shard(i, compute_fn)
+        # Aggregator calls:
+        result = contract.aggregate_all(shard_results, manifests)
+    """
+
+    plan: ShardPlan
+    tool_version: str
+    git_sha: str
+
+    @classmethod
+    def from_param_keys(
+        cls,
+        param_keys: Sequence[str],
+        n_shards: int,
+        tool_version: str = "0.1.0",
+        git_sha: str = "unknown",
+    ) -> "ShardContract":
+        plan = ShardPlan(n=n_shards, param_keys=tuple(sorted(param_keys)))
+        return cls(plan=plan, tool_version=tool_version, git_sha=git_sha)
+
+    def get_shard_keys(self, shard_i: int) -> Tuple[str, ...]:
+        """Get the parameter keys assigned to shard i."""
+        partition = self.plan.partition()
+        return partition[shard_i]
+
+    def execute_shard(
+        self,
+        shard_i: int,
+        compute_fn: Any,
+    ) -> Tuple[Dict[str, Any], Manifest]:
+        """Execute a shard's computation and produce its manifest.
+
+        Args:
+            shard_i: shard index
+            compute_fn: callable(param_key) -> result_payload
+
+        Returns:
+            (results_dict, manifest)
+        """
+        keys = self.get_shard_keys(shard_i)
+        results = {}
+        result_hashes = {}
+        for key in keys:
+            payload = compute_fn(key)
+            results[key] = payload
+            payload_json = json.dumps(payload, sort_keys=True).encode()
+            result_hashes[key] = hashlib.sha256(payload_json).hexdigest()
+
+        manifest = Manifest(
+            shard_i=shard_i,
+            shard_n=self.plan.n,
+            param_keys=keys,
+            tool_version=self.tool_version,
+            git_sha=self.git_sha,
+            result_hashes=result_hashes,
+        )
+        return results, manifest
+
+    def aggregate_all(
+        self,
+        shard_results_list: Sequence[Dict[str, Any]],
+        manifests: Sequence[Manifest],
+    ) -> AggregationResult:
+        """Aggregate all shard results with full validation.
+
+        Args:
+            shard_results_list: list of per-shard result dicts
+            manifests: list of per-shard manifests
+
+        Returns:
+            AggregationResult
+        """
+        # Merge all shard results
+        all_results: Dict[str, Any] = {}
+        for sr in shard_results_list:
+            all_results.update(sr)
+
+        return aggregate(
+            all_results,
+            manifests,
+            expected_n=self.plan.n,
+            expected_keys=set(self.plan.param_keys),
+        )
+
+
+# ---------------------------------------------------------------------------
+# run_cluster integration helpers
+# ---------------------------------------------------------------------------
+
+def build_shard_command_template(
+    worker_script: str,
+    n_shards: int,
+    extra_args: str = "",
+) -> str:
+    """Build a command template for run_cluster shard execution.
+
+    The template uses {i} and {n} placeholders that run_cluster will
+    substitute with shard index and total count.
+
+    Args:
+        worker_script: path to the worker Python script
+        n_shards: total number of shards
+        extra_args: additional command-line arguments
+
+    Returns:
+        Command template string for run_cluster's cmd_tpl parameter.
+    """
+    return (
+        f"python {worker_script} "
+        f"--shard-i {{i}} --shard-n {n_shards} "
+        f"--manifest-out manifest_{{i}}.json "
+        f"--results-out results_{{i}}.json "
+        f"{extra_args}"
+    )
+
+
+def collect_shard_outputs(
+    output_dir: str,
+    n_shards: int,
+) -> Tuple[Dict[str, Any], List[Manifest]]:
+    """Collect shard outputs from disk after run_cluster execution.
+
+    Reads manifest_{i}.json and results_{i}.json for i in [0, n_shards).
+
+    Args:
+        output_dir: directory containing shard output files
+        n_shards: expected number of shards
+
+    Returns:
+        (merged_results, manifests) ready for aggregate()
+    """
+    all_results: Dict[str, Any] = {}
+    manifests: List[Manifest] = []
+
+    for i in range(n_shards):
+        manifest_path = os.path.join(output_dir, f"manifest_{i}.json")
+        results_path = os.path.join(output_dir, f"results_{i}.json")
+
+        if not os.path.exists(manifest_path):
+            raise IncompleteShardError(
+                f"Missing manifest for shard {i}: {manifest_path}"
+            )
+        if not os.path.exists(results_path):
+            raise IncompleteShardError(
+                f"Missing results for shard {i}: {results_path}"
+            )
+
+        with open(manifest_path, "r") as f:
+            manifest = Manifest.from_dict(json.load(f))
+        manifests.append(manifest)
+
+        with open(results_path, "r") as f:
+            shard_results = json.load(f)
+        all_results.update(shard_results)
+
+    return all_results, manifests
