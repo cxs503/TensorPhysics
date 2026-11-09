@@ -45,6 +45,11 @@ PINNED_SCHEMA_FINGERPRINTS = {
     "geometry_contract.v1": "19f83a3be34c551011e4ea786165349b432ed07d69aff8efa86f265eb56d45e9",
     "failure_faces.v1": "e149ca6cdbd9322a4e67e96f593342e9c2c6ba8bd6eee47af39cb7cbd3135d4f",
     "failure_faces.v2": "32fb185c751f34fccb6c532df676fc7b6232e659b6b6d6fb2dd238cfe9dbe316",
+    # P84-W2C gate artifacts (campaign gate + bilateral interface schemas)
+    "campaign_gate_report.v1": "78929781ef79554de7acd16d91db1d19cea777412aba9da5a65b068c41c538e3",
+    "aero_polar.v1": "037e737613ad61e45a9e46224b7130a834c6608339d4b2dcd458e7d4c6d5605a",
+    "amp_emissions.v1": "700f0dad3cbb6d48d1c0adf194a917315b9a28c53a579b58bf3a89aa68f74993",
+    "sediment_summary.v1": "243193147acbb087109315fa0ad53d076d888aa7d6183c059b09f3a7ac9bfb52",
 }
 
 PRODUCER_ARTIFACTS = {

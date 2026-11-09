@@ -18,6 +18,12 @@ from __future__ import annotations
 from typing import Any, Mapping
 
 from .schema import SchemaError, canonical_json, payload_digest, validate
+from .p84w2c_gate.schemas import (
+    AERO_POLAR_V1,
+    AMP_EMISSIONS_V1,
+    CAMPAIGN_GATE_REPORT_V1,
+    SEDIMENT_SUMMARY_V1,
+)
 
 _VECTOR3 = {
     "type": "array",
@@ -333,6 +339,10 @@ ARTIFACT_SCHEMAS: dict[str, Mapping[str, Any]] = {
     "geometry_contract.v1": GEOMETRY_CONTRACT_V1,
     "failure_faces.v1": FAILURE_FACES_V1,
     "failure_faces.v2": FAILURE_FACES_V2,
+    "campaign_gate_report.v1": CAMPAIGN_GATE_REPORT_V1,
+    "aero_polar.v1": AERO_POLAR_V1,
+    "amp_emissions.v1": AMP_EMISSIONS_V1,
+    "sediment_summary.v1": SEDIMENT_SUMMARY_V1,
 }
 
 
