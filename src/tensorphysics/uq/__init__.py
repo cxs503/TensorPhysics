@@ -75,6 +75,25 @@ from .pce import (
     legendre_orthonormal,
     multi_indices,
 )
+from .ci_coverage import CoverageEntry, CoverageReport, coverage_study, wilson_interval
+from .gate import (
+    SCHEMA_VERSION,
+    GateDecision,
+    PreEvidence,
+    UQEvidenceError,
+    chain_asme_validation,
+    engineering_error_gate,
+    pre_evidence,
+    require_pass,
+)
+from .refinement import (
+    RefinementAxis,
+    RefinementPoint,
+    RefinementStudy,
+    adaptive_selection_diagnostic,
+    refinement_study,
+)
+from .robustness import InjectionCase, InjectionReport, injection_suite
 from .sample_spec import Marginal, SampleSpec, latent_from_unit
 from .sampler import RULES, SampleSet, compute_sample_hash, draw_unit, sample
 from .sobol_mc import SobolMCResult, saltelli_design, saltelli_indices
@@ -150,4 +169,28 @@ __all__ = [
     "sobol_g",
     "sobol_g_analytic",
     "sobol_g_spec",
+]
+
+# ---- IN145-N08 additions: refinement, interval calibration, robustness, gate
+__all__ += [
+    "CoverageEntry",
+    "CoverageReport",
+    "GateDecision",
+    "InjectionCase",
+    "InjectionReport",
+    "PreEvidence",
+    "RefinementAxis",
+    "RefinementPoint",
+    "RefinementStudy",
+    "SCHEMA_VERSION",
+    "UQEvidenceError",
+    "adaptive_selection_diagnostic",
+    "chain_asme_validation",
+    "coverage_study",
+    "engineering_error_gate",
+    "injection_suite",
+    "pre_evidence",
+    "refinement_study",
+    "require_pass",
+    "wilson_interval",
 ]
