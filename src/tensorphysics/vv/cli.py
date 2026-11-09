@@ -20,7 +20,10 @@ Examples
 ``python -m tensorphysics.vv.gci --table vv20_table.json --format plot \\
       --plot-out vv20.png``
 
-Exit codes: ``0`` PASS, ``1`` WARN, ``2`` FAIL, ``64`` usage / input error.
+Exit codes: ``0`` PASS, ``1`` WARN, ``2`` FAIL, ``3`` WITHHELD, ``4``
+UNRESOLVED, ``64`` usage / input error.  ``WITHHELD`` / ``UNRESOLVED`` are the
+resolvability statements of the ``R = delta / dx`` law: the discretisation
+cannot decide the question, so the number must not be consumed as converged.
 """
 from __future__ import annotations
 
@@ -31,10 +34,10 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from . import adapters
-from .gci import FAIL, PASS, WARN, GatePolicy, Observation, evaluate
+from .gci import FAIL, PASS, UNRESOLVED, WARN, WITHHELD, GatePolicy, Observation, evaluate
 from .validation import evaluate_validation_table
 
-EXIT_CODES = {PASS: 0, WARN: 1, FAIL: 2}
+EXIT_CODES = {PASS: 0, WARN: 1, WITHHELD: 3, UNRESOLVED: 4, FAIL: 2}
 EXIT_USAGE = 64
 FORMATS = ("text", "json", "table", "plot")
 
@@ -47,10 +50,11 @@ def _load_json(path: str) -> Any:
 
 def _observations_from_payload(payload: Any, args: argparse.Namespace) -> tuple[list[Observation], str, dict[str, Any]]:
     """Build observations from either a gate payload or a native benchmark file."""
+    _extra_keys = ("expected_order", "validation", "source", "features", "dx", "feature_scale")
     if isinstance(payload, dict) and "levels" in payload and not args.benchmark:
         levels = [Observation.from_mapping(item) for item in payload["levels"]]
         quantity = payload.get("quantity") or args.quantity or "observable"
-        extra = {k: payload[k] for k in ("expected_order", "validation", "source") if k in payload}
+        extra = {k: payload[k] for k in _extra_keys if k in payload}
         return levels, quantity, extra
     series = adapters.extract_series(
         payload,
@@ -60,7 +64,17 @@ def _observations_from_payload(payload: Any, args: argparse.Namespace) -> tuple[
         value_key=args.value_key,
         source_path=args.benchmark or args.obs or "",
     )
-    return list(series.levels), series.quantity, {"source": series.as_dict()}
+    # A benchmark document may carry its own feature scales and validation block
+    # (the cross-repository contract of tensorphysics.vv.schema): forward them so
+    # the CLI reproduces the document's V&V statement without extra flags.
+    extra: dict[str, Any] = {"source": series.as_dict()}
+    if isinstance(payload, dict):
+        for key in _extra_keys:
+            if key != "source" and key in payload:
+                extra[key] = payload[key]
+        if "feature_scale" in payload and "features" not in payload:
+            extra["features"] = payload["feature_scale"]
+    return list(series.levels), series.quantity, extra
 
 
 def _policy_from_args(args: argparse.Namespace, expected_order: float | None = None) -> GatePolicy:
@@ -116,6 +130,20 @@ def _render(verdict, policy: GatePolicy) -> str:
         v = verdict.validation
         lines.append(
             f"  V&V20: E={v.error:.6g}  U_val={v.u_val:.6g}  |E|/U_val={v.ratio:.4f}  -> {v.status}"
+        )
+    if verdict.resolvability is not None:
+        res = verdict.resolvability
+        lines.append(
+            f"  resolvability: R = delta/dx  min R={_fmt(res.ratio)}  dx={_fmt(res.dx)}  -> {res.status}"
+        )
+        for featspec in res.features:
+            lines.append(f"    - {featspec.detail}")
+    if verdict.uncertainty is not None:
+        led = verdict.uncertainty
+        lines.append(
+            f"  uncertainty ledger: U_num={led.u_num:.6g}  U_input={led.u_input:.6g}  "
+            f"U_val={led.u_val:.6g}  U_ref={led.u_ref:.6g}  U_ref/U_val={_fmt(led.reference_ratio)}  "
+            f"dominant={led.dominant_term()}"
         )
     lines.append("  checks:")
     for check in verdict.checks:
@@ -322,6 +350,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--format", choices=FORMATS, default=None,
                         help="output format: text (default), json, table, plot")
     parser.add_argument("--json", action="store_true", help="alias of --format json")
+    parser.add_argument(
+        "--feature-scale",
+        action="append",
+        default=None,
+        metavar="NAME=DELTA",
+        help="physical feature scale delta (repeatable), e.g. --feature-scale boundary_layer=0.004",
+    )
+    parser.add_argument("--dx", type=float, default=None,
+                        help="finest grid spacing for the R=delta/dx law (default: finest level h)")
+    parser.add_argument("--min-cells-per-feature", type=float, default=None,
+                        help="resolution floor of the R law (default 4.0)")
+    parser.add_argument("--require-resolvability", action="store_true",
+                        help="withhold the verdict unless a feature scale is declared")
+    parser.add_argument("--u-ref", type=float, default=None,
+                        help="reference uncertainty U_ref of the comparison benchmark")
     parser.add_argument("--plot-out", default=None,
                         help="PNG path for --format plot (default: vv_gate.png)")
     parser.add_argument("--out", default=None, help="write the JSON verdict to this path")
@@ -360,6 +403,32 @@ def _run_table(path: str, fmt: str, plot_out: str | None) -> int:
     return EXIT_CODES[FAIL] if record["n_fail"] else EXIT_CODES[PASS]
 
 
+def _features_from_args(args: argparse.Namespace, extra: dict[str, Any]):
+    """Feature specs from ``--feature-scale NAME=DELTA`` and/or the payload."""
+    from .resolvability import FeatureSpec
+
+    specs = []
+    for item in extra.get("features") or ():
+        specs.append(FeatureSpec(**item) if isinstance(item, dict) else item)
+    for token in args.feature_scale or ():
+        if "=" not in token:
+            raise ValueError(f"--feature-scale expects NAME=DELTA, got {token!r}")
+        name, delta = token.split("=", 1)
+        name = name.strip()
+        if not name:
+            raise ValueError(f"--feature-scale needs a feature name, got {token!r}")
+        specs.append(FeatureSpec(name=name, delta=float(delta)))
+    return specs
+
+
+def _resolvability_policy(args: argparse.Namespace):
+    from .resolvability import DiscriminabilityPolicy
+
+    if args.min_cells_per_feature is None:
+        return None
+    return DiscriminabilityPolicy(min_cells_per_feature=args.min_cells_per_feature)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -376,6 +445,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         f_sim = args.f_sim if args.f_sim is not None else validation_block.get("f_sim")
         expected = args.expected_order if args.expected_order is not None else extra.get("expected_order")
         policy = _policy_from_args(args, expected)
+        features = _features_from_args(args, extra)
+        u_ref = args.u_ref if args.u_ref is not None else validation_block.get("u_ref")
         verdict = evaluate(
             levels,
             quantity=quantity,
@@ -384,6 +455,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             u_input=u_input,
             u_num=u_num,
             f_sim=f_sim,
+            features=features or None,
+            dx=args.dx if args.dx is not None else extra.get("dx"),
+            resolvability_policy=_resolvability_policy(args),
+            require_resolvability=bool(args.require_resolvability),
+            u_ref=u_ref,
         )
     except (adapters.AdapterError, ValueError, OSError, KeyError) as exc:
         print(f"error: {exc}", file=sys.stderr)
