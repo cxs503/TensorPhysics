@@ -144,3 +144,26 @@ using [Persistent Research Worker](docs/PERSISTENT_RESEARCH_WORKER.md). This
 is execution infrastructure: production use still requires a real authenticated
 Agent CLI, an independent domain validator, persistent storage, and operating
 system isolation. A running worker alone does not prove scientific correctness.
+
+## 3-D solid element kernel (`tensorphysics.solid_fem`)
+
+From-scratch small-strain isoparametric solid elements (Hex8 / Hex20) used as the
+structural verification backbone:
+
+* trilinear / quadratic serendipity shape functions with analytic derivatives,
+  1-point / 2x2x2 / 3x3x3 Gauss rules;
+* `full`, `bbar` (mean dilatation, Hex8), `bbar_stab` (mean dilatation plus
+  dilatation-fluctuation stabilisation, Hex20) and `sri` volumetric formulations;
+* Flanagan-Belytschko hourglass control for 1-point Hex8;
+* J2 plasticity with radial return mapping and the analytic consistent tangent,
+  incremental Newton-Raphson driver;
+* verification benchmarks: constant-strain patch test, volumetric locking at
+  nu = 0.4999, hourglass energy fraction, uniaxial tension vs the analytic curve,
+  Lame thick cylinder and the elastic-perfectly-plastic limit pressure.
+
+```bash
+PYTHONPATH=src python -m pytest tests/test_solid_fem_kernel.py -q   # 47 tests
+PYTHONPATH=src python scripts/p33_w2_n06_solid_fem.py               # reproducible numbers + figures
+```
+
+Report: `docs/p33_w2_n06/REPORT.md`; evidence: `artifacts/p33_w2_n06/`.
