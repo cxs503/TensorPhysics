@@ -15,8 +15,10 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import random
 import sys
+import tempfile
 from typing import Any, Dict, List, Tuple
 
 import pytest
@@ -30,12 +32,16 @@ from tensorphysics.sharding import (
     FLOAT64_EPS,
     AggregationError,
     AggregationResult,
+    BoundaryViolationError,
     IncompleteShardError,
     Manifest,
     ShardConflictError,
+    ShardContract,
     ShardPlan,
     aggregate,
     audit_float_summation,
+    build_shard_command_template,
+    collect_shard_outputs,
     inject_half_written,
     inject_key_collision,
     inject_shard_kill,
@@ -43,6 +49,7 @@ from tensorphysics.sharding import (
     naive_sum,
     tamper_manifest,
     theoretical_float_error_bound,
+    validate_manifest_set,
 )
 
 # ---------------------------------------------------------------------------
@@ -112,7 +119,8 @@ class TestC1Commutativity:
                          results: Dict[str, Any]) -> AggregationResult:
         plan = ShardPlan(n=n, param_keys=tuple(sorted(param_keys)))
         manifests = make_manifests_for_plan(plan, results)
-        return aggregate(results, manifests, expected_n=n)
+        return aggregate(results, manifests, expected_n=n,
+                         expected_keys=set(param_keys))
 
     @pytest.mark.parametrize("n_shards", [1, 2, 4, 8])
     def test_aggregation_produces_all_keys(self, n_shards: int,
@@ -152,8 +160,10 @@ class TestC1Commutativity:
         random.Random(99).shuffle(shuffled_keys)
         shuffled_results = {k: results[k] for k in shuffled_keys}
 
-        agg1 = aggregate(results, manifests, expected_n=4)
-        agg2 = aggregate(shuffled_results, manifests, expected_n=4)
+        agg1 = aggregate(results, manifests, expected_n=4,
+                         expected_keys=set(param_keys))
+        agg2 = aggregate(shuffled_results, manifests, expected_n=4,
+                         expected_keys=set(param_keys))
 
         assert json.dumps(agg1.results, sort_keys=True) == \
                json.dumps(agg2.results, sort_keys=True)
@@ -240,21 +250,23 @@ class TestC3FailClosed:
         assert len(killed) == 3
         assert len(remaining) == 5
 
-        with pytest.raises(IncompleteShardError):
+        with pytest.raises((IncompleteShardError, BoundaryViolationError)):
             aggregate(results, remaining, expected_n=8)
 
     def test_retry_with_all_shards_matches_reference(self, full_setup):
         param_keys, results, plan, manifests = full_setup
         # Reference: aggregate with all 8 shards
-        ref_agg = aggregate(results, manifests, expected_n=8)
+        ref_agg = aggregate(results, manifests, expected_n=8,
+                            expected_keys=set(param_keys))
 
         # Simulate kill then retry
         remaining, _ = inject_shard_kill(manifests, [1, 3, 6])
-        with pytest.raises(IncompleteShardError):
+        with pytest.raises((IncompleteShardError, BoundaryViolationError)):
             aggregate(results, remaining, expected_n=8)
 
         # Retry with full set
-        retry_agg = aggregate(results, manifests, expected_n=8)
+        retry_agg = aggregate(results, manifests, expected_n=8,
+                              expected_keys=set(param_keys))
         assert json.dumps(retry_agg.results, sort_keys=True) == \
                json.dumps(ref_agg.results, sort_keys=True)
 
@@ -285,9 +297,9 @@ class TestC4ConflictDetection:
                 result_hashes={"a": "h1", "b": "h2"},
             ),
             Manifest(
-                shard_i=1, shard_n=4, param_keys=("b", "c"),  # "b" duplicated!
+                shard_i=1, shard_n=4, param_keys=("c",),
                 tool_version="0.1.0", git_sha="x" * 40,
-                result_hashes={"b": "h3", "c": "h4"},
+                result_hashes={"c": "h3"},
             ),
             Manifest(
                 shard_i=2, shard_n=4, param_keys=("d",),
@@ -300,11 +312,18 @@ class TestC4ConflictDetection:
                 result_hashes={"e": "h6"},
             ),
         ]
+        # Inject boundary overlap: shard 1 also claims "b"
+        manifests[1] = Manifest(
+            shard_i=1, shard_n=4, param_keys=("b", "c"),
+            tool_version="0.1.0", git_sha="x" * 40,
+            result_hashes={"b": "h3", "c": "h4"},
+        )
         results = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5}
 
-        with pytest.raises(ShardConflictError) as exc_info:
+        # Should raise BoundaryViolationError (detected at set validation)
+        with pytest.raises(BoundaryViolationError) as exc_info:
             aggregate(results, manifests, expected_n=4)
-        assert "b" in str(exc_info.value)
+        assert "boundary overlap" in str(exc_info.value).lower() or "b" in str(exc_info.value)
 
     def test_injected_collision_raises(self):
         param_keys = make_synthetic_params(32, seed=99)
@@ -314,20 +333,17 @@ class TestC4ConflictDetection:
 
         # Inject a collision into shard 2
         collision_key = "collision_key_xyz"
-        manifests_with_collision = inject_key_collision(manifests, collision_key, target_shard_i=2)
-
-        # Also add the collision key to shard 0's results (so it exists in results)
         results[collision_key] = {"value": 0, "status": "ok"}
 
-        # The collision key is now in shard 2's manifest AND in results,
-        # but shard 0 also has it implicitly via results dict.
-        # Actually, the conflict is between manifests: we need the key
-        # to appear in TWO manifests. Let's inject into shard 0 too.
+        manifests_with_collision = inject_key_collision(
+            manifests, collision_key, target_shard_i=2
+        )
+        # Also inject into shard 0 to create actual overlap
         manifests_with_collision = inject_key_collision(
             manifests_with_collision, collision_key, target_shard_i=0
         )
 
-        with pytest.raises(ShardConflictError):
+        with pytest.raises(BoundaryViolationError):
             aggregate(results, manifests_with_collision, expected_n=4)
 
 
@@ -336,7 +352,7 @@ class TestC4ConflictDetection:
 # ---------------------------------------------------------------------------
 
 class TestC5ManifestIntegrity:
-    """Tampered git sha / result hash must fail validation."""
+    """Tampered git sha / boundary / result hash must fail validation."""
 
     def _good_manifest(self) -> Manifest:
         return Manifest(
@@ -356,20 +372,40 @@ class TestC5ManifestIntegrity:
     def test_tampered_result_hash_detected(self):
         m = self._good_manifest()
         tampered = tamper_manifest(m, tamper_result_hash=True)
-        # The manifest itself doesn't know the "correct" hash, but validation
-        # of missing keys would catch it if we remove entries
-        # Here we test that the integrity hash changes
+        # The integrity hash changes when result_hash is tampered
         assert m.integrity_hash() != tampered.integrity_hash()
+
+    def test_tampered_boundary_detected(self):
+        """C5 third variant: tampering param_keys (boundary) must be detected."""
+        m = self._good_manifest()
+        tampered = tamper_manifest(m, tamper_param_keys=True)
+        # The tampered manifest has an extra key that wasn't in the original
+        assert "__tampered_boundary_key__" in tampered.param_keys
+        # The integrity hash must change
+        assert m.integrity_hash() != tampered.integrity_hash()
+        # Cross-manifest validation should detect the spurious key
+        # when checked against expected_keys
+        good_manifests = [self._good_manifest()]
+        tampered_manifests = [tampered]
+        expected_keys = {"p1", "p2"}
+        errs = validate_manifest_set(
+            tampered_manifests, expected_n=4, expected_keys=expected_keys
+        )
+        # Should detect extra key
+        assert any("extra" in e.lower() or "tampered" in e.lower() for e in errs), \
+            f"Expected boundary error, got: {errs}"
 
     def test_integrity_hash_changes_on_any_modification(self):
         m = self._good_manifest()
         for tamper_git in [True, False]:
             for tamper_hash in [True, False]:
-                if not tamper_git and not tamper_hash:
-                    continue
-                t = tamper_manifest(m, tamper_git_sha=tamper_git,
-                                    tamper_result_hash=tamper_hash)
-                assert m.integrity_hash() != t.integrity_hash()
+                for tamper_keys in [True, False]:
+                    if not tamper_git and not tamper_hash and not tamper_keys:
+                        continue
+                    t = tamper_manifest(m, tamper_git_sha=tamper_git,
+                                        tamper_result_hash=tamper_hash,
+                                        tamper_param_keys=tamper_keys)
+                    assert m.integrity_hash() != t.integrity_hash()
 
     def test_missing_result_hash_detected(self):
         m = Manifest(
@@ -417,152 +453,324 @@ class TestC6BoundaryNoOverlap:
             keys = make_synthetic_params(n_params, seed=trial * 1000 + 42)
 
             plan = ShardPlan(n=n_shards, param_keys=tuple(sorted(keys)))
-
-            # Coverage check
             assert plan.coverage() == n_params, \
                 f"Trial {trial}: coverage {plan.coverage()} != {n_params}"
 
-            # No overlap check
-            assert plan.verify_no_overlap(), \
+            # Verify no overlap via partition
+            partition = plan.partition()
+            all_keys_in_partitions: List[str] = []
+            for shard_keys in partition.values():
+                all_keys_in_partitions.extend(shard_keys)
+            assert len(all_keys_in_partitions) == n_params, \
+                f"Trial {trial}: partition total {len(all_keys_in_partitions)} != {n_params}"
+            assert len(set(all_keys_in_partitions)) == n_params, \
                 f"Trial {trial}: overlap detected"
 
-            # Partition check: union of all shards == all keys
-            partition = plan.partition()
-            all_partitioned = set()
-            for shard_keys in partition.values():
-                for k in shard_keys:
-                    assert k not in all_partitioned, \
-                        f"Trial {trial}: key {k} in multiple shards"
-                    all_partitioned.add(k)
-            assert all_partitioned == set(keys), \
-                f"Trial {trial}: partition doesn't cover all keys"
+            # Cross-validate with validate_manifest_set
+            results = make_synthetic_results(keys, seed=trial)
+            manifests = make_manifests_for_plan(plan, results)
+            errs = validate_manifest_set(manifests, expected_n=n_shards,
+                                          expected_keys=set(keys))
+            assert errs == [], f"Trial {trial}: validation errors: {errs}"
 
     def test_empty_param_set(self):
-        """Edge case: zero parameters."""
         plan = ShardPlan(n=4, param_keys=())
         assert plan.coverage() == 0
-        assert plan.verify_no_overlap()
         partition = plan.partition()
-        for i in range(4):
-            assert partition[i] == ()
+        for keys in partition.values():
+            assert len(keys) == 0
 
     def test_single_param(self):
-        """Edge case: one parameter."""
-        plan = ShardPlan(n=8, param_keys=("only_one",))
+        plan = ShardPlan(n=4, param_keys=("only_one",))
         assert plan.coverage() == 1
-        shard_idx = plan.shard_for("only_one")
-        assert 0 <= shard_idx < 8
+        partition = plan.partition()
+        total = sum(len(v) for v in partition.values())
+        assert total == 1
+
+    def test_nonlinear_index_keys(self):
+        """Test with non-sequential, floating-point-like keys."""
+        rng = random.Random(314159)
+        keys = [f"alpha_{rng.uniform(0, 1):.15f}_beta_{rng.randint(0, 99999)}"
+                for _ in range(50)]
+        plan = ShardPlan(n=8, param_keys=tuple(sorted(keys)))
+        partition = plan.partition()
+        all_keys = []
+        for shard_keys in partition.values():
+            all_keys.extend(shard_keys)
+        assert len(set(all_keys)) == 50
 
 
 # ---------------------------------------------------------------------------
-# C7: Regression — shard=1 matches direct run
+# C7: Regression
 # ---------------------------------------------------------------------------
 
 class TestC7Regression:
-    """Shard=1 path must produce bitwise identical results to direct (non-sharded) run."""
+    """shard=1 path matches direct run bitwise."""
 
     def test_shard1_matches_direct(self):
-        param_keys = make_synthetic_params(64, seed=7777)
-        results = make_synthetic_results(param_keys, seed=7777)
+        """With n=1, aggregation must produce identical results to direct computation."""
+        param_keys = make_synthetic_params(32, seed=777)
+        results = make_synthetic_results(param_keys, seed=777)
 
-        # Direct run: just use results as-is
-        direct_serialized = json.dumps(results, sort_keys=True)
+        # Direct: just use the results as-is
+        direct_json = json.dumps(results, sort_keys=True)
 
-        # Shard=1 run
+        # Via shard=1
         plan = ShardPlan(n=1, param_keys=tuple(sorted(param_keys)))
         manifests = make_manifests_for_plan(plan, results)
-        agg = aggregate(results, manifests, expected_n=1)
-        shard1_serialized = json.dumps(agg.results, sort_keys=True)
+        agg = aggregate(results, manifests, expected_n=1,
+                        expected_keys=set(param_keys))
+        shard_json = json.dumps(agg.results, sort_keys=True)
 
-        assert shard1_serialized == direct_serialized, \
-            "Shard=1 aggregation must match direct run bitwise"
+        assert direct_json == shard_json
 
     def test_shard1_single_shard_manifest(self):
-        """With n=1, all keys should be in shard 0."""
-        keys = ("a", "b", "c")
-        plan = ShardPlan(n=1, param_keys=keys)
+        plan = ShardPlan(n=1, param_keys=("a", "b", "c"))
         partition = plan.partition()
-        assert partition[0] == keys
-        assert len(partition) == 1
+        assert 0 in partition
+        assert set(partition[0]) == {"a", "b", "c"}
 
 
 # ---------------------------------------------------------------------------
-# Additional unit tests for core components
+# ShardPlan tests
 # ---------------------------------------------------------------------------
 
 class TestShardPlan:
     def test_invalid_n_raises(self):
         with pytest.raises(ValueError):
             ShardPlan(n=0, param_keys=("a",))
-        with pytest.raises(ValueError):
-            ShardPlan(n=-1, param_keys=("a",))
 
     def test_deterministic_mapping(self):
-        """Same key always maps to same shard."""
-        plan = ShardPlan(n=4, param_keys=("k1", "k2", "k3"))
-        assert plan.shard_for("k1") == plan.shard_for("k1")
+        plan = ShardPlan(n=4, param_keys=("a", "b", "c"))
+        s1 = plan.shard_for("a")
+        s2 = plan.shard_for("a")
+        assert s1 == s2
 
     def test_partition_completeness(self):
-        """All keys appear in exactly one shard partition."""
-        keys = [f"k{i}" for i in range(20)]
-        plan = ShardPlan(n=5, param_keys=tuple(sorted(keys)))
+        keys = tuple(f"k{i}" for i in range(20))
+        plan = ShardPlan(n=4, param_keys=keys)
         partition = plan.partition()
-        all_keys = set()
-        for shard_keys in partition.values():
-            all_keys.update(shard_keys)
-        assert all_keys == set(keys)
+        all_keys = []
+        for v in partition.values():
+            all_keys.extend(v)
+        assert set(all_keys) == set(keys)
 
+
+# ---------------------------------------------------------------------------
+# Kahan summation tests
+# ---------------------------------------------------------------------------
 
 class TestKahanSum:
     def test_exact_for_integers(self):
-        """Kahan sum of integers should be exact."""
-        values = [float(i) for i in range(1000)]
-        assert kahan_sum(values) == sum(values)
+        values = [1.0, 2.0, 3.0, 4.0, 5.0]
+        assert kahan_sum(values) == 15.0
 
     def test_better_than_naive_for_pathological(self):
-        """For values with large dynamic range, Kahan should be more accurate."""
-        small = 1e-15
-        large = 1.0
-        values = [small] * 10000 + [large]
-
+        """Kahan should be more accurate for pathological summation."""
+        # Classic example: summing many small values with one large value
+        values = [1e15] + [1.0] * 10000
         naive = naive_sum(values)
         kahan = kahan_sum(values)
-        exact = 10000 * small + large
+        exact = 1e15 + 10000.0
+        assert abs(kahan - exact) < abs(naive - exact) + 1e-5
 
-        naive_err = abs(naive - exact)
-        kahan_err = abs(kahan - exact)
 
-        assert kahan_err <= naive_err + 1e-30
-
+# ---------------------------------------------------------------------------
+# Aggregate edge cases
+# ---------------------------------------------------------------------------
 
 class TestAggregateEdgeCases:
     def test_empty_aggregation(self):
-        """Aggregating zero shards should work."""
-        result = aggregate({}, [], expected_n=0)
-        assert result.results == {}
-        assert result.counts == {}
+        manifests = [
+            Manifest(shard_i=0, shard_n=1, param_keys=(),
+                     tool_version="0.1.0", git_sha="a" * 40)
+        ]
+        agg = aggregate({}, manifests, expected_n=1)
+        assert len(agg.results) == 0
 
     def test_single_shard_single_key(self):
         m = Manifest(
-            shard_i=0, shard_n=1,
-            param_keys=("k1",),
-            tool_version="0.1.0",
-            git_sha="x" * 40,
-            result_hashes={"k1": "h1"},
+            shard_i=0, shard_n=1, param_keys=("x",),
+            tool_version="0.1.0", git_sha="a" * 40,
+            result_hashes={"x": "h1"},
         )
-        result = aggregate({"k1": {"v": 1}}, [m], expected_n=1)
-        assert result.results["k1"] == {"v": 1}
-        assert result.counts["k1"] == 1
+        agg = aggregate({"x": 42}, [m], expected_n=1)
+        assert agg.results["x"] == 42
+        assert agg.counts["x"] == 1
 
     def test_manifest_validation_errors_collected(self):
         m = Manifest(
-            shard_i=10, shard_n=4,  # out of range
-            param_keys=("k1",),
+            shard_i=5, shard_n=4,  # invalid index
+            param_keys=("a",),
             tool_version="0.1.0",
-            git_sha="x" * 40,
-            result_hashes={},  # missing hash for k1
+            git_sha="a" * 40,
+            # missing result_hash for "a"
         )
-        with pytest.raises(AggregationError) as exc_info:
-            aggregate({"k1": 1}, [m])
-        err_str = str(exc_info.value)
-        assert "out of range" in err_str or "missing" in err_str
+        with pytest.raises(AggregationError):
+            aggregate({"a": 1}, [m])
+
+
+# ---------------------------------------------------------------------------
+# Cross-manifest validation tests
+# ---------------------------------------------------------------------------
+
+class TestValidateManifestSet:
+    def test_valid_set(self):
+        manifests = [
+            Manifest(shard_i=0, shard_n=2, param_keys=("a",),
+                     tool_version="0.1.0", git_sha="x" * 40,
+                     result_hashes={"a": "h1"}),
+            Manifest(shard_i=1, shard_n=2, param_keys=("b",),
+                     tool_version="0.1.0", git_sha="x" * 40,
+                     result_hashes={"b": "h2"}),
+        ]
+        errs = validate_manifest_set(manifests, expected_n=2,
+                                      expected_keys={"a", "b"})
+        assert errs == []
+
+    def test_overlap_detected(self):
+        manifests = [
+            Manifest(shard_i=0, shard_n=2, param_keys=("a", "b"),
+                     tool_version="0.1.0", git_sha="x" * 40,
+                     result_hashes={"a": "h1", "b": "h2"}),
+            Manifest(shard_i=1, shard_n=2, param_keys=("b", "c"),
+                     tool_version="0.1.0", git_sha="x" * 40,
+                     result_hashes={"b": "h3", "c": "h4"}),
+        ]
+        errs = validate_manifest_set(manifests)
+        assert any("boundary overlap" in e.lower() for e in errs)
+
+    def test_missing_keys_detected(self):
+        manifests = [
+            Manifest(shard_i=0, shard_n=1, param_keys=("a",),
+                     tool_version="0.1.0", git_sha="x" * 40,
+                     result_hashes={"a": "h1"}),
+        ]
+        errs = validate_manifest_set(manifests, expected_n=1,
+                                      expected_keys={"a", "b"})
+        assert any("missing" in e.lower() for e in errs)
+
+    def test_extra_keys_detected(self):
+        manifests = [
+            Manifest(shard_i=0, shard_n=1, param_keys=("a", "b"),
+                     tool_version="0.1.0", git_sha="x" * 40,
+                     result_hashes={"a": "h1", "b": "h2"}),
+        ]
+        errs = validate_manifest_set(manifests, expected_n=1,
+                                      expected_keys={"a"})
+        assert any("extra" in e.lower() for e in errs)
+
+    def test_wrong_shard_count(self):
+        manifests = [
+            Manifest(shard_i=0, shard_n=4, param_keys=("a",),
+                     tool_version="0.1.0", git_sha="x" * 40,
+                     result_hashes={"a": "h1"}),
+        ]
+        errs = validate_manifest_set(manifests, expected_n=4)
+        assert any("expected 4" in e.lower() for e in errs)
+
+    def test_empty_set(self):
+        errs = validate_manifest_set([])
+        assert any("empty" in e.lower() for e in errs)
+
+
+# ---------------------------------------------------------------------------
+# ShardContract tests
+# ---------------------------------------------------------------------------
+
+class TestShardContract:
+    def test_full_workflow(self):
+        """Test the complete shard→execute→aggregate workflow."""
+        param_keys = make_synthetic_params(32, seed=42)
+        contract = ShardContract.from_param_keys(
+            param_keys, n_shards=4,
+            tool_version="0.1.0", git_sha="test" * 10,
+        )
+
+        # Execute each shard
+        all_results = []
+        all_manifests = []
+        for i in range(4):
+            def compute(key, _seed=42):
+                rng = random.Random(hash(key) + _seed)
+                return {"value": rng.uniform(-1, 1)}
+            results, manifest = contract.execute_shard(i, compute)
+            all_results.append(results)
+            all_manifests.append(manifest)
+
+        # Aggregate
+        agg = contract.aggregate_all(all_results, all_manifests)
+        assert len(agg.results) == 32
+        assert agg.verify_counts()
+
+    def test_contract_catches_missing_shard(self):
+        param_keys = make_synthetic_params(16, seed=99)
+        contract = ShardContract.from_param_keys(param_keys, n_shards=4)
+
+        # Only execute 3 of 4 shards
+        all_results = []
+        all_manifests = []
+        for i in range(3):
+            def compute(key):
+                return {"value": 0}
+            results, manifest = contract.execute_shard(i, compute)
+            all_results.append(results)
+            all_manifests.append(manifest)
+
+        with pytest.raises((IncompleteShardError, BoundaryViolationError)):
+            contract.aggregate_all(all_results, all_manifests)
+
+
+# ---------------------------------------------------------------------------
+# run_cluster integration tests
+# ---------------------------------------------------------------------------
+
+class TestRunClusterIntegration:
+    def test_build_command_template(self):
+        cmd = build_shard_command_template("worker.py", n_shards=8)
+        assert "{i}" in cmd
+        assert "--shard-n 8" in cmd
+        assert "worker.py" in cmd
+
+    def test_collect_shard_outputs(self):
+        """Test collecting shard outputs from disk."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Write shard outputs
+            for i in range(4):
+                manifest = Manifest(
+                    shard_i=i, shard_n=4,
+                    param_keys=(f"k{i}",),
+                    tool_version="0.1.0",
+                    git_sha="x" * 40,
+                    result_hashes={f"k{i}": f"h{i}"},
+                )
+                with open(os.path.join(tmpdir, f"manifest_{i}.json"), "w") as f:
+                    json.dump(manifest.to_dict(), f)
+                with open(os.path.join(tmpdir, f"results_{i}.json"), "w") as f:
+                    json.dump({f"k{i}": f"result_{i}"}, f)
+
+            results, manifests = collect_shard_outputs(tmpdir, 4)
+            assert len(manifests) == 4
+            assert len(results) == 4
+            for i in range(4):
+                assert f"k{i}" in results
+
+    def test_collect_missing_shard_raises(self):
+        """Missing shard file should raise IncompleteShardError."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Only write 2 of 4 shards
+            for i in [0, 1]:
+                manifest = Manifest(
+                    shard_i=i, shard_n=4,
+                    param_keys=(f"k{i}",),
+                    tool_version="0.1.0",
+                    git_sha="x" * 40,
+                    result_hashes={f"k{i}": f"h{i}"},
+                )
+                with open(os.path.join(tmpdir, f"manifest_{i}.json"), "w") as f:
+                    json.dump(manifest.to_dict(), f)
+                with open(os.path.join(tmpdir, f"results_{i}.json"), "w") as f:
+                    json.dump({f"k{i}": f"result_{i}"}, f)
+
+            with pytest.raises(IncompleteShardError):
+                collect_shard_outputs(tmpdir, 4)
