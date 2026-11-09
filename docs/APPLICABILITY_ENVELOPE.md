@@ -2,7 +2,7 @@
 
 **Module** `tensorphysics.applicability` | **campaign node** P155W1-N09 | **mission** 8238
 | configuration `src/tensorphysics/applicability/configs/default_capabilities.v1.json` (digest `a3daea28b05f361a`)
-| envelope artifact `artifacts/applicability/envelopes.json` (suite digest `00961a7030b27d08`)
+| envelope artifact `artifacts/applicability/envelopes.json` (suite digest `07fa0b114ec802b7`)
 
 Reproduce:
 
@@ -110,7 +110,7 @@ analytic scalar in a test and a repository kernel in production.
 ### 3.1 Envelopes of the three real capabilities
 
 All numbers are read from `artifacts/applicability/envelopes.json`
-(suite digest `00961a7030b27d08`); `*` marks an open interval end (no failure found
+(suite digest `07fa0b114ec802b7`); `*` marks an open interval end (no failure found
 inside the searched span).
 
 | capability | axis (scale) | searched span | in-domain interval | boundary +/- width | width / span | confidence | declared | compat |
