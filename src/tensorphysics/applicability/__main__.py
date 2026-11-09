@@ -20,6 +20,7 @@ import sys
 from typing import Any, Mapping
 
 from .capability import CapabilityRegistry
+from .artifact import (ArtifactError, gate_queries, load_envelopes, suite_digest)
 from .envelope import DomainStatus, assign_grade
 from .probe import probe_registry
 from .refine import DEFAULT_REL_TOL
@@ -104,6 +105,52 @@ def _config_digest(path: pathlib.Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()[:16]
 
 
+def _run_offline(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    """Answer queries from a persisted artifact: the consumer side of the mechanism."""
+    if args.figures:
+        parser.error("--figures needs a live probe; it cannot be combined with --envelope")
+    queries = _parse_queries(args.query)
+    if not queries:
+        parser.error("--envelope requires --query (nothing to gate)")
+    try:
+        envelopes = load_envelopes(args.envelope)
+    except ArtifactError as exc:
+        parser.error(str(exc))
+    answers = gate_queries(envelopes, queries)
+    payload = {
+        "schema": "tensorphysics.applicability.verdicts.v1",
+        "artifact_path": str(args.envelope),
+        "artifact_digest": suite_digest(envelopes),
+        "capabilities": sorted(envelopes),
+        "queries": answers,
+        "query_summary": {
+            "total": len(answers),
+            "errors": sum(1 for a in answers if "error" in a),
+            "out_of_domain": sum(1 for a in answers
+                                 if a.get("verdict", {}).get("domain_status")
+                                 == DomainStatus.OUT.value),
+            "withheld": sum(1 for a in answers
+                            if a.get("grade", {}).get("effective") == "WITHHELD"),
+        },
+    }
+    if not args.quiet:
+        for answer in answers:
+            if "error" in answer:
+                print(f"{answer['label']} :: ERROR {answer['error']}")
+                continue
+            verdict, grade = answer["verdict"], answer["grade"]
+            print(f"{answer['label']} :: {verdict['capability_id']} "
+                  f"{verdict['domain_status']} -> {grade['effective']} "
+                  f"({'accepted' if grade['accepted'] else 'refused'}: {grade['reason']})")
+    if args.out:
+        out = pathlib.Path(args.out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(payload, indent=2, sort_keys=False) + "\n", encoding="utf-8")
+        if not args.quiet:
+            print(f"verdicts: {out} (artifact digest {payload['artifact_digest']})")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m tensorphysics.applicability",
                                      description=__doc__)
@@ -111,6 +158,9 @@ def main(argv: list[str] | None = None) -> int:
                         help="capability configuration JSON (default: shipped real capabilities)")
     parser.add_argument("--out", default=None, help="write the envelope artifact JSON here")
     parser.add_argument("--figures", default=None, help="directory for matplotlib figures")
+    parser.add_argument("--envelope", default=None,
+                        help="answer --query from a previously written artifact "
+                             "(offline: no probe, no evaluator import)")
     parser.add_argument("--query", default=None,
                         help="JSON object (inline or a path) {capability_id: {axis: value}}")
     parser.add_argument("--rel-tol", type=float, default=DEFAULT_REL_TOL,
@@ -118,6 +168,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-refine", action="store_true", help="skip stage-3 bisection")
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args(argv)
+
+    if args.envelope:
+        return _run_offline(parser, args)
 
     artifact, suite, registry = build_artifact(pathlib.Path(args.config), rel_tol=args.rel_tol,
                                                queries=_parse_queries(args.query),
