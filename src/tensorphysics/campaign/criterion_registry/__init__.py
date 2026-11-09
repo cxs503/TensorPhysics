@@ -33,6 +33,12 @@ from .kpi import (
     KPIView,
     compute_kpi,
 )
+from .registration import (
+    Registration,
+    DeliveryAudit,
+    register_goal,
+    audit_delivery,
+)
 
 __all__ = [
     "CriterionManifest",
@@ -50,4 +56,8 @@ __all__ = [
     "query_kpi",
     "KPIView",
     "compute_kpi",
+    "Registration",
+    "DeliveryAudit",
+    "register_goal",
+    "audit_delivery",
 ]
