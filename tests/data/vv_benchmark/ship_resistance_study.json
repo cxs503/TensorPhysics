@@ -1,0 +1,16 @@
+{
+  "schema": "ship-performance.vv-benchmark/1",
+  "repo": "ship-performance-platform",
+  "quantity": "total_resistance",
+  "unit": "kN",
+  "case": "KCS model test cross-check, panel refinement",
+  "levels": [
+    {"panels": 1200, "total_resistance": 412.53, "sigma": 0.20},
+    {"panels": 2400, "total_resistance": 405.12, "sigma": 0.10},
+    {"panels": 4800, "total_resistance": 402.24, "sigma": 0.05}
+  ],
+  "features": [
+    {"name": "boundary_layer_thickness_at_ap", "delta": 0.0042, "unit": "m"}
+  ],
+  "validation": {"f_sim": 402.24, "f_exp": 398.0, "u_input": 1.50, "u_ref": 2.00}
+}

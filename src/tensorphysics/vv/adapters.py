@@ -18,6 +18,10 @@ Supported dialects (all read-only):
     time-step refinement, ``{"timesteps": [{"dt": 1e-3, "value": ...}, ...]}``
 ``tensorbem``
     panel refinement, ``{"meshes": [{"n_panels": 512, "value": ...}, ...]}``
+``ship``
+    ship-performance-platform grid/panel/timestep studies (schema prefix
+    ``ship-performance``), e.g. a resistance study over panel counts or a
+    CFD-vs-model-test comparison over cell counts.
 ``tensorphysics``
     this repository's own benchmark JSON ledgers.
 
@@ -158,6 +162,42 @@ REPO_PROFILES: dict[str, dict[str, Any]] = {
         "value_keys": ("value", "f", "error", "l2_error", "relative_error", "rao_error", "added_mass_error"),
         "containers": ("levels", "meshes", "panels", "runs", "cases"),
     },
+    # ship-performance-platform (the ship-domain repository): resistance /
+    # propulsion / seakeeping studies declare panel counts, cell counts or
+    # element sizes and report a physical observable in kN, N, W or a
+    # dimensionless coefficient.  Schemas start with ``ship-performance``.
+    "ship": {
+        "length_keys": ("h", "dx", "dt", "panel_size", "mesh_size", "cell_size", "element_size"),
+        "count_keys": (
+            "panels",
+            "n_panels",
+            "cells",
+            "n_cells",
+            "elements",
+            "n_elements",
+            "nodes",
+            "resolution",
+            "n",
+        ),
+        "value_keys": (
+            "value",
+            "f",
+            "resistance",
+            "total_resistance",
+            "rt",
+            "ct",
+            "cw",
+            "power",
+            "thrust",
+            "added_resistance",
+            "rao",
+            "amplitude",
+            "error",
+            "l2_error",
+            "relative_error",
+        ),
+        "containers": ("levels", "grids", "meshes", "refinements", "studies", "runs", "cases"),
+    },
 }
 REPO_PROFILES["generic"] = REPO_PROFILES["tensorphysics"]
 
@@ -229,13 +269,21 @@ def detect_repo(payload: Any) -> str:
     return "generic"
 
 
-def _qualifies(node: Any) -> bool:
+def _qualifies(node: Any, profile: Mapping[str, Any] | None = None) -> bool:
+    """Does ``node`` look like a list of level mappings under ``profile``'s keys?
+
+    ``profile=None`` falls back to the generic key sets, which keeps the old
+    behaviour for callers that have no dialect at hand.
+    """
     if not isinstance(node, list) or len(node) < 2:
         return False
     if not all(isinstance(item, Mapping) for item in node):
         return False
     keys = set().union(*(item.keys() for item in node))
-    return bool((keys & set(LENGTH_KEYS)) or (keys & set(COUNT_KEYS))) and bool(keys & set(VALUE_KEYS))
+    length_keys = set(LENGTH_KEYS if profile is None else profile.get("length_keys", LENGTH_KEYS))
+    count_keys = set(COUNT_KEYS if profile is None else profile.get("count_keys", COUNT_KEYS))
+    value_keys = set(VALUE_KEYS if profile is None else profile.get("value_keys", VALUE_KEYS))
+    return bool((keys & length_keys) or (keys & count_keys)) and bool(keys & value_keys)
 
 
 def _find_level_list(node: Any, profile: Mapping[str, Any], depth: int = 0) -> tuple[list, str]:
@@ -243,7 +291,7 @@ def _find_level_list(node: Any, profile: Mapping[str, Any], depth: int = 0) -> t
     if depth > 6:
         raise AdapterError("benchmark document is too deeply nested to locate the level list")
     if isinstance(node, list):
-        if _qualifies(node):
+        if _qualifies(node, profile):
             return node, ""
         for item in node:
             try:
@@ -255,7 +303,7 @@ def _find_level_list(node: Any, profile: Mapping[str, Any], depth: int = 0) -> t
         raise AdapterError("no list of level mappings found")
     containers = tuple(profile.get("containers", LEVEL_CONTAINERS))
     for key in containers:
-        if key in node and _qualifies(node[key]):
+        if key in node and _qualifies(node[key], profile):
             return node[key], key
     for key in sorted(node, key=lambda k: (k not in containers, str(k))):
         value = node[key]
@@ -264,7 +312,7 @@ def _find_level_list(node: Any, profile: Mapping[str, Any], depth: int = 0) -> t
                 return _find_level_list(value, profile, depth + 1)
             except AdapterError:
                 continue
-        elif isinstance(value, list) and _qualifies(value):
+        elif isinstance(value, list) and _qualifies(value, profile):
             return value, key
     raise AdapterError("no list of level mappings found")
 

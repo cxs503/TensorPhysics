@@ -10,7 +10,16 @@ Public surface
   test, plus a table driver.
 * :mod:`tensorphysics.vv.adapters` -- normalisation of benchmark JSON emitted
   by the TensorLBM / TensorFVM / TensorFEM / TensorDEM / TensorBEM
-  repositories into a single observation record consumed by the gate.
+  repositories (and the ship-performance platform) into a single observation
+  record consumed by the gate.
+* :mod:`tensorphysics.vv.resolvability` -- the ``R = delta / dx``
+  discriminability law (W10-N07): a declared physical feature that is subgrid
+  turns the verdict into ``UNRESOLVED``, a missing declaration into ``WITHHELD``.
+* :mod:`tensorphysics.vv.uncertainty` -- the full ASME V&V 20 uncertainty
+  ledger ``U_num`` / ``U_input`` / ``U_val`` plus the reference term ``U_ref``
+  that decides whether the comparison can discriminate at all.
+* :mod:`tensorphysics.vv.schema` -- dependency-free validation of the
+  cross-repository benchmark JSON contract.
 
 Command line
 ------------
@@ -27,6 +36,14 @@ from .gci import (
     observed_order,
     richardson_extrapolated,
 )
+from .resolvability import (
+    DiscriminabilityPolicy,
+    FeatureSpec,
+    ResolvabilityResult,
+    discriminability,
+    required_grid_spacing,
+)
+from .uncertainty import UncertaintyLedger, compare, ledger_from_study, u_num_from_study
 from .validation import (
     ValidationResult,
     evaluate_validation_table,
@@ -47,4 +64,13 @@ __all__ = [
     "richardson_extrapolated",
     "validate",
     "validation_uncertainty",
+    "DiscriminabilityPolicy",
+    "FeatureSpec",
+    "ResolvabilityResult",
+    "UncertaintyLedger",
+    "compare",
+    "discriminability",
+    "ledger_from_study",
+    "required_grid_spacing",
+    "u_num_from_study",
 ]
