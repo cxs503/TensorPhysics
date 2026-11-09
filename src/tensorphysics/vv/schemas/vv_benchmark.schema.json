@@ -1,0 +1,322 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tensorphysics.local/schemas/vv_benchmark.schema.json",
+  "title": "Tensor* / ship-performance V&V benchmark document",
+  "description": "Unified benchmark output consumed by the TensorPhysics V&V machine gate: a systematically refined study of one observable, optional physical feature scales for the R = delta/dx law and an optional ASME V&V 20 validation block.",
+  "type": "object",
+  "required": [
+    "schema",
+    "quantity",
+    "levels"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "description": "Dialect tag, e.g. tensorlbm.vv-benchmark/1, ship-performance.vv-benchmark/1"
+    },
+    "repo": {
+      "type": "string"
+    },
+    "solver": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "case": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "levels": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "h": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dx": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dt": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "mesh_size": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "panel_size": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "cell_size": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "element_size": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "spacing": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "time_step": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "panels": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "n_panels": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "cells": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "n_cells": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "elements": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "n_elements": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "nodes": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "resolution": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "n": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "value": {
+            "type": "number"
+          },
+          "f": {
+            "type": "number"
+          },
+          "total_resistance": {
+            "type": "number"
+          },
+          "resistance": {
+            "type": "number"
+          },
+          "ct": {
+            "type": "number"
+          },
+          "cw": {
+            "type": "number"
+          },
+          "thrust": {
+            "type": "number"
+          },
+          "power": {
+            "type": "number"
+          },
+          "added_resistance": {
+            "type": "number"
+          },
+          "rao": {
+            "type": "number"
+          },
+          "amplitude": {
+            "type": "number"
+          },
+          "kinetic_energy": {
+            "type": "number"
+          },
+          "error": {
+            "type": "number"
+          },
+          "l2_error": {
+            "type": "number"
+          },
+          "relative_error": {
+            "type": "number"
+          },
+          "relative_strain_energy_error": {
+            "type": "number"
+          },
+          "relative_l2_displacement_error": {
+            "type": "number"
+          },
+          "sigma": {
+            "type": "number",
+            "minimum": 0
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "h"
+            ]
+          },
+          {
+            "required": [
+              "dx"
+            ]
+          },
+          {
+            "required": [
+              "dt"
+            ]
+          },
+          {
+            "required": [
+              "mesh_size"
+            ]
+          },
+          {
+            "required": [
+              "panel_size"
+            ]
+          },
+          {
+            "required": [
+              "cell_size"
+            ]
+          },
+          {
+            "required": [
+              "element_size"
+            ]
+          },
+          {
+            "required": [
+              "spacing"
+            ]
+          },
+          {
+            "required": [
+              "time_step"
+            ]
+          },
+          {
+            "required": [
+              "panels"
+            ]
+          },
+          {
+            "required": [
+              "n_panels"
+            ]
+          },
+          {
+            "required": [
+              "cells"
+            ]
+          },
+          {
+            "required": [
+              "n_cells"
+            ]
+          },
+          {
+            "required": [
+              "elements"
+            ]
+          },
+          {
+            "required": [
+              "n_elements"
+            ]
+          },
+          {
+            "required": [
+              "nodes"
+            ]
+          },
+          {
+            "required": [
+              "resolution"
+            ]
+          },
+          {
+            "required": [
+              "n"
+            ]
+          }
+        ]
+      }
+    },
+    "features": {
+      "type": "array",
+      "description": "Physical feature scales for the R = delta/dx discriminability law",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "delta"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "delta": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "unit": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "f_exp"
+      ],
+      "properties": {
+        "f_sim": {
+          "type": "number"
+        },
+        "f_exp": {
+          "type": "number"
+        },
+        "u_num": {
+          "type": "number",
+          "minimum": 0
+        },
+        "u_input": {
+          "type": "number",
+          "minimum": 0
+        },
+        "u_ref": {
+          "type": "number",
+          "minimum": 0
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -47,6 +47,8 @@ __all__ = [
     "PASS",
     "WARN",
     "FAIL",
+    "WITHHELD",
+    "UNRESOLVED",
     "evaluate",
     "gci",
     "grid_convergence_study",
@@ -60,7 +62,14 @@ __all__ = [
 PASS = "PASS"
 WARN = "WARN"
 FAIL = "FAIL"
-_STATUS_ORDER = {PASS: 0, WARN: 1, FAIL: 2}
+#: Evidence statements of the resolvability law (``R = delta / dx``), see
+#: :mod:`tensorphysics.vv.resolvability`.  They are *not* solver failures: they
+#: say that this discretisation cannot decide the question, so the number must
+#: not be published as converged (``WITHHELD``) or is converging to the wrong
+#: physics because the feature is subgrid (``UNRESOLVED``).
+WITHHELD = "WITHHELD"
+UNRESOLVED = "UNRESOLVED"
+_STATUS_ORDER = {PASS: 0, WARN: 1, WITHHELD: 2, UNRESOLVED: 3, FAIL: 4}
 
 
 # ---------------------------------------------------------------------------
@@ -225,6 +234,8 @@ class GateVerdict:
     checks: tuple[dict[str, Any], ...] = field(default_factory=tuple)
     validation: Any | None = None
     policy: GatePolicy = field(default_factory=GatePolicy)
+    resolvability: Any | None = None
+    uncertainty: Any | None = None
 
     @property
     def reasons(self) -> tuple[str, ...]:
@@ -240,6 +251,8 @@ class GateVerdict:
             "study": None if self.study is None else self.study.as_dict(),
             "validation": None if self.validation is None else self.validation.as_dict(),
             "policy": self.policy.as_dict(),
+            "resolvability": None if self.resolvability is None else self.resolvability.as_dict(),
+            "uncertainty": None if self.uncertainty is None else self.uncertainty.as_dict(),
         }
 
 
@@ -586,8 +599,31 @@ def evaluate(
     u_input: float | None = None,
     u_num: float | None = None,
     f_sim: float | None = None,
+    features: Sequence[Any] | None = None,
+    dx: float | None = None,
+    resolvability_policy: Any | None = None,
+    require_resolvability: bool = False,
+    u_ref: float | None = None,
+    discrimination_factor: float = 1.0,
 ) -> GateVerdict:
-    """Run the full gate: numerical convergence + optional ASME V&V 20 validation."""
+    """Run the full gate.
+
+    Stages, in order:
+
+    1. numerical convergence (:func:`grid_convergence_study`): order, GCI,
+       asymptotic-range checks;
+    2. resolution of the physical features declared in ``features`` under the
+       ``R = delta / dx`` law (:mod:`tensorphysics.vv.resolvability`), with
+       ``dx`` defaulting to the finest grid spacing of the study.  A subgrid
+       feature downgrades the verdict to ``UNRESOLVED``; a missing declaration
+       (``require_resolvability=True`` without ``features``) downgrades it to
+       ``WITHHELD``;
+    3. ASME V&V 20 validation against ``f_exp``.  The plain ``|E| <= U_val``
+       test is kept as the historical ``validation/V&V20`` check; when the
+       reference uncertainty ``u_ref`` is supplied the full uncertainty ledger
+       (:mod:`tensorphysics.vv.uncertainty`) is added and a non-discriminative
+       reference turns the validation into ``WITHHELD`` instead of a PASS.
+    """
     from .validation import validate
 
     policy = policy or GatePolicy()
@@ -858,25 +894,96 @@ def evaluate(
                 f"|E|/U_val={validation.ratio:.4f}"
             )
             status = PASS if validation.passed else FAIL
+            # With a declared reference uncertainty the ledger owns the decision
+            # (see stage 12): the plain check is then informational only and must
+            # not turn a WITHHELD comparison into a FAIL.
+            if u_ref is None:
+                checks.append(
+                    _check(
+                        "validation/V&V20",
+                        status,
+                        detail if validation.passed else detail
+                        + ": the model is not validated against the reference",
+                        error=validation.error,
+                        u_val=validation.u_val,
+                        ratio=validation.ratio,
+                    )
+                )
+
+    # 11. resolvability law R = delta / dx (W10-N07)
+    resolvability = None
+    if features is not None or require_resolvability:
+        from .resolvability import (
+            MARGINAL,
+            RESOLVED,
+            UNRESOLVED as UNRESOLVED_FEATURE,
+            WITHHELD as WITHHELD_FEATURE,
+            discriminability,
+        )
+
+        feats = list(features or ())
+        dx_eff = dx if dx is not None else (study.levels[-1].h if study is not None else None)
+        policy_res = resolvability_policy
+        if policy_res is not None:
+            policy_res = policy_res.merged()
+        resolvability = discriminability(feats, dx_eff, policy=policy_res)
+        check_status = {
+            RESOLVED: PASS,
+            MARGINAL: WARN,
+            UNRESOLVED_FEATURE: UNRESOLVED,
+            WITHHELD_FEATURE: WITHHELD,
+        }[resolvability.status]
+        checks.append(
+            _check(
+                "resolvability/R=delta/dx",
+                check_status,
+                "; ".join(resolvability.reasons)
+                if resolvability.reasons
+                else f"all features resolved: min R={resolvability.ratio:.4f} on dx={dx_eff:g}",
+                ratio=resolvability.ratio,
+                dx=dx_eff,
+                features=len(resolvability.features),
+            )
+        )
+
+    # 12. ASME V&V 20 uncertainty ledger (always reported, decision-changing
+    #     only when the reference uncertainty U_ref is declared)
+    uncertainty = None
+    if f_exp is not None and study is not None and study.gci_fine is not None:
+        from .uncertainty import compare as _compare
+        from .uncertainty import ledger_from_study
+
+        u_input_eff = 0.0 if u_input is None else u_input
+        u_ref_eff = 0.0 if u_ref is None else u_ref
+        uncertainty = ledger_from_study(study, u_input=u_input_eff, u_ref=u_ref_eff)
+        if u_ref is not None:
+            f_sim_eff = study.f_fine if f_sim is None else f_sim
+            ledger_verdict = _compare(
+                f_sim_eff, f_exp, uncertainty, discrimination_factor=discrimination_factor
+            )
             checks.append(
                 _check(
-                    "validation/V&V20",
-                    status,
-                    detail if validation.passed else detail + ": the model is not validated against the reference",
-                    error=validation.error,
-                    u_val=validation.u_val,
-                    ratio=validation.ratio,
+                    "validation/V&V20-ledger",
+                    {PASS: PASS, "FAIL": FAIL, "WITHHELD": WITHHELD}[ledger_verdict.status],
+                    ledger_verdict.detail,
+                    error=ledger_verdict.error,
+                    u_val=uncertainty.u_val,
+                    u_ref=uncertainty.u_ref,
+                    reference_ratio=uncertainty.reference_ratio,
                 )
             )
 
     statuses = [c["status"] for c in checks]
+    status = _worst(statuses)
     return GateVerdict(
-        status=_worst(statuses),
+        status=status,
         quantity=quantity,
         study=study,
         checks=tuple(checks),
         validation=validation,
         policy=policy,
+        resolvability=resolvability,
+        uncertainty=uncertainty,
     )
 
 

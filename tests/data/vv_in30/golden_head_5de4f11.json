@@ -1,0 +1,503 @@
+{
+  "schema": "tensorphysics.vv.in30-regression/1",
+  "campaign": "plan48 IN30 family",
+  "gate_commit": "5de4f11",
+  "python": "3.11.6",
+  "policy": {
+    "safety_factor_three": 1.25,
+    "safety_factor_two": 3.0,
+    "p_min": 0.05,
+    "p_max": 6.0,
+    "assumed_order": null,
+    "expected_order": null,
+    "order_tolerance": 0.2,
+    "residual_warn": 0.002,
+    "residual_fail": 0.02,
+    "order_consistency_warn": 0.2,
+    "order_consistency_fail": 0.5,
+    "noise_warn_ratio": 0.05,
+    "noise_fail_ratio": 0.25,
+    "require_monotone": true,
+    "strict": false,
+    "pass_requires_noise_certificate": true,
+    "gci_absolute": false,
+    "gci_increase_tolerance": 0.05
+  },
+  "cases": [
+    {
+      "case": "IN30-N01",
+      "quantity": "heat_flux_nusselt",
+      "physics": "second-order diffusion observable, three uniform grids rho=2",
+      "status": "WARN",
+      "n_levels": 3,
+      "h": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "f": [
+        0.724327,
+        0.724105,
+        0.7240495
+      ],
+      "order_p": 2.0,
+      "order_source": "closed-form",
+      "convergence_type": "monotone",
+      "convergence_ratio": 0.25,
+      "f_fine": 0.7240495,
+      "f_extrapolated": 0.724031,
+      "gci_fine": 3.1938424e-05,
+      "gci_is_relative": true,
+      "noise_certified": false,
+      "validation": null,
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band/expected",
+          "status": "PASS"
+        },
+        {
+          "check": "power-law-residual",
+          "status": "PASS"
+        },
+        {
+          "check": "gci-monotonicity",
+          "status": "PASS"
+        },
+        {
+          "check": "noise-certificate",
+          "status": "WARN"
+        }
+      ],
+      "reasons": [
+        "the noise floor of this study is not certified (three levels without per-level sigma): the numbers may be a PASS, but an undeclared noise floor cannot be excluded, so the pass is capped at WARN"
+      ]
+    },
+    {
+      "case": "IN30-N02",
+      "quantity": "heat_flux_nusselt",
+      "physics": "same observable with a certified round-off floor (4 grids, sigma)",
+      "status": "PASS",
+      "n_levels": 4,
+      "h": [
+        0.08,
+        0.04,
+        0.02,
+        0.01
+      ],
+      "f": [
+        0.725215,
+        0.724327,
+        0.724105,
+        0.7240495
+      ],
+      "order_p": 2.0,
+      "order_source": "least-squares",
+      "convergence_type": "monotone",
+      "convergence_ratio": 0.25,
+      "f_fine": 0.7240495,
+      "f_extrapolated": 0.724031,
+      "gci_fine": 3.1938424e-05,
+      "gci_is_relative": true,
+      "noise_certified": true,
+      "validation": null,
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band/expected",
+          "status": "PASS"
+        },
+        {
+          "check": "power-law-residual",
+          "status": "PASS"
+        },
+        {
+          "check": "order-consistency",
+          "status": "PASS"
+        },
+        {
+          "check": "noise-floor",
+          "status": "PASS"
+        },
+        {
+          "check": "gci-monotonicity",
+          "status": "PASS"
+        }
+      ],
+      "reasons": []
+    },
+    {
+      "case": "IN30-N03",
+      "quantity": "advected_scalar_l2_error",
+      "physics": "mixed 1.5-order transport observable, four grids",
+      "status": "PASS",
+      "n_levels": 4,
+      "h": [
+        0.08,
+        0.04,
+        0.02,
+        0.01
+      ],
+      "f": [
+        1.00475175757,
+        1.00168,
+        1.000593969696,
+        1.00021
+      ],
+      "order_p": 1.5,
+      "order_source": "least-squares",
+      "convergence_type": "monotone",
+      "convergence_ratio": 0.353553390593,
+      "f_fine": 1.00021,
+      "f_extrapolated": 1.0,
+      "gci_fine": 0.000262444887,
+      "gci_is_relative": true,
+      "noise_certified": true,
+      "validation": null,
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band/expected",
+          "status": "PASS"
+        },
+        {
+          "check": "power-law-residual",
+          "status": "PASS"
+        },
+        {
+          "check": "order-consistency",
+          "status": "PASS"
+        },
+        {
+          "check": "gci-monotonicity",
+          "status": "PASS"
+        }
+      ],
+      "reasons": []
+    },
+    {
+      "case": "IN30-N04",
+      "quantity": "stagnant_observable",
+      "physics": "solver stopped converging, three identical values",
+      "status": "FAIL",
+      "n_levels": 3,
+      "h": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "f": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "order_p": null,
+      "order_source": "undefined",
+      "convergence_type": "stagnant",
+      "convergence_ratio": null,
+      "f_fine": 0.5,
+      "f_extrapolated": null,
+      "gci_fine": null,
+      "gci_is_relative": true,
+      "noise_certified": false,
+      "validation": null,
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "FAIL"
+        },
+        {
+          "check": "order-band",
+          "status": "FAIL"
+        },
+        {
+          "check": "noise-certificate",
+          "status": "WARN"
+        }
+      ],
+      "reasons": [
+        "non-monotone or non-contracting sequence: stagnant (R=None)",
+        "an observed order of accuracy could not be extracted",
+        "the noise floor of this study is not certified (three levels without per-level sigma): the numbers may be a PASS, but an undeclared noise floor cannot be excluded, so the pass is capped at WARN"
+      ]
+    },
+    {
+      "case": "IN30-N05",
+      "quantity": "oscillatory_observable",
+      "physics": "odd/even decoupled sequence, differences change sign",
+      "status": "FAIL",
+      "n_levels": 3,
+      "h": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "f": [
+        0.50016,
+        0.50604,
+        0.49701
+      ],
+      "order_p": null,
+      "order_source": "undefined",
+      "convergence_type": "oscillatory",
+      "convergence_ratio": -1.535714285714,
+      "f_fine": 0.49701,
+      "f_extrapolated": null,
+      "gci_fine": null,
+      "gci_is_relative": true,
+      "noise_certified": false,
+      "validation": null,
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "FAIL"
+        },
+        {
+          "check": "order-band",
+          "status": "FAIL"
+        },
+        {
+          "check": "noise-certificate",
+          "status": "WARN"
+        }
+      ],
+      "reasons": [
+        "non-monotone or non-contracting sequence: oscillatory (R=-1.5357142857143025)",
+        "an observed order of accuracy could not be extracted",
+        "the noise floor of this study is not certified (three levels without per-level sigma): the numbers may be a PASS, but an undeclared noise floor cannot be excluded, so the pass is capped at WARN"
+      ]
+    },
+    {
+      "case": "IN30-N06",
+      "quantity": "over_order_observable",
+      "physics": "spurious order p~8 (grid family too coarse to be asymptotic)",
+      "status": "FAIL",
+      "n_levels": 3,
+      "h": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "f": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "order_p": 8.199672344836,
+      "order_source": "closed-form",
+      "convergence_type": "monotone",
+      "convergence_ratio": 0.003401360544,
+      "f_fine": 1.0,
+      "f_extrapolated": 1.0,
+      "gci_fine": 0.0,
+      "gci_is_relative": true,
+      "noise_certified": false,
+      "validation": null,
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band",
+          "status": "FAIL"
+        },
+        {
+          "check": "power-law-residual",
+          "status": "PASS"
+        },
+        {
+          "check": "gci-monotonicity",
+          "status": "PASS"
+        },
+        {
+          "check": "noise-certificate",
+          "status": "WARN"
+        }
+      ],
+      "reasons": [
+        "observed order p=8.199672 outside (0.05, 6.0]: the study is not in the asymptotic range",
+        "the noise floor of this study is not certified (three levels without per-level sigma): the numbers may be a PASS, but an undeclared noise floor cannot be excluded, so the pass is capped at WARN"
+      ]
+    },
+    {
+      "case": "IN30-N07",
+      "quantity": "drag_coefficient",
+      "physics": "validated against a reference inside U_val (|E| <= U_val)",
+      "status": "WARN",
+      "n_levels": 3,
+      "h": [
+        0.05,
+        0.025,
+        0.0125
+      ],
+      "f": [
+        1.004,
+        1.001,
+        1.00025
+      ],
+      "order_p": 2.0,
+      "order_source": "closed-form",
+      "convergence_type": "monotone",
+      "convergence_ratio": 0.25,
+      "f_fine": 1.00025,
+      "f_extrapolated": 1.0,
+      "gci_fine": 0.000312421895,
+      "gci_is_relative": true,
+      "noise_certified": false,
+      "validation": {
+        "error": -5e-05,
+        "u_num": 0.0003125,
+        "u_val": 0.000507598513,
+        "ratio": 0.098503046715,
+        "passed": true
+      },
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band",
+          "status": "PASS"
+        },
+        {
+          "check": "power-law-residual",
+          "status": "PASS"
+        },
+        {
+          "check": "gci-monotonicity",
+          "status": "PASS"
+        },
+        {
+          "check": "noise-certificate",
+          "status": "WARN"
+        },
+        {
+          "check": "validation/V&V20",
+          "status": "PASS"
+        }
+      ],
+      "reasons": [
+        "the noise floor of this study is not certified (three levels without per-level sigma): the numbers may be a PASS, but an undeclared noise floor cannot be excluded, so the pass is capped at WARN"
+      ]
+    },
+    {
+      "case": "IN30-N08",
+      "quantity": "drag_coefficient",
+      "physics": "reference outside U_val (|E| > U_val): the model is not validated",
+      "status": "FAIL",
+      "n_levels": 3,
+      "h": [
+        0.05,
+        0.025,
+        0.0125
+      ],
+      "f": [
+        1.004,
+        1.001,
+        1.00025
+      ],
+      "order_p": 2.0,
+      "order_source": "closed-form",
+      "convergence_type": "monotone",
+      "convergence_ratio": 0.25,
+      "f_fine": 1.00025,
+      "f_extrapolated": 1.0,
+      "gci_fine": 0.000312421895,
+      "gci_is_relative": true,
+      "noise_certified": false,
+      "validation": {
+        "error": -0.00095,
+        "u_num": 0.0003125,
+        "u_val": 0.000507598513,
+        "ratio": 1.871557887596,
+        "passed": false
+      },
+      "checks": [
+        {
+          "check": "input",
+          "status": "PASS"
+        },
+        {
+          "check": "asymptotic-range/convergence-type",
+          "status": "PASS"
+        },
+        {
+          "check": "order-band",
+          "status": "PASS"
+        },
+        {
+          "check": "power-law-residual",
+          "status": "PASS"
+        },
+        {
+          "check": "gci-monotonicity",
+          "status": "PASS"
+        },
+        {
+          "check": "noise-certificate",
+          "status": "WARN"
+        },
+        {
+          "check": "validation/V&V20",
+          "status": "FAIL"
+        }
+      ],
+      "reasons": [
+        "the noise floor of this study is not certified (three levels without per-level sigma): the numbers may be a PASS, but an undeclared noise floor cannot be excluded, so the pass is capped at WARN",
+        "E=-0.00095, U_val=0.000507599, |E|/U_val=1.8716: the model is not validated against the reference"
+      ]
+    }
+  ],
+  "digest": "202c700ae10573249d3a7fc9f940fa661bdcfdb6ef8c089a80c4b71133007c4d"
+}
