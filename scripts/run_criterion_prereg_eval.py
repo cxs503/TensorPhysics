@@ -16,10 +16,14 @@ and re-renders ``docs/CRITERION_PREREGISTRATION.md`` from that JSON (so no
 number in the document is hand-copied, and the report/doc pair can never drift
 apart).
 
-Run: ``python scripts/run_criterion_prereg_eval.py``
+Run: ``python scripts/run_criterion_prereg_eval.py`` (writes into the repo);
+``--out-dir`` / ``--doc`` redirect both outputs so CI can re-derive the record
+into a scratch directory and byte-compare it with the checked-in copy -- the
+eval record is code output, not a hand-saved snapshot.
 """
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 import sys
@@ -318,8 +322,15 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from render_criterion_prereg_doc import render_doc  # noqa: E402
 
 
-def main() -> int:
-    OUT.mkdir(parents=True, exist_ok=True)
+def _artifact_label(path: Path) -> str:
+    """Repo-relative label of an artifact, independent of ``--out-dir``."""
+    return str(Path("artifacts") / "criterion_prereg" / path.name)
+
+
+def run(out_dir: Path = OUT, doc_path: Path = DOC, eval_path: Path | None = None) -> int:
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    eval_path = Path(eval_path) if eval_path is not None else out_dir / "eval.json"
 
     field = field_scores(gen_extraction_corpus(20, seed=20261109))
     heldout = field_scores(gen_extraction_corpus(20, seed=42))
@@ -337,10 +348,10 @@ def main() -> int:
     scan = scan_paths([ROOT / "src" / "tensorphysics" / "campaign" / "criterion_prereg"])
 
     figs = {
-        "confusion": fig_confusion(main_seed["metrics"], OUT / "fig_confusion_matrix.png"),
-        "baseline": fig_baseline(main_seed["metrics"], main_seed["baseline"], OUT / "fig_baseline_vs_audit.png"),
-        "field_f1": fig_field_f1(field, OUT / "fig_extractor_field_agreement.png"),
-        "demo_kpi": fig_demo_kpi(demo, main_seed["metrics"], OUT / "fig_demo_kpi.png"),
+        "confusion": fig_confusion(main_seed["metrics"], out_dir / "fig_confusion_matrix.png"),
+        "baseline": fig_baseline(main_seed["metrics"], main_seed["baseline"], out_dir / "fig_baseline_vs_audit.png"),
+        "field_f1": fig_field_f1(field, out_dir / "fig_extractor_field_agreement.png"),
+        "demo_kpi": fig_demo_kpi(demo, main_seed["metrics"], out_dir / "fig_demo_kpi.png"),
     }
 
     all_seeds_ok = all(v["metrics"]["recall"] >= 0.92 and v["metrics"]["precision"] >= 0.95 for v in per_seed.values())
@@ -405,19 +416,31 @@ def main() -> int:
             "per_seed": {k: {"metrics": {kk: vv for kk, vv in v["metrics"].items() if kk != "mismatches"}, "baseline": v["baseline"]} for k, v in per_seed.items()},
             "real_goal_demo": demo,
             "scan": scan.to_dict(),
-            "figures": {k: str(p.relative_to(ROOT)) for k, p in figs.items()},
+            "figures": {k: _artifact_label(p) for k, p in figs.items()},
         },
     }
     payload["all_acceptance_pass"] = all(
         v["pass"] for v in payload["acceptance"].values() if isinstance(v, dict) and "pass" in v
     ) and all_seeds_ok
-    (OUT / "eval.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    doc_path = render_doc()
+    eval_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    render_doc(eval_path, doc_path)
     print(json.dumps(payload["acceptance"], ensure_ascii=False, indent=2))
     print("all_acceptance_pass:", payload["all_acceptance_pass"])
-    print("doc:", doc_path.relative_to(ROOT))
-    print("artifacts:", ", ".join(str(p.relative_to(ROOT)) for p in sorted(OUT.glob("*"))))
+    print("doc:", doc_path)
+    print("artifacts:", ", ".join(_artifact_label(p) for p in sorted(out_dir.glob("*"))))
     return 0 if payload["all_acceptance_pass"] else 1
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--out-dir", default=str(OUT),
+                    help="artifact directory (default: artifacts/criterion_prereg)")
+    ap.add_argument("--doc", default=str(DOC),
+                    help="page to render (default: docs/CRITERION_PREREGISTRATION.md)")
+    ap.add_argument("--eval", default=None,
+                    help="evaluation record path (default: <out-dir>/eval.json)")
+    args = ap.parse_args(argv)
+    return run(Path(args.out_dir), Path(args.doc), Path(args.eval) if args.eval else None)
 
 
 if __name__ == "__main__":
