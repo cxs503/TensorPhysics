@@ -34,6 +34,40 @@ from .ice_sheet import (
     solve_winkler_plate_fd,
     winkler_kw_parametric,
 )
+from .multifield_coupling import (
+    CouplingDomain,
+    EnergyFlux,
+    EnergyLedger,
+    InterpolationOrder,
+    MultiFieldCouplingSimulator,
+    MultiFieldCouplingResult,
+    SubCyclingConfig,
+    SimpleLBMSolver,
+    SimpleFEMSolver,
+    SimpleDEMSolver,
+    interpolate_temporal,
+)
+from .fuel_cell import (
+    FARADAY_CONSTANT,
+    H2_MOLAR_MASS,
+    H2_LOWER_HEATING_VALUE,
+    PEMFCParameters,
+    FuelCellEnergyLedger,
+    FuelComparison,
+    activation_overpotential,
+    cell_voltage,
+    concentration_overpotential,
+    compare_fuel_paths,
+    hydrogen_consumption_rate,
+    hydrogen_mass_rate,
+    hydrogen_specific_consumption,
+    nernst_voltage,
+    ohmic_overpotential,
+    polarization_curve,
+    stack_power,
+    stack_voltage,
+    standard_fuel_comparison,
+)
 
 __all__ = [
     "ArtifactStore", "ArtifactStoreError", "LocalArtifactStore", "S3ArtifactStore",
@@ -56,5 +90,16 @@ __all__ = [
     "LedgerEntry", "PrincipalDimensions", "QuantityKind", "ReferenceFluxes", "SideLedger",
     "build_reference_dual_ledgers", "clock_drift", "reconcile", "reconcile_books",
     "schema_fingerprints", "tetrahedron_face_packet", "verify_alignment", "verify_same_batch",
+    # Multi-field coupling
+    "CouplingDomain", "EnergyFlux", "EnergyLedger", "InterpolationOrder",
+    "MultiFieldCouplingSimulator", "MultiFieldCouplingResult", "SubCyclingConfig",
+    "SimpleLBMSolver", "SimpleFEMSolver", "SimpleDEMSolver", "interpolate_temporal",
+    # Fuel cell
+    "FARADAY_CONSTANT", "H2_MOLAR_MASS", "H2_LOWER_HEATING_VALUE",
+    "PEMFCParameters", "FuelCellEnergyLedger", "FuelComparison",
+    "activation_overpotential", "cell_voltage", "concentration_overpotential",
+    "compare_fuel_paths", "hydrogen_consumption_rate", "hydrogen_mass_rate",
+    "hydrogen_specific_consumption", "nernst_voltage", "ohmic_overpotential",
+    "polarization_curve", "stack_power", "stack_voltage", "standard_fuel_comparison",
 ]
 __version__ = "0.1.0"
