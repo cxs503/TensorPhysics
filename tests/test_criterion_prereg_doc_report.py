@@ -141,6 +141,23 @@ def test_cli_stdout_is_the_written_page():
     assert out.stdout == DOC.read_text(encoding="utf-8")
 
 
+def test_eval_record_is_reproducible_from_scratch(tmp_path):
+    """The checked-in record is code output, not a hand-saved snapshot.
+
+    Re-running the evaluation into a scratch directory must reproduce both
+    ``eval.json`` and the page byte for byte; if the corpora, the extractor or
+    a metric changes without the record being regenerated, this fails.
+    """
+    doc = tmp_path / "page.md"
+    proc = subprocess.run([sys.executable, str(SCRIPTS / "run_criterion_prereg_eval.py"),
+                           "--out-dir", str(tmp_path / "artifacts"), "--doc", str(doc)],
+                          capture_output=True, text=True)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    fresh = (tmp_path / "artifacts" / "eval.json").read_text(encoding="utf-8")
+    assert fresh == EVAL.read_text(encoding="utf-8")
+    assert doc.read_text(encoding="utf-8") == DOC.read_text(encoding="utf-8")
+
+
 # --------------------------------------------------------------------------- #
 # (b) report payload: six elements, inline figures, numeric provenance
 # --------------------------------------------------------------------------- #
