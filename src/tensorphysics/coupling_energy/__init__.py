@@ -13,6 +13,11 @@ that each claim can be checked on its own:
     FEM, Q4 plane-stress FEM, 2D DEM) used to produce genuine interface fluxes
     and forces.
 
+``acceptance``
+    frozen, hashed acceptance criteria (:class:`Criterion`), three-valued
+    outcomes (PASS / FAIL / WITHHELD) and the verdict of a suite, including
+    re-gating a stored ``verification.json`` record.
+
 ``scenarios``
     the three coupled experiments of campaign node ``P40W3B-N09``:
 
@@ -25,6 +30,21 @@ is reported as a time series and not as a single final number.
 """
 from __future__ import annotations
 
+from .acceptance import (
+    CRITERIA,
+    CRITERIA_DIGEST,
+    AcceptanceError,
+    AcceptanceReport,
+    Criterion,
+    CriterionOutcome,
+    assert_accepted,
+    audit_drift,
+    criteria_digest,
+    evaluate,
+    evaluate_record,
+    format_table,
+    measurements,
+)
 from .exchange import (
     SCHEME_ORDER,
     ExchangeSample,
@@ -51,6 +71,19 @@ from .scenarios import (
 )
 
 __all__ = [
+    "CRITERIA",
+    "CRITERIA_DIGEST",
+    "AcceptanceError",
+    "AcceptanceReport",
+    "Criterion",
+    "CriterionOutcome",
+    "assert_accepted",
+    "audit_drift",
+    "criteria_digest",
+    "evaluate",
+    "evaluate_record",
+    "format_table",
+    "measurements",
     "SCHEME_ORDER",
     "ExchangeSample",
     "MultiRateSchedule",

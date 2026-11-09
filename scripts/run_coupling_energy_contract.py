@@ -28,6 +28,7 @@ import numpy as np
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "src"))
 
+from tensorphysics.coupling_energy import acceptance as A  # noqa: E402
 from tensorphysics.coupling_energy import scenarios as S  # noqa: E402
 from tensorphysics.coupling_energy.exchange import (  # noqa: E402
     SCHEME_ORDER,
@@ -81,76 +82,16 @@ def run_suite(quick: bool) -> dict:
 
 
 def acceptance(data: dict, extra: dict) -> dict:
-    def runs(name, mode):
-        return [r for r in data[name] if r["exchange_mode"] == mode]
+    """Gate the suite against the frozen criterion set.
 
-    shared_t = runs("thermal", "shared")
-    indep_t = runs("thermal", "independent")
-    shared_m = runs("mechanical", "shared")
-    indep_m = runs("mechanical", "independent")
-    shared_3 = runs("three_field", "shared")
-    indep_3 = runs("three_field", "independent")
-
-    thermal_res = max(r["residual_max"] for r in shared_t)
-    thermal_ctrl = min(r["residual_max"] for r in indep_t)
-    thermal_prof = min(r["metrics"].get("profile_rel_l2_error", float("nan")) for r in shared_t)
-    mom_res = max(max(r["series"]["momentum_residual"]) for r in shared_m)
-    mom_ctrl = min(max(r["series"]["momentum_residual"]) for r in indep_m)
-    mech_drift = {r["ratio"]: r["residual_max"] for r in shared_m
-                  if r["scheme"] == "linear"}
-    three_res = max(r["residual_max"] for r in shared_3)
-    three_ctrl = min(r["residual_max"] for r in indep_3)
-    orders = extra["order_scan"]
-
-    crit = {}
-
-    def gate(key, required, actual, passed, note=""):
-        crit[key] = {"required": required, "actual": actual, "pass": bool(passed),
-                     "note": note}
-
-    gate("thermal_conservation_residual",
-         "< 1e-12 (max over 12 shared runs)", thermal_res, thermal_res < 1e-12,
-         "ledger residual eps = |sum sides - Q_in - (t=0)| / scale")
-    gate("thermal_falsification_ratio",
-         "> 1e3 x shared (independent-flux control)",
-         thermal_ctrl / max(thermal_res, 1e-300), thermal_ctrl / max(thermal_res, 1e-300) > 1e3,
-         "control replaces the shared flux by the solid's own Fourier estimate")
-    gate("thermal_profile_error_r1",
-         "< 0.03 (rel. L2 vs exact 1-D slab series)", thermal_prof, thermal_prof < 0.03,
-         "best of the 12 shared runs; exact solution of the coupled 1-D problem")
-    gate("mechanical_momentum_residual",
-         "< 1e-10 (max over 12 shared runs)", mom_res, mom_res < 1e-10,
-         "|P(t) - P(0)| / |P(0)| with an unsupported plate (no external force)")
-    gate("mechanical_falsification_ratio",
-         "> 1e3 x shared (lagged-reaction control)",
-         mom_ctrl / max(mom_res, 1e-300), mom_ctrl / max(mom_res, 1e-300) > 1e3,
-         "control: plate reaction from a frozen start-of-interval particle state")
-    mono = all(mech_drift[r] <= mech_drift[1] for r in (2, 4, 8))
-    gate("mechanical_energy_convergence",
-         "drift(r=8) < 0.05 and monotone decreasing in r",
-         {str(k): v for k, v in mech_drift.items()},
-         mech_drift[8] < 0.05 and mono,
-         "first-order energy drift of the explicit DEM sub-stepping")
-    gate("three_field_energy_chain",
-         "< 1e-3 (max over 12 shared runs)", three_res, three_res < 1e-3,
-         "E_total = E_fluid + E_solid^thermal + E_solid^mech + E_particles + E_contact")
-    gate("three_field_falsification_ratio",
-         "> 1e2 x shared (independent-flux control)",
-         three_ctrl / max(three_res, 1e-300), three_ctrl / max(three_res, 1e-300) > 1e2)
-    ok_orders = (0.7 < orders["zoh"] < 1.3 and 1.7 < orders["linear"] < 2.3
-                 and 2.5 < orders["quadratic"] < 3.3)
-    gate("interpolation_order_scan",
-         "zoh 1.0, linear 2.0, quadratic 3.0 (+-0.3)", orders, ok_orders,
-         "measured on an analytic signal by exchange quadrature refinement")
-    gate("plate_first_frequency",
-         "< 0.03 rel. error vs c/(4L)", extra["plate_frequency"]["rel_error"],
-         extra["plate_frequency"]["rel_error"] < 0.03,
-         "FEM physics check, clamped-free axial mode")
-    n_runs = len(data["thermal"]) + len(data["mechanical"]) + len(data["three_field"])
-    gate("subcycling_matrix_complete",
-         "4 ratios x 3 schemes (+4 controls) x 3 couplings = 48 runs", n_runs,
-         n_runs == 48, "r in {1,2,4,8}, schemes in {zoh,linear,quadratic}")
-    return {"criteria": crit, "overall_pass": all(c["pass"] for c in crit.values())}
+    The gates themselves live in :mod:`tensorphysics.coupling_energy.acceptance`
+    so that a stored record can be re-gated after the fact; this function only
+    adapts the runner's arguments and keeps the historical record keys.
+    """
+    report = A.evaluate(data, extra)
+    payload = report.as_dict()
+    payload["overall_pass"] = report.verdict == "REAL"
+    return payload
 
 
 def figures(data: dict, out: pathlib.Path, extra: dict) -> list[dict]:
@@ -369,6 +310,10 @@ def main() -> int:
         "quick_mode": args.quick,
         "acceptance_criteria": gates["criteria"],
         "overall_pass": gates["overall_pass"],
+        "verdict": gates["verdict"],
+        "criteria_digest": gates["criteria_digest"],
+        "acceptance_counts": {k: gates[k] for k in ("n_pass", "n_fail", "n_withheld")},
+        "acceptance": gates,
         "order_scan": order_scan,
         "plate_first_frequency": freq,
         "figures": [f["name"] for f in figs],
@@ -376,8 +321,9 @@ def main() -> int:
     }
     (out / "verification.json").write_text(json.dumps(record, indent=2))
     (out / "figures.json").write_text(json.dumps(figs, indent=2))
-    print(json.dumps({k: v["actual"] for k, v in gates["criteria"].items()}, indent=2))
-    print("overall_pass:", gates["overall_pass"])
+    print(A.format_table(A.evaluate(data, extra)))
+    print("overall_pass:", gates["overall_pass"],
+          "criteria_digest:", gates["criteria_digest"][:16])
     return 0 if gates["overall_pass"] else 1
 
 
