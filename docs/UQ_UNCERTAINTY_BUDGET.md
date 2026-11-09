@@ -324,3 +324,21 @@ study.as_dict()                  # full JSON evidence (hashes, numbers, timings)
 | `examples/uq_end_to_end.py` | UQ → ASME V&V 20 chain on `R_T` |
 | `scripts/run_uq_acceptance.py` | A1–A10 acceptance run + figures + JSON |
 | `scripts/uq_shard_worker.py` | cluster shard worker (evaluate / merge) |
+## 8. IN145-N08 增量（2026-11-09）
+
+节点 IN145-N08 把上面的管线做成**出证前验收门**，并补上四项此前缺失的可信度证据
+（详见 [`IN145_N08_UQ_PRE_EVIDENCE_GATE.md`](IN145_N08_UQ_PRE_EVIDENCE_GATE.md)，
+工件 `artifacts/in145_n08/acceptance.json`）：
+
+| 新增部件 | 作用 |
+|---|---|
+| `uq.refinement_study` | 三轴收敛性研究（固定截断 / 固定 N 升阶 / 自适应选择）+ 独立 holdout 误差；给出 `loo_optimism = holdout/eps_LOO` |
+| `uq.coverage_study` | 95% bootstrap 区间覆盖率标定（Wilson 区间 + 精确二项检验），零指数用"分辨到零"判据 |
+| `uq.injection_suite` | 14 例反证矩阵：任何注入都不得产出 PASS，且必须报出对应原因码 |
+| `uq.engineering_error_gate` / `uq.pre_evidence` | digest 寻址的事前证据记录；claim 无证据即 WITHHELD；UQ 半宽作为 ASME `U_input` 链入 `vv.validation` |
+
+**已修复缺陷**：`uq.saltelli_indices` 的一阶（Saltelli 2010）与闭式二阶估计量此前
+不具平移不变性——乘子使用原始输出值，输出偏置 c 以 `c·O(σ/√N)` 泄漏。修复前，
+Ishigami（`n_base=2^14`，闭式 `S13=0.2437`）在偏置 1e4 下给出 `S13=12.38`；
+修复后三种偏置的估计逐位一致。船体阻力 O(1e3) kN 正落在该区间。
+回归测试：`tests/test_uq_shift_invariance.py`。
