@@ -1,31 +1,28 @@
-"""Multirate exchange operators: sub-cycling and temporal reconstruction.
+"""Interface-history reconstruction for sub-cycled partitioned coupling.
 
-Between two solvers with different stable time steps the partner data are only
-available at *exchange instants* ``t_k = k h``.  The receiving solver needs an
-interface history over ``[t_k, t_k+h]`` and the reconstruction rule decides the
-order of the resulting exchange error:
+When a fast solver (fluid / DEM) is sub-cycled inside one step of a slow solver
+(structure / FEM), only one interface sample per coarse step is exchanged.  The
+receiver therefore has to *reconstruct* the interface history inside the coarse
+interval.  Three reconstructions are offered, labelled by their nominal order:
 
-===============  ===========================================================
-scheme           interface history used by the receiver
-===============  ===========================================================
-``independent``  no shared history at all: each side evaluates the interface
-                 flux/force from its own field.  This is the classic
-                 Dirichlet-Dirichlet partitioned coupling and its conservation
-                 defect is a *spatial* consistency error, i.e. O(1) in ``dt``.
-``zoh``          shared flux held over the exchange interval (causal, first
-                 order: the held value is stale by up to ``h``).
-``linear``       shared flux continued with the slope of the last two samples
-                 (causal *linear extrapolation*; second order for smooth
-                 histories and it needs no future sample, unlike trapezoidal
-                 time interpolation).
-===============  ===========================================================
+===================  ==================================================  =====
+scheme               reconstruction                                      order
+===================  ==================================================  =====
+``zoh``              hold the newest sample (zero order)                  1
+``linear``           Taylor through the two newest samples (first order)  2
+``quadratic``        Taylor through the three newest samples (2nd order)  3
+``independent``      no shared history at all — each side evaluates its
+                     own interface value (the non-conservative control)  —
+===================  ==================================================  =====
 
-The module provides the three reconstruction rules plus a deterministic
-quadrature harness (:func:`quadrature_error`) that measures the order of each
-rule on an analytic signal, independently of any solver.  The coupled thermal
-run in :mod:`tensorphysics.coupling_energy.scenarios` re-measures the same
-orders on the real interface flux, so a scheme that only looks second order on
-a smooth signal is caught.
+The declared order refers to the *quadrature* order of the exchange, i.e. the
+order at which ``int q~ dt`` reproduces ``int q dt`` over one interval.  The
+module therefore ships both the reconstruction and a deterministic
+:func:`quadrature_error` / :func:`reconstruction_order_scan` harness that
+measures the order on an analytic signal, independently of any solver.  The
+coupled runs in :mod:`tensorphysics.coupling_energy.scenarios` re-measure the
+same orders on the real interface flux, so a scheme that only looks
+third-order on a smooth signal is caught.
 """
 from __future__ import annotations
 
@@ -40,7 +37,9 @@ __all__ = [
     "TemporalScheme",
     "SCHEME_ORDER",
     "ExchangeSample",
+    "reconstruction_poly",
     "reconstruct_interval",
+    "interval_integral",
     "quadrature_error",
     "MultiRateSchedule",
     "reconstruction_order_scan",
@@ -53,56 +52,101 @@ class TemporalScheme(str, Enum):
     INDEPENDENT = "independent"
     ZOH = "zoh"
     LINEAR = "linear"
+    QUADRATIC = "quadratic"
 
 
-#: Declared nominal order of each scheme (``independent`` has no rate).
+#: Declared nominal (quadrature) order of each scheme.
 SCHEME_ORDER: dict[TemporalScheme, int] = {
     TemporalScheme.INDEPENDENT: 0,
     TemporalScheme.ZOH: 1,
     TemporalScheme.LINEAR: 2,
+    TemporalScheme.QUADRATIC: 3,
 }
 
 
 @dataclass(frozen=True)
 class ExchangeSample:
-    """One interface sample at an exchange instant."""
+    """One interface sample at an exchange instant.
+
+    ``value`` is normally a scalar (one interface degree of freedom) but any
+    object supporting arithmetic works, which lets the scenarios reconstruct a
+    whole interface row with the same code path.
+    """
 
     t: float
-    value: float
+    value: object
 
 
-def reconstruct_interval(scheme: TemporalScheme, previous: ExchangeSample | None,
-                         current: ExchangeSample, t: float) -> float:
-    """Reconstruct the interface value at time ``t`` inside the current interval.
+def _coefficients(scheme: TemporalScheme, previous: ExchangeSample | None,
+                  current: ExchangeSample, previous2: ExchangeSample | None
+                  ) -> tuple[object, object, object]:
+    """Taylor coefficients ``(f0, a1, a2)`` of the reconstruction.
 
-    ``previous`` may be ``None`` for the very first interval: both ``zoh`` and
-    ``linear`` then degrade to the sample value (a documented start-up
-    transient, not a silent fallback).
+    The reconstruction is ``f(s) = f0 + a1 s + a2 s^2`` with ``s = t - t_cur >= 0``.
+    Missing history degrades the scheme to the highest order the available
+    samples support; that degradation is documented (a start-up transient) and
+    not a silent fallback, because the first interval is reported separately by
+    the scenarios.
     """
     if scheme is TemporalScheme.INDEPENDENT:
         raise CouplingLedgerError(
             "the independent scheme has no shared history to reconstruct; "
             "each side evaluates its own interface value"
         )
+    f0 = current.value
+    zero = f0 * 0.0 if hasattr(f0, "__mul__") else 0.0
+    if scheme is TemporalScheme.ZOH or previous is None:
+        return f0, zero, zero
+    h1 = current.t - previous.t
+    if h1 <= 0.0:
+        raise CouplingLedgerError("exchange instants must be strictly increasing")
+    slope = (f0 - previous.value) / h1
+    if scheme is TemporalScheme.LINEAR or previous2 is None:
+        return f0, slope, zero
+    h1p = previous.t - previous2.t
+    if h1p <= 0.0:
+        raise CouplingLedgerError("exchange instants must be strictly increasing")
+    # quadratic through (t2,v2), (t1,v1), (t0,v0) evaluated as
+    # f(s) = f0 + a1 s + a2 s^2, solved from the two backward conditions.
+    H = h1
+    G = h1 + h1p
+    A = f0 - previous.value
+    B = f0 - previous2.value
+    den = H * G * h1p
+    if den == 0.0:
+        raise CouplingLedgerError("degenerate exchange history")
+    # solve  a1 H - a2 H^2 = A ,  a1 G - a2 G^2 = B
+    a1 = (A * G * G - H * H * B) / den
+    a2 = (G * A - H * B) / den
+    return f0, a1, a2
+
+
+def reconstruction_poly(scheme: TemporalScheme, previous: ExchangeSample | None,
+                        current: ExchangeSample, previous2: ExchangeSample | None = None
+                        ) -> tuple[object, object, object]:
+    """Public access to the ``(f0, a1, a2)`` polynomial of the reconstruction."""
+    return _coefficients(scheme, previous, current, previous2)
+
+
+def reconstruct_interval(scheme: TemporalScheme, previous: ExchangeSample | None,
+                         current: ExchangeSample, t: float,
+                         previous2: ExchangeSample | None = None):
+    """Reconstruct the interface value at time ``t`` inside the current interval."""
     if t < current.t:
         raise CouplingLedgerError("reconstruction is evaluated forward in time only")
-    if scheme is TemporalScheme.ZOH or previous is None:
-        return current.value
-    dt = current.t - previous.t
-    if dt <= 0.0:
-        raise CouplingLedgerError("exchange instants must be strictly increasing")
-    slope = (current.value - previous.value) / dt
-    return current.value + slope * (t - current.t)
+    f0, a1, a2 = _coefficients(scheme, previous, current, previous2)
+    s = t - current.t
+    return f0 + a1 * s + a2 * s * s
 
 
-def _interval_integrals(scheme: TemporalScheme, previous: ExchangeSample | None,
-                        current: ExchangeSample, h: float) -> float:
+def interval_integral(scheme: TemporalScheme, previous: ExchangeSample | None,
+                      current: ExchangeSample, h: float,
+                      previous2: ExchangeSample | None = None):
     """Exact integral of the reconstructed history over one exchange interval."""
-    if scheme is TemporalScheme.INDEPENDENT:
-        raise CouplingLedgerError("independent scheme integrates its own history")
-    q0 = reconstruct_interval(scheme, previous, current, current.t)
-    q1 = reconstruct_interval(scheme, previous, current, current.t + h)
-    return 0.5 * (q0 + q1) * h
+    if h <= 0.0:
+        raise CouplingLedgerError("interval length must be positive")
+    f0, a1, a2 = _coefficients(scheme, previous, current, previous2)
+    return f0 * h + 0.5 * a1 * h * h + (a2 * h * h * h) / 3.0
 
 
 def quadrature_error(signal: Callable[[float], float], h: float, t_end: float,
@@ -124,18 +168,19 @@ def quadrature_error(signal: Callable[[float], float], h: float, t_end: float,
     n = int(round(t_end / h))
     if n < 1:
         raise CouplingLedgerError("at least one exchange interval is required")
-    previous: ExchangeSample | None = None
+    history: list[ExchangeSample] = []
     errors: list[float] = []
     exacts: list[float] = []
     for k in range(n):
         t0 = k * h
-        current = ExchangeSample(t0, signal(t0))
-        received = _interval_integrals(scheme, previous, current, h)
+        history.append(ExchangeSample(t0, signal(t0)))
+        previous = history[-2] if len(history) >= 2 else None
+        previous2 = history[-3] if len(history) >= 3 else None
+        received = interval_integral(scheme, previous, history[-1], h, previous2)
         # analytic interval integral of the signal (Simpson, exact enough)
         exact = (h / 6.0) * (signal(t0) + 4.0 * signal(t0 + 0.5 * h) + signal(t0 + h))
         errors.append(abs(received - exact))
         exacts.append(abs(exact))
-        previous = current
     denom = sum(exacts)
     if denom <= 0.0:
         raise CouplingLedgerError("degenerate signal: zero total exchange")
@@ -172,7 +217,8 @@ def reconstruction_order_scan(
     signal: Callable[[float], float],
     h: float,
     t_end: float,
-    schemes: Sequence[TemporalScheme] = (TemporalScheme.ZOH, TemporalScheme.LINEAR),
+    schemes: Sequence[TemporalScheme] = (TemporalScheme.ZOH, TemporalScheme.LINEAR,
+                                         TemporalScheme.QUADRATIC),
     refinements: Sequence[float] = (1.0, 0.5, 0.25),
 ) -> dict[str, OrderEstimate]:
     """Measure the observed exchange order of each scheme under ``h`` refinement."""
