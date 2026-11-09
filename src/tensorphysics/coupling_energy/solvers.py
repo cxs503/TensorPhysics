@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Sequence
+from typing import Callable, Sequence
 
 import numpy as np
 
@@ -44,7 +44,9 @@ __all__ = [
 _W = np.array([4.0 / 9.0] + [1.0 / 9.0] * 4 + [1.0 / 36.0] * 4)
 _EX = np.array([0, 1, 0, -1, 0, 1, -1, -1, 1])
 _EY = np.array([0, 0, 1, 0, -1, 1, 1, -1, -1])
-_OPP = np.array([0, 3, 4, 1, 2, 6, 5, 8, 7])
+#: opposite direction of each D2Q9 velocity; must be consistent with
+#: ``_EX``/``_EY`` (opp(5)=(1,1) -> 7, opp(6)=(-1,1) -> 8, ...).
+_OPP = np.array([0, 3, 4, 1, 2, 7, 8, 5, 6])
 #: lattice sound speed squared for D2Q9.
 CS2 = 1.0 / 3.0
 
@@ -73,6 +75,10 @@ class ThermalLBM2D:
         self.u = (float(u[0]), float(u[1]))
         self.f = np.zeros((9, self.ny, self.nx))
         self.f[:] = _W[:, None, None] * float(T_init)
+        #: per-column scalar injected by the coupled (south) wall at the last step
+        self.wall_injection = np.zeros(self.nx)
+        #: running total of the scalar injected by the coupled wall (diagnostic)
+        self.injected_total = 0.0
         self._iy, self._ix = np.meshgrid(np.arange(self.ny), np.arange(self.nx),
                                          indexing="ij")
 
@@ -106,11 +112,16 @@ class ThermalLBM2D:
         return -np.tensordot(_EY, fneq[:, 0, :], axes=(0, 0)) / self.tau
 
     # -- time step -------------------------------------------------------------
-    def step(self, wall_T: Sequence[float] | None = None) -> float:
-        """Advance one lattice step, returning the scalar injected at the wall.
+    def step(self, wall_T: Sequence[float] | None = None) -> np.ndarray:
+        """Advance one lattice step, returning the per-column wall injection.
 
-        Positive return value means the south (coupled) wall *feeds* the fluid;
-        the sign convention is the one used by the caller to book the exchange.
+        The return value is an array of ``nx`` scalars, one per lattice column:
+        the amount of passive scalar that the anti-bounce-back Dirichlet wall
+        added to (positive) or removed from (negative) the fluid in that column
+        during this step.  ``sum()`` over the array is the *exact* interface
+        exchange of the step, which is what the energy ledger books -- it is
+        measured, not modelled.  The same vector is stored in
+        :attr:`wall_injection`.
         """
         f = self.f
         T = f.sum(axis=0)
@@ -121,17 +132,34 @@ class ThermalLBM2D:
             feq = feq * (1.0 + 3.0 * cu)
         fpost = f + (feq - f) / self.tau
 
+        # --- streaming (pull) with full-way bounce-back on straight walls ------
+        # ``g[i][y, x]`` is the population of direction ``i`` *at* node (x, y)
+        # after streaming.  Its source is (x - ex_i, y - ey_i); where that source
+        # lies outside the lattice the population is the mirror image of the
+        # outgoing one, which makes the sweep an exact permutation of the
+        # populations (total scalar conserved to round-off).
         g = np.zeros_like(f)
+        g[0] = fpost[0]
         for i in range(1, 9):
-            sx = self._ix - _EX[i]
-            sy = self._iy - _EY[i]
-            inside = (sx >= 0) & (sx < self.nx) & (sy >= 0) & (sy < self.ny)
-            vals = fpost[i][np.clip(sy, 0, self.ny - 1), np.clip(sx, 0, self.nx - 1)]
-            g[i] = np.where(inside, vals, 0.0)
-            # conservative full-way bounce-back on every non-coupled face
-            g[_OPP[i]] += np.where(inside, 0.0, fpost[i])
+            ex, ey = int(_EX[i]), int(_EY[i])
+            dst_x = slice(max(0, ex), self.nx + min(0, ex))
+            src_x = slice(max(0, -ex), self.nx + min(0, -ex))
+            dst_y = slice(max(0, ey), self.ny + min(0, ey))
+            src_y = slice(max(0, -ey), self.ny + min(0, -ey))
+            g[i, dst_y, dst_x] = fpost[i, src_y, src_x]
+            mask = np.zeros((self.ny, self.nx), dtype=bool)
+            if ex > 0:
+                mask[:, 0] = True
+            elif ex < 0:
+                mask[:, -1] = True
+            if ey > 0:
+                mask[0, :] = True
+            elif ey < 0:
+                mask[-1, :] = True
+            g[i][mask] = fpost[_OPP[i]][mask]
 
-        injected = 0.0
+        # --- coupled south wall: anti-bounce-back Dirichlet -------------------
+        injected_col = np.zeros(self.nx)
         if wall_T is not None:
             Tw = np.asarray(wall_T, dtype=float).reshape(-1)
             if Tw.size != self.nx:
@@ -139,10 +167,12 @@ class ThermalLBM2D:
             for i in (4, 7, 8):  # directions pointing into the south wall
                 old = fpost[i][0, :]
                 new = -old + 2.0 * _W[i] * Tw
-                g[_OPP[i]][0, :] += new - old
-                injected += float((new - old).sum())
+                g[_OPP[i]][0, :] = new
+                injected_col += new - old
         self.f = g
-        return injected
+        self.wall_injection = injected_col
+        self.injected_total += float(injected_col.sum())
+        return injected_col
 
 
 # ---------------------------------------------------------------------------
@@ -200,10 +230,13 @@ class Q4Mesh:
             for eta in _G:
                 _, dN = _q4_shape(xi, eta)
                 J = dN @ coords
-                detJ = float(np.linalg.det(J))
+                detJ = float(J[0, 0] * J[1, 1] - J[0, 1] * J[1, 0])
                 if detJ <= 0.0:
                     raise ValueError("inverted quadrilateral element")
-                grads.append(np.linalg.solve(J, dN))
+                # analytic 2x2 inverse: J^{-1} = 1/det [[b, -b01], [-b10, a]]
+                Jinv = np.array([[J[1, 1], -J[0, 1]],
+                                 [-J[1, 0], J[0, 0]]]) / detJ
+                grads.append(Jinv @ dN)
                 dets.append(detJ)
         return grads, dets
 
@@ -251,20 +284,28 @@ class Q4ThermalFEM:
     def step(self, dt: float, flux: np.ndarray | None = None,
              matrix_inverse: np.ndarray | None = None) -> None:
         """One backward-Euler step with an optional nodal Neumann heat rate [W]."""
-        A = np.diag(self.M / dt) + self.K
         rhs = (self.M / dt) * self.T
         if flux is not None:
             rhs = rhs + np.asarray(flux, dtype=float)
-        inv = np.linalg.inv(A) if matrix_inverse is None else matrix_inverse
-        self.T = inv @ rhs
+        if matrix_inverse is None:
+            self.T = np.linalg.solve(np.diag(self.M / dt) + self.K, rhs)
+        else:
+            self.T = matrix_inverse @ rhs
 
     def cached_inverse(self, dt: float) -> np.ndarray:
         return np.linalg.inv(np.diag(self.M / dt) + self.K)
 
     def interface_flux_estimate(self, row: np.ndarray, spacing: float,
-                                band: float) -> np.ndarray:
-        """One-sided Fourier flux ``-k dT/dy`` at the top row [W per node]."""
-        below = self.mesh.row(1)
+                                band: float,
+                                below_row: np.ndarray | None = None) -> np.ndarray:
+        """One-sided Fourier flux ``-k dT/dy`` across the interface row [W].
+
+        ``below_row`` must be the node row one element *inside* the solid; it
+        used to be hardcoded to ``mesh.row(1)``, which silently measured the
+        wrong gradient for every mesh with more than two element rows (found by
+        the interface-flux consistency gate of P40W3C-N09, 1260 % error).
+        """
+        below = self.mesh.row(1) if below_row is None else below_row
         grad = (self.T[row] - self.T[below]) / band
         return -self.k * grad * spacing * self.thickness
 
@@ -402,14 +443,39 @@ class DEM2D:
         overlaps = np.maximum(-gaps, 0.0)
         rates = -(self.vel[:, 0] - wall_vel[node_of])
         mags = np.array([self.law.force(o, r) for o, r in zip(overlaps, rates)])
-        f_particles = np.column_stack([-mags, np.zeros_like(mags)])
+        # The particles sit on the +x side of the wall face, so a repulsive
+        # contact pushes them in +x and the reaction on the plate is -x.  One
+        # and the same magnitude array is used for both sides, which is what
+        # makes the exchange Newton-consistent; evaluating the two sides
+        # independently is the ``independent`` negative control of scenarios.
+        f_particles = np.column_stack([mags, np.zeros_like(mags)])
         f_nodes = np.zeros((wall_x.size, 2))
-        np.add.at(f_nodes, node_of, np.column_stack([mags, np.zeros_like(mags)]))
+        np.add.at(f_nodes, node_of, np.column_stack([-mags, np.zeros_like(mags)]))
         return f_particles, f_nodes, overlaps, node_of
 
-    def step(self, dt: float, force: np.ndarray) -> None:
+    def step(self, dt: float, force: np.ndarray,
+             force_fn: "Callable[[np.ndarray, np.ndarray], np.ndarray] | None" = None
+             ) -> None:
+        """Advance the discs by ``dt``.
+
+        With ``force_fn=None`` the supplied ``force`` is held constant over the
+        step, for which the update below is *exact* (position and velocity of a
+        constant-acceleration motion) -- that is the mode the conservative
+        shared-force coupling uses, so the coupling error is purely the stale
+        force of the exchange interval and not an integration error.
+
+        With ``force_fn(positions, velocities) -> force`` a kick-drift-kick
+        (velocity-Verlet) step is taken instead, which is what a single-solver
+        impact study with a stiff contact needs: the plain constant-force update
+        pumps energy into the contact spring (measured: +37 % kinetic energy at
+        ``omega dt = 0.2``, see the module report).
+        """
         acc = force / self.mass[:, None]
-        # velocity-Verlet: positions updated with the current acceleration,
-        # the caller re-evaluates the contact force for the half-kick.
-        self.pos = self.pos + dt * self.vel + 0.5 * dt * dt * acc
-        self.vel = self.vel + dt * acc
+        if force_fn is None:
+            self.pos = self.pos + dt * self.vel + 0.5 * dt * dt * acc
+            self.vel = self.vel + dt * acc
+            return
+        self.vel = self.vel + 0.5 * dt * acc
+        self.pos = self.pos + dt * self.vel
+        acc1 = force_fn(self.pos, self.vel) / self.mass[:, None]
+        self.vel = self.vel + 0.5 * dt * acc1
