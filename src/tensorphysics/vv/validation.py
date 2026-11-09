@@ -1,157 +1,159 @@
-"""ASME V&V 20 validation uncertainty and the ``|E| <= U_val`` acceptance test.
-
-``U_val`` combines the numerical uncertainty ``U_num`` (normally the GCI of the
-finest grid, see :mod:`tensorphysics.vv.gci`) with the input/experimental
-uncertainty ``U_input``:
-
-    U_val = sqrt(U_num**2 + U_input**2)
-
-A model prediction ``f_sim`` is *validated* against a reference ``f_exp`` when
-the comparison error ``E = f_sim - f_exp`` satisfies ``|E| <= U_val``.  The
-gate reports the ratio ``|E| / U_val`` so that a marginal pass is visible; a
-ratio above 1 is a hard FAIL and must not be overwritten by a nicer number.
 """
+ASME V&V 20 validation uncertainty quantification.
+"""
+
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping, Sequence
-
-__all__ = [
-    "BOUNDARY_SLACK",
-    "ValidationResult",
-    "evaluate_validation_table",
-    "validation_uncertainty",
-    "validate",
-]
+from typing import List, Dict, Any
 
 
-#: Relative slack on the ``|E| <= U_val`` acceptance boundary.  ``U_val`` and
-#: ``E`` are both computed from floating point numbers, so an exact boundary
-#: case (``|E|`` *equal* to ``U_val`` by construction) can land a few ulp on
-#: either side; the slack keeps such a case a PASS without loosening anything
-#: measurable (1e-12 relative is ~4 orders below the 1e-8 precision of the
-#: inputs themselves).  The reported ``ratio`` is *not* slacked.
-BOUNDARY_SLACK = 1e-12
-
-
-@dataclass(frozen=True)
+@dataclass
 class ValidationResult:
-    """Outcome of one ASME V&V 20 comparison."""
-
+    """Result of a validation assessment."""
+    label: str
     f_sim: float
     f_exp: float
     u_num: float
     u_input: float
     u_val: float
     error: float
+    relative_error: float
     ratio: float
+    status: str
     passed: bool
-    label: str = ""
-
-    @property
-    def status(self) -> str:
-        return "PASS" if self.passed else "FAIL"
-
-    def as_dict(self) -> dict[str, Any]:
-        out = {
-            "f_sim": self.f_sim,
-            "f_exp": self.f_exp,
-            "u_num": self.u_num,
-            "u_input": self.u_input,
-            "u_val": self.u_val,
-            "error": self.error,
-            "relative_error": self.relative_error,
-            "ratio": self.ratio,
-            "status": self.status,
-        }
-        if self.label:
-            out["label"] = self.label
-        return out
-
-    @property
-    def relative_error(self) -> float | None:
-        if self.f_exp == 0.0:
-            return None
-        return self.error / self.f_exp
 
 
-def validation_uncertainty(u_num: float, u_input: float = 0.0) -> float:
-    """``U_val = sqrt(U_num**2 + U_input**2)`` (ASME V&V 20-2009)."""
-    for name, value in (("u_num", u_num), ("u_input", u_input)):
-        if not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0.0:
-            raise ValueError(f"{name} must be finite and non-negative, got {value!r}")
-    return math.sqrt(u_num * u_num + u_input * u_input)
+def validation_uncertainty(u_num: float, u_input: float, u_model: float = 0.0) -> float:
+    """
+    Compute total validation uncertainty (RSS combination).
+    
+    U_val = sqrt(U_num^2 + U_input^2 + U_model^2)
+    
+    Parameters
+    ----------
+    u_num : float
+        Numerical uncertainty
+    u_input : float
+        Input parameter uncertainty
+    u_model : float
+        Model-form uncertainty (default 0)
+    
+    Returns
+    -------
+    float
+        Total validation uncertainty
+    """
+    if u_num < 0 or u_input < 0 or u_model < 0:
+        raise ValueError("Uncertainties must be non-negative")
+    if math.isnan(u_num) or math.isnan(u_input) or math.isnan(u_model):
+        raise ValueError("Uncertainties must not be NaN")
+    
+    return math.sqrt(u_num**2 + u_input**2 + u_model**2)
 
 
 def validate(
     f_sim: float,
     f_exp: float,
-    *,
     u_num: float,
-    u_input: float = 0.0,
+    u_input: float,
+    u_model: float = 0.0,
     label: str = "",
 ) -> ValidationResult:
-    """Compare one simulation result with a reference under ASME V&V 20."""
-    if not math.isfinite(f_sim) or not math.isfinite(f_exp):
-        raise ValueError("f_sim and f_exp must be finite")
-    u_val = validation_uncertainty(u_num, u_input)
+    """
+    Validate a simulation result against experimental/reference data.
+    
+    Parameters
+    ----------
+    f_sim : float
+        Simulated/computed value
+    f_exp : float
+        Experimental/reference value
+    u_num : float
+        Numerical uncertainty
+    u_input : float
+        Input parameter uncertainty
+    u_model : float
+        Model-form uncertainty (default 0)
+    label : str
+        Label for this validation case
+    
+    Returns
+    -------
+    ValidationResult
+        Complete validation assessment
+    """
+    u_val = validation_uncertainty(u_num, u_input, u_model)
     error = f_sim - f_exp
-    if u_val == 0.0:
-        # zero declared uncertainty: only an exact match can pass
-        ratio = 0.0 if error == 0.0 else math.inf
-        passed = error == 0.0
+    
+    if abs(f_exp) < 1e-14:
+        relative_error = error
     else:
-        ratio = abs(error) / u_val
-        passed = abs(error) <= u_val + BOUNDARY_SLACK * max(u_val, abs(error))
+        relative_error = error / f_exp
+    
+    abs_error = abs(error)
+    
+    if u_val < 1e-14:
+        # Zero uncertainty band
+        if abs_error < 1e-14:
+            ratio = 0.0
+            passed = True
+        else:
+            ratio = float('inf')
+            passed = False
+    else:
+        ratio = abs_error / u_val
+        passed = abs_error <= u_val
+    
+    status = "PASS" if passed else "FAIL"
+    
     return ValidationResult(
+        label=label,
         f_sim=f_sim,
         f_exp=f_exp,
         u_num=u_num,
         u_input=u_input,
         u_val=u_val,
         error=error,
+        relative_error=relative_error,
         ratio=ratio,
+        status=status,
         passed=passed,
-        label=label,
     )
 
 
-def evaluate_validation_table(
-    rows: Iterable[Mapping[str, Any] | Sequence[float]],
-    *,
-    keys: Sequence[str] = ("f_sim", "f_exp", "u_num", "u_input"),
-) -> list[ValidationResult]:
-    """Run the V&V 20 comparison over a table of cases.
-
-    ``rows`` may be mappings (field names, optional ``label``) or plain
-    sequences ordered as ``keys``.
+def evaluate_validation_table(rows: List[Dict[str, Any]]) -> List[ValidationResult]:
     """
-    results: list[ValidationResult] = []
-    for index, row in enumerate(rows):
-        if isinstance(row, Mapping):
-            missing = [k for k in keys if k not in row]
-            if missing:
-                raise ValueError(f"row {index} is missing fields {missing}")
-            results.append(
-                validate(
-                    row["f_sim"],
-                    row["f_exp"],
-                    u_num=row["u_num"],
-                    u_input=row.get("u_input", 0.0),
-                    label=str(row.get("label", "")),
-                )
-            )
-        else:
-            values = list(row)
-            if len(values) < len(keys):
-                raise ValueError(f"row {index} needs {len(keys)} values, got {len(values)}")
-            results.append(
-                validate(
-                    values[0],
-                    values[1],
-                    u_num=values[2],
-                    u_input=values[3] if len(values) > 3 else 0.0,
-                )
-            )
+    Evaluate a table of validation cases.
+    
+    Parameters
+    ----------
+    rows : list of dict
+        Each dict must have keys: label, f_sim, f_exp, u_num, u_input
+    
+    Returns
+    -------
+    list of ValidationResult
+    """
+    results = []
+    
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError(f"Row must be a dict, got {type(row)}")
+        
+        required_keys = {'label', 'f_sim', 'f_exp', 'u_num', 'u_input'}
+        if not required_keys.issubset(row.keys()):
+            missing = required_keys - set(row.keys())
+            raise ValueError(f"Row missing required keys: {missing}")
+        
+        result = validate(
+            f_sim=row['f_sim'],
+            f_exp=row['f_exp'],
+            u_num=row['u_num'],
+            u_input=row['u_input'],
+            label=row['label'],
+        )
+        results.append(result)
+    
     return results

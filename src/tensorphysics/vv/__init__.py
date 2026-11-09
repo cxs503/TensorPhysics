@@ -1,50 +1,50 @@
-"""Verification & validation (V&V) machine gate for cross-solver benchmarks.
-
-Public surface
---------------
-* :mod:`tensorphysics.vv.gci` -- Richardson extrapolation, observed order of
-  accuracy, Roache grid convergence index (GCI), asymptotic-range checks and
-  the PASS/WARN/FAIL gate that fuses them.
-* :mod:`tensorphysics.vv.validation` -- ASME V&V 20 validation uncertainty
-  ``U_val = sqrt(U_num**2 + U_input**2)`` and the ``|E| <= U_val`` acceptance
-  test, plus a table driver.
-* :mod:`tensorphysics.vv.adapters` -- normalisation of benchmark JSON emitted
-  by the TensorLBM / TensorFVM / TensorFEM / TensorDEM / TensorBEM
-  repositories into a single observation record consumed by the gate.
-
-Command line
-------------
-``python -m tensorphysics.vv --obs obs.json`` (equivalently
-``python -m tensorphysics.vv.gci --obs obs.json``).
 """
-from .gci import (
-    GatePolicy,
-    GateVerdict,
-    GridConvergenceStudy,
-    Observation,
-    evaluate,
-    grid_convergence_study,
-    observed_order,
-    richardson_extrapolated,
+V&V (Verification & Validation) Machine Gate for TensorPhysics.
+
+Provides Richardson extrapolation with GCI, ASME V&V 20 validation uncertainty,
+and cross-solver comparison adapters.
+
+This module provides two API layers:
+1. High-level classes (RichardsonExtrapolation, ASMEVV20, CrossSolverAdapter) for ease of use
+2. Low-level functions for integration with existing test infrastructure
+"""
+
+# High-level API (new implementation)
+from .richardson import RichardsonExtrapolation, GCIResult, ConvergenceStatus
+from .asme_vv20 import ASMEVV20, UncertaintyBudget
+from .cross_solver import (
+    CrossSolverAdapter,
+    ComparisonResult,
+    ComparisonStatus,
+    CanonicalCase,
+    create_boundary_layer_case,
+    create_cylinder_drag_case,
+    create_lid_driven_cavity_case,
 )
+
+# Low-level API (for compatibility with existing tests)
 from .validation import (
-    ValidationResult,
-    evaluate_validation_table,
-    validation_uncertainty,
     validate,
+    validation_uncertainty,
+    evaluate_validation_table,
 )
 
 __all__ = [
-    "GatePolicy",
-    "GateVerdict",
-    "GridConvergenceStudy",
-    "Observation",
-    "ValidationResult",
-    "evaluate",
-    "evaluate_validation_table",
-    "grid_convergence_study",
-    "observed_order",
-    "richardson_extrapolated",
-    "validate",
-    "validation_uncertainty",
+    # High-level API
+    'RichardsonExtrapolation',
+    'GCIResult',
+    'ConvergenceStatus',
+    'ASMEVV20',
+    'UncertaintyBudget',
+    'CrossSolverAdapter',
+    'ComparisonResult',
+    'ComparisonStatus',
+    'CanonicalCase',
+    'create_boundary_layer_case',
+    'create_cylinder_drag_case',
+    'create_lid_driven_cavity_case',
+    # Low-level API
+    'validate',
+    'validation_uncertainty',
+    'evaluate_validation_table',
 ]
