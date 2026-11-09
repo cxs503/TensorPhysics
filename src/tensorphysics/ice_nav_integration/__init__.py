@@ -18,6 +18,9 @@ Modules
   panel coupling with Aitken relaxation and the added-mass stability domain.
 * :mod:`~tensorphysics.ice_nav_integration.energy_ledger` -- five-channel
   resistance/energy ledger with explicit residual attribution.
+* :mod:`~tensorphysics.ice_nav_integration.energy_observables` -- three observable
+  energy channels (ice kinetic, viscous dissipation, free surface work) replacing
+  MOCK channels, plus energy closure ledger and cross-solver conservation.
 * :mod:`~tensorphysics.ice_nav_integration.gate` -- the loop, the C1..C5
   verdict, figures, provenance and the report driver.
 """
@@ -50,6 +53,19 @@ from .dem_field import (
     floe_statistics,
 )
 from .energy_ledger import CHANNELS, accumulate, brash_channel_split, build_ledger
+from .energy_observables import (
+    EnergyClosureState,
+    SolverInterfaceFlux,
+    compute_energy_closure,
+    free_surface_work_energy,
+    free_surface_work_rate,
+    ice_kinetic_energy_dem,
+    ice_kinetic_energy_lbm,
+    strain_rate_tensor,
+    verify_cross_solver_conservation,
+    viscous_dissipation_energy,
+    viscous_dissipation_rate,
+)
 from .fsi_coupling import (
     CouplingResult,
     StructuralSetup,
@@ -135,4 +151,16 @@ __all__ = [
     "validate_ice_field",
     "validate_struct_feedback",
     "write_report",
+    # Energy observables (AG27W2-N02)
+    "EnergyClosureState",
+    "SolverInterfaceFlux",
+    "compute_energy_closure",
+    "free_surface_work_energy",
+    "free_surface_work_rate",
+    "ice_kinetic_energy_dem",
+    "ice_kinetic_energy_lbm",
+    "strain_rate_tensor",
+    "verify_cross_solver_conservation",
+    "viscous_dissipation_energy",
+    "viscous_dissipation_rate",
 ]
