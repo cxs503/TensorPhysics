@@ -2,7 +2,7 @@
 
 **Campaign node** `P40W3-N09` · **mission** 8645 (re-opened from 7607 / PR #178)
 · **repo** TensorPhysics · **module** `tensorphysics.coupling_energy`
-· **record** `artifacts/p40w3n09/verification.json` · **criterion digest** `809e40fd6556ede3844ff5d190a8886849d17c49b1713382e6b44a58ca85a2b6`
+· **record** `artifacts/p40w3b_n09/verification.json` · **criterion digest** `809e40fd6556ede3844ff5d190a8886849d17c49b1713382e6b44a58ca85a2b6`
 · **verdict** **REAL** (15 PASS, 0
 FAIL, 0 WITHHELD)
 
@@ -84,8 +84,8 @@ claim to survive:
 Reproduction (the record below was produced by exactly this command):
 
 ```bash
-python3 scripts/run_coupling_energy_contract.py --out artifacts/p40w3n09
-python3 -m tensorphysics.coupling_energy.acceptance artifacts/p40w3n09/verification.json
+python3 scripts/run_coupling_energy_contract.py --out artifacts/p40w3b_n09
+python3 -m tensorphysics.coupling_energy.acceptance artifacts/p40w3b_n09/verification.json
 python3 scripts/report_coupling_acceptance.py     # regenerates this document
 ```
 
@@ -215,7 +215,7 @@ from "a smoke run finished". Only the production record above is certified.
 
 ## 4. Figures
 
-The runner writes these next to the record (`artifacts/p40w3n09/`, listed in
+The runner writes these next to the record (`artifacts/p40w3b_n09/`, listed in
 `figures.json`):
 
 | file | content |

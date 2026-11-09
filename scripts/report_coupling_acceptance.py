@@ -2,7 +2,7 @@
 """Generate ``docs/COUPLING_ENERGY_LEDGER_P40W3N09.md`` from the acceptance record.
 
 Every number in the document is read from
-``artifacts/p40w3n09/verification.json`` and from the frozen criterion set of
+``artifacts/p40w3b_n09/verification.json`` and from the frozen criterion set of
 :mod:`tensorphysics.coupling_energy.acceptance`; nothing is transcribed by hand,
 so the document cannot drift away from the record it describes.
 
@@ -44,7 +44,7 @@ def fmt(v, digits: int = 3) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--record", default="artifacts/p40w3n09/verification.json")
+    ap.add_argument("--record", default="artifacts/p40w3b_n09/verification.json")
     ap.add_argument("--out", default="docs/COUPLING_ENERGY_LEDGER_P40W3N09.md")
     args = ap.parse_args(argv)
 
@@ -233,8 +233,8 @@ claim to survive:
 Reproduction (the record below was produced by exactly this command):
 
 ```bash
-python3 scripts/run_coupling_energy_contract.py --out artifacts/p40w3n09
-python3 -m tensorphysics.coupling_energy.acceptance artifacts/p40w3n09/verification.json
+python3 scripts/run_coupling_energy_contract.py --out artifacts/p40w3b_n09
+python3 -m tensorphysics.coupling_energy.acceptance artifacts/p40w3b_n09/verification.json
 python3 scripts/report_coupling_acceptance.py     # regenerates this document
 ```
 
@@ -313,7 +313,7 @@ from "a smoke run finished". Only the production record above is certified.
 
 ## 4. Figures
 
-The runner writes these next to the record (`artifacts/p40w3n09/`, listed in
+The runner writes these next to the record (`artifacts/p40w3b_n09/`, listed in
 `figures.json`):
 
 | file | content |
