@@ -1,0 +1,405 @@
+"""Acceptance evaluation for the criterion pre-registration gate (p92w2b-n07).
+
+Produces, programmatically (no hand-copied numbers):
+
+* ``artifacts/criterion_prereg/eval.json``   -- every acceptance number,
+  per-case predictions and the fail-closed negative controls;
+* ``artifacts/criterion_prereg/fig_*.png``   -- confusion matrix, baseline vs
+  audit precision/recall, extractor field F1, KPI of the real-goal demo;
+* ``artifacts/criterion_prereg/demo_*.json`` -- freeze/audit records of this
+  node's own acceptance criteria (the "real goal" case).
+
+Run: ``python scripts/run_criterion_prereg_eval.py``
+"""
+from __future__ import annotations
+
+from decimal import Decimal
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+import matplotlib  # noqa: E402
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
+
+from tensorphysics.campaign.criterion_prereg import (  # noqa: E402
+    audit,
+    attach_to_metadata,
+    extract_criteria,
+    freeze,
+    kpi_view,
+    semantic_digest,
+    verify_manifest,
+)
+from tensorphysics.campaign.criterion_prereg.scan import scan_paths  # noqa: E402
+from tensorphysics.campaign.criterion_prereg.synth import (  # noqa: E402
+    baseline_text_hash,
+    detection_metrics,
+    field_scores,
+    gen_drift_cases,
+    gen_extraction_corpus,
+)
+
+OUT = ROOT / "artifacts" / "criterion_prereg"
+STAMP = "2026-11-09T00:00:00+00:00"
+
+#: The acceptance criteria of this node, verbatim from the campaign DAG node.
+NODE_GOAL = (
+    "机器验收判据：(a) 合成检测集24例recall≥0.92、precision≥0.95；"
+    "(b) 抽取器字段级F1≥0.95；"
+    "(c) fail-closed负控：空goal→unregistered，篡改sha256→tampered；"
+    "(d) 零领域语义扫描命中=0。"
+)
+
+#: Held-out surface perturbations (out of the generator's default grammar) used
+#: to characterise -- not to tune -- the extractor.  Each entry is
+#: (case_id, text, expected_fields_for_first_criterion).
+HARD_CASES = [
+    (
+        "hard-fullwidth",
+        "机器验收判据：（a）合成检测集24例 recall ＞＝ 0.92；（B）precision ＜ 0.5。",
+        {"metric": "recall", "op": ">=", "value": "0.92", "count": 24, "scope": "合成检测集", "label": "a"},
+    ),
+    (
+        "hard-percent-unit",
+        "机器验收判据：(a) 全量用例48cases f1 ≥ 95%。",
+        {"metric": "f1", "op": ">=", "value": "95", "unit": "%", "count": 48, "scope": "全量用例"},
+    ),
+]
+
+#: Probes that are *expected to fail*: they document the known limitation
+#: (undelimited Chinese metric names shorter than 4 characters cannot be
+#: boundary-detected without a lexicon).  Recorded, never scored as acceptance.
+LIMITATION_PROBES = [
+    (
+        "limit-undelimited-cjk-2char",
+        "机器验收判据：(a) 零领域样本命中=0。",
+        {"metric": "命中", "op": "==", "value": "0", "scope": "零领域样本"},
+    ),
+]
+
+
+def _drift_run(seed: int) -> tuple[dict, list[dict], list[dict]]:
+    cases = gen_drift_cases(seed=seed)
+    rows, base_rows = [], []
+    for case in cases:
+        fz = freeze(case.frozen_goal, frozen_at=STAMP)
+        report = audit(fz.manifest, receipt_goal=case.receipt_goal)
+        rows.append((report.failed(), report.dominant_class))
+        base = baseline_text_hash(case.frozen_goal, case.receipt_goal)
+        base_rows.append((base, "drift" if base else "unchanged"))
+        case.predicted = report.dominant_class
+        case.predicted_drift = report.failed()
+    metrics = detection_metrics(rows, cases)
+    base_metrics = detection_metrics(base_rows, cases)
+    per_case = [
+        {
+            "case_id": c.case_id,
+            "mutation": c.mutation,
+            "expected": c.expected_class,
+            "predicted": c.predicted,
+            "is_drift": c.is_drift,
+            "flagged": c.predicted_drift,
+        }
+        for c in cases
+    ]
+    return metrics, base_metrics, per_case
+
+
+def _hard_case_scores(cases=HARD_CASES) -> list[dict]:
+    rows = []
+    for case_id, text, expected in cases:
+        crit = extract_criteria(text).criteria
+        got = crit[0].to_dict() if crit else {}
+        matched = {k: (got.get(k, "") == v) for k, v in expected.items()}
+        rows.append(
+            {
+                "case_id": case_id,
+                "text": text,
+                "expected": expected,
+                "extracted": {k: got.get(k) for k in expected},
+                "matched": matched,
+                "all_matched": all(matched.values()),
+            }
+        )
+    return rows
+
+
+def _demo_real_goal() -> dict:
+    """Freeze this node's own criteria, then audit three receipt scenarios."""
+    fz = freeze(NODE_GOAL, mission_id=7803, node_id="p92w2b-n07-criterion-preregistration", frozen_by="m7803", frozen_at=STAMP)
+    metadata = attach_to_metadata({"mission_id": 7803, "owner": "autonomy"}, fz)
+    receipts = {
+        "unchanged_reformatted": NODE_GOAL.replace("≥", ">=").replace("、", "；"),
+        "loosened_recall": NODE_GOAL.replace("recall≥0.92", "recall≥0.80"),
+        "narrowed_scope": NODE_GOAL.replace("24例", "12例"),
+        "dropped_zero_domain": NODE_GOAL.replace("；(d) 零领域语义扫描命中=0", ""),
+        "tampered_manifest": None,
+    }
+    reports, events = {}, []
+    for name, goal in receipts.items():
+        if name == "tampered_manifest":
+            tampered = json.loads(json.dumps(fz.manifest))
+            tampered["criteria"][0]["value"] = "0.80"
+            report = audit(tampered, receipt_goal=NODE_GOAL)
+        else:
+            report = audit(fz.manifest, receipt_goal=goal)
+        reports[name] = report.to_dict()
+        events.extend(report.events())
+    empty = freeze("", mission_id=7803, node_id="p92w2b-n07-criterion-preregistration", frozen_at=STAMP)
+    (OUT / "demo_frozen_manifest.json").write_text(json.dumps(fz.manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    (OUT / "demo_mission_metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
+    (OUT / "demo_events.json").write_text(json.dumps(events, ensure_ascii=False, indent=2), encoding="utf-8")
+    (OUT / "demo_reports.json").write_text(
+        json.dumps({"reports": reports, "kpi": kpi_view(list(reports.values()))}, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    return {
+        "frozen_sha256": fz.sha256,
+        "semantic_digest": semantic_digest(fz.manifest),
+        "n_criteria": fz.manifest["n_criteria"],
+        "mission_metadata": metadata["criterion_manifest"],
+        "criteria": fz.manifest["criteria"],
+        "verify_state": verify_manifest(fz.manifest, goal=NODE_GOAL),
+        "empty_goal_state": empty.state,
+        "empty_goal_sha": empty.sha256,
+        "receipts": {k: {"state": v["state"], "verdict": v["verdict"], "dominant_class": v["dominant_class"], "counts": v["counts"], "notes": v["notes"]} for k, v in reports.items()},
+        "n_events": len(events),
+        "error_events": sum(1 for e in events if e["severity"] == "error"),
+        "kpi": kpi_view(list(reports.values())),
+    }
+
+
+# --------------------------------------------------------------------------- #
+# figures
+# --------------------------------------------------------------------------- #
+def fig_confusion(metrics: dict, path: Path) -> Path:
+    classes = ["unchanged", "tightened", "loosened", "scope_changed", "undefined"]
+    mat = np.zeros((len(classes), len(classes)), dtype=float)
+    for i, expected in enumerate(classes):
+        row = metrics["confusion"].get(expected, {})
+        for j, predicted in enumerate(classes):
+            mat[i, j] = row.get(predicted, 0)
+    fig, ax = plt.subplots(figsize=(6.2, 5.0))
+    im = ax.imshow(mat, cmap="Blues", vmin=0, vmax=max(1.0, mat.max()))
+    ax.set_xticks(range(len(classes)), classes, rotation=30, ha="right")
+    ax.set_yticks(range(len(classes)), classes)
+    ax.set_xlabel("predicted class")
+    ax.set_ylabel("generator truth")
+    ax.set_title(f"drift classification, 24 synthetic cases\nrecall={metrics['recall']:.3f} precision={metrics['precision']:.3f}")
+    for i in range(len(classes)):
+        for j in range(len(classes)):
+            if mat[i, j]:
+                ax.text(j, i, int(mat[i, j]), ha="center", va="center", color="white" if mat[i, j] > mat.max() / 2 else "black")
+    fig.colorbar(im, ax=ax, fraction=0.046)
+    fig.tight_layout()
+    fig.savefig(path, dpi=140)
+    plt.close(fig)
+    return path
+
+
+def fig_baseline(drift: dict, base: dict, path: Path) -> Path:
+    labels = ["precision", "recall", "f1"]
+    x = np.arange(len(labels))
+    audit_vals = [drift[k] for k in labels]
+    base_vals = [base[k] for k in labels]
+    fig, ax = plt.subplots(figsize=(6.0, 4.2))
+    ax.bar(x - 0.2, audit_vals, 0.4, label="structured audit", color="#2c7fb8")
+    ax.bar(x + 0.2, base_vals, 0.4, label="baseline: goal-text digest", color="#bdbdbd")
+    for xi, v in zip(x - 0.2, audit_vals):
+        ax.text(xi, v + 0.02, f"{v:.3f}", ha="center", fontsize=9)
+    for xi, v in zip(x + 0.2, base_vals):
+        ax.text(xi, v + 0.02, f"{v:.3f}", ha="center", fontsize=9)
+    ax.set_xticks(x, labels)
+    ax.set_ylim(0, 1.15)
+    ax.set_ylabel("score")
+    ax.axhline(0.95, ls="--", lw=1, color="#d62728")
+    ax.text(2.35, 0.96, "criterion 0.95", color="#d62728", fontsize=8, ha="right")
+    ax.set_title("drift detection: structured audit vs text-digest baseline")
+    ax.legend(loc="lower right", fontsize=8)
+    fig.tight_layout()
+    fig.savefig(path, dpi=140)
+    plt.close(fig)
+    return path
+
+
+def field_agreement(cases) -> dict[str, float]:
+    """Per-field agreement of the extractor (correct / total field values)."""
+    from tensorphysics.campaign.criterion_prereg.synth import iter_field_triples
+
+    fields = ("label", "kind", "metric", "op", "value", "unit", "count", "scope")
+    per_field = {name: [0, 0] for name in fields}
+    for case in cases:
+        gold = {t for t in iter_field_triples(case.gold, fields)}
+        pred = {t for t in iter_field_triples(extract_criteria(case.text).criteria, fields)}
+        for idx, name, value in gold:
+            per_field[name][1] += 1
+            if (idx, name, value) in pred:
+                per_field[name][0] += 1
+    return {n: (per_field[n][0] / per_field[n][1] if per_field[n][1] else 0.0) for n in fields}
+
+
+def fig_field_f1(field: dict, path: Path) -> Path:
+    """Per-field agreement of the extractor (from the same corpus run)."""
+    from tensorphysics.campaign.criterion_prereg.synth import iter_field_triples
+
+    cases = gen_extraction_corpus(20, seed=20261109)
+    fields = ("label", "kind", "metric", "op", "value", "unit", "count", "scope")
+    per_field = {name: [0, 0] for name in fields}  # [correct, total]
+    for case in cases:
+        gold = {t for t in iter_field_triples(case.gold, fields)}
+        pred = {t for t in iter_field_triples(extract_criteria(case.text).criteria, fields)}
+        for idx, name, value in gold:
+            per_field[name][1] += 1
+            if (idx, name, value) in pred:
+                per_field[name][0] += 1
+    names = list(fields)
+    acc = [per_field[n][0] / per_field[n][1] if per_field[n][1] else 0.0 for n in names]
+    fig, ax = plt.subplots(figsize=(6.4, 4.0))
+    ax.bar(names, acc, color=["#31a354" if a >= 0.95 else "#de2d26" for a in acc])
+    for i, a in enumerate(acc):
+        ax.text(i, a + 0.01, f"{a:.3f}", ha="center", fontsize=8)
+    ax.set_ylim(0, 1.12)
+    ax.set_ylabel("field agreement")
+    ax.set_title(f"extractor field-level agreement (F1={field['f1']:.3f}, n={field['tp'] + field['fn']} fields)")
+    ax.axhline(0.95, ls="--", lw=1, color="#d62728")
+    fig.tight_layout()
+    fig.savefig(path, dpi=140)
+    plt.close(fig)
+    return path
+
+
+def fig_demo_kpi(demo: dict, drift: dict, path: Path) -> Path:
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 4.0))
+    ax = axes[0]
+    classes = ["unchanged", "tightened", "loosened", "scope_changed", "undefined"]
+    counts = [drift["confusion"].get(c, {}).get(c, 0) for c in classes]
+    flags = ["#31a354" if c in ("unchanged", "tightened") else "#de2d26" for c in classes]
+    ax.bar(classes, counts, color=flags)
+    for i, v in enumerate(counts):
+        ax.text(i, v + 0.05, str(v), ha="center", fontsize=9)
+    ax.set_title("24-case detection set: cases per true class")
+    ax.set_ylabel("cases")
+    ax.tick_params(axis="x", rotation=20)
+
+    ax = axes[1]
+    kpi = demo["kpi"]
+    names = ["prereg_coverage", "audit_pass_rate", "drift_rate", "fail_closed_rate"]
+    vals = [kpi[n] for n in names]
+    ax.bar(names, vals, color="#6baed6")
+    for i, v in enumerate(vals):
+        ax.text(i, v + 0.02, f"{v:.3f}", ha="center", fontsize=9)
+    ax.set_ylim(0, 1.15)
+    ax.set_title("real-goal demo KPI (5 receipt scenarios)")
+    ax.tick_params(axis="x", rotation=20)
+    fig.tight_layout()
+    fig.savefig(path, dpi=140)
+    plt.close(fig)
+    return path
+
+
+def main() -> int:
+    OUT.mkdir(parents=True, exist_ok=True)
+
+    field = field_scores(gen_extraction_corpus(20, seed=20261109))
+    heldout = field_scores(gen_extraction_corpus(20, seed=42))
+    ood = field_scores(gen_extraction_corpus(20, seed=20261109, undelimited_cjk=True))
+    hard = _hard_case_scores()
+    limits = _hard_case_scores(LIMITATION_PROBES)
+
+    seeds = [20261109, 7, 42, 999, 1]
+    per_seed = {}
+    for seed in seeds:
+        metrics, base, per_case = _drift_run(seed)
+        per_seed[str(seed)] = {"metrics": metrics, "baseline": base, "per_case": per_case}
+    main_seed = per_seed[str(seeds[0])]
+    demo = _demo_real_goal()
+    scan = scan_paths([ROOT / "src" / "tensorphysics" / "campaign" / "criterion_prereg"])
+
+    figs = {
+        "confusion": fig_confusion(main_seed["metrics"], OUT / "fig_confusion_matrix.png"),
+        "baseline": fig_baseline(main_seed["metrics"], main_seed["baseline"], OUT / "fig_baseline_vs_audit.png"),
+        "field_f1": fig_field_f1(field, OUT / "fig_extractor_field_agreement.png"),
+        "demo_kpi": fig_demo_kpi(demo, main_seed["metrics"], OUT / "fig_demo_kpi.png"),
+    }
+
+    all_seeds_ok = all(v["metrics"]["recall"] >= 0.92 and v["metrics"]["precision"] >= 0.95 for v in per_seed.values())
+    payload = {
+        "node": "p92w2b-n07-criterion-preregistration",
+        "mission_id": 7803,
+        "schema": "criterion-prereg-eval/1",
+        "acceptance": {
+            "a_detection_24cases": {
+                "recall": main_seed["metrics"]["recall"],
+                "precision": main_seed["metrics"]["precision"],
+                "thresholds": {"recall": 0.92, "precision": 0.95},
+                "pass": main_seed["metrics"]["recall"] >= 0.92 and main_seed["metrics"]["precision"] >= 0.95,
+                "class_accuracy": main_seed["metrics"]["class_accuracy"],
+                "n_cases": main_seed["metrics"]["n_cases"],
+                "n_positive": main_seed["metrics"]["n_positive"],
+                "across_seeds_pass": all_seeds_ok,
+            },
+            "b_extractor_field_f1": {
+                "f1": field["f1"],
+                "precision": field["precision"],
+                "recall": field["recall"],
+                "thresholds": {"f1": 0.95},
+                "pass": field["f1"] >= 0.95,
+                "heldout_seed_f1": heldout["f1"],
+                "heldout_pass": heldout["f1"] >= 0.95,
+                "ood_undelimited_cjk_f1": ood["f1"],
+                "hard_case_matched": sum(1 for h in hard if h["all_matched"]),
+                "hard_case_total": len(hard),
+                "limitation_probes_matched": sum(1 for h in limits if h["all_matched"]),
+                "limitation_probes_total": len(limits),
+            },
+            "c_fail_closed": {
+                "empty_goal_state": demo["empty_goal_state"],
+                "empty_goal_sha_is_empty": demo["empty_goal_sha"] == "",
+                "tampered_state": demo["receipts"]["tampered_manifest"]["state"],
+                "tampered_verdict": demo["receipts"]["tampered_manifest"]["verdict"],
+                "pass": demo["empty_goal_state"] == "unregistered"
+                and demo["empty_goal_sha"] == ""
+                and demo["receipts"]["tampered_manifest"]["state"] == "tampered"
+                and demo["receipts"]["tampered_manifest"]["verdict"] == "fail",
+            },
+            "d_zero_domain_semantics": {
+                "hits": scan.n_hits,
+                "n_files": scan.n_files,
+                "n_terms": scan.n_terms,
+                "vocabulary_loaded": scan.vocabulary_loaded,
+                "pass": scan.clean and scan.vocabulary_loaded,
+            },
+        },
+        "detail": {
+            "extraction": {k: v for k, v in field.items() if k != "error_cases"},
+            "extraction_heldout": {k: v for k, v in heldout.items() if k != "error_cases"},
+            "extraction_ood_undelimited": {k: v for k, v in ood.items() if k != "error_cases"},
+            "extraction_per_field": field_agreement(gen_extraction_corpus(20, seed=20261109)),
+            "hard_cases": hard,
+            "limitation_probes": limits,
+            "drift": {k: v for k, v in main_seed["metrics"].items()},
+            "baseline_text_hash": main_seed["baseline"],
+            "per_case": main_seed["per_case"],
+            "per_seed": {k: {"metrics": {kk: vv for kk, vv in v["metrics"].items() if kk != "mismatches"}, "baseline": v["baseline"]} for k, v in per_seed.items()},
+            "real_goal_demo": demo,
+            "scan": scan.to_dict(),
+            "figures": {k: str(p.relative_to(ROOT)) for k, p in figs.items()},
+        },
+    }
+    payload["all_acceptance_pass"] = all(
+        v["pass"] for v in payload["acceptance"].values() if isinstance(v, dict) and "pass" in v
+    ) and all_seeds_ok
+    (OUT / "eval.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(payload["acceptance"], ensure_ascii=False, indent=2))
+    print("all_acceptance_pass:", payload["all_acceptance_pass"])
+    print("artifacts:", ", ".join(str(p.relative_to(ROOT)) for p in sorted(OUT.glob("*"))))
+    return 0 if payload["all_acceptance_pass"] else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
