@@ -7,8 +7,10 @@ makes the *fail-closed* direction the only one that passes.
 
 Package: `src/tensorphysics/campaign/criterion_prereg/` ·
 Evaluation CLI: `python scripts/run_criterion_prereg_eval.py` ·
+Renderer: `python scripts/render_criterion_prereg_doc.py --check` ·
 Numbers: `artifacts/criterion_prereg/eval.json` (this document is rendered from
-that file, no hand-copied digits).
+that file, no hand-copied digits; `--check` re-renders in memory and exits 1 when
+the checked-in page differs, so a hand-edited digit cannot survive CI).
 
 ---
 
@@ -154,11 +156,11 @@ the metadata payload that the dispatcher would publish is
 | label | kind | metric | op | value | count | scope |
 |---|---|---|---|---|---|---|
 | a | `threshold` | `recall` | `>=` | `0.92` | `24` | `合成检测集` |
-| — | `threshold` | `precision` | `>=` | `0.95` | `None` | `` |
-| b | `threshold` | `F1` | `>=` | `0.95` | `None` | `抽取器字段级` |
-| c | `mapping` | `goal` | `->` | `unregistered` | `None` | `closed负控:空` |
-| — | `mapping` | `sha256` | `->` | `tampered` | `None` | `篡改` |
-| d | `threshold` | `扫描命中` | `==` | `0` | `None` | `零领域语义` |
+| — | `threshold` | `precision` | `>=` | `0.95` | `—` | `` |
+| b | `threshold` | `F1` | `>=` | `0.95` | `—` | `抽取器字段级` |
+| c | `mapping` | `goal` | `->` | `unregistered` | `—` | `closed负控:空` |
+| — | `mapping` | `sha256` | `->` | `tampered` | `—` | `篡改` |
+| d | `threshold` | `扫描命中` | `==` | `0` | `—` | `零领域语义` |
 
 Receipt scenarios (`detail.real_goal_demo.receipts`; the event stream is
 `detail.real_goal_demo.events`):
@@ -191,6 +193,15 @@ of `python scripts/run_criterion_prereg_eval.py` (≈2 s, numpy+matplotlib only)
 everything under `artifacts/criterion_prereg/` is regenerable, and the numbers
 below are injected from `eval.json`, so code, numbers and prose cannot drift
 apart. Re-run the script after touching the package rather than editing prose.
+
+Rendering and publishing are separate, offline steps:
+`python scripts/render_criterion_prereg_doc.py` rebuilds this page from
+`eval.json` alone (no corpora, no matplotlib) and `--check` fails when the
+checked-in page and a fresh render differ; `python
+scripts/publish_criterion_prereg_report.py --dry-run` assembles the paper-level
+report payload (six-element markdown + base64 figures) and validates it
+fail-closed (missing/short/undecodable figure ⇒ non-zero exit) before anything
+is posted.
 
 ### Relationship to `campaign/criterion_registry` (overlap, declared)
 
