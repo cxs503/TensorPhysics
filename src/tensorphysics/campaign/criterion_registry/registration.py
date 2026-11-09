@@ -34,6 +34,8 @@ from .manifest import (
 
 
 UNREGISTERED = "unregistered"
+# Non-registered statuses that must survive into the drift classification.
+UNREGISTERED_BLOCKING = frozenset({UNREGISTERED, "tampered", "undefined"})
 
 
 @dataclass
@@ -48,6 +50,8 @@ class Registration:
     def __post_init__(self) -> None:
         if self.status == UNREGISTERED and not self.reason:
             self.reason = "no numeric level could be extracted (fail-closed)"
+        if self.status == "tampered" and not self.reason:
+            self.reason = "frozen manifest hash mismatch (fail-closed)"
 
     @property
     def is_registered(self) -> bool:
@@ -132,9 +136,17 @@ def audit_delivery(
     audit = DeliveryAudit(mission_id=mission_id)
     for registration in registrations:
         if not registration.is_registered:
+            # Preserve a stronger failure status (e.g. ``tampered`` from the
+            # durable freeze store) instead of flattening everything to
+            # ``unregistered``; both are fail-closed, but tampering must stay
+            # visible in the ledger.
+            status = registration.status
+            classification = (
+                status if status in UNREGISTERED_BLOCKING else UNREGISTERED
+            )
             result = DriftResult(
                 criterion_id=registration.criterion_id,
-                classification=UNREGISTERED,
+                classification=classification,
                 reason=registration.reason,
             )
         else:
