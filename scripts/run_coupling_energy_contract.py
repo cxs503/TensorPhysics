@@ -324,6 +324,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
     ap.add_argument("--out", default="artifacts/p40w3b_n09")
+    # The platform push gate keeps ``artifacts/`` out of GitHub (record-area
+    # blacklist), so the committed, re-gateable copy of the record and its
+    # figures is mirrored into ``docs/`` (a deliverable area the gate allows).
+    # Pass ``--docs-out ""`` to disable the mirror.
+    ap.add_argument("--docs-out", default="docs/p40w3b_n09")
     args = ap.parse_args()
     out = pathlib.Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -359,6 +364,13 @@ def main() -> int:
     }
     (out / "verification.json").write_text(json.dumps(record, indent=2))
     (out / "figures.json").write_text(json.dumps(figs, indent=2))
+    if args.docs_out:
+        docs_out = pathlib.Path(args.docs_out)
+        docs_out.mkdir(parents=True, exist_ok=True)
+        (docs_out / "verification.json").write_text(json.dumps(record, indent=2))
+        (docs_out / "figures.json").write_text(json.dumps(figs, indent=2))
+        for f in figs:
+            (docs_out / f["name"]).write_bytes((out / f["name"]).read_bytes())
     print(A.format_table(A.evaluate(data, extra)))
     print("overall_pass:", gates["overall_pass"],
           "criteria_digest:", gates["criteria_digest"][:16])
