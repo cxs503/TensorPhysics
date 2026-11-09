@@ -38,6 +38,10 @@ High-level API (class-based, complementary to the functional gate)
   (``create_boundary_layer_case`` / ``create_cylinder_drag_case`` /
   ``create_lid_driven_cavity_case``): a thin adapter layer for registering
   solver results and comparing them on canonical test cases.
+* :mod:`tensorphysics.vv.core` -- :class:`VVCore` and :class:`CoreVerdict`:
+  the unified V&V machine gate composing the convergence, ASME V&V 20
+  validation and cross-solver agreement stages into one fused verdict
+  (``evaluate_core`` one-call entry point).
 
 Command line
 ------------
@@ -92,6 +96,11 @@ from .asme_vv20 import (
     ASMEVV20,
     UncertaintyBudget,
 )
+from .core import (
+    CoreVerdict,
+    VVCore,
+    evaluate_core,
+)
 
 __all__ = [
     "GatePolicy",
@@ -134,4 +143,8 @@ __all__ = [
     "RichardsonExtrapolation",
     "ASMEVV20",
     "UncertaintyBudget",
+    # Core gate (m7729 / PR #199 re-open, m8768)
+    "CoreVerdict",
+    "VVCore",
+    "evaluate_core",
 ]
