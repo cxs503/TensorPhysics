@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "capabilities": [
+    {
+      "capability_id": "stationary-solve-error-vs-grid",
+      "labels": {
+        "title": "stationary solver: relative error vs closed-form solution at fixed iteration budget",
+        "quantity": "relative L_inf error, 200 sweeps, tol 1e-10"
+      },
+      "evaluator": {
+        "target": "tensorphysics.applicability.metrics:stationary_solver_error",
+        "kwargs": {
+          "solver": "tensorphysics.multigrid_poisson.core:jacobi_solver",
+          "rhs": "tensorphysics.multigrid_poisson.core:poisson_rhs",
+          "exact": "tensorphysics.multigrid_poisson.core:analytic_solution",
+          "max_iter": 200,
+          "tol": 1e-10
+        },
+        "axis_kwargs": {
+          "grid_n": "grid_n"
+        },
+        "value_key": "value",
+        "reference_key": "reference",
+        "flags_key": "flags"
+      },
+      "axes": [
+        {
+          "name": "grid_n",
+          "low": 4.0,
+          "high": 256.0,
+          "scale": "log",
+          "samples": 13,
+          "distribution": "geometric",
+          "monotone": "none",
+          "monotone_slack": 0.5,
+          "floor": null,
+          "nominal": 32.0,
+          "quantum": 1
+        }
+      ],
+      "policy": {
+        "criterion": {
+          "kind": "abs",
+          "reference": 0.0,
+          "tolerance": 0.15
+        },
+        "pathology": {
+          "flags": {},
+          "nan": true
+        },
+        "order_window": null
+      },
+      "declared": {
+        "grid_n": {
+          "low": 4.0,
+          "high": 256.0,
+          "slack": 0.0,
+          "source": "docs/multigrid_poisson_verification.md \u00a7C6",
+          "note": "declared: the discrete operator is defined for N>=4; the documented analysis reports the Jacobi iteration matrix spectral radius exact at N=16 and practical non-convergence at N=256 (200 sweeps leave 98.5% of the residual, 305785 sweeps needed for the 1e-10 tolerance). No error-level claim is made for the fixed 200-sweep budget outside that bracket."
+        }
+      }
+    },
+    {
+      "capability_id": "stationary-iteration-stability",
+      "labels": {
+        "title": "stationary iteration: per-sweep growth factor vs relaxation factor",
+        "quantity": "rho per sweep (power iteration, homogeneous problem, 60 sweeps, n=64)"
+      },
+      "evaluator": {
+        "target": "tensorphysics.applicability.metrics:stationary_iteration_rate",
+        "kwargs": {
+          "sweeper": "tensorphysics.multigrid_poisson.core:jacobi_sweeps",
+          "grid_n": 64,
+          "sweeps": 60,
+          "seed": 0
+        },
+        "axis_kwargs": {
+          "relaxation": "relaxation"
+        },
+        "value_key": "value",
+        "reference_key": "reference",
+        "flags_key": "flags"
+      },
+      "axes": [
+        {
+          "name": "relaxation",
+          "low": 0.2,
+          "high": 1.6,
+          "scale": "linear",
+          "samples": 15,
+          "distribution": "geometric",
+          "monotone": "none",
+          "monotone_slack": 0.3,
+          "floor": null,
+          "nominal": 1.0
+        }
+      ],
+      "policy": {
+        "criterion": {
+          "kind": "range",
+          "lower": 0.0,
+          "upper": 1.0
+        },
+        "pathology": {
+          "flags": {
+            "finite": false
+          },
+          "nan": true
+        },
+        "order_window": null
+      },
+      "declared": {
+        "relaxation": {
+          "low": 0.2,
+          "high": 1.0,
+          "slack": 0.02,
+          "source": "docs/multigrid_poisson_verification.md \u00a7C6",
+          "note": "declared stable for relaxation factor <= 1 (undamped Jacobi is the omega=1 case); the documented control run with omega=1.1 grows at 1.1246 per sweep, i.e. divergence. Slack 2% of the searched span absorbs the finite-sweep estimator noise of the measured growth factor."
+        }
+      }
+    },
+    {
+      "capability_id": "multigrid-contraction-vs-damping",
+      "labels": {
+        "title": "geometric multigrid: per-cycle contraction factor vs Jacobi smoother damping",
+        "quantity": "asymptotic contraction factor per V-cycle (n_fine=64, n_coarse=4, 20 cycles)"
+      },
+      "evaluator": {
+        "target": "tensorphysics.applicability.metrics:multigrid_cycle_rate",
+        "kwargs": {
+          "solver": "tensorphysics.multigrid_poisson.core:MultigridSolver",
+          "history": "tensorphysics.multigrid_poisson.core:convergence_history",
+          "n_fine": 64,
+          "n_coarse": 4,
+          "cycles": 20,
+          "seed": 0,
+          "smoother": "jacobi"
+        },
+        "axis_kwargs": {
+          "damping": "damping"
+        },
+        "value_key": "value",
+        "reference_key": "reference",
+        "flags_key": "flags"
+      },
+      "axes": [
+        {
+          "name": "damping",
+          "low": 0.2,
+          "high": 1.8,
+          "scale": "linear",
+          "samples": 15,
+          "distribution": "geometric",
+          "monotone": "none",
+          "monotone_slack": 0.3,
+          "floor": null,
+          "nominal": 0.6666667
+        }
+      ],
+      "policy": {
+        "criterion": {
+          "kind": "range",
+          "lower": 0.0,
+          "upper": 1.0
+        },
+        "pathology": {
+          "flags": {
+            "finite": false
+          },
+          "nan": true
+        },
+        "order_window": null
+      },
+      "declared": {
+        "damping": {
+          "low": 0.2,
+          "high": 1.0,
+          "slack": 0.02,
+          "source": "src/tensorphysics/multigrid_poisson/core.py (MultigridSolver docstring) + docs/multigrid_poisson_verification.md \u00a7C6",
+          "note": "declared: the Jacobi smoother is documented for damping omega <= 1 (default 2/3; 'damped, diagonal symbol -> usable in the two-level analysis'), and the documented omega=1.1 control diverges at 1.1246 per sweep. Slack 2% of the searched span absorbs estimator noise."
+        }
+      }
+    }
+  ]
+}
