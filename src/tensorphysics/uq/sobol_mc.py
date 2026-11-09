@@ -207,17 +207,29 @@ def saltelli_indices(
     V = float(np.var(np.concatenate([yA, yB])))
     if V <= 0.0:
         raise ValueError("model output has zero variance; Sobol indices are undefined")
+    # Sobol' indices are invariant under the shift f -> f + c.  The Jansen
+    # estimators below only use *differences* of model outputs and are therefore
+    # shift-invariant by construction.  The Saltelli (2010) first-order estimator
+    # and the closed second-order estimator multiply such a difference by a raw
+    # model value; with a large output offset (a ship resistance of O(1e3) kN, a
+    # pressure of O(1e5) Pa) that factor is a pure-noise amplifier: the exact
+    # identity E[f_{A_i} - f_A] = 0 holds only in expectation, so the offset
+    # leaks into the estimate as c * O(sigma / sqrt(N)).  Centring the multiplier
+    # on the grand mean removes the leak exactly and leaves the estimator
+    # unchanged for a zero-mean output.
+    grand = float(np.mean(np.concatenate([yA, yB])))
+    centred_b = yB - grand
     first_j = np.empty(dim)
     first_s = np.empty(dim)
     total = np.empty(dim)
     for i in range(dim):
         diff = yB - yAi[i]
         first_j[i] = 1.0 - float(np.mean(np.square(diff))) / (2.0 * V)
-        first_s[i] = float(np.mean(yB * (yAi[i] - yA))) / V
+        first_s[i] = float(np.mean(centred_b * (yAi[i] - yA))) / V
         total[i] = float(np.mean(np.square(yA - yAi[i]))) / (2.0 * V)
     for (i, j), yij in yAij.items():
         second[(i, j)] = (
-            float(np.mean(yB * (yij - yAi[i] - yAi[j] + yA))) / V
+            float(np.mean(centred_b * (yij - yAi[i] - yAi[j] + yA))) / V
         )
 
     first_ci = None
