@@ -75,6 +75,10 @@ class ThermalLBM2D:
         self.f[:] = _W[:, None, None] * float(T_init)
         self._iy, self._ix = np.meshgrid(np.arange(self.ny), np.arange(self.nx),
                                          indexing="ij")
+        # Streaming map (static geometry) is built once: push destinations and
+        # bounce-back sources per direction.  Without this the wall treatment
+        # costs a pair of fancy-index operations per direction and step.
+        self._map = None
 
     # -- observables -----------------------------------------------------------
     @property
@@ -105,6 +109,21 @@ class ThermalLBM2D:
         fneq = self.f - feq
         return -np.tensordot(_EY, fneq[:, 0, :], axes=(0, 0)) / self.tau
 
+    def _streaming_map(self):
+        if self._map is None:
+            maps = []
+            for i in range(9):
+                dest_x = self._ix + _EX[i]
+                dest_y = self._iy + _EY[i]
+                inside = (dest_x >= 0) & (dest_x < self.nx) & (dest_y >= 0) & (dest_y < self.ny)
+                iy, ix = inside.nonzero()
+                dy = dest_y[inside]
+                dx = dest_x[inside]
+                oy, ox = (~inside).nonzero()
+                maps.append(((iy, ix, dy, dx), (oy, ox)))
+            self._map = maps
+        return self._map
+
     # -- time step -------------------------------------------------------------
     def step(self, wall_T: Sequence[float] | None = None) -> float:
         """Advance one lattice step, returning the scalar injected at the wall.
@@ -122,24 +141,43 @@ class ThermalLBM2D:
         fpost = f + (feq - f) / self.tau
 
         g = np.zeros_like(f)
-        for i in range(1, 9):
-            sx = self._ix - _EX[i]
-            sy = self._iy - _EY[i]
-            inside = (sx >= 0) & (sx < self.nx) & (sy >= 0) & (sy < self.ny)
-            vals = fpost[i][np.clip(sy, 0, self.ny - 1), np.clip(sx, 0, self.nx - 1)]
-            g[i] = np.where(inside, vals, 0.0)
-            # conservative full-way bounce-back on every non-coupled face
-            g[_OPP[i]] += np.where(inside, 0.0, fpost[i])
+        bounce = np.zeros_like(f)
+        # --- push streaming with half-way bounce-back -----------------------
+        # Every population is pushed to its destination node; if that node lies
+        # outside the domain the wall sits half-way between source and
+        # destination and the population is reflected into the opposite
+        # direction *at the source node*.  Each value therefore lands exactly
+        # once, which makes the step conservative by construction.  Two defects
+        # of the original pull implementation are removed here:
+        #   * bounce-back targets were accumulated into ``g`` before later
+        #     direction assignments overwrote them (one reflected population
+        #     destroyed per wall node and step);
+        #   * the population reflected was the incoming one instead of the
+        #     outgoing one, so a non-uniform field leaked at the walls.
+        # i = 0 (rest direction) is streamed too: it stays on its own node.
+        for i, (push, bnc) in enumerate(self._streaming_map()):
+            iy, ix, dy, dx = push
+            if iy.size:
+                g[i][dy, dx] = fpost[i][iy, ix]
+            oy, ox = bnc
+            if oy.size:
+                bounce[_OPP[i]][oy, ox] += fpost[i][oy, ox]
+        g = g + bounce
 
         injected = 0.0
         if wall_T is not None:
             Tw = np.asarray(wall_T, dtype=float).reshape(-1)
             if Tw.size != self.nx:
                 raise ValueError("wall_T must provide one value per lattice column")
-            for i in (4, 7, 8):  # directions pointing into the south wall
-                old = fpost[i][0, :]
+            # anti-bounce-back Dirichlet wall: the incoming population becomes
+            # -f_out + 2 w_i T_w instead of the reflected f_out
+            # directions whose *source* lies below the south row (ey = +1):
+            # these are the populations that would enter the domain through the
+            # wall, and they are replaced by the anti-bounce-back value
+            for i in (2, 5, 6):
+                old = fpost[_OPP[i]][0, :]
                 new = -old + 2.0 * _W[i] * Tw
-                g[_OPP[i]][0, :] += new - old
+                g[i][0, :] += new - old
                 injected += float((new - old).sum())
         self.f = g
         return injected
@@ -402,9 +440,13 @@ class DEM2D:
         overlaps = np.maximum(-gaps, 0.0)
         rates = -(self.vel[:, 0] - wall_vel[node_of])
         mags = np.array([self.law.force(o, r) for o, r in zip(overlaps, rates)])
-        f_particles = np.column_stack([-mags, np.zeros_like(mags)])
+        # compression pushes the two bodies apart: the particle (which sits at
+        # x_p > x_wall) is pushed towards +x, the wall towards -x.  The two
+        # forces are equal and opposite, which is what makes the exchange
+        # momentum-conserving.
+        f_particles = np.column_stack([mags, np.zeros_like(mags)])
         f_nodes = np.zeros((wall_x.size, 2))
-        np.add.at(f_nodes, node_of, np.column_stack([mags, np.zeros_like(mags)]))
+        np.add.at(f_nodes, node_of, np.column_stack([-mags, np.zeros_like(mags)]))
         return f_particles, f_nodes, overlaps, node_of
 
     def step(self, dt: float, force: np.ndarray) -> None:
