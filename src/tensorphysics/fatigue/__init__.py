@@ -9,6 +9,7 @@ Implements:
 - Palmgren-Miner linear cumulative damage + bilinear correction
 - Weibull/Rayleigh load fitting + Gumbel extreme value extrapolation
 - Hot-spot stress via Kt factor
+- Detail fatigue: weld toe geometry → Kt → hot-spot extrapolation → S-N life
 """
 
 from .rainflow import rainflow_counting, RainflowResult
@@ -26,6 +27,22 @@ from .spectral import (
     bimodal_analytic_damage_rate, discrete_psd_grid, synthesize_gaussian_history,
     time_domain_damage_rate, monte_carlo_damage_rate, sensitivity_table,
     spectral_fatigue_assessment,
+)
+from .detail_fatigue import (
+    WeldToeGeometry,
+    kt_nii_t_joint,
+    kt_maddox_butt_joint,
+    kt_fillet_joint_approx,
+    linear_extrapolation,
+    quadratic_extrapolation,
+    HotSpotExtrapolationResult,
+    fem_stress_field_t_joint,
+    fem_stress_field_butt_joint,
+    fem_stress_field_fillet_joint,
+    mesh_convergence_analysis,
+    MeshConvergenceResult,
+    detail_fatigue_assessment,
+    DetailFatigueResult,
 )
 
 __all__ = [
@@ -45,4 +62,19 @@ __all__ = [
     "synthesize_gaussian_history", "time_domain_damage_rate",
     "monte_carlo_damage_rate", "sensitivity_table",
     "spectral_fatigue_assessment",
+    # Detail fatigue
+    "WeldToeGeometry",
+    "kt_nii_t_joint",
+    "kt_maddox_butt_joint",
+    "kt_fillet_joint_approx",
+    "linear_extrapolation",
+    "quadratic_extrapolation",
+    "HotSpotExtrapolationResult",
+    "fem_stress_field_t_joint",
+    "fem_stress_field_butt_joint",
+    "fem_stress_field_fillet_joint",
+    "mesh_convergence_analysis",
+    "MeshConvergenceResult",
+    "detail_fatigue_assessment",
+    "DetailFatigueResult",
 ]
