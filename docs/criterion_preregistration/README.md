@@ -209,3 +209,43 @@ See `tests/test_criterion_preregistration.py` for comprehensive tests covering:
 - `store.py`: durable cross-process freeze store (two digest layers)
 - `bench.py`: synthetic-corpus drift benchmark
 - `__init__.py`: Public API exports
+
+## Drift-audit artifacts (reproducibility contract)
+
+The numbers quoted by the maturity tests are not typed by hand: they live in two
+committed JSON artifacts, and the tests refuse to run without them.
+
+| artifact | sha256 |
+|---|---|
+| `artifacts/criterion_drift_audit/bench_v2_hardened.json` | `ce61f66f939d0dd5f54dad53ca18a81b76180c2b2d9334c0a70f687975aecfbc` |
+| `artifacts/criterion_drift_audit/bench_v1_legacy.json` | `98703c5869e3325e1a3ec0224ac2430c8e2b88a168632b51dbc60849fe15305e` |
+
+Both are pinned to the same corpus fingerprint
+`corpus_sha256 = 01d420d1ad918cc3cbc5cdccdc51a4aa9942639b73be680e48fd3486ea180d26`.
+
+| record | extraction P | extraction R | extraction F1 | held-out F1 | drift P | drift R | all gates |
+|---|---|---|---|---|---|---|---|
+| v1_legacy | 0.8462 | 0.7674 | 0.8049 | 0.7523 | 1.0000 | 1.0000 | no |
+| v2_hardened | 1.0000 | 1.0000 | 1.0000 | 0.9735 | 1.0000 | 1.0000 | yes |
+
+The `v1_legacy` row is a measurement of the **pre-hardening** extractor, not a
+straw man written to look bad: `benchmarks/criterion_drift_audit/legacy_manifest_v1.py`
+is a byte-identical copy of the extractor as introduced by commit `15326d3`
+(m7397), superseded by `41d0e52` (comparator-anchored extraction). Its whole-file
+sha256 is pinned in `generate.py` (`82fe953188c730f0…`) and checked before every
+use — an edited baseline raises `LegacySnapshotTampered` instead of quietly
+producing a friendlier delta.
+
+### Regenerating
+
+```bash
+python benchmarks/criterion_drift_audit/generate.py
+```
+
+Generation is a pure function of the corpus (no clock, no randomness, no
+network): re-running on an unchanged tree reproduces both files byte for byte.
+The script fails closed if the hardened record misses a gate, if the baseline is
+no longer worse, or if the two records disagree on the corpus fingerprint.
+
+Guarded by `tests/test_criterion_drift_artifacts.py` (baseline provenance,
+bit-for-bit reproduction, corpus pinning, direction of the delta).
