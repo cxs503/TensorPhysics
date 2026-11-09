@@ -55,7 +55,11 @@ def run_suite(quick: bool) -> dict:
     mech_kw = dict(n_macro=400)
     three_kw = dict(n_macro=120)
     if quick:
-        thermal_kw = dict(t_end=500.0, relax=0.2, nx=20, ny=10,
+        # The accuracy gate is a *spatial* statement, so --quick keeps the
+        # production grid: a coarser grid would report a discretisation artefact
+        # (3.5 % rel-L2 at nx=20) as if it were a physics failure.  Only the
+        # time horizon and the ensemble sizes shrink to stay fast.
+        thermal_kw = dict(t_end=500.0, relax=0.2, nx=40, ny=20,
                           sample_times=[250.0, 500.0])
         mech_kw = dict(n_macro=200)
         three_kw = dict(n_macro=60)
@@ -79,6 +83,40 @@ def run_suite(quick: bool) -> dict:
             S.run_three_field(ratio, TemporalScheme.LINEAR, "independent",
                               **three_kw).as_dict())
     return data
+
+
+#: Only these ``series`` arrays are consumed by the acceptance gates (the
+#: momentum residual and the contact overlap).  Everything else is plotting
+#: material; keeping it would inflate the committed record to megabytes without
+#: making it any more auditable.
+_SERIES_KEEP = ("momentum_residual", "overlap")
+#: ``metrics`` entries that are only plotted, never gated.
+_METRICS_DROP = ("profiles",)
+
+
+def _compact_suite(data: dict) -> dict:
+    """Shrink the run matrix to the fields needed to re-gate the record.
+
+    ``acceptance.evaluate_record`` reads scalar residuals, the two mechanical
+    series and a handful of metrics; the long energy/impulse time series exist
+    only to draw the figures and are dropped here.  The result is small enough
+    to commit alongside the manuscript while remaining fully re-gateable.
+    """
+    out: dict = {}
+    for group, runs in data.items():
+        compact_runs = []
+        for run in runs:
+            slim = {k: v for k, v in run.items() if k != "series"}
+            series = run.get("series") or {}
+            kept = {k: series[k] for k in _SERIES_KEEP if k in series}
+            if kept:
+                slim["series"] = kept
+            if isinstance(slim.get("metrics"), dict):
+                slim["metrics"] = {k: v for k, v in slim["metrics"].items()
+                                   if k not in _METRICS_DROP}
+            compact_runs.append(slim)
+        out[group] = compact_runs
+    return out
 
 
 def acceptance(data: dict, extra: dict) -> dict:
@@ -317,7 +355,7 @@ def main() -> int:
         "order_scan": order_scan,
         "plate_first_frequency": freq,
         "figures": [f["name"] for f in figs],
-        "runs": data,
+        "runs": _compact_suite(data),
     }
     (out / "verification.json").write_text(json.dumps(record, indent=2))
     (out / "figures.json").write_text(json.dumps(figs, indent=2))

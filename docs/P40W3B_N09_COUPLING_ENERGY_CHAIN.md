@@ -87,9 +87,16 @@ the free edge. The reported chain is
 | plate_first_frequency | < 0.03 rel. error vs c/(4L) | 0.003 | PASS |
 | subcycling_matrix_complete | 4 ratios x 3 schemes (+4 controls) x 3 couplings = 48 runs | 48.000 | PASS |
 
-The full machine record (48 runs, all per-step series) is
-`artifacts/p40w3b_n09/verification.json`; figures are listed in
-`artifacts/p40w3b_n09/figures.json`.
+The machine record is committed at `artifacts/p40w3b_n09/verification.json`
+(48 runs; it keeps every gated scalar plus the two mechanical series the
+re-gate consumes, and prunes the plotting-only energy/impulse histories so the
+file ships at a few hundred kB instead of megabytes). Re-gating the committed
+record without re-running anything is
+`acceptance.evaluate_record(json.load(...))`; `tests/test_coupling_energy_contract.py`
+enforces that it still returns `REAL`. Figures are committed under
+`artifacts/p40w3b_n09/fig_*.png` and enumerated in the record's `figures`
+field; both the record and the figures are reproduced by
+`python scripts/run_coupling_energy_contract.py`.
 
 ### 3.2 (a) thermal — conservation residual and solution accuracy
 
