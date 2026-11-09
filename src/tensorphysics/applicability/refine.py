@@ -64,6 +64,35 @@ class Boundary:
             "confidence_label": self.confidence_label,
         }
 
+    @classmethod
+    def from_dict(cls, payload: dict) -> "Boundary":
+        """Rebuild a boundary from :meth:`to_dict` output (artifact round trip).
+
+        ``confidence_label`` is a derived property and is therefore not an input.
+        """
+        def number(key: str):
+            value = payload[key]
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ValueError(f"{key!r} is not a number: {value!r}")
+            return value      # keep int/float as serialized: quantised axes snap to ints
+
+        try:
+            return cls(
+                axis=str(payload["axis"]),
+                side=str(payload["side"]),
+                value=number("value"),
+                width=number("width"),
+                span_fraction=number("span_fraction"),
+                inside_value=number("inside_value"),
+                outside_value=number("outside_value"),
+                source=str(payload["source"]),
+                iterations=int(payload["iterations"]),
+                converged=bool(payload["converged"]),
+                confidence=number("confidence"),
+            )
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError(f"malformed serialized Boundary: {exc}") from None
+
 
 def bisect_boundary(
     axis: AxisSpec,

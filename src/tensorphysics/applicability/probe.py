@@ -24,7 +24,18 @@ from .evaluation import ERROR, LAW, PASS, Evaluation, evaluate_point, law_violat
 from .refine import DEFAULT_REL_TOL, Boundary, bisect_boundary
 
 __all__ = ["ScanRecord", "ProbeReport", "probe_axis", "probe_capability", "probe_registry",
-           "EnvelopeSuite"]
+           "EnvelopeSuite", "CONTENT_VOLATILE_FIELDS", "envelope_content_material"]
+
+#: Envelope fields that carry run metadata rather than content.  They are
+#: excluded from the suite digest, otherwise the same envelopes probed twice
+#: would hash differently and the artifact identity could never be reproduced
+#: (and therefore never be verified by a later consumer).
+CONTENT_VOLATILE_FIELDS = ("generated_utc",)
+
+
+def envelope_content_material(payload: Mapping[str, Any]) -> dict[str, Any]:
+    """The digestable content of a serialized envelope (volatile metadata dropped)."""
+    return {k: v for k, v in payload.items() if k not in CONTENT_VOLATILE_FIELDS}
 
 
 @dataclass(frozen=True)
@@ -78,7 +89,7 @@ class EnvelopeSuite:
     """All envelopes produced by one run, with process provenance."""
 
     reports: Mapping[str, ProbeReport]
-    digest: str
+    digest: str          # content digest: reproducible across runs, timestamp excluded
     generated_utc: str
     config_digest: str = ""
     rel_tol: float = DEFAULT_REL_TOL
@@ -275,7 +286,10 @@ def probe_registry(registry: CapabilityRegistry, *, rel_tol: float = DEFAULT_REL
     for capability_id in selected:
         reports[capability_id] = probe_capability(registry.get(capability_id),
                                                   rel_tol=rel_tol, refine=refine)
-    material = {k: v.envelope.to_dict() for k, v in reports.items()}
+    # content only: the digest must be reproducible across runs (see
+    # CONTENT_VOLATILE_FIELDS) so a stored artifact can be verified later
+    material = {k: envelope_content_material(v.envelope.to_dict())
+                for k, v in reports.items()}
     return EnvelopeSuite(
         reports=reports,
         digest=_digest(material),

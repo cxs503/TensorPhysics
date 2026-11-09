@@ -22,6 +22,7 @@ from typing import Any, Mapping
 from .refine import Boundary
 
 __all__ = [
+    "EnvelopeFormatError",
     "DomainStatus",
     "OUT_OF_DOMAIN",
     "GradeWriteError",
@@ -45,6 +46,10 @@ UNSEARCHED = "unsearched"
 OUT_OF_DOMAIN = "OUT_OF_DOMAIN"
 
 
+class EnvelopeFormatError(ValueError):
+    """A serialized envelope cannot be reconstructed -- fail closed, never guess."""
+
+
 class DomainStatus(str, Enum):
     """Whether a point is inside the capability's detected applicability domain."""
 
@@ -55,6 +60,34 @@ class DomainStatus(str, Enum):
 
 class GradeWriteError(RuntimeError):
     """A ``REAL`` grade was requested for a result outside its applicability domain."""
+
+
+def _number(payload: Mapping[str, Any], key: str, context: str):
+    """Read a numeric field *without* changing its type.
+
+    A quantised axis legitimately serializes snapped values as integers (``22``),
+    so coercing every number to ``float`` would break the exact round trip that
+    the artifact digest is computed over.
+    """
+    value = _field(payload, key, context, lambda v: v)
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise EnvelopeFormatError(f"{context}: field {key!r} is not a number: {value!r}")
+    return value
+
+
+def _as_number(value: Any, label: str, context: str):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise EnvelopeFormatError(f"{context}: {label} is not a number: {value!r}")
+    return value
+
+
+def _field(payload: Mapping[str, Any], key: str, context: str, cast):
+    if not isinstance(payload, Mapping) or key not in payload:
+        raise EnvelopeFormatError(f"{context}: missing required field {key!r}")
+    try:
+        return cast(payload[key])
+    except (TypeError, ValueError) as exc:
+        raise EnvelopeFormatError(f"{context}: field {key!r} is not a valid {cast.__name__}: {exc}") from None
 
 
 @dataclass(frozen=True)
@@ -68,6 +101,13 @@ class Interval:
 
     def contains(self, value: float) -> bool:
         return self.low <= value <= self.high
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "Interval":
+        return cls(low=_number(payload, "low", "Interval"),
+                   high=_number(payload, "high", "Interval"),
+                   low_open=bool(payload.get("low_open", False)),
+                   high_open=bool(payload.get("high_open", False)))
 
     def to_dict(self) -> dict[str, Any]:
         return {"low": self.low, "high": self.high,
@@ -101,6 +141,32 @@ class AxisEnvelope:
                         max(iv.high for iv in self.intervals),
                         any(iv.low_open for iv in self.intervals),
                         any(iv.high_open for iv in self.intervals))
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "AxisEnvelope":
+        context = "AxisEnvelope"
+        span = _field(payload, "searched_span", context, list)
+        if not isinstance(span, list) or len(span) != 2:
+            raise EnvelopeFormatError(f"{context}: 'searched_span' must be [low, high]")
+        boundaries = payload.get("boundaries") or []
+        intervals = payload.get("intervals") or []
+        try:
+            return cls(
+                name=str(_field(payload, "axis", context, str)),
+                span_low=_as_number(span[0], "searched_span[0]", context),
+                span_high=_as_number(span[1], "searched_span[1]", context),
+                intervals=tuple(Interval.from_dict(item) for item in intervals),
+                boundaries=tuple(Boundary.from_dict(item) for item in boundaries),
+                confidence=_as_number(payload.get("confidence", 1.0), "confidence", context),
+                samples_total=int(payload.get("samples_total", 0)),
+                samples_in=int(payload.get("samples_in", 0)),
+                unresolved=bool(payload.get("unresolved", False)),
+                notes=tuple(str(n) for n in (payload.get("notes") or ())),
+            )
+        except EnvelopeFormatError:
+            raise
+        except (KeyError, TypeError, ValueError) as exc:
+            raise EnvelopeFormatError(f"{context}: malformed payload: {exc}") from None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -224,6 +290,44 @@ class ApplicabilityEnvelope:
             "samples_in": self.samples_in,
             "axes": {name: env.to_dict() for name, env in self.axes.items()},
         }
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "ApplicabilityEnvelope":
+        """Rebuild an envelope from :meth:`to_dict` output.
+
+        This is the consumer side of the mechanism: a persisted artifact can be
+        reloaded in another process and used to gate grades *without* re-running
+        the probe or having the evaluator importable.  Round-tripping is exact,
+        which is what lets :mod:`~.artifact` verify the suite digest after load.
+        """
+        context = "ApplicabilityEnvelope"
+        raw_axes = _field(payload, "axes", context, dict)
+        if not isinstance(raw_axes, Mapping):
+            raise EnvelopeFormatError(f"{context}: 'axes' must be a mapping")
+        axes: dict[str, AxisEnvelope] = {}
+        for key, item in raw_axes.items():
+            axis_envelope = AxisEnvelope.from_dict(item)
+            if axis_envelope.name != key:
+                raise EnvelopeFormatError(
+                    f"{context}: axis key {key!r} does not match serialized name "
+                    f"{axis_envelope.name!r}")
+            axes[key] = axis_envelope
+        declared = payload.get("declared") or {}
+        if not isinstance(declared, Mapping):
+            raise EnvelopeFormatError(f"{context}: 'declared' must be a mapping")
+        nominal = payload.get("nominal") or {}
+        if not isinstance(nominal, Mapping):
+            raise EnvelopeFormatError(f"{context}: 'nominal' must be a mapping")
+        return cls(
+            capability_id=str(_field(payload, "capability_id", context, str)),
+            axes=axes,
+            nominal=dict(nominal),
+            digest=str(payload.get("digest", "")),
+            generated_utc=str(payload.get("generated_utc", "")),
+            declared={str(k): dict(v) for k, v in declared.items()},
+            samples_total=int(payload.get("samples_total", 0)),
+            samples_in=int(payload.get("samples_in", 0)),
+        )
 
 
 _SEVERITY = {DomainStatus.IN: 0, DomainStatus.UNKNOWN: 1, DomainStatus.OUT: 2}
