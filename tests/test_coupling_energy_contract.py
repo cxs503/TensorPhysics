@@ -16,6 +16,7 @@ tens of seconds; the production numbers are produced by
 from __future__ import annotations
 
 import math
+import pathlib
 
 import numpy as np
 import pytest
@@ -286,3 +287,39 @@ def test_quick_suite_is_gated_by_the_frozen_criteria():
     # a withheld record is not silently accepted
     with pytest.raises(A.AcceptanceError):
         A.assert_accepted(report)
+
+# ---------------------------------------------------------------------------
+# the committed acceptance record: the manuscript's numbers must be traceable
+# ---------------------------------------------------------------------------
+ARTIFACT = (pathlib.Path(__file__).resolve().parents[1]
+            / "artifacts" / "p40w3b_n09" / "verification.json")
+
+
+def test_committed_verification_record_regates_to_real():
+    """The shipped ``verification.json`` must re-gate to REAL on its own.
+
+    The manuscript quotes the acceptance table; this guards that the quoted
+    numbers are backed by a committed, machine-readable record rather than
+    hand-copied prose, and that the record stays small enough to ship (the raw
+    plotting series are pruned by ``_compact_suite``).
+    """
+    import json
+
+    from tensorphysics.coupling_energy import acceptance as A
+
+    assert ARTIFACT.is_file(), f"missing committed acceptance record: {ARTIFACT}"
+    assert ARTIFACT.stat().st_size < 512_000, "verification.json is not compact"
+
+    record = json.loads(ARTIFACT.read_text())
+    assert record["overall_pass"] is True
+    assert record["verdict"] == "REAL"
+    assert record["mission_id"] == 7597
+
+    report = A.evaluate_record(record)
+    assert report.verdict == "REAL"
+    assert report.digest == record["criteria_digest"] == A.CRITERIA_DIGEST
+    assert not report.failures and not report.withheld
+    # the record carries no plotting-only series, only the gated ones
+    kept_series = {k for group in record["runs"].values()
+                   for run in group for k in (run.get("series") or {})}
+    assert kept_series <= {"momentum_residual", "overlap"}
