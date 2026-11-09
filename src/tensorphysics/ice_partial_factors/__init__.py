@@ -18,8 +18,20 @@ The package wires four ingredients into one auditable chain:
    row-by-row comparison with ISO 19906 Tables A.1/A.2/A.3 (with explicit
    provenance tiers) and an in-repo anchor pair, judged on achieved ``beta``.
 
-Public entry point
-------------------
+Mature layer (IN101-N09)
+------------------------
+:mod:`~tensorphysics.ice_partial_factors.p_area_joint` adds the joint pressure-area
+ice-force state (``F = k_F p(A) A``), whose negative p-A correlation is what makes
+the force so much less scattered than an independent combination would suggest,
+and :mod:`~tensorphysics.ice_partial_factors.target_reliability_inverse` +
+:mod:`~tensorphysics.ice_partial_factors.target_inverse_checks` +
+:mod:`~tensorphysics.ice_partial_factors.target_inverse_study` solve the
+two-parameter inverse ``(gamma_f, psi)`` for ``beta(gamma) = beta_T = 4.0`` with
+adjoint beta sensitivities, FORM/IS/MC cross-checks, the ISO table deviation map
+and the p-A correlation negative control.
+
+Public entry points
+-------------------
 ``run_calibration``
     Full study as a JSON-serialisable dict (used by the benchmark runner and the
     report generator).
@@ -30,6 +42,9 @@ Example
 >>> out = run_calibration({"beta_targets": [3.8, 4.0, 4.3]})
 >>> round(out["calibration"]["gamma_F"], 3) > 1.0
 True
+
+``run_target_inverse_study``
+    The IN101-N09 target-reliability inverse as a JSON-serialisable dict.
 """
 
 from .api import (
@@ -74,6 +89,18 @@ from .limit_state import (
     design_thickness_for_factor,
     load_effect,
     resistance,
+)
+from .p_area_joint import (
+    PAreaForceModel,
+)
+from .target_inverse_study import (
+    evaluate_criteria as evaluate_inverse_criteria,
+    run_study as run_target_inverse_study,
+)
+from .target_reliability_inverse import (
+    design_split,
+    solve_factors,
+    solve_factors_multistart,
 )
 from .pressure_area import (
     GevFit,
@@ -140,4 +167,10 @@ __all__ = [
     "ks_statistic_gumbel",
     "simulate_annual_maxima",
     "storm_gumbel",
+    "PAreaForceModel",
+    "design_split",
+    "solve_factors",
+    "solve_factors_multistart",
+    "evaluate_inverse_criteria",
+    "run_target_inverse_study",
 ]
