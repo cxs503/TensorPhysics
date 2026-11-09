@@ -1,0 +1,733 @@
+{
+  "schema": "lineage_debt_vocab.v1",
+  "description": "Injectable vocabulary for the lineage-inheritance debt ledger. Every domain word, quantity alias, table-header token and deny-list term lives HERE (configuration), never in the package logic - the logic stays domain-free so that a different domain can be plugged in by swapping this file.",
+  "thresholds": {
+    "default_pct": 15.0,
+    "by_domain": {
+      "campaign_meta": 0.0
+    },
+    "by_quantity": {}
+  },
+  "table_contract": {
+    "quantity_headers": [
+      "量",
+      "量名",
+      "关键量",
+      "指标",
+      "quantity",
+      "quantity_name",
+      "metric",
+      "item"
+    ],
+    "condition_headers": [
+      "工况",
+      "船型",
+      "算例",
+      "condition",
+      "case",
+      "model",
+      "state"
+    ],
+    "error_header_patterns": [
+      "误差",
+      "error",
+      "偏差",
+      "相对误差",
+      "rel_err",
+      "rel error",
+      "err"
+    ],
+    "verdict_markers": {
+      "fail": [
+        "FAIL",
+        "fail",
+        "honest FAIL",
+        "honest-fail",
+        "未通过",
+        "不通过"
+      ],
+      "pass": [
+        "PASS",
+        "pass",
+        "通过"
+      ]
+    },
+    "empty_markers": [
+      "",
+      "—",
+      "-",
+      "–",
+      "n/a",
+      "N/A",
+      "na",
+      "NaN",
+      "nan",
+      "None"
+    ],
+    "fraction_interpretation": true
+  },
+  "criteria_contract": {
+    "threshold_patterns": [
+      "(?P<qty>[^,;，；|]+?)\\s*[<≤]=?\\s*(?P<val>\\d+(?:\\.\\d+)?)\\s*%",
+      "(?P<qty>[^,;，；|]+?)\\s*(?:误差|error|偏差)\\s*[<≤]=?\\s*(?P<val>\\d+(?:\\.\\d+)?)(?!\\s*%)"
+    ],
+    "ref_patterns": {
+      "mission": [
+        "\\bm(?P<v>\\d{3,6})\\b",
+        "\\bmission\\s*#?(?P<v>\\d{3,6})\\b"
+      ],
+      "node": [
+        "\\bnode\\s*#?(?P<v>\\d{2,6})\\b",
+        "\\bnode_id\\s*[=:]\\s*(?P<v>\\d{2,6})\\b"
+      ],
+      "report": [
+        "\\breport\\s*#?(?P<v>\\d{3,6})\\b",
+        "\\breport_id\\s*[=:]\\s*(?P<v>\\d{3,6})\\b"
+      ],
+      "plan": [
+        "\\bplan\\s*#?(?P<v>\\d{2,6})\\b",
+        "\\bplan_id\\s*[=:]\\s*(?P<v>\\d{2,6})\\b"
+      ]
+    }
+  },
+  "domains": {
+    "resistance": {
+      "aliases": [
+        "resistance",
+        "drag",
+        "阻力",
+        "减阻",
+        "总阻力",
+        "摩擦阻力"
+      ],
+      "quantities": {
+        "C_T": {
+          "aliases": [
+            "C_T",
+            "CT",
+            "总阻力系数"
+          ],
+          "unit": "-"
+        },
+        "C_F": {
+          "aliases": [
+            "C_F",
+            "CF",
+            "摩擦阻力系数"
+          ],
+          "unit": "-"
+        },
+        "R_T": {
+          "aliases": [
+            "R_T",
+            "RT",
+            "总阻力"
+          ],
+          "unit": "kN"
+        },
+        "delta_Cf": {
+          "aliases": [
+            "delta_Cf",
+            "ΔC_F",
+            "ΔCf",
+            "粗糙度补贴",
+            "粗糙度增量"
+          ],
+          "unit": "-"
+        },
+        "k_s_plus": {
+          "aliases": [
+            "k_s_plus",
+            "ks+",
+            "k_s+"
+          ],
+          "unit": "-"
+        },
+        "R_w": {
+          "aliases": [
+            "R_w",
+            "Rw",
+            "波浪增阻"
+          ],
+          "unit": "kN"
+        }
+      }
+    },
+    "propulsion": {
+      "aliases": [
+        "propulsion",
+        "propulsor",
+        "推进",
+        "自航",
+        "推进因子",
+        "螺旋桨"
+      ],
+      "quantities": {
+        "w": {
+          "aliases": [
+            "w",
+            "wake fraction",
+            "伴流分数",
+            "wake"
+          ],
+          "unit": "-"
+        },
+        "t": {
+          "aliases": [
+            "t",
+            "thrust deduction",
+            "推力减额"
+          ],
+          "unit": "-"
+        },
+        "eta_R": {
+          "aliases": [
+            "eta_R",
+            "η_R",
+            "ηR",
+            "相对旋转效率"
+          ],
+          "unit": "-"
+        },
+        "eta_0": {
+          "aliases": [
+            "eta_0",
+            "η_0",
+            "η0",
+            "敞水效率"
+          ],
+          "unit": "-"
+        },
+        "eta_H": {
+          "aliases": [
+            "eta_H",
+            "η_H",
+            "ηH",
+            "船身效率"
+          ],
+          "unit": "-"
+        },
+        "eta_D": {
+          "aliases": [
+            "eta_D",
+            "η_D",
+            "ηD",
+            "准推进系数"
+          ],
+          "unit": "-"
+        },
+        "K_T": {
+          "aliases": [
+            "K_T",
+            "KT",
+            "推力系数"
+          ],
+          "unit": "-"
+        },
+        "K_Q": {
+          "aliases": [
+            "K_Q",
+            "KQ",
+            "扭矩系数"
+          ],
+          "unit": "-"
+        },
+        "P_E": {
+          "aliases": [
+            "P_E",
+            "PE",
+            "有效功率"
+          ],
+          "unit": "kW"
+        },
+        "P_D": {
+          "aliases": [
+            "P_D",
+            "PD",
+            "收到功率"
+          ],
+          "unit": "kW"
+        },
+        "J": {
+          "aliases": [
+            "J",
+            "进速系数",
+            "advance ratio"
+          ],
+          "unit": "-"
+        },
+        "J0": {
+          "aliases": [
+            "J0",
+            "零推力点",
+            "zero-thrust"
+          ],
+          "unit": "-"
+        }
+      }
+    },
+    "seakeeping": {
+      "aliases": [
+        "seakeeping",
+        "耐波",
+        "耐波性",
+        "上浪",
+        "波浪中"
+      ],
+      "quantities": {
+        "Hs": {
+          "aliases": [
+            "Hs",
+            "有义波高"
+          ],
+          "unit": "m"
+        },
+        "T_r": {
+          "aliases": [
+            "T_r",
+            "Tr",
+            "横摇周期"
+          ],
+          "unit": "s"
+        },
+        "phi_a": {
+          "aliases": [
+            "phi_a",
+            "φ_a",
+            "横摇幅值"
+          ],
+          "unit": "deg"
+        },
+        "resonance_freq": {
+          "aliases": [
+            "共振频率",
+            "resonance frequency"
+          ],
+          "unit": "Hz"
+        },
+        "impact_pressure": {
+          "aliases": [
+            "冲击压力",
+            "impact pressure"
+          ],
+          "unit": "kPa"
+        }
+      }
+    },
+    "manoeuvring": {
+      "aliases": [
+        "manoeuvring",
+        "maneuvering",
+        "操纵",
+        "操纵性",
+        "回转",
+        "停船"
+      ],
+      "quantities": {
+        "D_T_over_L": {
+          "aliases": [
+            "D_T/L",
+            "DT/L",
+            "回转直径"
+          ],
+          "unit": "-"
+        },
+        "Y_H": {
+          "aliases": [
+            "Y_H",
+            "YH",
+            "横荡力"
+          ],
+          "unit": "-"
+        },
+        "stopping_distance": {
+          "aliases": [
+            "停船距离",
+            "stopping distance"
+          ],
+          "unit": "m"
+        },
+        "CPA": {
+          "aliases": [
+            "CPA",
+            "DCPA",
+            "TCPA"
+          ],
+          "unit": "n mile"
+        },
+        "zigzag_overshoot": {
+          "aliases": [
+            "首超",
+            "超角",
+            "overshoot",
+            "zigzag overshoot"
+          ],
+          "unit": "deg"
+        },
+        "speed_loss": {
+          "aliases": [
+            "速降",
+            "稳态速降",
+            "speed loss",
+            "speed_loss_pct",
+            "失速"
+          ],
+          "unit": "%"
+        },
+        "transfer": {
+          "aliases": [
+            "transfer",
+            "横移",
+            "transfer_over_L",
+            "transfer over L"
+          ],
+          "unit": "L"
+        }
+      }
+    },
+    "stability": {
+      "aliases": [
+        "stability",
+        "稳性",
+        "完整稳性",
+        "横摇耦合"
+      ],
+      "quantities": {
+        "GM": {
+          "aliases": [
+            "GM",
+            "初稳性高"
+          ],
+          "unit": "m"
+        },
+        "GZ": {
+          "aliases": [
+            "GZ",
+            "复原力臂"
+          ],
+          "unit": "m"
+        },
+        "lw1": {
+          "aliases": [
+            "lw1",
+            "l_w1",
+            "风压倾侧力臂"
+          ],
+          "unit": "m"
+        },
+        "lw2": {
+          "aliases": [
+            "lw2",
+            "l_w2"
+          ],
+          "unit": "m"
+        },
+        "theta_f": {
+          "aliases": [
+            "theta_f",
+            "θf",
+            "进水角"
+          ],
+          "unit": "deg"
+        }
+      }
+    },
+    "structure": {
+      "aliases": [
+        "structure",
+        "结构",
+        "板",
+        "屈曲",
+        "疲劳"
+      ],
+      "quantities": {
+        "sigma": {
+          "aliases": [
+            "sigma",
+            "σ",
+            "应力"
+          ],
+          "unit": "MPa"
+        },
+        "omega_mn": {
+          "aliases": [
+            "omega_mn",
+            "ω_mn",
+            "固有频率"
+          ],
+          "unit": "rad/s"
+        },
+        "b_value": {
+          "aliases": [
+            "b值",
+            "b-value"
+          ],
+          "unit": "-"
+        }
+      }
+    },
+    "vibration_noise": {
+      "aliases": [
+        "vibration",
+        "noise",
+        "振动",
+        "噪声",
+        "声"
+      ],
+      "quantities": {
+        "SPL": {
+          "aliases": [
+            "SPL",
+            "声压级"
+          ],
+          "unit": "dB"
+        },
+        "BPF": {
+          "aliases": [
+            "BPF",
+            "叶片通过频率"
+          ],
+          "unit": "Hz"
+        },
+        "sigma_ka": {
+          "aliases": [
+            "sigma",
+            "σ",
+            "辐射效率"
+          ],
+          "unit": "-"
+        }
+      }
+    },
+    "green_shipping": {
+      "aliases": [
+        "green_shipping",
+        "绿色",
+        "节能",
+        "能效",
+        "EEXI",
+        "CII"
+      ],
+      "quantities": {
+        "EEDI": {
+          "aliases": [
+            "EEDI"
+          ],
+          "unit": "g/t·nm"
+        },
+        "fuel_saving": {
+          "aliases": [
+            "节能率",
+            "fuel saving",
+            "功率收益"
+          ],
+          "unit": "%"
+        },
+        "C_L_over_C_D": {
+          "aliases": [
+            "C_L/C_D",
+            "CL/CD",
+            "升阻比"
+          ],
+          "unit": "-"
+        }
+      }
+    },
+    "ice": {
+      "aliases": [
+        "ice",
+        "冰区",
+        "冰载",
+        "冰阻力"
+      ],
+      "quantities": {
+        "ice_resistance": {
+          "aliases": [
+            "冰阻力",
+            "ice resistance"
+          ],
+          "unit": "kN"
+        },
+        "ice_load": {
+          "aliases": [
+            "冰载荷",
+            "ice load"
+          ],
+          "unit": "kPa"
+        }
+      }
+    },
+    "cfd_lbm": {
+      "aliases": [
+        "lbm",
+        "lattice boltzmann",
+        "cfd",
+        "格子玻尔兹曼"
+      ],
+      "quantities": {
+        "Ra_c": {
+          "aliases": [
+            "Ra_c",
+            "Ra c",
+            "临界瑞利数"
+          ],
+          "unit": "-"
+        },
+        "Nu": {
+          "aliases": [
+            "Nu",
+            "努塞尔数"
+          ],
+          "unit": "-"
+        }
+      }
+    },
+    "campaign_meta": {
+      "aliases": [
+        "campaign",
+        "ledger",
+        "extraction",
+        "coverage",
+        "gate",
+        "seed",
+        "战役",
+        "覆盖率"
+      ],
+      "quantities": {
+        "extraction_rate": {
+          "aliases": [
+            "提取率",
+            "extraction rate",
+            "抽取率"
+          ],
+          "unit": "%"
+        },
+        "interception_rate": {
+          "aliases": [
+            "拦截率",
+            "interception rate",
+            "播种拦截"
+          ],
+          "unit": "%"
+        },
+        "coverage_error": {
+          "aliases": [
+            "覆盖误差",
+            "coverage error"
+          ],
+          "unit": "%"
+        }
+      }
+    },
+    "cfd_dem": {
+      "aliases": [
+        "dem",
+        "非定常曳力",
+        "附加质量",
+        "basset",
+        "离散元",
+        "unsteady drag"
+      ],
+      "quantities": {
+        "C_A": {
+          "aliases": [
+            "C_A",
+            "C A",
+            "附加质量系数",
+            "added mass coefficient"
+          ],
+          "unit": "-"
+        },
+        "amplitude": {
+          "aliases": [
+            "幅值",
+            "振幅",
+            "amplitude"
+          ],
+          "unit": "-"
+        },
+        "phase_lag": {
+          "aliases": [
+            "相位滞后",
+            "Δφ",
+            "相位差",
+            "phase lag"
+          ],
+          "unit": "deg"
+        },
+        "basset_fraction": {
+          "aliases": [
+            "basset占比",
+            "basset fraction",
+            "basset 占比"
+          ],
+          "unit": "%"
+        }
+      }
+    }
+  },
+  "states": {
+    "open": "debt_open",
+    "closed": "debt_closed",
+    "unclassified_domain": "unclassified",
+    "wildcard_condition": "ALL"
+  },
+  "coverage": {
+    "covered": "covered",
+    "covered_by_domain": "covered_by_domain",
+    "deferred": "deferred",
+    "dropped": "dropped",
+    "rule_explicit_ref": "explicit_ref",
+    "rule_quantity": "quantity",
+    "rule_domain": "domain",
+    "rule_deferral": "deferral"
+  },
+  "deny_list": [
+    "resistance",
+    "drag",
+    "propulsion",
+    "propeller",
+    "propulsor",
+    "wake",
+    "thrust",
+    "seakeeping",
+    "manoeuvring",
+    "maneuvering",
+    "stability",
+    "hull",
+    "ship",
+    "vessel",
+    "ice",
+    "lbm",
+    "lattice",
+    "boltzmann",
+    "hydrodynamic",
+    "KCS",
+    "KVLCC2",
+    "KVLCC1",
+    "Taylor",
+    "Blendermann",
+    "IMO",
+    "EEDI",
+    "CII",
+    "Flettner",
+    "Basset",
+    "Lighthill",
+    "阻力",
+    "推进",
+    "螺旋桨",
+    "伴流",
+    "推力减额",
+    "耐波",
+    "操纵",
+    "稳性",
+    "结构",
+    "振动",
+    "噪声",
+    "绿色",
+    "冰区",
+    "船型",
+    "桨",
+    "上浪"
+  ]
+}
