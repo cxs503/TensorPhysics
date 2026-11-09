@@ -27,7 +27,7 @@ plot = ["matplotlib>=3.7", "numpy>=1.26"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-tensorphysics = ["contracts/*.json", "lineage_debt/configs/*.json", "applicability/configs/*.json"]
+tensorphysics = ["contracts/*.json", "lineage_debt/configs/*.json", "applicability/configs/*.json", "campaign/criterion_prereg/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
