@@ -254,3 +254,35 @@ def test_quick_suite_produces_the_ratio_scheme_matrix():
         assert all(run["residual_max"] == run["residual_max"] for run in out[name])
     assert out["thermal"][0]["scheme"] == "zoh"
     assert any(r["exchange_mode"] == "independent" for r in out["thermal"])
+
+# ---------------------------------------------------------------------------
+# acceptance gate over the same suite (frozen criteria, three-valued outcomes)
+# ---------------------------------------------------------------------------
+def test_quick_suite_is_gated_by_the_frozen_criteria():
+    """The contract test now ends where the campaign ends: at a verdict.
+
+    A partial suite cannot be certified, so the verdict is ``WITHHELD`` -- what
+    matters here is that the gate is *fed* by real runs and that every criterion
+    it can evaluate agrees with the direct assertions above.
+    """
+    from tensorphysics.coupling_energy import acceptance as A
+
+    out = S.run_suite(ratios=(1, 2),
+                      schemes=(TemporalScheme.ZOH, TemporalScheme.LINEAR),
+                      include_control=True,
+                      thermal_kw=dict(t_end=300.0, relax=0.2,
+                                      sample_times=[150.0, 300.0]),
+                      mechanical_kw=dict(n_macro=200),
+                      three_field_kw=dict(n_macro=30))
+    report = A.evaluate(out, {"order_scan": {"zoh": 1.0, "linear": 2.0,
+                                             "quadratic": 2.8}})
+    assert report.digest == A.CRITERIA_DIGEST
+    assert report.verdict == "WITHHELD"                     # 12 of 48 runs
+    for cid in ("thermal_energy_conservation", "thermal_falsification_ratio",
+                "mechanical_momentum_conservation", "mechanical_contact_engaged",
+                "three_field_thermal_subchain", "three_field_falsification_ratio"):
+        assert report.outcomes[cid].status == "PASS", (cid, report.outcomes[cid])
+    assert report.outcomes["matrix_completeness"].status == "WITHHELD"
+    # a withheld record is not silently accepted
+    with pytest.raises(A.AcceptanceError):
+        A.assert_accepted(report)
