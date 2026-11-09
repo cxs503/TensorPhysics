@@ -21,6 +21,11 @@ paragraph" into a reproducible artifact:
   ``domain_status in {IN, OUT, UNKNOWN}``; ``OUT`` forces the grading field to
   ``OUT_OF_DOMAIN`` and a ``REAL`` write is refused
   (:func:`~tensorphysics.applicability.envelope.assign_grade`).
+* **stage 5 -- consumer side.**  The written artifact can be reloaded in another
+  process (:func:`~tensorphysics.applicability.artifact.load_envelopes`), its
+  suite digest re-verified, and any later point gated without re-running the
+  probe or importing the evaluators
+  (:func:`~tensorphysics.applicability.artifact.gate`).
 
 Quick start::
 
@@ -34,18 +39,22 @@ Quick start::
 """
 from __future__ import annotations
 
+from .artifact import (ARTIFACT_SCHEMA, ArtifactError, gate, gate_queries, load_envelopes,
+                       suite_digest)
 from .axis import AxisConfigError, AxisSpec
 from .capability import (ApplicabilityConfigError, CapabilityRegistry, CapabilitySpec, Criterion,
                          DeclaredAxis, EvaluatorSpec, FailurePolicy, import_target)
 from .envelope import (ApplicabilityEnvelope, AxisCompat, AxisEnvelope, DomainCompat,
-                       DomainStatus, GradeRecord, GradeWriteError, Interval, OUT_OF_DOMAIN,
-                       Verdict, assign_grade, declaration_compat)
+                       DomainStatus, EnvelopeFormatError, GradeRecord, GradeWriteError, Interval,
+                       OUT_OF_DOMAIN, Verdict, assign_grade, declaration_compat)
 from .evaluation import (CRITERION, ERROR, LAW, PASS, PATHOLOGY, Evaluation, evaluate_point,
                          law_violation)
 from .probe import EnvelopeSuite, ProbeReport, ScanRecord, probe_capability, probe_axis, probe_registry
 from .refine import Boundary, bisect_boundary
 
 __all__ = [
+    "ARTIFACT_SCHEMA",
+    "ArtifactError",
     "AxisConfigError",
     "AxisSpec",
     "ApplicabilityConfigError",
@@ -60,6 +69,7 @@ __all__ = [
     "DeclaredAxis",
     "DomainCompat",
     "DomainStatus",
+    "EnvelopeFormatError",
     "ERROR",
     "EvaluatorSpec",
     "Evaluation",
@@ -79,9 +89,13 @@ __all__ = [
     "bisect_boundary",
     "declaration_compat",
     "evaluate_point",
+    "gate",
+    "gate_queries",
     "import_target",
+    "load_envelopes",
     "law_violation",
     "probe_axis",
     "probe_capability",
     "probe_registry",
+    "suite_digest",
 ]
