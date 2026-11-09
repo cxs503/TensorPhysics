@@ -18,6 +18,10 @@ Public surface
 * :mod:`tensorphysics.vv.uncertainty` -- the full ASME V&V 20 uncertainty
   ledger ``U_num`` / ``U_input`` / ``U_val`` plus the reference term ``U_ref``
   that decides whether the comparison can discriminate at all.
+* :mod:`tensorphysics.vv.cross_solver` -- the cross-solver agreement gate:
+  inverse-variance weighted consensus, the largest pairwise agreement band and
+  the PASS/WARN/FAIL verdict for a set of solvers reporting the same
+  observable with no reference available.
 * :mod:`tensorphysics.vv.schema` -- dependency-free validation of the
   cross-repository benchmark JSON contract.
 
@@ -50,6 +54,14 @@ from .validation import (
     validation_uncertainty,
     validate,
 )
+from .cross_solver import (
+    AgreementPolicy,
+    AgreementResult,
+    SolverSample,
+    agreement_spread,
+    consensus,
+    cross_solver_agreement,
+)
 
 __all__ = [
     "GatePolicy",
@@ -73,4 +85,10 @@ __all__ = [
     "ledger_from_study",
     "required_grid_spacing",
     "u_num_from_study",
+    "AgreementPolicy",
+    "AgreementResult",
+    "SolverSample",
+    "agreement_spread",
+    "consensus",
+    "cross_solver_agreement",
 ]
