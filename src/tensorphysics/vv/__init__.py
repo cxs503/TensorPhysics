@@ -25,6 +25,20 @@ Public surface
 * :mod:`tensorphysics.vv.schema` -- dependency-free validation of the
   cross-repository benchmark JSON contract.
 
+High-level API (class-based, complementary to the functional gate)
+------------------------------------------------------------------
+* :mod:`tensorphysics.vv.richardson` -- :class:`RichardsonExtrapolation` and
+  :class:`GCIResult`: a thin wrapper around the ``gci`` functional gate for
+  the common "three grids, one observable" case.
+* :mod:`tensorphysics.vv.asme_vv20` -- :class:`ASMEVV20` and
+  :class:`UncertaintyBudget`: a thin wrapper around the ``validation``
+  functional gate for the full ASME V&V 20 uncertainty budget.
+* :mod:`tensorphysics.vv.cross_solver` -- :class:`CrossSolverAdapter`,
+  :class:`CanonicalCase` and the canonical-case factories
+  (``create_boundary_layer_case`` / ``create_cylinder_drag_case`` /
+  ``create_lid_driven_cavity_case``): a thin adapter layer for registering
+  solver results and comparing them on canonical test cases.
+
 Command line
 ------------
 ``python -m tensorphysics.vv --obs obs.json`` (equivalently
@@ -57,10 +71,26 @@ from .validation import (
 from .cross_solver import (
     AgreementPolicy,
     AgreementResult,
+    CanonicalCase,
+    ComparisonResult,
+    ComparisonStatus,
+    CrossSolverAdapter,
     SolverSample,
     agreement_spread,
     consensus,
+    create_boundary_layer_case,
+    create_cylinder_drag_case,
+    create_lid_driven_cavity_case,
     cross_solver_agreement,
+)
+from .richardson import (
+    ConvergenceStatus,
+    GCIResult,
+    RichardsonExtrapolation,
+)
+from .asme_vv20 import (
+    ASMEVV20,
+    UncertaintyBudget,
 )
 
 __all__ = [
@@ -91,4 +121,17 @@ __all__ = [
     "agreement_spread",
     "consensus",
     "cross_solver_agreement",
+    # High-level API
+    "CanonicalCase",
+    "ComparisonResult",
+    "ComparisonStatus",
+    "CrossSolverAdapter",
+    "create_boundary_layer_case",
+    "create_cylinder_drag_case",
+    "create_lid_driven_cavity_case",
+    "ConvergenceStatus",
+    "GCIResult",
+    "RichardsonExtrapolation",
+    "ASMEVV20",
+    "UncertaintyBudget",
 ]
