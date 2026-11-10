@@ -120,3 +120,8 @@ __all__ = [
     "WHIPLASH_RELATIVE_TOLERANCE", "IceCondition", "IceVibrationAnalysis", "IceVibrationCase",
     "build_reference_case", "spectrum_peak_deviation",
 ]
+from .lockin_coupling import (
+    DEFAULT_ENTRAINMENT_BAND, LockInCase, LockInState, ice_force_velocity_slope,
+    ice_negative_damping, limit_cycle_amplitude, lock_in_state, lockin_scan,
+    self_excited_speed_window, lock_in_amplification_check,
+)
