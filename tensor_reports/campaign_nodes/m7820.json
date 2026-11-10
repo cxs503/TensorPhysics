@@ -1,0 +1,15 @@
+{
+ "depends_on_missions": [],
+ "goal": "【战役 DAG 节点|p129w1r2-n08-tensorsph-slamming|TensorSPH 入水砰击压力验证面：Wagner 附加质量 + Dobrovol'skaya 自相似解双锚 + δ-SPH 压力噪声抑制与收敛阶】（上层智能体播种的自主战役，物理域 耐波（砰击载荷 / 入水冲击），风险 ，层 ）。物理目标：在不可压 SPH 里拿到可信的入水砰击压力时历与空间分布。实现路径：(a) 实现刚性楔形体（deadrise β=10/20/30°）与二维船体剖面匀速入水算例（V=1-5 m/s，Fr 覆盖）；(b) 双层锚：外层 Wagner 附加质量 m_a(t)∝√t 的力系数 C_s(t)=F/(0.5ρV²c)，内层 Dobrovol'skaya 自相似解的压力分布 p(x)/p_max；(c) 压力场平滑：δ-SPH 密度耗散 + MLS 压力梯度修正，做开/关对照量化噪声；(d) 三分辨率收敛研究 N∈{2e4, 8e4, 3e5}。机器判据：1) C_s,max vs Wagner 估计相对误差 ≤15%（并声明 SPH 与势流差异的来源）；2) 自相似阶段压力分布形状相对 L2 误差 ≤15%；3) δ-SPH 开启后压力 RMS 噪声下降 ≥50% 且 |ΔC_s,max|≤5%；4) 力峰值收敛阶 ≥0.5；5) 质量守恒 |Δm|/m ≤1e-6；6) pytest ≥12 项含负控（关闭压力平滑时判据必须失败）；7) 报告写明适用域（β、V、Fr）与未达标项。。落库 TensorSPH（若模块不存在则按领域目录新建，附 pytest 用例）。\n机器验收判据（全部满足，判据数字与产物路径落报告 JSON）：见战役表 metadata。\n纪律：全新前沿节点（禁止重复 verified/ 已验证案例）；worktree 内提交自己分支；论文级报告（物理表述+图+判据数字+审计链+局限）；honest FAIL 不可覆盖。",
+ "mission_id": 7820,
+ "mission_status": "succeeded",
+ "node_dependencies": [],
+ "node_ext_id": "p129w1r2-n08-tensorsph-slamming",
+ "node_id": 1810,
+ "node_status": "done",
+ "plan_id": 337,
+ "report": null,
+ "reproduction_verdict": null,
+ "result_checks": "本地 PYTHONPATH=src pytest tests/test_slamming.py -q → 20 passed in 62s（含负控：无平滑 antisymmetric 梯度对线性场误差 19.3 vs MLS 1.4e-7；锯齿压力剖面 noise>0.5 vs 解析剖面<0.02；关闭开关时 SlammingImpact 与 WedgeImpact RHS 逐位相同）。δ-SPH 算子：守恒 sum V_i D_i ≈ 5e-15（量级 167），∇²ρ 相关 0.99999999，k_eff=3.7557 与 dx 无关（0.01/0.005 两网格一致到 1e-6）。dx=2mm、β=20°、V=2 探针（4 变体，本地 threads=4）：off_off noise 0.0928 / C_s,max 25.8 / shape L2 0.419；d_on noise 0.101 / C_s,max 26.1 / shape 0.415；p_max 96.8→75.5 kPa。C_s 的 Wagner 值为 π²/tan20°=27.1，即 C_s,max 误差约 -5%。",
+ "schema": "campaign_node_artifact.v1"
+}
