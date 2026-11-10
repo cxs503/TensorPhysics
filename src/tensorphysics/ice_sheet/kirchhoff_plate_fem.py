@@ -349,6 +349,8 @@ class PlateField:
     Mx: np.ndarray
     My: np.ndarray
     Mxy: np.ndarray
+    foundation_model: str = "winkler"
+    g_p: float = 0.0
 
     # -- sampling -----------------------------------------------------------
     def _bilinear(self, F: np.ndarray, xq, yq) -> np.ndarray:
@@ -520,6 +522,17 @@ class BFSPlateSolver:
         Node coordinates (lengths ``nx + 1`` / ``ny + 1``); defaults to a uniform
         mesh.  Pass :func:`graded_axis` / :func:`graded_axis_centered` output to
         refine the mesh locally.
+    foundation_model : {"winkler", "pasternak", "none"}
+        ``"winkler"`` (default) keeps the classical one-parameter subgrade
+        ``p = k_w w``; ``"pasternak"`` adds the shear layer
+        ``p = k_w w - g_p lap^2 w`` through the element term
+        ``int g_p (N_,x N_,x^T + N_,y N_,y^T) dA``; ``"none"`` drops the
+        foundation entirely (free-plate negative control, ``k_w`` still sets
+        ``D`` and the post-processing).  ``"pasternak"`` with ``g_p = 0`` is
+        bit-identical to ``"winkler"``.
+    g_p : float
+        Pasternak shear-layer modulus [N/m]; ignored unless
+        ``foundation_model="pasternak"``.
     """
 
     def __init__(
@@ -529,10 +542,29 @@ class BFSPlateSolver:
         ny: int,
         xs: Optional[Iterable[float]] = None,
         ys: Optional[Iterable[float]] = None,
+        foundation_model: str = "winkler",
+        g_p: float = 0.0,
     ):
         if not isinstance(nx, int) or not isinstance(ny, int) or nx < 1 or ny < 1:
             raise ValueError(f"nx and ny must be positive integers, got nx={nx!r}, ny={ny!r}")
+        if foundation_model not in ("winkler", "pasternak", "none"):
+            raise ValueError(
+                "foundation_model must be 'winkler', 'pasternak' or 'none', "
+                f"got {foundation_model!r}"
+            )
+        if not np.isfinite(g_p) or g_p < 0.0:
+            raise ValueError(f"g_p must be non-negative and finite, got {g_p!r}")
+        if foundation_model == "winkler" and g_p != 0.0:
+            raise ValueError(
+                "g_p > 0 requires foundation_model='pasternak' "
+                f"(got foundation_model={foundation_model!r}, g_p={g_p!r})"
+            )
         self.plate = plate
+        self.foundation_model = foundation_model
+        self.g_p = float(g_p)
+        # effective foundation coefficients used by the assembly
+        self._k_eff = 0.0 if foundation_model == "none" else float(plate.k_w)
+        self._g_eff = float(g_p) if foundation_model == "pasternak" else 0.0
         self.nx = nx
         self.ny = ny
         self.x = np.linspace(0.0, plate.lx, nx + 1) if xs is None else np.asarray(xs, dtype=float)
@@ -593,7 +625,15 @@ class BFSPlateSolver:
 
     # -- assembly -----------------------------------------------------------
     def element_matrices(self) -> Tuple[np.ndarray, np.ndarray]:
-        """All element stiffness/foundation matrices, shapes ``(ne, 16, 16)``."""
+        """All element stiffness/foundation matrices, shapes ``(ne, 16, 16)``.
+
+        The second array is the *total* foundation matrix: the Winkler subgrade
+        ``k N N^T`` plus, for ``foundation_model="pasternak"``, the shear-layer
+        term ``g_p (N_,x N_,x^T + N_,y N_,y^T)`` (the ``-g_p lap^2 w`` of the
+        Pasternak pressure is the Euler-Lagrange form of
+        ``+ g_p/2 int |grad w|^2 dA``).  For ``g_p = 0`` the shear term is never
+        touched, so the Winkler assembly is reproduced bit for bit.
+        """
         hx_e, hy_e = self._elem_sizes()
         C = self.plate.constitutive()
         jac = hx_e * hy_e
@@ -601,11 +641,44 @@ class BFSPlateSolver:
         Kf = np.zeros((hx_e.size, 16, 16))
         for xi, wi in zip(_GP, _GW):
             for eta, wj in zip(_GP, _GW):
-                N, _, _, Nxx, Nyy, Nxy = bfs_shape(xi, eta, hx_e, hy_e)
+                N, Nx, Ny, Nxx, Nyy, Nxy = bfs_shape(xi, eta, hx_e, hy_e)
                 B = np.stack([Nxx, Nyy, 2.0 * Nxy], axis=1)  # (ne, 3, 16)
                 Ke += (wi * wj) * np.einsum("egi,gh,ehj->eij", B, C, B) * jac[:, None, None]
-                Kf += (wi * wj) * np.einsum("ei,ej->eij", N, N) * self.plate.k_w * jac[:, None, None]
+                Kf += (wi * wj) * np.einsum("ei,ej->eij", N, N) * self._k_eff * jac[:, None, None]
+                if self._g_eff > 0.0:
+                    Kf += (
+                        (wi * wj)
+                        * (
+                            np.einsum("ei,ej->eij", Nx, Nx)
+                            + np.einsum("ei,ej->eij", Ny, Ny)
+                        )
+                        * self._g_eff
+                        * jac[:, None, None]
+                    )
         return Ke, Kf
+
+    def element_shear_matrix(self) -> np.ndarray:
+        """Pasternak shear-layer element matrices ``int g_p grad N . grad N dA``.
+
+        Shape ``(ne, 16, 16)``; all zeros for a Winkler foundation.  Exposed so
+        tests can check the shear contribution independently of the bending and
+        Winkler terms (integrated with the same 3x3 Gauss rule).
+        """
+        hx_e, hy_e = self._elem_sizes()
+        jac = hx_e * hy_e
+        Kg = np.zeros((hx_e.size, 16, 16))
+        if self._g_eff <= 0.0:
+            return Kg
+        for xi, wi in zip(_GP, _GW):
+            for eta, wj in zip(_GP, _GW):
+                _, Nx, Ny, _, _, _ = bfs_shape(xi, eta, hx_e, hy_e)
+                Kg += (
+                    (wi * wj)
+                    * (np.einsum("ei,ej->eij", Nx, Nx) + np.einsum("ei,ej->eij", Ny, Ny))
+                    * self._g_eff
+                    * jac[:, None, None]
+                )
+        return Kg
 
     def _stiffness(self) -> sp.csr_matrix:
         if self._K is not None:
@@ -844,7 +917,17 @@ class BFSPlateSolver:
         My /= np.maximum(cnt, 1.0)
         Mxy /= np.maximum(cnt, 1.0)
         w = u[0::4].reshape(ny1, nx1)
-        return PlateField(plate=plate, x=self.x, y=self.y, w=w, Mx=Mx, My=My, Mxy=Mxy)
+        return PlateField(
+            plate=plate,
+            x=self.x,
+            y=self.y,
+            w=w,
+            Mx=Mx,
+            My=My,
+            Mxy=Mxy,
+            foundation_model=self.foundation_model,
+            g_p=self.g_p,
+        )
 
 
 # ---------------------------------------------------------------------------

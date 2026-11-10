@@ -13,7 +13,7 @@
 | solid3d.py | 8节点六面体 | ✅有测试 | PASS | test_solid3d.py | — |
 | cohesive.py | 两节点 cohesive 界面 (Mode-I) | ✅有测试 | PASS | test_cohesive.py (6 tests) | GAP-FEM-3D-COHESIVE |
 | mixed_mode_cohesive.py | BK 混合模式准则 | ✅有测试 | PASS | test_mixed_mode_cohesive.py | GAP-FEM-P4 |
-| ice_sheet.py | 冰板 (Winkler 占位) | ⚠️部分 | 部分 | 浮力有测试, 地基板未实现 | GAP-FEM-P0 |
+| ice_sheet.py | 冰板 (Winkler 占位) | ✅Pasternak 已闭环 (2026-11-10) | PASS | TensorPhysics `ice_sheet/pasternak_foundation.py` + `kirchhoff_plate_fem.py` (`foundation_model='pasternak'`, `g_p`): FEM vs Pasternak/Vlasov Green 函数 r=0 5e-6 / RMS 1.9 %; Winkler 退化 0 差异; 32 pytest; docs/reports/p54w3_pasternak_foundation_report.md | GAP-FEM-P0 **已关闭** |
 | dynamics.py | Newmark-β 隐式瞬态 | ✅有测试 | PASS | test_beam_dynamics.py | — |
 | explicit_dynamics.py | 中心差分显式 | ✅有测试 | PASS | test_explicit_dynamics.py | — |
 | coupled_hull.py | 线性船体接收器 | ⚠️间接 | 间接 | physical_accuracy=False | GAP-FEM-P3 |
