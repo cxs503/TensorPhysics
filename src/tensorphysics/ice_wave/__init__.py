@@ -55,6 +55,18 @@ from .miz import (
     power_law_exponents,
     LITERATURE_ALPHA_BAND,
 )
+
+from .coupled_resistance import (
+    IceWaveCouplingError,
+    plate_rigidity as ice_plate_rigidity,
+    wave_induced_bending_stress,
+    ice_breaking_criterion as ice_wave_breaking_criterion,
+    ice_resistance,
+    wave_added_resistance,
+    coupling_resistance,
+    sweep_resistance_surface,
+)
+
 from .miz_coupling import (
     MIZCouplingError,
     ice_bending_stress,
@@ -113,4 +125,13 @@ __all__ = [
     "ship_motion_miz",
     "coupled_miz_solver",
     "parameter_sweep",
+
+    "IceWaveCouplingError",
+    "ice_plate_rigidity",
+    "wave_induced_bending_stress",
+    "ice_wave_breaking_criterion",
+    "ice_resistance",
+    "wave_added_resistance",
+    "coupling_resistance",
+    "sweep_resistance_surface",
 ]
