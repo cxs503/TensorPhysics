@@ -1,0 +1,169 @@
+{
+  "curved_channel": {
+    "differences": {
+      "cells": 0.0,
+      "faces": 0.0,
+      "internal_skewness_max": 0.0,
+      "minimum_cell_area_m2": 0.0,
+      "minimum_face_projected_distance_m": 0.0,
+      "nonorthogonality_max_deg": 0.0,
+      "nonorthogonality_p95_deg": 0.0,
+      "positive_cell_areas": 0.0,
+      "positive_projected_distances": 0.0
+    },
+    "independent": {
+      "cells": 32,
+      "faces": 76,
+      "internal_skewness_max": 0.03619288125423071,
+      "minimum_cell_area_m2": 7.499999999999976e-05,
+      "minimum_face_projected_distance_m": 0.0024798885692339026,
+      "nonorthogonality_max_deg": 7.272448980368973,
+      "nonorthogonality_p95_deg": 7.272448980367102,
+      "positive_cell_areas": true,
+      "positive_projected_distances": true
+    },
+    "max_absolute_difference": 0.0,
+    "shipped": {
+      "cells": 32,
+      "faces": 76,
+      "internal_skewness_max": 0.03619288125423071,
+      "minimum_cell_area_m2": 7.499999999999976e-05,
+      "minimum_face_projected_distance_m": 0.0024798885692339026,
+      "nonorthogonality_max_deg": 7.272448980368973,
+      "nonorthogonality_p95_deg": 7.272448980367102,
+      "positive_cell_areas": true,
+      "positive_projected_distances": true,
+      "quality_gate_passed": true
+    }
+  },
+  "gate_degrees": 70.0,
+  "gate_flip": {
+    "absolute_error_deg": 3.7834979593753815e-10,
+    "documented_gate_deg": 70.0,
+    "flip_angle_deg": 69.99999999962165
+  },
+  "grid": {
+    "nx": 8,
+    "ny": 4
+  },
+  "inverted_cell_control": {
+    "gate_passed": false,
+    "inverted_cell_area_m2": -0.00014999999999999974,
+    "positive_cell_areas": false
+  },
+  "inverted_face_control": {
+    "flipped_face": 17,
+    "gate_passed": false,
+    "nonorthogonality_max_deg": 180.0,
+    "positive_projected_distances": false
+  },
+  "orthogonal_reference": {
+    "gate_passed": true,
+    "internal_skewness_max": 1.1102230246251583e-14,
+    "minimum_face_projected_distance_m": 0.002499999999999978,
+    "nonorthogonality_max_deg": 8.537736462515939e-07,
+    "positive_cell_areas": true,
+    "positive_projected_distances": true
+  },
+  "rotation_invariance": [
+    {
+      "angle_deg": 0.0,
+      "internal_skewness_max": 0.03619288125423071,
+      "minimum_face_projected_distance_m": 0.0024798885692339026,
+      "nonorthogonality_max_deg": 7.272448980368973
+    },
+    {
+      "angle_deg": 17.0,
+      "internal_skewness_max": 0.03619288125423075,
+      "minimum_face_projected_distance_m": 0.0024798885692339048,
+      "nonorthogonality_max_deg": 7.272448980368873
+    },
+    {
+      "angle_deg": 43.0,
+      "internal_skewness_max": 0.036192881254230765,
+      "minimum_face_projected_distance_m": 0.0024798885692338952,
+      "nonorthogonality_max_deg": 7.2724489803690755
+    },
+    {
+      "angle_deg": 90.0,
+      "internal_skewness_max": 0.03619288125423071,
+      "minimum_face_projected_distance_m": 0.0024798885692339026,
+      "nonorthogonality_max_deg": 7.272448980368973
+    }
+  ],
+  "shear_closed_form": [
+    {
+      "absolute_error_deg": 8.537736462515939e-07,
+      "gamma": 0.0,
+      "gate_passed": true,
+      "measured_min_projected_distance_m": 0.002499999999999978,
+      "measured_nonorthogonality_deg": 8.537736462515939e-07,
+      "measured_skewness": 1.1102230246251583e-14,
+      "shear_deg": 0.0
+    },
+    {
+      "absolute_error_deg": 1.305622276959184e-12,
+      "gamma": 0.08748866352592401,
+      "gate_passed": true,
+      "measured_min_projected_distance_m": 0.002490486745229358,
+      "measured_nonorthogonality_deg": 5.000000000001306,
+      "measured_skewness": 5.594315114139767e-15,
+      "shear_deg": 5.0
+    },
+    {
+      "absolute_error_deg": 4.774847184307873e-12,
+      "gamma": 0.17632698070846498,
+      "gate_passed": true,
+      "measured_min_projected_distance_m": 0.0024620193825305088,
+      "measured_nonorthogonality_deg": 10.000000000004775,
+      "measured_skewness": 2.2591401799415273e-14,
+      "shear_deg": 10.0
+    },
+    {
+      "absolute_error_deg": 7.489120434911456e-12,
+      "gamma": 0.36397023426620234,
+      "gate_passed": true,
+      "measured_min_projected_distance_m": 0.0023492315519647185,
+      "measured_nonorthogonality_deg": 20.00000000000749,
+      "measured_skewness": 2.940650514817821e-14,
+      "shear_deg": 20.0
+    },
+    {
+      "absolute_error_deg": 1.5560885913146194e-11,
+      "gamma": 0.8390996311772799,
+      "gate_passed": true,
+      "measured_min_projected_distance_m": 0.001915111107797419,
+      "measured_nonorthogonality_deg": 40.00000000001556,
+      "measured_skewness": 5.721958498152855e-14,
+      "shear_deg": 40.0
+    },
+    {
+      "absolute_error_deg": 2.4805046905385097e-11,
+      "gamma": 1.7320508075688767,
+      "gate_passed": true,
+      "measured_min_projected_distance_m": 0.0012499999999999376,
+      "measured_nonorthogonality_deg": 60.000000000024805,
+      "measured_skewness": 2.6233057155591344e-13,
+      "shear_deg": 60.0
+    },
+    {
+      "absolute_error_deg": 5.758238330599852e-11,
+      "gamma": 2.6050890646938005,
+      "gate_passed": true,
+      "measured_min_projected_distance_m": 0.0008959198738632105,
+      "measured_nonorthogonality_deg": 69.00000000005758,
+      "measured_skewness": 7.959029274150216e-13,
+      "shear_deg": 69.0
+    },
+    {
+      "absolute_error_deg": 7.982237093528965e-11,
+      "gamma": 2.904210877675822,
+      "gate_passed": false,
+      "measured_min_projected_distance_m": 0.0008139203861428241,
+      "measured_nonorthogonality_deg": 71.00000000007982,
+      "measured_skewness": 5.749157303938219e-13,
+      "shear_deg": 71.0
+    }
+  ],
+  "verdict": true
+}

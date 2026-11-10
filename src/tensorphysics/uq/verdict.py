@@ -454,6 +454,7 @@ def decide(
     min_samples: int | None = None,
     min_samples_per_term: float = SAMPLES_PER_TERM,
     require_cross_check: bool = True,
+    budget_certified_directly: bool = False,
     extra_notes: Iterable[Reason] = (),
     details: dict[str, Any] | None = None,
 ) -> UQVerdict:
@@ -462,6 +463,13 @@ def decide(
     Every input is optional except ``budget``: what is missing is *reported*
     (a missing cross-check withholds unless ``require_cross_check=False``), so
     a partial run can never masquerade as a pass.
+
+    ``budget_certified_directly`` declares that ``budget`` was measured on
+    solver output (a direct quasi-Monte-Carlo prediction interval) rather than
+    propagated through a chaos surrogate.  Only then is the missing surrogate
+    *not* a blocking reason (``UQ-W08-NOPCE``); the route is still recorded on
+    the verdict through the caller's non-blocking note.  The default ``False``
+    keeps the surrogate-required semantics unchanged for every existing caller.
     """
     if threshold <= 0.0 or not math.isfinite(threshold):
         raise ValueError(f"threshold must be positive and finite, got {threshold!r}")
@@ -525,9 +533,23 @@ def decide(
             )
         )
     if surrogate is None:
-        reasons.append(
-            Reason("UQ-W08-NOPCE", "no polynomial-chaos surrogate available to certify the budget")
-        )
+        if budget_certified_directly:
+            reasons.append(
+                Reason(
+                    "UQ-N05-MC-FAILSAFE",
+                    "no polynomial-chaos surrogate: the band is a direct solver "
+                    "prediction interval and the indices come from the quasi-Monte-Carlo "
+                    "route (degraded mode)",
+                    blocking=False,
+                )
+            )
+        else:
+            reasons.append(
+                Reason(
+                    "UQ-W08-NOPCE",
+                    "no polynomial-chaos surrogate available to certify the budget",
+                )
+            )
     elif surrogate.eps_loo > eps_loo_max:
         reasons.append(
             Reason(
