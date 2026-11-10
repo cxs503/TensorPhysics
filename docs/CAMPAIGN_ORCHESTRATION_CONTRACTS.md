@@ -72,6 +72,34 @@ Artifacts: `side_ledger.v1`, `ledger_reconciliation.v1`.
 
 Artifacts: `geometry_contract.v1`, `failure_faces.v1`, `failure_faces.v2`.
 
+### 3b. `failure_faces` v3 — the implementation-level packet (FEM → DEM)
+
+v1/v2 above stop at the *document* level: a face carries an id, a normal, an area and
+a capacity, but no geometry and no energy, so a DEM consumer cannot build fragments
+from it.  `tensorphysics.failure_handoff` implements the successor **v3.0.0**
+(`schema_name: failure_faces`, `version: "3.0.0"`, schema fingerprint
+`807d9eef29db7f7974ab8c1acc8546ea7659b9f69c7a64cba83f5bca8bca0db3`):
+
+* per face: `vertices_m`, `normal`, `centroid_m`, `area_m2`, `specific_energy_j_m2`,
+  `energy_j`, `failure_mode`, `mode_mixity`, `normal_traction_pa`, `shear_traction_pa`;
+* per packet: `verts`-derived totals (`area_total_m2`, `energy_total_j`), `units`,
+  `timestamp`, `source_solver`, optional `crack_front_m` / `fracture_layer_thickness_m`,
+  and a `sha256` seal over the canonical JSON payload;
+* three-layer validation: closed-subset validator + `jsonschema` draft-2020-12 +
+  semantic invariants (declared area vs. polygon re-computation, unit normal, winding
+  vs. normal, totals vs. element sums, seal digest).  Versions outside
+  `SUPPORTED_VERSIONS` are rejected, so a schema change *must* bump `version` and
+  re-pin the fingerprint in `tests/test_failure_handoff_schema.py`;
+* v1/v2 packets upgrade through `upgrade_legacy_packet` (synthetic planar patch flagged
+  `geometry_synthetic`, legacy mode vocabulary mapped lossily to the crack-mode
+  vocabulary).
+
+Conservation gate on the handoff (measured, not asserted): area ≤1 %, energy ≤2 %,
+mass/clump-volume identities at 1e-12, plus a discriminating-power matrix that shows
+each gate firing on a deliberately lossy consumer.  Report:
+`docs/reports/p154w2_n03/REPORT.md`; artifacts: `artifacts/p154w2_n03/`.
+
+
 ## 4. Schema lock
 
 `schema_fingerprint(name)` hashes the canonical JSON of a registered schema;
