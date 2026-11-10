@@ -1,0 +1,320 @@
+{
+ "schema_version": "criteria-controls/1.0",
+ "description": "Negative-control set for the criterion-degeneracy classifier: 12 degenerate criteria (4 per type) and 12 benign criteria that must not be flagged. Benign samples deliberately include the tricky legitimate cases: 1e-6/1e-9 level consistency, a zero reference whose measured value is also zero, tiny magnitudes whose ratio is well defined, and a one-sided engineering bound.",
+ "degenerate": [
+  {
+   "id": "D-T1-01",
+   "expect": "T1_REFERENCE_NEAR_ZERO",
+   "name": "reference at the noise floor (Ikeda-type roll damping vs experiment)",
+   "y": 0.0023,
+   "y_ref": 0.0009,
+   "sigma_noise": 0.001,
+   "scale_y": 1.0,
+   "tau": 0.05,
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "|y_ref| = 9e-4 <= 3*sigma = 3e-3: the printed percentage is a property of the noise floor.",
+   "expect_verdict": "WITHHELD"
+  },
+  {
+   "id": "D-T1-02",
+   "expect": "T1_REFERENCE_NEAR_ZERO",
+   "name": "exact zero reference (closure residual vs identity)",
+   "y": 1e-09,
+   "y_ref": 0.0,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "y_ref == 0: the relative error is undefined; a printed 3 % tolerance is inapplicable.",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T1-03",
+   "expect": "T1_REFERENCE_NEAR_ZERO",
+   "name": "reference absent (self-consistent trend used as benchmark)",
+   "y": 0.42,
+   "y_ref": null,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "No external reference: nothing to divide by, so no relative error exists at all.",
+   "expect_verdict": "WITHHELD"
+  },
+  {
+   "id": "D-T1-04",
+   "expect": "T1_REFERENCE_NEAR_ZERO",
+   "name": "reference far below the engineering scale",
+   "y": 4.5e-08,
+   "y_ref": 2e-09,
+   "scale_y": 1.0,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "|y_ref| = 2e-9 < 0.1*scale = 0.1: the denominator is far below the scale of interest.",
+   "expect_verdict": "PASS"
+  },
+  {
+   "id": "D-T2-01",
+   "expect": "T2_SIGN_CROSSING",
+   "name": "measured and reference have opposite signs (speed-loss style)",
+   "y": -0.4,
+   "y_ref": 0.9,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "sign(y) != sign(y_ref): |Delta|/|y_ref| jumps between +100% and -100% for the same |Delta|.",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T2-02",
+   "expect": "T2_SIGN_CROSSING",
+   "name": "sign-sensitive quantity close to zero",
+   "y": 0.0008,
+   "y_ref": 0.02,
+   "tau": 0.05,
+   "metric": "relative",
+   "unit": "1",
+   "sign_sensitive": true,
+   "rationale": "flagged sign-sensitive and |y| <= tau*scale: the ratio is dominated by the crossing.",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T2-03",
+   "expect": "T2_SIGN_CROSSING",
+   "name": "negative reference, positive measurement",
+   "y": 0.3,
+   "y_ref": -0.2,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "opposite signs: log-ratio undefined, relative error meaningless.",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T2-04",
+   "expect": "T2_SIGN_CROSSING",
+   "name": "sign semantics documented in prose only",
+   "y": 0.02,
+   "y_ref": 0.01,
+   "tau": 0.5,
+   "metric": "relative",
+   "unit": "1",
+   "sign_sensitive": true,
+   "rationale": "the quantity is a signed speed change (Delta V<0 means acceleration): the criterion cannot be read as a pure ratio.",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T3-01",
+   "expect": "T3_MULTI_METRIC_NO_PRIORITY",
+   "name": "dual standard 3% in header, 10% band in cell",
+   "y": 1.06,
+   "y_ref": 1.0,
+   "tau": 0.03,
+   "competing_taus": [
+    0.1
+   ],
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "6% deviation: PASS under the 10 % band, FAIL under the registered 3 %; no priority given.",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T3-02",
+   "expect": "T3_MULTI_METRIC_NO_PRIORITY",
+   "name": "reference given as an interval without a priority rule",
+   "y": 0.0175,
+   "y_ref": 0.04,
+   "y_ref_range": [
+    0.04,
+    0.06
+   ],
+   "tau": 0.1,
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "56% against the lower bound, 65% against the midpoint: the verdict depends on an unstated choice.",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T3-03",
+   "expect": "T3_MULTI_METRIC_NO_PRIORITY",
+   "name": "two tolerances for the same quantity",
+   "y": 1.04,
+   "y_ref": 1.0,
+   "tau": 0.03,
+   "competing_taus": [
+    0.05
+   ],
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "4% is inside 5 % and outside 3 %: which one is the criterion?",
+   "expect_verdict": "FAIL"
+  },
+  {
+   "id": "D-T3-04",
+   "expect": "T3_MULTI_METRIC_NO_PRIORITY",
+   "name": "reference interval plus a looser band",
+   "y": 2.05,
+   "y_ref": 2.0,
+   "y_ref_range": [
+    2.0,
+    3.0
+   ],
+   "tau": 0.05,
+   "competing_taus": [
+    0.1
+   ],
+   "metric": "relative",
+   "unit": "1",
+   "rationale": "two degrees of freedom at once; note the merged criterion can still PASS (2.5% < 5%).",
+   "expect_verdict": "PASS"
+  }
+ ],
+ "benign": [
+  {
+   "id": "B-01",
+   "expect": "NONE",
+   "name": "1e-6 level agreement of an identity",
+   "y": 1.0000004,
+   "y_ref": 1.0,
+   "tau": 1e-06,
+   "metric": "relative",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "consistent at 4e-7 vs a 1e-6 tolerance."
+  },
+  {
+   "id": "B-02",
+   "expect": "NONE",
+   "name": "1e-9 level agreement",
+   "y": 1.000000001,
+   "y_ref": 1.0,
+   "tau": 1e-08,
+   "metric": "relative",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "machine-precision closure, well above the noise floor of a 1.0 reference."
+  },
+  {
+   "id": "B-03",
+   "expect": "NONE",
+   "name": "zero reference whose measured value is also zero (legitimate)",
+   "y": 0.0,
+   "y_ref": 0.0,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "|Delta| = 0 is metric-invariant: exact agreement must not be flagged."
+  },
+  {
+   "id": "B-04",
+   "expect": "NONE",
+   "name": "tiny magnitudes with a well-defined ratio",
+   "y": 1.02e-09,
+   "y_ref": 1e-09,
+   "scale_y": 1e-09,
+   "tau": 0.05,
+   "metric": "relative",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "the reference is small in absolute terms but not small relative to its own scale (2%)."
+  },
+  {
+   "id": "B-05",
+   "expect": "NONE",
+   "name": "ordinary 0.4% agreement vs a 3% tolerance",
+   "y": 1.004,
+   "y_ref": 1.0,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "the everyday case that must not be flagged."
+  },
+  {
+   "id": "B-06",
+   "expect": "NONE",
+   "name": "one-sided engineering bound met (stop distance vs IMO 20L)",
+   "y": 1352.0,
+   "y_ref": 3600.0,
+   "tau": 0.0,
+   "metric": "bound",
+   "unit": "m",
+   "expect_verdict": "PASS",
+   "rationale": "a bound criterion is not an error criterion; excess is 0."
+  },
+  {
+   "id": "B-07",
+   "expect": "NONE",
+   "name": "log-ratio 2% inside a 3% symmetric band",
+   "y": 1.02,
+   "y_ref": 1.0,
+   "tau": 0.03,
+   "metric": "log_ratio",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "|ln(y/y_ref)| = 0.0198 <= ln(1.03) = 0.0296."
+  },
+  {
+   "id": "B-08",
+   "expect": "NONE",
+   "name": "signed absolute error inside an engineering tolerance",
+   "y": 1.98,
+   "y_ref": 2.0,
+   "tau": 0.05,
+   "metric": "signed",
+   "unit": "m",
+   "expect_verdict": "PASS",
+   "rationale": "signed error -0.02 m, |.| <= 0.05 m."
+  },
+  {
+   "id": "B-09",
+   "expect": "NONE",
+   "name": "large magnitudes with 1.9% agreement",
+   "y": 1210000000.0,
+   "y_ref": 1234000000.0,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "N*m*s/rad",
+   "expect_verdict": "PASS",
+   "rationale": "|y_ref| is far above any plausible noise floor."
+  },
+  {
+   "id": "B-10",
+   "expect": "NONE",
+   "name": "0.02% agreement vs a 0.1% tolerance",
+   "y": 1.0002,
+   "y_ref": 1.0,
+   "tau": 0.001,
+   "metric": "relative",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "tight but well-posed tolerance."
+  },
+  {
+   "id": "B-11",
+   "expect": "NONE",
+   "name": "reference comfortably above the noise floor",
+   "y": 0.51,
+   "y_ref": 0.5,
+   "sigma_noise": 0.01,
+   "tau": 0.03,
+   "metric": "relative",
+   "unit": "1",
+   "expect_verdict": "PASS",
+   "rationale": "|y_ref| = 0.5 > 3*sigma = 0.03: no T1."
+  },
+  {
+   "id": "B-12",
+   "expect": "NONE",
+   "name": "absolute criterion in engineering units",
+   "y": 10.0,
+   "y_ref": 10.2,
+   "tau": 0.5,
+   "metric": "absolute",
+   "unit": "kN",
+   "expect_verdict": "PASS",
+   "rationale": "0.2 kN inside 0.5 kN; tolerance and residual share the unit."
+  }
+ ]
+}
