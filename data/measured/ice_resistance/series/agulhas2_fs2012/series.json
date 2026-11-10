@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "series_id": "AGULHAS2-FS2012",
+  "title": "PSRV S.A. Agulhas II full-scale level-ice trial (Baltic Sea, 21-22 March 2012): recorded speed vs measured thickness",
+  "ice_state": "level",
+  "measured_quantity": "speed_power",
+  "ship": {
+    "name": "S.A. Agulhas II (polar supply & research vessel, PC 5)",
+    "L_pp_m": 134.2,
+    "B_m": 21.7,
+    "T_m": 7.65,
+    "bow_angle_deg": 30.0,
+    "flare_deg": 25.0,
+    "displacement_t": 13687.0,
+    "source": "Aalto thesis Table 3 (length/breadth/draught/displacement); bow and flare angles are ASSUMED default values (not reported) -- this series is therefore screening-only",
+    "convention_notes": {
+      "bow_angle_deg": "ASSUMED 30 deg (PC5-typical); not measured",
+      "flare_deg": "ASSUMED 25 deg (model default); not measured"
+    }
+  },
+  "provenance": {
+    "citation": "Aalto University doctoral thesis, 'Evaluation of selected state-of-the-art methods for ship performance in level ice' (Table 3, Table 4, Sec. 2.4); measurements from the S.A. Agulhas II ice trial reported by Suominen et al. (2013) and Bekker et al. (2014)",
+    "doi": null,
+    "url": "https://aaltodoc.aalto.fi/handle/123456789/46932",
+    "grade": "MEASURED-SECONDARY",
+    "tables": [
+      "Table 3 (ship parameters)",
+      "Table 4 (recorded vs simulated speed)",
+      "Sec. 2.4 (power range)"
+    ],
+    "retrieval_note": "Full-text extract of the thesis retrieved from AaltoDspace on 2026-11-10 (the repository's text bitstream, not the publisher PDF). Per-case engine power is not tabulated; the source reports only the 2000-5400 kW range across the four level-ice periods.",
+    "sources": [
+      {
+        "artifact": "source/pass_a_table4_columnar.csv",
+        "sha256": "550b59417756154356065423befb8078d0cbabf1c82b8ef607c31230b55e6c35",
+        "bytes": 206,
+        "kind": "transcription-column-major",
+        "role": "pass A digitisation of Table 4"
+      },
+      {
+        "artifact": "source/pass_b_table4_rowmajor.txt",
+        "sha256": "c1627b19b7bc797bb53312bb9033a81c7cedc7d85669167c40d8e7ba66d2a5de",
+        "bytes": 866,
+        "kind": "transcription-row-major",
+        "role": "pass B digitisation (row-major)"
+      }
+    ],
+    "scale": {
+      "model_scale": null,
+      "reported_frame": "full_scale"
+    },
+    "limitations": [
+      "no measured thrust/resistance: adjudication is a power-band consistency screen only",
+      "hull bow angle and flare not reported -> assumed; used only for screening",
+      "ice rubble contamination in case (d) (source notes speed drops from rubble)"
+    ]
+  },
+  "points": [
+    {
+      "point_id": "A",
+      "h_m": 0.31,
+      "V_ms": 4.99,
+      "provenance_ref": "Aalto thesis (handle 123456789/46932) Table 4, cases a-d (recorded mean speed)",
+      "V_final_ms": 5.41,
+      "P_band_kW": [
+        2000.0,
+        5400.0
+      ],
+      "case_group": "a",
+      "notes": "engine power reported as a range over the four level-ice periods, not per case"
+    },
+    {
+      "point_id": "B",
+      "h_m": 0.27,
+      "V_ms": 4.8,
+      "provenance_ref": "Aalto thesis (handle 123456789/46932) Table 4, cases a-d (recorded mean speed)",
+      "V_final_ms": 5.02,
+      "P_band_kW": [
+        2000.0,
+        5400.0
+      ],
+      "case_group": "b",
+      "notes": "engine power reported as a range over the four level-ice periods, not per case"
+    },
+    {
+      "point_id": "C",
+      "h_m": 0.32,
+      "V_ms": 3.55,
+      "provenance_ref": "Aalto thesis (handle 123456789/46932) Table 4, cases a-d (recorded mean speed)",
+      "V_final_ms": 3.59,
+      "P_band_kW": [
+        2000.0,
+        5400.0
+      ],
+      "case_group": "c",
+      "notes": "engine power reported as a range over the four level-ice periods, not per case"
+    },
+    {
+      "point_id": "D",
+      "h_m": 0.27,
+      "V_ms": 3.4,
+      "provenance_ref": "Aalto thesis (handle 123456789/46932) Table 4, cases a-d (recorded mean speed)",
+      "V_final_ms": 3.29,
+      "P_band_kW": [
+        2000.0,
+        5400.0
+      ],
+      "case_group": "d",
+      "notes": "engine power reported as a range over the four level-ice periods, not per case"
+    }
+  ]
+}
