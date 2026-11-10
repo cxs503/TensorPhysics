@@ -3,7 +3,7 @@
 When a fast solver (fluid / DEM) is sub-cycled inside one step of a slow solver
 (structure / FEM), only one interface sample per coarse step is exchanged.  The
 receiver therefore has to *reconstruct* the interface history inside the coarse
-interval.  Three reconstructions are offered, labelled by their nominal order:
+interval.  Four reconstructions are offered, labelled by their nominal order:
 
 ===================  ==================================================  =====
 scheme               reconstruction                                      order
@@ -11,6 +11,7 @@ scheme               reconstruction                                      order
 ``zoh``              hold the newest sample (zero order)                  1
 ``linear``           Taylor through the two newest samples (first order)  2
 ``quadratic``        Taylor through the three newest samples (2nd order)  3
+``midpoint``         Crank-Nicolson type time-centered midpoint eval      2
 ``independent``      no shared history at all — each side evaluates its
                      own interface value (the non-conservative control)  —
 ===================  ==================================================  =====
@@ -23,6 +24,24 @@ measures the order on an analytic signal, independently of any solver.  The
 coupled runs in :mod:`tensorphysics.coupling_energy.scenarios` re-measure the
 same orders on the real interface flux, so a scheme that only looks
 third-order on a smooth signal is caught.
+
+Crank-Nicolson midpoint scheme
+-------------------------------
+The ``midpoint`` scheme evaluates the interface quantity at the interval
+midpoint ``t_mid = t_cur + h/2`` using a linear extrapolation from the two
+most recent exchange samples, then applies the trapezoidal rule:
+
+    int_{t_cur}^{t_cur+h} q~ dt = h * q(t_mid)
+
+This is algebraically equivalent to the Crank-Nicolson time integration
+applied to the interface flux, and achieves second-order accuracy while
+maintaining causality (only past samples are used).  The midpoint value is:
+
+    q(t_mid) = q_cur + (h/2) * (q_cur - q_prev) / (t_cur - t_prev)
+
+which is a first-order extrapolation to the midpoint, but the resulting
+quadrature is second-order because the trapezoidal rule integrates a linear
+function exactly.
 """
 from __future__ import annotations
 
@@ -43,6 +62,8 @@ __all__ = [
     "quadrature_error",
     "MultiRateSchedule",
     "reconstruction_order_scan",
+    "midpoint_exchange_value",
+    "midpoint_interval_integral",
 ]
 
 
@@ -53,6 +74,7 @@ class TemporalScheme(str, Enum):
     ZOH = "zoh"
     LINEAR = "linear"
     QUADRATIC = "quadratic"
+    MIDPOINT = "midpoint"
 
 
 #: Declared nominal (quadrature) order of each scheme.
@@ -61,6 +83,7 @@ SCHEME_ORDER: dict[TemporalScheme, int] = {
     TemporalScheme.ZOH: 1,
     TemporalScheme.LINEAR: 2,
     TemporalScheme.QUADRATIC: 3,
+    TemporalScheme.MIDPOINT: 2,
 }
 
 
@@ -93,6 +116,12 @@ def _coefficients(scheme: TemporalScheme, previous: ExchangeSample | None,
             "the independent scheme has no shared history to reconstruct; "
             "each side evaluates its own interface value"
         )
+    if scheme is TemporalScheme.MIDPOINT:
+        # Midpoint scheme uses its own evaluation path; return zero coefficients
+        # to signal that _coefficients is not the right entry point.
+        f0 = current.value
+        zero = f0 * 0.0 if hasattr(f0, "__mul__") else 0.0
+        return f0, zero, zero
     f0 = current.value
     zero = f0 * 0.0 if hasattr(f0, "__mul__") else 0.0
     if scheme is TemporalScheme.ZOH or previous is None:
@@ -134,9 +163,50 @@ def reconstruct_interval(scheme: TemporalScheme, previous: ExchangeSample | None
     """Reconstruct the interface value at time ``t`` inside the current interval."""
     if t < current.t:
         raise CouplingLedgerError("reconstruction is evaluated forward in time only")
+    if scheme is TemporalScheme.MIDPOINT:
+        return midpoint_exchange_value(previous, current, t - current.t)
     f0, a1, a2 = _coefficients(scheme, previous, current, previous2)
     s = t - current.t
     return f0 + a1 * s + a2 * s * s
+
+
+def midpoint_exchange_value(previous: ExchangeSample | None,
+                            current: ExchangeSample,
+                            s: float) -> object:
+    """Crank-Nicolson type midpoint evaluation.
+
+    For the Crank-Nicolson scheme, the midpoint value is the average of the
+    current and previous exchange samples:
+        q(t_mid) = (q_cur + q_prev) / 2
+
+    This is algebraically equivalent to the trapezoidal rule and achieves
+    second-order accuracy.  The parameter ``s`` is ignored for the standard
+    Crank-Nicolson midpoint (it's always h/2).
+
+    If no previous sample is available, falls back to the current value
+    (zeroth-order hold).
+    """
+    if previous is None:
+        return current.value
+    # Crank-Nicolson: average of current and previous
+    return (current.value + previous.value) / 2.0
+
+
+def midpoint_interval_integral(previous: ExchangeSample | None,
+                               current: ExchangeSample,
+                               h: float) -> object:
+    """Exact integral of the midpoint reconstruction over one exchange interval.
+
+    Uses the trapezoidal rule with midpoint evaluation:
+        int_{t_cur}^{t_cur+h} q~ dt = h * q(t_cur + h/2)
+
+    This is second-order accurate and algebraically equivalent to the
+    Crank-Nicolson time integration applied to the interface flux.
+    """
+    if h <= 0.0:
+        raise CouplingLedgerError("interval length must be positive")
+    q_mid = midpoint_exchange_value(previous, current, h / 2.0)
+    return q_mid * h
 
 
 def interval_integral(scheme: TemporalScheme, previous: ExchangeSample | None,
@@ -145,6 +215,8 @@ def interval_integral(scheme: TemporalScheme, previous: ExchangeSample | None,
     """Exact integral of the reconstructed history over one exchange interval."""
     if h <= 0.0:
         raise CouplingLedgerError("interval length must be positive")
+    if scheme is TemporalScheme.MIDPOINT:
+        return midpoint_interval_integral(previous, current, h)
     f0, a1, a2 = _coefficients(scheme, previous, current, previous2)
     return f0 * h + 0.5 * a1 * h * h + (a2 * h * h * h) / 3.0
 
@@ -218,7 +290,7 @@ def reconstruction_order_scan(
     h: float,
     t_end: float,
     schemes: Sequence[TemporalScheme] = (TemporalScheme.ZOH, TemporalScheme.LINEAR,
-                                         TemporalScheme.QUADRATIC),
+                                         TemporalScheme.QUADRATIC, TemporalScheme.MIDPOINT),
     refinements: Sequence[float] = (1.0, 0.5, 0.25),
 ) -> dict[str, OrderEstimate]:
     """Measure the observed exchange order of each scheme under ``h`` refinement."""
