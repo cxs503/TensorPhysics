@@ -1,0 +1,969 @@
+{
+  "mission_id": 9281,
+  "node": "p257w2-n10-voyage-accumulated-fatigue",
+  "module": "tensorphysics.voyage_fatigue",
+  "provenance": {
+    "git_rev": "72ab09f",
+    "python": "3.11.6",
+    "numpy": "2.4.6",
+    "generated_by": "benchmarks/pending/voyage_fatigue/run_voyage_fatigue.py"
+  },
+  "case": {
+    "class": "VoyageFatigueCase",
+    "hull": {
+      "name": "reference-ice-class-tanker-150m",
+      "length_m": 150.0,
+      "breadth_m": 25.0,
+      "draught_m": 9.0,
+      "block_coefficient_stated": 0.75,
+      "block_coefficient_from_displacement": 0.75,
+      "displacement_kg": 25945312.5,
+      "displaced_volume_m3": 25312.5,
+      "mass_per_length_kg_m": 172968.75,
+      "relative_error": 0.0,
+      "tolerance": 0.02,
+      "consistent": true,
+      "class": "HullParameters"
+    },
+    "girder": {
+      "class": "HullGirder",
+      "bending_stiffness_nm2": 4000000000000.0,
+      "moment_of_inertia_m4": 19.41747572815534,
+      "section_modulus_m3": 3.1067961165048543,
+      "depth_m": 12.5,
+      "youngs_modulus_pa": 206000000000.0
+    },
+    "vibration": {
+      "frequency_hz": 0.7610506291766472,
+      "damping_ratio": 0.03,
+      "modal_mass_kg": 6486330.636979492,
+      "modal_stiffness_nm2": 148315287.5837915,
+      "curvature_midship_per_m": 0.0007896011034320673,
+      "bow_ordinate": 1.0,
+      "stress_per_modal_displacement_mpa": 1016.6114206687866
+    },
+    "profile": {
+      "class": "VoyageProfile",
+      "name": "arctic_round_trip_reference",
+      "voyage_duration_days": 12.0,
+      "ice_duration_s": 36000.0,
+      "ice_duration_h": 10.0,
+      "legs": [
+        {
+          "class": "VoyageLeg",
+          "name": "level_ice_transit",
+          "duration_s": 7200.0,
+          "duration_h": 2.0,
+          "peak_force_n": 2000000.0,
+          "ice_frequency_hz": 0.3,
+          "pulse_duration_s": 0.35,
+          "amplitude_cv": 0.35,
+          "ridge_probability": 0.0,
+          "ridge_factor": 1.8,
+          "window_duration_s": 60.0,
+          "dt_s": 0.02,
+          "application_x_fraction": 0.25,
+          "seed": 101,
+          "scale_to_leg": 120.0,
+          "description": "continuous level-ice crushing at U/s = 0.30 Hz"
+        },
+        {
+          "class": "VoyageLeg",
+          "name": "brash_ice_channel",
+          "duration_s": 3600.0,
+          "duration_h": 1.0,
+          "peak_force_n": 1000000.0,
+          "ice_frequency_hz": 0.45,
+          "pulse_duration_s": 0.3,
+          "amplitude_cv": 0.4,
+          "ridge_probability": 0.0,
+          "ridge_factor": 1.8,
+          "window_duration_s": 60.0,
+          "dt_s": 0.02,
+          "application_x_fraction": 0.25,
+          "seed": 202,
+          "scale_to_leg": 60.0,
+          "description": "brash-ice channel, high pulse rate, low amplitude"
+        },
+        {
+          "class": "VoyageLeg",
+          "name": "ridge_ramming",
+          "duration_s": 1800.0,
+          "duration_h": 0.5,
+          "peak_force_n": 3500000.0,
+          "ice_frequency_hz": 0.2,
+          "pulse_duration_s": 0.25,
+          "amplitude_cv": 0.3,
+          "ridge_probability": 0.2,
+          "ridge_factor": 1.8,
+          "window_duration_s": 60.0,
+          "dt_s": 0.02,
+          "application_x_fraction": 0.25,
+          "seed": 303,
+          "scale_to_leg": 30.0,
+          "description": "ridge ramming: sparse high-amplitude impacts"
+        },
+        {
+          "class": "VoyageLeg",
+          "name": "lock_in_channel",
+          "duration_s": 5400.0,
+          "duration_h": 1.5,
+          "peak_force_n": 1600000.0,
+          "ice_frequency_hz": 0.68,
+          "pulse_duration_s": 0.3,
+          "amplitude_cv": 0.3,
+          "ridge_probability": 0.0,
+          "ridge_factor": 1.8,
+          "window_duration_s": 60.0,
+          "dt_s": 0.02,
+          "application_x_fraction": 0.25,
+          "seed": 404,
+          "scale_to_leg": 90.0,
+          "description": "pulse frequency close to f1 -> ice-induced vibration dominant"
+        },
+        {
+          "class": "VoyageLeg",
+          "name": "open_water_background",
+          "duration_s": 18000.0,
+          "duration_h": 5.0,
+          "peak_force_n": 350000.0,
+          "ice_frequency_hz": 0.12,
+          "pulse_duration_s": 0.5,
+          "amplitude_cv": 0.45,
+          "ridge_probability": 0.0,
+          "ridge_factor": 1.8,
+          "window_duration_s": 60.0,
+          "dt_s": 0.02,
+          "application_x_fraction": 0.25,
+          "seed": 505,
+          "scale_to_leg": 300.0,
+          "description": "residual open-water / wave-induced load at the same station"
+        }
+      ],
+      "description": "one Arctic round trip: 9.5 h in ice + open water, 12 calendar days"
+    },
+    "sn_curve": {
+      "class": "PowerLawSN",
+      "name": "power_law_fit_DNV_D_seawater_cp",
+      "m": 2.9999999999999987,
+      "log10_C": 11.198910013008053,
+      "C": 158092043433.89267,
+      "form": "sigma_a**m * N = C (sigma_a in MPa, amplitude)"
+    },
+    "n_voyages": 60,
+    "severity_sequence": null
+  },
+  "criteria": [
+    {
+      "id": "C1",
+      "name": "Miner cumulative damage vs hand calculation",
+      "blocks": [
+        {
+          "stress_range_mpa": 20.0,
+          "stress_amplitude_mpa": 10.0,
+          "n_cycles": 1000.0,
+          "N_to_failure": 1000000000.0,
+          "damage": 1e-06
+        },
+        {
+          "stress_range_mpa": 40.0,
+          "stress_amplitude_mpa": 20.0,
+          "n_cycles": 500.0,
+          "N_to_failure": 125000000.0,
+          "damage": 4e-06
+        },
+        {
+          "stress_range_mpa": 60.0,
+          "stress_amplitude_mpa": 30.0,
+          "n_cycles": 100.0,
+          "N_to_failure": 37037037.03703704,
+          "damage": 2.7e-06
+        }
+      ],
+      "hand_calculation": 7.699999999999999e-06,
+      "computed": 7.699999999999999e-06,
+      "relative_deviation": 0.0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    {
+      "id": "C2",
+      "name": "Power-law S-N fit sigma_a^m * N = C",
+      "fit_steep_segment": {
+        "class": "PowerLawFit",
+        "m": 2.9999999999999987,
+        "log10_C": 11.198910013008053,
+        "R_squared": 1.0,
+        "n_points": 25,
+        "rmse_log10_life": 1.2685725232129474e-15
+      },
+      "code_values": {
+        "m_DNV_D": 3.0,
+        "log10_K1_DNV_D": 12.102
+      },
+      "fitted_curve": {
+        "class": "PowerLawSN",
+        "name": "power_law_fit_DNV_D_seawater_cp",
+        "m": 2.9999999999999987,
+        "log10_C": 11.198910013008053,
+        "C": 158092043433.89267,
+        "form": "sigma_a**m * N = C (sigma_a in MPa, amplitude)"
+      },
+      "fit_across_knee": {
+        "class": "PowerLawFit",
+        "m": 3.1567198542513406,
+        "log10_C": 11.534553974240183,
+        "R_squared": 0.9960941648912159,
+        "n_points": 40,
+        "rmse_log10_life": 0.08324122600857221
+      },
+      "reproduction_samples": [
+        {
+          "N_target": 10000.0,
+          "stress_range_mpa": 501.9571752634256,
+          "N_from_fit": 9999.999999999987,
+          "relative_deviation": 1.2732925824820995e-15
+        },
+        {
+          "N_target": 56234.13251903491,
+          "stress_range_mpa": 282.27126312643907,
+          "N_from_fit": 56234.13251903479,
+          "relative_deviation": 2.07018969817893e-15
+        },
+        {
+          "N_target": 316227.7660168379,
+          "stress_range_mpa": 158.73279616967545,
+          "N_from_fit": 316227.7660168371,
+          "relative_deviation": 2.576963000602398e-15
+        },
+        {
+          "N_target": 1778279.410038923,
+          "stress_range_mpa": 89.26201094922487,
+          "N_from_fit": 1778279.410038916,
+          "relative_deviation": 3.92790878091717e-15
+        },
+        {
+          "N_target": 10000000.0,
+          "stress_range_mpa": 50.19571752634256,
+          "N_from_fit": 9999999.999999955,
+          "relative_deviation": 4.470348358154297e-15
+        }
+      ],
+      "r_squared": 1.0,
+      "min_r_squared": 0.99,
+      "passed": true
+    },
+    {
+      "id": "C3",
+      "name": "Rainflow counting vs ASTM E1049-85 / independent implementation",
+      "analytic_anchor": {
+        "periods": 30,
+        "amplitude_mpa": 25.0,
+        "expected_cycles_at_2A": 29,
+        "counted_cycles_at_2A": 29.0,
+        "relative_deviation": 0.0
+      },
+      "cross_check": [
+        {
+          "leg": "level_ice_transit",
+          "component": "total",
+          "cycles_astm_stack": 61.0,
+          "cycles_independent": 61.0,
+          "damage_astm_stack": 5.110818331157456e-07,
+          "damage_independent": 5.110818331157456e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 4.78743013542926e-07,
+          "relative_deviation_legacy_list": 0.06327522810910742
+        },
+        {
+          "leg": "level_ice_transit",
+          "component": "quasi_static",
+          "cycles_astm_stack": 18.0,
+          "cycles_independent": 18.0,
+          "damage_astm_stack": 2.0808336848456355e-07,
+          "damage_independent": 2.0808336848456355e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 2.080833684845636e-07,
+          "relative_deviation_legacy_list": 2.5441513941716603e-16
+        },
+        {
+          "leg": "level_ice_transit",
+          "component": "vibration",
+          "cycles_astm_stack": 58.5,
+          "cycles_independent": 58.5,
+          "damage_astm_stack": 3.068385202839364e-07,
+          "damage_independent": 3.068385202839364e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 3.088694702523472e-07,
+          "relative_deviation_legacy_list": 0.006618953730227293
+        },
+        {
+          "leg": "brash_ice_channel",
+          "component": "total",
+          "cycles_astm_stack": 69.5,
+          "cycles_independent": 69.5,
+          "damage_astm_stack": 4.7379347734414e-08,
+          "damage_independent": 4.7379347734414e-08,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 4.134620872776553e-08,
+          "relative_deviation_legacy_list": 0.12733689455725233
+        },
+        {
+          "leg": "brash_ice_channel",
+          "component": "quasi_static",
+          "cycles_astm_stack": 27.0,
+          "cycles_independent": 27.0,
+          "damage_astm_stack": 3.81932096043566e-08,
+          "damage_independent": 3.81932096043566e-08,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 3.8304720452665215e-08,
+          "relative_deviation_legacy_list": 0.00291965114908531
+        },
+        {
+          "leg": "brash_ice_channel",
+          "component": "vibration",
+          "cycles_astm_stack": 63.0,
+          "cycles_independent": 63.0,
+          "damage_astm_stack": 3.076675490549848e-08,
+          "damage_independent": 3.076675490549848e-08,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 3.02619626056512e-08,
+          "relative_deviation_legacy_list": 0.01640706994929335
+        },
+        {
+          "leg": "ridge_ramming",
+          "component": "total",
+          "cycles_astm_stack": 54.0,
+          "cycles_independent": 54.0,
+          "damage_astm_stack": 5.844701512308805e-07,
+          "damage_independent": 5.844701512308805e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 4.819304420014964e-07,
+          "relative_deviation_legacy_list": 0.17544045493758392
+        },
+        {
+          "leg": "ridge_ramming",
+          "component": "quasi_static",
+          "cycles_astm_stack": 11.0,
+          "cycles_independent": 11.0,
+          "damage_astm_stack": 5.372083848058825e-07,
+          "damage_independent": 5.372083848058825e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 5.372083848058826e-07,
+          "relative_deviation_legacy_list": 1.9709133625128806e-16
+        },
+        {
+          "leg": "ridge_ramming",
+          "component": "vibration",
+          "cycles_astm_stack": 50.5,
+          "cycles_independent": 50.5,
+          "damage_astm_stack": 3.4443785998813037e-07,
+          "damage_independent": 3.4443785998813037e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 3.4903412610831125e-07,
+          "relative_deviation_legacy_list": 0.01334425350436004
+        },
+        {
+          "leg": "lock_in_channel",
+          "component": "total",
+          "cycles_astm_stack": 72.5,
+          "cycles_independent": 72.5,
+          "damage_astm_stack": 5.375576854516592e-07,
+          "damage_independent": 5.375576854516592e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 5.232970976070638e-07,
+          "relative_deviation_legacy_list": 0.026528479139152385
+        },
+        {
+          "leg": "lock_in_channel",
+          "component": "quasi_static",
+          "cycles_astm_stack": 40.0,
+          "cycles_independent": 40.0,
+          "damage_astm_stack": 1.7628052196774213e-07,
+          "damage_independent": 1.7628052196774213e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 1.7708054297385345e-07,
+          "relative_deviation_legacy_list": 0.004538340351963091
+        },
+        {
+          "leg": "lock_in_channel",
+          "component": "vibration",
+          "cycles_astm_stack": 79.0,
+          "cycles_independent": 79.0,
+          "damage_astm_stack": 2.2967702762457797e-07,
+          "damage_independent": 2.2967702762457797e-07,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 2.399037405108606e-07,
+          "relative_deviation_legacy_list": 0.04452649440848235
+        },
+        {
+          "leg": "open_water_background",
+          "component": "total",
+          "cycles_astm_stack": 52.0,
+          "cycles_independent": 52.0,
+          "damage_astm_stack": 2.0860365026729086e-10,
+          "damage_independent": 2.0860365026729086e-10,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 2.0650331109057453e-10,
+          "relative_deviation_legacy_list": 0.010068563872324817
+        },
+        {
+          "leg": "open_water_background",
+          "component": "quasi_static",
+          "cycles_astm_stack": 7.0,
+          "cycles_independent": 7.0,
+          "damage_astm_stack": 6.391264293020216e-11,
+          "damage_independent": 6.391264293020216e-11,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 6.391264293020217e-11,
+          "relative_deviation_legacy_list": 2.0222441880952858e-16
+        },
+        {
+          "leg": "open_water_background",
+          "component": "vibration",
+          "cycles_astm_stack": 49.5,
+          "cycles_independent": 49.5,
+          "damage_astm_stack": 1.763972667718947e-10,
+          "damage_independent": 1.763972667718947e-10,
+          "relative_deviation": 0.0,
+          "damage_legacy_list_variant": 1.7820689828242914e-10,
+          "relative_deviation_legacy_list": 0.01025884098802132
+        }
+      ],
+      "worst_cross_check_deviation": 0.0,
+      "worst_legacy_list_deviation": 0.17544045493758392,
+      "tolerance": 0.01,
+      "passed": true,
+      "note": "the legacy list implementation fatigue.rainflow.rainflow_counting closes the OUTER range of a four-point set (documented legacy behaviour of that module) and over-estimates large ranges; the ASTM-conformant stack implementation is used here"
+    },
+    {
+      "id": "C4",
+      "name": "Cumulative damage monotone non-decreasing (no repair)",
+      "uniform_route": {
+        "n_voyages": 40,
+        "final_damage": 0.032930046404272724,
+        "min_increment": 0.0008232511601068172,
+        "is_monotone": true
+      },
+      "varying_severity": {
+        "severity_range": [
+          0.6,
+          1.4
+        ],
+        "final_damage": 0.03293004640427274,
+        "min_increment": 0.0004939506960640911,
+        "is_monotone": true
+      },
+      "cumulative_damage_at_10_voyages": 0.008232511601068183,
+      "passed": true
+    },
+    {
+      "id": "C5",
+      "name": "Residual life limits: D->1 => N_remaining->0, D=0 => N_total",
+      "damage_per_voyage": 0.0008232511601068184,
+      "voyage_duration_days": 12.0,
+      "limits": {
+        "D=0": {
+          "class": "RemainingLife",
+          "damage_used": 0.0,
+          "damage_per_voyage": 0.0008232511601068184,
+          "damage_critical": 1.0,
+          "total_voyages_to_failure": 1214.6961321867414,
+          "fraction_life_used": 0.0,
+          "remaining_voyages": 1214.6961321867414,
+          "remaining_operating_days": 14576.353586240897,
+          "remaining_operating_years": 39.907881139605465
+        },
+        "D=0.5": {
+          "class": "RemainingLife",
+          "damage_used": 0.5,
+          "damage_per_voyage": 0.0008232511601068184,
+          "damage_critical": 1.0,
+          "total_voyages_to_failure": 1214.6961321867414,
+          "fraction_life_used": 0.5,
+          "remaining_voyages": 607.3480660933707,
+          "remaining_operating_days": 7288.176793120449,
+          "remaining_operating_years": 19.953940569802732
+        },
+        "D=0.99": {
+          "class": "RemainingLife",
+          "damage_used": 0.99,
+          "damage_per_voyage": 0.0008232511601068184,
+          "damage_critical": 1.0,
+          "total_voyages_to_failure": 1214.6961321867414,
+          "fraction_life_used": 0.99,
+          "remaining_voyages": 12.146961321867423,
+          "remaining_operating_days": 145.76353586240907,
+          "remaining_operating_years": 0.39907881139605494
+        },
+        "D=1.0": {
+          "class": "RemainingLife",
+          "damage_used": 1.0,
+          "damage_per_voyage": 0.0008232511601068184,
+          "damage_critical": 1.0,
+          "total_voyages_to_failure": 1214.6961321867414,
+          "fraction_life_used": 1.0,
+          "remaining_voyages": 0.0,
+          "remaining_operating_days": 0.0,
+          "remaining_operating_years": 0.0
+        }
+      },
+      "n_total_voyages": 1214.6961321867414,
+      "relative_deviation_at_D0": 0.0,
+      "absolute_value_at_D1": 0.0,
+      "passed": true
+    },
+    {
+      "id": "C6",
+      "name": "Ice-induced vibration share of the voyage damage",
+      "voyage_fraction": 0.5446598860563131,
+      "per_leg_fraction": {
+        "level_ice_transit": 0.5928570436244822,
+        "brash_ice_channel": 0.19388485847357995,
+        "ridge_ramming": 0.08086258353051227,
+        "lock_in_channel": 0.6720714320740659,
+        "open_water_background": 0.693616852589546
+      },
+      "damage_total": 0.0008232511601068184,
+      "damage_quasi_static": 0.0003748592770473111,
+      "damage_vibration_only": 0.000441031779208072,
+      "in_open_interval_0_1": true,
+      "passed": true
+    },
+    {
+      "id": "C7",
+      "name": "Voyage damage >= single-window damage",
+      "voyage_damage": 0.0008232511601068184,
+      "max_single_window_damage": 3.6970244582566755e-06,
+      "ratio": 222.67939241468284,
+      "passed": true
+    },
+    {
+      "id": "C8",
+      "name": "pytest coverage of C1-C8",
+      "test_file": "tests/test_voyage_fatigue.py",
+      "n_tests": 26,
+      "passed": true,
+      "note": "run `python -m pytest tests/test_voyage_fatigue.py` - all tests green"
+    }
+  ],
+  "all_passed": true,
+  "voyage_damage": {
+    "class": "VoyageDamage",
+    "profile_name": "arctic_round_trip_reference",
+    "damage_total": 0.0008232511601068184,
+    "damage_static": 0.0003748592770473111,
+    "damage_vibration_only": 0.000441031779208072,
+    "ice_vibration_fraction": 0.5446598860563131,
+    "max_single_window_damage": 3.6970244582566755e-06,
+    "dominates_single_window": true,
+    "peak_stress_mpa": 71.44157021442135,
+    "ice_duration_s": 36000.0,
+    "worst_leg": "level_ice_transit",
+    "per_leg": [
+      {
+        "class": "LegDamage",
+        "leg_name": "level_ice_transit",
+        "damage_total": 0.00038793742329945087,
+        "damage_static": 0.0001579459894108391,
+        "damage_vibration_only": 0.00023290623382617618,
+        "ice_vibration_fraction": 0.5928570436244822,
+        "scale_to_leg": 120.0,
+        "window_damage_total": 3.2328118608287574e-06,
+        "window_cycles": 61.0,
+        "leg_cycles": 7320.0,
+        "peak_stress_mpa": 53.773571201546446,
+        "peak_vibration_stress_mpa": 36.22106137262632,
+        "max_stress_range_mpa": 86.72488867352605,
+        "duration_s": 7200.0
+      },
+      {
+        "class": "LegDamage",
+        "leg_name": "brash_ice_channel",
+        "damage_total": 1.798168207784316e-05,
+        "damage_static": 1.449530619306363e-05,
+        "damage_vibration_only": 1.1676775467209541e-05,
+        "ice_vibration_fraction": 0.19388485847357995,
+        "scale_to_leg": 60.0,
+        "window_damage_total": 2.99694701297386e-07,
+        "window_cycles": 69.5,
+        "leg_cycles": 4170.0,
+        "peak_stress_mpa": 25.233682784610405,
+        "peak_vibration_stress_mpa": 17.280248375034393,
+        "max_stress_range_mpa": 37.39408368262349,
+        "duration_s": 3600.0
+      },
+      {
+        "class": "LegDamage",
+        "leg_name": "ridge_ramming",
+        "damage_total": 0.00011091073374770026,
+        "damage_static": 0.00010194220527559644,
+        "damage_vibration_only": 6.536151709598682e-05,
+        "ice_vibration_fraction": 0.08086258353051227,
+        "scale_to_leg": 30.0,
+        "window_damage_total": 3.6970244582566755e-06,
+        "window_cycles": 54.0,
+        "leg_cycles": 1620.0,
+        "peak_stress_mpa": 71.44157021442135,
+        "peak_vibration_stress_mpa": 34.00414989284679,
+        "max_stress_range_mpa": 102.37865097656274,
+        "duration_s": 1800.0
+      },
+      {
+        "class": "LegDamage",
+        "leg_name": "lock_in_channel",
+        "damage_total": 0.00030602546870665023,
+        "damage_static": 0.00010035449370183455,
+        "damage_vibration_only": 0.00013075251630140157,
+        "ice_vibration_fraction": 0.6720714320740659,
+        "scale_to_leg": 90.0,
+        "window_damage_total": 3.400282985629447e-06,
+        "window_cycles": 72.5,
+        "leg_cycles": 6525.0,
+        "peak_stress_mpa": 54.43816291467424,
+        "peak_vibration_stress_mpa": 31.30960213185871,
+        "max_stress_range_mpa": 82.93009314033678,
+        "duration_s": 5400.0
+      },
+      {
+        "class": "LegDamage",
+        "leg_name": "open_water_background",
+        "damage_total": 3.958522751738351e-07,
+        "damage_static": 1.2128246597734873e-07,
+        "damage_vibration_only": 3.347365172978924e-07,
+        "ice_vibration_fraction": 0.693616852589546,
+        "scale_to_leg": 300.0,
+        "window_damage_total": 1.3195075839127838e-09,
+        "window_cycles": 52.0,
+        "leg_cycles": 15600.0,
+        "peak_stress_mpa": 4.075914086783942,
+        "peak_vibration_stress_mpa": 3.3146991024500427,
+        "max_stress_range_mpa": 7.093299532472295,
+        "duration_s": 18000.0
+      }
+    ]
+  },
+  "life_summary": {
+    "voyage_damage": {
+      "class": "VoyageDamage",
+      "profile_name": "arctic_round_trip_reference",
+      "damage_total": 0.0008232511601068184,
+      "damage_static": 0.0003748592770473111,
+      "damage_vibration_only": 0.000441031779208072,
+      "ice_vibration_fraction": 0.5446598860563131,
+      "max_single_window_damage": 3.6970244582566755e-06,
+      "dominates_single_window": true,
+      "peak_stress_mpa": 71.44157021442135,
+      "ice_duration_s": 36000.0,
+      "worst_leg": "level_ice_transit",
+      "per_leg": [
+        {
+          "class": "LegDamage",
+          "leg_name": "level_ice_transit",
+          "damage_total": 0.00038793742329945087,
+          "damage_static": 0.0001579459894108391,
+          "damage_vibration_only": 0.00023290623382617618,
+          "ice_vibration_fraction": 0.5928570436244822,
+          "scale_to_leg": 120.0,
+          "window_damage_total": 3.2328118608287574e-06,
+          "window_cycles": 61.0,
+          "leg_cycles": 7320.0,
+          "peak_stress_mpa": 53.773571201546446,
+          "peak_vibration_stress_mpa": 36.22106137262632,
+          "max_stress_range_mpa": 86.72488867352605,
+          "duration_s": 7200.0
+        },
+        {
+          "class": "LegDamage",
+          "leg_name": "brash_ice_channel",
+          "damage_total": 1.798168207784316e-05,
+          "damage_static": 1.449530619306363e-05,
+          "damage_vibration_only": 1.1676775467209541e-05,
+          "ice_vibration_fraction": 0.19388485847357995,
+          "scale_to_leg": 60.0,
+          "window_damage_total": 2.99694701297386e-07,
+          "window_cycles": 69.5,
+          "leg_cycles": 4170.0,
+          "peak_stress_mpa": 25.233682784610405,
+          "peak_vibration_stress_mpa": 17.280248375034393,
+          "max_stress_range_mpa": 37.39408368262349,
+          "duration_s": 3600.0
+        },
+        {
+          "class": "LegDamage",
+          "leg_name": "ridge_ramming",
+          "damage_total": 0.00011091073374770026,
+          "damage_static": 0.00010194220527559644,
+          "damage_vibration_only": 6.536151709598682e-05,
+          "ice_vibration_fraction": 0.08086258353051227,
+          "scale_to_leg": 30.0,
+          "window_damage_total": 3.6970244582566755e-06,
+          "window_cycles": 54.0,
+          "leg_cycles": 1620.0,
+          "peak_stress_mpa": 71.44157021442135,
+          "peak_vibration_stress_mpa": 34.00414989284679,
+          "max_stress_range_mpa": 102.37865097656274,
+          "duration_s": 1800.0
+        },
+        {
+          "class": "LegDamage",
+          "leg_name": "lock_in_channel",
+          "damage_total": 0.00030602546870665023,
+          "damage_static": 0.00010035449370183455,
+          "damage_vibration_only": 0.00013075251630140157,
+          "ice_vibration_fraction": 0.6720714320740659,
+          "scale_to_leg": 90.0,
+          "window_damage_total": 3.400282985629447e-06,
+          "window_cycles": 72.5,
+          "leg_cycles": 6525.0,
+          "peak_stress_mpa": 54.43816291467424,
+          "peak_vibration_stress_mpa": 31.30960213185871,
+          "max_stress_range_mpa": 82.93009314033678,
+          "duration_s": 5400.0
+        },
+        {
+          "class": "LegDamage",
+          "leg_name": "open_water_background",
+          "damage_total": 3.958522751738351e-07,
+          "damage_static": 1.2128246597734873e-07,
+          "damage_vibration_only": 3.347365172978924e-07,
+          "ice_vibration_fraction": 0.693616852589546,
+          "scale_to_leg": 300.0,
+          "window_damage_total": 1.3195075839127838e-09,
+          "window_cycles": 52.0,
+          "leg_cycles": 15600.0,
+          "peak_stress_mpa": 4.075914086783942,
+          "peak_vibration_stress_mpa": 3.3146991024500427,
+          "max_stress_range_mpa": 7.093299532472295,
+          "duration_s": 18000.0
+        }
+      ]
+    },
+    "trajectory": {
+      "class": "DamageTrajectory",
+      "n_voyages": 60,
+      "final_damage": 0.04939506960640914,
+      "final_time_days": 720.0,
+      "is_monotone": true
+    },
+    "voyages_to_failure_simulated": 1215,
+    "voyages_to_failure_analytic": 1214.6961321867414,
+    "remaining_life_at_zero_damage": {
+      "class": "RemainingLife",
+      "damage_used": 0.0,
+      "damage_per_voyage": 0.0008232511601068184,
+      "damage_critical": 1.0,
+      "total_voyages_to_failure": 1214.6961321867414,
+      "fraction_life_used": 0.0,
+      "remaining_voyages": 1214.6961321867414,
+      "remaining_operating_days": 14576.353586240897,
+      "remaining_operating_years": 39.907881139605465
+    },
+    "remaining_life_at_half_life": {
+      "class": "RemainingLife",
+      "damage_used": 0.5,
+      "damage_per_voyage": 0.0008232511601068184,
+      "damage_critical": 1.0,
+      "total_voyages_to_failure": 1214.6961321867414,
+      "fraction_life_used": 0.5,
+      "remaining_voyages": 607.3480660933707,
+      "remaining_operating_days": 7288.176793120449,
+      "remaining_operating_years": 19.953940569802732
+    }
+  },
+  "frequency_sweep": [
+    {
+      "frequency_ratio": 0.1,
+      "ice_frequency_hz": 0.07610506291766472,
+      "damage_total": 3.675838941534986e-05,
+      "damage_static": 3.05395808555662e-05,
+      "ice_vibration_fraction": 0.169180659400348,
+      "peak_stress_mpa": 34.74271255392409,
+      "peak_vibration_stress_mpa": 18.59989848974126,
+      "amplification_analytic": 1.0100824596293025
+    },
+    {
+      "frequency_ratio": 0.2,
+      "ice_frequency_hz": 0.15221012583532945,
+      "damage_total": 0.00015488717434719904,
+      "damage_static": 8.125636742676204e-05,
+      "ice_vibration_fraction": 0.47538349918750733,
+      "peak_stress_mpa": 47.916096788216336,
+      "peak_vibration_stress_mpa": 26.769879526594444,
+      "amplification_analytic": 1.041585295993835
+    },
+    {
+      "frequency_ratio": 0.3,
+      "ice_frequency_hz": 0.22831518875299417,
+      "damage_total": 0.00019643943386210962,
+      "damage_static": 0.0001054941965371433,
+      "ice_vibration_fraction": 0.4629683334803602,
+      "peak_stress_mpa": 41.42256562631435,
+      "peak_vibration_stress_mpa": 28.643346637019956,
+      "amplification_analytic": 1.0986861855382475
+    },
+    {
+      "frequency_ratio": 0.4,
+      "ice_frequency_hz": 0.3044202516706589,
+      "damage_total": 0.0004402178174170973,
+      "damage_static": 0.0001579460388982748,
+      "ice_vibration_fraction": 0.6412093453531796,
+      "peak_stress_mpa": 53.02961633624167,
+      "peak_vibration_stress_mpa": 37.64021266562225,
+      "amplification_analytic": 1.1899905791198748
+    },
+    {
+      "frequency_ratio": 0.5,
+      "ice_frequency_hz": 0.3805253145883236,
+      "damage_total": 0.0010513878619688255,
+      "damage_static": 0.0002520358140146692,
+      "ice_vibration_fraction": 0.7602827432849493,
+      "peak_stress_mpa": 57.86203966810544,
+      "peak_vibration_stress_mpa": 57.86203966810544,
+      "amplification_analytic": 1.332267944962386
+    },
+    {
+      "frequency_ratio": 0.6,
+      "ice_frequency_hz": 0.45663037750598834,
+      "damage_total": 0.00034677507231010437,
+      "damage_static": 0.00031464069512933645,
+      "ice_vibration_fraction": 0.09266634123006304,
+      "peak_stress_mpa": 66.3036728713596,
+      "peak_vibration_stress_mpa": 37.73881239122157,
+      "amplification_analytic": 1.5600339267387213
+    },
+    {
+      "frequency_ratio": 0.7,
+      "ice_frequency_hz": 0.5327354404236531,
+      "damage_total": 0.000629752036846196,
+      "damage_static": 0.0003355195529868595,
+      "ice_vibration_fraction": 0.46721958269933594,
+      "peak_stress_mpa": 77.04618311507517,
+      "peak_vibration_stress_mpa": 37.826719501628766,
+      "amplification_analytic": 1.954168917626285
+    },
+    {
+      "frequency_ratio": 0.8,
+      "ice_frequency_hz": 0.6088405033413178,
+      "damage_total": 0.0008894545635369119,
+      "damage_static": 0.00036661522606430154,
+      "ice_vibration_fraction": 0.5878201753145683,
+      "peak_stress_mpa": 65.24479941813581,
+      "peak_vibration_stress_mpa": 33.84515176660812,
+      "amplification_analytic": 2.7534108352295417
+    },
+    {
+      "frequency_ratio": 0.9,
+      "ice_frequency_hz": 0.6849455662589825,
+      "damage_total": 0.0014643546072162941,
+      "damage_static": 0.0003958403856997748,
+      "ice_vibration_fraction": 0.7296826986106468,
+      "peak_stress_mpa": 80.31121628331125,
+      "peak_vibration_stress_mpa": 41.44092348382917,
+      "amplification_analytic": 5.062658447868112
+    },
+    {
+      "frequency_ratio": 0.95,
+      "ice_frequency_hz": 0.7229980977178149,
+      "damage_total": 0.004331000510842595,
+      "damage_static": 0.000414475673279182,
+      "ice_vibration_fraction": 0.9043002483510338,
+      "peak_stress_mpa": 102.49089485123301,
+      "peak_vibration_stress_mpa": 67.022466198863,
+      "amplification_analytic": 8.854326093529046
+    },
+    {
+      "frequency_ratio": 1.0,
+      "ice_frequency_hz": 0.7610506291766472,
+      "damage_total": 0.0118636377903335,
+      "damage_static": 0.00043146261740248967,
+      "ice_vibration_fraction": 0.9636315078875685,
+      "peak_stress_mpa": 100.16328165384166,
+      "peak_vibration_stress_mpa": 100.16328165384166,
+      "amplification_analytic": 16.666666666666668
+    },
+    {
+      "frequency_ratio": 1.1,
+      "ice_frequency_hz": 0.8371556920943121,
+      "damage_total": 0.0006525297260649724,
+      "damage_static": 0.00044167190505849325,
+      "ice_vibration_fraction": 0.32313902736361166,
+      "peak_stress_mpa": 47.88574364379751,
+      "peak_vibration_stress_mpa": 56.61938885704269,
+      "amplification_analytic": 4.542827223339309
+    },
+    {
+      "frequency_ratio": 1.25,
+      "ice_frequency_hz": 0.951313286470809,
+      "damage_total": 0.00031995144353048655,
+      "damage_static": 0.0005073719498655524,
+      "ice_vibration_fraction": -0.5857779676409164,
+      "peak_stress_mpa": 46.3011563099022,
+      "peak_vibration_stress_mpa": 49.81455923017334,
+      "amplification_analytic": 1.762182934546906
+    }
+  ],
+  "dt_convergence": [
+    {
+      "dt_s": 0.02,
+      "damage_total": 0.00030602546870665023,
+      "peak_stress_mpa": 54.43816291467424,
+      "relative_deviation_vs_finest": 0.0026994537633533637
+    },
+    {
+      "dt_s": 0.01,
+      "damage_total": 0.00030673266407630023,
+      "peak_stress_mpa": 54.447217564638706,
+      "relative_deviation_vs_finest": 0.00039478830061030426
+    },
+    {
+      "dt_s": 0.005,
+      "damage_total": 0.0003068538063690525,
+      "peak_stress_mpa": 54.4430681513236,
+      "relative_deviation_vs_finest": 0.0
+    }
+  ],
+  "resonance_check": {
+    "measured_mpa": 114.42362990790798,
+    "analytic_mpa": 114.23990037602012,
+    "relative_deviation": 0.0016082781172175238
+  },
+  "vibration_decomposition_check": {
+    "force_n": 1000000.0,
+    "exact_static_stress_mpa": 18.10546875,
+    "mode1_modal_static_stress_mpa": 6.854394022561206,
+    "mode1_share_of_static": 0.37858141742732876,
+    "bending_moment_static_nm": 56250000.0,
+    "note": "higher vertical modes are treated quasi-statically; mode 1 carries 37.9 % of the static midship moment and all of the retained vibratory dynamics"
+  },
+  "figures": [
+    {
+      "path": "benchmarks/pending/voyage_fatigue/figures/fig1_stress_histories.png",
+      "sha256": "dfa727c25d8e90cb45967cd44736a3a64145dfbc25df956fd638a847b4215fe2"
+    },
+    {
+      "path": "benchmarks/pending/voyage_fatigue/figures/fig2_rainflow_and_damage.png",
+      "sha256": "d51f5897ff2b204a4748a5fde1966c041197272193787c96e7c56934d809019b"
+    },
+    {
+      "path": "benchmarks/pending/voyage_fatigue/figures/fig3_leg_damage_split.png",
+      "sha256": "eb97da5d59c31778c531ec380115e27a8d0013fcedd890ae20857a85a8026f0f"
+    },
+    {
+      "path": "benchmarks/pending/voyage_fatigue/figures/fig4_damage_trajectory.png",
+      "sha256": "89bbea691cf1ddd9be2f8b6626fdaf1aaedd3503db62a85353d5d57cb459ed82"
+    },
+    {
+      "path": "benchmarks/pending/voyage_fatigue/figures/fig5_frequency_sweep.png",
+      "sha256": "04423575345a5a313694f2da293471d4eee329b000a9620733367a965e909d59"
+    },
+    {
+      "path": "benchmarks/pending/voyage_fatigue/figures/fig6_sn_fit.png",
+      "sha256": "e27d5f5445cd8524158789a19986959eccf567ab033ec4894372931b0909742e"
+    },
+    {
+      "path": "benchmarks/pending/voyage_fatigue/figures/fig7_dt_convergence.png",
+      "sha256": "1be9d097de283722e8fe360c37707b58f73e092890e73a4546ba7fcf8fb2aa4e"
+    }
+  ]
+}
