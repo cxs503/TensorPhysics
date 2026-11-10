@@ -8,6 +8,9 @@ including:
   - Compressive strength model (Schulson, 1999)
   - Fracture toughness with Hall-Petch grain-size relation
   - Weibull strength distribution integration
+  - Ice-ridge consolidation thermodynamics: brine-saturated porous keel,
+    modified Stefan refreezing, consolidation-degree strength evolution and the
+    consolidation -> ship-resistance closure (IN13-W3-N05)
 
 References:
   - Timco, G.W. & Frederking, R.M.W. (2007). Cold Reg. Sci. Technol.
@@ -32,6 +35,23 @@ from .constitutive import (
     WeibullStrengthDistribution,
 )
 from .myi_model import MYIModel
+from .ridge_consolidation import (
+    ConsolidationState,
+    KeelProperties,
+    consolidated_layer_temperature,
+    consolidated_strength,
+    consolidation_history,
+    consolidation_state,
+    consolidation_time_to_degree,
+    consolidation_time_to_thickness,
+    keel_properties,
+    keel_resistance_coupled,
+    ridge_total_resistance,
+    sail_resistance_coupled,
+    solid_ice_strength,
+    stefan_constant,
+    stefan_number,
+)
 
 __all__ = [
     "StefanSolver",
@@ -46,4 +66,19 @@ __all__ = [
     "hall_petch_slope",
     "WeibullStrengthDistribution",
     "MYIModel",
+    "ConsolidationState",
+    "KeelProperties",
+    "consolidated_layer_temperature",
+    "consolidated_strength",
+    "consolidation_history",
+    "consolidation_state",
+    "consolidation_time_to_degree",
+    "consolidation_time_to_thickness",
+    "keel_properties",
+    "keel_resistance_coupled",
+    "ridge_total_resistance",
+    "sail_resistance_coupled",
+    "solid_ice_strength",
+    "stefan_constant",
+    "stefan_number",
 ]
