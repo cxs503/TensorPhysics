@@ -28,6 +28,23 @@ from .density_filter import (
     checkerboard_index,
     filter_sensitivity,
 )
+from .filter_acceptance import (
+    convergence_order,
+    jaccard_similarity,
+    run_acceptance as run_filter_acceptance,
+    sample_to_grid,
+)
+from .filter_chain import (
+    FilterChain,
+    HeavisideProjection,
+    IdentityFilter,
+    PdeFilter,
+    adjoint_sensitivity_chain,
+    fd_sensitivity_chain,
+    make_filter_chain,
+    pde_radius_from_hat_radius,
+    run_simp_chain,
+)
 from .fem2d import Q4Mesh, assemble_stiffness, compliance_and_displacements
 from .problems import (
     build_cantilever,
@@ -46,6 +63,19 @@ from .verification import count_test_cases, run_acceptance
 
 __all__ = [
     "DensityFilter",
+    "FilterChain",
+    "HeavisideProjection",
+    "IdentityFilter",
+    "PdeFilter",
+    "adjoint_sensitivity_chain",
+    "convergence_order",
+    "fd_sensitivity_chain",
+    "jaccard_similarity",
+    "make_filter_chain",
+    "pde_radius_from_hat_radius",
+    "run_filter_acceptance",
+    "run_simp_chain",
+    "sample_to_grid",
     "checkerboard_index",
     "filter_sensitivity",
     "Q4Mesh",
