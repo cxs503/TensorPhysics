@@ -1,0 +1,492 @@
+{
+  "schema": "tensorphysics.metrology.criteria.controls/1",
+  "note": "Negative-control corpus for the criterion degeneracy classifier (P266W2-N09). 12 degenerate criteria (4 per type) and 12 benign ones. Benign specimens encode the two traps named in the goal: 1e-6-level consistency and a legitimate zero reference where the measurand is also at zero (judged with an absolute band, i.e. no division). Shadow rows exist only to make the T3 family carry two competing metric kinds; they are excluded from scoring.",
+  "degenerate": [
+    {
+      "id": "D-T1-1",
+      "type": "T1",
+      "expect_classes": [
+        "T1_zero_reference"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 5%",
+      "y": 3.0,
+      "y_ref": 0.0,
+      "scale": 3.0,
+      "note": "reference exactly zero: relative denominator collapses, ratio is unbounded"
+    },
+    {
+      "id": "D-T1-2",
+      "type": "T1",
+      "expect_classes": [
+        "T1_zero_reference"
+      ],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": 0.001,
+      "y_ref": 1e-09,
+      "scale": 1.0,
+      "note": "reference nine decades below the engineering scale: 1e6 relative error is noise, deviation is 0.1% of scale"
+    },
+    {
+      "id": "D-T1-3",
+      "type": "T1",
+      "expect_classes": [
+        "T1_zero_reference"
+      ],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": 0.005,
+      "y_ref": 1e-12,
+      "scale": 10.0,
+      "note": "residual reference (1e-12) far below 3 sigma; the adaptive band decides on the engineering unit"
+    },
+    {
+      "id": "D-T1-4",
+      "type": "T1",
+      "expect_classes": [
+        "T1_zero_reference"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 2%",
+      "y": 0.001,
+      "y_ref": 2e-15,
+      "scale": 0.001,
+      "note": "tiny reference but the deviation is a full engineering unit: degeneracy must not launder a real failure"
+    },
+    {
+      "id": "D-T2-1",
+      "type": "T2",
+      "expect_classes": [
+        "T2_sign_flip"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 5%",
+      "y": -1.0,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "note": "opposite signs: relative error saturates at 2.0, no threshold below 100% can ever pass"
+    },
+    {
+      "id": "D-T2-2",
+      "type": "T2",
+      "expect_classes": [
+        "T2_sign_flip"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 1%",
+      "y": 2.0,
+      "y_ref": -2.0,
+      "scale": 2.0,
+      "note": "negative reference, positive measurement"
+    },
+    {
+      "id": "D-T2-3",
+      "type": "T2",
+      "expect_classes": [
+        "T2_sign_flip",
+        "T1_zero_reference"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 5%",
+      "y": 0.5,
+      "y_ref": 0.0,
+      "scale": 10.0,
+      "note": "zero crossing on top of a zero reference; reported as partial pass by a naive reader"
+    },
+    {
+      "id": "D-T2-4",
+      "type": "T2",
+      "expect_classes": [
+        "T2_sign_flip"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 5%",
+      "y": -0.0010001,
+      "y_ref": 0.001,
+      "scale": 0.001,
+      "note": "sign flip on a millimetre-scale quantity: relative band cannot represent it"
+    },
+    {
+      "id": "D-T3-1",
+      "type": "T3",
+      "expect_classes": [
+        "T3_multi_metric_no_priority"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 2%",
+      "y": 1.05,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "family": "ctrl_t3_a",
+      "note": "relative metric fails (5%), absolute band passes (0.05 <= 0.5): no priority -> double standard",
+      "shadow": {
+        "criterion": "max|Δ| <= 0.5",
+        "y": 1.05,
+        "y_ref": 1.0,
+        "scale": 1.0,
+        "family": "ctrl_t3_a"
+      }
+    },
+    {
+      "id": "D-T3-2",
+      "type": "T3",
+      "expect_classes": [
+        "T3_multi_metric_no_priority"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 2%",
+      "y": 1.001,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "family": "ctrl_t3_b",
+      "note": "relative metric passes (0.1%), absolute band fails (1e-3 > 1e-4): partial pass would be reported",
+      "shadow": {
+        "criterion": "max|Δ| <= 1e-4",
+        "y": 1.001,
+        "y_ref": 1.0,
+        "scale": 1.0,
+        "family": "ctrl_t3_b"
+      }
+    },
+    {
+      "id": "D-T3-3",
+      "type": "T3",
+      "expect_classes": [
+        "T3_multi_metric_no_priority"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 2%",
+      "y": 1.01,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "family": "ctrl_t3_c",
+      "note": "relative passes on the asymmetric band while the symmetric log band fails",
+      "shadow": {
+        "criterion": "|ln(y/y_ref)| <= ln(1+0.005)",
+        "y": 1.01,
+        "y_ref": 1.0,
+        "scale": 1.0,
+        "family": "ctrl_t3_c"
+      }
+    },
+    {
+      "id": "D-T3-4",
+      "type": "T3",
+      "expect_classes": [
+        "T3_multi_metric_no_priority"
+      ],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 1%",
+      "y": 0.98,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "family": "ctrl_t3_d",
+      "note": "relative band fails (2 % > 1 %) while the absolute band passes (0.02 <= 0.05): reading the absolute one is the partial pass",
+      "shadow": {
+        "criterion": "max|Δ| <= 0.05",
+        "y": 0.98,
+        "y_ref": 1.0,
+        "scale": 1.0,
+        "family": "ctrl_t3_d"
+      }
+    }
+  ],
+  "benign": [
+    {
+      "id": "B-01",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1e-5",
+      "y": 1.0,
+      "y_ref": 1.000001,
+      "scale": 1.0,
+      "note": "1e-6-level consistency"
+    },
+    {
+      "id": "B-02",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1e-5",
+      "y": 1.000001,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "note": "1e-6-level consistency, opposite direction"
+    },
+    {
+      "id": "B-03",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": 2.0,
+      "y_ref": 2.0,
+      "scale": 2.0,
+      "note": "exact agreement"
+    },
+    {
+      "id": "B-04",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": 0.999,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "note": "0.1% band"
+    },
+    {
+      "id": "B-05",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 5%",
+      "y": 1.02,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "note": "2% inside a 5% band"
+    },
+    {
+      "id": "B-06",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": -1.0,
+      "y_ref": -1.0,
+      "scale": 1.0,
+      "note": "negative pair, no sign flip"
+    },
+    {
+      "id": "B-07",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 2%",
+      "y": -0.99,
+      "y_ref": -1.0,
+      "scale": 1.0,
+      "note": "negative pair within band"
+    },
+    {
+      "id": "B-08",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": 0.001,
+      "y_ref": 0.0010001,
+      "scale": 0.001,
+      "note": "small magnitudes but reference is 6 decades above the noise floor"
+    },
+    {
+      "id": "B-09",
+      "expect_classes": [],
+      "expect_verdict": "FAIL",
+      "criterion": "相对误差 < 2%",
+      "y": 1.05,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "note": "healthy criterion, genuinely failing result: must not be excused as degenerate"
+    },
+    {
+      "id": "B-10",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "max|Δ| <= 1e-12",
+      "y": 1e-13,
+      "y_ref": 0.0,
+      "scale": 1e-12,
+      "note": "legitimate zero reference with an absolute band (no division at all)"
+    },
+    {
+      "id": "B-11",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": 5e-07,
+      "y_ref": 5e-07,
+      "scale": 5e-07,
+      "note": "tiny but exactly equal pair, reference far above its own noise floor"
+    },
+    {
+      "id": "B-12",
+      "expect_classes": [],
+      "expect_verdict": "PASS",
+      "criterion": "max|Δ| <= 1e-12",
+      "y": 0.0,
+      "y_ref": 0.0,
+      "scale": 1e-12,
+      "note": "zero reference AND zero measurand with an absolute criterion: legitimate, bounded"
+    }
+  ],
+  "supplementary": [
+    {
+      "id": "S-01",
+      "lane": "legit_zero_relative",
+      "expect_classes": [
+        "T1_zero_reference"
+      ],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1e-6",
+      "y": 0.0,
+      "y_ref": 0.0,
+      "scale": 1e-12,
+      "note": "zero/zero under a relative metric: structurally degenerate (T1) yet exact, the adaptive family passes on the absolute band"
+    },
+    {
+      "id": "S-02",
+      "lane": "near_zero_reference",
+      "expect_classes": [
+        "T1_zero_reference"
+      ],
+      "expect_verdict": "PASS",
+      "criterion": "相对误差 < 1%",
+      "y": 2e-15,
+      "y_ref": 1e-15,
+      "scale": 1e-12,
+      "note": "both quantities at the round-off level: the relative ratio is 1.0 but physically meaningless"
+    }
+  ],
+  "labeled_extra": [
+    {
+      "id": "L-01",
+      "labelA": "degenerate",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 3%",
+      "y": 0.98,
+      "y_ref": 0.0,
+      "scale": 1.0
+    },
+    {
+      "id": "L-02",
+      "labelA": "degenerate",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 3%",
+      "y": -1.01,
+      "y_ref": 1.0,
+      "scale": 1.0
+    },
+    {
+      "id": "L-03",
+      "labelA": "benign",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 3%",
+      "y": 1.01,
+      "y_ref": 1.0,
+      "scale": 1.0
+    },
+    {
+      "id": "L-04",
+      "labelA": "benign",
+      "labelB_hint": "absolute",
+      "criterion": "max|Δ| <= 1e-9",
+      "y": 0.0,
+      "y_ref": 0.0,
+      "scale": 1e-09
+    },
+    {
+      "id": "L-05",
+      "labelA": "degenerate",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 5%",
+      "y": 1e-06,
+      "y_ref": 5e-13,
+      "scale": 1.0
+    },
+    {
+      "id": "L-06",
+      "labelA": "benign",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 5%",
+      "y": 1.0,
+      "y_ref": 0.5,
+      "scale": 1.0
+    },
+    {
+      "id": "L-07",
+      "labelA": "degenerate",
+      "labelB_hint": "sign",
+      "criterion": "相对误差 < 1%",
+      "y": -0.999,
+      "y_ref": 0.0,
+      "scale": 1.0
+    },
+    {
+      "id": "L-08",
+      "labelA": "benign",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 1%",
+      "y": -0.999,
+      "y_ref": -1.0,
+      "scale": 1.0
+    },
+    {
+      "id": "L-09",
+      "labelA": "benign",
+      "labelB_hint": "absolute",
+      "criterion": "eps_max <= 1e-12",
+      "y": 0.0,
+      "y_ref": 0.0,
+      "scale": 1e-12
+    },
+    {
+      "id": "L-10",
+      "labelA": "degenerate",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 2%",
+      "y": 3.0,
+      "y_ref": 1e-30,
+      "scale": 3.0
+    },
+    {
+      "id": "L-11",
+      "labelA": "benign",
+      "labelB_hint": "denominator",
+      "criterion": "相对误差 < 2%",
+      "y": 1.0,
+      "y_ref": 0.99,
+      "scale": 1.0
+    },
+    {
+      "id": "L-12",
+      "labelA": "benign",
+      "labelB_hint": "absolute",
+      "criterion": "|Δm|/Σm <= 1e-12",
+      "y": 0.0,
+      "y_ref": 1.0,
+      "scale": 1.0,
+      "note": "conservation criterion: |dm| = 0 against a normalising mass of 1 -> healthy"
+    },
+    {
+      "id": "L-13",
+      "labelA": "degenerate",
+      "labelB_hint": "denominator",
+      "criterion": "relative error < 3%",
+      "y": 0.0,
+      "y_ref": 0.0,
+      "scale": 1e-12
+    },
+    {
+      "id": "L-14",
+      "labelA": "benign",
+      "labelB_hint": "denominator",
+      "criterion": "rel-L2 error < 3%",
+      "y": 1.0002,
+      "y_ref": 1.0,
+      "scale": 1.0
+    },
+    {
+      "id": "L-15",
+      "labelA": "degenerate",
+      "labelB_hint": "sign",
+      "criterion": "相对误差 < 2%",
+      "y": 0.4,
+      "y_ref": -0.4,
+      "scale": 0.4
+    },
+    {
+      "id": "L-16",
+      "labelA": "benign",
+      "labelB_hint": "absolute",
+      "criterion": "max|A-B| <= 1e-10",
+      "y": 1e-11,
+      "y_ref": 0.0,
+      "scale": 1e-10
+    }
+  ]
+}
