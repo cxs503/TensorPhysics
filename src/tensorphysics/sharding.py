@@ -37,7 +37,6 @@ import sys
 from dataclasses import dataclass, field
 from typing import Any, Dict, Hashable, List, Optional, Sequence, Tuple
 
-import numpy as np
 
 
 # ---------------------------------------------------------------------------
@@ -253,6 +252,10 @@ class Manifest:
 
 def _json_default(obj):
     """JSON serializer for numpy types."""
+    try:  # numpy is optional for the pure-JSON shard-worker path
+        import numpy as np
+    except ImportError:  # pragma: no cover - numpy is a test dependency
+        return str(obj)
     if isinstance(obj, np.integer):
         return int(obj)
     if isinstance(obj, np.floating):
@@ -407,6 +410,8 @@ class Aggregator:
         reference = self.aggregate(shard_results)
 
         perms_to_test = min(math.factorial(len(shard_results)), 24)
+        import numpy as np
+
         rng = np.random.RandomState(42)
         indices = list(range(len(shard_results)))
 
@@ -434,7 +439,7 @@ class FloatAudit:
     Where eps = machine epsilon for float64 ≈ 2.22e-16.
     """
 
-    EPS64 = np.finfo(np.float64).eps  # ≈ 2.22e-16
+    EPS64 = sys.float_info.epsilon  # == np.finfo(np.float64).eps ≈ 2.22e-16
 
     @staticmethod
     def naive_sum(values: Sequence[float]) -> float:
@@ -482,9 +487,9 @@ class FloatAudit:
         label: str = "",
     ) -> Dict[str, Any]:
         """Perform comprehensive float summation audit."""
-        arr = np.asarray(values, dtype=np.float64)
+        arr = [float(v) for v in values]  # plain floats: no numpy needed here
         n = len(arr)
-        abs_sum = float(np.sum(np.abs(arr)))
+        abs_sum = math.fsum(abs(v) for v in arr)
 
         naive = cls.naive_sum(arr)
         kahan = cls.kahan_sum(arr)
