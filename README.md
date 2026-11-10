@@ -67,6 +67,13 @@ The main branch contains:
   velocity-weakening lock-in, Duffing harmonic balance, and transient whiplash response of the first
   two hull-girder bending modes — see [Ice-induced vibration](docs/ICE_VIBRATION_LOCKIN.md) and
   `scenarios/ice_vibration_lockin/`.
+- A superstructure-icing module (`src/tensorphysics/superstructure_icing/`): analytic potential flow
+  (cylinder / Joukowski ellipse) + Lagrangian supercooled-droplet tracking (local and total collection
+  efficiency, ballistic and inertia-free limits), Messinger control-volume heat balance (rime/glaze,
+  runback, evaporation, radiation) with transient 1-D growth, electro-thermal anti-icing power
+  optimisation (skin-conduction spreading, SLSQP and SIMP 0/1 layouts), and the KG / GM / roll-period
+  consequences of the resulting icing mass distribution — see
+  [superstructure icing report](docs/reports/p380w2_n07/REPORT.md).
 
 The coupling example is deliberately a contract test, not a validated CFD/DEM/FEM physical model. It demonstrates data flow and a conservation invariant only. The field store supports temporal linear interpolation for data types that implement arithmetic, but does not perform unit conversion or conservative mesh/particle mapping. Its history is bounded to two distinct-time samples by default; set `history_limit` to retain more samples for subcycling.
 
