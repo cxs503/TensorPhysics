@@ -11,6 +11,13 @@ Renderer: `python scripts/render_criterion_prereg_doc.py --check` ·
 Numbers: `artifacts/criterion_prereg/eval.json` (this document is rendered from
 that file, no hand-copied digits; `--check` re-renders in memory and exits 1 when
 the checked-in page differs, so a hand-edited digit cannot survive CI).
+Mission record: `docs/m8598/outputs/acceptance_criteria.json`, emitted from the
+same payload and **sealed** with `payload_sha256` (digest of its own canonical
+body) so a stale or hand-edited copy refutes itself offline — no artefact cache
+and no corpora re-run needed. The merge gate is
+`python scripts/run_criterion_prereg_eval.py --check`: it re-derives into a
+scratch directory and exits 1 when either committed copy lags the derivation or
+the seal does not verify.
 
 ---
 

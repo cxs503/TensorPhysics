@@ -29,6 +29,7 @@ import argparse
 import json
 from pathlib import Path
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -46,6 +47,7 @@ from tensorphysics.campaign.criterion_prereg import (  # noqa: E402
     freeze,
     kpi_view,
     semantic_digest,
+    sha256_obj,
     verify_manifest,
 )
 from tensorphysics.campaign.criterion_prereg.scan import scan_paths  # noqa: E402
@@ -335,6 +337,37 @@ def _artifact_label(path: Path) -> str:
     return str(Path("artifacts") / "criterion_prereg" / path.name)
 
 
+#: Key holding the deliverable's self-digest (never part of its own digest).
+DIGEST_KEY = "payload_sha256"
+
+
+def deliverable_digest(record: dict) -> str:
+    """Digest of every field of ``record`` except the digest itself.
+
+    Canonical JSON (sorted keys, no whitespace) so the digest survives
+    re-indentation, but *any* change to an id, a measured value, a threshold or
+    a ``pass`` flag flips it.
+    """
+    body = {k: v for k, v in record.items() if k != DIGEST_KEY}
+    return sha256_obj(body)
+
+
+def verify_deliverable(record: dict) -> tuple[bool, str]:
+    """Offline self-check of a sealed deliverable record.
+
+    Returns ``(ok, reason)``.  This needs no artefact cache and no re-run of the
+    corpora: a stale or hand-edited copy (the failure mode that once shipped a
+    *different mission's* record into ``docs/m8598/outputs/``) refutes itself.
+    """
+    declared = record.get(DIGEST_KEY)
+    if not isinstance(declared, str) or not declared:
+        return False, f"missing {DIGEST_KEY} (unsealed record)"
+    actual = deliverable_digest(record)
+    if actual != declared:
+        return False, f"{DIGEST_KEY} mismatch: declared {declared[:12]}, content {actual[:12]}"
+    return True, "ok"
+
+
 def deliverable_record(payload: dict, eval_label: str) -> dict:
     """The mission's own acceptance record (``docs/m8598/outputs/...``).
 
@@ -343,8 +376,12 @@ def deliverable_record(payload: dict, eval_label: str) -> dict:
     copy of another mission's record (it carried shaft-torsion metrics and a
     ``pytest_test_shaft_torsion`` flag this node never runs), i.e. the very
     "second source" this gate exists to prevent.
+
+    The record is sealed with ``payload_sha256`` over its own canonical body so
+    the checked-in copy can be validated in any checkout -- including one where
+    the artefact cache was stripped and the corpora are not re-run.
     """
-    return {
+    record = {
         "schema": "criterion-prereg-deliverable/1",
         "mission_id": payload["mission_id"],
         "node_id": payload["node"],
@@ -354,10 +391,12 @@ def deliverable_record(payload: dict, eval_label: str) -> dict:
         "all_acceptance_pass": payload["all_acceptance_pass"],
         "acceptance": payload["acceptance"],
     }
+    record[DIGEST_KEY] = deliverable_digest(record)
+    return record
 
 
 def run(out_dir: Path = OUT, doc_path: Path = DOC, eval_path: Path | None = None,
-        deliverable_path: Path | None = None) -> int:
+        deliverable_path: Path | None = None, verbose: bool = True) -> int:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     eval_path = Path(eval_path) if eval_path is not None else out_dir / "eval.json"
@@ -459,11 +498,52 @@ def run(out_dir: Path = OUT, doc_path: Path = DOC, eval_path: Path | None = None
     deliverable = deliverable_record(payload, _artifact_label(eval_path))
     deliverable_path.write_text(json.dumps(deliverable, ensure_ascii=False, indent=2) + "\n",
                                 encoding="utf-8")
-    print(json.dumps(payload["acceptance"], ensure_ascii=False, indent=2))
-    print("all_acceptance_pass:", payload["all_acceptance_pass"])
-    print("doc:", doc_path)
-    print("artifacts:", ", ".join(_artifact_label(p) for p in sorted(out_dir.glob("*"))))
+    if verbose:
+        print(json.dumps(payload["acceptance"], ensure_ascii=False, indent=2))
+        print("all_acceptance_pass:", payload["all_acceptance_pass"])
+        print("doc:", doc_path)
+        print("deliverable:", deliverable_path, "sealed", deliverable[DIGEST_KEY][:12])
+        print("artifacts:", ", ".join(_artifact_label(p) for p in sorted(out_dir.glob("*"))))
     return 0 if payload["all_acceptance_pass"] else 1
+
+
+def check(doc_path: Path = DOC, deliverable_path: Path = DELIVERABLE) -> int:
+    """Re-derive everything into a scratch dir and byte-compare what is committed.
+
+    A merge-time gate: the checked-in page and mission record are code output, so
+    "stale copy in git" (the exact failure this mission was reopened for: the
+    committed record was another mission's) must be a non-zero exit.  Writes
+    nothing into the repository.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        code = run(out_dir=tmp / "artifacts", doc_path=tmp / "page.md",
+                   eval_path=tmp / "artifacts" / "eval.json",
+                   deliverable_path=tmp / "acceptance_criteria.json", verbose=False)
+        pairs = (
+            (Path(doc_path), tmp / "page.md"),
+            (Path(deliverable_path), tmp / "acceptance_criteria.json"),
+        )
+        problems = []
+        for committed, fresh in pairs:
+            label = committed.relative_to(ROOT) if committed.is_absolute() and ROOT in committed.parents else committed
+            if not committed.exists():
+                problems.append(f"{label}: missing")
+            elif committed.read_bytes() != fresh.read_bytes():
+                problems.append(f"{label}: stale vs derivation")
+        # the committed copy must also pass its own offline seal check
+        if Path(deliverable_path).exists():
+            ok, reason = verify_deliverable(json.loads(Path(deliverable_path).read_text(encoding="utf-8")))
+            if not ok:
+                problems.append(f"{deliverable_path.name}: {reason}")
+    if problems:
+        print("criterion-prereg check: FAIL")
+        for p in problems:
+            print(" -", p)
+        print("fix: python scripts/run_criterion_prereg_eval.py")
+        return 1
+    print("criterion-prereg check: OK (page + mission record equal the derivation, seal valid)")
+    return 0 if code == 0 else 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -477,7 +557,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--deliverable", default=str(DELIVERABLE),
                     help="mission acceptance record to emit "
                          "(default: docs/m8598/outputs/acceptance_criteria.json)")
+    ap.add_argument("--check", action="store_true",
+                    help="derive into a scratch dir and byte-compare the committed "
+                         "page/record (exit 1 on drift); writes nothing")
     args = ap.parse_args(argv)
+    if args.check:
+        return check(Path(args.doc), Path(args.deliverable))
     return run(Path(args.out_dir), Path(args.doc), Path(args.eval) if args.eval else None,
                Path(args.deliverable))
 

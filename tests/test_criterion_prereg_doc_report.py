@@ -362,8 +362,10 @@ def test_mission_record_is_emitted_from_the_same_payload(derived):
     assert shipped["acceptance"] == derived["record"]["acceptance"]
     assert shipped["mission_id"] == derived["record"]["mission_id"] == 8598
     assert shipped["node_id"] == derived["record"]["node"]
+    # the record *declares* its provenance; the artefact cache itself is optional
+    # in git (a merge gate strips artifacts/), so its presence is not required --
+    # the byte-equality with the derivation below is the authoritative check.
     assert shipped["source"] == "artifacts/criterion_prereg/eval.json"
-    assert (ROOT / shipped["source"]).exists()
     assert (ROOT / shipped["page"]).exists()
     # threshold values must not appear twice: the numbers live in the record only
     for block in shipped["acceptance"].values():
@@ -372,6 +374,89 @@ def test_mission_record_is_emitted_from_the_same_payload(derived):
         "docs/m8598/outputs/acceptance_criteria.json is stale; re-run "
         "scripts/run_criterion_prereg_eval.py"
     )
+
+
+def _sealed_shipped() -> dict:
+    import run_criterion_prereg_eval as ev  # noqa: E402  (scripts/ is on sys.path)
+
+    return ev, json.loads(DELIVERABLE.read_text(encoding="utf-8"))
+
+
+def test_deliverable_is_sealed_and_verifiable_without_the_cache(derived):
+    """The committed record refutes a stale copy on its own, offline.
+
+    Regression guard for the failure this mission was reopened for: the
+    checked-in record was another mission's file (shaft-torsion metrics), and
+    detecting that needed a full re-derivation.  ``payload_sha256`` makes the
+    copy self-verifying: no artefact cache, no corpora re-run, just the bytes.
+    """
+    ev, shipped = _sealed_shipped()
+    assert isinstance(shipped.get(ev.DIGEST_KEY), str) and len(shipped[ev.DIGEST_KEY]) == 64
+    ok, reason = ev.verify_deliverable(shipped)
+    assert ok, reason
+    # the shipped seal is the derivation's seal: same body -> same digest
+    fresh = ev.deliverable_record(derived["record"], "artifacts/criterion_prereg/eval.json")
+    assert ev.verify_deliverable(fresh) == (True, "ok")
+    assert shipped[ev.DIGEST_KEY] == fresh[ev.DIGEST_KEY]
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda r: r["acceptance"]["a_detection_24cases"].__setitem__("recall", 0.5),
+        lambda r: r["acceptance"]["b_extractor_field_f1"].__setitem__("pass", False),
+        lambda r: r["acceptance"]["c_fail_closed"].__setitem__("tampered_verdict", "pass"),
+        lambda r: r.__setitem__("mission_id", 7803),
+        lambda r: r.__setitem__("all_acceptance_pass", False),
+    ],
+    ids=["threshold-edited", "pass-flag-flipped", "negative-control-weakened",
+         "wrong-mission", "overall-verdict-flipped"],
+)
+def test_seal_detects_tampering(mutate):
+    """Negative controls: every edit the old record suffered must flip the seal."""
+    ev, shipped = _sealed_shipped()
+    tampered = json.loads(json.dumps(shipped))
+    mutate(tampered)
+    ok, reason = ev.verify_deliverable(tampered)
+    assert not ok and ev.DIGEST_KEY in reason, reason
+
+
+def test_seal_is_absent_for_unsealed_records():
+    """An unsealed record (the shape that shipped stale) fails closed, not open."""
+    ev, shipped = _sealed_shipped()
+    del shipped[ev.DIGEST_KEY]
+    ok, reason = ev.verify_deliverable(shipped)
+    assert not ok and "unsealed" in reason
+
+
+def test_check_mode_gates_committed_copies(tmp_path):
+    """``run_criterion_prereg_eval.py --check`` is a usable merge gate.
+
+    Exit 0 on the committed pair; exit 1 when the record was edited by hand or
+    when the page lags the record -- both without touching the repository.
+    """
+    script = SCRIPTS / "run_criterion_prereg_eval.py"
+    good = subprocess.run([sys.executable, str(script), "--check"],
+                          capture_output=True, text=True)
+    assert good.returncode == 0, good.stdout + good.stderr
+    assert "check: OK" in good.stdout
+
+    stale_record = tmp_path / "acceptance_criteria.json"
+    record = json.loads(DELIVERABLE.read_text(encoding="utf-8"))
+    record["acceptance"]["a_detection_24cases"]["recall"] = 0.5
+    stale_record.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    bad = subprocess.run([sys.executable, str(script), "--check",
+                          "--deliverable", str(stale_record)],
+                         capture_output=True, text=True)
+    assert bad.returncode == 1, bad.stdout + bad.stderr
+    assert "stale vs derivation" in bad.stdout and "mismatch" in bad.stdout
+
+    stale_page = tmp_path / "page.md"
+    stale_page.write_text(DOC.read_text(encoding="utf-8") + "\nedited\n", encoding="utf-8")
+    bad_page = subprocess.run([sys.executable, str(script), "--check", "--doc", str(stale_page)],
+                              capture_output=True, text=True)
+    assert bad_page.returncode == 1, bad_page.stdout + bad_page.stderr
+    assert "stale vs derivation" in bad_page.stdout
 
 
 def test_committed_figures_when_present_are_valid_png(derived):

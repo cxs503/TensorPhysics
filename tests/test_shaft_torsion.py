@@ -270,8 +270,15 @@ class TestFullPipeline:
 class TestAcceptanceCriteria:
     """Summary of all acceptance criteria in one place."""
 
-    def test_all_criteria(self):
-        """Run all criteria and produce summary JSON."""
+    def test_all_criteria(self, tmp_path):
+        """Run all criteria and produce summary JSON (in a scratch dir).
+
+        The summary used to be written to ``<repo>/outputs/acceptance_criteria.json``,
+        i.e. a test polluted the working tree with a file named like a *mission
+        acceptance record*; a copy of exactly that file once shipped as
+        ``docs/m8598/outputs/acceptance_criteria.json`` (another mission's record).
+        Tests must not write into the repository -- use pytest's ``tmp_path``.
+        """
         results = {}
 
         # (a) Modal accuracy
@@ -334,11 +341,8 @@ class TestAcceptanceCriteria:
 
         # Save results
         results["pytest_test_shaft_torsion"] = True
-        results_path = os.path.join(os.path.dirname(__file__), "..", "outputs",
-                                     "acceptance_criteria.json")
-        os.makedirs(os.path.dirname(results_path), exist_ok=True)
-        with open(results_path, "w") as f:
-            json.dump(results, f, indent=2)
+        results_path = tmp_path / "acceptance_criteria.json"
+        results_path.write_text(json.dumps(results, indent=2), encoding="utf-8")
 
         print("\n=== Acceptance Criteria Summary ===")
         for k, v in results.items():
