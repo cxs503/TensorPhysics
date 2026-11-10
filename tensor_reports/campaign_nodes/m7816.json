@@ -1,0 +1,15 @@
+{
+ "depends_on_missions": [],
+ "goal": "【战役 DAG 节点|p129w1r2-n04-kb-geometry-gate|知识库样本容量真值与几何闸门成熟化：ship_platform 11351 行镜像到平台口径 + Cb 异常行归因清除（KPI kb_samples 0→10000）】（上层智能体播种的自主战役，物理域 船型几何 / 总体性能数据底座，风险 ，层 ）。【成熟化任务】物理目标：把『知识库样本』从自报数字变成可核账事实。实现路径：(a) 新建 backend/knowledge/sample_audit.py，对 ship_platform.ship_samples 与 tensorplatform.ship_samples 逐行对账（行数/主键哈希/来源字段完整性），产出 diff 报告；(b) 口径统一：镜像到平台口径（或把 tracker kb_samples 查询改指向真库，二选一并写进口径文档），同一 SQL 两次独立执行 bit-identical；(c) 几何闸门硬化：每行须由 L/B/T/∇ 复算 Cb=∇/(L·B·T)，偏差>15% 的行进 quarantine 表并写归因字段（单位/来源/插值），禁止静默隔离；(d) 出处门：新样本必须带 provenance（url/报告 id/公式），无源行=0。机器判据：1) tensorplatform.ship_samples ≥10000 且与 ship_platform 行数差 ≤1%；2) provenance 完整率 100%（无源行 0）；3) 几何闸门 pass 率 ≥95%，quarantine 归因非空率 100%；4) 来源哈希审计 122/122 一致（复算，不抄旧数）；5) pytest ≥20 项含负控（人为注入错 Cb 必须被门抓到并 fail）；6) 幂等：连跑两次输出 JSON 完全一致；7) 报告显式给出『kb_samples 是否达标』与残余异常行的物理归因。。落库 ship-performance-platform（若模块不存在则按领域目录新建，附 pytest 用例）。\n机器验收判据（全部满足，判据数字与产物路径落报告 JSON）：见战役表 metadata。\n纪律：全新前沿节点（禁止重复 verified/ 已验证案例）；worktree 内提交自己分支；论文级报告（物理表述+图+判据数字+审计链+局限）；honest FAIL 不可覆盖。",
+ "mission_id": 7816,
+ "mission_status": "succeeded",
+ "node_dependencies": [],
+ "node_ext_id": "p129w1r2-n04-kb-geometry-gate",
+ "node_id": 1806,
+ "node_status": "done",
+ "plan_id": 337,
+ "report": null,
+ "reproduction_verdict": null,
+ "result_checks": "pytest 23/23 passed; audit report: artifacts/kb_audit_report.json; mirror report: artifacts/kb_mirror_report.json; source hash audit: artifacts/source_hash_audit.json; figures: artifacts/kb_gate/fig1_dashboard.png, fig2_geometry_error_dist.png; caliber doc: docs/knowledge_caliber.md",
+ "schema": "campaign_node_artifact.v1"
+}
