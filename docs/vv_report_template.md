@@ -1,5 +1,19 @@
 # V&V Machine Gate Report Template
 
+> **Filling this template.** Do not type numbers into the placeholders below:
+> render them from the gate verdict with
+> `tensorphysics.vv.report.build_report(verdict, title=..., metadata=...)`.
+> The renderer injects §1, §2.1, §2.2, §5, §6 and §7 from
+> `GateVerdict.study` / `.validation` / `.uncertainty` / `.resolvability` /
+> `.checks`, marks every section the machine cannot fill as `WITHHELD` (so the
+> report status can never be better than `WITHHELD`), rejects hand-typed
+> placeholders like `[value]`, and stamps sha256 provenance of both the verdict
+> payload and the rendered body. Sections §3 (results discussion) and §4
+> (figures) still need a human/agent author, and §2.3/§5 are rendered only when
+> the corresponding data is supplied. See `docs/VV_REPORT_GENERATOR.md` and
+> `examples/vv_report_from_verdict.py`. The placeholder tokens in this file are
+> the *form*; a generated report must contain none of them.
+
 ## 1. Case Introduction
 
 ### 1.1 Physical Background
