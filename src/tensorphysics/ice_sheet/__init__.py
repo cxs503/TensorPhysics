@@ -8,6 +8,7 @@ used for level-ice bending-failure analysis under ship-bow indentation loads.
 Physical domain: ice_mechanics
 Campaigns: SIR-PC2 | F01 | Winkler elastic foundation plate
            IN11-H3 | level-ice bending failure, Kirchhoff plate FEM
+           P54-W3-N02 | Pasternak (two-parameter) foundation, closed GAP-FEM-P0
 """
 
 from .kirchhoff_plate_fem import (
@@ -23,6 +24,20 @@ from .kirchhoff_plate_fem import (
     kelvin_point_load,
     kelvin_point_load_moments,
     limiting_moment,
+)
+from .pasternak_foundation import (
+    PasternakFoundation,
+    bessel_k_reference,
+    calibration_table,
+    ice_foundation_calibration,
+    pasternak_critical_patch_load,
+    pasternak_critical_point_load,
+    pasternak_patch_field,
+    pasternak_patch_load,
+    pasternak_point_load,
+    pasternak_point_load_moments,
+    pasternak_roots,
+    shear_coupling,
 )
 from .winkler_plate import (
     WinklerPlateParams,
@@ -50,4 +65,16 @@ __all__ = [
     "kelvin_point_load",
     "kelvin_point_load_moments",
     "limiting_moment",
+    "PasternakFoundation",
+    "bessel_k_reference",
+    "calibration_table",
+    "ice_foundation_calibration",
+    "pasternak_critical_patch_load",
+    "pasternak_critical_point_load",
+    "pasternak_patch_field",
+    "pasternak_patch_load",
+    "pasternak_point_load",
+    "pasternak_point_load_moments",
+    "pasternak_roots",
+    "shear_coupling",
 ]
