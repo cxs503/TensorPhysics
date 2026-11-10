@@ -29,8 +29,9 @@ The audit engine only requires two callables:
   - truth_generator(rng, n_samples, error_level) -> (data, true_theta)
   - estimator(data) -> (theta_hat, ci_lo, ci_hi)
 
-All domain content (Weibull, σ-divergence, etc.) is injected via these
-interfaces.  The engine itself knows nothing about ships, ice, or waves.
+All application content is injected via these interfaces; the engine itself
+carries no subject-matter vocabulary (verified by a lexical scan in the test
+suite).
 
 Usage
 -----
@@ -180,6 +181,12 @@ class LevelResult:
     wilson_hw: float
     verdict: str
     coverage_curve: list[float] = field(default_factory=list)  # running coverage
+    # --- phase-2 additions (backwards compatible defaults) -----------------
+    spec_verdict: str = ""          # verdict per node spec (three-state)
+    width_anomaly: bool = False     # over-wide CI flagged separately
+    sd_theta_hat: float = 0.0       # Monte-Carlo sd of the point estimate
+    misses_low: int = 0             # truth below the interval
+    misses_high: int = 0            # truth above the interval
 
     def as_dict(self) -> dict:
         d = asdict(self)
@@ -240,6 +247,7 @@ class CoverageAudit:
         target_level: float = 0.95,
         seed: int = 42,
         estimator_name: str = "unnamed",
+        nominal_width: float | None = None,
     ):
         self.truth_generator = truth_generator
         self.estimator = estimator
@@ -248,6 +256,10 @@ class CoverageAudit:
         self.target_level = target_level
         self.seed = seed
         self.estimator_name = estimator_name
+        # Reference CI width.  When given, every level's width ratio is
+        # measured against it (order-independent, suitable for negative
+        # controls); otherwise the first processed level acts as baseline.
+        self.nominal_width = nominal_width
 
     def run(self, error_levels: Sequence[int] = (0, 1, 2)) -> AuditResult:
         """Run the coverage audit for each error level."""
@@ -257,6 +269,8 @@ class CoverageAudit:
         for elvl in error_levels:
             rng = np.random.default_rng(self.seed + elvl * 1000)
             n_covered = 0
+            misses_low = 0
+            misses_high = 0
             theta_hats = []
             ci_los = []
             ci_his = []
@@ -270,15 +284,22 @@ class CoverageAudit:
                 ci_his.append(ci_hi)
                 if ci_lo <= true_theta <= ci_hi:
                     n_covered += 1
+                elif true_theta < ci_lo:
+                    misses_low += 1      # estimate/interval sits above the truth
+                else:
+                    misses_high += 1     # estimate/interval sits below the truth
                 coverage_curve.append(n_covered / (rep + 1))
 
             coverage = n_covered / self.n_replications
             mean_width = np.mean([h - l for l, h in zip(ci_los, ci_his)])
             if base_width is None:
                 base_width = mean_width
-            width_ratio = mean_width / base_width if base_width > 0 else 1.0
+            ref_width = self.nominal_width if self.nominal_width else base_width
+            width_ratio = mean_width / ref_width if ref_width > 0 else 1.0
             wilson_hw = wilson_half_width(n_covered, self.n_replications)
             verdict = judge_coverage(coverage, width_ratio)
+            spec_verdict = judge_coverage_spec(coverage)
+            anomaly = is_width_anomaly(coverage, width_ratio)
 
             levels_results.append(LevelResult(
                 error_level=elvl,
@@ -293,6 +314,11 @@ class CoverageAudit:
                 wilson_hw=float(wilson_hw),
                 verdict=verdict,
                 coverage_curve=coverage_curve,
+                spec_verdict=spec_verdict,
+                width_anomaly=anomaly,
+                sd_theta_hat=float(np.std(theta_hats, ddof=1)) if len(theta_hats) > 1 else 0.0,
+                misses_low=misses_low,
+                misses_high=misses_high,
             ))
 
         # Stopping rule: n_min for ±0.02 resolution
@@ -341,6 +367,166 @@ def run_audit_and_export(
     with open(out, "w") as f:
         json.dump(result.as_dict(), f, indent=2)
     return result
+
+
+# ===========================================================================
+# Phase-2 API (node p270w2-n03): node-spec verdict, negative controls,
+# reproducible stopping rule, detection rate.
+# ===========================================================================
+
+def judge_coverage_spec(coverage: float) -> str:
+    """Three-state verdict exactly as specified by the audit node.
+
+    WELL_CALIBRATED : 0.93 <= coverage <= 0.97   (nominal 0.95)
+    CONSERVATIVE    : coverage > 0.97
+    DISTORTED       : coverage < 0.93
+
+    Over-wide intervals are *not* folded into the verdict here; they are
+    reported separately by :func:`is_width_anomaly` so that a conservative
+    (honest but wasteful) interval is not mislabelled as broken.
+    """
+    if coverage < WELL_CALIBRATED_LO:
+        return "DISTORTED"
+    if coverage > CONSERVATIVE_LO:
+        return "CONSERVATIVE"
+    return "WELL_CALIBRATED"
+
+
+def is_width_anomaly(coverage: float, ci_width_ratio: float,
+                     ratio_threshold: float = 2.0) -> bool:
+    """Flag pathological over-coverage produced by a blown-up interval."""
+    return bool(coverage > DISTORTED_HI and ci_width_ratio > ratio_threshold)
+
+
+def scaled_estimator(estimator: Estimator, factor: float) -> Estimator:
+    """Wrap an estimator, scaling its CI half-widths by ``factor``.
+
+    The interval centre (midpoint) is preserved, so ``factor < 1`` is a
+    sensitivity negative control (interval too narrow -> coverage must fall)
+    and ``factor > 1`` is a truth-invariance negative control (interval too
+    wide -> coverage must approach 1).  The point estimate is untouched.
+    """
+    if factor <= 0:
+        raise ValueError("factor must be > 0")
+
+    def wrapped(data: Any) -> tuple[float, float, float]:
+        theta_hat, ci_lo, ci_hi = estimator(data)
+        centre = 0.5 * (ci_lo + ci_hi)
+        return (float(theta_hat),
+                float(centre - factor * (centre - ci_lo)),
+                float(centre + factor * (ci_hi - centre)))
+
+    return wrapped
+
+
+def wilson_half_width_continuous(p: float, n: float, z: float = 1.96) -> float:
+    """Wilson half-width at coverage ``p`` for a (possibly fractional) n."""
+    if n <= 0:
+        return 1.0
+    denom = 1 + z * z / n
+    centre = p + z * z / (2 * n)
+    spread = z * math.sqrt(max(p * (1 - p) / n + z * z / (4 * n * n), 0.0))
+    return float(0.5 * ((centre + spread) - (centre - spread)) / denom)
+
+
+def coverage_resolution_table(coverage: float,
+                              n_grid: Sequence[int] = (100, 200, 300, 400,
+                                                       500, 750, 1000, 1500,
+                                                       2000, 3000, 5000),
+                              z: float = 1.96) -> list[dict]:
+    """Coverage resolution (Wilson half-width) as a function of replication n.
+
+    Returns one record per n: ``{n, half_width}``.  The half-width is strictly
+    decreasing in n for fixed coverage, which is what makes the stopping rule
+    invertible.
+    """
+    if not (0.0 < coverage < 1.0):
+        raise ValueError("coverage must be in (0, 1)")
+    return [{"n": int(n),
+             "half_width": wilson_half_width_continuous(coverage, float(n), z)}
+            for n in n_grid]
+
+
+def solve_n_min_from_resolution(coverage: float, target_hw: float = 0.02,
+                                n_max: int = 200_000) -> int:
+    """Smallest replication count whose Wilson half-width <= ``target_hw``.
+
+    Solves the *case-specific* stopping rule (coverage from the pilot run)
+    rather than the worst-case p=0.5 bound, by bisection on the monotone
+    half-width function.
+    """
+    if not (0.0 < coverage < 1.0):
+        raise ValueError("coverage must be in (0, 1)")
+    if wilson_half_width_continuous(coverage, float(n_max)) > target_hw:
+        raise ValueError("target_hw unreachable within n_max")
+    lo, hi = 1, int(n_max)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if wilson_half_width_continuous(coverage, float(mid)) <= target_hw:
+            hi = mid
+        else:
+            lo = mid + 1
+    return int(lo)
+
+
+@dataclass
+class DetectionResult:
+    """Outcome of a repeated-audit detection study."""
+    error_level: int
+    n_trials: int
+    n_replications: int
+    detections: int
+    detection_rate: float
+    trial_coverages: list[float]
+    trial_verdicts: list[str]
+
+    def as_dict(self) -> dict:
+        return asdict(self)
+
+
+def detection_rate(
+    truth_generator: TruthGenerator,
+    estimator: Estimator,
+    error_level: int,
+    n_trials: int = 10,
+    n_replications: int = 500,
+    n_samples: int = 50,
+    seed: int = 42,
+    max_coverage: float = WELL_CALIBRATED_LO,
+) -> DetectionResult:
+    """Repeat independent audits and measure how often distortion is flagged.
+
+    Each trial is an *independent* Monte-Carlo audit (its own seed stream,
+    ``n_replications`` datasets).  A trial counts as a detection when the
+    empirical coverage falls below ``max_coverage`` (0.93, i.e. the audit's
+    own well-calibrated lower bound) **and** the spec verdict is DISTORTED.
+    """
+    coverages: list[float] = []
+    verdicts: list[str] = []
+    detections = 0
+    for t in range(n_trials):
+        audit = CoverageAudit(
+            truth_generator=truth_generator,
+            estimator=estimator,
+            n_replications=n_replications,
+            n_samples=n_samples,
+            seed=seed + 7919 * t,
+        )
+        res = audit.run(error_levels=(error_level,))
+        lv = res.levels[0]
+        coverages.append(lv.coverage)
+        verdicts.append(lv.spec_verdict)
+        if lv.coverage < max_coverage and lv.spec_verdict == "DISTORTED":
+            detections += 1
+    return DetectionResult(
+        error_level=error_level,
+        n_trials=n_trials,
+        n_replications=n_replications,
+        detections=detections,
+        detection_rate=detections / n_trials if n_trials else 0.0,
+        trial_coverages=coverages,
+        trial_verdicts=verdicts,
+    )
 
 
 # ---------------------------------------------------------------------------
