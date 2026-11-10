@@ -75,6 +75,42 @@ from .pce import (
     legendre_orthonormal,
     multi_indices,
 )
+from .failsafe import (
+    DEFAULT_Q2_MIN,
+    MODE_MONTECARLO,
+    MODE_PCE,
+    FailsafeDecision,
+    FailsafeStudy,
+    assess as assess_failsafe,
+    direct_budget,
+    indices_from_mc,
+    loo_q2,
+    run_with_failsafe,
+)
+from .holton import (
+    HoltonBenchmark,
+    holton,
+    holton_analytic,
+    holton_reference_indices,
+    holton_spec,
+    make_holton,
+)
+from .solver_outputs import (
+    SUPPORTED_SOLVERS,
+    BenchmarkArtifact,
+    BenchmarkQoI,
+    BudgetComponent,
+    CombinedBudget,
+    UnknownBenchmarkError,
+    combine_budget,
+    detect_solver,
+    gate_with_benchmark,
+    parse_artifact,
+    parse_benchmarks,
+    relative_error as benchmark_relative_error,
+    select as select_benchmark_qoi,
+)
+
 from .ci_coverage import CoverageEntry, CoverageReport, coverage_study, wilson_interval
 from .gate import (
     SCHEMA_VERSION,
@@ -169,6 +205,39 @@ __all__ = [
     "sobol_g",
     "sobol_g_analytic",
     "sobol_g_spec",
+]
+
+# ---- P142W3-N10 additions: Holton anchor, fail-safe, cross-repo adapters, CLI
+__all__ += [
+    "BenchmarkArtifact",
+    "BenchmarkQoI",
+    "BudgetComponent",
+    "CombinedBudget",
+    "DEFAULT_Q2_MIN",
+    "FailsafeDecision",
+    "FailsafeStudy",
+    "HoltonBenchmark",
+    "MODE_MONTECARLO",
+    "MODE_PCE",
+    "SUPPORTED_SOLVERS",
+    "UnknownBenchmarkError",
+    "assess_failsafe",
+    "benchmark_relative_error",
+    "combine_budget",
+    "detect_solver",
+    "direct_budget",
+    "gate_with_benchmark",
+    "holton",
+    "holton_analytic",
+    "holton_reference_indices",
+    "holton_spec",
+    "indices_from_mc",
+    "loo_q2",
+    "make_holton",
+    "parse_artifact",
+    "parse_benchmarks",
+    "run_with_failsafe",
+    "select_benchmark_qoi",
 ]
 
 # ---- IN145-N08 additions: refinement, interval calibration, robustness, gate
