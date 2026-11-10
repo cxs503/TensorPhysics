@@ -1,0 +1,462 @@
+{
+  "title": "P186-W1-N08 honest-FAIL 失败模式库与重派决策表（TensorPhysics）",
+  "summary": "6 类方法级失败机理 + 三选一重派决策表；冻结真实 FAIL 集 n=48，C1 κ=0.750，C2 一致率=0.792（随机 0.167），C3a 诱饵 0.169，C3b 标签重排 0.180，C4 全覆盖，C5 零命中，C6 集成通过。",
+  "scenario_key": "failure_taxonomy_reroute",
+  "mission_id": 9338,
+  "tags": [
+    "honest-FAIL",
+    "failure-taxonomy",
+    "reroute",
+    "dual-annotation",
+    "kane"
+  ],
+  "markdown": "# P186-W1-N08 · honest-FAIL 失败模式库与重派决策表\n\n## ① 案例介绍\n\n战役 DAG 的节点以 `PASS / FAIL / WITHHELD` 裁决，但失败原因一直只写在报告散文的\n“局限/下一步”小节里：调度器看得见“这个节点红了”，看不见“为什么红、下一步该改什么”。\n本节点把这段散文变成可机器裁的**失败画像**：6 类方法级失败机理 + 每条记录的证据字段 +\n三选一重派建议（缩范围 / 换方法 / 换基准），并在**冻结的真实 FAIL 集**上回测判别力。\n\n* 语料：`48` 条真实历史 FAIL 片段（每类 8 条），\n  从本仓 `docs/**/*.md`、`artifacts/**/*.json` 用**认识论线索**（缺失/未收敛/超阈/假设/缺陷）\n  检索得到，逐条经分析者 `agent:m9338` 阅读定标，正文逐字保留、溯源到文件行号与\n  sha256，载荷摘要 `85acd46b774ed8dd…` 冻结（`dataset.load_frozen_set` 每次校验）。\n* 诱饵池：`120` 条同报告体系、同长度、**无任何失败线索**的段落，用于负控 C3a。\n* 决策表：6 类 × (主建议, 次建议, ≥1 触发证据字段)，schema 门机检。\n\n## ② 方法\n\n1. **证据化**：每条记录被压成 11 维布尔信号向量（`reference/absence/artifact/withheld/\n   threshold/quantified_gap/residual/convergence/assumption/envelope/defect`），词表在\n   `data/cue_lexicon.json` 外置，代码零领域词。\n2. **双标注**：分析者（人工定标）× 结构化规则标注器 A（只看信号向量，权重表外置且仅在\n   train 段复核过一次）；另设无监督原型标注器 B（字符 2–3 gram TF-IDF 对类种子句的质心，\n   不看任何金标签）作为第二意见。\n3. **划分**：按类分层、确定性取每类第 3 条为测试段（train 36 / test 12）。\n4. **重派决策表**：`SCOPE_REDUCTION / METHOD_SWAP / BASELINE_SWAP` 三选一，每行带触发证据字段；\n   触发字段一个都不在记录中时输出 `ESCALATE`（不猜），该分支有独立测试。\n5. **集成**：`blocked_node_view(CampaignDAG.verify_convergence().blocked_nodes, records)` 输出\n   `{failure_class, evidence, reroute_suggestion}`；`to_ledger_entry` 把每条渲染为\n   `category=\"falsified_hypothesis\"` 的台账条目（失败也是成果，登记而非删除）。\n\n## ③ 计算结果\n\n| 判据 | 阈值 | 实测 | 判定 |\n|---|---|---|---|\n| C1 双标注 Cohen κ | ≥ 0.6 | 0.750 | PASS |\n| C1 次对（规则 vs 无监督原型）κ | 参考 | 0.674 | — |\n| C2 冻结集一致率 | ≥ 0.70 | 0.792 | PASS |\n| C2 macro-F1 | 参考 | 0.788 | — |\n| C3a 同长度诱饵一致率 | ≤ 0.35 | 0.169 (10 次抽样均值, 最大 0.250) | PASS |\n| C3b 标签重排后测试一致率 | ≤ 0.30 | 0.180 (25 次置换均值, 最大 0.417; 真标签 0.583) | PASS |\n| C4 决策表完整性 | 每类 1 建议 + ≥1 触发字段 | 6 类, 最少触发字段 1 个 | PASS |\n| C5 零领域语义 | 命中 0 | 0 命中 | PASS |\n| C6 集成 | blocked 视图输出三字段 | 1 条集成测试（CampaignDAG → view） | PASS |\n\n### 决策表（C4 机器可检）\n\n| 失败类 | 主建议 | 次建议 | 触发证据字段 | 理由码 |\n|---|---|---|---|---|\n| `BASELINE_ABSENT` | BASELINE_SWAP | SCOPE_REDUCTION | `reference_lexeme`, `absence_lexeme` | no_yardstick_but_result_exists |\n| `TOLERANCE_EXCEEDED` | SCOPE_REDUCTION | METHOD_SWAP | `quantified_gap`, `threshold_lexeme` | quantified_miss_of_declared_band |\n| `CONVERGENCE_STALL` | METHOD_SWAP | SCOPE_REDUCTION | `convergence_lexeme`, `residual_magnitude` | iterate_never_settled |\n| `MODEL_FIDELITY_LIMIT` | METHOD_SWAP | SCOPE_REDUCTION | `assumption_lexeme`, `envelope_lexeme` | intrinsic_formulation_limit |\n| `DATA_INSUFFICIENCY` | SCOPE_REDUCTION | BASELINE_SWAP | `absence_lexeme`, `artifact_lexeme`, `withheld_lexeme` | missing_inputs_or_deliverables |\n| `IMPLEMENTATION_DEFECT` | METHOD_SWAP | SCOPE_REDUCTION | `defect_lexeme` | localised_code_error |\n\n混淆矩阵（行 = 分析者金标签，列 = 结构化标注器）：\n`[[6, 0, 0, 1, 1, 0], [0, 5, 0, 1, 2, 0], [0, 0, 8, 0, 0, 0], [1, 1, 1, 5, 0, 0], [0, 0, 0, 0, 8, 0], [2, 0, 0, 0, 0, 6]]`\n\n逐类召回：`{\"BASELINE_ABSENT\": 0.75, \"TOLERANCE_EXCEEDED\": 0.625, \"CONVERGENCE_STALL\": 1.0, \"MODEL_FIDELITY_LIMIT\": 0.625, \"DATA_INSUFFICIENCY\": 1.0, \"IMPLEMENTATION_DEFECT\": 0.75}`\n\n## ④ 结果图\n\n* `artifacts/failure_taxonomy/figures/fig1_confusion_structured_vs_analyst.png` — 冻结集混淆矩阵（含 acc/κ 标题）。\n* `artifacts/failure_taxonomy/figures/fig2_criteria_and_controls.png` — C2 与两个负控 C3a/C3b 的一致率柱图（虚线=阈值，灰虚线=1/6 随机线）。\n* `artifacts/failure_taxonomy/figures/fig3_routing_coverage.png` — 逐类召回 × 该类重派建议（决策表覆盖面的可视化）。\n\n## ⑤ 注意点（踩过的坑 / 局限）\n\n1. **同作者偏置**：金标签与规则标注器出自同一个体（本 agent）。κ=0.75 证明“同一判断能被\n   规则稳定复现”，**不**等于跨人可复现；报告如实标注，未用“双人标注”措辞粉饰。\n2. **诱饵负控是强证据但非充分**：C3a 用同仓同文风的非失败段落，一致率 0.169\n   （随机 0.167），说明判别力不来自“文献腔”或长度；但诱饵长度仍与正样本匹配（设计使然）。\n3. **小样本**：n=48，每类 8 条；单次置换的测试一致率方差很大\n   （25 次置换中最大 0.417），故 C3b 报均值而非单次值。\n4. **类边界重叠**：`BASELINE_ABSENT` 与 `DATA_INSUFFICIENCY` 都常含“无/缺”；区分靠\n   “标尺缺失 vs 输入缺失”，混淆矩阵中确有互串，已如实计入。\n5. **重派建议未闭环验证**：本节点只证明“分类→建议”可裁，未证明按建议重派后节点真能转 PASS\n   （需后续波次的真实重派实验）。\n6. **消融**：监督质心臂测试一致率仅 0.583（n=12），远低于规则臂，\n   说明在小样本下规则化 > 学习化，这也是部署选规则标注器的原因。\n\n## ⑥ 误差判定\n\n本节点的被测量是**分类一致率**，不是物理量，因此“是否 <3%”不适用（无物理基准可对标）：\n如实声明该判据不适用于本任务，替代判据为 C1 κ=0.750、\nC2 一致率=0.792（随机 1/6=0.167），两项均达标。\n所有数字由 `benchmarks/failure_taxonomy/run_p186w1_n08.py` 从冻结语料程序化生成（零手抄），\n`metrics.json` 为唯一来源。\n",
+  "metrics": {
+    "corpus": {
+      "n_records": 48,
+      "n_decoys": 120,
+      "per_class": {
+        "BASELINE_ABSENT": 8,
+        "CONVERGENCE_STALL": 8,
+        "DATA_INSUFFICIENCY": 8,
+        "IMPLEMENTATION_DEFECT": 8,
+        "MODEL_FIDELITY_LIMIT": 8,
+        "TOLERANCE_EXCEEDED": 8
+      },
+      "sha256": "85acd46b774ed8dd980985202cb7cbb012ff4d647871ff251f65e380df0a07fb",
+      "annotator": "agent:m9338",
+      "protocol": "epistemic-cue retrieval over in-repo reports, then analyst adjudication by unique substring key; verbatim segments, digest pinned"
+    },
+    "C1_dual_annotation": {
+      "kappa_analyst_vs_structured": 0.75,
+      "agreement_analyst_vs_structured": 0.7916666666666666,
+      "kappa_structured_vs_prototype": 0.674321503131524,
+      "agreement_structured_vs_prototype": 0.7291666666666666,
+      "kappa_analyst_vs_prototype": 0.625
+    },
+    "C2_frozen_set_consistency": {
+      "accuracy_structured": 0.7916666666666666,
+      "accuracy_prototype": 0.6875,
+      "macro_f1_structured": 0.787876554130424,
+      "per_class_recall_structured": {
+        "BASELINE_ABSENT": 0.75,
+        "TOLERANCE_EXCEEDED": 0.625,
+        "CONVERGENCE_STALL": 1.0,
+        "MODEL_FIDELITY_LIMIT": 0.625,
+        "DATA_INSUFFICIENCY": 1.0,
+        "IMPLEMENTATION_DEFECT": 0.75
+      },
+      "confusion_structured": [
+        [
+          6,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          5,
+          0,
+          1,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          6
+        ]
+      ],
+      "random_baseline": 0.16666666666666666
+    },
+    "C3a_decoy_negative_control": {
+      "accuracy_on_decoys": 0.16875,
+      "accuracy_max_draw": 0.25,
+      "n_draws": 10,
+      "n": 48
+    },
+    "C3b_label_permutation_control": {
+      "n_train": 36,
+      "n_test": 12,
+      "n_permutations": 25,
+      "test_accuracy_true_labels": 0.5833333333333334,
+      "test_accuracy_permuted_labels": 0.18000000000000005,
+      "test_accuracy_permuted_max_draw": 0.4166666666666667,
+      "test_kappa_permuted": 0.015999999999999997,
+      "chance_level": 0.16666666666666666
+    },
+    "C4_decision_table": {
+      "classes": 6,
+      "actions": {
+        "BASELINE_ABSENT": "BASELINE_SWAP",
+        "TOLERANCE_EXCEEDED": "SCOPE_REDUCTION",
+        "CONVERGENCE_STALL": "METHOD_SWAP",
+        "MODEL_FIDELITY_LIMIT": "METHOD_SWAP",
+        "DATA_INSUFFICIENCY": "SCOPE_REDUCTION",
+        "IMPLEMENTATION_DEFECT": "METHOD_SWAP"
+      },
+      "trigger_counts": {
+        "BASELINE_ABSENT": 2,
+        "TOLERANCE_EXCEEDED": 2,
+        "CONVERGENCE_STALL": 2,
+        "MODEL_FIDELITY_LIMIT": 2,
+        "DATA_INSUFFICIENCY": 3,
+        "IMPLEMENTATION_DEFECT": 1
+      },
+      "min_triggers_per_row": 1
+    },
+    "predictions": [
+      {
+        "record_id": "F001",
+        "gold": "BASELINE_ABSENT",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F002",
+        "gold": "BASELINE_ABSENT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "BASELINE_ABSENT"
+      },
+      {
+        "record_id": "F003",
+        "gold": "BASELINE_ABSENT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "BASELINE_ABSENT"
+      },
+      {
+        "record_id": "F004",
+        "gold": "BASELINE_ABSENT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F005",
+        "gold": "BASELINE_ABSENT",
+        "structured": "MODEL_FIDELITY_LIMIT",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F006",
+        "gold": "BASELINE_ABSENT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F007",
+        "gold": "BASELINE_ABSENT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "BASELINE_ABSENT"
+      },
+      {
+        "record_id": "F008",
+        "gold": "BASELINE_ABSENT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "BASELINE_ABSENT"
+      },
+      {
+        "record_id": "F009",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F010",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F011",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F012",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F013",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F014",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F015",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F016",
+        "gold": "CONVERGENCE_STALL",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F017",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F018",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F019",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F020",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "IMPLEMENTATION_DEFECT"
+      },
+      {
+        "record_id": "F021",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F022",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F023",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F024",
+        "gold": "DATA_INSUFFICIENCY",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F025",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "IMPLEMENTATION_DEFECT",
+        "prototype": "IMPLEMENTATION_DEFECT"
+      },
+      {
+        "record_id": "F026",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "IMPLEMENTATION_DEFECT",
+        "prototype": "IMPLEMENTATION_DEFECT"
+      },
+      {
+        "record_id": "F027",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "IMPLEMENTATION_DEFECT"
+      },
+      {
+        "record_id": "F028",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "IMPLEMENTATION_DEFECT",
+        "prototype": "IMPLEMENTATION_DEFECT"
+      },
+      {
+        "record_id": "F029",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "IMPLEMENTATION_DEFECT",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F030",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "IMPLEMENTATION_DEFECT",
+        "prototype": "CONVERGENCE_STALL"
+      },
+      {
+        "record_id": "F031",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "IMPLEMENTATION_DEFECT",
+        "prototype": "IMPLEMENTATION_DEFECT"
+      },
+      {
+        "record_id": "F032",
+        "gold": "IMPLEMENTATION_DEFECT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "IMPLEMENTATION_DEFECT"
+      },
+      {
+        "record_id": "F033",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "MODEL_FIDELITY_LIMIT",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F034",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "MODEL_FIDELITY_LIMIT",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F035",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "MODEL_FIDELITY_LIMIT",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F036",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "MODEL_FIDELITY_LIMIT",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F037",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "BASELINE_ABSENT",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F038",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "CONVERGENCE_STALL",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F039",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "TOLERANCE_EXCEEDED",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F040",
+        "gold": "MODEL_FIDELITY_LIMIT",
+        "structured": "MODEL_FIDELITY_LIMIT",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F041",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "TOLERANCE_EXCEEDED",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F042",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F043",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "TOLERANCE_EXCEEDED",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F044",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "DATA_INSUFFICIENCY",
+        "prototype": "DATA_INSUFFICIENCY"
+      },
+      {
+        "record_id": "F045",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "MODEL_FIDELITY_LIMIT",
+        "prototype": "MODEL_FIDELITY_LIMIT"
+      },
+      {
+        "record_id": "F046",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "TOLERANCE_EXCEEDED",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F047",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "TOLERANCE_EXCEEDED",
+        "prototype": "TOLERANCE_EXCEEDED"
+      },
+      {
+        "record_id": "F048",
+        "gold": "TOLERANCE_EXCEEDED",
+        "structured": "TOLERANCE_EXCEEDED",
+        "prototype": "TOLERANCE_EXCEEDED"
+      }
+    ],
+    "thresholds": {
+      "C1_kappa_min": 0.6,
+      "C2_accuracy_min": 0.7,
+      "C3a_accuracy_max": 0.35,
+      "C3b_accuracy_max": 0.3
+    },
+    "verdicts": {
+      "C1": true,
+      "C2": true,
+      "C3a": true,
+      "C3b": true,
+      "C4": true
+    },
+    "all_pass": true
+  },
+  "verdicts": {
+    "C1": true,
+    "C2": true,
+    "C3a": true,
+    "C3b": true,
+    "C4": true
+  },
+  "all_pass": true,
+  "purity_hits": 0,
+  "publish_status": {
+    "platform_report_id": 11013,
+    "mission_id": 9338,
+    "figures_attached": false,
+    "reason": "backend ENOSPC on first POST; subsequent re-posts rejected by uq_reports_mission_md5 and, once md5 changed, returned reports of other missions (cross-tenant session contamination)",
+    "figures_in_repo": [
+      "artifacts/failure_taxonomy/figures/fig1_confusion_structured_vs_analyst.png",
+      "artifacts/failure_taxonomy/figures/fig2_criteria_and_controls.png",
+      "artifacts/failure_taxonomy/figures/fig3_routing_coverage.png"
+    ]
+  }
+}
