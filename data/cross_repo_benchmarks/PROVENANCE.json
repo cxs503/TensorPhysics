@@ -1,0 +1,35 @@
+{
+  "purpose": "Byte-identical copies of real solver-repository benchmark artefacts, pinned so that the TensorPhysics UQ cross-repository adapters can be tested and audited without cloning the solver repositories. Originals were read at the paths below; copies were verified sha256-identical at import time (2026-11-10).",
+  "imported_by": "m9026 / P142W3-N10",
+  "schema_version": "uq-cross-repo-1",
+  "artifacts": [
+    {
+      "local": "tensorlbm_sdaa_wigley_hydrostatics.json",
+      "solver": "TensorLBM",
+      "source": "/root/tensor-ecosystem/TensorLBM/artifacts/sdaa_wigley_hydrostatics.json",
+      "sha256": "18daec57ebacaec0741e9e4500ea0273d0d2fcd73472d58f0dacb8249aaa15b0",
+      "content": "Wigley hull hydrostatics on SDAA: results per grid vs the analytic block"
+    },
+    {
+      "local": "tensorfvm_mesh_quality_results.json",
+      "solver": "TensorFVM",
+      "source": "/root/tensor-ecosystem/TensorFVM/scripts/verification-mesh-quality/results.json",
+      "sha256": "72b2ea698eb2cd6c91cd383f6a85a7f8d5ce25bc383ca831ff98b0a45ddaead8",
+      "content": "Mesh-quality verification: shear closed form and rotation invariance"
+    },
+    {
+      "local": "tensorfvm_lid_cavity_summary.json",
+      "solver": "TensorFVM",
+      "source": "/root/tensor-ecosystem/TensorFVM/scripts/verification-lid-cavity/summary.json",
+      "sha256": "9d5e52bdb0d8844a35576628a55d5dec85a0db51807115e7ea8c991ae3bf028d",
+      "content": "Lid-driven cavity Re=100: centreline velocity profiles vs Ghia et al. (1982)"
+    },
+    {
+      "local": "tensorfem_finite_width_hole_audit.json",
+      "solver": "TensorFEM",
+      "source": "/root/tensor-ecosystem/TensorFEM/benchmarks/finite_width_hole_audit.json",
+      "sha256": "1ca275d14f13ed371ba3e5da935323d42998e9662c458d1a9bc6adeef0478858",
+      "content": "Finite-width plate with a central hole: net-section Kt vs Howland, per rho case"
+    }
+  ]
+}
