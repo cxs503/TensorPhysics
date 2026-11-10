@@ -1,0 +1,1608 @@
+{
+  "node": "P233W2-N07",
+  "title": "Ice-induced vibration spectral analysis: response PSD and resonance risk",
+  "criteria": {
+    "AC1": {
+      "description": "SDOF natural frequency error <= 1 %; MDOF (>=3 DOF) <= 5 %",
+      "sdof": {
+        "measured_frequency_hz": 1.0868003499168961,
+        "analytic_frequency_hz": 1.0872352440145021,
+        "relative_error": 0.0004000000000001812,
+        "tolerance": 0.01,
+        "passed": true,
+        "method": "peak of |H(f)| on a 40001-point grid vs sqrt(k/m)/(2 pi) (the damped-peak shift f_n sqrt(1-2 zeta^2) is 0.04 % at zeta=0.02)"
+      },
+      "mdof": {
+        "checks": [
+          {
+            "n_dof": 3,
+            "eigenfrequencies_hz": [
+              0.708306131611453,
+              1.9846296786640771,
+              2.8678729779715773
+            ],
+            "analytic_frequencies_hz": [
+              0.7083061316114524,
+              1.9846296786640765,
+              2.867872977971578
+            ],
+            "max_relative_error": 7.837169375474073e-16,
+            "tolerance": 0.05,
+            "passed": true
+          },
+          {
+            "n_dof": 5,
+            "eigenfrequencies_hz": [
+              0.45300219973034,
+              1.322307055076684,
+              2.0844864568835733,
+              2.677793162872051,
+              3.0541609922537756
+            ],
+            "analytic_frequencies_hz": [
+              0.4530021997303397,
+              1.3223070550766838,
+              2.0844864568835733,
+              2.677793162872051,
+              3.054160992253775
+            ],
+            "max_relative_error": 6.127028882453788e-16,
+            "tolerance": 0.05,
+            "passed": true
+          },
+          {
+            "n_dof": 8,
+            "eigenfrequencies_hz": [
+              0.29369930999128807,
+              0.871096352225606,
+              1.4188292529497994,
+              1.9182456251629123,
+              2.352338443293144,
+              2.7063251970560196,
+              2.96815129211246,
+              3.1289005548211066
+            ],
+            "analytic_frequencies_hz": [
+              0.2936993099912874,
+              0.8710963522256052,
+              1.4188292529497988,
+              1.9182456251629114,
+              2.352338443293144,
+              2.7063251970560196,
+              2.9681512921124606,
+              3.128900554821107
+            ],
+            "max_relative_error": 2.2680809661924463e-15,
+            "tolerance": 0.05,
+            "passed": true
+          }
+        ],
+        "max_relative_error": 2.2680809661924463e-15,
+        "tolerance": 0.05,
+        "passed": true
+      },
+      "passed": true
+    },
+    "AC2": {
+      "description": "FRF amplitude/phase vs analytic <= 1 % (<= 5 % near resonance)",
+      "sdof": {
+        "amplitude_max_relative_error": 2.7623933124428274e-15,
+        "amplitude_max_relative_error_near_resonance": 2.7623933124428274e-15,
+        "phase_max_error_deg": 2.2899993706537323e-13,
+        "peak_amplitude_measured_m_per_n": 1.7856393237247476e-06,
+        "peak_amplitude_analytic_m_per_n": 1.7860715357500126e-06,
+        "peak_amplitude_relative_error": 0.0002419903215598694,
+        "tolerance_amplitude": 0.01,
+        "tolerance_near_resonance": 0.05,
+        "tolerance_phase_deg": 1.0,
+        "passed": true
+      },
+      "mdof": {
+        "max_relative_error_modal_vs_direct": 4.142158341621958e-14,
+        "tolerance": 0.01,
+        "passed": true,
+        "probe_range_hz": [
+          0.2,
+          8.0
+        ],
+        "dof_out": 4,
+        "dof_in": 4
+      },
+      "passed": true
+    },
+    "AC3": {
+      "description": "random-excitation response RMS vs analytic <= 5 %",
+      "result": {
+        "white_noise_level_n2_per_hz": 100000000.0,
+        "rms_analytic_m": 0.004667277983061714,
+        "rms_from_spectral_integration_m": 0.0046672722075611975,
+        "spectral_integration_relative_error": 1.2374451526488462e-06,
+        "rms_time_domain_ensemble_m": 0.004664483414110286,
+        "rms_time_domain_per_seed_m": [
+          0.0046005568657785266,
+          0.005344670358648588,
+          0.00449790134015843,
+          0.0041530571051865495,
+          0.004447869658146124,
+          0.004942845156743498
+        ],
+        "time_domain_relative_error": 0.0005987577687829984,
+        "time_domain_relative_scatter": 0.08212477380742542,
+        "tolerance": 0.05,
+        "passed": true
+      },
+      "passed": true
+    },
+    "AC4": {
+      "description": "resonance criterion identical to analytic criterion over >= 20 points",
+      "result": {
+        "n_points": 27,
+        "n_agree": 27,
+        "agreement": 1.0,
+        "n_agree_small_damping_approximation": 27,
+        "agreement_small_damping_approximation": 1.0,
+        "points": [
+          {
+            "frequency_ratio": 0.7,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 0.77,
+            "relative_detuning": 0.30000000000000004,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.03919895891080289,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.85,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 0.935,
+            "relative_detuning": 0.15000000000000002,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.07193361344130791,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.94,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 1.034,
+            "relative_detuning": 0.060000000000000046,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.16961466147429904,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.96,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 1.056,
+            "relative_detuning": 0.040000000000000036,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.2477675371306654,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.0,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 1.1,
+            "relative_detuning": 0.0,
+            "tier": "lock_in",
+            "band_criterion_risk": true,
+            "amplification_ratio": 0.9999499987499376,
+            "amplification_criterion_risk": true,
+            "small_damping_approximation_risk": true,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.04,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 1.1440000000000001,
+            "relative_detuning": 0.040000000000000036,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.23749168710513466,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.06,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 1.1660000000000001,
+            "relative_detuning": 0.060000000000000046,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.15947537093956188,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.15,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 1.265,
+            "relative_detuning": 0.14999999999999983,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.061855297317935744,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.3,
+            "damping_ratio": 0.01,
+            "f_ice_hz": 1.4300000000000002,
+            "relative_detuning": 0.30000000000000004,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.028963503027248677,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.7,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 0.77,
+            "relative_detuning": 0.30000000000000004,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.0782977699346775,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.85,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 0.935,
+            "relative_detuning": 0.15000000000000002,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.1430456280134154,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.94,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 1.034,
+            "relative_detuning": 0.060000000000000046,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.3269398360954264,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.96,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 1.056,
+            "relative_detuning": 0.040000000000000036,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.4581036109595755,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.0,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 1.1,
+            "relative_detuning": 0.0,
+            "tier": "lock_in",
+            "band_criterion_risk": true,
+            "amplification_ratio": 0.9997999799959991,
+            "amplification_criterion_risk": true,
+            "small_damping_approximation_risk": true,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.04,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 1.1440000000000001,
+            "relative_detuning": 0.040000000000000036,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.4366313469857409,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.06,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 1.1660000000000001,
+            "relative_detuning": 0.060000000000000046,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.30605277366952505,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.15,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 1.265,
+            "relative_detuning": 0.14999999999999983,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.12276367771319166,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.3,
+            "damping_ratio": 0.02,
+            "f_ice_hz": 1.4300000000000002,
+            "relative_detuning": 0.30000000000000004,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.057795527261231446,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.7,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 0.77,
+            "relative_detuning": 0.30000000000000004,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.19401419905244635,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.85,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 0.935,
+            "relative_detuning": 0.15000000000000002,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.34412785646947924,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.94,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 1.034,
+            "relative_detuning": 0.060000000000000046,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.6675415316103877,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 0.96,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 1.056,
+            "relative_detuning": 0.040000000000000036,
+            "tier": "lock_in",
+            "band_criterion_risk": true,
+            "amplification_ratio": 0.8057951630899691,
+            "amplification_criterion_risk": true,
+            "small_damping_approximation_risk": true,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.0,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 1.1,
+            "relative_detuning": 0.0,
+            "tier": "lock_in",
+            "band_criterion_risk": true,
+            "amplification_ratio": 0.998749217771909,
+            "amplification_criterion_risk": true,
+            "small_damping_approximation_risk": true,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.04,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 1.1440000000000001,
+            "relative_detuning": 0.040000000000000036,
+            "tier": "lock_in",
+            "band_criterion_risk": true,
+            "amplification_ratio": 0.7555328076722334,
+            "amplification_criterion_risk": true,
+            "small_damping_approximation_risk": true,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.06,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 1.1660000000000001,
+            "relative_detuning": 0.060000000000000046,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.6133767977659083,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.15,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 1.265,
+            "relative_detuning": 0.14999999999999983,
+            "tier": "near_resonance",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.29169887508537934,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          },
+          {
+            "frequency_ratio": 1.3,
+            "damping_ratio": 0.05,
+            "f_ice_hz": 1.4300000000000002,
+            "relative_detuning": 0.30000000000000004,
+            "tier": "clear",
+            "band_criterion_risk": false,
+            "amplification_ratio": 0.14224368428890308,
+            "amplification_criterion_risk": false,
+            "small_damping_approximation_risk": false,
+            "agree": true
+          }
+        ]
+      },
+      "passed": true
+    },
+    "AC5": {
+      "description": "DEM-style ice load -> response PSD peak vs literature <= 20 %",
+      "result": {
+        "f_ice_from_U_over_s_hz": 1.0666666666666667,
+        "ice_force_psd_peak_hz": 1.007080078125,
+        "ice_force_psd_peak_relative_error": 0.055862426757812486,
+        "response_psd_peak_hz": 1.0986600543607838,
+        "literature_dominant_frequency_hz": 1.1,
+        "literature_band_hz": [
+          1.0,
+          1.2
+        ],
+        "relative_frequency_error": 0.001218132399287495,
+        "within_literature_band": true,
+        "tolerance": 0.2,
+        "passed": true,
+        "note": "frequency validated; amplitude not validated (records not public)"
+      },
+      "passed": true
+    }
+  },
+  "all_passed": true,
+  "cases": {
+    "lighthouse": {
+      "case": "A: lighthouse sway mode (Bothnian lighthouse literature anchor)",
+      "structure": {
+        "label": "lighthouse sway mode",
+        "mass_kg": 300000.0,
+        "stiffness_n_per_m": 14330665.59038175,
+        "damping_ratio": 0.02,
+        "frequency_hz": 1.1,
+        "omega_n_rad_s": 6.911503837897546,
+        "damping_n_s_per_m": 82938.04605477056,
+        "peak_amplitude_m_per_n": 1.7448597444966316e-06,
+        "peak_frequency_hz": 1.0995599119647825,
+        "half_power_band_hz": [
+          1.0773308131526704,
+          1.1213484378335783
+        ]
+      },
+      "excitation": {
+        "dt_s": 0.002,
+        "duration_s": 180.0,
+        "n_samples": 90000,
+        "drift_velocity_m_s": 0.16,
+        "crushing_penetration_m": 0.15,
+        "contact_width_m": 2.0,
+        "effective_pressure_mpa": 0.3,
+        "seed": 20261110,
+        "f_ice_hz": 1.0666666666666667,
+        "force_mean_n": 38175.42602955382,
+        "force_rms_n": 28912.15325551498,
+        "force_peak_n": 197527.01295819698,
+        "psd_peak_frequency_hz": 1.007080078125,
+        "psd_df_hz": 0.030517578125,
+        "metadata": {
+          "model": "intermittent brittle-ductile crushing (1-D parameterisation)",
+          "period_jitter_cv": 0.18,
+          "amplitude_jitter_cv": 0.25,
+          "rise_fraction": 0.65,
+          "background_fraction": 0.12,
+          "drift_modulation_fraction": 0.08,
+          "drift_modulation_hz": 0.11,
+          "nperseg": 16384,
+          "peak_force_model_n": 90000.0
+        }
+      },
+      "response": {
+        "rms_displacement_m": 0.01455597215806352,
+        "rms_acceleration_m_per_s2": 0.6820476365728881,
+        "peak_acceleration_m_per_s2": 2.35877975235679,
+        "response_peak_frequency_hz": 1.0986600543607838,
+        "time_domain_rms_displacement_m": 0.014221413661648162,
+        "time_domain_rms_acceleration_m_per_s2": 0.6638357800644038,
+        "spectral_vs_time_rms_relative_difference": 0.02298427702268055,
+        "welch_grid_df_hz": 0.030517578125,
+        "rms_displacement_on_welch_grid_m": 0.014877448820775734,
+        "welch_grid_rms_overshoot": 0.02208555081181074
+      },
+      "resonance_risk": {
+        "f_ice_hz": 1.0666666666666667,
+        "f_n_hz": 1.1,
+        "damping_ratio": 0.02,
+        "relative_detuning": 0.030303030303030394,
+        "half_power_edges_hz": [
+          1.0773308131526704,
+          1.1213484378335783
+        ],
+        "half_power_bandwidth_hz": 0.04401762468090786,
+        "amplification_ratio": 0.5618133172632812,
+        "tier": "near_resonance",
+        "is_resonance_risk": false,
+        "margin_to_band_edge_hz": 0.010664146486003778
+      },
+      "grid_resolution_study": [
+        {
+          "nperseg": 1024,
+          "df_hz": 0.48828125,
+          "bandwidth_ratio": 11.097301136363635,
+          "rms_on_welch_grid_m": 0.005623740638786568,
+          "rms_reference_m": 0.01455597215806352,
+          "relative_bias": -0.6136471973346551
+        },
+        {
+          "nperseg": 2048,
+          "df_hz": 0.244140625,
+          "bandwidth_ratio": 5.5486505681818175,
+          "rms_on_welch_grid_m": 0.0061209281991461174,
+          "rms_reference_m": 0.01455597215806352,
+          "relative_bias": -0.5794902509651113
+        },
+        {
+          "nperseg": 4096,
+          "df_hz": 0.1220703125,
+          "bandwidth_ratio": 2.7743252840909087,
+          "rms_on_welch_grid_m": 0.020980288900953763,
+          "rms_reference_m": 0.01455597215806352,
+          "relative_bias": 0.44135264021725873
+        },
+        {
+          "nperseg": 8192,
+          "df_hz": 0.06103515625,
+          "bandwidth_ratio": 1.3871626420454544,
+          "rms_on_welch_grid_m": 0.016136071589040495,
+          "rms_reference_m": 0.01455597215806352,
+          "relative_bias": 0.10855334249191007
+        },
+        {
+          "nperseg": 16384,
+          "df_hz": 0.030517578125,
+          "bandwidth_ratio": 0.6935813210227272,
+          "rms_on_welch_grid_m": 0.014877448820775734,
+          "rms_reference_m": 0.01455597215806352,
+          "relative_bias": 0.02208555081181074
+        },
+        {
+          "nperseg": 32768,
+          "df_hz": 0.0152587890625,
+          "bandwidth_ratio": 0.3467906605113636,
+          "rms_on_welch_grid_m": 0.015167834264983146,
+          "rms_reference_m": 0.01455597215806352,
+          "relative_bias": 0.04203512484603622
+        }
+      ],
+      "lock_in_demonstration": {
+        "f_ice_unlocked_hz": 1.0666666666666667,
+        "f_ice_locked_hz": 1.1,
+        "drift_velocity_locked_m_s": 0.165,
+        "rms_displacement_unlocked_m": 0.01455597215806352,
+        "rms_displacement_locked_m": 0.029997815789470215,
+        "amplification_of_rms": 2.0608596570344795,
+        "verdict_unlocked": {
+          "f_ice_hz": 1.0666666666666667,
+          "f_n_hz": 1.1,
+          "damping_ratio": 0.02,
+          "relative_detuning": 0.030303030303030394,
+          "half_power_edges_hz": [
+            1.0773308131526704,
+            1.1213484378335783
+          ],
+          "half_power_bandwidth_hz": 0.04401762468090786,
+          "amplification_ratio": 0.5618133172632812,
+          "tier": "near_resonance",
+          "is_resonance_risk": false,
+          "margin_to_band_edge_hz": 0.010664146486003778
+        },
+        "verdict_locked": {
+          "f_ice_hz": 1.1,
+          "f_n_hz": 1.1,
+          "damping_ratio": 0.02,
+          "relative_detuning": 0.0,
+          "half_power_edges_hz": [
+            1.0773308131526704,
+            1.1213484378335783
+          ],
+          "half_power_bandwidth_hz": 0.04401762468090786,
+          "amplification_ratio": 0.9997999799959991,
+          "tier": "lock_in",
+          "is_resonance_risk": true,
+          "margin_to_band_edge_hz": -0.021348437833578204
+        }
+      },
+      "literature_anchor": {
+        "source": "Norrstrom (1978); Karna & Turunen (1990), Bothnian lighthouse cases",
+        "dominant_frequency_hz": 1.1,
+        "reported_band_hz": [
+          1.0,
+          1.2
+        ],
+        "note": "published dominant freq. quoted as a 1.0-1.2 Hz band; original records are not public, so amplitude is not validated"
+      },
+      "ac5_relative_frequency_error": 0.001218132399287495
+    },
+    "hull_chain": {
+      "case": "B: hull-girder 5-DOF chain, bow ice excitation",
+      "structure": {
+        "label": "hull-girder lumped chain",
+        "n_dof": 5,
+        "mass_kg": 5000000.0,
+        "stiffness_n_per_m": 2000000000.0,
+        "eigenfrequencies_hz": [
+          0.9060043994606798,
+          2.6446141101533676,
+          4.1689729137671465,
+          5.355586325744102,
+          6.10832198450755
+        ],
+        "analytic_frequencies_hz": [
+          0.9060043994606795,
+          2.6446141101533676,
+          4.1689729137671465,
+          5.355586325744102,
+          6.10832198450755
+        ],
+        "rayleigh_alpha": 0.19829242216802595,
+        "rayleigh_beta": 0.0009075993010855951,
+        "modal_damping": [
+          0.02,
+          0.013507303944162915,
+          0.015672034187507625,
+          0.018216805569886828,
+          0.020000000000000007
+        ],
+        "mode_shapes": [
+          [
+            7.597762042956392e-05,
+            0.0002038105036345179,
+            0.00026693499199171704,
+            0.00024530950646407243,
+            0.00014579998590823133
+          ],
+          [
+            0.00014579998590823163,
+            0.00026693499199171704,
+            7.59776204295638e-05,
+            -0.00020381050363451803,
+            -0.00024530950646407243
+          ],
+          [
+            0.00020381050363451792,
+            0.0001457999859082313,
+            -0.0002453095064640722,
+            -7.597762042956372e-05,
+            0.00026693499199171726
+          ],
+          [
+            0.00024530950646407216,
+            -7.597762042956388e-05,
+            -0.00014579998590823158,
+            0.00026693499199171694,
+            -0.00020381050363451798
+          ],
+          [
+            0.00026693499199171694,
+            -0.0002453095064640724,
+            0.00020381050363451795,
+            -0.0001457999859082313,
+            7.597762042956383e-05
+          ]
+        ]
+      },
+      "excitation": {
+        "dt_s": 0.004,
+        "duration_s": 180.0,
+        "n_samples": 45000,
+        "drift_velocity_m_s": 0.16,
+        "crushing_penetration_m": 0.15,
+        "contact_width_m": 1.0,
+        "effective_pressure_mpa": 0.5,
+        "seed": 20261111,
+        "f_ice_hz": 1.0666666666666667,
+        "force_mean_n": 32456.137506665356,
+        "force_rms_n": 24812.916912057026,
+        "force_peak_n": 139516.47475214966,
+        "psd_peak_frequency_hz": 1.068115234375,
+        "psd_df_hz": 0.030517578125,
+        "metadata": {
+          "model": "intermittent brittle-ductile crushing (1-D parameterisation)",
+          "period_jitter_cv": 0.18,
+          "amplitude_jitter_cv": 0.25,
+          "rise_fraction": 0.65,
+          "background_fraction": 0.12,
+          "drift_modulation_fraction": 0.08,
+          "drift_modulation_hz": 0.11,
+          "nperseg": 8192,
+          "peak_force_model_n": 75000.0
+        }
+      },
+      "response": {
+        "rms_displacement_m": 0.0003221866360066312,
+        "rms_acceleration_m_per_s2": 0.011675809421350788,
+        "response_peak_frequency_hz": 0.9098278575175242,
+        "dof_in": 4,
+        "dof_out": 4
+      },
+      "resonance_risk_first_mode": {
+        "f_ice_hz": 1.0666666666666667,
+        "f_n_hz": 0.9060043994606798,
+        "damping_ratio": 0.02,
+        "relative_detuning": 0.17733055965470457,
+        "half_power_edges_hz": [
+          0.887333142173519,
+          0.9235878345505295
+        ],
+        "half_power_bandwidth_hz": 0.03625469237701051,
+        "amplification_ratio": 0.10281549317476157,
+        "tier": "clear",
+        "is_resonance_risk": false,
+        "margin_to_band_edge_hz": 0.14307883211613714
+      },
+      "drift_sweep": [
+        {
+          "drift_velocity_m_s": 0.04,
+          "f_ice_hz": 0.26666666666666666,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.7056673600863238,
+            0.899166133296021,
+            0.9360354043591752,
+            0.9502077549595626,
+            0.9563437115229011
+          ],
+          "amplification_ratio": [
+            0.04378154723662167,
+            0.027289506320653637,
+            0.031468909464789134,
+            0.03651804311849798,
+            0.0400683030289424
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.06,
+          "f_ice_hz": 0.4,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.5585010401294858,
+            0.8487491999440315,
+            0.9040531065387628,
+            0.9253116324393437,
+            0.9345155672843516
+          ],
+          "amplification_ratio": [
+            0.04966270088980017,
+            0.027644320966062192,
+            0.031631265827733755,
+            0.036631773907953774,
+            0.040164092923189
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.08,
+          "f_ice_hz": 0.5333333333333333,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.4113347201726477,
+            0.798332266592042,
+            0.8720708087183504,
+            0.900415509919125,
+            0.9126874230458023
+          ],
+          "amplification_ratio": [
+            0.06115945197825198,
+            0.028156843122419648,
+            0.031861398239517884,
+            0.03679219152697833,
+            0.04029897017639837
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.1,
+          "f_ice_hz": 0.6666666666666667,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.26416840021580956,
+            0.7479153332400525,
+            0.8400885108979379,
+            0.8755193873989062,
+            0.8908592788072528
+          ],
+          "amplification_ratio": [
+            0.08703458131094244,
+            0.02884439468525107,
+            0.0321622471156302,
+            0.03700051750713536,
+            0.04047371954823874
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.12,
+          "f_ice_hz": 0.8,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.11700208025897152,
+            0.6974983998880631,
+            0.8081062130775256,
+            0.8506232648786876,
+            0.8690311345687034
+          ],
+          "amplification_ratio": [
+            0.17923353521589042,
+            0.029731717426590722,
+            0.032537752843171557,
+            0.037258362059495856,
+            0.040689369504577196
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.14,
+          "f_ice_hz": 0.9333333333333335,
+          "tiers": [
+            "near_resonance",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.03016423969786665,
+            0.6470814665360735,
+            0.7761239152571131,
+            0.8257271423584687,
+            0.8472029903301539
+          ],
+          "amplification_ratio": [
+            0.5418135403886063,
+            0.030853375677440027,
+            0.03299298887926822,
+            0.037567755773100384,
+            0.04094720756356466
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.16,
+          "f_ice_hz": 1.0666666666666667,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.17733055965470457,
+            0.5966645331840841,
+            0.7441416174367008,
+            0.80083101983825,
+            0.8253748460916046
+          ],
+          "amplification_ratio": [
+            0.10281549317476157,
+            0.032257488746790526,
+            0.03353434070863619,
+            0.03793119065866137,
+            0.04124879990195974
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.18000000000000002,
+          "f_ice_hz": 1.2000000000000002,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.32449687961154283,
+            0.5462475998320945,
+            0.7121593196162884,
+            0.7759348973180312,
+            0.8035467018530551
+          ],
+          "amplification_ratio": [
+            0.05288895555593932,
+            0.03401162060910889,
+            0.03416974295148383,
+            0.03835167212723966,
+            0.041596015790360444
+          ],
+          "governing_mode": 0
+        },
+        {
+          "drift_velocity_m_s": 0.2,
+          "f_ice_hz": 1.3333333333333335,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.4716631995683809,
+            0.495830666480105,
+            0.680177021795876,
+            0.7510387747978126,
+            0.7817185576145057
+          ],
+          "amplification_ratio": [
+            0.03426090799280518,
+            0.03621233481390964,
+            0.03490899195374529,
+            0.038832783997405806,
+            0.04199105758798782
+          ],
+          "governing_mode": 4
+        },
+        {
+          "drift_velocity_m_s": 0.22,
+          "f_ice_hz": 1.4666666666666668,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.6188295195252189,
+            0.44541373312811555,
+            0.6481947239754636,
+            0.7261426522775937,
+            0.7598904133759562
+          ],
+          "amplification_ratio": [
+            0.024657467450817903,
+            0.03900129112337883,
+            0.03576415837049864,
+            0.03937876926810655,
+            0.042436497225654075
+          ],
+          "governing_mode": 4
+        },
+        {
+          "drift_velocity_m_s": 0.24000000000000002,
+          "f_ice_hz": 1.6,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.765995839482057,
+            0.39499679977612606,
+            0.6162124261550512,
+            0.701246529757375,
+            0.7380622691374067
+          ],
+          "amplification_ratio": [
+            0.018864875255929482,
+            0.042593692811459805,
+            0.03675013470003965,
+            0.039994630230620595,
+            0.042935320351183484
+          ],
+          "governing_mode": 4
+        },
+        {
+          "drift_velocity_m_s": 0.26,
+          "f_ice_hz": 1.7333333333333334,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            0.913162159438895,
+            0.34457986642413657,
+            0.5842301283346388,
+            0.6763504072371562,
+            0.7162341248988573
+          ],
+          "amplification_ratio": [
+            0.015027298766444588,
+            0.047331666978668085,
+            0.03788536824212936,
+            0.04068625259467713,
+            0.04349097962016079
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.27999999999999997,
+          "f_ice_hz": 1.8666666666666665,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            1.0603284793957328,
+            0.29416293307214714,
+            0.5522478305142265,
+            0.6514542847169376,
+            0.694405980660308
+          ],
+          "amplification_ratio": [
+            0.01232039480246035,
+            0.053792313953631064,
+            0.03919285347992132,
+            0.0414605597741762,
+            0.04410745900689639
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.3,
+          "f_ice_hz": 2.0,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            1.2074947993525709,
+            0.2437459997201576,
+            0.520265532693814,
+            0.6265581621967187,
+            0.6725778364217585
+          ],
+          "amplification_ratio": [
+            0.010323074140539701,
+            0.06302896922610306,
+            0.04070149433808368,
+            0.0423257054646231,
+            0.04478935151348776
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.32,
+          "f_ice_hz": 2.1333333333333333,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            1.354661119309409,
+            0.1933290663681681,
+            0.48828323487340164,
+            0.6016620396765,
+            0.650749692183209
+          ],
+          "amplification_ratio": [
+            0.008798335877360825,
+            0.07718612048173917,
+            0.042448004590307176,
+            0.04329131536155332,
+            0.04554195330640249
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.33999999999999997,
+          "f_ice_hz": 2.2666666666666666,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            1.501827439266247,
+            0.14291213301617864,
+            0.45630093705298924,
+            0.5767659171562812,
+            0.6289215479446596
+          ],
+          "amplification_ratio": [
+            0.007602907876530243,
+            0.10139371385566501,
+            0.04447960879003014,
+            0.044368792631987806,
+            0.04637137816186936
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.36,
+          "f_ice_hz": 2.4,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            1.648993759223085,
+            0.09249519966418915,
+            0.42431863923257684,
+            0.5518697946360624,
+            0.6070934037061102
+          ],
+          "amplification_ratio": [
+            0.00664528568329595,
+            0.1516427347310491,
+            0.046857963680194493,
+            0.04557170702974514,
+            0.04728469722558511
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.38,
+          "f_ice_hz": 2.5333333333333337,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            1.7961600791799237,
+            0.0420782663121995,
+            0.39233634141216434,
+            0.5269736721158437,
+            0.5852652594675607
+          ],
+          "amplification_ratio": [
+            0.005864420965400705,
+            0.31280506621085835,
+            0.04966499252695913,
+            0.04691629505355659,
+            0.04829011059018771
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.39999999999999997,
+          "f_ice_hz": 2.6666666666666665,
+          "tiers": [
+            "clear",
+            "lock_in",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            1.943326399136761,
+            0.008338667039789817,
+            0.3603540435917521,
+            0.502077549595625,
+            0.5634371152290113
+          ],
+          "amplification_ratio": [
+            0.005218111919577609,
+            0.8447615198761206,
+            0.05301181345334227,
+            0.048422109384177424,
+            0.049397159209848586
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.42,
+          "f_ice_hz": 2.8,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            2.090492719093599,
+            0.0587556003917793,
+            0.3283717457713397,
+            0.47718142707540623,
+            0.5416089709904619
+          ],
+          "amplification_ratio": [
+            0.004676311736467501,
+            0.21731603230980326,
+            0.0570528563089991,
+            0.050112871729592987,
+            0.050616988412898085
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.44,
+          "f_ice_hz": 2.9333333333333336,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            2.237659039050438,
+            0.10917253374376895,
+            0.2963894479509272,
+            0.4522853045551874,
+            0.5197808267519124
+          ],
+          "amplification_ratio": [
+            0.0042170882775260906,
+            0.11632881141660074,
+            0.062009054548545654,
+            0.05201760691991872,
+            0.05196267804353903
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.45999999999999996,
+          "f_ice_hz": 3.0666666666666664,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            2.384825359007275,
+            0.15958946709575828,
+            0.2644071501305149,
+            0.42738918203496873,
+            0.49795268251336305
+          ],
+          "amplification_ratio": [
+            0.0038240876143954697,
+            0.07805433812624396,
+            0.0682077181028854,
+            0.05417217214576796,
+            0.053449659510228904
+          ],
+          "governing_mode": 1
+        },
+        {
+          "drift_velocity_m_s": 0.48,
+          "f_ice_hz": 3.2,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            2.531991678964114,
+            0.2100064004477479,
+            0.2324248523101024,
+            0.4024930595147499,
+            0.47612453827481355
+          ],
+          "amplification_ratio": [
+            0.0034848879870908226,
+            0.05805752263623147,
+            0.07615495067847466,
+            0.056621351192489656,
+            0.055096247412904656
+          ],
+          "governing_mode": 2
+        },
+        {
+          "drift_velocity_m_s": 0.5,
+          "f_ice_hz": 3.3333333333333335,
+          "tiers": [
+            "clear",
+            "clear",
+            "clear",
+            "clear",
+            "clear"
+          ],
+          "damping_ratios": [
+            0.02,
+            0.013507303944162915,
+            0.015672034187507625,
+            0.018216805569886828,
+            0.020000000000000007
+          ],
+          "relative_detuning": [
+            2.6791579989209517,
+            0.2604233337997374,
+            0.20044255448969,
+            0.3775969369945312,
+            0.4542963940362641
+          ],
+          "amplification_ratio": [
+            0.0031899006387170596,
+            0.04581039825986851,
+            0.08667636346060723,
+            0.05942177238490395,
+            0.05692432398726252
+          ],
+          "governing_mode": 2
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "generated_utc": "2026-11-10T18:35:00.352075+00:00",
+    "node": "P233W2-N07",
+    "mission_id": 10678,
+    "git_branch": "agent/m10678",
+    "git_commit": "1bef1ce7f25ff8d31970344ec5d26889f4e62450",
+    "python": "3.11.6",
+    "numpy": "2.4.6",
+    "matplotlib": "3.10.8",
+    "figures": [
+      "docs/reports/ice_vibration_spectral/figures/fig1_excitation.png",
+      "docs/reports/ice_vibration_spectral/figures/fig2_frf.png",
+      "docs/reports/ice_vibration_spectral/figures/fig3_response_psd.png",
+      "docs/reports/ice_vibration_spectral/figures/fig4_mode_shapes.png",
+      "docs/reports/ice_vibration_spectral/figures/fig5_resonance_map.png",
+      "docs/reports/ice_vibration_spectral/figures/fig6_hull_chain.png",
+      "docs/reports/ice_vibration_spectral/figures/fig7_grid_study.png"
+    ],
+    "tests": "tests/test_ice_vibration_spectral.py (18 tests)",
+    "note": "payload generated in the worktree; git_commit is HEAD at generation time",
+    "verification_paths": {
+      "AC1": "structural.chain_analytic_frequencies vs numpy.linalg.eigh",
+      "AC2": "structural.state_space_frf_sdof vs closed form; modal vs direct",
+      "AC3": "response.white_noise_rms_analytic vs spectral integration and exact ZOH time history",
+      "AC4": "criterion.classification_consistency (band vs amplification predicate)",
+      "AC5": "case.run_lighthouse_case response PSD peak vs Norrstrom/Karna literature band"
+    },
+    "node_payload_sha256": "2085f7879fad559b82677789f4255e9a44e0edbbbc2780ba90b7595b0eaf0185"
+  }
+}
