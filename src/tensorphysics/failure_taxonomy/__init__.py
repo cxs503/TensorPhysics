@@ -55,6 +55,30 @@ from .decide import (
 from .evidence import SIGNAL_KEYS, Evidence, extract
 from .labelers import SeedPrototypeLabeler, SignalRuleLabeler, SupervisedCentroidLabeler
 from .purity import DomainPurityError, assert_pure, scan_paths, scan_text
+from .holdout import (
+    AblationRow,
+    HoldoutSetError,
+    ablate_lexicon,
+    document_of,
+    document_profile,
+    evaluate,
+    group_folds,
+    grouped_cv,
+    grouped_split,
+    holdout_manifest,
+    load_heldout_set,
+    record_level_cv,
+)
+from .selective import (
+    LOW_MARGIN,
+    Margined,
+    aurc,
+    label_with_margin,
+    margin_of,
+    margins,
+    risk_coverage,
+    selective_decision,
+)
 from .taxonomy import CLASS_CODES, CLASSES, RANDOM_BASELINE, SPECS, FailureClass, spec
 from .view import (
     UNCLASSIFIED,
@@ -90,7 +114,27 @@ __all__ = [
     "SupervisedCentroidLabeler",
     "UNCLASSIFIED",
     "accuracy",
+    "AblationRow",
+    "HoldoutSetError",
+    "LOW_MARGIN",
+    "Margined",
+    "ablate_lexicon",
     "assert_pure",
+    "aurc",
+    "document_of",
+    "document_profile",
+    "evaluate",
+    "group_folds",
+    "grouped_cv",
+    "grouped_split",
+    "holdout_manifest",
+    "label_with_margin",
+    "load_heldout_set",
+    "margin_of",
+    "margins",
+    "record_level_cv",
+    "risk_coverage",
+    "selective_decision",
     "blocked_node_view",
     "cohen_kappa",
     "confusion_matrix",

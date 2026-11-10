@@ -1,0 +1,30 @@
+{
+  "_note": "Analyst curation sheet for the document-disjoint held-out FAIL corpus (v2). Each row names a source document that the frozen v1 corpus does NOT use, a marker substring that occurs exactly once in that document, and the class the analyst assigned by reading the passage against the class definitions in taxonomy.py. The builder scripts/build_failure_taxonomy_holdout.py turns this sheet into heldout_fail_set.jsonl + heldout_manifest.json (verbatim segments, digests pinned). Markers are document-specific strings, never the classifier cue lexemes, so the sheet does not leak annotator-A wording into the labels.",
+  "protocol": "single analyst annotation of document-disjoint passages, adjudicated against taxonomy.ClassSpec.definition/boundary_note and the discriminating evidence fields; label assigned before any classifier output was inspected on this corpus",
+  "rows": [
+    {"record_id": "H001", "source_path": "docs/VOYAGE_ACCUMULATED_FATIGUE.md", "marker": "无实验/文献基准可比", "gold_class": "BASELINE_ABSENT"},
+    {"record_id": "H002", "source_path": "docs/papers/w5n05_ice_wave/REPORT.md", "marker": "3D 球体文献标定", "gold_class": "BASELINE_ABSENT"},
+    {"record_id": "H003", "source_path": "docs/reports/m1138/REPORT.md", "marker": "冲击载荷峰值 vs **实验记录**", "gold_class": "BASELINE_ABSENT"},
+    {"record_id": "H004", "source_path": "docs/papers/w5n05_ice_wave/REPORT.md", "marker": "该对照的证据等级为 WITHHELD", "gold_class": "BASELINE_ABSENT"},
+    {"record_id": "H005", "source_path": "docs/COMPOSITE_LAMINATE_CLT_FSDT.md", "marker": "偏刚 **15.3%**", "gold_class": "TOLERANCE_EXCEEDED"},
+    {"record_id": "H006", "source_path": "docs/ADAPTIVE_FEM_ZZ_HREFINEMENT.md", "marker": "逐点 COD 外推", "gold_class": "TOLERANCE_EXCEEDED"},
+    {"record_id": "H007", "source_path": "docs/ICE_RESISTANCE_MEASURED_ANCHOR.md", "marker": "全谱 Lindqvist 支路对实测的中位相对误差", "gold_class": "TOLERANCE_EXCEEDED"},
+    {"record_id": "H008", "source_path": "docs/SIMP_DENSITY_FILTER_SENSITIVITY.md", "marker": "被证伪**（实测 0.9771", "gold_class": "TOLERANCE_EXCEEDED"},
+    {"record_id": "H009", "source_path": "docs/multigrid_poisson_verification.md", "marker": "达不到 1e-10", "gold_class": "CONVERGENCE_STALL"},
+    {"record_id": "H010", "source_path": "docs/reports/w3n04/structural_reliability_report.md", "marker": "经典 HL-RF 割线更新在本问题上不收敛", "gold_class": "CONVERGENCE_STALL"},
+    {"record_id": "H011", "source_path": "docs/templates/hull_ice_friction_temperature.template.md", "marker": "次迭代不收敛", "gold_class": "CONVERGENCE_STALL"},
+    {"record_id": "H012", "source_path": "docs/reports/w3n04/structural_reliability_report.md", "marker": "迭代停滞", "gold_class": "CONVERGENCE_STALL"},
+    {"record_id": "H013", "source_path": "docs/ADAPTIVE_FEM_ZZ_HREFINEMENT.md", "marker": "结论不能外推到高阶单元或 3D", "gold_class": "MODEL_FIDELITY_LIMIT"},
+    {"record_id": "H014", "source_path": "docs/ICE_INDENTATION_J2_CONTACT.md", "marker": "本模型只是塑性强约束的理想化", "gold_class": "MODEL_FIDELITY_LIMIT"},
+    {"record_id": "H015", "source_path": "docs/HULL_ICEBELT_FEM_XCHECK.md", "marker": "载荷理想化 | uniform over the panel", "gold_class": "MODEL_FIDELITY_LIMIT"},
+    {"record_id": "H016", "source_path": "docs/VOYAGE_ACCUMULATED_FATIGUE.md", "marker": "绝对寿命不可用于设计", "gold_class": "MODEL_FIDELITY_LIMIT"},
+    {"record_id": "H017", "source_path": "docs/reports/P27W3_integration_report.md", "marker": "N02 尚无记录", "gold_class": "DATA_INSUFFICIENCY"},
+    {"record_id": "H018", "source_path": "docs/reports/in19_g19_wave3_gate.md", "marker": "6 行 `withheld`", "gold_class": "DATA_INSUFFICIENCY"},
+    {"record_id": "H019", "source_path": "docs/reports/m4/autoapprove_probe_report.md", "marker": "figures 为空数组但未说明理由", "gold_class": "DATA_INSUFFICIENCY"},
+    {"record_id": "H020", "source_path": "docs/ICE_INDENTATION_J2_CONTACT.md", "marker": "工作树内无实验数据", "gold_class": "DATA_INSUFFICIENCY"},
+    {"record_id": "H021", "source_path": "docs/ICE_INDENTATION_J2_CONTACT.md", "marker": "这两处一开始都写错", "gold_class": "IMPLEMENTATION_DEFECT"},
+    {"record_id": "H022", "source_path": "docs/UQ_UNCERTAINTY_BUDGET.md", "marker": "A BLAS bug can silently poison the fit", "gold_class": "IMPLEMENTATION_DEFECT"},
+    {"record_id": "H023", "source_path": "docs/platform_audit.md", "marker": "| **P0** | #6 |", "gold_class": "IMPLEMENTATION_DEFECT"},
+    {"record_id": "H024", "source_path": "docs/ADAPTIVE_FEM_ZZ_HREFINEMENT.md", "marker": "位移 L2 误差 179%", "gold_class": "IMPLEMENTATION_DEFECT"}
+  ]
+}
