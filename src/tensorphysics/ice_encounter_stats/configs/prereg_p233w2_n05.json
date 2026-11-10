@@ -1,0 +1,252 @@
+{
+  "node": "P233W2-N05",
+  "title": "Ergodicity criteria and shot-noise anchor for DEM ice-resistance statistics",
+  "version": "1.0.0",
+  "frozen_utc": "2026-11-10T00:00:00Z",
+  "note": "Pre-registered before any production run. Editing this file after a run changes its SHA-256 and makes prereg.validate() return INVALID for that run.",
+  "criteria": [
+    {
+      "id": "AC1",
+      "metric": "ac1.min_adjusted_p_value",
+      "op": ">=",
+      "threshold": 0.05,
+      "description": "KS of recovered encounter intervals vs exponential: Bonferroni over 3 seeds still p > 0.05"
+    },
+    {
+      "id": "AC2",
+      "metric": "ac2.max_adjusted_p_value",
+      "op": "<=",
+      "threshold": 0.01,
+      "description": "Negative control: clustered (Neyman-Scott) field must be rejected, p < 0.01"
+    },
+    {
+      "id": "AC3",
+      "metric": "ac3.max_variance_relative_error",
+      "op": "<=",
+      "threshold": 0.1,
+      "description": "sigma^2 measured vs lambda*E[int h^2 dt] within 10% for 3 operating conditions"
+    },
+    {
+      "id": "AC4",
+      "metric": "ac4.max_relative_error",
+      "op": "<=",
+      "threshold": 0.15,
+      "description": "Ensemble std of window means at T = 0.5/1/2/4 T_req vs sigma/sqrt(N_eff) within 15%"
+    },
+    {
+      "id": "AC5",
+      "metric": "ac5.coverage",
+      "op": ">=",
+      "threshold": 0.9,
+      "description": "Stop-time rule coverage: >= 18 of 20 random conditions inside the 5% band"
+    },
+    {
+      "id": "AC5-cal",
+      "metric": "ac5.calibration_relative_error",
+      "op": "<=",
+      "threshold": 0.15,
+      "description": "Integrity: the tail factor calibrated on 300 independent cases reproduces the value frozen in the manifest within 15%"
+    },
+    {
+      "id": "AC6",
+      "metric": "ac6.complete_score",
+      "op": ">=",
+      "threshold": 1.0,
+      "description": "Paper-quality report with six sections and seven figures present and non-empty"
+    }
+  ],
+  "execution": {
+    "numerics": {
+      "samples_per_pulse": 40
+    },
+    "ac1": {
+      "seeds": [
+        1101,
+        1102,
+        1103
+      ],
+      "duration_s": 8000.0,
+      "level_quantile": 0.98,
+      "level_fraction": 1.0,
+      "min_gap_s": 0.05,
+      "max_lag_s": 5.0,
+      "acf_points": 120
+    },
+    "ac2": {
+      "seeds": [
+        2101,
+        2102,
+        2103
+      ],
+      "duration_s": 8000.0,
+      "level_quantile": 0.98,
+      "level_fraction": 1.0,
+      "min_gap_s": 0.05,
+      "max_lag_s": 5.0
+    },
+    "ac3": {
+      "cases": [
+        "base",
+        "dense",
+        "slow_heavy"
+      ],
+      "seeds": [
+        3001,
+        3002,
+        3003,
+        3004,
+        3005,
+        3006,
+        3007,
+        3008,
+        3009,
+        3010,
+        3011,
+        3012
+      ],
+      "duration_s": 1500.0,
+      "max_lag_s": 5.0,
+      "population_marks": 200000,
+      "mark_seed": 1301
+    },
+    "ac4": {
+      "seeds": [
+        4001
+      ],
+      "eps": 0.1,
+      "safety_factor": 1.0,
+      "reference_duration_s": 2000.0,
+      "multipliers": [
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "ensembles": 300,
+      "max_lag_s": 5.0,
+      "population_marks": 200000,
+      "mark_seed": 4401
+    },
+    "ac5": {
+      "eps": 0.05,
+      "tail_factor": 1.855,
+      "tail_factor_tolerance": 0.15,
+      "calibration": {
+        "n_cases": 300,
+        "case_seed": 424242,
+        "pilot_seed": 424242,
+        "production_seed": 910000,
+        "mark_seed": 66001,
+        "alpha": 0.05,
+        "pilot_duration_s": 200.0
+      },
+      "n_cases": 20,
+      "case_seed": 5001,
+      "pilot_seed": 6001,
+      "production_seed": 700001,
+      "mark_seed": 77001,
+      "pilot_duration_s": 200.0,
+      "max_lag_s": 5.0,
+      "population_marks": 200000,
+      "max_duration_s": 40000.0
+    }
+  },
+  "cases": {
+    "base": {
+      "name": "base",
+      "beam_m": 20.0,
+      "speed_mps": 1.5,
+      "number_density_per_m2": 0.02,
+      "floe_size": {
+        "distribution": "loguniform",
+        "params": {
+          "min": 0.25,
+          "max": 1.6
+        }
+      },
+      "thickness": {
+        "distribution": "constant",
+        "params": {
+          "value": 0.6
+        }
+      },
+      "force": {
+        "coefficient": 120000.0,
+        "size_exponent": 1.0,
+        "thickness_exponent": 1.0,
+        "log_sigma": 0.35
+      },
+      "pulse": {
+        "shape": "asymmetric_triangle",
+        "rise_fraction": 0.3,
+        "duration_model": "size_over_speed",
+        "duration_scale": 1.0
+      },
+      "noise_std_ratio": 0.0
+    },
+    "overrides": {
+      "clustered": {
+        "name": "clustered",
+        "clustering": {
+          "mean_offspring": 6.0,
+          "sigma_s": 1.5
+        }
+      },
+      "dense": {
+        "name": "dense",
+        "number_density_per_m2": 0.05
+      },
+      "slow_heavy": {
+        "name": "slow_heavy",
+        "speed_mps": 1.0,
+        "number_density_per_m2": 0.03,
+        "thickness": {
+          "distribution": "constant",
+          "params": {
+            "value": 0.9
+          }
+        },
+        "force": {
+          "coefficient": 120000.0,
+          "size_exponent": 1.0,
+          "thickness_exponent": 1.0,
+          "log_sigma": 0.5
+        }
+      }
+    },
+    "ac5_ranges": {
+      "beam_m": [
+        15.0,
+        25.0
+      ],
+      "speed_mps": [
+        1.0,
+        2.5
+      ],
+      "number_density_per_m2": [
+        0.01,
+        0.05
+      ],
+      "floe_min_m": [
+        0.2,
+        0.4
+      ],
+      "floe_max_m": [
+        1.2,
+        2.0
+      ],
+      "thickness_m": [
+        0.4,
+        1.0
+      ],
+      "force_coefficient": [
+        80000.0,
+        160000.0
+      ],
+      "force_log_sigma": [
+        0.2,
+        0.5
+      ]
+    }
+  }
+}
