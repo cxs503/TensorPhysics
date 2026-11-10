@@ -71,10 +71,25 @@ from .response import (
     band_rms,
     point_force_acceleration,
 )
+from .mitigation import (
+    DEFAULT_WAVE_WHIPPING_LOAD,
+    QZSMount,
+    band_attenuation,
+    design_map,
+    select_design,
+    service_stroke,
+    simulate_base_excitation,
+    tolerance_window,
+)
+from .maturity import MitigationConfig, MitigationResult, run_mitigation
 from .transfer import MountIsolation, transmissibility_envelope
 
 __all__ = [
     "DEFAULT_SCALE_SWEEP",
+    "DEFAULT_WAVE_WHIPPING_LOAD",
+    "MitigationConfig",
+    "MitigationResult",
+    "QZSMount",
     "DEFAULT_SEVERITIES",
     "GOVERNING_PATH",
     "DESIGN_KQ",
@@ -94,6 +109,13 @@ __all__ = [
     "fatigue_life",
     "geometry_gate",
     "milling_torque_excitation",
+    "band_attenuation",
+    "design_map",
+    "run_mitigation",
+    "select_design",
+    "service_stroke",
+    "simulate_base_excitation",
+    "tolerance_window",
     "narrowband_damage_rate",
     "point_force_acceleration",
     "replace_scaled",
