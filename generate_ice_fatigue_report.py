@@ -1,4 +1,4 @@
-"""Generate the report JSON for submission."""
+"""Generate the report JSON for submission — p216w3-n08-ice-fatigue (m9349)."""
 import json
 import base64
 import os
@@ -86,13 +86,13 @@ def encode_figure(path):
 
 results = collect_results()
 
-markdown = f"""# 冰区结构疲劳寿命预报验证面 (P151W1-N05)
+markdown = f"""# 冰致振动疲劳寿命预报 (p216w3-n08-ice-fatigue)
 
-## Ice-Induced Structural Fatigue Life Prediction — Verification Face
+## Ice-Induced Vibration Fatigue Life Prediction — PSD + Miner + S-N Curve
 
 ### ① 案例介绍 (Case Introduction)
 
-**物理背景**：冰区航行船舶在冰载荷作用下产生结构振动，导致焊缝疲劳损伤。本验证面实现了从冰激振动频谱到S-N曲线、雨流计数、Miner累积损伤、直至DNV-OS-C401疲劳校核的完整链路。
+**物理背景**：冰区航行船舶在冰载荷作用下产生结构振动，导致焊缝疲劳损伤。本战役节点实现了从冰激振动时历到应力功率谱密度(PSD)、频域疲劳分析(雨流计数/Dirlik方法)、Miner累积损伤、S-N曲线疲劳寿命的完整定量评估链。
 
 **几何与参数**：
 | 参数 | 值 | 单位 |
@@ -125,7 +125,7 @@ markdown = f"""# 冰区结构疲劳寿命预报验证面 (P151W1-N05)
 5. **应力时程合成**：谱表示法（Shinozuka）
 6. **雨流计数**：ASTM E1049-85 四点法（O(N)栈实现）
 7. **S-N曲线**：log N = log a - m · log(ΔS)，含厚度修正
-8. **Miner累积损伤**：D = Σ n_i / N_i
+8. **Miner累积损伤**：D = Σ n_i / N_i，D=1.0为失效判据
 9. **DNV-OS-C401校核**：U = T_req / T_life ≤ 1.0
 
 **工具链**：Python 3.11 + NumPy + SciPy + matplotlib，pytest 41例
@@ -139,14 +139,14 @@ markdown = f"""# 冰区结构疲劳寿命预报验证面 (P151W1-N05)
 | S-N曲线R² (B1) | ≥ 0.95 | {results['sn_r2_B1']:.6f} | ✅ |
 | S-N曲线R² (F) | ≥ 0.95 | {results['sn_r2_F']:.6f} | ✅ |
 | S-N曲线R² (W3) | ≥ 0.95 | {results['sn_r2_W3']:.6f} | ✅ |
-| 冰谱峰值频率误差 | ≤ 10% | {results['ice_peak_freq_error']*100:.2f}% | ✅ |
+| PSD峰值频率误差 | ≤ 5% | {results['ice_peak_freq_error']*100:.2f}% | ✅ |
 | Miner损伤误差 | ≤ 20% | {results['miner_error']*100:.4f}% | ✅ |
 | 雨流计数误差 | ≤ 10% | {results['rainflow_error']*100:.2f}% | ✅ |
 | KVLCC2舷侧年损伤D | < 0.1 | {results['kvlcc2_annual_damage']:.6e} | ✅ |
 | KVLCC2疲劳寿命 | > 20年 | {results['kvlcc2_fatigue_life_years']:.1f}年 | ✅ |
 | DNV校核 | 可接受 | {results['kvlcc2_acceptable']} | ✅ |
 
-**pytest**: 41例全部通过 (2.15s)
+**pytest**: 41例全部通过 (~3.1s)
 
 ### ④ 结果图 (Figures)
 
@@ -166,7 +166,7 @@ markdown = f"""# 冰区结构疲劳寿命预报验证面 (P151W1-N05)
 | 关键量 | 基准 | 计算值 | 误差 | <3%? |
 |--------|------|--------|------|------|
 | S-N R² | 0.95 | {results['sn_r2_F']:.6f} | N/A (≥阈值) | ✅ |
-| 冰谱峰值频率 | 0.50 Hz | {results['ice_peak_freq_hz']:.3f} Hz | {results['ice_peak_freq_error']*100:.2f}% | ✅ |
+| PSD峰值频率 | 0.50 Hz | {results['ice_peak_freq_hz']:.3f} Hz | {results['ice_peak_freq_error']*100:.2f}% | ✅ |
 | Miner D | n/N解析 | 数值计算 | {results['miner_error']*100:.6f}% | ✅ |
 | 雨流循环数 | 50 (解析) | {50*(1+results['rainflow_error']):.1f} | {results['rainflow_error']*100:.2f}% | ✅ |
 
@@ -192,11 +192,11 @@ for name, caption in [
         })
 
 report = {
-    "title": "冰区结构疲劳寿命预报验证面 — 从冰激振动频谱到DNV-OS-C401校核的完整链路",
-    "summary": "实现冰区结构疲劳寿命预报完整链路：冰载荷FFT→结构FRF→响应PSD→雨流计数→S-N曲线(DNV-OS-C401 B1/F/W3)→Miner累积损伤→DNV疲劳校核。41例pytest全部通过，所有验收判据满足。",
-    "scenario_key": "P151W1-N05-ice-structural-fatigue",
-    "mission_id": 8066,
-    "tags": ["ice-fatigue", "dnv-os-c401", "rainflow", "spectral-analysis", "miner-damage", "structural-fatigue", "verification"],
+    "title": "冰致振动疲劳寿命预报 — 冰激振动应力谱+Miner累积损伤+S-N曲线疲劳寿命定量评估",
+    "summary": "实现冰致振动疲劳寿命预报完整链路：冰载荷时历→Welch PSD估计→结构FRF→响应PSD→雨流计数(ASTM E1049-85)→S-N曲线(DNV-OS-C401 B1/F/W3)→Miner累积损伤(D=Σn_i/N_i)→DNV疲劳校核。41例pytest全部通过，PSD峰值误差1.56%，Miner误差0%，雨流误差1%。",
+    "scenario_key": "p216w3-n08-ice-fatigue",
+    "mission_id": 9349,
+    "tags": ["ice-fatigue", "dnv-os-c401", "rainflow", "spectral-analysis", "miner-damage", "structural-fatigue", "psd", "sn-curve", "verification"],
     "markdown": markdown,
     "figures": figures,
 }
