@@ -1,6 +1,6 @@
 # Elastoplastic Collapse and Grillage Ultimate Strength Verification Report
 
-**Generated:** 2026-11-10T10:59:53.761862  
+**Generated:** 2026-11-10T13:51:35.072836  
 **Module:** tensorphysics.elastoplastic_collapse
 
 ## Executive Summary
@@ -47,8 +47,8 @@ Progressive collapse analysis of a stiffened plate under axial compression:
 
 | Metric | Value |
 |--------|-------|
-| Ultimate strength σ_u | 374.2 MPa |
-| Strain at ultimate ε_u | 0.0500 |
+| Ultimate strength σ_u | 313.0 MPa |
+| Strain at ultimate ε_u | 0.0020 |
 | Failure mode | yielding |
 | Converged | True |
 
@@ -71,9 +71,9 @@ Verification of grillage discretization convergence:
 
 | Metric | Value | Criterion | Status |
 |--------|-------|-----------|--------|
-| σ_u (3x3) | 391.9 MPa | - | - |
-| σ_u (5x5) | 395.5 MPa | - | - |
-| Relative error | 0.0091 | < 2% | ✅ |
+| σ_u (3x3) | 198.5 MPa | - | - |
+| σ_u (5x5) | 198.7 MPa | - | - |
+| Relative error | 0.0014 | < 2% | ✅ |
 
 ### Physical Interpretation
 The grillage model shows mesh-independent results, confirming:
@@ -92,13 +92,13 @@ Measurement of grillage interaction effects:
 
 | Metric | Value |
 |--------|-------|
-| σ_u (isolated) | 374.3 MPa |
-| σ_u (grillage) | 395.5 MPa |
-| δ_iso | 0.0566 |
+| σ_u (isolated) | 198.7 MPa |
+| σ_u (grillage) | 198.7 MPa |
+| δ_iso | 0.0004 |
 | Sign | positive |
 
 ### Physical Interpretation
-Grillage provides significant boundary restraint, increasing capacity
+sign of delta_iso = curvature of the capacity-vs-imperfection relation at the panel mean imperfection: negative = concave (Jensen loss), positive = convex (isolated element conservative). Magnitude is the isolated-element error bound of the panel average.
 
 ## 5. Tripping Mode Switch
 
@@ -111,14 +111,14 @@ Lateral-torsional buckling (tripping) analysis with λ_trip sweep:
 
 | λ_trip | Capacity (MPa) | Failure Mode |
 |--------|----------------|--------------|
-| 1.00 | 312.6 | tripping |
-| 1.30 | 312.1 | tripping |
-| 1.60 | 309.6 | tripping |
-| 1.90 | 281.6 | tripping |
-| 2.20 | 244.5 | tripping |
-| 2.50 | 215.5 | tripping |
+| 1.00 | 221.3 | tripping |
+| 1.30 | 198.1 | tripping |
+| 1.60 | 177.6 | tripping |
+| 1.90 | 160.0 | tripping |
+| 2.20 | 145.0 | tripping |
+| 2.50 | 132.3 | tripping |
 
-**Capacity drop:** 31.07% (criterion: ≥ 10%) ✅
+**Capacity drop:** 40.23% (criterion: ≥ 10%) ✅
 
 ### Physical Interpretation
 The tripping analysis correctly captures:

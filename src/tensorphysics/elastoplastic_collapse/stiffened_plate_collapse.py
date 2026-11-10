@@ -367,8 +367,12 @@ class SmithCollapseSolver:
             else:
                 sigma_avg = sigma_column
 
-            # Elastoplastic correction
+            # Elastoplastic correction.  A first magnitude guard: the axial
+            # stress of a compression member can never exceed the current yield
+            # stress (the P70-N01 baseline returned sigma_u/sigma_y = 1.196).
             sigma_y_current = mat.sigma_y0 + mat.H * alpha
+            if abs(sigma_avg) > sigma_y_current:
+                sigma_avg = float(np.sign(sigma_avg) * sigma_y_current)
             if abs(sigma_avg) > sigma_y_current:
                 # Plastic correction via return mapping
                 strain_vec = np.array([sigma_avg / mat.E, 0.0, 0.0])

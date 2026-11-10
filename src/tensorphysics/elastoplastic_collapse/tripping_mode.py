@@ -1,67 +1,108 @@
-"""Tripping (lateral-torsional buckling) of stiffeners.
+"""Stiffener tripping: torsional-buckling mode with an explicit mode switch.
 
-Implements the analysis of stiffener tripping, which is the lateral-torsional
-buckling mode where the stiffener rotates about its attachment to the plate.
+Physics
+-------
+Tripping is the lateral-torsional failure of a stiffener that rotates about its
+attachment line to the plating.  The elastic torsional-buckling stress of the
+stiffener (Vlasov / Timoshenko, column torsional buckling) is
 
-Tripping is a critical failure mode for stiffened panels under compression,
-especially for:
-- Bulb flats and flat bars (weak torsional rigidity)
-- Slender stiffeners (high h_s/t_w ratio)
-- Panels with large stiffener spacing
+    sigma_ET = [ G J_s + pi^2 E C_w,s / L_t^2 ] / I_ps
 
-The tripping capacity depends on:
-- Stiffener geometry (web, flange, attached plate)
-- Material properties (E, σ_y)
-- Lateral restraint from the plate (characterized by λ_trip)
-- Length between lateral supports
+where
+    ``J_s``    Saint-Venant torsion constant of the *stiffener alone*
+               (``sum L t^3/3`` for web + flange),
+    ``C_w,s``  warping constant of the stiffener alone,
+    ``I_ps``   polar second moment of the stiffener alone about its shear
+               centre, ``I_x + I_y + A_s (y_sc - y_bar)^2``,
+    ``L_t``    unrestrained tripping length (default: transverse frame spacing).
+The elastoplastic reduction uses the DNV-RP-C201 column curve with
+``lambda_T = sqrt(sigma_y / sigma_ET)`` (``mu0 = 0.34``, curve b), so the
+mode switches continuously from yielding (``lambda_T <~ 0.2``) through
+elastoplastic tripping to elastic tripping (``lambda_T >~ 1.5``).
 
-Parameter λ_trip
-----------------
-The parameter λ_trip characterizes the lateral restraint provided by the plate:
-- λ_trip = 1.0: Full lateral restraint (plate provides complete fixity)
-- λ_trip = 2.5: Reduced lateral restraint (plate flexibility)
+Why the polar moment is about the shear centre and *not* about the plate line
+---------------------------------------------------------------------------
+The baseline module used ``I_z = t_w h^3/12 + t_f b_f^3/12 + b_f t_f (h_s/2)^2``
+plus a plate term ``t b^3/12`` and a 1/I-interaction of torsion and weak-axis
+bending.  Those are bending inertias, not polar ones, and the flange transfer
+was taken at ``h_s/2`` instead of the flange centroid ``h_s + t_f/2``; the
+result is an unanchored constant that cannot be checked.  For an isolated
+stiffener the torsional-buckling polar radius is taken about the shear centre
+(Timoshenko & Gere Ch. 6, Vlasov); using the polar moment about the plate line
+*including* the attached plate would raise ``I_p`` by an order of magnitude and
+drive every panel into a spurious tripping mode, which is why the attached
+plating enters here only through the restraint factor ``lambda_trip``.
 
-As λ_trip increases, the tripping capacity decreases and the failure mode
-may shift from tripping to other modes (column buckling, yielding).
+Benchmark
+---------
+``ltb_critical_moment`` reproduces the classical uniform-moment lateral
+torsional buckling reference used by ``tensorfem.marine_stiffener_failure``
+
+    Mcr = (pi/L) sqrt(E I_y G J) sqrt(1 + pi^2 E C_w / (L^2 G J))
+
+and ``ltb_stress`` converts it to the axial stress equivalent
+``Mcr / (I_ps / c)`` requested by the mission.  ``ltb_numerical`` solves the same
+bifurcation with a centred-difference Dirichlet Laplacian so that the closed
+form is verified by an independent discretisation (error must vanish as
+``segments`` grows).
 
 References
 ----------
-- Hughes, O.F. (1988). "Ship Structure Design: A Rationale for Naval
-  Architects, Marine Engineers, and Structural Engineers." SNAME.
-- DNV-GL (2017). Recommended Practice DNV-RP-C201: Buckling of Ships.
-- Paik, J.K. & Thayamballi, A.K. (2003). Ultimate Limit State Design
-  of Steel-Plated Structures. Wiley, Chapter 6.
+- Timoshenko, S.P. & Gere, J.M. (1961). Theory of Elastic Stability, Ch. 6.
+- Vlasov, V.Z. (1961). Thin-Walled Elastic Beams.
+- Hughes, O.F. (1988). Ship Structural Design. SNAME, Ch. 8.
+- DNV-RP-C201 (2017). Buckling of Ships, Sec. 8-9.
+- Paik, J.K. & Thayamballi, A.K. (2003). Ultimate Limit State Design of
+  Steel-Plated Structures, Ch. 6.
 """
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
-from typing import List, Tuple, Dict
+from typing import Dict, Optional
+
 import numpy as np
 
 from .von_mises_plasticity import VonMisesMaterial
+from .panel_section import StiffenerSection, stiffener_section, rectangle_torsion_constant
 
 __all__ = [
     "TrippingAnalysis",
     "TrippingResult",
     "tripping_capacity",
+    "ltb_critical_moment",
+    "ltb_numerical",
 ]
+
+
+#: DNV-RP-C201 imperfection factor (curve b) used for the tripping column curve
+TRIPPING_MU0 = 0.34
+
+
+def _column_curve(lam: float, mu0: float = TRIPPING_MU0) -> float:
+    """DNV-RP-C201 column curve ``sigma/sigma_y`` (``1/lam^2`` asymptote)."""
+    if lam <= 0.2:
+        return 1.0
+    mu = mu0 * (lam - 0.2)
+    a = (1.0 + mu + lam**2) / (2.0 * lam**2)
+    return float(max(a - math.sqrt(max(a * a - 1.0 / lam**2, 0.0)), 0.0))
 
 
 @dataclass(frozen=True)
 class TrippingResult:
-    """Result of tripping analysis.
+    """Result of a tripping assessment.
 
     Attributes
     ----------
     sigma_trip : float
-        Tripping (critical) stress [Pa].
+        Elastoplastic tripping stress [Pa] (on the stiffener section).
     lambda_trip : float
-        Lateral restraint parameter used.
+        Restraint factor used.
     failure_mode : str
-        'tripping', 'column_buckling', 'yielding', or 'interactive'.
+        ``'tripping'``, ``'yielding'``, ``'elastic_tripping'`` or ``'none'``.
     capacity_reduction : float
-        Ratio σ_trip / σ_y (capacity utilization).
+        ``sigma_trip / sigma_y``.
     """
 
     sigma_trip: float
@@ -72,26 +113,24 @@ class TrippingResult:
 
 @dataclass
 class TrippingAnalysis:
-    """Analysis of stiffener tripping (lateral-torsional buckling).
+    """Stiffener tripping analysis.
 
     Parameters
     ----------
     a : float
-        Stiffener span (length between lateral supports) [m].
+        Stiffener span between transverse frames [m] (= tripping length).
     b : float
-        Stiffener spacing (plate width) [m].
+        Stiffener spacing [m] (plating tributary width; documentation only).
     t : float
         Plate thickness [m].
-    h_s : float
-        Stiffener web height [m].
-    t_w : float
-        Stiffener web thickness [m].
-    b_f : float
-        Stiffener flange width [m].
-    t_f : float
-        Stiffener flange thickness [m].
+    h_s, t_w : float
+        Web height / thickness [m].
+    b_f, t_f : float
+        Flange width / thickness [m] (0 for a flat bar).
     material : VonMisesMaterial
-        Material properties.
+    plate_width : float, optional
+        Attached-plate width used when reporting the *panel* sections
+        (defaults to ``b``).  Not used in the tripping stress itself.
     """
 
     a: float
@@ -102,207 +141,240 @@ class TrippingAnalysis:
     b_f: float
     t_f: float
     material: VonMisesMaterial
+    plate_width: Optional[float] = None
 
     def __post_init__(self) -> None:
         if self.a <= 0 or self.b <= 0 or self.t <= 0:
-            raise ValueError("Panel dimensions must be positive")
+            raise ValueError("panel dimensions must be positive")
         if self.h_s <= 0 or self.t_w <= 0:
-            raise ValueError("Stiffener web dimensions must be positive")
+            raise ValueError("stiffener web dimensions must be positive")
+        if self.b_f < 0 or self.t_f < 0:
+            raise ValueError("flange dimensions must be non-negative")
+        if (self.b_f == 0) != (self.t_f == 0):
+            raise ValueError("flange width and thickness must be given together")
+
+    # ---- stiffener-alone section ---------------------------------------- #
+    @property
+    def stiffener_area(self) -> float:
+        return self.h_s * self.t_w + self.b_f * self.t_f
+
+    @property
+    def stiffener_centroid_y(self) -> float:
+        a_w = self.h_s * self.t_w
+        a_f = self.b_f * self.t_f
+        return (a_w * 0.5 * self.h_s + a_f * (self.h_s + 0.5 * self.t_f)) / self.stiffener_area
+
+    @property
+    def stiffener_i_x(self) -> float:
+        y_bar = self.stiffener_centroid_y
+        i = self.t_w * self.h_s**3 / 12.0 + self.h_s * self.t_w * (0.5 * self.h_s - y_bar) ** 2
+        if self.b_f > 0:
+            y_f = self.h_s + 0.5 * self.t_f
+            i += (self.b_f * self.t_f**3 / 12.0
+                  + self.b_f * self.t_f * (y_f - y_bar) ** 2)
+        return i
+
+    @property
+    def stiffener_i_y(self) -> float:
+        return (self.h_s * self.t_w**3 / 12.0 + self.t_f * self.b_f**3 / 12.0)
+
+    @property
+    def shear_centre_y(self) -> float:
+        """Shear-centre height above the plate [m] (thin-wall, symmetric section)."""
+        if self.b_f > 0:
+            return self.h_s + 0.5 * self.t_f   # wall intersection (flange mid-line)
+        return 0.5 * self.h_s                 # single wall: its own centroid
+
+    @property
+    def j_saint_venant(self) -> float:
+        """Saint-Venant constant of the stiffener alone, ``sum L t^3/3`` [m^4]."""
+        return self.h_s * self.t_w**3 / 3.0 + self.b_f * self.t_f**3 / 3.0
+
+    @property
+    def j_saint_venant_rect(self) -> float:
+        """Saint-Venant constant of the stiffener alone (exact rectangle series)."""
+        return (rectangle_torsion_constant(self.h_s, self.t_w)
+                + rectangle_torsion_constant(self.b_f, self.t_f))
+
+    @property
+    def warping_constant(self) -> float:
+        """Warping constant of the stiffener alone [m^6].
+
+        The flat-bar and symmetric-tee families have every wall passing through
+        the wall intersection where the shear centre sits, so the mid-surface
+        (Vlasov) model returns ``C_w = 0`` exactly.  The general sectorial
+        machinery of :mod:`panel_section` is reused with a vanishing plate strip
+        so that the value is *computed*, not asserted.
+        """
+        sec = stiffener_section(
+            plate_width=1e-9, plate_thickness=min(self.t, 1e-3),
+            web_height=self.h_s, web_thickness=self.t_w,
+            flange_width=self.b_f, flange_thickness=self.t_f,
+            young=self.material.E, poisson=self.material.nu,
+        )
+        return sec.warping_constant()
+
+    @property
+    def i_p_shear_centre(self) -> float:
+        """Polar second moment of the stiffener alone about its shear centre [m^4]."""
+        e = self.shear_centre_y - self.stiffener_centroid_y
+        return self.stiffener_i_x + self.stiffener_i_y + self.stiffener_area * e**2
+
+    @property
+    def i_p_attachment(self) -> float:
+        """Polar second moment about the plate attachment line [m^4] (reported)."""
+        return (self.stiffener_i_x + self.stiffener_area * self.stiffener_centroid_y**2
+                + self.stiffener_i_y)
+
+    @property
+    def c_from_sc(self) -> float:
+        """Distance from the shear centre to the outermost fibre [m]."""
+        y_top = self.h_s + self.t_f
+        x_top = 0.5 * self.b_f
+        dy = abs(y_top - self.shear_centre_y)
+        return float(np.hypot(x_top, dy))
+
+    def panel_section(self, plate_width: Optional[float] = None) -> StiffenerSection:
+        """Stiffener + attached-plate section (reported properties)."""
+        bw = self.b if plate_width is None else float(plate_width)
+        return stiffener_section(
+            plate_width=bw, plate_thickness=self.t,
+            web_height=self.h_s, web_thickness=self.t_w,
+            flange_width=self.b_f, flange_thickness=self.t_f,
+            young=self.material.E, poisson=self.material.nu,
+        )
 
     def section_properties(self) -> Dict[str, float]:
-        """Compute section properties for tripping analysis.
+        """Dictionary of the section quantities (backwards compatible keys).
 
-        Returns
-        -------
-        dict with keys:
-            I_z : float - Second moment of area about z-axis (lateral) [m⁴]
-            I_w : float - Warping constant [m⁶]
-            J : float - Saint-Venant torsion constant [m⁴]
-            z_s : float - Shear center location from plate [m]
+        ``I_z``/``I_w``/``J``/``z_s`` are kept for the P70-N01 API; they now hold
+        the weak-axis inertia, the warping constant, the Saint-Venant constant
+        and the shear-centre height of the stiffener alone.
         """
-        # Web contribution
-        I_z_web = self.t_w * self.h_s**3 / 12.0
-        J_web = self.h_s * self.t_w**3 / 3.0
-
-        # Flange contribution (if present)
-        if self.b_f > 0:
-            I_z_flange = self.t_f * self.b_f**3 / 12.0
-            # Flange about its own centroid + transfer to web tip
-            I_z_flange += self.b_f * self.t_f * (self.h_s / 2.0)**2
-            J_flange = self.b_f * self.t_f**3 / 3.0
-        else:
-            I_z_flange = 0.0
-            J_flange = 0.0
-
-        # Plate strip contribution (attached plate, width = spacing / 2 each side)
-        b_plate = self.b / 2.0  # Half spacing each side
-        I_z_plate = self.t * b_plate**3 / 12.0
-        J_plate = b_plate * self.t**3 / 3.0
-
-        # Total
-        I_z = I_z_web + I_z_flange + I_z_plate
-        J = J_web + J_flange + J_plate
-
-        # Warping constant (approximate for T-section)
-        # I_w ≈ I_z_flange * h_s² for T-section
-        if self.b_f > 0:
-            I_w = self.t_f * self.b_f**3 / 12.0 * (self.h_s + self.t_f / 2.0)**2
-        else:
-            I_w = 0.0
-
-        # Shear center (approximate)
-        z_s = self.h_s / 2.0  # Mid-web for symmetric sections
-
         return {
-            "I_z": I_z,
-            "I_w": I_w,
-            "J": J,
-            "z_s": z_s,
+            "I_z": float(self.stiffener_i_y),
+            "I_x": float(self.stiffener_i_x),
+            "I_w": float(self.warping_constant),
+            "J": float(self.j_saint_venant),
+            "J_rect": float(self.j_saint_venant_rect),
+            "A_s": float(self.stiffener_area),
+            "y_bar": float(self.stiffener_centroid_y),
+            "z_s": float(self.shear_centre_y),
+            "I_p_sc": float(self.i_p_shear_centre),
+            "I_p_attachment": float(self.i_p_attachment),
+            "c": float(self.c_from_sc),
         }
 
-    def elastic_tripping_stress(self, lambda_trip: float = 1.0) -> float:
-        """Compute elastic tripping stress.
+    # ---- elastic tripping ------------------------------------------------- #
+    def elastic_tripping_stress(
+        self, lambda_trip: float = 1.0, length: Optional[float] = None,
+    ) -> float:
+        """Elastic tripping (torsional buckling) stress [Pa].
 
-        Parameters
-        ----------
-        lambda_trip : float
-            Lateral restraint parameter (1.0 = full fixity, 2.5 = reduced).
+        ``sigma_ET = [G J_s + pi^2 E C_w,s / L_t^2] / I_ps / lambda_trip``
 
-        Returns
-        -------
-        sigma_cr_trip : float
-            Elastic tripping stress [Pa].
+        ``lambda_trip >= 1`` is the lateral/torsional restraint factor: the
+        plating restraint is represented conservatively as a penalty (the
+        stiffener-alone value is the unrestrained upper bound).
         """
+        if lambda_trip <= 0:
+            raise ValueError("lambda_trip must be positive")
+        L = float(self.a if length is None else length)
         mat = self.material
-        sec = self.section_properties()
+        g = mat.shear_modulus
+        sigma = (g * self.j_saint_venant
+                 + np.pi**2 * mat.E * self.warping_constant / L**2) / self.i_p_shear_centre
+        return float(sigma / lambda_trip)
 
-        G = mat.shear_modulus
-        E = mat.E
+    # ---- lateral-torsional buckling reference ---------------------------- #
+    def ltb_critical_moment(self, length: Optional[float] = None) -> float:
+        """Classical uniform-moment elastic LTB moment ``Mcr`` [N m].
 
-        # Torsional buckling stress
-        # σ_T = (1/I_z) [G J + π² E I_w / a²]
-        I_z = sec["I_z"]
-        J = sec["J"]
-        I_w = sec["I_w"]
-
-        if I_z > 0:
-            sigma_T = (G * J + np.pi**2 * E * I_w / self.a**2) / I_z
-        else:
-            sigma_T = 0.0
-
-        # Lateral buckling stress (column buckling about weak axis)
-        # σ_L = π² E I_z / (a² A)
-        A = self.b * self.t + self.h_s * self.t_w
-        if self.b_f > 0:
-            A += self.b_f * self.t_f
-
-        if A > 0 and I_z > 0:
-            sigma_L = np.pi**2 * E * I_z / (self.a**2 * A)
-        else:
-            sigma_L = 0.0
-
-        # Combined tripping stress (interaction)
-        # 1/σ_trip = 1/σ_T + 1/σ_L (approximate)
-        if sigma_T > 0 and sigma_L > 0:
-            sigma_cr_trip = 1.0 / (1.0 / sigma_T + 1.0 / sigma_L)
-        elif sigma_T > 0:
-            sigma_cr_trip = sigma_T
-        elif sigma_L > 0:
-            sigma_cr_trip = sigma_L
-        else:
-            sigma_cr_trip = 0.0
-
-        # Apply lateral restraint factor
-        # λ_trip > 1 reduces the tripping capacity
-        sigma_cr_trip /= lambda_trip
-
-        return sigma_cr_trip
-
-    def tripping_capacity(self, lambda_trip: float = 1.0) -> TrippingResult:
-        """Compute tripping capacity with failure mode classification.
-
-        Parameters
-        ----------
-        lambda_trip : float
-            Lateral restraint parameter.
-
-        Returns
-        -------
-        TrippingResult
-            Tripping stress, failure mode, and capacity utilization.
+        ``Mcr = (pi/L) sqrt(E I_y G J) sqrt(1 + pi^2 E C_w/(L^2 G J))``
+        (identical to ``tensorfem.marine_stiffener_failure``'s oracle).
         """
+        L = float(self.a if length is None else length)
         mat = self.material
-        sigma_y = mat.sigma_y0
+        e_iy = mat.E * self.stiffener_i_y
+        gj = mat.shear_modulus * self.j_saint_venant
+        amp = math.sqrt(max(1.0 + np.pi**2 * mat.E * self.warping_constant / (L**2 * gj), 0.0))
+        return float((np.pi / L) * math.sqrt(e_iy * gj) * amp)
 
-        # Elastic tripping stress
-        sigma_cr_trip = self.elastic_tripping_stress(lambda_trip)
+    def ltb_stress(self, length: Optional[float] = None) -> float:
+        """Axial-stress equivalent of ``Mcr``: ``Mcr / (I_ps / c)`` [Pa]."""
+        return float(self.ltb_critical_moment(length) / (self.i_p_shear_centre / self.c_from_sc))
 
-        # Column buckling stress (strong axis)
-        sec = self.section_properties()
-        A = self.b * self.t + self.h_s * self.t_w
-        if self.b_f > 0:
-            A += self.b_f * self.t_f
-
-        # Strong axis moment of inertia
-        I_x = (self.b * self.t**3 / 12.0 +
-               self.t_w * self.h_s**3 / 12.0 +
-               self.h_s * self.t_w * (self.t / 2.0 + self.h_s / 2.0)**2)
-        if self.b_f > 0:
-            I_x += (self.b_f * self.t_f**3 / 12.0 +
-                    self.b_f * self.t_f * (self.t / 2.0 + self.h_s + self.t_f / 2.0)**2)
-
-        r_x = np.sqrt(I_x / A) if A > 0 else 0.0
-        lam_x = self.a / r_x if r_x > 0 else 100.0
-        sigma_cr_col = np.pi**2 * mat.E / lam_x**2 if lam_x > 0 else 0.0
-
-        # Determine tripping stress (elastoplastic correction)
-        lam_trip = np.sqrt(sigma_y / sigma_cr_trip) if sigma_cr_trip > 0 else 100.0
-
-        if lam_trip < 0.5:
-            # Stocky: yielding governs
-            sigma_trip = sigma_y
-            failure_mode = "yielding"
-        elif lam_trip < 1.5:
-            # Intermediate: elastoplastic interaction
-            # Perry-Robertson type formula
-            sigma_E = sigma_cr_trip
-            eta = 0.001 * lam_trip**2
-            a_coef = 1.0
-            b_coef = -(sigma_y + sigma_E * (1.0 + eta))
-            c_coef = sigma_y * sigma_E
-            disc = b_coef**2 - 4*a_coef*c_coef
-            if disc > 0:
-                sigma_trip = (-b_coef - np.sqrt(disc)) / (2*a_coef)
-            else:
-                sigma_trip = min(sigma_y, sigma_E)
-            failure_mode = "tripping"
+    # ---- elastoplastic tripping capacity --------------------------------- #
+    def tripping_capacity(
+        self, lambda_trip: float = 1.0, length: Optional[float] = None,
+    ) -> TrippingResult:
+        """Elastoplastic tripping stress with failure-mode classification."""
+        sigma_y = self.material.sigma_y0
+        sigma_et = self.elastic_tripping_stress(lambda_trip, length)
+        if sigma_et <= 0:
+            return TrippingResult(0.0, lambda_trip, "tripping", 0.0)
+        lam_t = math.sqrt(sigma_y / sigma_et)
+        reduction = _column_curve(lam_t)
+        sigma = reduction * sigma_y
+        if lam_t <= 0.2:
+            mode = "yielding"
+        elif lam_t < 1.5:
+            mode = "tripping"
         else:
-            # Slender: elastic buckling
-            sigma_trip = sigma_cr_trip
-            failure_mode = "tripping"
-
-        # Check column buckling interaction
-        lam_col = np.sqrt(sigma_y / sigma_cr_col) if sigma_cr_col > 0 else 100.0
-        if lam_col < lam_trip:
-            # Column buckling may govern
-            if lam_col < 0.5:
-                sigma_col = sigma_y
-            else:
-                sigma_E = sigma_cr_col
-                sigma_col = sigma_E
-            if sigma_col < sigma_trip:
-                sigma_trip = sigma_col
-                failure_mode = "column_buckling"
-
-        # Capacity reduction
-        capacity_reduction = sigma_trip / sigma_y if sigma_y > 0 else 0.0
-
+            mode = "elastic_tripping"
         return TrippingResult(
-            sigma_trip=sigma_trip,
-            lambda_trip=lambda_trip,
-            failure_mode=failure_mode,
-            capacity_reduction=capacity_reduction,
+            sigma_trip=float(sigma),
+            lambda_trip=float(lambda_trip),
+            failure_mode=mode,
+            capacity_reduction=float(reduction),
         )
+
+
+def ltb_critical_moment(
+    *, length: float, young: float, shear_modulus: float,
+    weak_axis_inertia: float, torsion_constant: float, warping_constant: float,
+) -> float:
+    """Closed-form uniform-moment elastic LTB moment ``Mcr`` [N m].
+
+    ``Mcr = (pi/L) sqrt(E I_y G J) sqrt(1 + pi^2 E C_w/(L^2 G J))``.
+    """
+    if length <= 0:
+        raise ValueError("length must be positive")
+    gj = shear_modulus * torsion_constant
+    amp = math.sqrt(max(1.0 + np.pi**2 * young * warping_constant / (length**2 * gj), 0.0))
+    return float((math.pi / length) * math.sqrt(young * weak_axis_inertia * gj) * amp)
+
+
+def ltb_numerical(
+    *, segments: int, length: float = 3.0, young: float = 2.06e11,
+    shear_modulus: float = 79.2e9, weak_axis_inertia: float = 8.0e-7,
+    torsion_constant: float = 1.2e-7, warping_constant: float = 2.5e-8,
+) -> Dict[str, float]:
+    """LTB moment from a centred-difference Dirichlet Laplacian eigenvalue.
+
+    Mirrors ``tensorfem.marine_stiffener_failure.lateral_torsional_buckling_screen``
+    so that the closed form can be verified by an independent discretisation.
+    """
+    if isinstance(segments, bool) or not isinstance(segments, int) or segments < 2:
+        raise ValueError("segments must be an integer of at least two")
+    if length <= 0 or young <= 0 or shear_modulus <= 0:
+        raise ValueError("length/young/shear_modulus must be positive")
+    h = length / (segments + 1)
+    wave_sq = 4.0 * math.sin(math.pi / (2.0 * (segments + 1))) ** 2 / h**2
+    computed = math.sqrt(young * weak_axis_inertia
+                         * (shear_modulus * torsion_constant * wave_sq
+                            + young * warping_constant * wave_sq**2))
+    exact = (math.pi / length) ** 2
+    oracle = math.sqrt(young * weak_axis_inertia
+                       * (shear_modulus * torsion_constant * exact
+                          + young * warping_constant * exact**2))
+    return {
+        "critical_moment": computed,
+        "oracle_moment": oracle,
+        "relative_error": abs(computed / oracle - 1.0),
+        "discrete_wave_number_squared": wave_sq,
+        "oracle_wave_number_squared": exact,
+    }
 
 
 def tripping_capacity(
@@ -316,27 +388,8 @@ def tripping_capacity(
     material: VonMisesMaterial,
     lambda_trip: float = 1.0,
 ) -> TrippingResult:
-    """Convenience function for tripping capacity analysis.
-
-    Parameters
-    ----------
-    a, b, t : float
-        Panel dimensions [m].
-    h_s, t_w, b_f, t_f : float
-        Stiffener dimensions [m].
-    material : VonMisesMaterial
-        Material properties.
-    lambda_trip : float
-        Lateral restraint parameter.
-
-    Returns
-    -------
-    TrippingResult
-        Tripping analysis result.
-    """
+    """Convenience wrapper for the tripping capacity."""
     analysis = TrippingAnalysis(
-        a=a, b=b, t=t,
-        h_s=h_s, t_w=t_w, b_f=b_f, t_f=t_f,
-        material=material,
+        a=a, b=b, t=t, h_s=h_s, t_w=t_w, b_f=b_f, t_f=t_f, material=material,
     )
     return analysis.tripping_capacity(lambda_trip)
