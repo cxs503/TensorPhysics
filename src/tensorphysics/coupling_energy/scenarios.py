@@ -48,7 +48,10 @@ from typing import Sequence
 
 import numpy as np
 
-from .exchange import MultiRateSchedule, TemporalScheme, reconstruction_poly
+from .exchange import (
+    MultiRateSchedule, TemporalScheme, reconstruction_poly,
+    midpoint_exchange_value, midpoint_interval_integral,
+)
 from .ledger import EnergyLedger, MomentumLedger
 from .solvers import DEM2D, ContactLaw, Q4Mesh, Q4PlaneStressFEM, Q4ThermalFEM, ThermalLBM2D
 
@@ -72,6 +75,8 @@ SCHEMES: tuple[TemporalScheme, ...] = (
     TemporalScheme.LINEAR,
     TemporalScheme.QUADRATIC,
 )
+#: Midpoint scheme (Crank-Nicolson type) - used explicitly for AC1-AC4 tests.
+MIDPOINT_SCHEME = TemporalScheme.MIDPOINT
 
 
 class _Sample:
@@ -261,12 +266,19 @@ def run_thermal_lbm_fem(ratio: int = 1, scheme: TemporalScheme = TemporalScheme.
         previous = history[-2] if len(history) >= 2 else None
         previous2 = history[-3] if len(history) >= 3 else None
         current = history[-1]
-        f0, a1, a2 = reconstruction_poly(scheme, previous, current, previous2)
-        injected = 0.0
-        for k in range(ratio):
-            s = (k + 1) * dt_fine
-            wall = f0 + a1 * s + a2 * s * s
-            injected += lbm.step(wall)
+        if scheme is TemporalScheme.MIDPOINT:
+            # Crank-Nicolson midpoint: evaluate at interval midpoint
+            q_mid = midpoint_exchange_value(previous, current, h / 2.0)
+            injected = 0.0
+            for k in range(ratio):
+                injected += lbm.step(q_mid)
+        else:
+            f0, a1, a2 = reconstruction_poly(scheme, previous, current, previous2)
+            injected = 0.0
+            for k in range(ratio):
+                s = (k + 1) * dt_fine
+                wall = f0 + a1 * s + a2 * s * s
+                injected += lbm.step(wall)
         q_iface = injected * C_f
 
         q_est = float(np.sum(k_solid * (fem.T[top] - fem.T[below]) / band
