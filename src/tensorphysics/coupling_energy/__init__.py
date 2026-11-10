@@ -31,6 +31,11 @@ that each claim can be checked on its own:
     with ``solve_ivp`` as oracle, plus the exchange-cadence ladder driver.
 ``exchange_gate``
     the acceptance gate of node ``p223w3-n06``: study + criteria + verdict.
+``exchange_energy``
+    the same exchange measured in the *conserved quantity*: per-chain stored
+    energy ``E`` with ``dE/dt = q g - dis``, the interface-energy defect and its
+    order, the interval-complete energy attribution ledger and the balance
+    cross-check (campaign node ``p223w3-n05``).
 
 ``scenarios``
     the three coupled experiments of campaign node ``P40W3B-N09``:
