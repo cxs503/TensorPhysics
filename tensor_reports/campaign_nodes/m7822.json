@@ -1,0 +1,15 @@
+{
+ "depends_on_missions": [],
+ "goal": "【战役 DAG 节点|p129w1r2-n10-flettner-coupling|风助推进-操纵-CII 三学科耦合验证：Flettner 旋筒推力-功耗 + 偏航力矩 + 航次碳强度净收益闭环（ship-performance-platform 绿色航行族）】（上层智能体播种的自主战役，物理域 绿色航行 / 操纵性（风助推进 / 多学科耦合），风险 ，层 ）。物理目标：建立 Flettner 旋筒风助推进的『推力-操纵-CII』三学科耦合验证面，把旋筒从『孤立推力源』推到『系统级节能评估』。\n\n实现路径：\n(a) 旋筒推力单学科锚：单旋筒（D=3m, H=25m, RPM=120）在 U_rel=10m/s、α=90° 条件下，推力 T=ρ·Γ·U·H（Γ=π·D²·RPM/60·Cl_eff），与 Thom(1934) 风洞数据对比偏差 ≤10%；功耗 P_motor = 2π·Q·RPM 与推力净收益做能量账本。\n(b) 偏航力矩耦合：旋筒位于 x_rotor 处，侧向力 F_y 产生偏航力矩 N = F_y · (x_rotor - x_G)，在 /maneuvering/turning 端点注入此外力矩，计算回转圈径变化 ΔD_T/D_T ≤ 5%（旋筒关闭 vs 开启对比）。\n(c) 航次 CII 净收益：在 /green-shipping/voyage_co2 端点，输入航次剖面（航速、风况、旋筒工况），计算：Δfuel = fuel_no_rotor - fuel_with_rotor（含旋筒功耗），Δdistance = 实际航程（含操纵偏差），CII_net = (fuel_no_rotor - Δfuel) / (distance · cargo)。与旋筒厂商典型节能声明（5-15%）对比，裁决是否可达。\n(d) 多旋筒（2/4/6 筒）布局优化：对称 vs 非对称布局的偏航力矩抵消 + 推力叠加，给出最优布局推荐。\n(e) 几何闸门：Cb/L/B/∇ 先行校验。\n\n机器判据：\n1) 单旋筒推力 vs Thom 风洞数据偏差 ≤10%（α=60°~120° 范围）；\n2) 旋筒功耗/推力比（COP = T/P_motor）在合理范围内（5-15 N/W）；\n3) 偏航力矩注入后回转圈径变化 ΔD_T/D_T 可解释（≤5% 或归因到侧向力）；\n4) 航次 CII 净收益在典型北大西洋航线（Fn=0.18, Beaufort 5 平均）为 5-15%，与文献一致；\n5) 能量闭合：主机功率变化 = 旋筒推力等效功率 - 旋筒功耗 - 操纵损失，残差 ≤5%；\n6) pytest ≥15 项含负控（旋筒 RPM=0 时推力必须为零）；\n7) 显式适用域（相对风速 >5m/s、无极端横风 >25m/s）。。落库 ship-performance-platform（若模块不存在则按领域目录新建，附 pytest 用例）。\n机器验收判据（全部满足，判据数字与产物路径落报告 JSON）：见战役表 metadata。\n纪律：全新前沿节点（禁止重复 verified/ 已验证案例）；worktree 内提交自己分支；论文级报告（物理表述+图+判据数字+审计链+局限）；honest FAIL 不可覆盖。",
+ "mission_id": 7822,
+ "mission_status": "succeeded",
+ "node_dependencies": [],
+ "node_ext_id": "p129w1r2-n10-flettner-coupling",
+ "node_id": 1812,
+ "node_status": "done",
+ "plan_id": 337,
+ "report": null,
+ "reproduction_verdict": null,
+ "result_checks": "",
+ "schema": "campaign_node_artifact.v1"
+}

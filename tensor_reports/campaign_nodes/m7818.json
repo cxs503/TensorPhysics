@@ -1,0 +1,15 @@
+{
+ "depends_on_missions": [],
+ "goal": "【战役 DAG 节点|p129w1r2-n06-tensorfvm-freesurface|TensorFVM 自由面船舶绕流验证面：Wigley 波系 + Series 60 阻力 + DTMB 5415 兴波图案三解析/实验锚 + 网格收敛阶（船海CFD零→一）】（上层智能体播种的自主战役，物理域 阻力与推进（自由面 RANS / 船舶 CFD），风险 ，层 ）。物理目标：为 TensorFVM 建立船舶自由面绕流的从零到一验证面，覆盖解析锚（Wigley 波系）+ 系统试验锚（Series 60 阻力）+ 基准实验锚（DTMB 5415 兴波图案）。\n\n实现路径：\n(a) Wigley 抛物船型（L=3m, B=0.3m, T=0.1875m, Cb=2/3）：Fn=0.2,0.3,0.4 三航速，VOF 自由面捕捉波 elev(x,y=0)，与 Michell 薄船理论解析波系对比，波高峰值位置偏差 ≤10%，波幅偏差 ≤15%（Fn=0.2 线性区）。\n(b) Series 60 Cb=0.6 标准模型（L=3.048m）：Fn=0.15~0.35 取 5 点，R_T 与 Todd 模型试验数据对比，偏差 ≤10%（含 ITTC-57 摩擦修正）。\n(c) DTMB 5415（L=5.72m, Cb=0.55）：Fn=0.28 设计航速，自由面波系图案（横波+散波角度）与 NASA/Iowa 实验照片定性对比 + 波高定量偏差 ≤15%；总阻力 vs 实验值偏差 ≤10%。\n(d) 网格收敛：三套网格（粗/中/细，h_ratio=√2），Richardson 外推得收敛阶 p，要求 p≥1.5（一阶迎风）或 p≥2（二阶格式）。\n(e) 几何闸门：Cb/L/B/∇ 先行校验（误差 ≤1%）。\n\n机器判据：\n1) Wigley Fn=0.2 波幅 vs Michell 解析偏差 ≤15%，波峰纵向位置偏差 ≤5%L；\n2) Series 60 五航速 R_T vs Todd 实验平均偏差 ≤8%，最大单点偏差 ≤12%；\n3) DTMB 5415 散波角度 vs Kelvin 19.5° 理论偏差 ≤2°，R_T vs 实验偏差 ≤10%；\n4) 网格收敛阶 p≥1.5（粗→中→细三套）；\n5) 质量守恒：出口流量/入口流量偏差 ≤0.1%；\n6) pytest ≥15 项含负控（关闭 VOF 必须被自由面判据拒绝）；\n7) 显式适用域（Fn<0.5 排水型、无碎波、无通气）。。落库 TensorFVM（若模块不存在则按领域目录新建，附 pytest 用例）。\n机器验收判据（全部满足，判据数字与产物路径落报告 JSON）：见战役表 metadata。\n纪律：全新前沿节点（禁止重复 verified/ 已验证案例）；worktree 内提交自己分支；论文级报告（物理表述+图+判据数字+审计链+局限）；honest FAIL 不可覆盖。",
+ "mission_id": 7818,
+ "mission_status": "succeeded",
+ "node_dependencies": [],
+ "node_ext_id": "p129w1r2-n06-tensorfvm-freesurface",
+ "node_id": 1808,
+ "node_status": "done",
+ "plan_id": 337,
+ "report": null,
+ "reproduction_verdict": null,
+ "result_checks": "pytest tests/test_ship_freesurface_verification.py: 24 passed, 0 failed (5.0s)",
+ "schema": "campaign_node_artifact.v1"
+}
