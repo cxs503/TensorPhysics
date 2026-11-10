@@ -9,6 +9,18 @@ Physical domain: ice_mechanics
 Campaigns: SIR-PC2 | F01 | Winkler elastic foundation plate
            IN11-H3 | level-ice bending failure, Kirchhoff plate FEM
            P54-W3-N02 | Pasternak (two-parameter) foundation, closed GAP-FEM-P0
+           P366-W2-N01 | ice thickness / temperature / loading-rate design laws
+
+Sub-modules
+-----------
+``ice_material``
+    Rate- and temperature-dependent ice state: ``E(T, eps_dot)``,
+    ``sigma_f(T, eps_dot)``, strain rate from the indentation rate, and the
+    self-consistent ``(E, D, l, G_p)`` state of the sheet.
+``design_laws``
+    Peak bending stress / first-crack load of the sheet, the constant-pressure
+    patch test of the BFS foundation element, and the thickness / temperature /
+    loading-rate dependence study.
 """
 
 from .kirchhoff_plate_fem import (
@@ -38,6 +50,27 @@ from .pasternak_foundation import (
     pasternak_point_load_moments,
     pasternak_roots,
     shear_coupling,
+)
+from .ice_material import (
+    GRAVITY,
+    SEA_WATER_DENSITY,
+    IceSheetMaterial,
+    creep_rate_factor,
+    ice_elastic_modulus,
+    ice_flexural_strength,
+    ice_shear_modulus,
+    material_sweep,
+    strain_rate_from_indentation_rate,
+    temperature_stiffening,
+)
+from .design_laws import (
+    dependence_study,
+    first_crack_load,
+    foundation_patch_test,
+    loglog_slope,
+    peak_bending_stress,
+    sign_report,
+    unit_moment_field,
 )
 from .winkler_plate import (
     WinklerPlateParams,
@@ -77,4 +110,21 @@ __all__ = [
     "pasternak_point_load_moments",
     "pasternak_roots",
     "shear_coupling",
+    "GRAVITY",
+    "SEA_WATER_DENSITY",
+    "IceSheetMaterial",
+    "creep_rate_factor",
+    "ice_elastic_modulus",
+    "ice_flexural_strength",
+    "ice_shear_modulus",
+    "material_sweep",
+    "strain_rate_from_indentation_rate",
+    "temperature_stiffening",
+    "dependence_study",
+    "first_crack_load",
+    "foundation_patch_test",
+    "loglog_slope",
+    "peak_bending_stress",
+    "sign_report",
+    "unit_moment_field",
 ]
