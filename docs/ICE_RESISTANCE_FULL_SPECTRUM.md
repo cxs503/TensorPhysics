@@ -173,7 +173,7 @@ R_field(s) = R_level(h_bg) + W(h_k)/s                     （间距 s 摊薄成�
 
 ## 5. 注意点（坑 / 局限 / 适用范围）
 
-- 绝对精度 vs 实尺度测量 = WITHHELD：仓内无数字化实尺度冰阻力记录；本报告只给出解析恒等式、已发表定律标度关系、跨定律一致性与推进功率量级带。
+- 绝对精度 vs 实尺度测量 = **JUDGED（mission 9425，2026-11-10 起）**：实测锚库已建立（`data/measured/ice_resistance/`，2 系列 14 点，逐点 DOI/表号/sha256），15% 判据已可执行；首次判决为 honest-FAIL —— 本支路对 MT Uikku 实测中位相对误差 198%，误差集中于 `R_break` 闭合项。详见 `docs/ICE_RESISTANCE_MEASURED_ANCHOR.md` 与 `artifacts/ice_resistance/measured_adjudication.json`。本报告其余解析类判据不受影响。
 - Lindqvist 三分量中压溃项与船体宽度无关（σ_c h² 结构），这是原式的特性；跨定律一致区间接吸收了这一点。
 - k_bend 闭合常数按跨定律量级标定（非实验标定），其 ±50% 影响已在 uncertainty 中给出。
 - 冰脊项为半静态穿透阻力，动态冲撞峰值可比其高 2-4 倍；能量法 ram 容量忽略推力限制，因此 ram 容量全部被适用域上限封顶（能量 12-104 MJ 远大于准静态穿脊功 0.2-1.0 MJ），真实冲撞受推力/动态堆积压力限制，本模型不覆盖。

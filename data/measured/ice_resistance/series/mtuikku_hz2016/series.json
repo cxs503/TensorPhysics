@@ -1,0 +1,288 @@
+{
+  "schema_version": "1.0",
+  "series_id": "MTUIKKU-HZ2016",
+  "title": "MT Uikku level-ice model tests (ice basin, scale 1:31.56), resistance at full scale",
+  "ice_state": "level",
+  "measured_quantity": "resistance",
+  "ship": {
+    "name": "MT Uikku (double-acting icebreaking tanker, Neste/Nemarc)",
+    "L_pp_m": 150.0,
+    "B_m": 21.3,
+    "T_m": 9.5,
+    "bow_angle_deg": 21.0,
+    "flare_deg": 30.0,
+    "displacement_t": null,
+    "source": "Hu & Zhou (2016) ship particulars (also tabulated by Koto & Afrizal 2017, Table 2)",
+    "convention_notes": {
+      "bow_angle_deg": "waterline entrance angle as reported (21 deg); used as the plan-view stem half-angle argument phi/2 in R_break",
+      "flare_deg": "stem angle 30 deg as reported; used as the plating angle to the horizontal in R_crush (assumption A1)"
+    }
+  },
+  "provenance": {
+    "citation": "Hu, Z. & Zhou, L. (2016) Further study on level ice resistance and channel resistance for an icebreaking vessel, Int. J. Naval Architecture and Ocean Engineering 8(2) 169-176",
+    "doi": "10.1016/j.ijnaoe.2016.01.004",
+    "url": "https://doi.org/10.1016/j.ijnaoe.2016.01.004",
+    "grade": "MEASURED-PRIMARY",
+    "tables": [
+      "Table 3 (measured force statistics)",
+      "Table 8 (experimental reference + published predictions)"
+    ],
+    "retrieval_note": "Publisher PDF (Elsevier, CC BY-NC-ND) returned HTTP 403 from this worktree's network on 2026-11-10; the digits were ingested from the archived in-ecosystem transcription of the same tables (TensorDEM mt_uikku_level_ice.csv) whose README documents the Table-3/Table-8 discrepancy. Pass A and pass B are two independent read orders/unit paths over that transcript.",
+    "sources": [
+      {
+        "artifact": "source/hz2016_level_ice_table3.csv",
+        "sha256": "7c4415ac3259947efa841014fd342c3f62075d741e90fa8b8c0197ea3ee0ddc2",
+        "bytes": 1034,
+        "kind": "transcription-column-major",
+        "role": "pass A digitisation of Tables 3/8 (SI-derived units)"
+      },
+      {
+        "artifact": "source/pass_b_rowmajor_mixed_units.txt",
+        "sha256": "02df058b4ce5a82192d8e96719d6232ca8e76547f82e5a71bb9be52d66ac0325",
+        "bytes": 2227,
+        "kind": "transcription-row-major",
+        "role": "pass B digitisation (row-major, MPa/GPa unit path)"
+      }
+    ],
+    "scale": {
+      "model_scale": 31.56,
+      "reported_frame": "full_scale"
+    },
+    "limitations": [
+      "digitised summary forces, not the raw force time series",
+      "Table 3 and Table 8 differ by ~1-2% on several cases; the mean-force column is used as truth and the Table 8 reference is carried as an alternative"
+    ]
+  },
+  "points": [
+    {
+      "point_id": "103",
+      "h_m": 0.77,
+      "V_ms": 0.2,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 480.0,
+      "R_unc_kN": 130.0,
+      "R_max_kN": 920.0,
+      "R_min_kN": 100.0,
+      "R_alt_kN": 470.0,
+      "sigma_f_kPa": 724.0,
+      "sigma_c_kPa": 1748.0,
+      "E_MPa": 929.0,
+      "case_group": "a",
+      "literature_baselines_kN": {
+        "lindqvist": 320.0,
+        "riska": 610.0,
+        "jeong": 330.0,
+        "keinonen": 510.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": ""
+    },
+    {
+      "point_id": "104",
+      "h_m": 0.76,
+      "V_ms": 0.5,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 560.0,
+      "R_unc_kN": 130.0,
+      "R_max_kN": 990.0,
+      "R_min_kN": 200.0,
+      "R_alt_kN": 560.0,
+      "sigma_f_kPa": 844.0,
+      "sigma_c_kPa": 2192.0,
+      "E_MPa": 984.0,
+      "case_group": "a",
+      "literature_baselines_kN": {
+        "lindqvist": 380.0,
+        "riska": 630.0,
+        "jeong": 520.0,
+        "keinonen": 600.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": ""
+    },
+    {
+      "point_id": "205",
+      "h_m": 0.96,
+      "V_ms": 0.2,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 670.0,
+      "R_unc_kN": 220.0,
+      "R_max_kN": 1410.0,
+      "R_min_kN": 100.0,
+      "R_alt_kN": 670.0,
+      "sigma_f_kPa": 920.0,
+      "sigma_c_kPa": 1840.0,
+      "E_MPa": 1685.0,
+      "case_group": "b",
+      "literature_baselines_kN": {
+        "lindqvist": 510.0,
+        "riska": 800.0,
+        "jeong": 560.0,
+        "keinonen": 740.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": ""
+    },
+    {
+      "point_id": "206",
+      "h_m": 0.95,
+      "V_ms": 0.5,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 720.0,
+      "R_unc_kN": 193.0,
+      "R_max_kN": 1390.0,
+      "R_min_kN": 130.0,
+      "R_alt_kN": 720.0,
+      "sigma_f_kPa": 912.0,
+      "sigma_c_kPa": 1862.0,
+      "E_MPa": 1701.0,
+      "case_group": "b",
+      "literature_baselines_kN": {
+        "lindqvist": 560.0,
+        "riska": 840.0,
+        "jeong": 800.0,
+        "keinonen": 810.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": ""
+    },
+    {
+      "point_id": "301",
+      "h_m": 1.04,
+      "V_ms": 0.2,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 540.0,
+      "R_unc_kN": 88.0,
+      "R_max_kN": 850.0,
+      "R_min_kN": 290.0,
+      "R_alt_kN": 539.0,
+      "sigma_f_kPa": 540.0,
+      "sigma_c_kPa": 2477.0,
+      "E_MPa": 1474.0,
+      "case_group": "c",
+      "literature_baselines_kN": {
+        "lindqvist": 426.0,
+        "riska": 892.0,
+        "jeong": 459.0,
+        "keinonen": 663.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": ""
+    },
+    {
+      "point_id": "302",
+      "h_m": 1.04,
+      "V_ms": 0.5,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 830.0,
+      "R_unc_kN": 130.0,
+      "R_max_kN": 1200.0,
+      "R_min_kN": 450.0,
+      "R_alt_kN": 829.0,
+      "sigma_f_kPa": 669.0,
+      "sigma_c_kPa": 2485.0,
+      "E_MPa": 1273.0,
+      "case_group": "c",
+      "literature_baselines_kN": {
+        "lindqvist": 538.0,
+        "riska": 942.0,
+        "jeong": 765.0,
+        "keinonen": 783.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": ""
+    },
+    {
+      "point_id": "303",
+      "h_m": 1.04,
+      "V_ms": 1.0,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 780.0,
+      "R_unc_kN": 160.0,
+      "R_max_kN": 1260.0,
+      "R_min_kN": 370.0,
+      "R_alt_kN": 781.0,
+      "sigma_f_kPa": 592.0,
+      "sigma_c_kPa": 2397.0,
+      "E_MPa": 1390.0,
+      "case_group": "c",
+      "literature_baselines_kN": {
+        "lindqvist": 572.0,
+        "riska": 1025.0,
+        "jeong": 961.0,
+        "keinonen": 847.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": ""
+    },
+    {
+      "point_id": "401",
+      "h_m": 0.63,
+      "V_ms": 0.2,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 150.0,
+      "R_unc_kN": null,
+      "R_max_kN": null,
+      "R_min_kN": null,
+      "R_alt_kN": 152.0,
+      "sigma_f_kPa": 808.0,
+      "sigma_c_kPa": 4040.0,
+      "E_MPa": 1616.0,
+      "case_group": "d",
+      "literature_baselines_kN": {
+        "lindqvist": 251.0,
+        "riska": 473.0,
+        "jeong": 259.0,
+        "keinonen": 425.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": "force statistics not reported in the retrieved table (left empty, not imputed)"
+    },
+    {
+      "point_id": "402",
+      "h_m": 0.63,
+      "V_ms": 0.5,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 290.0,
+      "R_unc_kN": null,
+      "R_max_kN": null,
+      "R_min_kN": null,
+      "R_alt_kN": 291.0,
+      "sigma_f_kPa": 1029.0,
+      "sigma_c_kPa": 5389.0,
+      "E_MPa": 2058.0,
+      "case_group": "d",
+      "literature_baselines_kN": {
+        "lindqvist": 322.0,
+        "riska": 501.0,
+        "jeong": 300.0,
+        "keinonen": 526.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": "force statistics not reported in the retrieved table (left empty, not imputed)"
+    },
+    {
+      "point_id": "403",
+      "h_m": 0.63,
+      "V_ms": 1.0,
+      "provenance_ref": "Hu & Zhou (2016) Table 3 (mean force) / Table 8 (reference value)",
+      "R_meas_kN": 390.0,
+      "R_unc_kN": null,
+      "R_max_kN": null,
+      "R_min_kN": null,
+      "R_alt_kN": 391.0,
+      "sigma_f_kPa": 903.0,
+      "sigma_c_kPa": 4616.0,
+      "E_MPa": 1805.0,
+      "case_group": "d",
+      "literature_baselines_kN": {
+        "lindqvist": 351.0,
+        "riska": 548.0,
+        "jeong": 542.0,
+        "keinonen": 579.0,
+        "_note": "published predictions reproduced from the source Table 8; context only, never truth"
+      },
+      "notes": "force statistics not reported in the retrieved table (left empty, not imputed)"
+    }
+  ]
+}
