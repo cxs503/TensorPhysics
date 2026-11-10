@@ -1,0 +1,83 @@
+{
+  "schema": "tensorphysics.envelope.case.v1",
+  "case_id": "stranding_tide_window",
+  "title": "Stranding window: admissible tide band for a deep-draught transit over a shoal",
+  "description": "Operating window of the tide level at which a transit over a shoal is admissible. Lower bound: under-keel clearance (charted depth + tide level - draught - squat - allowance) must stay positive. Upper bound: the tidal sill / berth limit. Three loading conditions; the binding constraint is annotated per side.",
+  "mode": "interval",
+  "axes": [
+    {"name": "tide_level", "lo": 0.0, "hi": 6.0}
+  ],
+  "constants": {
+    "charted_depth": 10.0,
+    "squat": 0.5,
+    "ukc_allowance": 0.6
+  },
+  "conditions": [
+    {"label": "transit_full", "params": {"draught": 10.3, "sill_limit": 3.2}},
+    {"label": "transit_medium", "params": {"draught": 9.6, "sill_limit": 4.0}},
+    {"label": "transit_light", "params": {"draught": 9.0, "sill_limit": 4.6}}
+  ],
+  "constraints": [
+    {
+      "id": "c_ukc",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "under-keel clearance incl. squat and allowance",
+      "value": {
+        "op": "sum",
+        "terms": [
+          {"op": "var", "name": "charted_depth"},
+          {"op": "var", "name": "tide_level"},
+          {"op": "neg", "arg": {"op": "var", "name": "draught"}},
+          {"op": "neg", "arg": {"op": "var", "name": "squat"}},
+          {"op": "neg", "arg": {"op": "var", "name": "ukc_allowance"}}
+        ]
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"tide_level": 1}, "convex": true}
+    },
+    {
+      "id": "c_sill",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "sill / air-draught limit: the tide must not exceed the declared ceiling",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "sill_limit"},
+        "b": {"op": "var", "name": "tide_level"}
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"tide_level": -1}, "convex": true}
+    }
+  ],
+  "anchor": {"tide_level": 3.0},
+  "contract": {
+    "min_boundary_order": 1.9,
+    "area_rel_tol": 1e-3,
+    "monotone_rel_tol": 1e-2,
+    "expect": {"intervals": 1, "active": {"lower": "c_ukc", "upper": "c_sill"}}
+  },
+  "extensions": {
+    "legacy_reference": {
+      "note": "closed-form per-window path that predates the engine: polynomial coefficients of each margin in the window axis, given as expressions of the condition parameters",
+      "c_ukc": {
+        "form": "linear",
+        "a": {"op": "const", "value": 1.0},
+        "b": {
+          "op": "sum",
+          "terms": [
+            {"op": "var", "name": "charted_depth"},
+            {"op": "neg", "arg": {"op": "var", "name": "draught"}},
+            {"op": "neg", "arg": {"op": "var", "name": "squat"}},
+            {"op": "neg", "arg": {"op": "var", "name": "ukc_allowance"}}
+          ]
+        }
+      },
+      "c_sill": {
+        "form": "linear",
+        "a": {"op": "const", "value": -1.0},
+        "b": {"op": "var", "name": "sill_limit"}
+      }
+    }
+  }
+}
