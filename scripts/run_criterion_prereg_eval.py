@@ -15,7 +15,8 @@ Produces, programmatically (no hand-copied numbers):
 
 and re-renders ``docs/CRITERION_PREREGISTRATION.md`` from that JSON (so no
 number in the document is hand-copied, and the report/doc pair can never drift
-apart).
+apart), and emits the mission's own acceptance record into
+``docs/m8598/outputs/acceptance_criteria.json`` from the same payload.
 
 Run: ``python scripts/run_criterion_prereg_eval.py`` (writes into the repo);
 ``--out-dir`` / ``--doc`` redirect both outputs so CI can re-derive the record
@@ -59,6 +60,7 @@ from tensorphysics.campaign.criterion_prereg.synth import (  # noqa: E402
 OUT = ROOT / "artifacts" / "criterion_prereg"
 EVAL = OUT / "eval.json"
 DOC = ROOT / "docs" / "CRITERION_PREREGISTRATION.md"
+DELIVERABLE = ROOT / "docs" / "m8598" / "outputs" / "acceptance_criteria.json"
 STAMP = "2026-11-09T00:00:00+00:00"
 
 #: The acceptance criteria of this node, verbatim from the campaign DAG node.
@@ -333,10 +335,34 @@ def _artifact_label(path: Path) -> str:
     return str(Path("artifacts") / "criterion_prereg" / path.name)
 
 
-def run(out_dir: Path = OUT, doc_path: Path = DOC, eval_path: Path | None = None) -> int:
+def deliverable_record(payload: dict, eval_label: str) -> dict:
+    """The mission's own acceptance record (``docs/m8598/outputs/...``).
+
+    Generated from the evaluation payload, never typed: the criteria and their
+    measured values exist exactly once, in ``eval.json``.  The file used to be a
+    copy of another mission's record (it carried shaft-torsion metrics and a
+    ``pytest_test_shaft_torsion`` flag this node never runs), i.e. the very
+    "second source" this gate exists to prevent.
+    """
+    return {
+        "schema": "criterion-prereg-deliverable/1",
+        "mission_id": payload["mission_id"],
+        "node_id": payload["node"],
+        "generated_by": "scripts/run_criterion_prereg_eval.py",
+        "source": eval_label,
+        "page": "docs/CRITERION_PREREGISTRATION.md",
+        "all_acceptance_pass": payload["all_acceptance_pass"],
+        "acceptance": payload["acceptance"],
+    }
+
+
+def run(out_dir: Path = OUT, doc_path: Path = DOC, eval_path: Path | None = None,
+        deliverable_path: Path | None = None) -> int:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     eval_path = Path(eval_path) if eval_path is not None else out_dir / "eval.json"
+    deliverable_path = Path(deliverable_path) if deliverable_path is not None else DELIVERABLE
+    deliverable_path.parent.mkdir(parents=True, exist_ok=True)
 
     field = field_scores(gen_extraction_corpus(20, seed=20261109))
     heldout = field_scores(gen_extraction_corpus(20, seed=42))
@@ -430,6 +456,9 @@ def run(out_dir: Path = OUT, doc_path: Path = DOC, eval_path: Path | None = None
     ) and all_seeds_ok
     eval_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     render_doc(eval_path, doc_path)
+    deliverable = deliverable_record(payload, _artifact_label(eval_path))
+    deliverable_path.write_text(json.dumps(deliverable, ensure_ascii=False, indent=2) + "\n",
+                                encoding="utf-8")
     print(json.dumps(payload["acceptance"], ensure_ascii=False, indent=2))
     print("all_acceptance_pass:", payload["all_acceptance_pass"])
     print("doc:", doc_path)
@@ -445,8 +474,12 @@ def main(argv: list[str] | None = None) -> int:
                     help="page to render (default: docs/CRITERION_PREREGISTRATION.md)")
     ap.add_argument("--eval", default=None,
                     help="evaluation record path (default: <out-dir>/eval.json)")
+    ap.add_argument("--deliverable", default=str(DELIVERABLE),
+                    help="mission acceptance record to emit "
+                         "(default: docs/m8598/outputs/acceptance_criteria.json)")
     args = ap.parse_args(argv)
-    return run(Path(args.out_dir), Path(args.doc), Path(args.eval) if args.eval else None)
+    return run(Path(args.out_dir), Path(args.doc), Path(args.eval) if args.eval else None,
+               Path(args.deliverable))
 
 
 if __name__ == "__main__":
