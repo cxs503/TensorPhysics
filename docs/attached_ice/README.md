@@ -63,10 +63,18 @@ The equivalent sand-grain roughness is:
 k_s = k_s0 + alpha_ice * h_ice^beta_ice
 ```
 
-The ITTC-1978 roughness allowance is:
+The ITTC-1978 roughness allowance of one surface is
 ```
-Delta C_f = 0.004 * [(k_s/L)^(1/3) - (k_s0/L)^(1/3)]
+Delta C_f(k_s) = (105 * (k_s/L)^(1/3) - 0.64) * 1e-3
 ```
+and the penalty relative to the clean hull is its increment
+```
+Delta C_f = 0.105 * [(k_s/L)^(1/3) - (k_s0/L)^(1/3)]
+```
+(the constant -0.64e-3 cancels; `ittc_1978_delta_cf` is the canonical reference
+used by the tests).  Until 2026-11-10 this file quoted a coefficient of 0.004,
+which under-predicted the penalty by a factor 26 — see
+`docs/attached_ice/maturity_p302w2_n09.md`.
 
 ## Verification Criteria
 
@@ -118,21 +126,54 @@ print(f"Delta C_f: {rough.delta_cf:.6e}")
 
 ## Thin Interface for ship-performance-platform
 
-The module exports a thin interface for consumption by the resistance/propulsion
-chain:
+`attached_ice.handoff` is the single bridge to the resistance / propulsion
+chain.  It emits a versioned, JSON-serialisable payload and contains no
+ship-domain resistance formula of its own (the consumer supplies its total
+resistance coefficient):
 
 ```python
-# Output: dict with h_ice, k_s, delta_cf, delta_t_over_t
-def compute_ice_penalty(h_ice, k_s0, ship_length):
-    from tensorphysics.ice.attached_ice import roughness_state
-    state = roughness_state(h_ice=h_ice, k_s0=k_s0, ship_length=ship_length)
-    return {
-        "h_ice_m": state.h_ice,
-        "k_s_m": state.k_s,
-        "delta_cf": state.delta_cf,
-        "delta_t_over_t": state.delta_t_over_t,
-    }
+from tensorphysics.ice.attached_ice import build_handoff, to_json
+
+payload = build_handoff(
+    undercooling_k=2.0,          # K, T_freeze - T_surface
+    duration_s=7200.0,           # accretion window
+    speed_m_s=3.0,               # or u_star=...
+    c_f=1e-4,                    # frazil volume concentration
+    water_temperature_k=273.35,  # bulk water temperature
+    ice_temperature_c=-5.0,      # -> bond strength from the adfreeze model
+    cf_total=0.004,              # consumer's total resistance coefficient
+    n_mc=200,                    # optional P50/P90 envelope
+)
+open("/tmp/attached_ice.json", "w").write(to_json(payload))
 ```
+
+Payload sections: `inputs` (value+unit echo), `time_series` (h_ice, k_s,
+Delta C_f), `scalars` (end-of-window values, closed-form equilibrium,
+detachment regime, linearisation flag), `envelope` (P50/P90 in time) and
+`limitations`.
+
+## Maturity status (p302w2-n09, 2026-11-10)
+
+Criterion-by-criterion acceptance, the three defects found and fixed, and the
+honest limitations are documented in
+[`maturity_p302w2_n09.md`](maturity_p302w2_n09.md); the machine-readable verdicts
+live in `artifacts/attached_ice_maturity/criteria.json`, produced by
+`benchmarks/attached_ice_maturity/run_maturity.py`.
+
+API added in the maturity pass:
+
+| function | purpose |
+|---|---|
+| `stefan_with_initial` | exact similarity solution from a finite seed (C2 truth) |
+| `IceGrowthODE.solve_euler(..., method="stefan_split")` | exact advance of the singular conduction term |
+| `IceGrowthODE.energy_closure` | integral latent-heat balance diagnostic (C1) |
+| `equilibrium_thickness` | closed-form steady state `min(h_growth, h_detach)` (C4) |
+| `detachment_limited_thickness`, `detachment_regime` | stripping limit + reachability diagnostic |
+| `bond_strength_from_adfreeze_pa` | MPa->Pa nerve point to `ice.adfreeze` (C6) |
+| `friction_velocity_from_speed` / `speed_from_friction_velocity` | u_* <-> ship speed |
+| `ittc_1978_delta_cf`, `ittc_1957_cf` | canonical ITTC references (C5) |
+| `monte_carlo_envelope` | time-resolved P50/P90 envelope over the uncertain forcing |
+| `build_handoff`, `to_json` | thin JSON interface for the resistance/propulsion chain |
 
 ## References
 

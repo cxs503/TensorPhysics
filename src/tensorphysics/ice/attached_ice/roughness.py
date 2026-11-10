@@ -24,16 +24,26 @@ approximately linearly with thickness (beta ~ 1).
 
 ITTC-1978 roughness allowance
 -----------------------------
-The ITTC-1978 procedure recommends a roughness allowance for the friction
-resistance coefficient::
+The ITTC-1978 Performance Prediction Method defines the roughness allowance
+of a hull with equivalent sand-grain roughness ``k_s`` as::
+
+    Delta C_f(k_s) = (105 * (k_s / L)^(1/3) - 0.64) * 1e-3
+
+(valid for ``1e-6 <= k_s/L <= 1e-4``).  The roughness *penalty* relative to the
+clean hull is the increment of that allowance::
 
     Delta C_f = alpha * [(k_s / L)^(1/3) - (k_s0 / L)^(1/3)]
 
-where:
-* ``alpha = 0.004`` (ITTC-1978 recommended value)
-* ``L`` is the ship length [m]
-* ``k_s`` is the roughened equivalent sand-grain roughness [m]
-* ``k_s0`` is the baseline (clean hull) roughness [m]
+with ``alpha = 105e-3 = 0.105``, ``L`` the ship length [m], ``k_s`` the
+roughened equivalent sand-grain roughness [m] and ``k_s0`` the baseline
+(clean-hull) roughness [m].  Because the constant term cancels, the increment
+form is exact with respect to :func:`ittc_1978_delta_cf`.
+
+.. note::
+   Until 2026-11-10 this module used ``alpha = 0.004``, which under-predicted the
+   penalty by a factor ~15 (96% error against the ITTC-1978 expression for
+   k_s = 0.5 mm -> 5 mm at L = 150 m).  See the maturity audit
+   ``artifacts/attached_ice_maturity/*``.
 
 Thrust loss
 -----------
@@ -110,8 +120,8 @@ def equivalent_sand_roughness(
 
     Parameters
     ----------
-    h_ice : float
-        Ice thickness [m].
+    h_ice : float or array_like
+        Ice thickness [m] (vectorised).
     k_s0 : float
         Clean-hull roughness [m].
     alpha_ice : float
@@ -121,16 +131,18 @@ def equivalent_sand_roughness(
 
     Returns
     -------
-    float
+    float or numpy.ndarray
         Equivalent sand-grain roughness [m].
     """
-    h = float(h_ice)
-    if h < 0.0:
+    h = np.asarray(h_ice, dtype=float)
+    if np.any(h < 0.0):
         raise ValueError("ice thickness must be non-negative")
     if k_s0 < 0.0:
         raise ValueError("baseline roughness must be non-negative")
 
-    return float(k_s0 + alpha_ice * h**beta_ice)
+    out = k_s0 + alpha_ice * h**beta_ice
+    # scalar in -> float out; array in -> array out (vectorised for envelopes)
+    return float(out) if out.ndim == 0 else out
 
 
 def ittc_1978_roughness_penalty(
@@ -179,8 +191,20 @@ def ittc_1978_thrust_loss(
     ship_length: float = DEFAULT_SHIP_LENGTH_M,
     alpha: float = ITTC_DELTA_CF_ALPHA,
     cf0: float = DEFAULT_CF0,
+    c_total: float | None = None,
 ) -> float:
     """Estimate thrust loss fraction Delta T / T.
+
+    First-order ITTC-1978 propagation: with ``(1-t)`` unchanged, the required
+    thrust scales with the resistance, hence
+
+        Delta T / T = Delta C_f / C_denominator
+
+    where ``C_denominator`` is the resistance coefficient the penalty is added
+    to.  Passing the *total* resistance coefficient (``c_total``, supplied by the
+    consuming resistance/propulsion chain) is the correct usage; the fallback
+    ``cf0`` (friction only) is a conservative upper bound and over-predicts
+    strongly once ``Delta C_f`` reaches the same order as ``C_f0``.
 
     Parameters
     ----------
@@ -193,7 +217,10 @@ def ittc_1978_thrust_loss(
     alpha : float
         ITTC-1978 coefficient.
     cf0 : float
-        Clean-hull friction coefficient.
+        Friction coefficient fallback denominator (dimensionless).
+    c_total : float, optional
+        Total resistance coefficient supplied by the consumer; used as the
+        denominator when given.
 
     Returns
     -------
@@ -201,11 +228,11 @@ def ittc_1978_thrust_loss(
         Thrust loss fraction (dimensionless).
     """
     delta_cf = ittc_1978_roughness_penalty(k_s, k_s0, ship_length, alpha)
-    cf0 = float(cf0)
-    if cf0 <= 0.0:
-        raise ValueError("clean-hull friction coefficient must be positive")
+    denom = float(c_total) if c_total is not None else float(cf0)
+    if denom <= 0.0:
+        raise ValueError("denominator resistance coefficient must be positive")
 
-    return float(delta_cf / cf0)
+    return float(delta_cf / denom)
 
 
 def roughness_state(
@@ -293,3 +320,143 @@ def p50_p90_envelope(
         "delta_cf_p50": float(np.percentile(delta_cf_arr, 50)),
         "delta_cf_p90": float(np.percentile(delta_cf_arr, 90)),
     }
+
+
+# ---------------------------------------------------------------------------
+# ITTC-1978 reference formulation (canonical), used as the verification truth
+# ---------------------------------------------------------------------------
+#: Validity window of the ITTC-1978 roughness allowance in k_s / L
+ITTC_K_OVER_L_MIN = 1.0e-6
+ITTC_K_OVER_L_MAX = 1.0e-4
+
+
+def ittc_1978_delta_cf(
+    k_s: float,
+    ship_length: float,
+    strict: bool = False,
+) -> float:
+    """Canonical ITTC-1978 roughness allowance of one surface [dimensionless].
+
+    ``Delta C_f(k_s) = (105 * (k_s/L)**(1/3) - 0.64) * 1e-3``
+
+    Parameters
+    ----------
+    k_s : float
+        Equivalent sand-grain roughness [m].
+    ship_length : float
+        Ship length [m].
+    strict : bool
+        If True, raise when ``k_s / L`` falls outside the ITTC-1978 validity
+        window ``[1e-6, 1e-4]``.
+
+    Returns
+    -------
+    float
+        Roughness allowance (dimensionless).
+    """
+    k_s = float(k_s)
+    L = float(ship_length)
+    if k_s < 0.0:
+        raise ValueError("roughness must be non-negative")
+    if L <= 0.0:
+        raise ValueError("ship length must be positive")
+    ratio = k_s / L
+    if strict and not (ITTC_K_OVER_L_MIN <= ratio <= ITTC_K_OVER_L_MAX):
+        raise ValueError(
+            f"k_s/L={ratio:.3e} outside ITTC-1978 validity window "
+            f"[{ITTC_K_OVER_L_MIN:g}, {ITTC_K_OVER_L_MAX:g}]"
+        )
+    return float((105.0 * ratio ** (1.0 / 3.0) - 0.64) * 1e-3)
+
+
+def ittc_1957_cf(reynolds: float) -> float:
+    """ITTC-1957 friction coefficient ``C_F = 0.075 / (log10(Re) - 2)^2``."""
+    re = float(reynolds)
+    if re <= 1.0e4:
+        raise ValueError("Reynolds number must exceed 1e4 for ITTC-1957")
+    return float(0.075 / (np.log10(re) - 2.0) ** 2)
+
+
+def monte_carlo_envelope(
+    ship_length: float = DEFAULT_SHIP_LENGTH_M,
+    duration_s: float = 6 * 3600.0,
+    n_steps: int = 400,
+    n_samples: int = 200,
+    seed: int = 20261110,
+    undercooling_k_range=(0.5, 3.0),
+    u_star_range=(0.01, 0.06),
+    c_f_range=(1e-6, 1e-4),
+    eta_stick_range=(0.3, 1.0),
+    t_water_k: float = 273.15 + 0.2,
+    k_s0: float = DEFAULT_HULL_ROUGHNESS_M,
+    alpha_ice: float = ALPHA_ICE,
+    beta_ice: float = BETA_ICE,
+    alpha_ittc: float = ITTC_DELTA_CF_ALPHA,
+    cf0: float = DEFAULT_CF0,
+    method: str = "stefan_split",
+) -> dict:
+    """Time-resolved P50/P90 envelope of ``h_ice``, ``k_s`` and ``Delta C_f``.
+
+    Uncertainty of the driving state (undercooling, near-wall shear, frazil
+    concentration, sticking efficiency) is propagated through the growth ODE by
+    Monte Carlo.  Unlike :func:`p50_p90_envelope` — which only percentiles an
+    already-sampled ``h_ice`` array — this returns an *envelope in time*, which is
+    what the resistance/propulsion chain needs to bound an ice accretion event.
+
+    All parameters are drawn independently and uniformly from the given ranges
+    (``c_f`` log-uniform, because frazil concentrations span decades).
+
+    Returns
+    -------
+    dict
+        ``t_s`` (list), ``h_ice_p50/p90``, ``k_s_p50/p90``, ``delta_cf_p50/p90``
+        (lists, same length as ``t_s``), plus scalar ``h_ice_final_p50/p90`` etc.
+    """
+    from .growth import solve_growth  # local import: avoids import cycle
+
+    rng = np.random.default_rng(int(seed))
+    n_samples = int(n_samples)
+    if n_samples < 10:
+        raise ValueError("n_samples must be >= 10 for a meaningful envelope")
+
+    dt = np.log(c_f_range[1] / c_f_range[0])
+    h_curves = np.zeros((n_samples, int(n_steps) + 1))
+    for i in range(n_samples):
+        dT = rng.uniform(*undercooling_k_range)
+        u_s = rng.uniform(*u_star_range)
+        c_f = c_f_range[0] * np.exp(rng.uniform(0.0, dt))
+        eta = rng.uniform(*eta_stick_range)
+        res = solve_growth(
+            undercooling_k=float(dT),
+            u_star=float(u_s),
+            c_f=float(c_f),
+            t_max=float(duration_s),
+            eta_stick=float(eta),
+            n_steps=int(n_steps),
+            t_water_k=float(t_water_k),
+            method=method,
+        )
+        h_curves[i] = res.h_ice
+
+    t = np.linspace(0.0, float(duration_s), int(n_steps) + 1)
+    k_curves = k_s0 + alpha_ice * h_curves**beta_ice
+    dcf_curves = alpha_ittc * (
+        (k_curves / ship_length) ** (1.0 / 3.0) - (k_s0 / ship_length) ** (1.0 / 3.0)
+    )
+
+    def _b(prefix, arr):
+        return {
+            f"{prefix}_p50": np.percentile(arr, 50, axis=0).tolist(),
+            f"{prefix}_p90": np.percentile(arr, 90, axis=0).tolist(),
+        }
+
+    out = {"t_s": t.tolist(), "n_samples": n_samples, "seed": int(seed),
+           "method": method, "ship_length_m": float(ship_length)}
+    out.update(_b("h_ice", h_curves))
+    out.update(_b("k_s", k_curves))
+    out.update(_b("delta_cf", dcf_curves))
+    out["h_ice_final_p50"] = float(np.percentile(h_curves[:, -1], 50))
+    out["h_ice_final_p90"] = float(np.percentile(h_curves[:, -1], 90))
+    out["delta_t_over_t_final_p50"] = float(np.percentile(dcf_curves[:, -1], 50) / cf0)
+    out["delta_t_over_t_final_p90"] = float(np.percentile(dcf_curves[:, -1], 90) / cf0)
+    return out

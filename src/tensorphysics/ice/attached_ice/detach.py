@@ -227,3 +227,148 @@ def detachment_state(
         is_detached=is_detached,
         safety_factor=sf,
     )
+
+
+def detachment_limited_thickness(
+    u_star: float,
+    tau_bond: float = DEFAULT_BOND_STRENGTH_PA,
+    h_ref: float = H_REF_M,
+    rho_water: float = RHO_WATER,
+) -> float:
+    """Largest thickness whose adhesive strength still carries the wall shear.
+
+    Inversion of ``tau_bond / (1 + h/h_ref) = rho_water u_star**2``::
+
+        h_detach = h_ref * (tau_bond / (rho_water u_star**2) - 1)
+
+    Returns ``0.0`` when the shear already exceeds the zero-thickness bond
+    strength (nothing can adhere) and ``inf`` for a stress-free wall.
+    """
+    u_s = float(u_star)
+    if u_s < 0.0:
+        raise ValueError("friction velocity must be non-negative")
+    tau_wall = wall_shear_stress(u_s, rho_water)
+    if tau_wall <= 0.0:
+        return float("inf")
+    ratio = float(tau_bond) / tau_wall
+    return float(h_ref * (ratio - 1.0)) if ratio > 1.0 else 0.0
+
+
+def detachment_regime(
+    u_star: float,
+    tau_bond: float = DEFAULT_BOND_STRENGTH_PA,
+    h_ice: float = 0.0,
+    h_ref: float = H_REF_M,
+    rho_water: float = RHO_WATER,
+    cf: float = 0.0015,
+) -> dict:
+    """Reachability diagnostic for shear-driven detachment.
+
+    Shear stripping only matters when the achievable wall shear is comparable to
+    the ice/steel bond strength.  With Frederking-type bond strengths
+    (order 1e5 Pa) and hull-boundary-layer shear (order 1e1 Pa at
+    ``u_star = 0.1 m/s``) the two differ by four orders of magnitude, so the
+    stripping branch of the ODE is inert under ship-scale forcing and the
+    physically active removal mechanism is melting — this helper makes that
+    statement auditable instead of implicit.
+
+    The mean-flow speed corresponding to ``u_star`` uses the standard
+    friction-velocity relation ``u_star = U * sqrt(cf/2)``.
+
+    Returns
+    -------
+    dict
+        ``tau_wall_Pa``, ``tau_bond_Pa``, ``margin`` (= tau_bond/tau_wall),
+        ``shear_detachment_active`` (margin <= 1), ``u_star_crit_m_s`` (from
+        :func:`detachment_threshold_velocity`), ``speed_crit_m_s`` and
+        ``speed_at_state_m_s``.
+    """
+    tau_wall = wall_shear_stress(u_star, rho_water)
+    tau_adh = adhesive_strength(h_ice, tau_bond, h_ref)
+    margin = tau_bond / tau_wall if tau_wall > 0.0 else float("inf")
+    u_crit = detachment_threshold_velocity(tau_bond, h_ice, rho_water, h_ref)
+    c = float(cf)
+    if c <= 0.0:
+        raise ValueError("friction coefficient must be positive")
+    return {
+        "u_star_m_s": float(u_star),
+        "tau_wall_Pa": tau_wall,
+        "tau_bond_Pa": float(tau_bond),
+        "tau_adhesive_Pa": tau_adh,
+        "margin": margin,
+        "shear_detachment_active": bool(tau_wall > tau_adh),
+        "u_star_crit_m_s": u_crit,
+        "speed_crit_m_s": u_crit / np.sqrt(c / 2.0),
+        "speed_at_state_m_s": float(u_star) / np.sqrt(c / 2.0),
+    }
+
+
+def friction_velocity_from_speed(speed_m_s: float, cf: float = 0.0015) -> float:
+    """``u_star = U * sqrt(cf/2)`` — mean-flow speed to friction velocity."""
+    U = float(speed_m_s)
+    c = float(cf)
+    if U < 0.0:
+        raise ValueError("speed must be non-negative")
+    if c <= 0.0:
+        raise ValueError("friction coefficient must be positive")
+    return float(U * np.sqrt(c / 2.0))
+
+
+def speed_from_friction_velocity(u_star: float, cf: float = 0.0015) -> float:
+    """``U = u_star / sqrt(cf/2)`` — inverse of :func:`friction_velocity_from_speed`."""
+    u_s = float(u_star)
+    c = float(cf)
+    if u_s < 0.0:
+        raise ValueError("friction velocity must be non-negative")
+    if c <= 0.0:
+        raise ValueError("friction coefficient must be positive")
+    return float(u_s / np.sqrt(c / 2.0))
+
+
+def bond_strength_from_adfreeze_pa(
+    ice_temperature_c: float,
+    contact_time_s: float = 1.0e4,
+    salinity_gkg: float = 0.0,
+    roughness_um: Optional[float] = None,
+    gap_scale_m: Optional[float] = None,
+) -> float:
+    """Bond strength [Pa] from the Frederking (1984) adfreeze model [MPa].
+
+    Single nerve point between the two ice modules: ``tensorphysics.ice.adfreeze``
+    returns MPa, the attached-ice detachment model works in Pa.  Doing the
+    conversion here (and only here) means the two modules cannot drift apart in
+    units — criterion C6.
+
+    Parameters
+    ----------
+    ice_temperature_c : float
+        Joint / ice interface temperature [degC].
+    contact_time_s : float
+        Time the joint has been frozen [s].
+    salinity_gkg : float
+        Ice bulk salinity [g/kg], 0 for freshwater.
+    roughness_um : float, optional
+        Surface arithmetic mean roughness Ra [um]; ``None`` keeps the adfreeze
+        module default (single source of truth — no duplicated constants here).
+    gap_scale_m : float, optional
+        Water-filled gap width [m]; ``None`` keeps the adfreeze default.
+
+    Returns
+    -------
+    float
+        Adfreeze shear strength [Pa].
+    """
+    from ..adfreeze import adfreeze_strength  # local import: avoids an import cycle
+
+    from ..adfreeze import DEFAULT_GAP_SCALE_M, DEFAULT_ROUGHNESS_UM
+
+    tau_mpa = adfreeze_strength(
+        ice_temperature_c=ice_temperature_c,
+        contact_time_s=contact_time_s,
+        salinity_gkg=salinity_gkg,
+        roughness_um=DEFAULT_ROUGHNESS_UM if roughness_um is None else roughness_um,
+        gap_scale_m=DEFAULT_GAP_SCALE_M if gap_scale_m is None else gap_scale_m,
+    )
+    if tau_mpa < 0.0:
+        raise ValueError("adfreeze model returned a negative strength")
+    return float(tau_mpa * 1.0e6)
