@@ -20,6 +20,14 @@ to answer it reproducibly:
                       whipping bookkeeping, rainflow commutability
 ``pipeline``          the node driver: runs every machine criterion and returns a
                       JSON-serialisable results dictionary
+``bimodal``           (P82W5-N09) band-split bimodal spectral closures: the
+                      two-band riding damage ``D = D_rider + kappa D_carrier``,
+                      the calibrated ``kappa(r,N)`` closure, the decidable
+                      sum-rule envelope, and the spectral-method benchmark
+``whipping_regime``   (P82W5-N09) whipping-share calibers over a declared
+                      loading plane, with the regime boundary of the m5528
+                      ``< 8 %`` claim and the force-jump diagnostic
+``w5n09``             (P82W5-N09) the node driver: criteria (a)-(e) in one JSON
 
 Everything numerical that involves randomness is seeded; ``pipeline.run_study``
 records seeds, record lengths, sampling rates and the git commit so that the
@@ -65,7 +73,36 @@ from .dem import (
     load_statistics,
     scaled_drift_rate,
 )
+from .bimodal import (
+    N_SEPARATED,
+    BandSplit,
+    KappaClosure,
+    band_case,
+    band_split,
+    bimodal_benchmark,
+    equal_damage_amplitude_ratio,
+    fit_kappa_closure,
+    kappa_calibration_grid,
+    riding_kappa_convolution,
+    sum_rule_envelope,
+    two_band_riding_damage,
+)
 from .pipeline import run_study, summarise_criteria
+from .w5n09 import (
+    CRITERION_A_RATIOS,
+    SUM_RULE_BAND,
+    commutation_check,
+    run_w5n09_study,
+    sum_rule_scan,
+)
+from .whipping_regime import (
+    JUMP_FRACTION_MAX,
+    SHARE_THRESHOLD,
+    THETA_MIN,
+    regime_consistency,
+    regime_plane,
+    whipping_regime_scan,
+)
 from .rainflow_stream import (
     StreamingRainflow,
     damage_from_cycles,
@@ -99,6 +136,14 @@ __all__ = [
     "CALIBRATED_M5528", "IceContactParams", "generate_ice_force", "load_statistics",
     "scaled_drift_rate",
     "run_study", "summarise_criteria",
+    "N_SEPARATED", "BandSplit", "KappaClosure", "band_case", "band_split",
+    "bimodal_benchmark", "equal_damage_amplitude_ratio", "fit_kappa_closure",
+    "kappa_calibration_grid", "riding_kappa_convolution", "sum_rule_envelope",
+    "two_band_riding_damage",
+    "CRITERION_A_RATIOS", "SUM_RULE_BAND", "commutation_check", "run_w5n09_study",
+    "sum_rule_scan",
+    "JUMP_FRACTION_MAX", "SHARE_THRESHOLD", "THETA_MIN", "regime_consistency",
+    "regime_plane", "whipping_regime_scan",
     "StreamingRainflow", "damage_from_cycles", "equivalent_stress_range",
     "rainflow_cycles", "turning_points",
     "bimodal_f", "jonswap_f", "jonswap_omega", "normalised_psd", "spectral_moments",
