@@ -33,8 +33,15 @@ T_FREEZE_FW = 273.15     # K, freezing point of freshwater
 T_FREEZE_SW = 271.35     # K, freezing point of seawater (~ -1.8 degC)
 GRAVITY = 9.81           # m/s^2
 
-# ITTC-1978 roughness allowance coefficient
-ITTC_DELTA_CF_ALPHA = 0.004  # dimensionless, per ITTC-1978 recommendation
+# ITTC-1978 roughness allowance coefficient.
+#
+# The ITTC-1978 Performance Prediction Method gives the roughness allowance
+#     dCf(k_s) = (105 * (k_s/L)**(1/3) - 0.64) * 1e-3
+# i.e. a leading coefficient of 105e-3 = 0.105 in the (k_s/L)**(1/3) term.
+# The module returns the *increment* between the roughened and the clean hull,
+# for which the constant -0.64e-3 cancels, leaving
+#     dCf = 0.105 * [ (k_s/L)**(1/3) - (k_s0/L)**(1/3) ].
+ITTC_DELTA_CF_ALPHA = 0.105  # m**(1/3)-form leading coefficient of ITTC-1978
 
 # Default frazil particle diameter (Stokes regime)
 DEFAULT_FRAZIL_DIAMETER_M = 1.0e-4  # 0.1 mm
@@ -64,22 +71,36 @@ from .growth import (
     IceGrowthODE,
     solve_growth,
     stefan_analytic,
+    stefan_with_initial,
+    equilibrium_thickness,
     energy_residual,
     GrowthResult,
+    CF_REF,
+    PR_T,
 )
 from .detach import (
     wall_shear_stress,
     adhesive_strength,
     detachment_threshold_velocity,
+    detachment_limited_thickness,
+    detachment_regime,
     detachment_state,
+    friction_velocity_from_speed,
+    speed_from_friction_velocity,
+    bond_strength_from_adfreeze_pa,
     DetachmentState,
+    H_REF_M,
 )
+from .handoff import build_handoff, to_json, SCHEMA as HANDOFF_SCHEMA
 from .roughness import (
     equivalent_sand_roughness,
     ittc_1978_roughness_penalty,
+    ittc_1978_delta_cf,
+    ittc_1957_cf,
     ittc_1978_thrust_loss,
     roughness_state,
     p50_p90_envelope,
+    monte_carlo_envelope,
     RoughnessState,
 )
 
@@ -95,13 +116,16 @@ __all__ = [
     "frazil_impact_flux", "deposition_velocity", "settling_velocity_stokes",
     "FrazilFluxState",
     # growth
-    "IceGrowthODE", "solve_growth", "stefan_analytic", "energy_residual",
-    "GrowthResult",
+    "IceGrowthODE", "solve_growth", "stefan_analytic", "stefan_with_initial",
+    "equilibrium_thickness", "energy_residual", "GrowthResult", "CF_REF", "PR_T",
     # detach
     "wall_shear_stress", "adhesive_strength", "detachment_threshold_velocity",
-    "detachment_state", "DetachmentState",
+    "detachment_limited_thickness", "detachment_regime", "detachment_state",
+    "friction_velocity_from_speed", "speed_from_friction_velocity",
+    "bond_strength_from_adfreeze_pa", "DetachmentState", "H_REF_M",
     # roughness
     "equivalent_sand_roughness", "ittc_1978_roughness_penalty",
-    "ittc_1978_thrust_loss", "roughness_state", "p50_p90_envelope",
+    "ittc_1978_delta_cf", "ittc_1957_cf", "ittc_1978_thrust_loss",
+    "roughness_state", "p50_p90_envelope", "monte_carlo_envelope",
     "RoughnessState",
 ]
