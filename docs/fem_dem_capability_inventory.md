@@ -14,6 +14,7 @@
 | cohesive.py | 两节点 cohesive 界面 (Mode-I) | ✅有测试 | PASS | test_cohesive.py (6 tests) | GAP-FEM-3D-COHESIVE |
 | mixed_mode_cohesive.py | BK 混合模式准则 | ✅有测试 | PASS | test_mixed_mode_cohesive.py | GAP-FEM-P4 |
 | ice_sheet.py | 冰板 (Winkler 占位) | ✅Pasternak 已闭环 (2026-11-10) | PASS | TensorPhysics `ice_sheet/pasternak_foundation.py` + `kirchhoff_plate_fem.py` (`foundation_model='pasternak'`, `g_p`): FEM vs Pasternak/Vlasov Green 函数 r=0 5e-6 / RMS 1.9 %; Winkler 退化 0 差异; 32 pytest; docs/reports/p54w3_pasternak_foundation_report.md | GAP-FEM-P0 **已关闭** |
+| elastic_foundation (TensorPhysics) | 弹性地基梁/板解析验证面 | ✅验证面成熟 (2026-11-10) | PASS | `src/tensorphysics/elastic_foundation/` (beams: Hetényi / Selvadurai Pasternak 复根统一解 + Hermite FEM; plates: Kelvin kei 闭式 + Hankel 积分复核 + 轴对称 Kirchhoff 环单元 FEM + 有限域精确解): 梁 FEM 内部 L∞ 3.5e-6 / Pasternak 7.9e-5, 板 FEM 斑载剖面 L2 2.5e-7, 弯矩 0.6 %, 边界效应指数 1.35 (≈√2), 标度律指数 0.75 (FEM 反算); 27 pytest; 15 机器判据全 PASS; docs/reports/p270w1_n09_elastic_foundation.md | GAP-FEM-P0 **验证面补齐**（缺口本体由 p54w3 关闭） |
 | dynamics.py | Newmark-β 隐式瞬态 | ✅有测试 | PASS | test_beam_dynamics.py | — |
 | explicit_dynamics.py | 中心差分显式 | ✅有测试 | PASS | test_explicit_dynamics.py | — |
 | coupled_hull.py | 线性船体接收器 | ⚠️间接 | 间接 | physical_accuracy=False | GAP-FEM-P3 |
