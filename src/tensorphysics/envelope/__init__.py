@@ -44,8 +44,13 @@ Semantics that are enforced, not assumed
   separately, so a continuous boundary is never presented as an attainable
   setting.
 * **every check is falsifiable**: monotonicity, convexity, boundary order,
-  empty-window semantics and window structure each return pass/fail with the
-  numbers behind the verdict.
+  empty-window semantics, resolution and window structure each return pass/fail
+  with the numbers behind the verdict.
+* **the probe scale is a number**: a segment's verdict comes from probes at a
+  declared spacing (:mod:`~tensorphysics.envelope.subgrid`), not from a single
+  midpoint sample.  A disagreement between probes is subdivided until it is
+  settled; a span that cannot be settled is reported as unresolved and fails the
+  ``resolution`` check instead of being averaged into a window.
 
 Quick start::
 
@@ -114,6 +119,12 @@ from .marching import (
     window_1d,
 )
 from .roots import RootResult, bisect, brent, bracket, refine_bracket
+from .subgrid import (
+    ResolutionLedger,
+    ResolutionPolicy,
+    Span,
+    check_span_partition,
+)
 
 __all__ = [
     "AnalyticReference",
@@ -170,6 +181,10 @@ __all__ = [
     "order_study",
     "read_artifact",
     "refine_bracket",
+    "ResolutionLedger",
+    "ResolutionPolicy",
+    "Span",
+    "check_span_partition",
     "scan_plane",
     "snap_lattice",
     "symmetric_eigenvalues",
