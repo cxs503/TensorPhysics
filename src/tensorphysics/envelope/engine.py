@@ -34,6 +34,7 @@ from .contracts import (
     check_boundary_order,
     check_component_expectation,
     check_convexity,
+    check_feature_resolution,
     check_infeasible_expectation,
     check_infeasible_semantics,
     check_interval_expectation,
@@ -96,6 +97,7 @@ class WindowResult:
     source_digest: str
     grid_check: PlaneScan | None = None
     boundary_error: float | None = None
+    resolution: Any = None
 
     @property
     def ok(self) -> bool:
@@ -120,6 +122,7 @@ class WindowResult:
             "elapsed_s": self.elapsed_s,
             "source_digest": self.source_digest,
             "boundary_error": self.boundary_error,
+            "resolution": self.resolution,
         }
         if self.grid_check is not None:
             payload["grid_check"] = {
@@ -171,6 +174,7 @@ class EnvelopeEngine:
         # a condition may declare its own structure/active-set expectations; an
         # explicitly supplied policy always wins, so a caller can test a variant
         policy = self.policy if self._explicit_policy else self.case.policy_for(condition)
+        probing = policy.resolution_policy()
         axes = self._axes_for_mode()
         base = self.case.base_params(condition)
         contracts: list[ContractReport] = []
@@ -186,6 +190,7 @@ class EnvelopeEngine:
                 n=n_scan,
                 counter=counter,
                 verify=verify,
+                policy=probing,
             )
             intervals = window.intervals
             components: Tuple[Component, ...] = ()
@@ -255,6 +260,7 @@ class EnvelopeEngine:
                 n_lines=n_lines,
                 n_scan=n_scan,
                 counter=counter,
+                policy=probing,
             )
             intervals = ()
             components = window_plane.components
@@ -327,6 +333,14 @@ class EnvelopeEngine:
                     )
                 )
             )
+            ledgers = (
+                (window.resolution,)
+                if self.case.mode == "interval"
+                else (window_plane.resolution,)
+            )
+            resolution_check = check_feature_resolution(ledgers, policy)
+            if resolution_check is not None:
+                contracts.append(ContractReport((resolution_check,)))
         elapsed = time.perf_counter() - started
         return WindowResult(
             case_id=self.case.case_id,
@@ -347,6 +361,11 @@ class EnvelopeEngine:
             source_digest=self.case.source_digest,
             grid_check=grid_check,
             boundary_error=boundary_error,
+            resolution=(
+                window.resolution.to_dict()
+                if self.case.mode == "interval" and window.resolution is not None
+                else (window_plane.resolution if self.case.mode != "interval" else None)
+            ),
         )
 
 

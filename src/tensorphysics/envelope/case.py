@@ -48,6 +48,7 @@ from dataclasses import dataclass, field, replace
 from typing import Any, Mapping, Tuple
 
 from .constraints import Constraint, ConstraintContract, ConstraintKind, ConstraintSet, Lattice
+from .subgrid import ResolutionPolicy
 from .expressions import ExpressionError, compile_expression, free_names, validate_expression
 
 __all__ = [
@@ -129,6 +130,7 @@ class ContractPolicy:
     expect_intervals: int | None = None
     expect_infeasible: bool | None = None
     expect_active: Mapping[str, str] = field(default_factory=dict)
+    resolution: Mapping[str, Any] = field(default_factory=dict)
 
     def with_overrides(self, expectation: Mapping[str, Any]) -> "ContractPolicy":
         """Apply a condition-level expectation block on top of the case policy."""
@@ -157,7 +159,13 @@ class ContractPolicy:
             "expect_intervals": self.expect_intervals,
             "expect_infeasible": self.expect_infeasible,
             "expect_active": dict(self.expect_active),
+            "resolution": dict(self.resolution),
         }
+
+    def resolution_policy(self) -> "ResolutionPolicy":
+        """Probing policy declared by the case (defaults when nothing is declared)."""
+
+        return ResolutionPolicy.from_spec(self.resolution or None)
 
 
 @dataclass(frozen=True)
@@ -380,6 +388,8 @@ def _parse_contract(spec: Any, where: str) -> ContractPolicy:
     infeasible = expect.get("infeasible")
     active = expect.get("active", {})
     try:
+        resolution = dict(spec.get("resolution", {}) or {})
+        ResolutionPolicy.from_spec(resolution or None)  # validation only
         return ContractPolicy(
             min_boundary_order=float(spec.get("min_boundary_order", 1.9)),
             area_rel_tol=float(spec.get("area_rel_tol", 1e-3)),
@@ -389,6 +399,7 @@ def _parse_contract(spec: Any, where: str) -> ContractPolicy:
             expect_intervals=intervals,
             expect_infeasible=infeasible,
             expect_active=dict(active),
+            resolution=resolution,
         )
     except (TypeError, ValueError) as exc:
         raise EnvelopeConfigError(f"{where}: {exc}") from exc
