@@ -27,21 +27,40 @@ def _find_peaks_valleys(signal: np.ndarray) -> np.ndarray:
     """Extract alternating peaks and valleys from a signal.
 
     Removes monotonic segments, keeping only local extrema.
+
+    Plateaus (runs of exactly equal samples, e.g. the zero gaps between
+    intermittent ice-crushing pulses or a clipped signal) are collapsed to a
+    single sample *before* the sign change test.  Without that step a plateau
+    hides the extremum next to it - ``diff`` is zero inside the plateau, so
+    ``diff[i] * diff[i-1] < 0`` never fires - and extrema are silently lost,
+    which under-counts cycles.  For signals without repeats the result is
+    bit-identical to the plain sign-change scan.
     """
     if len(signal) < 3:
         return signal.copy()
 
-    # Compute differences
-    diff = np.diff(signal)
+    # Collapse plateaus: keep the first sample of every run of equal values.
+    # The last sample is appended only when it ends a non-constant step; if the
+    # record ends *inside* a plateau the plateau's first sample already
+    # represents it and appending another copy would create a spurious
+    # zero-range residue cycle.
+    changed = np.nonzero(np.diff(signal) != 0.0)[0] + 1
+    keep = np.concatenate(([0], changed))
+    if keep[-1] != len(signal) - 1 and signal[-1] != signal[keep[-1]]:
+        keep = np.append(keep, len(signal) - 1)
+    compressed = signal[keep]
+    if len(compressed) < 3:
+        return compressed
 
     # Find sign changes (peaks and valleys)
+    diff = np.diff(compressed)
     extrema_indices = [0]  # always include first point
     for i in range(1, len(diff)):
         if diff[i] * diff[i - 1] < 0:
             extrema_indices.append(i)
-    extrema_indices.append(len(signal) - 1)  # always include last point
+    extrema_indices.append(len(compressed) - 1)  # always include last point
 
-    return signal[extrema_indices]
+    return compressed[extrema_indices]
 
 
 def rainflow_counting(signal: np.ndarray) -> RainflowResult:
