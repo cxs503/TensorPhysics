@@ -1,0 +1,421 @@
+{
+ "blocker_count": 17,
+ "blockers": [
+  {
+   "blocker_id": "caliber:derived-7814",
+   "fail_keys": [
+    "FR-4716e8bd3645bda1"
+   ],
+   "kind": "numerical_caliber_change",
+   "note": "rule-derived from attribution=numerical_caliber (basis=report_summary:残差)",
+   "provenance": {
+    "FR-4716e8bd3645bda1": {
+     "basis": "rule:attribution=numerical_caliber;report_summary:残差",
+     "line_no": 211,
+     "mission_id": 7814,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "caliber:derived-9824",
+   "fail_keys": [
+    "FR-1188a9b281e5b30a",
+    "FR-3b6bddc2ee9ed0a3",
+    "FR-78857c67c078dddc",
+    "FR-830671fa14c53714"
+   ],
+   "kind": "numerical_caliber_change",
+   "note": "rule-derived from attribution=numerical_caliber (basis=report_summary:收敛)",
+   "provenance": {
+    "FR-1188a9b281e5b30a": {
+     "basis": "rule:attribution=numerical_caliber;report_summary:收敛",
+     "line_no": 123,
+     "mission_id": 9824,
+     "mode": "rule"
+    },
+    "FR-3b6bddc2ee9ed0a3": {
+     "basis": "rule:attribution=numerical_caliber;report_summary:收敛",
+     "line_no": 124,
+     "mission_id": 9824,
+     "mode": "rule"
+    },
+    "FR-78857c67c078dddc": {
+     "basis": "rule:attribution=numerical_caliber;report_summary:收敛",
+     "line_no": 125,
+     "mission_id": 9824,
+     "mode": "rule"
+    },
+    "FR-830671fa14c53714": {
+     "basis": "rule:attribution=numerical_caliber;row:收敛",
+     "line_no": 126,
+     "mission_id": 9824,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "caliber:derived-9860",
+   "fail_keys": [
+    "FR-1f82de10d6b78841"
+   ],
+   "kind": "numerical_caliber_change",
+   "note": "rule-derived from attribution=numerical_caliber (basis=report_summary:残差)",
+   "provenance": {
+    "FR-1f82de10d6b78841": {
+     "basis": "rule:attribution=numerical_caliber;report_summary:残差",
+     "line_no": 144,
+     "mission_id": 9860,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "caliber:derived-9871",
+   "fail_keys": [
+    "FR-1508e6b219537f73"
+   ],
+   "kind": "numerical_caliber_change",
+   "note": "rule-derived from attribution=numerical_caliber (basis=row:converge)",
+   "provenance": {
+    "FR-1508e6b219537f73": {
+     "basis": "rule:attribution=numerical_caliber;row:converge",
+     "line_no": 62,
+     "mission_id": 9871,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "caliber:fs-discretisation-sign",
+   "fail_keys": [
+    "FR-90bd2a6b95d93d77",
+    "FR-84d6e999d7fb01e5",
+    "FR-3583aef3d0fed859",
+    "FR-f682748ea4f02635"
+   ],
+   "kind": "numerical_caliber_change",
+   "note": "truncated-domain free-surface solve does not converge: the 3-point backward difference has Im k > 0 and damps the physical k = k0 wave; needs an upwind/panel caliber revision.",
+   "provenance": {
+    "FR-3583aef3d0fed859": {
+     "basis": "curated:report 9181 verdict table",
+     "line_no": 70,
+     "mission_id": 7827,
+     "mode": "curated"
+    },
+    "FR-84d6e999d7fb01e5": {
+     "basis": "curated:report 9181 summary",
+     "line_no": 68,
+     "mission_id": 7827,
+     "mode": "curated"
+    },
+    "FR-90bd2a6b95d93d77": {
+     "basis": "curated:report 9181 summary (discrete sign analysis) + section on f_fs_study",
+     "line_no": 65,
+     "mission_id": 7827,
+     "mode": "curated"
+    },
+    "FR-f682748ea4f02635": {
+     "basis": "curated:report 9181 error table",
+     "line_no": 83,
+     "mission_id": 7827,
+     "mode": "curated"
+    }
+   }
+  },
+  {
+   "blocker_id": "caliber:response-bandwidth",
+   "fail_keys": [
+    "FR-12ab2c5f2336a4fb"
+   ],
+   "kind": "numerical_caliber_change",
+   "note": "5% exceedance band is only attainable for epsilon <= 0.05; realistic seas sit at 0.09-0.27 because the platform heave RAO carries an excitation notch, so the criterion needs a bandwidth-aware caliber revision, not a code fix.",
+   "provenance": {
+    "FR-12ab2c5f2336a4fb": {
+     "basis": "curated:report 9211 summary + section 3.5 bandwidth sweep",
+     "line_no": 180,
+     "mission_id": 7813,
+     "mode": "curated"
+    }
+   }
+  },
+  {
+   "blocker_id": "capability:derived-gap-7814",
+   "fail_keys": [
+    "FR-173e9fb3e9f7c34c"
+   ],
+   "kind": "capability_slug",
+   "note": "rule-derived from attribution=capability_gap (basis=row:未实现)",
+   "provenance": {
+    "FR-173e9fb3e9f7c34c": {
+     "basis": "rule:attribution=capability_gap;row:未实现",
+     "line_no": 193,
+     "mission_id": 7814,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "capability:derived-model-form-7814",
+   "fail_keys": [
+    "FR-e52745493953b7eb"
+   ],
+   "kind": "capability_slug",
+   "note": "rule-derived from attribution=model_form (basis=row:经验)",
+   "provenance": {
+    "FR-e52745493953b7eb": {
+     "basis": "rule:attribution=model_form;row:经验",
+     "line_no": 212,
+     "mission_id": 7814,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "capability:derived-model-form-9801",
+   "fail_keys": [
+    "FR-9398dcd362fd218a",
+    "FR-289618513bf7c6a1"
+   ],
+   "kind": "capability_slug",
+   "note": "rule-derived from attribution=model_form (basis=report_summary:系数)",
+   "provenance": {
+    "FR-289618513bf7c6a1": {
+     "basis": "rule:attribution=model_form;report_summary:系数",
+     "line_no": 105,
+     "mission_id": 9801,
+     "mode": "rule"
+    },
+    "FR-9398dcd362fd218a": {
+     "basis": "rule:attribution=model_form;report_summary:系数",
+     "line_no": 72,
+     "mission_id": 9801,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "capability:derived-model-form-9840",
+   "fail_keys": [
+    "FR-1ed2ddff8faaf5dd",
+    "FR-b8a621b566da22ee",
+    "FR-c035f21898ebc118",
+    "FR-fea2ff333622d133",
+    "FR-735368bf694db959",
+    "FR-7a73fc4426c443e9",
+    "FR-0a4765ee2dbd8a96",
+    "FR-05792c9e369b9697"
+   ],
+   "kind": "capability_slug",
+   "note": "rule-derived from attribution=model_form (basis=report_summary:回归)",
+   "provenance": {
+    "FR-05792c9e369b9697": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 133,
+     "mission_id": 9840,
+     "mode": "rule"
+    },
+    "FR-0a4765ee2dbd8a96": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 66,
+     "mission_id": 9840,
+     "mode": "rule"
+    },
+    "FR-1ed2ddff8faaf5dd": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 50,
+     "mission_id": 9840,
+     "mode": "rule"
+    },
+    "FR-735368bf694db959": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 64,
+     "mission_id": 9840,
+     "mode": "rule"
+    },
+    "FR-7a73fc4426c443e9": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 65,
+     "mission_id": 9840,
+     "mode": "rule"
+    },
+    "FR-b8a621b566da22ee": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 51,
+     "mission_id": 9840,
+     "mode": "rule"
+    },
+    "FR-c035f21898ebc118": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 52,
+     "mission_id": 9840,
+     "mode": "rule"
+    },
+    "FR-fea2ff333622d133": {
+     "basis": "rule:attribution=model_form;report_summary:回归",
+     "line_no": 63,
+     "mission_id": 9840,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "capability:maneuvering-derivative-uncertainty",
+   "fail_keys": [
+    "FR-20237c8983a52e30",
+    "FR-8e0eb67d5829100f"
+   ],
+   "kind": "capability_slug",
+   "note": "turn diameter stays -61.2% off the anchor; sensitivity table shows the derivative/coefficient bandwidth reaches +-40.1%, so the missing capability is a derivative-source uncertainty band, not a tuning constant.",
+   "provenance": {
+    "FR-20237c8983a52e30": {
+     "basis": "curated:report 9178 sections 5-6 (sensitivity + reachable D/L band)",
+     "line_no": 141,
+     "mission_id": 7815,
+     "mode": "curated"
+    },
+    "FR-8e0eb67d5829100f": {
+     "basis": "curated:report 9178 section 6 uncertainty band",
+     "line_no": 147,
+     "mission_id": 7815,
+     "mode": "curated"
+    }
+   }
+  },
+  {
+   "blocker_id": "capability:reference-anchor",
+   "fail_keys": [
+    "FR-ae2bcce68475d308",
+    "FR-49054d6230d0b7f0",
+    "FR-4639c02ed8b5ed10",
+    "FR-429a19f186e2ec25",
+    "FR-1b84816372416c4a"
+   ],
+   "kind": "capability_slug",
+   "note": "rule-derived from attribution=missing_reference (basis=row:文献)",
+   "provenance": {
+    "FR-1b84816372416c4a": {
+     "basis": "rule:attribution=missing_reference;row:WITHHELD",
+     "line_no": 214,
+     "mission_id": 7814,
+     "mode": "rule"
+    },
+    "FR-429a19f186e2ec25": {
+     "basis": "rule:attribution=missing_reference;row:文献",
+     "line_no": 158,
+     "mission_id": 7814,
+     "mode": "rule"
+    },
+    "FR-4639c02ed8b5ed10": {
+     "basis": "rule:attribution=missing_reference;row:文献",
+     "line_no": 157,
+     "mission_id": 7814,
+     "mode": "rule"
+    },
+    "FR-49054d6230d0b7f0": {
+     "basis": "rule:attribution=missing_reference;row:文献",
+     "line_no": 156,
+     "mission_id": 7814,
+     "mode": "rule"
+    },
+    "FR-ae2bcce68475d308": {
+     "basis": "rule:attribution=missing_reference;row:文献",
+     "line_no": 155,
+     "mission_id": 7814,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "mission:6008",
+   "fail_keys": [
+    "FR-8c6bb4d80c5fde26",
+    "FR-e18b9172d4d79c35"
+   ],
+   "kind": "upstream_mission",
+   "note": "advance A_D/L is 73.6% off while the anchor set is not self-consistent; the upstream baseline implementation must be corrected before this criterion can be re-measured.",
+   "provenance": {
+    "FR-8c6bb4d80c5fde26": {
+     "basis": "curated:report 9178 error table note '(anchor not self-consistent)'",
+     "line_no": 143,
+     "mission_id": 7815,
+     "mode": "curated"
+    },
+    "FR-e18b9172d4d79c35": {
+     "basis": "curated:report 9178 error table note '(anchor not self-consistent)'",
+     "line_no": 144,
+     "mission_id": 7815,
+     "mode": "curated"
+    }
+   }
+  },
+  {
+   "blocker_id": "undeclared:FR-749b29919965330f",
+   "fail_keys": [
+    "FR-749b29919965330f"
+   ],
+   "kind": "undeclared",
+   "note": "rule-derived from attribution=unclassified (basis=report_summary)",
+   "provenance": {
+    "FR-749b29919965330f": {
+     "basis": "rule:attribution=unclassified;report_summary",
+     "line_no": 59,
+     "mission_id": 9871,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "undeclared:FR-75bbc1925c76180c",
+   "fail_keys": [
+    "FR-75bbc1925c76180c"
+   ],
+   "kind": "undeclared",
+   "note": "rule-derived from attribution=unclassified (basis=report_summary)",
+   "provenance": {
+    "FR-75bbc1925c76180c": {
+     "basis": "rule:attribution=unclassified;report_summary",
+     "line_no": 60,
+     "mission_id": 9871,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "undeclared:FR-9f929a5e7afb705b",
+   "fail_keys": [
+    "FR-9f929a5e7afb705b"
+   ],
+   "kind": "undeclared",
+   "note": "rule-derived from attribution=unclassified (basis=report_summary)",
+   "provenance": {
+    "FR-9f929a5e7afb705b": {
+     "basis": "rule:attribution=unclassified;report_summary",
+     "line_no": 61,
+     "mission_id": 9871,
+     "mode": "rule"
+    }
+   }
+  },
+  {
+   "blocker_id": "undeclared:FR-f32971afaa991a73",
+   "fail_keys": [
+    "FR-f32971afaa991a73"
+   ],
+   "kind": "undeclared",
+   "note": "rule-derived from attribution=unclassified (basis=report_summary)",
+   "provenance": {
+    "FR-f32971afaa991a73": {
+     "basis": "rule:attribution=unclassified;report_summary",
+     "line_no": 63,
+     "mission_id": 9871,
+     "mode": "rule"
+    }
+   }
+  }
+ ],
+ "corpus": "/root/tp-agent/work/m9954/tensor_reports/campaign_nodes",
+ "note": "One declared blocker per honest FAIL. Curated declarations cite the report section; rule-derived ones record the attribution they came from. Data only -- no code semantics are attached to these names.",
+ "record_count": 37,
+ "schema": "fail_blocker_declarations.v1"
+}

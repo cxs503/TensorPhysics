@@ -1,0 +1,31 @@
+{
+  "schema": "fail_revival_layout.v2",
+  "note": "Layout/lexical data only: no engineering-domain term. Column keywords, verdict markers and attribution rules are data so the package logic stays domain-neutral and the vocabulary can grow without touching code.",
+  "criterion_headings": ["机器判据", "机器可算验收判据", "Acceptance criteria", "Machine criteria"],
+  "criterion_stop_markers": ["实现路径", "证据", "pytest", "【"],
+  "verdict_classes": {
+    "fail_unambiguous": ["FAIL", "未达成", "未收敛", "未通过", "无法判定", "拒绝（诚实", "拒绝(诚实", "不满足", "未实现"],
+    "fail_ambiguous": ["否", "no"],
+    "withheld": ["WITHHELD", "证据不足", "无基准", "no baseline"],
+    "pass": ["PASS", "通过", "是", "yes", "OK", "✓", "满足"]
+  },
+  "pass_precedence_tokens": ["✓"],
+  "pass_semantics_headers": ["被拒", "rejected", "期望"],
+  "column_keywords": {
+    "metric": ["量", "关键量", "判据", "criterion", "quantity", "算例", "船", "舱室类型", "工况", "参数", "项目", "船型"],
+    "verdict": ["判定", "判级", "verdict", "结果", "<3 % ?", "<3%?", "<3%？", "< 3 %", "≤10%?", "≤10 % ?", "PASS/FAIL", "结论"],
+    "measured": ["计算", "实测", "本面", "computed", "value", "measured"],
+    "reference": ["基准", "参考", "reference", "锚", "analytic", "实验"],
+    "allowed": ["允许", "阈值", "允许值", "threshold", "限值", "精度门"],
+    "error": ["误差", "error", "偏差", "残差"],
+    "note": ["说明", "备注", "note", "evidence", "证据", "detail", "反例"]
+  },
+  "attribution_rules": {
+    "numerical_caliber": ["收敛", "converge", "离散", "discret", "网格", "mesh", "numerical", "数值", "truncat", "截断", "残差", "积分"],
+    "missing_reference": ["无出处", "无基准", "无公开", "no sourced", "no experimental", "WITHHELD", "no baseline", "文献", "无实验", "not available"],
+    "capability_gap": ["未实现", "not implemented", "缺", "missing", "does not", "unsupported", "尚未", "不可闭合"],
+    "scope_limit": ["适用域", "scope", "带宽", "bandwidth", "只能", "only valid", "区域", "realistic", "前提"],
+    "model_form": ["经验", "empirical", "公式", "formulation", "系数", "coefficient", "回归", "regression"]
+  },
+  "default_attribution": "unclassified"
+}
