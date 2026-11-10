@@ -1,0 +1,140 @@
+{
+  "schema": "tensorphysics.envelope.case.v1",
+  "case_id": "sts_transfer_window",
+  "title": "Ship-to-ship transfer window: admissible cargo transfer-rate band",
+  "description": "Operating window of the transfer rate between two moored ships. Lower bound: the minimum controllable rate of the transfer line. Upper bounds: the manifold pressure budget (a quadratic law in the rate), the hose tension limit and the weather-dependent relative-motion limit. The rate must additionally sit on the discharged approved step lattice.",
+  "mode": "interval",
+  "axes": [
+    {"name": "transfer_rate", "lo": 0.0, "hi": 2500.0}
+  ],
+  "constants": {
+    "pressure_quadratic": 2.2e-6,
+    "pressure_linear": 4.0e-4
+  },
+  "conditions": [
+    {
+      "label": "sts_calm",
+      "params": {"pressure_budget": 9.0, "hose_limit": 2200.0, "weather_limit": 2100.0, "min_rate": 300.0}
+    },
+    {
+      "label": "sts_moderate",
+      "params": {"pressure_budget": 7.0, "hose_limit": 1900.0, "weather_limit": 1750.0, "min_rate": 450.0}
+    },
+    {
+      "label": "sts_rough",
+      "params": {"pressure_budget": 5.0, "hose_limit": 1200.0, "weather_limit": 1400.0, "min_rate": 600.0}
+    }
+  ],
+  "constraints": [
+    {
+      "id": "c_min_rate",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "minimum controllable rate of the transfer line",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "transfer_rate"},
+        "b": {"op": "var", "name": "min_rate"}
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"transfer_rate": 1}, "convex": true}
+    },
+    {
+      "id": "c_manifold_pressure",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "manifold pressure budget: budget - c2 r^2 - c1 r >= 0",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "pressure_budget"},
+        "b": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "product",
+              "factors": [
+                {"op": "var", "name": "pressure_quadratic"},
+                {"op": "square", "arg": {"op": "var", "name": "transfer_rate"}}
+              ]
+            },
+            {
+              "op": "product",
+              "factors": [
+                {"op": "var", "name": "pressure_linear"},
+                {"op": "var", "name": "transfer_rate"}
+              ]
+            }
+          ]
+        }
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"transfer_rate": -1}, "convex": true}
+    },
+    {
+      "id": "c_hose_limit",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "hose tension / relative-drift limit",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "hose_limit"},
+        "b": {"op": "var", "name": "transfer_rate"}
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"transfer_rate": -1}, "convex": true}
+    },
+    {
+      "id": "c_weather_limit",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "weather-dependent relative-motion limit",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "weather_limit"},
+        "b": {"op": "var", "name": "transfer_rate"}
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"transfer_rate": -1}, "convex": true}
+    },
+    {
+      "id": "c_setting",
+      "kind": "discrete",
+      "description": "approved transfer steps are multiples of 100 m3/h",
+      "value": {"op": "var", "name": "transfer_rate"},
+      "lattice": {"step": 100.0, "offset": 0.0, "tolerance": 1e-6}
+    }
+  ],
+  "anchor": {"transfer_rate": 0.0},
+  "contract": {
+    "min_boundary_order": 1.9,
+    "area_rel_tol": 1e-3,
+    "monotone_rel_tol": 1e-2,
+    "expect": {"intervals": 1}
+  },
+  "extensions": {
+    "legacy_reference": {
+      "note": "closed-form per-window path: polynomial form of each margin in the window axis",
+      "c_min_rate": {
+        "form": "linear",
+        "a": {"op": "const", "value": 1.0},
+        "b": {"op": "neg", "arg": {"op": "var", "name": "min_rate"}}
+      },
+      "c_manifold_pressure": {
+        "form": "quadratic",
+        "a": {"op": "neg", "arg": {"op": "var", "name": "pressure_quadratic"}},
+        "b": {"op": "neg", "arg": {"op": "var", "name": "pressure_linear"}},
+        "c": {"op": "var", "name": "pressure_budget"}
+      },
+      "c_hose_limit": {
+        "form": "linear",
+        "a": {"op": "const", "value": -1.0},
+        "b": {"op": "var", "name": "hose_limit"}
+      },
+      "c_weather_limit": {
+        "form": "linear",
+        "a": {"op": "const", "value": -1.0},
+        "b": {"op": "var", "name": "weather_limit"}
+      }
+    }
+  }
+}
