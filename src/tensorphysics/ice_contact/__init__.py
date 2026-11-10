@@ -4,6 +4,7 @@ A self-contained verification-grade model of the three-way thermodynamic /
 tribological coupling at a sliding ice/structure interface:
 
 * :mod:`.pressure_melting` -- Clausius-Clapeyron pressure melting;
+* :mod:`.pressure_melting_cycle` -- pressure melting–refreezing bond cycle state machine;
 * :mod:`.stefan` -- Stefan moving-boundary reference solutions (Neumann similarity
   solution plus an independent 1-D enthalpy solver);
 * :mod:`.film` -- melt-film thickness ODE from the mass and energy balance,
@@ -43,6 +44,17 @@ from .pressure_melting import (
     pressure_melting_threshold,
     superheat,
 )
+from .pressure_melting_cycle import (
+    ContactStateEnum,
+    PressureMeltingCycle,
+    PressureMeltingCycleParams,
+    bond_strength,
+    contact_force,
+    melt_rate,
+    pressure_melting_threshold_linear,
+    refreeze_rate,
+    refreeze_time_constant,
+)
 from .properties import IceWaterProperties, StructureProperties, water_viscosity
 from .stefan import (
     neumann_front,
@@ -75,6 +87,15 @@ __all__ = [
     "scan_mechanism_map",
     "ContactState",
     "FilmModel",
+    "ContactStateEnum",
+    "PressureMeltingCycle",
+    "PressureMeltingCycleParams",
+    "bond_strength",
+    "contact_force",
+    "melt_rate",
+    "pressure_melting_threshold_linear",
+    "refreeze_rate",
+    "refreeze_time_constant",
     "clapeyron_slope",
     "integrate_melt_temperature",
     "melt_point_depression",
