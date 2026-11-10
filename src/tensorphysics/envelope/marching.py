@@ -37,6 +37,7 @@ from typing import Any, Mapping, Sequence, Tuple
 from .case import AxesSpec
 from .constraints import Constraint, ConstraintSet, EvalCounter, Lattice
 from .roots import DEFAULT_MAXITER, DEFAULT_RTOL, RootResult, bracket, linspace, refine_bracket
+from .subgrid import ResolutionLedger, ResolutionPolicy, Span, resolve as resolve_spans
 
 __all__ = [
     "BoundaryInterval",
@@ -108,6 +109,7 @@ class Window1D:
     attempts: int
     verified: bool
     span_truncated: bool = False
+    resolution: ResolutionLedger | None = None
 
     @property
     def width(self) -> float:
@@ -127,6 +129,7 @@ class Window1D:
             "attempts": self.attempts,
             "verified": self.verified,
             "span_truncated": self.span_truncated,
+            "resolution": None if self.resolution is None else self.resolution.to_dict(),
         }
 
 
@@ -207,6 +210,7 @@ class PlaneWindow:
     lines: Tuple[Tuple[BoundaryInterval, ...], ...]
     u_values: Tuple[float, ...]
     n_evals: int
+    resolution: Any = None
 
     @property
     def area(self) -> float:
@@ -232,6 +236,7 @@ class PlaneWindow:
             "components": [c.to_dict() for c in self.components],
             "area": self.area,
             "n_evals": self.n_evals,
+            "resolution": self.resolution,
         }
 
 
@@ -299,49 +304,63 @@ def _roots_on_grid(
     return tuple(merged)
 
 
-def _intervals_from_roots(
-    constraints: Sequence[Constraint],
-    params: dict[str, float],
+def _edge_lookup(
+    edges: Sequence[tuple[float, Tuple[str, ...], bool]], x: float, tol: float
+) -> tuple[Tuple[str, ...], bool]:
+    """Drivers and convergence flag of the edge that sits at ``x`` (or none)."""
+
+    for ex, drivers, converged in edges:
+        if abs(ex - x) <= tol:
+            return drivers, converged
+    return (), True
+
+
+def _intervals_from_spans(
+    spans: Sequence[Span],
+    edges: Sequence[tuple[float, Tuple[str, ...], bool]],
     axis: AxesSpec,
-    roots: Sequence[RootPoint],
-    counter: EvalCounter,
-    span_truncated: bool,
+    merge_tol: float,
 ) -> Tuple[BoundaryInterval, ...]:
-    edges: list[tuple[float, Tuple[str, ...], bool]] = [
-        (axis.lo, (), True)
-    ] + [(r.x, r.drivers, r.converged) for r in roots] + [(axis.hi, (), True)]
+    """Merge consecutive resolved feasible spans into boundary intervals.
+
+    An unresolved span (a probe disagreement the budget could not settle) never
+    extends a window: it terminates the interval and marks the boundary as not
+    converged, so the doubt is visible in the numbers as well as the ledger.
+    """
+
     intervals: list[BoundaryInterval] = []
-    open_start: tuple[float, Tuple[str, ...], bool] | None = None
-    for index in range(len(edges) - 1):
-        left, right = edges[index], edges[index + 1]
-        if right[0] <= left[0]:
-            continue
-        params[axis.name] = 0.5 * (left[0] + right[0])
-        feasible = all(c.margin(params, counter) >= 0.0 for c in constraints)
-        if feasible and open_start is None:
-            open_start = left
-        elif not feasible and open_start is not None:
-            intervals.append(
-                BoundaryInterval(
-                    lo=open_start[0],
-                    hi=left[0],
-                    lo_drivers=open_start[1],
-                    hi_drivers=left[1],
-                    lo_converged=open_start[2],
-                    hi_converged=left[2],
+    open_at: float | None = None
+    open_drivers: Tuple[str, ...] = ()
+    open_converged = True
+    for span in spans:
+        if span.feasible and span.resolved:
+            if open_at is None:
+                open_at = span.lo
+                open_drivers, open_converged = _edge_lookup(edges, span.lo, merge_tol)
+        else:
+            if open_at is not None:
+                hi_drivers, hi_converged = _edge_lookup(edges, span.lo, merge_tol)
+                intervals.append(
+                    BoundaryInterval(
+                        lo=open_at,
+                        hi=span.lo,
+                        lo_drivers=open_drivers,
+                        hi_drivers=hi_drivers,
+                        lo_converged=open_converged,
+                        hi_converged=hi_converged and span.resolved,
+                    )
                 )
-            )
-            open_start = None
-    if open_start is not None:
-        last = edges[-1]
+                open_at = None
+    if open_at is not None:
+        hi_drivers, hi_converged = _edge_lookup(edges, spans[-1].hi, merge_tol)
         intervals.append(
             BoundaryInterval(
-                lo=open_start[0],
-                hi=last[0],
-                lo_drivers=open_start[1],
-                hi_drivers=last[1],
-                lo_converged=open_start[2],
-                hi_converged=last[2],
+                lo=open_at,
+                hi=spans[-1].hi,
+                lo_drivers=open_drivers,
+                hi_drivers=hi_drivers,
+                lo_converged=open_converged,
+                hi_converged=hi_converged,
             )
         )
     return tuple(intervals)
@@ -353,6 +372,7 @@ def _window_once(
     axis: AxesSpec,
     n: int,
     counter: EvalCounter,
+    policy: ResolutionPolicy | None = None,
 ) -> Window1D:
     merge_tol = MERGE_FRACTION * axis.width
     # scale of the constraint values on this grid, used for the "is a node a root" test
@@ -365,7 +385,34 @@ def _window_once(
     zero_tol = ZERO_FRACTION * max(scale, 1e-30)
     start = counter.count
     roots = _roots_on_grid(constraints, params, axis, n, counter, merge_tol, zero_tol)
-    intervals = _intervals_from_roots(constraints, params, axis, roots, counter, False)
+    edges = (
+        [(axis.lo, (), True)]
+        + [(r.x, r.drivers, r.converged) for r in roots]
+        + [(axis.hi, (), True)]
+    )
+    cell = axis.width / max(1, n - 1)
+    probe_policy = (policy or ResolutionPolicy()).validated()
+    spans, ledger = resolve_spans(
+        constraints,
+        params,
+        axis,
+        [edge[0] for edge in edges],
+        probe_policy,
+        counter,
+        zero_tol=zero_tol,
+        merge_tol=merge_tol,
+        target_spacing=cell / probe_policy.samples_per_segment,
+    )
+    if ledger.internal_roots:
+        extra = [(x, drivers, True) for x, drivers in ledger.internal_roots]
+        merged = sorted(edges + extra, key=lambda item: item[0])
+        deduped: list[tuple[float, Tuple[str, ...], bool]] = []
+        for item in merged:
+            if deduped and abs(item[0] - deduped[-1][0]) <= merge_tol:
+                continue
+            deduped.append(item)
+        edges = deduped
+    intervals = _intervals_from_spans(spans, edges, axis, merge_tol)
     truncated = bool(
         intervals
         and (
@@ -381,7 +428,18 @@ def _window_once(
         attempts=1,
         verified=False,
         span_truncated=truncated,
+        resolution=ledger,
     )
+
+
+def _resolution_clean(*windows: Window1D) -> bool:
+    """A window is only trusted when no probe disagreement was left unresolved."""
+
+    for window in windows:
+        ledger = window.resolution
+        if ledger is not None and not ledger.resolved:
+            return False
+    return True
 
 
 def _same_structure(a: Window1D, b: Window1D) -> bool:
@@ -405,6 +463,7 @@ def window_1d(
     counter: EvalCounter | None = None,
     verify: bool = True,
     max_attempts: int = 3,
+    policy: ResolutionPolicy | None = None,
 ) -> Window1D:
     """Feasible intervals of one axis, with refined boundary roots.
 
@@ -420,13 +479,17 @@ def window_1d(
     params = {k: float(v) for k, v in base_params.items()}
     n_current = n
     attempts = 0
-    current = _window_once(section, params, axis, n_current, counter)
+    current = _window_once(section, params, axis, n_current, counter, policy)
     if not verify:
+        return current
+    if not _resolution_clean(current):
+        # escalating the grid would only move the probe scale without saying so;
+        # a span the probes could not settle is reported, not hidden
         return current
     while attempts < max_attempts:
         attempts += 1
-        finer = _window_once(section, params, axis, 2 * n_current, counter)
-        if _same_structure(current, finer):
+        finer = _window_once(section, params, axis, 2 * n_current, counter, policy)
+        if _same_structure(current, finer) and _resolution_clean(current, finer):
             return Window1D(
                 axis=finer.axis,
                 intervals=finer.intervals,
@@ -435,6 +498,7 @@ def window_1d(
                 attempts=attempts,
                 verified=True,
                 span_truncated=finer.span_truncated,
+                resolution=finer.resolution,
             )
         current = finer
         n_current *= 2
@@ -446,6 +510,7 @@ def window_1d(
         attempts=attempts,
         verified=False,
         span_truncated=current.span_truncated,
+        resolution=current.resolution,
     )
 
 
@@ -599,6 +664,7 @@ def march_plane(
     n_scan: int = 100,
     counter: EvalCounter | None = None,
     verify_lines: bool = False,
+    policy: ResolutionPolicy | None = None,
 ) -> PlaneWindow:
     """Trace the boundary of every feasible region on a two-axis plane."""
 
@@ -609,6 +675,8 @@ def march_plane(
     u_values = linspace(u_axis.lo, u_axis.hi, n_lines)
     lines: list[tuple[BoundaryInterval, ...]] = []
     start = counter.count
+    ledgers: list[ResolutionLedger] = []
+    unresolved: list[dict[str, Any]] = []
     for u in u_values:
         params = {k: float(v) for k, v in base_params.items()}
         params[u_axis.name] = u
@@ -620,8 +688,13 @@ def march_plane(
             counter=counter,
             verify=verify_lines,
             max_attempts=1,
+            policy=policy,
         )
         lines.append(window.intervals)
+        if window.resolution is not None:
+            ledgers.append(window.resolution)
+            for lo, hi in window.resolution.unresolved_spans:
+                unresolved.append({"u": u, "v_lo": lo, "v_hi": hi})
 
     # union-find over (line, interval) nodes
     parent: dict[tuple[int, int], tuple[int, int]] = {}
@@ -700,10 +773,37 @@ def march_plane(
                 complex_topology=complex_topology,
             )
         )
+    line_spacing = u_axis.width / max(1, len(u_values) - 1)
+    single_line = sum(
+        1 for c in components if len(set(c.u_values)) < 2
+    )
+    if ledgers:
+        widths = [l.min_probed_width for l in ledgers if l.min_probed_width == l.min_probed_width]
+        probe_width = min(widths) if widths else None
+        resolution: dict[str, Any] | None = {
+            "policy": ledgers[0].policy.to_dict(),
+            "min_probed_width": probe_width,
+            "line_spacing": line_spacing,
+            "single_line_components": single_line,
+            "area_reliable": single_line == 0,
+            "guaranteed_width": (
+                None if probe_width is None else max(probe_width, line_spacing)
+            ),
+            "lines": len(ledgers),
+            "spans_tested": sum(l.spans_tested for l in ledgers),
+            "suspect_spans": sum(l.suspect_spans for l in ledgers),
+            "refined_spans": sum(l.refined_spans for l in ledgers),
+            "unresolved_spans": unresolved,
+            "budget_exhausted": any(l.budget_exhausted for l in ledgers),
+            "resolved": not unresolved and not any(l.budget_exhausted for l in ledgers),
+        }
+    else:
+        resolution = None
     return PlaneWindow(
         axes=(u_axis, v_axis),
         components=tuple(components),
         lines=tuple(lines),
         u_values=u_values,
         n_evals=counter.count - start,
+        resolution=resolution,
     )
