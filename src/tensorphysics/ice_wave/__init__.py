@@ -8,6 +8,9 @@ Provides:
 * :mod:`tensorphysics.ice_wave.miz` -- marginal ice zone (MIZ) attenuation of
   wave amplitude ``A(x) = A0 exp(-alpha x)`` via a Kelvin-Voigt effective medium,
   with energy-flux cross-check and literature band comparison.
+* :mod:`tensorphysics.ice_wave.miz_coupling` -- wave-ice-ship three-body coupling
+  model for the MIZ: wave attenuation, ice bending failure, floe size distribution,
+  ship motion response, and coupled solver with parameter sweep.
 * :mod:`tensorphysics.ice_wave.dem2d` -- minimal 2-D soft-disc granular DEM shear
   cell (Lees-Edwards periodic shear) used to produce contact-force networks.
 * :mod:`tensorphysics.ice_wave.homogenise` -- Love-Weber stress recovery and
@@ -52,6 +55,21 @@ from .miz import (
     power_law_exponents,
     LITERATURE_ALPHA_BAND,
 )
+from .miz_coupling import (
+    MIZCouplingError,
+    ice_bending_stress,
+    ice_breaking_criterion,
+    characteristic_floe_size,
+    floe_size_distribution_pdf,
+    generate_floe_field,
+    fit_floe_distribution_exponent,
+    wave_excitation_force,
+    ice_impulse_force,
+    ship_motion_rao,
+    ship_motion_miz,
+    coupled_miz_solver,
+    parameter_sweep,
+)
 
 __all__ = [
     "FlexuralWaveError",
@@ -82,4 +100,17 @@ __all__ = [
     "sweep_attenuation",
     "power_law_exponents",
     "LITERATURE_ALPHA_BAND",
+    "MIZCouplingError",
+    "ice_bending_stress",
+    "ice_breaking_criterion",
+    "characteristic_floe_size",
+    "floe_size_distribution_pdf",
+    "generate_floe_field",
+    "fit_floe_distribution_exponent",
+    "wave_excitation_force",
+    "ice_impulse_force",
+    "ship_motion_rao",
+    "ship_motion_miz",
+    "coupled_miz_solver",
+    "parameter_sweep",
 ]

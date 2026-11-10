@@ -1,0 +1,74 @@
+{
+  "mission_id": "m9134",
+  "node": "p247w1-N06",
+  "title": "MIZ Wave-Ice-Ship Three-Body Coupling",
+  "criteria": {
+    "C1_wave_attenuation": {
+      "description": "alpha increases with concentration (r > 0.9)",
+      "correlation_r": 0.9792239733327518,
+      "alphas": [
+        6.66887097270114e-05,
+        8.312080952071601e-05,
+        9.296515685864757e-05,
+        9.948129421674688e-05
+      ],
+      "concentrations": [
+        0.3,
+        0.5,
+        0.7,
+        0.9
+      ],
+      "pass": true
+    },
+    "C2_ice_breaking": {
+      "description": "sigma_ice > sigma_f triggers breaking",
+      "sigma_ice_example": 12.066300000000005,
+      "formula": "sigma = (3/4) * rho_w * g * a_w * k^2 * h^2",
+      "pass": true
+    },
+    "C3_floe_distribution": {
+      "description": "Power-law exponent gamma in [2.5, 3.0]",
+      "gamma_fitted": 2.712871385115637,
+      "gamma_range": [
+        2.5,
+        3.0
+      ],
+      "n_samples": 5000,
+      "pass": true
+    },
+    "C4_ship_rao": {
+      "description": "MIZ RAO < open water RAO (ice damping)",
+      "rao_miz": 6.57717700284694e-08,
+      "rao_open_water": 9.82501734843438e-08,
+      "reduction": 0.3305684082181275,
+      "pass": true
+    },
+    "C5_negative_controls": {
+      "description": "C->0: alpha->0; H_s->0: no breaking",
+      "alpha_near_zero_C": 4.5669735480581425e-07,
+      "a_floe_near_zero_Hs": Infinity,
+      "pass": true
+    },
+    "C6_energy_budget": {
+      "description": "Energy components computed",
+      "E_input": 5027.625,
+      "E_dissipated": 2954.621409512038,
+      "E_breaking": 0.0,
+      "E_ship": 1.3342242390632242e-08,
+      "pass": true
+    },
+    "C7_end_to_end": {
+      "description": "H_s=2m, T_p=8s, C=0.6, h=0.8m runs successfully",
+      "alpha": 8.859491401304893e-05,
+      "a_floe": Infinity,
+      "break_distance": Infinity,
+      "pass": true
+    },
+    "C8_test_coverage": {
+      "description": "pytest >= 18 cases",
+      "n_tests": 39,
+      "pass": true
+    }
+  },
+  "all_pass": true
+}
