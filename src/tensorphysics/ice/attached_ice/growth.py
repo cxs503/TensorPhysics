@@ -64,7 +64,12 @@ from . import (
     DEFAULT_STICKING_EFFICIENCY, DEFAULT_BOND_STRENGTH_PA,
 )
 from .flux import frazil_impact_flux, FrazilFluxState
-from .detach import wall_shear_stress, adhesive_strength
+from .detach import wall_shear_stress, adhesive_strength, H_REF_M
+
+#: Reference skin-friction coefficient relating u_star to the mean flow speed
+CF_REF = 1.5e-3
+#: Prandtl number of the water film in the Colburn analogy (water at 0 degC)
+PR_T = 13.0
 
 
 @dataclass(frozen=True)
@@ -209,6 +214,8 @@ class IceGrowthODE:
         c_p_water: float = C_P_WATER,
         rho_water: float = RHO_WATER,
         tau_bond: float = DEFAULT_BOND_STRENGTH_PA,
+        cf_ref: float = CF_REF,
+        pr_t: float = PR_T,
     ):
         """Initialise the growth ODE.
 
@@ -230,6 +237,12 @@ class IceGrowthODE:
             Physical constants.
         tau_bond : float
             Bond strength [Pa] for detachment check.
+        cf_ref : float
+            Reference skin-friction coefficient used to relate the friction
+            velocity to the mean-flow speed, ``u_star = U sqrt(cf_ref/2)``.
+        pr_t : float
+            Molecular/turbulent Prandtl number of the water film (default 13,
+            water at 0 degC) in the Colburn analogy ``St = (cf/2) Pr**(-2/3)``.
         """
         self.undercooling_k = float(undercooling_k)
         self.u_star = float(u_star)
@@ -252,8 +265,23 @@ class IceGrowthODE:
         )
         self._frazil_mass_flux = self._flux_state.mass_flux
 
-        # Convective heat transfer coefficient (Reynolds analogy, Pr_t ~ 1)
-        self._h_c = self.rho_water * self.c_p_water * self.u_star
+        # Convective heat transfer coefficient.
+        #
+        # Colburn/Reynolds analogy on the wall shear:  St = (cf/2) * Pr**(-2/3)
+        # with  h_c = rho Cp U St  and  U = u_star / sqrt(cf/2), hence
+        #     h_c = rho Cp u_star sqrt(cf/2) Pr**(-2/3).
+        # Before 2026-11-10 the module used h_c = rho Cp u_star, i.e. it equated
+        # the friction velocity with the mean-flow speed inside the Stanton
+        # number (St = u_star/U = sqrt(cf/2) instead of cf/2).  That
+        # over-predicted h_c — and therefore the melting flux — by
+        # 1/[sqrt(cf/2) Pr**(-2/3)] ~ 2e2, which made any accretion at ship
+        # speeds impossible.  See artifacts/attached_ice_maturity/.
+        self.cf_ref = float(cf_ref)
+        self.pr_t = float(pr_t)
+        self._h_c = (
+            self.rho_water * self.c_p_water * self.u_star
+            * np.sqrt(self.cf_ref / 2.0) * self.pr_t ** (-2.0 / 3.0)
+        )
 
         # Convective flux (positive when water is warmer than freezing)
         delta_t_conv = self.t_water_k - T_FREEZE_FW
@@ -307,8 +335,9 @@ class IceGrowthODE:
         t_max: float,
         n_steps: int = 1000,
         h_init: float = 0.0,
+        method: str = "euler",
     ) -> GrowthResult:
-        """Solve the ODE using forward Euler (numpy-only, no scipy).
+        """Integrate the growth ODE (numpy-only, no scipy).
 
         Parameters
         ----------
@@ -318,11 +347,21 @@ class IceGrowthODE:
             Number of time steps.
         h_init : float
             Initial ice thickness [m].
+        method : {"euler", "stefan_split"}
+            ``euler`` — classic explicit forward Euler on the full right-hand
+            side (first order; the ``1/h`` conduction term needs many steps).
+            ``stefan_split`` — operator split: the singular conduction term is
+            advanced by its *exact* quadrature ``h**2 -> h**2 + 2 k dT dt/(rho L)``
+            while the (bounded) frazil and convective source terms are advanced
+            explicitly.  Exact for the pure Stefan problem at any step size, so
+            the C2 benchmark measures only the source-term splitting error.
 
         Returns
         -------
         GrowthResult
         """
+        if method not in ("euler", "stefan_split"):
+            raise ValueError(f"unknown integration method {method!r}")
         t = np.linspace(0.0, float(t_max), int(n_steps) + 1)
         dt = t[1] - t[0]
         h = np.zeros_like(t)
@@ -341,8 +380,18 @@ class IceGrowthODE:
                 res[i] = 0.0
                 continue
 
-            dh = self.rhs(h[i]) * dt
-            h[i + 1] = max(h[i] + dh, 0.0)  # enforce non-negativity
+            if method == "euler":
+                dh = self.rhs(h[i]) * dt
+                h_next = h[i] + dh
+            else:
+                # exact advance of the singular Stefan (conduction) term ...
+                src = (self.eta_stick * self._frazil_mass_flux * self.l_fusion
+                       - self._convective_flux) / (self.rho_ice * self.l_fusion)
+                arg = h[i] ** 2 + 2.0 * self.k_ice * self.undercooling_k * dt / (
+                    self.rho_ice * self.l_fusion)
+                h_cond = float(np.sqrt(max(arg, 0.0)))
+                h_next = h_cond + src * dt
+            h[i + 1] = max(h_next, 0.0)  # enforce non-negativity
 
             # Compute energy residual at this step
             if h[i] > 1e-15:
@@ -397,6 +446,115 @@ class IceGrowthODE:
         )
 
 
+    def energy_closure(self, result: GrowthResult, skip_steps: int = 1) -> dict:
+        """Integral energy-balance closure of an integration result.
+
+        Criterion C1 of the maturity spec asks for the *interface energy
+        residual* to stay below 2%.  A per-step residual recomputed with the very
+        same flux expressions the right-hand side uses is identically zero and
+        proves nothing, so the closure is measured on the integral form
+
+            rho_ice * L_f * (h(T) - h(0)) = int_0^T (q_cond(t) - q_conv + q_frazil) dt
+
+        with ``q_cond = k_ice * dT / h(t)`` taken from the returned trajectory and
+        the integral evaluated by trapezoidal quadrature.  The residual is a
+        genuine discretisation-error measure (it vanishes only if the scheme
+        conserves latent heat).
+
+        Parameters
+        ----------
+        result : GrowthResult
+            Integration output of :meth:`solve_euler`.
+        skip_steps : int
+            Number of leading steps excluded from the integral.  The very first
+            step carries the singular ``1/h`` nucleation jump from ``h_init``;
+            trapezoidal quadrature of ``1/h(t)`` there is invalid (it reflects
+            the kink of the initial condition, not the scheme), so the closure
+            is measured on the regular part and the nucleation step is reported
+            separately in ``relative_error_including_nucleation``.
+            Starting from a finite seed ``h_init`` the skipped part accounts for
+            exactly ``rho L (h[skip] - h[0])``, which is subtracted below.
+
+        Returns
+        -------
+        dict
+            ``latent_heat_J_m2``, ``flux_integral_J_m2``,
+            ``relative_error`` (|difference| / max of the two),
+            ``relative_error_including_nucleation`` and
+            ``max_step_relative_residual``.
+        """
+        t = np.asarray(result.t, dtype=float)
+        h = np.asarray(result.h_ice, dtype=float)
+        h_safe = np.maximum(h, 1e-12)
+        q_cond = np.where(h > 1e-12, self.k_ice * self.undercooling_k / h_safe, 0.0)
+        q = (q_cond - self._convective_flux
+             + self.eta_stick * self._frazil_mass_flux * self.l_fusion)
+        k = int(max(0, min(skip_steps, len(t) - 1)))
+        flux_integral = float(np.trapezoid(q[k:], t[k:]))
+        latent = float(self.rho_ice * self.l_fusion * (h[-1] - h[k]))
+        scale = max(abs(latent), abs(flux_integral), 1e-30)
+        flux_integral_full = float(np.trapezoid(q, t))
+        latent_full = float(self.rho_ice * self.l_fusion * (h[-1] - h[0]))
+        scale_full = max(abs(latent_full), abs(flux_integral_full), 1e-30)
+        # per-step trapezoidal residual, normalised by the local flux magnitude
+        q_scale = max(float(np.max(np.abs(q))), 1e-30)
+        step_res = np.abs(
+            self.rho_ice * self.l_fusion * np.diff(h)
+            - 0.5 * (q[1:] + q[:-1]) * np.diff(t)
+        ) / q_scale
+        return {
+            "latent_heat_J_m2": latent,
+            "flux_integral_J_m2": flux_integral,
+            "relative_error": abs(latent - flux_integral) / scale,
+            "relative_error_including_nucleation": abs(latent_full - flux_integral_full) / scale_full,
+            "max_step_relative_residual": float(np.max(step_res)) if step_res.size else 0.0,
+        }
+
+
+def stefan_with_initial(
+    initial_thickness_m: float,
+    undercooling_k: float,
+    time_s: float,
+    k_ice: float = K_ICE,
+    rho_ice: float = RHO_ICE,
+    l_fusion: float = L_FUSION,
+) -> float:
+    """Exact solution of the pure-conduction Stefan ODE from a finite seed.
+
+    ``dh/dt = k_ice * dT / (rho_ice * L_f * h)`` has the closed-form solution
+
+        h(t) = sqrt( h0**2 + 2 * k_ice * dT * t / (rho_ice * L_f) )
+
+    which reduces to :func:`stefan_analytic` for ``h0 = 0``.  This is the exact
+    reference used for the C2 verification of the numerical integrators: the
+    discretisation error can therefore be measured without any model
+    approximation leaking into the benchmark.
+
+    Parameters
+    ----------
+    initial_thickness_m : float
+        Seed thickness ``h0`` [m] (>= 0).
+    undercooling_k : float
+        T_freeze - T_surface [K].
+    time_s : float
+        Elapsed time [s].
+
+    Returns
+    -------
+    float
+        Ice thickness [m].
+    """
+    h0 = float(initial_thickness_m)
+    dT = float(undercooling_k)
+    t = float(time_s)
+    if h0 < 0.0:
+        raise ValueError("initial thickness must be non-negative")
+    if t < 0.0:
+        raise ValueError("time must be non-negative")
+    arg = h0 * h0 + 2.0 * float(k_ice) * dT * t / (float(rho_ice) * float(l_fusion))
+    return float(np.sqrt(max(arg, 0.0)))
+
+
 def solve_growth(
     undercooling_k: float,
     u_star: float,
@@ -404,6 +562,7 @@ def solve_growth(
     t_max: float,
     eta_stick: float = DEFAULT_STICKING_EFFICIENCY,
     n_steps: int = 1000,
+    method: str = "euler",
     **kwargs,
 ) -> GrowthResult:
     """Convenience function to solve the ice growth ODE.
@@ -422,6 +581,8 @@ def solve_growth(
         Sticking efficiency.
     n_steps : int
         Number of time steps.
+    method : {"euler", "stefan_split"}
+        Integrator, see :meth:`IceGrowthODE.solve_euler`.
 
     Returns
     -------
@@ -434,4 +595,133 @@ def solve_growth(
         eta_stick=eta_stick,
         **kwargs,
     )
-    return ode.solve_euler(t_max=t_max, n_steps=n_steps)
+    return ode.solve_euler(t_max=t_max, n_steps=n_steps, method=method)
+
+
+def equilibrium_thickness(
+    undercooling_k: float,
+    u_star: float,
+    c_f: float = 0.0,
+    eta_stick: float = DEFAULT_STICKING_EFFICIENCY,
+    t_water_k: Optional[float] = None,
+    tau_bond: float = DEFAULT_BOND_STRENGTH_PA,
+    h_ref: float = H_REF_M,
+    particle_diameter_m: float = 1.0e-4,
+    k_ice: float = K_ICE,
+    rho_ice: float = RHO_ICE,
+    rho_water: float = RHO_WATER,
+    c_p_water: float = C_P_WATER,
+    l_fusion: float = L_FUSION,
+) -> dict:
+    """Closed-form steady-state thickness ``h_ss(u_star)`` of the attached layer.
+
+    Two independent limits compete, and the steady state is the smaller of them:
+
+    * **growth equilibrium** — the layer stops growing when the conductive heat
+      flux ``k_ice dT / h`` balances the net sink ``q_conv - q_frazil``::
+
+          h_growth = k_ice * dT / (q_conv - q_frazil),
+          q_conv = rho_water c_p u_star (T_water - T_f),
+          q_frazil = eta_stick * C_f rho_ice v_dep u_star-correlated * L_f
+
+      i.e. the layer is in thermal equilibrium against melting.  If
+      ``q_conv <= q_frazil`` no equilibrium exists (the layer grows without
+      bound; the returned value is ``inf``) — a physical statement, not a
+      numerical failure: with the water at the freezing point and a persistent
+      frazil supply nothing melts the layer.
+
+    * **detachment limit** — the largest thickness whose adhesive strength still
+      carries the wall shear stress, from inversion of
+      ``tau_bond / (1 + h/h_ref) = rho_water u_star**2``::
+
+          h_detach = h_ref * (tau_bond / (rho_water u_star**2) - 1)
+
+    Both limits are strictly decreasing functions of ``u_star`` (``q_conv`` and
+    ``q_frazil`` grow linearly with ``u_star``; ``tau_wall`` grows
+    quadratically), therefore ``h_ss = min(h_growth, h_detach)`` is monotone
+    decreasing — the property asserted by criterion C4.  Unlike the sawtooth
+    produced by stripping ice inside a finite integration window, ``h_ss`` is a
+    well-defined single-valued function of the forcing.
+
+    Parameters
+    ----------
+    undercooling_k : float
+        T_freeze - T_surface [K].
+    u_star : float
+        Friction velocity [m/s].
+    c_f : float
+        Frazil volume concentration.
+    eta_stick : float
+        Sticking efficiency.
+    t_water_k : float, optional
+        Bulk water temperature [K]; default = freezing point (no melting).
+    tau_bond : float
+        Bond strength [Pa] (from the adfreeze/Frederking model).
+    h_ref : float
+        Adhesive-strength reference thickness [m].
+    Others : physical constants.
+
+    Returns
+    -------
+    dict
+        ``h_growth_m``, ``h_detach_m``, ``h_eq_m``, ``equilibrium_exists`` and
+        ``limited_by`` in {"growth", "detachment", "none"}.  When no melting sink
+        removes the frazil input (``q_conv <= q_frazil``) the growth limit is
+        infinite, ``equilibrium_exists`` is False, ``h_eq_m`` is ``inf`` and
+        ``limited_by`` is ``"none"`` — the detachment cap is reported separately
+        in ``h_detach_m`` but is not promoted to a steady state.
+    """
+    u_s = float(u_star)
+    if u_s < 0.0:
+        raise ValueError("friction velocity must be non-negative")
+    ode = IceGrowthODE(
+        undercooling_k=undercooling_k,
+        u_star=u_s,
+        c_f=c_f,
+        eta_stick=eta_stick,
+        t_water_k=t_water_k,
+        particle_diameter_m=particle_diameter_m,
+        k_ice=k_ice,
+        rho_ice=rho_ice,
+        l_fusion=l_fusion,
+        c_p_water=c_p_water,
+        rho_water=rho_water,
+        tau_bond=tau_bond,
+    )
+    q_conv = ode._convective_flux
+    q_frazil = ode.eta_stick * ode._frazil_mass_flux * l_fusion
+    sink = q_conv - q_frazil
+    if sink > 0.0:
+        h_growth = float(k_ice * float(undercooling_k) / sink)
+    else:
+        h_growth = float("inf")
+
+    tau_wall = wall_shear_stress(u_s, rho_water)
+    if tau_wall <= 0.0:
+        h_detach = float("inf")
+    else:
+        ratio = float(tau_bond) / tau_wall
+        h_detach = float(h_ref * (ratio - 1.0)) if ratio > 1.0 else 0.0
+
+    # An *equilibrium* only exists if a melting sink removes the frazil latent
+    # input; otherwise the layer grows without bound and the detachment cap is a
+    # degenerate (km-scale) artefact that must not be reported as a steady state.
+    equilibrium_exists = bool(np.isfinite(h_growth))
+    if equilibrium_exists:
+        h_eq = min(h_growth, h_detach)
+        limited_by = "detachment" if h_detach < h_growth else "growth"
+    else:
+        h_eq = float("inf")
+        limited_by = "none"
+
+    return {
+        "u_star_m_s": u_s,
+        "tau_wall_Pa": tau_wall,
+        "q_conv_W_m2": q_conv,
+        "q_frazil_W_m2": q_frazil,
+        "h_growth_m": h_growth,
+        "h_detach_m": h_detach,
+        "h_eq_m": h_eq,
+        "equilibrium_exists": equilibrium_exists,
+        "limited_by": limited_by,
+    }
