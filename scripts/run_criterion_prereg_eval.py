@@ -9,8 +9,9 @@ Produces, programmatically (no hand-copied numbers):
   per-case predictions and the fail-closed negative controls;
 * ``artifacts/criterion_prereg/fig_*.png``   -- confusion matrix, baseline vs
   audit precision/recall, extractor field F1, KPI of the real-goal demo;
-* ``artifacts/criterion_prereg/demo_*.json`` -- freeze/audit records of this
-  node's own acceptance criteria (the "real goal" case).
+* the freeze/audit records of this node's own acceptance criteria (the "real
+  goal" case) travel *inside* ``eval.json`` (``detail.real_goal_demo``) so the
+  record stays a single, digest-verifiable file instead of a set of loose dumps.
 
 and re-renders ``docs/CRITERION_PREREGISTRATION.md`` from that JSON (so no
 number in the document is hand-copied, and the report/doc pair can never drift
@@ -143,7 +144,12 @@ def _hard_case_scores(cases=HARD_CASES) -> list[dict]:
 
 
 def _demo_real_goal() -> dict:
-    """Freeze this node's own criteria, then audit three receipt scenarios."""
+    """Freeze this node's own criteria, then audit five receipts.
+
+    Four are behavioural re-statements of the same goal (reformat / loosened
+    threshold / narrowed scope / dropped criterion) and one is a manifest-level
+    tamper; the empty goal is audited separately as the fail-closed control.
+    """
     fz = freeze(NODE_GOAL, mission_id=8598, node_id="criterion-preregistration-gate", frozen_by="m8598", frozen_at=STAMP)
     metadata = attach_to_metadata({"mission_id": 8598, "owner": "autonomy"}, fz)
     receipts = {

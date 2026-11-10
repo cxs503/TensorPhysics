@@ -255,10 +255,33 @@ def test_publisher_fails_closed_when_a_figure_is_missing(tmp_path, art_dir):
 
 
 # --------------------------------------------------------------------------- #
-# (c) the published artefacts, when the evaluation has been run locally
+# (c) the published artefacts; the record is checked in, so the figures are too
 # --------------------------------------------------------------------------- #
-@pytest.mark.skipif(not (ROOT / "artifacts" / "criterion_prereg" / "fig_demo_kpi.png").exists(),
-                    reason="evaluation figures not generated in this checkout")
+ART = ROOT / "artifacts" / "criterion_prereg"
+
+
+def test_checked_in_figures_exist_and_are_valid_png(eval_record):
+    """``eval.json`` is checked in, therefore the figures it names must be too.
+
+    The page and the report are both rendered from the (record, figures) pair,
+    so a artefact filter that drops the binary figures while keeping the JSON
+    leaves an unverifiable deliverable.  The only test that touched the real
+    figures used to be ``skipif``-guarded, i.e. it went green on a checkout
+    where they were missing; the skip is now a hard requirement.
+    """
+    labels = eval_record["detail"]["figures"]
+    assert labels, "eval.json must list its figures"
+    for key, rel in labels.items():
+        path = ROOT / rel
+        assert path.exists(), f"figure {key!r} missing from the checkout: {rel}"
+        raw = path.read_bytes()
+        assert raw.startswith(pub.PNG_SIGNATURE), f"{rel} is not a PNG"
+        assert len(raw) > 1000, f"{rel} is suspiciously small ({len(raw)} bytes)"
+
+
 def test_real_artifacts_produce_a_publishable_payload(eval_record):
-    payload = pub.build_payload(eval_record, ROOT / "artifacts" / "criterion_prereg")
+    payload = pub.build_payload(eval_record, ART)
+    assert pub.validate(payload) == []
+    for fig in payload["figures"]:
+        assert base64.b64decode(fig["png_base64"]).startswith(pub.PNG_SIGNATURE)
     assert pub.validate(payload) == []
