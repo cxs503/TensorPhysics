@@ -146,3 +146,39 @@ __all__ = [
     "thermal_degradation_factor",
     "waterline_half_breadth",
 ]
+# Cross-implementation attribution (P519-N02)
+from .cross_impl_attribution import (
+    COMPONENT_NAMES,
+    CaliberFingerprint,
+    RefShip,
+    attribute_divergence,
+    build_fingerprints,
+    calibrate_crushing_coefficient,
+    decompose_five,
+    impl_ia_lindqvist,
+    impl_lit_corrected,
+    impl_lit_original,
+    impl_tp_level,
+    run_full_attribution,
+    sensitivity_matrix,
+    validate_fingerprints,
+    write_artifacts,
+)
+
+__all__.extend([
+    "COMPONENT_NAMES",
+    "CaliberFingerprint",
+    "RefShip",
+    "attribute_divergence",
+    "build_fingerprints",
+    "calibrate_crushing_coefficient",
+    "decompose_five",
+    "impl_ia_lindqvist",
+    "impl_lit_corrected",
+    "impl_lit_original",
+    "impl_tp_level",
+    "run_full_attribution",
+    "sensitivity_matrix",
+    "validate_fingerprints",
+    "write_artifacts",
+])
