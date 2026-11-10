@@ -1,0 +1,42 @@
+{
+  "n_records": 24,
+  "sha256": "611ae758ababe5309ea52d9ae0fa0dc00e0e744e362a7bcb223040eafa95f040",
+  "per_class": {
+    "BASELINE_ABSENT": 4,
+    "TOLERANCE_EXCEEDED": 4,
+    "CONVERGENCE_STALL": 4,
+    "MODEL_FIDELITY_LIMIT": 4,
+    "DATA_INSUFFICIENCY": 4,
+    "IMPLEMENTATION_DEFECT": 4
+  },
+  "n_documents": 17,
+  "max_records_per_document": 3,
+  "records_per_document": {
+    "docs/ADAPTIVE_FEM_ZZ_HREFINEMENT.md": 3,
+    "docs/COMPOSITE_LAMINATE_CLT_FSDT.md": 1,
+    "docs/HULL_ICEBELT_FEM_XCHECK.md": 1,
+    "docs/ICE_INDENTATION_J2_CONTACT.md": 3,
+    "docs/ICE_RESISTANCE_MEASURED_ANCHOR.md": 1,
+    "docs/SIMP_DENSITY_FILTER_SENSITIVITY.md": 1,
+    "docs/UQ_UNCERTAINTY_BUDGET.md": 1,
+    "docs/VOYAGE_ACCUMULATED_FATIGUE.md": 2,
+    "docs/multigrid_poisson_verification.md": 1,
+    "docs/papers/w5n05_ice_wave/REPORT.md": 2,
+    "docs/platform_audit.md": 1,
+    "docs/reports/P27W3_integration_report.md": 1,
+    "docs/reports/in19_g19_wave3_gate.md": 1,
+    "docs/reports/m1138/REPORT.md": 1,
+    "docs/reports/m4/autoapprove_probe_report.md": 1,
+    "docs/reports/w3n04/structural_reliability_report.md": 2,
+    "docs/templates/hull_ice_friction_temperature.template.md": 1
+  },
+  "annotator": "agent:m9812",
+  "protocol": "single analyst annotation of document-disjoint passages, adjudicated against taxonomy.ClassSpec.definition/boundary_note and the discriminating evidence fields; label assigned before any classifier output was inspected on this corpus",
+  "document_disjoint_from_frozen": true,
+  "frozen_documents": 32,
+  "windowed_records": [],
+  "source_scope": [
+    "docs/**/*.md"
+  ],
+  "builder": "scripts/build_failure_taxonomy_holdout.py"
+}
