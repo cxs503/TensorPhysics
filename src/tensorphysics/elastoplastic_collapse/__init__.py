@@ -16,7 +16,14 @@ This package provides a unified verification surface for:
    Lateral-torsional buckling (tripping) of stiffeners with mode switching.
 
 5. **IACS ice-belt pressure-area law**
-   P = P0 (A/A0)^(-0.3) verification for ice belt design.
+   P = P0 (A/A0)^(-0.3) verification for ice belt design, plus the rigid-plastic
+   pressure capacity of the ice-belt panel (strip or stiffened T-section).
+
+6. **Progressive (fiber-based) collapse**
+   Incremental Smith method: element load-end shortening curves integrated over
+   the discretised cross-section with the mid-span column equilibrium
+   M = N·δ, giving the ultimate strength, a genuine limit point and the
+   post-ultimate branch (:mod:`progressive_collapse`).
 
 References
 ----------
@@ -55,6 +62,18 @@ from .iacs_icebelt_pressure import (  # noqa: F401
     IACSIceBeltPressure,
     pressure_area_law_icebelt,
     verify_pressure_area_exponent,
+    icebelt_panel_plastic_capacity,
+    icebelt_stiffened_panel_capacity,
+    icebelt_design_ratio,
+    plastic_section_modulus,
+)
+from .progressive_collapse import (  # noqa: F401
+    PanelFiber,
+    ProgressiveCollapseResult,
+    ProgressiveCollapseSolver,
+    panel_convergence_study,
+    plate_load_shortening_stress,
+    uniaxial_elastoplastic_stress,
 )
 
 __all__ = [
@@ -75,4 +94,14 @@ __all__ = [
     "IACSIceBeltPressure",
     "pressure_area_law_icebelt",
     "verify_pressure_area_exponent",
+    "icebelt_panel_plastic_capacity",
+    "icebelt_stiffened_panel_capacity",
+    "icebelt_design_ratio",
+    "plastic_section_modulus",
+    "PanelFiber",
+    "ProgressiveCollapseResult",
+    "ProgressiveCollapseSolver",
+    "panel_convergence_study",
+    "plate_load_shortening_stress",
+    "uniaxial_elastoplastic_stress",
 ]
