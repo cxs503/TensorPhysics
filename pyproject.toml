@@ -27,7 +27,7 @@ plot = ["matplotlib>=3.7", "numpy>=1.26"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-tensorphysics = ["contracts/*.json", "lineage_debt/configs/*.json", "applicability/configs/*.json", "campaign/criterion_prereg/*.json", "failure_taxonomy/data/*.json", "failure_taxonomy/data/*.jsonl"]
+tensorphysics = ["contracts/*.json", "lineage_debt/configs/*.json", "applicability/configs/*.json", "campaign/criterion_prereg/*.json", "failure_taxonomy/data/*.json", "failure_taxonomy/data/*.jsonl", "metrology/criteria_semantics/data/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
