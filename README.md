@@ -176,3 +176,7 @@ PYTHONPATH=src python scripts/p33_w2_n06_solid_fem.py               # reproducib
 ```
 
 Report: `docs/p33_w2_n06/REPORT.md`; evidence: `artifacts/p33_w2_n06/`.
+
+## License
+
+See [LICENSE](LICENSE) for the software license and [LICENSE_SCOPE.md](LICENSE_SCOPE.md) for the boundary between project software and third-party or content assets. Dataset, paper, model, customer, and other non-software assets retain their own rights and restrictions.
