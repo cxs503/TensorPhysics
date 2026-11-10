@@ -42,6 +42,11 @@ High-level API (class-based, complementary to the functional gate)
   the unified V&V machine gate composing the convergence, ASME V&V 20
   validation and cross-solver agreement stages into one fused verdict
   (``evaluate_core`` one-call entry point).
+* :mod:`tensorphysics.vv.report` -- :func:`build_report` / :class:`VVReport`:
+  renders ``docs/vv_report_template.md`` from a :class:`GateVerdict` so every
+  number in a V&V report is injected from the gate (no hand-copy), with a
+  ``WITHHELD`` ledger for sections the machine cannot fill and sha256
+  provenance of the verdict payload and the report body.
 
 Command line
 ------------
@@ -101,6 +106,12 @@ from .core import (
     VVCore,
     evaluate_core,
 )
+from .report import (
+    VVReport,
+    ReportSection,
+    build_report,
+    render_markdown,
+)
 
 __all__ = [
     "GatePolicy",
@@ -147,4 +158,9 @@ __all__ = [
     "CoreVerdict",
     "VVCore",
     "evaluate_core",
+    # Machine report from a gate verdict (m8633)
+    "VVReport",
+    "ReportSection",
+    "build_report",
+    "render_markdown",
 ]
