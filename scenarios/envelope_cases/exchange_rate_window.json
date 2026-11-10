@@ -1,0 +1,163 @@
+{
+  "schema": "tensorphysics.envelope.case.v1",
+  "case_id": "exchange_rate_window",
+  "title": "Ballast-water exchange window: admissible exchange-rate band",
+  "description": "Operating window of the exchange rate. Lower bound: the exchange must complete inside the available time. Upper bounds: pump capacity, the residence-time requirement (a reciprocal law: faster exchange leaves less contact time) and the loss of metacentric height from free surfaces (a quadratic law). The attainable rate must additionally sit on an approved pump-setting lattice.",
+  "mode": "interval",
+  "axes": [
+    {"name": "exchange_rate", "lo": 10.0, "hi": 3000.0}
+  ],
+  "constants": {
+    "hold_volume": 12000.0,
+    "gm_linear": 1e-4,
+    "gm_quadratic": 3e-8
+  },
+  "conditions": [
+    {
+      "label": "exchange_open_sea",
+      "params": {"residence_required": 7.5, "available_time": 12.0, "pump_capacity": 2400.0, "gm_margin": 0.35}
+    },
+    {
+      "label": "exchange_coastal",
+      "params": {"residence_required": 5.0, "available_time": 10.0, "pump_capacity": 1800.0, "gm_margin": 0.30}
+    },
+    {
+      "label": "exchange_estuary",
+      "params": {"residence_required": 4.0, "available_time": 8.0, "pump_capacity": 1600.0, "gm_margin": 0.22}
+    }
+  ],
+  "constraints": [
+    {
+      "id": "c_completion",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "the exchange must finish before the available time runs out",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "exchange_rate"},
+        "b": {
+          "op": "div",
+          "numerator": {"op": "var", "name": "hold_volume"},
+          "denominator": {"op": "var", "name": "available_time"}
+        }
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"exchange_rate": 1}, "convex": true}
+    },
+    {
+      "id": "c_residence",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "required residence time of the water in the hold: volume / rate >= required",
+      "value": {
+        "op": "sub",
+        "a": {
+          "op": "div",
+          "numerator": {"op": "var", "name": "hold_volume"},
+          "denominator": {"op": "var", "name": "exchange_rate"}
+        },
+        "b": {"op": "var", "name": "residence_required"}
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"exchange_rate": -1}}
+    },
+    {
+      "id": "c_pump_capacity",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "installed pump capacity",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "pump_capacity"},
+        "b": {"op": "var", "name": "exchange_rate"}
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"exchange_rate": -1}, "convex": true}
+    },
+    {
+      "id": "c_stability",
+      "kind": "inequality",
+      "side": "ge",
+      "description": "remaining metacentric-height margin under free-surface loss: margin - a q - b q^2 >= 0",
+      "value": {
+        "op": "sub",
+        "a": {"op": "var", "name": "gm_margin"},
+        "b": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "scale",
+              "factor": 1.0,
+              "arg": {
+                "op": "product",
+                "factors": [
+                  {"op": "var", "name": "gm_linear"},
+                  {"op": "var", "name": "exchange_rate"}
+                ]
+              }
+            },
+            {
+              "op": "product",
+              "factors": [
+                {"op": "var", "name": "gm_quadratic"},
+                {
+                  "op": "square",
+                  "arg": {"op": "var", "name": "exchange_rate"}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "active_tolerance": 1e-9,
+      "contract": {"slope": {"exchange_rate": -1}, "convex": true}
+    },
+    {
+      "id": "c_setting",
+      "kind": "discrete",
+      "description": "approved pump settings are multiples of 250 m3/h",
+      "value": {"op": "var", "name": "exchange_rate"},
+      "lattice": {"step": 250.0, "offset": 0.0, "tolerance": 1e-6}
+    }
+  ],
+  "anchor": {"exchange_rate": 500.0},
+  "contract": {
+    "min_boundary_order": 1.9,
+    "area_rel_tol": 1e-3,
+    "monotone_rel_tol": 1e-2,
+    "expect": {"intervals": 1}
+  },
+  "extensions": {
+    "legacy_reference": {
+      "note": "closed-form per-window path: polynomial (or reciprocal) form of each margin in the window axis",
+      "c_completion": {
+        "form": "linear",
+        "a": {"op": "const", "value": 1.0},
+        "b": {
+          "op": "neg",
+          "arg": {
+            "op": "div",
+            "numerator": {"op": "var", "name": "hold_volume"},
+            "denominator": {"op": "var", "name": "available_time"}
+          }
+        }
+      },
+      "c_residence": {
+        "form": "reciprocal",
+        "a": {"op": "var", "name": "hold_volume"},
+        "b": {"op": "neg", "arg": {"op": "var", "name": "residence_required"}}
+      },
+      "c_pump_capacity": {
+        "form": "linear",
+        "a": {"op": "const", "value": -1.0},
+        "b": {"op": "var", "name": "pump_capacity"}
+      },
+      "c_stability": {
+        "form": "quadratic",
+        "a": {"op": "neg", "arg": {"op": "var", "name": "gm_quadratic"}},
+        "b": {"op": "neg", "arg": {"op": "var", "name": "gm_linear"}},
+        "c": {"op": "var", "name": "gm_margin"}
+      }
+    }
+  }
+}
