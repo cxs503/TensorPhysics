@@ -41,6 +41,15 @@ The main branch contains:
 - Explicit PRE_STEP, AFTER_SOLVER, and POST_STEP coupling phases with stable callback ordering.
 - A two-reservoir coupling test that checks total-mass conservation and same-step field delivery.
 - A versioned JSON checkpoint envelope with atomic local-file writes and schema/clock validation.
+- An implementation-level cross-solver fracture handoff (`src/tensorphysics/failure_handoff/`):
+  the `failure_faces` interface is frozen at **v3.0.0** as a sealed JSON packet with
+  per-face geometry, mixed-mode fracture energy and a SHA-256 seal; a Hex8 FEM fracture-face
+  extractor (Benzeggagh-Kenane mixed-mode toughness, strength criterion, crack-front
+  polyline) feeds a DEM fragment consumer that re-derives areas from the vertex data,
+  initialises polyhedral/clump fragments with the inherited fracture energy, and enforces
+  area (≤1 %), energy (≤2 %), mass and clump-volume conservation gates.  End-to-end case:
+  notched three-point bend → `failure_faces.json` → fragments → free fall + impact, with the
+  energy chain closing to 5e-14 relative.  Report: [docs/reports/p154w2_n03/REPORT.md](docs/reports/p154w2_n03/REPORT.md).
 - An ice-structure domain module (`src/tensorphysics/ice/`): adfreeze (freeze-bond)
   shear-strength model calibrated on the Frederking (1984) four-temperature data
   (max residual 3.3 %, < 15 % acceptance), Stefan-problem contact-time kinetics,
