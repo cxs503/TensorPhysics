@@ -8,6 +8,12 @@ packet that both solvers agreed on paper) into an executable pipeline:
 ``conservation``      area (≤1 %), energy (≤2 %), mass and clump-volume gates
 ``dem_rigid``         rigid-fragment integrator closing the energy chain (free fall + impact)
 ``three_point_bend``  notched three-point-bend FEM driver used for the end-to-end case
+``mixed_mode``        crack-tip K by displacement correlation, MTS kink angle, Williams
+                      stress-field fit and element-deletion crack advance
+``transfer``          mass / inertia / velocity inheritance and the volume, momentum and
+                      energy budgets of the reconstructed fragments
+``protocol``          the continuous-crack -> discrete-fragment protocol (C1-C4 + capability
+                      record) on a mixed-mode ice three-point-bend specimen
 ``pipeline``          the end-to-end run that produces the audited artifacts
 ``schema``            frozen JSON Schema, canonical digest, seal and version upgrades
 ``geometry``          polygon primitives shared by both sides (independent recomputation)
@@ -47,6 +53,40 @@ from .fem_export import (
 )
 from .geometry import polygon_area, polygon_centroid
 from .pipeline import run_handoff
+from .mixed_mode import (
+    EFFECTIVE_KAPPA_CASES,
+    asymptotic_kink_angle_deg,
+    asymptotic_sigma_theta,
+    mts_kink_angle_deg,
+    notch_face_node_pairs,
+    propagate_crack,
+    ring_kink_angle,
+    senb_k1_reference,
+    solve_step,
+    stress_intensity_factors,
+)
+from .protocol import (
+    ICE_DENSITY_KG_M3,
+    ICE_MATERIAL,
+    ICE_SPEC,
+    ProtocolRun,
+    gate_sensitivity,
+    run_protocol,
+    write_protocol_artifacts,
+)
+from .transfer import (
+    TransferFragment,
+    build_transfer_fragment,
+    element_volume,
+    element_volumes,
+    energy_budget,
+    fragment_inertia,
+    momentum_budget,
+    polyhedron_volume,
+    polygon_second_moments,
+    rigid_body_fit,
+    volume_budget,
+)
 from .schema import (
     FAILURE_FACES_SCHEMA,
     SCHEMA_FINGERPRINT,
@@ -69,6 +109,34 @@ from .three_point_bend import (
 )
 
 __all__ = [
+    "EFFECTIVE_KAPPA_CASES",
+    "ICE_DENSITY_KG_M3",
+    "ICE_MATERIAL",
+    "ICE_SPEC",
+    "ProtocolRun",
+    "gate_sensitivity",
+    "TransferFragment",
+    "asymptotic_kink_angle_deg",
+    "asymptotic_sigma_theta",
+    "build_transfer_fragment",
+    "element_volume",
+    "element_volumes",
+    "energy_budget",
+    "fragment_inertia",
+    "momentum_budget",
+    "mts_kink_angle_deg",
+    "notch_face_node_pairs",
+    "polyhedron_volume",
+    "polygon_second_moments",
+    "propagate_crack",
+    "rigid_body_fit",
+    "ring_kink_angle",
+    "run_protocol",
+    "senb_k1_reference",
+    "solve_step",
+    "stress_intensity_factors",
+    "volume_budget",
+    "write_protocol_artifacts",
     "AREA_TOLERANCE",
     "ENERGY_TOLERANCE",
     "BeamSpec",

@@ -249,6 +249,20 @@ class RigidDEM:
         history.min_height.append(float(np.min(positions[:, 1] - radii - self.ground)))
 
     # -- convenience -----------------------------------------------------
+    def set_velocities(self, velocities) -> None:
+        """Overwrite the fragment translational velocities (handoff initial condition).
+
+        The FEM→DEM handoff inherits a velocity field; the rigid integrator is
+        otherwise initialised at rest.
+        """
+        values = np.asarray(velocities, dtype=float)
+        if values.shape != (len(self.states), 3):
+            raise ValueError(
+                f"expected {len(self.states)} velocities of shape (3,), got {values.shape}"
+            )
+        for state, velocity in zip(self.states, values):
+            state.velocity_m_s = np.array(velocity, dtype=float)
+
     def lift_to(self, release_height_m: float) -> None:
         """Translate every fragment so the lowest one starts at ``release_height_m``.
 
