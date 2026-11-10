@@ -14,7 +14,7 @@ dependencies = []
 [project.optional-dependencies]
 test = [
     "pytest>=7.4", "numpy>=1.24", "scipy>=1.10", "matplotlib>=3.7", "torch>=2.1", "fastapi>=0.110",
-    "httpx2",
+    "httpx>=0.27",
   ]
 physics = ["numpy>=1.24", "scipy>=1.10"]
 plots = ["matplotlib>=3.7"]
