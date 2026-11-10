@@ -1,0 +1,40 @@
+{
+  "_note": "Domain-neutral epistemic cue lexemes. Keys are the signal fields of tensorphysics.failure_taxonomy.evidence.SIGNAL_KEYS. No physics or ship-domain noun may appear here; the scanner in purity.py enforces the separation with domain_lexicon.json.",
+  "reference_lexeme": [
+    "基准", "参考值", "参照", "解析解", "解析值", "解析极限", "解析场", "实验值", "试验值",
+    "文献值", "对标", "未对标", "reference", "benchmark", "analytic", "experimental",
+    "measured value", "published"
+  ],
+  "absence_lexeme": [
+    "无", "缺少", "缺失", "未取得", "未提供", "未给出", "未获得", "没有", "不存在", "不足",
+    "不可得", "无法判定", "不可判定", "absent", "missing", "not available", "no reference"
+  ],
+  "artifact_lexeme": [
+    "产物", "工件", "交付", "递交", "落盘", "可解析", "报告", "artifact", "deliverable",
+    "withheld", "在飞"
+  ],
+  "withheld_lexeme": [
+    "withheld", "无法判定", "不可判定", "未判定", "不允许给出", "不可算", "不可信", "保留"
+  ],
+  "threshold_lexeme": [
+    "判据", "阈值", "容差", "门槛", "超出", "≤", "误差", "偏差", "tolerance", "criterion",
+    "threshold", "band", "within"
+  ],
+  "convergence_lexeme": [
+    "收敛", "残差", "迭代", "发散", "收敛阶", "细化", "极限环", "网格", "阶", "振荡",
+    "stagnant", "diverg", "residual", "iteration", "order", "refinement", "monte carlo",
+    "蒙特卡洛"
+  ],
+  "assumption_lexeme": [
+    "假设", "简化", "理想化", "固有", "不覆盖", "约化", "各向同性", "锁死", "体积格式化",
+    "封顶", "上限", "失效区", "限定", "assumption", "idealisation", "reduced", "envelope"
+  ],
+  "envelope_lexeme": [
+    "外推", "适用域", "适用范围", "域外", "超出", "范围", "extrapolat", "validity", "envelope",
+    "validated on"
+  ],
+  "defect_lexeme": [
+    "缺陷", "bug", "初版", "修复", "忽略", "写错", "误用", "错位", "不一致", "实现错误",
+    "regression", "typo", "patch", "failed checks"
+  ]
+}
