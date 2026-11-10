@@ -1,0 +1,1468 @@
+{
+  "module": "tensorphysics.plasticity.cowper_symonds + impact_daf",
+  "cowper_symonds": {
+    "D": 40.4,
+    "p": 5.0
+  },
+  "thresholds": {
+    "uniaxial": 0.02,
+    "daf_vs_reference": 0.15,
+    "rate_independent": 0.01,
+    "quasi_static": 0.02
+  },
+  "a_cowper_symonds": {
+    "D": 40.4,
+    "p": 5.0,
+    "perfectly_plastic": [
+      {
+        "strain_rate": 0.001,
+        "sigma_dynamic": 263170307.60303503,
+        "sigma_analytic": 263170307.60303748,
+        "relative_error": 9.285965647299375e-15,
+        "plastic_strain_rate": 0.001000000000001523,
+        "amplification": 1.119873649374617
+      },
+      {
+        "strain_rate": 0.1,
+        "sigma_dynamic": 305760613.4395416,
+        "sigma_analytic": 305760613.439521,
+        "relative_error": 6.72539285429489e-14,
+        "plastic_strain_rate": 0.0999999999999139,
+        "amplification": 1.3011089933597515
+      },
+      {
+        "strain_rate": 10.0,
+        "sigma_dynamic": 412742624.78399056,
+        "sigma_analytic": 412742624.7840272,
+        "relative_error": 8.88128686879539e-14,
+        "plastic_strain_rate": 10.000000000007132,
+        "amplification": 1.7563515948254917
+      }
+    ],
+    "hardening_2GPa": [
+      {
+        "strain_rate": 0.001,
+        "sigma_dynamic": 304646934.19133735,
+        "sigma_analytic": 304654276.9522635,
+        "relative_error": 2.4101945981470588e-05,
+        "plastic_strain_rate": 0.0009894494568218175
+      },
+      {
+        "strain_rate": 0.1,
+        "sigma_dynamic": 353226859.3021509,
+        "sigma_analytic": 353273047.27653307,
+        "relative_error": 0.00013074298970226092,
+        "plastic_strain_rate": 0.09877670351743369
+      },
+      {
+        "strain_rate": 10.0,
+        "sigma_dynamic": 474384911.7744413,
+        "sigma_analytic": 474674113.1722184,
+        "relative_error": 0.0006092630496412899,
+        "plastic_strain_rate": 9.835710853059677
+      }
+    ],
+    "criteria": [
+      {
+        "name": "a_uniaxial_H0_rate_0.001",
+        "description": "Cowper-Symonds uniaxial tension, perfectly plastic, vs analytic sigma_0*A(rate)",
+        "model": 263170307.60303503,
+        "reference": 263170307.60303748,
+        "relative_error": 9.285965647299375e-15,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "a_uniaxial_H0_rate_0.1",
+        "description": "Cowper-Symonds uniaxial tension, perfectly plastic, vs analytic sigma_0*A(rate)",
+        "model": 305760613.4395416,
+        "reference": 305760613.439521,
+        "relative_error": 6.72539285429489e-14,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "a_uniaxial_H0_rate_10",
+        "description": "Cowper-Symonds uniaxial tension, perfectly plastic, vs analytic sigma_0*A(rate)",
+        "model": 412742624.78399056,
+        "reference": 412742624.7840272,
+        "relative_error": 8.88128686879539e-14,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "a_uniaxial_H2GPa_rate_0.001",
+        "description": "Cowper-Symonds uniaxial tension, H = 2 GPa, vs steady-state closed form (eps_p_dot = eps_dot/(1+H/E))",
+        "model": 304646934.19133735,
+        "reference": 304654276.9522635,
+        "relative_error": 2.4101945981470588e-05,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "a_uniaxial_H2GPa_rate_0.1",
+        "description": "Cowper-Symonds uniaxial tension, H = 2 GPa, vs steady-state closed form (eps_p_dot = eps_dot/(1+H/E))",
+        "model": 353226859.3021509,
+        "reference": 353273047.27653307,
+        "relative_error": 0.00013074298970226092,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "a_uniaxial_H2GPa_rate_10",
+        "description": "Cowper-Symonds uniaxial tension, H = 2 GPa, vs steady-state closed form (eps_p_dot = eps_dot/(1+H/E))",
+        "model": 474384911.7744413,
+        "reference": 474674113.1722184,
+        "relative_error": 0.0006092630496412899,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "a_inverse_round_trip",
+        "description": "analytic inverse rate = D (A-1)^p reproduces A within machine precision",
+        "model": 0.0,
+        "reference": 0.0,
+        "relative_error": 0.0,
+        "tolerance": 1e-12,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_literature_flow_stress_ratio_100",
+        "description": "CS(D=40.4,p=5) flow-stress ratio at 100 s^-1 vs mild-steel literature value ~2",
+        "model": 2.1987364937462757,
+        "reference": 2.0,
+        "relative_error": 0.09936824687313783,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": "literature anchor: Jones (1989) ch. 8 / Campbell & Cooper (1966)"
+      }
+    ]
+  },
+  "b_shock_spectrum": {
+    "rows": [
+      {
+        "tau_over_T": 0.05,
+        "closed_form": 0.19953299810002786,
+        "rk4": 0.19953284551675685,
+        "relative_error": 7.64701941388107e-07
+      },
+      {
+        "tau_over_T": 0.2,
+        "closed_form": 0.770492375595188,
+        "rk4": 0.7704923755952041,
+        "relative_error": 2.0893436933271723e-14
+      },
+      {
+        "tau_over_T": 0.4,
+        "closed_form": 1.3734088638886552,
+        "rk4": 1.3734088464756047,
+        "relative_error": 1.2678708442088806e-08
+      },
+      {
+        "tau_over_T": 0.6,
+        "closed_form": 1.6903953402212892,
+        "rk4": 1.6903952583256685,
+        "relative_error": 4.8447613869211424e-08
+      },
+      {
+        "tau_over_T": 0.8,
+        "closed_form": 1.7683270881774058,
+        "rk4": 1.7683270176311907,
+        "relative_error": 3.989432473409038e-08
+      },
+      {
+        "tau_over_T": 1.0,
+        "closed_form": 1.7320508063817421,
+        "rk4": 1.7320508075688694,
+        "relative_error": 6.853882582361616e-10
+      },
+      {
+        "tau_over_T": 1.5,
+        "closed_form": 1.5,
+        "rk4": 1.5000000000000033,
+        "relative_error": 2.220446049250313e-15
+      },
+      {
+        "tau_over_T": 2.0,
+        "closed_form": 1.2680753550602049,
+        "rk4": 1.2680753550602197,
+        "relative_error": 1.173194358727268e-14
+      },
+      {
+        "tau_over_T": 5.0,
+        "closed_form": 1.0998016009685885,
+        "rk4": 1.0998015941157573,
+        "relative_error": 6.230970372619825e-09
+      }
+    ],
+    "peak": {
+      "tau_over_T": 0.8110183639398998,
+      "daf_max": 1.7684561298151826
+    },
+    "criteria": [
+      {
+        "name": "b_shock_spectrum_tau_T_0.05",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 0.19953284551675685,
+        "reference": 0.19953299810002786,
+        "relative_error": 7.64701941388107e-07,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_0.2",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 0.7704923755952041,
+        "reference": 0.770492375595188,
+        "relative_error": 2.0893436933271723e-14,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_0.4",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 1.3734088464756047,
+        "reference": 1.3734088638886552,
+        "relative_error": 1.2678708442088806e-08,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_0.6",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 1.6903952583256685,
+        "reference": 1.6903953402212892,
+        "relative_error": 4.8447613869211424e-08,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_0.8",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 1.7683270176311907,
+        "reference": 1.7683270881774058,
+        "relative_error": 3.989432473409038e-08,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_1",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 1.7320508075688694,
+        "reference": 1.7320508063817421,
+        "relative_error": 6.853882582361616e-10,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_1.5",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 1.5000000000000033,
+        "reference": 1.5,
+        "relative_error": 2.220446049250313e-15,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_2",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 1.2680753550602197,
+        "reference": 1.2680753550602049,
+        "relative_error": 1.173194358727268e-14,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_tau_T_5",
+        "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+        "model": 1.0998015941157573,
+        "reference": 1.0998016009685885,
+        "relative_error": 6.230970372619825e-09,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_shock_spectrum_peak_vs_literature",
+        "description": "peak undamped half-sine DAF vs the textbook value 1.77",
+        "model": 1.7684561298151826,
+        "reference": 1.77,
+        "relative_error": 0.0008722430422697098,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": "literature anchor: Harris & Crede, Shock and Vibration Handbook"
+      }
+    ]
+  },
+  "b_daf_six_cases": {
+    "load_ratio": 0.5,
+    "cases": [
+      {
+        "thickness": 0.008,
+        "pulse_duration": 0.01,
+        "pressure_amplitude": 15040.0,
+        "sigma_static_global": 117482380.28592646,
+        "sigma_dynamic_max": 155606144.45092422,
+        "daf_fem": 1.324506228697553,
+        "daf_modal_reference": 1.332024051869688,
+        "daf_modal_sections": {
+          "end": 1.332024051869688,
+          "mid": 1.6006337934776467
+        },
+        "relative_error": 0.005643909478648337,
+        "tau_over_T1": 0.4458650000695129,
+        "first_period": 0.022428313499469443,
+        "max_plastic_strain_rate": 0.0,
+        "plastic": false
+      },
+      {
+        "thickness": 0.008,
+        "pulse_duration": 0.03,
+        "pressure_amplitude": 15040.0,
+        "sigma_static_global": 117482380.28592646,
+        "sigma_dynamic_max": 178700263.29986387,
+        "daf_fem": 1.5210813984611689,
+        "daf_modal_reference": 1.5232741906547174,
+        "daf_modal_sections": {
+          "end": 1.5232741906547174,
+          "mid": 1.6303857356466922
+        },
+        "relative_error": 0.0014395256001849721,
+        "tau_over_T1": 1.3375950002085386,
+        "first_period": 0.022428313499469443,
+        "max_plastic_strain_rate": 0.0,
+        "plastic": false
+      },
+      {
+        "thickness": 0.008,
+        "pulse_duration": 0.1,
+        "pressure_amplitude": 15040.0,
+        "sigma_static_global": 117482380.28592646,
+        "sigma_dynamic_max": 124959740.62390576,
+        "daf_fem": 1.0636466533941604,
+        "daf_modal_reference": 1.0637242258752484,
+        "daf_modal_sections": {
+          "end": 1.0637242258752484,
+          "mid": 1.0832673743280403
+        },
+        "relative_error": 7.292536843761848e-05,
+        "tau_over_T1": 4.458650000695129,
+        "first_period": 0.022428313499469443,
+        "max_plastic_strain_rate": 0.0,
+        "plastic": false
+      },
+      {
+        "thickness": 0.016,
+        "pulse_duration": 0.01,
+        "pressure_amplitude": 60160.0,
+        "sigma_static_global": 117482380.28592646,
+        "sigma_dynamic_max": 194099469.47124282,
+        "daf_fem": 1.6521581278728528,
+        "daf_modal_reference": 1.6565492623339484,
+        "daf_modal_sections": {
+          "end": 1.6565492623339484,
+          "mid": 1.8462087836597632
+        },
+        "relative_error": 0.002650772036147515,
+        "tau_over_T1": 0.8917300001390258,
+        "first_period": 0.011214156749734722,
+        "max_plastic_strain_rate": 0.0,
+        "plastic": false
+      },
+      {
+        "thickness": 0.016,
+        "pulse_duration": 0.03,
+        "pressure_amplitude": 60160.0,
+        "sigma_static_global": 117482380.28592646,
+        "sigma_dynamic_max": 129860177.5667937,
+        "daf_fem": 1.105358754655314,
+        "daf_modal_reference": 1.1060994908985482,
+        "daf_modal_sections": {
+          "end": 1.1060994908985482,
+          "mid": 1.1499831243230623
+        },
+        "relative_error": 0.0006696831969720703,
+        "tau_over_T1": 2.675190000417077,
+        "first_period": 0.011214156749734722,
+        "max_plastic_strain_rate": 0.0,
+        "plastic": false
+      },
+      {
+        "thickness": 0.016,
+        "pulse_duration": 0.1,
+        "pressure_amplitude": 60160.0,
+        "sigma_static_global": 117482380.28592646,
+        "sigma_dynamic_max": 123160716.80083065,
+        "daf_fem": 1.0483335160649994,
+        "daf_modal_reference": 1.048610637537107,
+        "daf_modal_sections": {
+          "end": 1.048610637537107,
+          "mid": 1.0590832806325003
+        },
+        "relative_error": 0.00026427490069950787,
+        "tau_over_T1": 8.917300001390258,
+        "first_period": 0.011214156749734722,
+        "max_plastic_strain_rate": 0.0,
+        "plastic": false
+      }
+    ],
+    "max_relative_error": 0.005643909478648337,
+    "criteria": [
+      {
+        "name": "b_daf_h8mm_tau10ms",
+        "description": "plate-strip FE DAF vs exact modal superposition reference",
+        "model": 1.324506228697553,
+        "reference": 1.332024051869688,
+        "relative_error": 0.005643909478648337,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_daf_h8mm_tau30ms",
+        "description": "plate-strip FE DAF vs exact modal superposition reference",
+        "model": 1.5210813984611689,
+        "reference": 1.5232741906547174,
+        "relative_error": 0.0014395256001849721,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_daf_h8mm_tau100ms",
+        "description": "plate-strip FE DAF vs exact modal superposition reference",
+        "model": 1.0636466533941604,
+        "reference": 1.0637242258752484,
+        "relative_error": 7.292536843761848e-05,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_daf_h16mm_tau10ms",
+        "description": "plate-strip FE DAF vs exact modal superposition reference",
+        "model": 1.6521581278728528,
+        "reference": 1.6565492623339484,
+        "relative_error": 0.002650772036147515,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_daf_h16mm_tau30ms",
+        "description": "plate-strip FE DAF vs exact modal superposition reference",
+        "model": 1.105358754655314,
+        "reference": 1.1060994908985482,
+        "relative_error": 0.0006696831969720703,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_daf_h16mm_tau100ms",
+        "description": "plate-strip FE DAF vs exact modal superposition reference",
+        "model": 1.0483335160649994,
+        "reference": 1.048610637537107,
+        "relative_error": 0.00026427490069950787,
+        "tolerance": 0.15,
+        "passed": true,
+        "note": ""
+      }
+    ],
+    "all_passed": true
+  },
+  "b_daf_plastic_cases": {
+    "load_ratio": 0.8,
+    "cases": [
+      {
+        "thickness": 0.008,
+        "pulse_duration": 0.01,
+        "pressure_amplitude": 24064.0,
+        "load_ratio_to_first_yield": 0.8,
+        "collapse_ratio": 1.6666666666666665,
+        "daf_cs": 2.117874791139573,
+        "daf_rate_independent": 1.261613448722458,
+        "daf_rate_factor": 1.6787034041878575,
+        "daf_elastic_modal": 1.332024051869688,
+        "max_plastic_strain_rate": 5.296642580898263,
+        "final_plastic_strain": {
+          "end_0": 0.002519240414313041,
+          "mid": 0.0,
+          "end_L": 0.0025192404143118668
+        },
+        "sigma_dynamic_max_sections": {
+          "end_0": 398100754.5769535,
+          "mid": 189557706.74189353,
+          "end_L": 398100754.57701826
+        },
+        "sigma_static_global": 187971808.45748234,
+        "tau_over_T1": 0.4458650000695129,
+        "sigma_peak": 398100754.57701826,
+        "capacity_bound": 399922379.60495186,
+        "capacity_ratio": 0.9954450535383066
+      },
+      {
+        "thickness": 0.008,
+        "pulse_duration": 0.03,
+        "pressure_amplitude": 24064.0,
+        "load_ratio_to_first_yield": 0.8,
+        "collapse_ratio": 1.6666666666666665,
+        "daf_cs": 2.865631668094525,
+        "daf_rate_independent": 1.28820185361544,
+        "daf_rate_factor": 2.224520683658313,
+        "daf_elastic_modal": 1.5232741906547171,
+        "max_plastic_strain_rate": 62.3323065526609,
+        "final_plastic_strain": {
+          "end_0": 0.016154608976029945,
+          "mid": 0.01813301397319562,
+          "end_L": 0.016154608975971572
+        },
+        "sigma_dynamic_max_sections": {
+          "end_0": 519257184.1513914,
+          "mid": 538657967.0247597,
+          "end_L": 519257184.15129524
+        },
+        "sigma_static_global": 187971808.45748234,
+        "tau_over_T1": 1.3375950002085386,
+        "sigma_peak": 538657967.0247597,
+        "capacity_bound": 567109352.8536615,
+        "capacity_ratio": 0.9498308647428646
+      },
+      {
+        "thickness": 0.008,
+        "pulse_duration": 0.1,
+        "pressure_amplitude": 24064.0,
+        "load_ratio_to_first_yield": 0.8,
+        "collapse_ratio": 1.6666666666666665,
+        "daf_cs": 1.0636466533942135,
+        "daf_rate_independent": 1.0636466533942135,
+        "daf_rate_factor": 1.0,
+        "daf_elastic_modal": 1.0637242258752484,
+        "max_plastic_strain_rate": 0.0,
+        "final_plastic_strain": {
+          "end_0": 0.0,
+          "mid": 0.0,
+          "end_L": 0.0
+        },
+        "sigma_dynamic_max_sections": {
+          "end_0": 199935584.99817112,
+          "mid": 101926872.93386728,
+          "end_L": 199935584.99825922
+        },
+        "sigma_static_global": 187971808.45748234,
+        "tau_over_T1": 4.458650000695129,
+        "sigma_peak": 199935584.99825922,
+        "capacity_bound": 235000000.0,
+        "capacity_ratio": 0.8507897233968478
+      },
+      {
+        "thickness": 0.016,
+        "pulse_duration": 0.01,
+        "pressure_amplitude": 96256.0,
+        "load_ratio_to_first_yield": 0.8,
+        "collapse_ratio": 1.6666666666666665,
+        "daf_cs": 2.4861064122284526,
+        "daf_rate_independent": 1.2829943180650625,
+        "daf_rate_factor": 1.9377376635446477,
+        "daf_elastic_modal": 1.6565492623339486,
+        "max_plastic_strain_rate": 28.72039047839691,
+        "final_plastic_strain": {
+          "end_0": 0.004518209118066905,
+          "mid": 0.005308693559549468,
+          "end_L": 0.004518251478189387
+        },
+        "sigma_dynamic_max_sections": {
+          "end_0": 464361055.46308815,
+          "mid": 467317918.3243253,
+          "end_L": 464361055.4630813
+        },
+        "sigma_static_global": 187971808.45748234,
+        "tau_over_T1": 0.8917300001390258,
+        "sigma_peak": 467317918.3243253,
+        "capacity_bound": 475031907.3515489,
+        "capacity_ratio": 0.9837611139213122
+      },
+      {
+        "thickness": 0.016,
+        "pulse_duration": 0.03,
+        "pressure_amplitude": 96256.0,
+        "load_ratio_to_first_yield": 0.8,
+        "collapse_ratio": 1.6666666666666665,
+        "daf_cs": 1.1053587546555157,
+        "daf_rate_independent": 1.1053587546555157,
+        "daf_rate_factor": 1.0,
+        "daf_elastic_modal": 1.1060994908985478,
+        "max_plastic_strain_rate": 0.0,
+        "final_plastic_strain": {
+          "end_0": 0.0,
+          "mid": 0.0,
+          "end_L": 0.0
+        },
+        "sigma_dynamic_max_sections": {
+          "end_0": 207776284.10680217,
+          "mid": 108139925.3002393,
+          "end_L": 207776284.1069078
+        },
+        "sigma_static_global": 187971808.45748234,
+        "tau_over_T1": 2.675190000417077,
+        "sigma_peak": 207776284.1069078,
+        "capacity_bound": 235000000.0,
+        "capacity_ratio": 0.8841544004549269
+      },
+      {
+        "thickness": 0.016,
+        "pulse_duration": 0.1,
+        "pressure_amplitude": 96256.0,
+        "load_ratio_to_first_yield": 0.8,
+        "collapse_ratio": 1.6666666666666665,
+        "daf_cs": 1.0483335160648448,
+        "daf_rate_independent": 1.0483335160648448,
+        "daf_rate_factor": 1.0,
+        "daf_elastic_modal": 1.048610637537107,
+        "max_plastic_strain_rate": 0.0,
+        "final_plastic_strain": {
+          "end_0": 0.0,
+          "mid": 0.0,
+          "end_L": 0.0
+        },
+        "sigma_dynamic_max_sections": {
+          "end_0": 197057146.88117525,
+          "mid": 99617904.94128571,
+          "end_L": 197057146.88129997
+        },
+        "sigma_static_global": 187971808.45748234,
+        "tau_over_T1": 8.917300001390258,
+        "sigma_peak": 197057146.88129997,
+        "capacity_bound": 235000000.0,
+        "capacity_ratio": 0.8385410505587233
+      }
+    ],
+    "criteria": [
+      {
+        "name": "b_plastic_rate_effect_monotone",
+        "description": "strain-rate sensitivity can only raise the dynamic capacity: DAF(CS) >= DAF(rate-independent) in every case",
+        "model": 0.0,
+        "reference": -0.0,
+        "relative_error": 0.0,
+        "tolerance": 1e-12,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "b_plastic_cs_capacity_bound",
+        "description": "peak section stress stays below the CS capacity (sigma_0 + H eps_p) A(eps_p_dot) of the same run (constitutive self-consistency)",
+        "model": 0.9954450535383066,
+        "reference": 1.0,
+        "relative_error": 0.0,
+        "tolerance": 1e-06,
+        "passed": true,
+        "note": ""
+      }
+    ]
+  },
+  "c_rate_independent": {
+    "rows": [
+      {
+        "strain_rate": 0.0,
+        "amplification": 1.0,
+        "relative_deviation": 0.0
+      },
+      {
+        "strain_rate": 1e-06,
+        "amplification": 1.0301108993359664,
+        "relative_deviation": 0.030110899335966446
+      },
+      {
+        "strain_rate": 0.0001,
+        "amplification": 1.0756351594825648,
+        "relative_deviation": 0.07563515948256483
+      }
+    ],
+    "rate_for_one_percent": 4.0400000000000175e-09,
+    "criteria": [
+      {
+        "name": "c_exact_rate_zero",
+        "description": "A(0) == 1 exactly (rate-independent limit is structural, not a tolerance)",
+        "model": 1.0,
+        "reference": 1.0,
+        "relative_error": 0.0,
+        "tolerance": 0.01,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "c_rate_independent_literal_1e-4",
+        "description": "literal criterion: |sigma_d-sigma_0|/sigma_0 <= 1 % at 1e-4 s^-1 (classical CS, D=40.4, p=5) -- NOT ACHIEVABLE, reported as FAIL",
+        "model": 1.0756351594825648,
+        "reference": 1.0,
+        "relative_error": 0.07563515948256483,
+        "tolerance": 0.01,
+        "passed": false,
+        "note": "CS is a threshold-free power law; a 1 % threshold requires eps_p_dot <= 4.04e-09 s^-1 (reported as c_rate_independent_at_needed_rate)"
+      },
+      {
+        "name": "c_rate_independent_at_needed_rate",
+        "description": "at the rate where CS reaches exactly 1 % amplification, the deviation is <= 1 %",
+        "model": 1.01,
+        "reference": 1.0,
+        "relative_error": 0.010000000000000009,
+        "tolerance": 0.01,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "c_rate_independent_D_infinity",
+        "description": "D -> infinity (rate-insensitive material) leaves A == 1 at all rates",
+        "model": 1.0000000025118865,
+        "reference": 1.0,
+        "relative_error": 2.5118864765971693e-09,
+        "tolerance": 0.01,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "c_uniaxial_zero_rate",
+        "description": "uniaxial stress at eps_dot = 1e-12 s^-1 equals sigma_0",
+        "model": 235446469.28749707,
+        "reference": 235000000.0,
+        "relative_error": 0.0018998693084981847,
+        "tolerance": 0.01,
+        "passed": true,
+        "note": ""
+      }
+    ]
+  },
+  "d_quasi_static": {
+    "rows": [
+      {
+        "thickness": 0.008,
+        "pulse_duration": 10.0,
+        "tau_over_T1": 445.86500006951286,
+        "daf": 1.0010106767875473,
+        "deviation_from_one": 0.0010106767875472933,
+        "sdof_reference": 1.0011215031354292
+      },
+      {
+        "thickness": 0.016,
+        "pulse_duration": 10.0,
+        "tau_over_T1": 891.7300001390257,
+        "daf": 1.0005041525198428,
+        "deviation_from_one": 0.0005041525198428154,
+        "sdof_reference": 1.000560807091502
+      }
+    ],
+    "criteria": [
+      {
+        "name": "d_quasi_static_h8mm",
+        "description": "pulse duration 10 s: |DAF - 1| <= 2 %",
+        "model": 1.0010106767875473,
+        "reference": 1.0,
+        "relative_error": 0.0010106767875472933,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "d_quasi_static_h16mm",
+        "description": "pulse duration 10 s: |DAF - 1| <= 2 %",
+        "model": 1.0005041525198428,
+        "reference": 1.0,
+        "relative_error": 0.0005041525198428154,
+        "tolerance": 0.02,
+        "passed": true,
+        "note": ""
+      }
+    ]
+  },
+  "d_elastic_linearity": {
+    "rows": [
+      {
+        "load_ratio": 0.1,
+        "daf_fem": 1.3241658864038506,
+        "daf_modal": 1.332024051869688,
+        "max_plastic_strain_rate": 0.0
+      },
+      {
+        "load_ratio": 0.25,
+        "daf_fem": 1.324165886403763,
+        "daf_modal": 1.332024051869688,
+        "max_plastic_strain_rate": 0.0
+      }
+    ],
+    "criteria": [
+      {
+        "name": "d_elastic_amplitude_invariance",
+        "description": "elastic DAF is amplitude independent (spread of two amplitudes <= 1 %)",
+        "model": 8.748557434046234e-14,
+        "reference": 0.0,
+        "relative_error": 6.606843994301741e-14,
+        "tolerance": 0.01,
+        "passed": true,
+        "note": ""
+      },
+      {
+        "name": "c_no_plasticity_below_yield",
+        "description": "below first yield the plastic strain rate is exactly zero",
+        "model": 0.0,
+        "reference": 0.0,
+        "relative_error": 0.0,
+        "tolerance": 1e-12,
+        "passed": true,
+        "note": ""
+      }
+    ]
+  },
+  "criteria": [
+    {
+      "name": "a_uniaxial_H0_rate_0.001",
+      "description": "Cowper-Symonds uniaxial tension, perfectly plastic, vs analytic sigma_0*A(rate)",
+      "model": 263170307.60303503,
+      "reference": 263170307.60303748,
+      "relative_error": 9.285965647299375e-15,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "a_uniaxial_H0_rate_0.1",
+      "description": "Cowper-Symonds uniaxial tension, perfectly plastic, vs analytic sigma_0*A(rate)",
+      "model": 305760613.4395416,
+      "reference": 305760613.439521,
+      "relative_error": 6.72539285429489e-14,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "a_uniaxial_H0_rate_10",
+      "description": "Cowper-Symonds uniaxial tension, perfectly plastic, vs analytic sigma_0*A(rate)",
+      "model": 412742624.78399056,
+      "reference": 412742624.7840272,
+      "relative_error": 8.88128686879539e-14,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "a_uniaxial_H2GPa_rate_0.001",
+      "description": "Cowper-Symonds uniaxial tension, H = 2 GPa, vs steady-state closed form (eps_p_dot = eps_dot/(1+H/E))",
+      "model": 304646934.19133735,
+      "reference": 304654276.9522635,
+      "relative_error": 2.4101945981470588e-05,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "a_uniaxial_H2GPa_rate_0.1",
+      "description": "Cowper-Symonds uniaxial tension, H = 2 GPa, vs steady-state closed form (eps_p_dot = eps_dot/(1+H/E))",
+      "model": 353226859.3021509,
+      "reference": 353273047.27653307,
+      "relative_error": 0.00013074298970226092,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "a_uniaxial_H2GPa_rate_10",
+      "description": "Cowper-Symonds uniaxial tension, H = 2 GPa, vs steady-state closed form (eps_p_dot = eps_dot/(1+H/E))",
+      "model": 474384911.7744413,
+      "reference": 474674113.1722184,
+      "relative_error": 0.0006092630496412899,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "a_inverse_round_trip",
+      "description": "analytic inverse rate = D (A-1)^p reproduces A within machine precision",
+      "model": 0.0,
+      "reference": 0.0,
+      "relative_error": 0.0,
+      "tolerance": 1e-12,
+      "passed": true,
+      "note": "",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "b_literature_flow_stress_ratio_100",
+      "description": "CS(D=40.4,p=5) flow-stress ratio at 100 s^-1 vs mild-steel literature value ~2",
+      "model": 2.1987364937462757,
+      "reference": 2.0,
+      "relative_error": 0.09936824687313783,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "literature anchor: Jones (1989) ch. 8 / Campbell & Cooper (1966)",
+      "group": "a_cowper_symonds"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_0.05",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 0.19953284551675685,
+      "reference": 0.19953299810002786,
+      "relative_error": 7.64701941388107e-07,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_0.2",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 0.7704923755952041,
+      "reference": 0.770492375595188,
+      "relative_error": 2.0893436933271723e-14,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_0.4",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 1.3734088464756047,
+      "reference": 1.3734088638886552,
+      "relative_error": 1.2678708442088806e-08,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_0.6",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 1.6903952583256685,
+      "reference": 1.6903953402212892,
+      "relative_error": 4.8447613869211424e-08,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_0.8",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 1.7683270176311907,
+      "reference": 1.7683270881774058,
+      "relative_error": 3.989432473409038e-08,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_1",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 1.7320508075688694,
+      "reference": 1.7320508063817421,
+      "relative_error": 6.853882582361616e-10,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_1.5",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 1.5000000000000033,
+      "reference": 1.5,
+      "relative_error": 2.220446049250313e-15,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_2",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 1.2680753550602197,
+      "reference": 1.2680753550602049,
+      "relative_error": 1.173194358727268e-14,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_tau_T_5",
+      "description": "closed-form half-sine shock spectrum vs independent RK4 integration",
+      "model": 1.0998015941157573,
+      "reference": 1.0998016009685885,
+      "relative_error": 6.230970372619825e-09,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_shock_spectrum_peak_vs_literature",
+      "description": "peak undamped half-sine DAF vs the textbook value 1.77",
+      "model": 1.7684561298151826,
+      "reference": 1.77,
+      "relative_error": 0.0008722430422697098,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "literature anchor: Harris & Crede, Shock and Vibration Handbook",
+      "group": "b_shock_spectrum"
+    },
+    {
+      "name": "b_daf_h8mm_tau10ms",
+      "description": "plate-strip FE DAF vs exact modal superposition reference",
+      "model": 1.324506228697553,
+      "reference": 1.332024051869688,
+      "relative_error": 0.005643909478648337,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_six_cases"
+    },
+    {
+      "name": "b_daf_h8mm_tau30ms",
+      "description": "plate-strip FE DAF vs exact modal superposition reference",
+      "model": 1.5210813984611689,
+      "reference": 1.5232741906547174,
+      "relative_error": 0.0014395256001849721,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_six_cases"
+    },
+    {
+      "name": "b_daf_h8mm_tau100ms",
+      "description": "plate-strip FE DAF vs exact modal superposition reference",
+      "model": 1.0636466533941604,
+      "reference": 1.0637242258752484,
+      "relative_error": 7.292536843761848e-05,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_six_cases"
+    },
+    {
+      "name": "b_daf_h16mm_tau10ms",
+      "description": "plate-strip FE DAF vs exact modal superposition reference",
+      "model": 1.6521581278728528,
+      "reference": 1.6565492623339484,
+      "relative_error": 0.002650772036147515,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_six_cases"
+    },
+    {
+      "name": "b_daf_h16mm_tau30ms",
+      "description": "plate-strip FE DAF vs exact modal superposition reference",
+      "model": 1.105358754655314,
+      "reference": 1.1060994908985482,
+      "relative_error": 0.0006696831969720703,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_six_cases"
+    },
+    {
+      "name": "b_daf_h16mm_tau100ms",
+      "description": "plate-strip FE DAF vs exact modal superposition reference",
+      "model": 1.0483335160649994,
+      "reference": 1.048610637537107,
+      "relative_error": 0.00026427490069950787,
+      "tolerance": 0.15,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_six_cases"
+    },
+    {
+      "name": "b_plastic_rate_effect_monotone",
+      "description": "strain-rate sensitivity can only raise the dynamic capacity: DAF(CS) >= DAF(rate-independent) in every case",
+      "model": 0.0,
+      "reference": -0.0,
+      "relative_error": 0.0,
+      "tolerance": 1e-12,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_plastic_cases"
+    },
+    {
+      "name": "b_plastic_cs_capacity_bound",
+      "description": "peak section stress stays below the CS capacity (sigma_0 + H eps_p) A(eps_p_dot) of the same run (constitutive self-consistency)",
+      "model": 0.9954450535383066,
+      "reference": 1.0,
+      "relative_error": 0.0,
+      "tolerance": 1e-06,
+      "passed": true,
+      "note": "",
+      "group": "b_daf_plastic_cases"
+    },
+    {
+      "name": "c_exact_rate_zero",
+      "description": "A(0) == 1 exactly (rate-independent limit is structural, not a tolerance)",
+      "model": 1.0,
+      "reference": 1.0,
+      "relative_error": 0.0,
+      "tolerance": 0.01,
+      "passed": true,
+      "note": "",
+      "group": "c_rate_independent"
+    },
+    {
+      "name": "c_rate_independent_literal_1e-4",
+      "description": "literal criterion: |sigma_d-sigma_0|/sigma_0 <= 1 % at 1e-4 s^-1 (classical CS, D=40.4, p=5) -- NOT ACHIEVABLE, reported as FAIL",
+      "model": 1.0756351594825648,
+      "reference": 1.0,
+      "relative_error": 0.07563515948256483,
+      "tolerance": 0.01,
+      "passed": false,
+      "note": "CS is a threshold-free power law; a 1 % threshold requires eps_p_dot <= 4.04e-09 s^-1 (reported as c_rate_independent_at_needed_rate)",
+      "group": "c_rate_independent"
+    },
+    {
+      "name": "c_rate_independent_at_needed_rate",
+      "description": "at the rate where CS reaches exactly 1 % amplification, the deviation is <= 1 %",
+      "model": 1.01,
+      "reference": 1.0,
+      "relative_error": 0.010000000000000009,
+      "tolerance": 0.01,
+      "passed": true,
+      "note": "",
+      "group": "c_rate_independent"
+    },
+    {
+      "name": "c_rate_independent_D_infinity",
+      "description": "D -> infinity (rate-insensitive material) leaves A == 1 at all rates",
+      "model": 1.0000000025118865,
+      "reference": 1.0,
+      "relative_error": 2.5118864765971693e-09,
+      "tolerance": 0.01,
+      "passed": true,
+      "note": "",
+      "group": "c_rate_independent"
+    },
+    {
+      "name": "c_uniaxial_zero_rate",
+      "description": "uniaxial stress at eps_dot = 1e-12 s^-1 equals sigma_0",
+      "model": 235446469.28749707,
+      "reference": 235000000.0,
+      "relative_error": 0.0018998693084981847,
+      "tolerance": 0.01,
+      "passed": true,
+      "note": "",
+      "group": "c_rate_independent"
+    },
+    {
+      "name": "d_quasi_static_h8mm",
+      "description": "pulse duration 10 s: |DAF - 1| <= 2 %",
+      "model": 1.0010106767875473,
+      "reference": 1.0,
+      "relative_error": 0.0010106767875472933,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "d_quasi_static"
+    },
+    {
+      "name": "d_quasi_static_h16mm",
+      "description": "pulse duration 10 s: |DAF - 1| <= 2 %",
+      "model": 1.0005041525198428,
+      "reference": 1.0,
+      "relative_error": 0.0005041525198428154,
+      "tolerance": 0.02,
+      "passed": true,
+      "note": "",
+      "group": "d_quasi_static"
+    },
+    {
+      "name": "d_elastic_amplitude_invariance",
+      "description": "elastic DAF is amplitude independent (spread of two amplitudes <= 1 %)",
+      "model": 8.748557434046234e-14,
+      "reference": 0.0,
+      "relative_error": 6.606843994301741e-14,
+      "tolerance": 0.01,
+      "passed": true,
+      "note": "",
+      "group": "d_elastic_linearity"
+    },
+    {
+      "name": "c_no_plasticity_below_yield",
+      "description": "below first yield the plastic strain rate is exactly zero",
+      "model": 0.0,
+      "reference": 0.0,
+      "relative_error": 0.0,
+      "tolerance": 1e-12,
+      "passed": true,
+      "note": "",
+      "group": "d_elastic_linearity"
+    }
+  ],
+  "passed": [
+    "a_uniaxial_H0_rate_0.001",
+    "a_uniaxial_H0_rate_0.1",
+    "a_uniaxial_H0_rate_10",
+    "a_uniaxial_H2GPa_rate_0.001",
+    "a_uniaxial_H2GPa_rate_0.1",
+    "a_uniaxial_H2GPa_rate_10",
+    "a_inverse_round_trip",
+    "b_literature_flow_stress_ratio_100",
+    "b_shock_spectrum_tau_T_0.05",
+    "b_shock_spectrum_tau_T_0.2",
+    "b_shock_spectrum_tau_T_0.4",
+    "b_shock_spectrum_tau_T_0.6",
+    "b_shock_spectrum_tau_T_0.8",
+    "b_shock_spectrum_tau_T_1",
+    "b_shock_spectrum_tau_T_1.5",
+    "b_shock_spectrum_tau_T_2",
+    "b_shock_spectrum_tau_T_5",
+    "b_shock_spectrum_peak_vs_literature",
+    "b_daf_h8mm_tau10ms",
+    "b_daf_h8mm_tau30ms",
+    "b_daf_h8mm_tau100ms",
+    "b_daf_h16mm_tau10ms",
+    "b_daf_h16mm_tau30ms",
+    "b_daf_h16mm_tau100ms",
+    "b_plastic_rate_effect_monotone",
+    "b_plastic_cs_capacity_bound",
+    "c_exact_rate_zero",
+    "c_rate_independent_at_needed_rate",
+    "c_rate_independent_D_infinity",
+    "c_uniaxial_zero_rate",
+    "d_quasi_static_h8mm",
+    "d_quasi_static_h16mm",
+    "d_elastic_amplitude_invariance",
+    "c_no_plasticity_below_yield"
+  ],
+  "failed": [
+    "c_rate_independent_literal_1e-4"
+  ],
+  "all_passed": false,
+  "surface": {
+    "thickness": 0.008,
+    "yield_pressure": 30080.0,
+    "collapse_pressure": 40106.666666666664,
+    "durations": [
+      0.005,
+      0.01,
+      0.02,
+      0.03,
+      0.05,
+      0.1
+    ],
+    "load_ratios": [
+      0.3,
+      0.5,
+      0.7,
+      0.8,
+      0.9
+    ],
+    "pressure_amplitudes": [
+      9024.0,
+      15040.0,
+      21056.0,
+      24064.0,
+      27072.0
+    ],
+    "daf": [
+      [
+        0.8176747615623765,
+        1.3245062286973754,
+        1.6521581278726882,
+        1.5210813984610851,
+        1.148605722311582,
+        1.0636466533943427
+      ],
+      [
+        0.8176747615622237,
+        1.324506228697553,
+        1.6521581278728528,
+        1.5210813984611689,
+        1.1486057223118313,
+        1.0636466533941604
+      ],
+      [
+        0.8176747615622941,
+        1.3245062286976068,
+        3.2417550527354457,
+        2.775137874553371,
+        1.1486057223117576,
+        1.0636466533942253
+      ],
+      [
+        0.8176747615622854,
+        2.117874791139573,
+        3.41788213202903,
+        2.865631668094525,
+        1.1486057223117436,
+        1.0636466533942135
+      ],
+      [
+        0.8176747615623265,
+        2.371926694093921,
+        3.465203576298723,
+        2.6668672097070774,
+        1.8411672163845905,
+        1.0636466533939923
+      ]
+    ],
+    "daf_rate_independent": [
+      [
+        0.8176747615623765,
+        1.3245062286973754,
+        1.6521581278726882,
+        1.5210813984610851,
+        1.148605722311582,
+        1.0636466533943427
+      ],
+      [
+        0.8176747615622237,
+        1.324506228697553,
+        1.6521581278728528,
+        1.5210813984611689,
+        1.1486057223118313,
+        1.0636466533941604
+      ],
+      [
+        0.8176747615622941,
+        1.3245062286976068,
+        1.4608829184149583,
+        1.4406679140116085,
+        1.1486057223117576,
+        1.0636466533942253
+      ],
+      [
+        0.8176747615622854,
+        1.261613448722458,
+        1.3098023089493702,
+        1.28820185361544,
+        1.1486057223117436,
+        1.0636466533942135
+      ],
+      [
+        0.8176747615623265,
+        1.1483683413315362,
+        1.2091132248182919,
+        1.174077782989289,
+        1.1162750143093576,
+        1.0636466533939923
+      ]
+    ],
+    "daf_rate_factor": [
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        2.2190382349413147,
+        1.9262856120852079,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.6787034041878575,
+        2.609464121933493,
+        2.224520683658313,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        2.0654755175013495,
+        2.865904950150125,
+        2.2714570093618804,
+        1.6493849569173826,
+        1.0
+      ]
+    ],
+    "max_plastic_strain_rate": [
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        62.043931118474006,
+        25.40639632850414,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        5.296642580898263,
+        74.35479210292469,
+        62.3323065526609,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        41.9607996878459,
+        89.08984617994298,
+        67.1343730437399,
+        4.507128251950062,
+        0.0
+      ]
+    ],
+    "first_period": 0.022428313499469443
+  },
+  "runner": {
+    "script": "benchmarks/rate_plasticity_daf/run_verification.py",
+    "elapsed_s": 191.3,
+    "python": "3.11.6",
+    "numpy": "2.4.6",
+    "quick": false
+  },
+  "literature_anchors": {
+    "cowper_symonds_D_p_mild_steel": [
+      40.4,
+      5.0
+    ],
+    "peak_undamped_half_sine_daf": 1.77,
+    "mild_steel_flow_stress_ratio_100_per_s": 2.0
+  }
+}
