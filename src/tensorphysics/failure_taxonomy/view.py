@@ -27,6 +27,7 @@ from typing import Iterable, Mapping, Sequence
 from .decide import DEFAULT_TABLE, ESCALATE, RerouteDecision, decide
 from .evidence import Evidence, extract
 from .labelers import SignalRuleLabeler
+from .selective import LOW_MARGIN, margin_of, selective_decision
 from .taxonomy import CLASS_CODES
 
 UNCLASSIFIED = "UNCLASSIFIED"
@@ -55,6 +56,7 @@ def blocked_node_view(
     records: Iterable[object],
     labeler: SignalRuleLabeler | None = None,
     table=DEFAULT_TABLE,
+    margin_floor: float | None = None,
 ) -> list[dict]:
     """Emit ``{failure_class, evidence, reroute_suggestion}`` per blocked node.
 
@@ -96,16 +98,22 @@ def blocked_node_view(
         evidence = extract(body, labeler.lexicon) if hasattr(labeler, "lexicon") else None
         present = evidence.present() if evidence is not None else ()
         decision: RerouteDecision = decide(labelled.code, present, table=table)
+        evidence_block: dict[str, object] = {
+            "record_id": str(getattr(rec, "record_id", "")),
+            "signals": list(present),
+            "confidence_margin": labelled.confidence,
+            "provenance": dict(getattr(rec, "provenance", {}) or {}),
+        }
+        if margin_floor is not None and evidence is not None:
+            score_margin = margin_of(labeler.scores(evidence))
+            evidence_block["score_margin"] = round(score_margin, 6)
+            decision = selective_decision(decision, score_margin, margin_floor)
+            evidence_block["abstained"] = decision.rationale_code == LOW_MARGIN
         items.append(
             {
                 "node_id": node_id,
                 "failure_class": labelled.code,
-                "evidence": {
-                    "record_id": str(getattr(rec, "record_id", "")),
-                    "signals": list(present),
-                    "confidence_margin": labelled.confidence,
-                    "provenance": dict(getattr(rec, "provenance", {}) or {}),
-                },
+                "evidence": evidence_block,
                 "reroute_suggestion": decision.as_dict(),
             }
         )
@@ -163,6 +171,7 @@ def to_ledger_entry(item: Mapping[str, object], mission_id: str | int | None = N
 
 __all__ = [
     "FailRecordView",
+    "LOW_MARGIN",
     "UNCLASSIFIED",
     "blocked_node_view",
     "summarise_view",
