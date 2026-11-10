@@ -289,112 +289,53 @@ class SmithCollapseSolver:
         return sigma_cr
 
     def solve(self) -> CollapseResult:
-        """Solve the collapse problem and return the load-displacement curve.
+        """Solve the collapse problem and return the load–displacement curve.
+
+        Implementation note (defect fix, campaign node p167w2-n03)
+        -----------------------------------------------------------
+        The former implementation combined *constant* smeared formulae (a
+        Faulkner effective width evaluated once at σ_y, a Perry-Robertson
+        column blend weighted by plate slenderness) with a plastic correction
+        that imposed ``ε_yy = 0`` (plane-strain lateral restraint) instead of
+        free lateral contraction.  Measured consequences on the documented
+        reference panel: ``σ_u = 1.13 σ_y`` for an *elastic-perfectly-plastic*
+        steel (a yield-surface violation), no limit point (the load path was
+        monotone to 5 % strain), and ``σ_u`` essentially independent of plate
+        slenderness (β = 0.84 → 1.13 σ_y, β = 4.68 → 0.98 σ_y).
+
+        The method now delegates to the incremental fiber-based Smith solver
+        (:class:`tensorphysics.elastoplastic_collapse.progressive_collapse.
+        ProgressiveCollapseSolver`): element load–shortening curves are
+        integrated over the discretised cross-section and the curvature is
+        obtained from the mid-span column equilibrium ``M = N·δ``, which yields
+        a genuine limit point and a post-ultimate branch.
 
         Returns
         -------
         CollapseResult
             Ultimate strength, failure mode, and full load path.
         """
-        g = self.geom
-        mat = self.mat
-        sec = self.sec
+        from .progressive_collapse import ProgressiveCollapseSolver
 
-        # Strain increments
-        eps_arr = np.linspace(0, self.max_strain, self.n_steps + 1)
-        load_path = []
-
-        # Initial imperfection amplitude (normalized)
-        w0 = g.w0_max / g.t if g.t > 0 else 0.0
-
-        # Track maximum stress
-        sigma_max = 0.0
-        eps_at_max = 0.0
-
-        # Internal variables (averaged over cross-section)
-        alpha = 0.0  # Accumulated plastic strain
-        eps_p = 0.0  # Plastic strain
-
-        for i, eps_x in enumerate(eps_arr):
-            # Imperfection amplification factor
-            # w/w0 = 1 / (1 - σ/σ_cr) for simply supported
-            sigma_elastic = mat.E * eps_x
-            if self.sigma_cr_plate > 0:
-                amp_factor = 1.0 / max(1.0 - sigma_elastic / self.sigma_cr_plate, 0.01)
-            else:
-                amp_factor = 1.0
-
-            # Effective width (Faulkner)
-            b_eff = faulkner_effective_width(g.b, g.t, self.sigma_cr_plate, mat.sigma_y0)
-            b_eff_ratio = b_eff / g.b
-
-            # Average stress in plate (with effective width reduction)
-            sigma_plate = sigma_elastic * b_eff_ratio
-
-            # Column buckling interaction
-            # σ_column = σ_cr_column / (1 + (σ_cr_column/σ_y)^(λ-1))
-            # Simplified: use Perry-Robertson formula
-            lam_col = g.column_slenderness
-            if lam_col < 0.2:
-                sigma_column = mat.sigma_y0
-            elif lam_col < 2.0:
-                # Perry-Robertson with imperfection parameter η = 0.001 λ²
-                eta = 0.001 * lam_col**2 + w0 * 0.1
-                sigma_E = np.pi**2 * mat.E / lam_col**2
-                sigma_y_eff = mat.sigma_y0 + mat.H * alpha
-                # Quadratic: (σ - σ_y)(σ - σ_E) = η σ σ_E
-                a_coef = 1.0
-                b_coef = -(sigma_y_eff + sigma_E * (1.0 + eta))
-                c_coef = sigma_y_eff * sigma_E
-                disc = b_coef**2 - 4*a_coef*c_coef
-                if disc > 0:
-                    sigma_column = float((-b_coef - np.sqrt(disc)) / (2*a_coef))
-                else:
-                    sigma_column = min(sigma_y_eff, sigma_E)
-            else:
-                sigma_E = np.pi**2 * mat.E / lam_col**2
-                sigma_column = sigma_E
-
-            # Combined stress (plate + column interaction)
-            # Weighted average based on slenderness
-            beta = g.plate_slenderness
-            if beta < 1.0:
-                sigma_avg = sigma_plate
-            elif beta < 3.0:
-                # Interactive region
-                weight = (beta - 1.0) / 2.0
-                sigma_avg = (1.0 - weight) * sigma_plate + weight * sigma_column
-            else:
-                sigma_avg = sigma_column
-
-            # Elastoplastic correction
-            sigma_y_current = mat.sigma_y0 + mat.H * alpha
-            if abs(sigma_avg) > sigma_y_current:
-                # Plastic correction via return mapping
-                strain_vec = np.array([sigma_avg / mat.E, 0.0, 0.0])
-                eps_p_vec = np.array([eps_p, 0.0, 0.0])
-                sigma_new, _, eps_p_new, alpha_new = return_mapping(
-                    strain_vec, eps_p_vec, np.array([alpha]), mat, plane_stress=True)
-                # Extract scalar values (return_mapping returns 2D arrays)
-                sigma_avg = float(np.asarray(sigma_new).item(0))
-                eps_p = float(np.asarray(eps_p_new).item(0))
-                alpha = float(np.asarray(alpha_new).item(0))
-
-            load_path.append((float(eps_x), float(sigma_avg)))
-
-            if sigma_avg > sigma_max:
-                sigma_max = sigma_avg
-                eps_at_max = eps_x
-
-        # Determine failure mode
-        failure_mode = self._classify_failure_mode(sigma_max, eps_at_max)
+        solver = ProgressiveCollapseSolver(
+            self.geom,
+            n_web_fibers=8,
+            n_flange_fibers=2,
+            n_steps=max(40, int(self.n_steps)),
+            max_strain=float(self.max_strain),
+        )
+        res = solver.solve()
+        # keep the elastic reference stresses consistent with the solver used
+        self.sigma_cr_plate = res.sigma_cr_plate
+        self.sigma_cr_column = res.sigma_cr_column
+        self.progressive_result = res
 
         return CollapseResult(
-            sigma_u=float(sigma_max),
-            eps_u=float(eps_at_max),
-            load_displacement=load_path,
-            failure_mode=failure_mode,
-            converged=True,
+            sigma_u=float(res.sigma_u),
+            eps_u=float(res.eps_u),
+            load_displacement=[(float(e), float(sg)) for e, sg in res.load_displacement],
+            failure_mode=res.failure_mode,
+            converged=bool(res.converged),
         )
 
     def _classify_failure_mode(self, sigma_u: float, eps_u: float) -> str:
