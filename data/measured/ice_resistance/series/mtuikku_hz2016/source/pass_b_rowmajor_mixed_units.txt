@@ -1,0 +1,18 @@
+# MT Uikku level-ice model tests -- transcription pass B (row-major, mixed units)
+# Primary source: Hu & Zhou (2016), Int. J. Naval Archit. Ocean Eng. 8(2) 169-176,
+#   DOI 10.1016/j.ijnaoe.2016.01.004, Table 3 (force statistics) and Table 8
+#   (experimental reference + published formula predictions).
+# This pass is written row-major and with engineering units (MPa / GPa) so that it
+# exercises a different read-order and unit path than pass A (column-major CSV kept
+# in SI-derived units kPa / MPa).  "-" means "not reported", never imputed.
+# Columns: test | h[m] | sigma_f[MPa] | sigma_c[MPa] | E[GPa] | V[m/s] | Rmean[kN] | Rstd[kN] | Rmax[kN] | Rmin[kN] | Rref_t8[kN] | Lindqvist_t8 | Riska_t8 | Jeong_t8 | Keinonen_t8
+103  h=0.77  sf=0.724  sc=1.748  E=0.929  V=0.20  Rmean=480  Rstd=130  Rmax=920   Rmin=100  Rref_t8=470  Lind=320  Riska=610  Jeong=330  Keinonen=510
+104  h=0.76  sf=0.844  sc=2.192  E=0.984  V=0.50  Rmean=560  Rstd=130  Rmax=990   Rmin=200  Rref_t8=560  Lind=380  Riska=630  Jeong=520  Keinonen=600
+205  h=0.96  sf=0.920  sc=1.840  E=1.685  V=0.20  Rmean=670  Rstd=220  Rmax=1410  Rmin=100  Rref_t8=670  Lind=510  Riska=800  Jeong=560  Keinonen=740
+206  h=0.95  sf=0.912  sc=1.862  E=1.701  V=0.50  Rmean=720  Rstd=193  Rmax=1390  Rmin=130  Rref_t8=720  Lind=560  Riska=840  Jeong=800  Keinonen=810
+301  h=1.04  sf=0.540  sc=2.477  E=1.474  V=0.20  Rmean=540  Rstd=88   Rmax=850   Rmin=290  Rref_t8=539  Lind=426  Riska=892  Jeong=459  Keinonen=663
+302  h=1.04  sf=0.669  sc=2.485  E=1.273  V=0.50  Rmean=830  Rstd=130  Rmax=1200  Rmin=450  Rref_t8=829  Lind=538  Riska=942  Jeong=765  Keinonen=783
+303  h=1.04  sf=0.592  sc=2.397  E=1.390  V=1.00  Rmean=780  Rstd=160  Rmax=1260  Rmin=370  Rref_t8=781  Lind=572  Riska=1025 Jeong=961  Keinonen=847
+401  h=0.63  sf=0.808  sc=4.040  E=1.616  V=0.20  Rmean=150  Rstd=-    Rmax=-     Rmin=-    Rref_t8=152  Lind=251  Riska=473  Jeong=259  Keinonen=425
+402  h=0.63  sf=1.029  sc=5.389  E=2.058  V=0.50  Rmean=290  Rstd=-    Rmax=-     Rmin=-    Rref_t8=291  Lind=322  Riska=501  Jeong=300  Keinonen=526
+403  h=0.63  sf=0.903  sc=4.616  E=1.805  V=1.00  Rmean=390  Rstd=-    Rmax=-     Rmin=-    Rref_t8=391  Lind=351  Riska=548  Jeong=542  Keinonen=579
