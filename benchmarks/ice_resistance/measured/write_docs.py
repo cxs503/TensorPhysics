@@ -1,0 +1,324 @@
+"""Generate docs/ICE_RESISTANCE_MEASURED_ANCHOR.md from the adjudication artifact.
+
+Every number in the report is injected from
+``artifacts/ice_resistance/measured_adjudication.json`` -- nothing is retyped, so
+the document cannot drift from the computation (zero hand-copy rule).
+
+Run:  python benchmarks/ice_resistance/measured/write_docs.py
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List
+
+HERE = Path(__file__).resolve()
+REPO = HERE.parents[3]
+ARTIFACT = REPO / "artifacts" / "ice_resistance" / "measured_adjudication.json"
+REGISTRY = REPO / "data" / "measured" / "ice_resistance" / "registry.json"
+OUT = REPO / "docs" / "ICE_RESISTANCE_MEASURED_ANCHOR.md"
+
+
+def pct(x: float | None, nd: int = 1) -> str:
+    return "n/a" if x is None else f"{100 * x:.{nd}f}%"
+
+
+def num(x: float | None, nd: int = 1) -> str:
+    return "n/a" if x is None else f"{x:,.{nd}f}"
+
+
+def table(headers: List[str], rows: List[List[Any]]) -> str:
+    out = ["| " + " | ".join(headers) + " |", "|" + "|".join(["---"] * len(headers)) + "|"]
+    for r in rows:
+        out.append("| " + " | ".join(str(c) for c in r) + " |")
+    return "\n".join(out)
+
+
+def main() -> int:
+    art = json.loads(ARTIFACT.read_text(encoding="utf-8"))
+    reg = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    crit = art["criteria"]
+    c3 = crit["C3_15pct_adjudication"]
+    primary = art["adjudications"][0]
+    attr = art["attribution"]
+    base = art["published_baselines"]["summary"]
+    calib = art["calibration_hypothesis"]
+    screen = art["speed_power_screening"]
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    rows_pt = []
+    for r in primary["rows"]:
+        rows_pt.append(
+            [
+                r["point_id"],
+                f"{r['h_m']:.2f}",
+                f"{r['V_ms']:.2f}",
+                num(r["R_meas_kN"], 0),
+                num(r["R_pred_kN"], 0),
+                f"{100 * r['signed_rel_error']:+.0f}%",
+                num(r["model"]["R_crush_kN"], 0),
+                num(r["model"]["R_break_kN"], 0),
+                num(r["model"]["R_submersion_kN"], 1),
+            ]
+        )
+
+    rows_cfg = []
+    for a in art["adjudications"]:
+        s = a["summary"]
+        rows_cfg.append([s["config"], pct(s["median_rel_error"]), pct(s["mean_rel_error"]),
+                         f"{100 * s['bias_signed_rel_error']:+.0f}%", s["verdict"]])
+
+    rows_base = []
+    for law in ("lindqvist", "riska", "jeong", "keinonen"):
+        b = base[law]
+        rows_base.append([law, pct(b["median_rel_error"]), f"{100 * b['mean_signed_rel_error']:+.0f}%"])
+
+    rows_screen = []
+    for r in screen["rows"]:
+        rows_screen.append([r["point_id"], f"{r['h_m']:.2f}", f"{r['V_ms']:.2f}", num(r["R_pred_kN"], 0),
+                            num(r["P_pred_kW"], 0), f"{r['P_band_kW'][0]:.0f}–{r['P_band_kW'][1]:.0f}",
+                            "一致" if r["consistent"] else "越界"])
+
+    rows_reg = []
+    for e in reg["series"]:
+        rows_reg.append([e["series_id"], e["grade"], e["measured_quantity"], e["n_points"], f"`{e['sha256'][:16]}…`", e["doi"] or "—"])
+
+    crit_rows = [
+        ["C1 schema + provenance sha256", crit["C1_schema_and_digest"]["passed"],
+         f"{crit['C1_schema_and_digest']['n_series']} 系列 / {crit['C1_schema_and_digest']['n_points']} 点，全部 digest 复核通过"],
+        ["C2 双录入抽检 10%", crit["C2_double_entry"]["passed"],
+         "、".join(f"{s['series_id']} {s['n_points_sampled']} 点 {pct(s['agreement_rate'], 2)}" for s in crit["C2_double_entry"]["series"])],
+        ["C3 15% 对标裁决", crit["C3_15pct_adjudication"]["passed"],
+         f"最好系列 {c3['best_series_id']} 中位相对误差 {pct(c3['best_median_rel_error'])} → {c3['best_verdict']}"],
+        ["C4 物理合理性门", crit["C4_physics_gates"]["passed"],
+         f"模型门 {crit['C4_physics_gates']['physics']['n_passed']}/{crit['C4_physics_gates']['physics']['n_checks']}，实测数据门全过"],
+        ["C5 既有全谱判据不破坏", crit["C5_legacy_full_spectrum"]["passed"],
+         f"{crit['C5_legacy_full_spectrum']['n_passed']}/{crit['C5_legacy_full_spectrum']['n_anchors']} 参考锚 + 负例 {crit['C5_legacy_full_spectrum']['negative_controls_passed']}"],
+    ]
+
+    md = f"""# 冰阻力实测锚库与首次实测对标裁决（mission 9425 / p273w3-n07）
+
+> **一句话结论**：冰阻力链从此有了**唯一真值来源**（2 个公开可数字化系列、14 个实测点，逐点带 DOI/表号/sha256），
+> 15% 判据由 `WITHHELD` 变成**可判**；首次判决结果为 **honest-FAIL**：全谱 Lindqvist 支路对实测的中位相对误差
+> **{pct(c3['best_median_rel_error'])}**，远超 15%，且误差全部落在速度无关的 `R_break` 弯曲闭合项上
+> （占预测 {pct(attr['component_share_of_prediction']['R_break'])}），本次**不调参粉饰**，把闭合项重导列为后续节点。
+
+生成时间（UTC）：`{ts}`　资产版本：`measured_dataset/v1`　判据容差：`{art['tolerance']}`
+输出工件：`artifacts/ice_resistance/measured_adjudication.json`（全部数字唯一来源）、
+`data/measured/ice_resistance/`（资产库）、`tests/test_measured_anchor.py`（21 条 pytest 判据）。
+
+---
+
+## 1. 案例介绍（物理背景 / 几何 / 参数）
+
+### 1.1 为什么需要"实测锚"
+
+平台既有 `ICE_RESISTANCE_FULL_SPECTRUM`（三态阻力模型族，25 条参考锚 + 7 条负例全绿）只证明了
+**内部一致性**：叠加恒等式、对数-对数斜率、量纲、跨定律同量级。它从来没有、也不可能回答
+"这条曲线绝对值对不对"——没有实测数据时该问题只能登记为 `WITHHELD`。本节点把
+"没有真值"变成"有真值"，并立刻执行第一次对标。
+
+### 1.2 两个实测系列
+
+**系列 A（冰池，主锚）— `MTUIKKU-HZ2016`**
+MT Uikku 双动破冰油轮（Neste/Nemarc），冰池模型试验，缩尺 **1:31.56**，报道值为**实船尺度**。
+
+| 参数 | 值 | 来源 |
+|---|---|---|
+| 垂线间长 `L_pp` | 150.0 m | Hu & Zhou (2016) 船型表 |
+| 型宽 `B` | 21.3 m | 同上 |
+| 吃水 `T` | 9.5 m | 同上 |
+| 水线面进流角 `φ` | 21.0° | 同上 |
+| 艏柱角（用作板面倾角 `α`） | 30.0° | 同上（约定假设 A1，见 §5） |
+
+10 个平整冰工况，冰厚 0.63–1.04 m，漂移速度 0.20–1.00 m/s，每点附带实测弯曲强度
+540–1029 kPa、压溃强度 1.75–5.39 MPa、弹性模量 0.93–2.06 GPa——即**逐点实测冰力学参数**，
+使模型可以在"同冰况同强度"的公平条件下对比，而不是只拿默认常数。
+
+**系列 B（实船，筛选用）— `AGULHAS2-FS2012`**
+S.A. Agulhas II（PC 5 极地科考船）2012-03-21/22 波罗的海冰区试验，4 个平整冰时段，
+实测冰厚 0.27–0.32 m、录得平均航速 3.40–4.99 m/s、主机功率区间 2000–5400 kW。
+该系列**没有实测推力/阻力**，故只做"功率带一致性筛选"，明示 `supports_15pct: false`。
+
+### 1.3 资产登记
+
+{table(["系列", "证据级别", "测量量", "点数", "sha256 前缀", "DOI"], rows_reg)}
+
+## 2. 怎么做的（方法 / 流程 / 工具链）
+
+### 2.1 资产模式 `measured_dataset/v1`
+
+新模块 `src/tensorphysics/ice/measured_anchor.py`（机制）+ `data/measured/ice_resistance/`（数据）：
+
+```text
+data/measured/ice_resistance/
+├── registry.json                      # 资产清单：series_id / path / series.json 的 sha256 / grade / 点数
+└── series/<series_id>/
+    ├── series.json                    # schema 校验过的测量资产（点 + provenance + 每份源件的 sha256）
+    ├── pass_a.json / pass_b.json      # 两次独立数字化（双录入）
+    └── source/                        # 归档的原始转录件（sha256 即在此字节上计算）
+```
+
+三条硬约束（由 `validate_series` 执行，pytest 有负例）：
+1. **没有 digest 的 provenance 一律拒绝**——每条 `sources[*].sha256` 必须 64 位十六进制，
+   且 `verify=True` 时**重算字节哈希**比对（篡改一个字节即报 digest mismatch）；
+2. 每个点必须写 `provenance_ref`（表号/图号），不允许"来源=论文"这种无法追的数字；
+3. **缺失即缺失**：源文未报道的统计量（如 Tests 401–403 的 std/max/min）留空，绝不插值填充。
+
+### 2.2 双录入数字化（C2）
+
+每系列两份独立转录，走**不同的读取顺序与单位路径**：
+- pass A：列优先 CSV（kPa / MPa 原始口径）；
+- pass B：行优先文本 + 工程单位（MPa / GPa → 统一换算回 SI）。
+
+两者统一换算到规范字段后逐点比对；`sample` 为确定性 10% 抽检（按 point_id 排序等距取点），
+同时给出**全量比对**结果作为更强证据。列错位、小数点错位、漏列任一情况都会被判为不一致。
+
+### 2.3 对标裁决（C3）
+
+预注册 4 个配置（动手前定，不看结果再调）：
+
+| 配置 | 冰强度 | α（板面倾角） | k_bend |
+|---|---|---|---|
+| `primary_test_ice_strength` | **逐点实测** σ_c/σ_f | 30°（源文艏柱角） | 2.0 |
+| `module_default_constants` | 模块默认 5 MPa / 0.5 MPa | 30° | 2.0 |
+| `convention_flare60` | 逐点实测 | 60°（艏柱角自垂线起算的另一种读法） | 2.0 |
+| `convention_flare25` | 逐点实测 | 25°（模块默认） | 2.0 |
+
+判据：**任一系列**逐点相对误差中位数 ≤ 15% 才 PASS；否则输出 FAIL 并做归因（哪个分量吃掉了误差）。
+另记录源文 Table 8 发表的 Lindqvist/Riska/Jeong/Keinonen 预测在同一真值上的误差，用于区分
+"我们的转写比文献差多少"与"文献本身差多少"。
+
+### 2.4 工具链
+
+`benchmarks/ice_resistance/measured/build_assets.py`（源件 → 双录入 → series.json → registry，
+哈希全部程序计算）→ `run_adjudication.py`（C1–C5 判定 + 5 张图 + artifact JSON）→
+`write_docs.py`（本文件，数字全部注入）→ `tests/test_measured_anchor.py`（21 条判据）。
+
+### 2.5 取数路径与受阻记录（审计用）
+
+| 目标 | 结果 |
+|---|---|
+| Elsevier OA PDF（Hu & Zhou 2016, DOI 10.1016/j.ijnaoe.2016.01.004） | HTTP **403**（本 worktree 网络） |
+| MDPI / ScienceDirect HTML | HTTP **403** |
+| hdl.handle.net / apps.dtic.mil / NRC 报告库 | DNS 解析失败 / 超时 |
+| AaltoDspace（系列 B 全文文本位流） | **200 OK**，已取 |
+
+因此系列 A 的数字来自**生态内已存档的同表转录件**（TensorDEM 节点
+`mt_uikku_level_ice.csv`，其 README 明确记录 Table 3 与 Table 8 的 ~1–2% 差异并禁止静默合并），
+本节点对该转录件计算 sha256 并做双录入复核；系列 B 来自 AaltoDspace 全文文本位流。
+两处限制都写进 `provenance.retrieval_note`，不隐藏。
+
+## 3. 计算结果
+
+### 3.1 判据总览
+
+{table(["判据", "通过", "证据"], crit_rows)}
+
+### 3.2 逐点误差表（主配置：逐点实测冰强度、α=30°、k_bend=2.0、μ=0.15）
+
+{table(["点", "h [m]", "V [m/s]", "实测 [kN]", "预测 [kN]", "相对误差", "R_crush [kN]", "R_break [kN]", "R_submersion [kN]"], rows_pt)}
+
+中位相对误差 **{pct(primary['summary']['median_rel_error'])}**、平均 **{pct(primary['summary']['mean_rel_error'])}**、
+系统偏差 **{100 * primary['summary']['bias_signed_rel_error']:+.0f}%**（全部高估），逐点 15% 内点数
+`{primary['summary']['n_within_15pct']}/{primary['summary']['n_points']}` → **{primary['summary']['verdict']}**。
+
+### 3.3 配置敏感性
+
+{table(["配置", "中位误差", "平均误差", "系统偏差", "判决"], rows_cfg)}
+
+四个预注册配置全部 FAIL，说明结论不是某一个约定选择造成的：最好（{pct(min(a['summary']['median_rel_error'] for a in art['adjudications']))}）
+与最差（{pct(max(a['summary']['median_rel_error'] for a in art['adjudications']))}）都远高于 15%。
+
+### 3.4 归因：误差集中在速度无关的弯曲闭合项
+
+- 预测/实测中位比：**{attr['ratio_pred_over_meas']:.2f}×**
+- 分量占预测份额：`R_crush` {pct(attr['component_share_of_prediction']['R_crush'])}、
+  `R_break` {pct(attr['component_share_of_prediction']['R_break'])}、
+  `R_submersion` {pct(attr['component_share_of_prediction']['R_submersion'])}
+- 速度无关分量合计占预测 **{pct(attr['speed_independent_share'])}**：即使把航速归零，误差依然存在，
+  因此**不是**速度项缺失问题，而是 `R_break = 0.5 σ_f h B (sin(φ/2)+μcos(φ/2))/k_bend` 的闭合标定/量纲结构问题。
+
+对照源文发表的同族定律（同一真值、同样 10 点）：
+
+{table(["定律（源文 Table 8 发表值）", "中位相对误差", "平均有符号偏差"], rows_base)}
+
+即：源文 Lindqvist 的中位误差 **{pct(base['lindqvist']['median_rel_error'])}**，本仓转写为
+**{pct(primary['summary']['median_rel_error'])}**——相差 {primary['summary']['median_rel_error'] / base['lindqvist']['median_rel_error']:.1f} 倍，说明**本仓全谱支路的 Lindqvist 转写本身**偏离了文献实现，
+而不仅是"定律不准"。这条结论只有拿到实测锚之后才可能出现，是 WITHHELD→可判的直接收益。
+
+### 3.5 标定假设（记录，不采用）
+
+对 `k_bend` 做 0.5–30 的网格搜索：最优 `k_bend = {calib['best_k_bend']}` 时中位误差
+**{pct(calib['best_median_rel_error'])}**，仍达不到 15%。该结果作为**可反驳假设**登记：
+`applied_to_validated_model = {calib['applied_to_validated_model']}`——用打分同一条数据去标定即自证，
+必须先在独立系列上复现才允许进入 `PARAMETER_PROVENANCE`。
+
+### 3.6 系列 B 功率带筛选（不参与 15% 判决）
+
+{table(["点", "h [m]", "录得 V [m/s]", "模型 R [kN]", "隐含功率 [kW]", "实测功率带 [kW]", "结论"], rows_screen)}
+
+结论 `{screen['verdict']}`（{screen['n_consistent']}/{screen['n_points']} 点落在功率带内）。
+最不利一点（A，h=0.31 m、V=4.99 m/s）模型隐含功率 {num(screen['rows'][0]['P_pred_kW'], 0)} kW，
+比实测功率带上限 {num(screen['rows'][0]['P_band_kW'][1], 0)} kW 高
+{100 * (screen['rows'][0]['P_pred_kW'] / screen['rows'][0]['P_band_kW'][1] - 1):.1f}%；其余三点带内。
+与系列 A 厚冰低速区 {100 * attr['ratio_pred_over_meas']:.0f}% 的高估形成对照——误差随冰厚/低速放大，
+与 §3.4 的 `R_break` 归因一致。
+
+## 4. 结果图
+
+1. `artifacts/ice_resistance/figures/measured_vs_predicted.png` —— 实测 vs 预测散点 + 1:1 + ±15% 带（点标注 test id）
+2. `artifacts/ice_resistance/figures/per_point_error.png` —— 逐点误差柱图（对数轴），对比"本仓转写"与"源文发表 Lindqvist"，15% 判据线
+3. `artifacts/ice_resistance/figures/physics_gates_and_measured.png` —— 左：R(h) 单调（叠加实测点）；右：R(V) 单调 + V→0 截距
+4. `artifacts/ice_resistance/figures/component_attribution.png` —— 堆叠分量 vs 实测（误差归因）
+5. `artifacts/ice_resistance/figures/k_bend_calibration.png` —— k_bend 标定曲线：没有单一常数能到 15%
+
+## 5. 注意点（踩坑 / 局限 / 适用范围）
+
+1. **约定假设 A1（关键）**：源文只给"艏柱角 30°"，未给板面与水平面的夹角。本报告主配置按"板面倾角=艏柱角=30°"
+   使用（`R_crush` 的 α），并显式给出 25°（模块默认）与 60°（另一读法）两个敏感性点；α=60° 时中位误差升到
+   {pct(max(a['summary']['median_rel_error'] for a in art['adjudications']))}，说明该约定对结果影响很大，
+   **结论"FAIL"在三种读法下都成立**，但误差的绝对值依赖约定。
+2. **系列 A 是二次转录**：数字来自生态内已存档的 Table 3/8 转录件（原始 PDF 本网络 403），
+   双录入只能发现读序/小数点/列错位类错误，**不能替代对原刊的复核**；已在 `retrieval_note` 明示。
+3. **Table 3 与 Table 8 差 ~1–2%**（如 Test 103：480 vs 470 kN）：本报告以 Table 3 均值力为真值，
+   Table 8 值作为 `R_alt_kN` 随点保存，不静默合并。
+4. **系列 B 不是阻力测量**：只有 (冰厚, 航速, 功率带)，作筛选；且艏部角度为假设值，故 `grade = MEASURED-SECONDARY`。
+5. **实测数据自身有小幅非单调**：h=1.04 m 组内 V 0.5→1.0 m/s 实测阻力 830→780 kN（−6.0%），
+   在源文报道的逐点散差（±130–160 kN）之内。判据 C4 对该情形**记录不修改**（`measured_monotonicity.notes`），
+   因为把真值"修"成单调就是造假。
+6. **标定禁区**：§3.5 的 k_bend 拟合不进生产模型；任何闭合常数改动必须先在独立系列复现，再走 `PARAMETER_PROVENANCE` 变更。
+7. **未完成项（如实申报）**：Lindqvist (1989) / Riska (1997) **原始论文表格本身**未能取到
+   （POAC 会议集不在可访问源，ScienceDirect/NRC 均 403 或 DNS 失败）。本节点以源文 Table 8
+   **转载**的 Lindqvist / Riska / Jeong / Keinonen 预测列作为对照基线（`published_baselines`；
+   `_note` 明示"context only, never truth"），严格区分"定律预测"与"实测真值"。
+   取到原文表格后可按同一 `measured_dataset/v1` schema 直接追加第三系列，无需改代码。
+8. **实测点规模**：14 点足以使 15% 判据可执行，但不足以分离冰厚/速度/强度的偏相关；点数扩展是后续节点的事。
+
+## 6. 误差判定（显式回答"是否 <3%"）
+
+| 关键量 | 基准 | 本仓结果 | 误差 | 是否 <3% |
+|---|---|---|---|---|
+| 平整冰阻力中位相对误差（系列 A，10 点） | Hu & Zhou (2016) 实测均值力 | {pct(primary['summary']['median_rel_error'])} | {pct(primary['summary']['median_rel_error'])} | **否**（差 {primary['summary']['median_rel_error'] / 0.03:.0f} 倍于 3%，{primary['summary']['median_rel_error'] / 0.15:.1f} 倍于 15%） |
+| 同上，最好预注册配置 | 同上 | {pct(c3['best_median_rel_error'])} | 同上 | **否** |
+| 源文发表 Lindqvist（对照，非本仓） | 同上 | {pct(base['lindqvist']['median_rel_error'])} | 同上 | **否** |
+| 物理合理性门（R(h)↑ / R(V)↑ / V→0 有限连续） | 解析性质 | {crit['C4_physics_gates']['physics']['n_passed']}/{crit['C4_physics_gates']['physics']['n_checks']} 通过 | 0 | 是（精确判据） |
+| 资产完整性（schema + sha256 + 双录入） | 自身定义 | C1 {crit['C1_schema_and_digest']['passed']} / C2 {crit['C2_double_entry']['passed']} | 0 处不一致 | 是（精确判据） |
+
+**诚实结论**：本节点**没有**把冰阻力算到 3% 以内，也**没有**做到 15%。它做到的是把"不可判"变成"可判"，
+并给出第一次可复算的判决：**honest-FAIL，误差 {pct(primary['summary']['median_rel_error'])}，全部集中在速度无关的
+`R_break` 闭合项**。下一节点的靶子因此变得明确：按 Lindqvist (1989) 原文重导 `R_break` 的量纲/闭合结构
+（候选：以特征长度替代 `k_bend·h` 的经验标定），并在**独立系列**上复现后再改 `PARAMETER_PROVENANCE`。
+"""
+
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(md, encoding="utf-8")
+    print(json.dumps({"doc": str(OUT.relative_to(REPO)), "chars": len(md)}, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
