@@ -30,6 +30,7 @@ from typing import Sequence
 import numpy as np
 
 __all__ = [
+    "NumpyDEM2D",
     "ThermalLBM2D",
     "Q4Mesh",
     "Q4ThermalFEM",
@@ -455,3 +456,232 @@ class DEM2D:
         # the caller re-evaluates the contact force for the half-kick.
         self.pos = self.pos + dt * self.vel + 0.5 * dt * dt * acc
         self.vel = self.vel + dt * acc
+
+# ---------------------------------------------------------------------------
+# Numpy-based DEM (torch-free backend for AC5/AC6)
+# ---------------------------------------------------------------------------
+class NumpyDEM2D:
+    """Pure-numpy 2D DEM solver for coupling-chain maturation (AC5/AC6).
+
+    This is a numpy-only implementation of the DEM kernel, designed to run
+    in a clean venv without torch.  It provides:
+    - Bit-level reproducibility with a fixed seed
+    - Energy and momentum bookkeeping
+    - Interface for coupling with LBM/FEM solvers
+
+    The physics is identical to :class:`DEM2D` but the implementation uses
+    only numpy, making it suitable for the torch-free acceptance tests.
+    """
+
+    def __init__(self, n_particles: int, seed: int = 42,
+                 domain: tuple[float, float] = (1.0, 1.0),
+                 radius: float = 0.02, density: float = 1000.0,
+                 stiffness: float = 1.0e7, damping: float = 100.0,
+                 gravity: float = 0.0) -> None:
+        """Initialize a random packing of circular particles.
+
+        Parameters
+        ----------
+        n_particles:
+            Number of particles to create.
+        seed:
+            Random seed for reproducible initial conditions.
+        domain:
+            (width, height) of the simulation domain.
+        radius:
+            Particle radius (uniform size).
+        density:
+            Particle material density [kg/m^3].
+        stiffness:
+            Contact stiffness [N/m].
+        damping:
+            Contact damping coefficient [N*s/m].
+        gravity:
+            Gravitational acceleration [m/s^2] (positive = downward).
+        """
+        self.n = int(n_particles)
+        self.domain = (float(domain[0]), float(domain[1]))
+        self.radius = float(radius)
+        self.density = float(density)
+        self.stiffness = float(stiffness)
+        self.damping = float(damping)
+        self.gravity = float(gravity)
+
+        rng = np.random.RandomState(seed)
+        # Random initial positions (avoiding overlaps)
+        self.pos = np.zeros((self.n, 2))
+        self.vel = np.zeros((self.n, 2))
+        self.mass = np.full(self.n, density * np.pi * radius ** 2)
+
+        # Place particles with simple rejection sampling
+        max_attempts = 1000
+        for i in range(self.n):
+            placed = False
+            for _ in range(max_attempts):
+                x = rng.uniform(radius, domain[0] - radius)
+                y = rng.uniform(radius, domain[1] - radius)
+                candidate = np.array([x, y])
+                # Check overlap with existing particles
+                if i == 0:
+                    self.pos[i] = candidate
+                    placed = True
+                    break
+                dists = np.linalg.norm(self.pos[:i] - candidate, axis=1)
+                if np.all(dists >= 2.0 * radius):
+                    self.pos[i] = candidate
+                    placed = True
+                    break
+            if not placed:
+                # Fallback: place anywhere (may overlap initially)
+                self.pos[i] = np.array([
+                    rng.uniform(radius, domain[0] - radius),
+                    rng.uniform(radius, domain[1] - radius)
+                ])
+
+        # Small random initial velocities
+        self.vel = rng.uniform(-0.1, 0.1, (self.n, 2))
+
+        # Bookkeeping
+        self.time = 0.0
+        self.step_count = 0
+        self.kinetic_energy_history: list[float] = []
+        self.potential_energy_history: list[float] = []
+        self.total_energy_history: list[float] = []
+
+    @property
+    def kinetic_energy(self) -> float:
+        return float(0.5 * np.sum(self.mass[:, None] * self.vel ** 2))
+
+    @property
+    def potential_energy(self) -> float:
+        """Elastic potential energy from contacts."""
+        e_pot = 0.0
+        for i in range(self.n):
+            for j in range(i + 1, self.n):
+                dist = np.linalg.norm(self.pos[i] - self.pos[j])
+                overlap = 2.0 * self.radius - dist
+                if overlap > 0.0:
+                    e_pot += 0.5 * self.stiffness * overlap ** 2
+        # Wall contacts
+        for i in range(self.n):
+            for dim in range(2):
+                if self.pos[i, dim] < self.radius:
+                    overlap = self.radius - self.pos[i, dim]
+                    e_pot += 0.5 * self.stiffness * overlap ** 2
+                if self.pos[i, dim] > self.domain[dim] - self.radius:
+                    overlap = self.pos[i, dim] - (self.domain[dim] - self.radius)
+                    e_pot += 0.5 * self.stiffness * overlap ** 2
+        return e_pot
+
+    @property
+    def total_energy(self) -> float:
+        return self.kinetic_energy + self.potential_energy
+
+    def momentum(self) -> np.ndarray:
+        return np.sum(self.mass[:, None] * self.vel, axis=0)
+
+    def _compute_forces(self) -> np.ndarray:
+        """Compute all forces on particles (contacts + gravity + walls)."""
+        forces = np.zeros((self.n, 2))
+
+        # Gravity
+        forces[:, 1] -= self.mass * self.gravity
+
+        # Particle-particle contacts
+        for i in range(self.n):
+            for j in range(i + 1, self.n):
+                diff = self.pos[j] - self.pos[i]
+                dist = np.linalg.norm(diff)
+                if dist < 2.0 * self.radius and dist > 1e-15:
+                    overlap = 2.0 * self.radius - dist
+                    normal = diff / dist
+                    rel_vel = self.vel[j] - self.vel[i]
+                    overlap_rate = np.dot(rel_vel, normal)
+                    # Contact force (repulsive)
+                    f_mag = self.stiffness * overlap + self.damping * max(overlap_rate, 0.0)
+                    f_vec = f_mag * normal
+                    forces[i] += f_vec
+                    forces[j] -= f_vec
+
+        # Wall contacts
+        for i in range(self.n):
+            for dim in range(2):
+                if self.pos[i, dim] < self.radius:
+                    overlap = self.radius - self.pos[i, dim]
+                    rate = -self.vel[i, dim]
+                    f = self.stiffness * overlap + self.damping * max(rate, 0.0)
+                    forces[i, dim] += f
+                elif self.pos[i, dim] > self.domain[dim] - self.radius:
+                    overlap = self.pos[i, dim] - (self.domain[dim] - self.radius)
+                    rate = self.vel[i, dim]
+                    f = self.stiffness * overlap + self.damping * max(rate, 0.0)
+                    forces[i, dim] -= f
+
+        return forces
+
+    def step(self, dt: float) -> dict:
+        """Velocity-Verlet integration step.
+
+        Returns a dict with energy and momentum bookkeeping info.
+        """
+        dt = float(dt)
+        forces = self._compute_forces()
+        acc = forces / self.mass[:, None]
+
+        # Position update
+        self.pos = self.pos + dt * self.vel + 0.5 * dt * dt * acc
+
+        # Force re-evaluation at new positions
+        forces_new = self._compute_forces()
+        acc_new = forces_new / self.mass[:, None]
+
+        # Velocity update
+        self.vel = self.vel + 0.5 * dt * (acc + acc_new)
+
+        self.time += dt
+        self.step_count += 1
+
+        # Bookkeeping
+        ke = self.kinetic_energy
+        pe = self.potential_energy
+        self.kinetic_energy_history.append(ke)
+        self.potential_energy_history.append(pe)
+        self.total_energy_history.append(ke + pe)
+
+        return {
+            "time": self.time,
+            "step": self.step_count,
+            "kinetic_energy": ke,
+            "potential_energy": pe,
+            "total_energy": ke + pe,
+            "momentum": self.momentum().tolist(),
+        }
+
+    def state_dict(self) -> dict:
+        """Return a serializable state dict for reproducibility checks."""
+        return {
+            "pos": self.pos.copy(),
+            "vel": self.vel.copy(),
+            "time": self.time,
+            "step_count": self.step_count,
+        }
+
+    def load_state(self, state: dict) -> None:
+        """Load state from a dict (for reproducibility verification)."""
+        self.pos = np.array(state["pos"], dtype=float).copy()
+        self.vel = np.array(state["vel"], dtype=float).copy()
+        self.time = float(state["time"])
+        self.step_count = int(state["step_count"])
+
+    def settling_energy_drift(self, n_steps: int, dt: float) -> float:
+        """Run a settling scenario and return the relative energy drift.
+
+        This is the AC8 test: 10^5 step energy drift < 1%.
+        """
+        e0 = self.total_energy
+        for _ in range(n_steps):
+            self.step(dt)
+        e_final = self.total_energy
+        if abs(e0) < 1e-300:
+            return 0.0
+        return abs(e_final - e0) / abs(e0)
