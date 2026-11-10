@@ -449,6 +449,70 @@ def check_component_expectation(
     )
 
 
+def check_feature_resolution(
+    ledgers: Sequence[Any], policy: ContractPolicy, label: str = "window"
+) -> CheckOutcome | None:
+    """Was the window probed at least as fine as its features demand?
+
+    The window is only believed at the scale that was actually probed.  This
+    check fails when a probe disagreement could not be resolved (an unresolved
+    span, or an exhausted refinement budget), and when the case declared a
+    ``min_feature_width`` coarser than the probed spacing -- in that case a
+    feature of the declared size could have slipped between two probes.
+    """
+
+    present = [ledger for ledger in ledgers if ledger is not None]
+    if not present:
+        return None
+    declared = policy.resolution.get("min_feature_width")
+    declared = None if declared is None else float(declared)
+
+    def field(ledger: Any, name: str, default: Any = None) -> Any:
+        if isinstance(ledger, Mapping):
+            return ledger.get(name, default)
+        return getattr(ledger, name, default)
+
+    widths = [
+        field(ledger, "guaranteed_width")
+        for ledger in present
+        if field(ledger, "guaranteed_width") == field(ledger, "guaranteed_width")
+    ]
+    probed = min(widths) if widths else None
+    unresolved = [span for ledger in present for span in field(ledger, "unresolved_spans")]
+    exhausted = any(field(ledger, "budget_exhausted") for ledger in present)
+    problems: list[str] = []
+    if unresolved:
+        problems.append(
+            f"{len(unresolved)} span(s) still show a probe disagreement: "
+            + ", ".join(f"[{lo:.9g}, {hi:.9g}]" for lo, hi in unresolved[:4])
+        )
+    if exhausted:
+        problems.append("refinement budget exhausted before every span was resolved")
+    if declared is not None and probed is not None and probed > declared:
+        problems.append(
+            f"probed spacing {probed:.9g} is coarser than the declared minimum "
+            f"feature width {declared:.9g}"
+        )
+    return CheckOutcome(
+        id=f"resolution:{label}",
+        kind="resolution",
+        passed=not problems,
+        detail="; ".join(problems) if problems else "probed scale covers the declared features",
+        metrics={
+            "min_probed_width": probed,
+            "line_spacing": field(present[0], "line_spacing"),
+            "samples_per_segment": policy.resolution_policy().samples_per_segment,
+            "sub_cells": policy.resolution_policy().sub_cells,
+            "max_depth": policy.resolution_policy().max_depth,
+            "suspect_spans": sum(field(ledger, "suspect_spans") for ledger in present),
+            "refined_spans": sum(field(ledger, "refined_spans") for ledger in present),
+            "unresolved_spans": [list(span) for span in unresolved],
+            "budget_exhausted": exhausted,
+            "declared_min_feature_width": declared,
+        },
+    )
+
+
 def check_active_expectation(
     intervals: Sequence[Any], policy: ContractPolicy, label: str = "window"
 ) -> CheckOutcome | None:
