@@ -1,0 +1,51 @@
+{
+  "_note": "Seed exemplars for annotator B (unsupervised nearest-centroid). Written for the taxonomy in generic method language; none of them is taken from the back-test corpus, so B sees no gold label and no corpus wording.",
+  "BASELINE_ABSENT": [
+    "There is no reference value to compare the computed quantity against, so accuracy cannot be judged.",
+    "本项没有解析解也没有公开基准，只能声明量级而不宣称精度。",
+    "No benchmark or measurement is available for this quantity; the criterion stays undischarged.",
+    "文献中查不到可比的数值，报告的相对偏差因此无法给出。",
+    "The result exists but no independent yardstick exists, so the node is withheld rather than graded.",
+    "这一项缺少外部对照值，报告只给出与另一近似模型的相对差。"
+  ],
+  "TOLERANCE_EXCEEDED": [
+    "The reported error is 18 %, which exceeds the declared 10 % tolerance band.",
+    "实测偏差 38.9%，超出判据允许的区间，如实登记为失败。",
+    "Against the reference the quantity misses the band by a factor of two.",
+    "与基准值相比偏差 12.6%，判据判定不通过。",
+    "The deviation from the reference is quantified and lies outside the acceptance tolerance.",
+    "误差 25.2% 高于阈值，按规定记为失败。"
+  ],
+  "CONVERGENCE_STALL": [
+    "The iteration stalled: the residual plateaued after 500 steps and never reached the tolerance.",
+    "网格细化后观测阶只有 0.8，与理论二阶不符，收敛未建立。",
+    "The estimator cannot converge because the sample never contains enough events.",
+    "松弛迭代出现极限环，任何松弛因子都不收敛。",
+    "Refinement does not settle on the asymptotic range, residual decay is below the required order.",
+    "蒙特卡洛样本量不足，估计量无法收敛到目标精度。"
+  ],
+  "MODEL_FIDELITY_LIMIT": [
+    "The formulation assumes a reduced dimensionality, so the absolute value cannot be extrapolated.",
+    "该结果只在刚性假设下成立，超出假设后模型不再覆盖。",
+    "Element locking limits accuracy for slender bending; the limitation is intrinsic to the formulation.",
+    "各向同性假设与实测各向异性相差可达 30%，属模型形式局限。",
+    "Beyond the validated range the closure diverges; the statement is restricted to the envelope.",
+    "参数取文献量级属建模决策，绝对量级只具量级意义。"
+  ],
+  "DATA_INSUFFICIENCY": [
+    "The node withheld the verdict because the deliverable artefacts were never written.",
+    "缺产物且缺报告，判据无法评估，结果为 WITHHELD。",
+    "No calibration record was delivered, so the parameter set cannot be graded.",
+    "本次未取得复跑值，误差不可判定。",
+    "A partial matrix is withheld, not failed: the expected inputs never arrived.",
+    "文献数值本次不可读，故该项保留为未判定。"
+  ],
+  "IMPLEMENTATION_DEFECT": [
+    "The first version used the wrong coordinate, which was a code defect and is now patched.",
+    "初版实现把单位链写错，修复后偏差降到 1e-10。",
+    "A bug in the estimator accumulated residuals across steps and corrupted the result.",
+    "解析式一开始写错，被有限差分自检抓住后修正。",
+    "The interface contract check failed twice; the mismatch was a bookkeeping defect.",
+    "缺陷定位在取样下标，修复后回归测试通过。"
+  ]
+}

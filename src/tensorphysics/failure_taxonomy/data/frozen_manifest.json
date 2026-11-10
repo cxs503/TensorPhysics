@@ -1,0 +1,20 @@
+{
+  "n_records": 48,
+  "sha256": "85acd46b774ed8dd980985202cb7cbb012ff4d647871ff251f65e380df0a07fb",
+  "per_class": {
+    "BASELINE_ABSENT": 8,
+    "CONVERGENCE_STALL": 8,
+    "DATA_INSUFFICIENCY": 8,
+    "IMPLEMENTATION_DEFECT": 8,
+    "MODEL_FIDELITY_LIMIT": 8,
+    "TOLERANCE_EXCEEDED": 8
+  },
+  "n_decoys": 120,
+  "annotator": "agent:m9338",
+  "protocol": "epistemic-cue retrieval over in-repo reports, then analyst adjudication by unique substring key; verbatim segments, digest pinned",
+  "source_scope": [
+    "docs/**/*.md",
+    "artifacts/**/*.json",
+    "benchmarks/artifacts/**/*.json"
+  ]
+}

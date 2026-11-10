@@ -1,0 +1,45 @@
+{
+  "_note": "Weighted rule table of annotator A (SignalRuleLabeler). Weights were set by reasoning about the class boundaries and then reviewed once on the TRAIN split of the frozen corpus only; the TEST split was touched once, for the reported number. Positive weight = evidence for the class, negative = evidence against.",
+  "BASELINE_ABSENT": {
+    "reference_lexeme": 2.0,
+    "absence_lexeme": 1.2,
+    "withheld_lexeme": 0.8,
+    "quantified_gap": -0.8,
+    "artifact_lexeme": -0.8,
+    "convergence_lexeme": -0.3
+  },
+  "TOLERANCE_EXCEEDED": {
+    "quantified_gap": 1.6,
+    "threshold_lexeme": 1.2,
+    "reference_lexeme": 0.6,
+    "residual_magnitude": 0.3,
+    "absence_lexeme": -1.2,
+    "withheld_lexeme": -1.0,
+    "assumption_lexeme": -0.4
+  },
+  "CONVERGENCE_STALL": {
+    "convergence_lexeme": 2.0,
+    "residual_magnitude": 1.0,
+    "threshold_lexeme": 0.2,
+    "absence_lexeme": -0.4,
+    "assumption_lexeme": -0.4
+  },
+  "MODEL_FIDELITY_LIMIT": {
+    "assumption_lexeme": 2.2,
+    "envelope_lexeme": 0.8,
+    "defect_lexeme": -0.8,
+    "convergence_lexeme": -0.2
+  },
+  "DATA_INSUFFICIENCY": {
+    "withheld_lexeme": 1.8,
+    "artifact_lexeme": 1.2,
+    "absence_lexeme": 1.0,
+    "quantified_gap": -0.6,
+    "reference_lexeme": -0.2
+  },
+  "IMPLEMENTATION_DEFECT": {
+    "defect_lexeme": 2.5,
+    "threshold_lexeme": -0.2,
+    "assumption_lexeme": -0.5
+  }
+}
