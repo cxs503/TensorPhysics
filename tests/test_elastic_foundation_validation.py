@@ -372,3 +372,198 @@ def test_input_guards():
         solve_axisym_plate_fem(1.0, 0.3, 1.0, 1.0, bc="pinned")
     with pytest.raises(ValueError):
         solve_beam_foundation_fem(EI, K_BEAM, P_BEAM, 1.0, n_elem=3)
+
+# ---------------------------------------------------------------------------
+# AC6: Negative control — no foundation (k=0) must FAIL (divergent deflection)
+# ---------------------------------------------------------------------------
+def test_negative_control_no_foundation_beam_diverges():
+    """AC6: With k=0 and G_p=0 the beam has no restoring force; the FEM
+    produces unphysically large deflections (>> characteristic scale),
+    proving the foundation is essential for a bounded solution."""
+    lb_ref = beam_char_length(EI, K_BEAM)
+    w_expected = P_BEAM / (2.0 * K_BEAM * lb_ref)  # ~5e-2 m
+    res = solve_beam_foundation_fem(EI, 0.0, P_BEAM, half_length=8 * lb_ref,
+                                    n_elem=800, G_p=0.0)
+    w_max = float(np.max(np.abs(res.w)))
+    # deflection should be >> expected (divergent); ratio > 1e6
+    assert w_max / w_expected > 1e6, (
+        f"k=0 beam deflection {w_max:.2e} not divergent "
+        f"(expected ~{w_expected:.2e})"
+    )
+
+
+def test_negative_control_no_foundation_plate_diverges():
+    """AC6: With k=0 the plate equation D grad^4 w = q has no bounded
+    solution for a point load; the FEM produces unphysically large deflections."""
+    D = winkler_plate_flexural_rigidity(E_ICE, H_ICE, NU_ICE)
+    l = winkler_plate_char_length(D, RHO_G)
+    w_expected = P_ICE / (8.0 * RHO_G * l ** 2)  # ~2.3e-3 m
+    res = solve_axisym_plate_fem(D, NU_ICE, 0.0, 40 * l, P=P_ICE,
+                                 load_radius=0.0, n_outer=400, grading=2.0,
+                                 bc="free")
+    w_max = float(np.max(np.abs(res.w)))
+    assert w_max / w_expected > 1e3, (
+        f"k=0 plate deflection {w_max:.2e} not divergent "
+        f"(expected ~{w_expected:.2e})"
+    )
+
+
+# ---------------------------------------------------------------------------
+# AC7: Energy conservation — external work = strain energy (consistent FEM)
+# ---------------------------------------------------------------------------
+def test_energy_conservation_beam_winkler():
+    """AC7: For a Winkler beam, W_ext = P*w(0)/2 must equal
+    U_b + U_f computed from the consistent stiffness matrices."""
+    lb = beam_char_length(EI, K_BEAM)
+    res = solve_beam_foundation_fem(EI, K_BEAM, P_BEAM, half_length=8 * lb,
+                                    n_elem=800)
+    w0 = float(res.evaluate(0.0)[0])
+    W_ext = P_BEAM * w0 / 2.0
+
+    # Consistent energy from nodal DOFs
+    x = res.x
+    n_elem = len(x) - 1
+    ndof = 2 * (n_elem + 1)
+    K_b = np.zeros((ndof, ndof))
+    K_f = np.zeros((ndof, ndof))
+    elem_len = np.diff(x)
+    for e in range(n_elem):
+        le = elem_len[e]
+        kb = np.array([
+            [12.0, 6*le, -12.0, 6*le],
+            [6*le, 4*le**2, -6*le, 2*le**2],
+            [-12.0, -6*le, 12.0, -6*le],
+            [6*le, 2*le**2, -6*le, 4*le**2],
+        ]) * (EI / le**3)
+        kf = np.array([
+            [156.0, 22*le, 54.0, -13*le],
+            [22*le, 4*le**2, 13*le, -3*le**2],
+            [54.0, 13*le, 156.0, -22*le],
+            [-13*le, -3*le**2, -22*le, 4*le**2],
+        ]) * (K_BEAM * le / 420.0)
+        idx = np.array([2*e, 2*e+1, 2*e+2, 2*e+3])
+        K_b[np.ix_(idx, idx)] += kb
+        K_f[np.ix_(idx, idx)] += kf
+
+    d = np.zeros(ndof)
+    d[0::2] = res.w
+    d[1::2] = res.theta
+    U_b = 0.5 * d @ K_b @ d
+    U_f = 0.5 * d @ K_f @ d
+    U_total = U_b + U_f
+
+    rel_err = abs(W_ext - U_total) / W_ext
+    assert rel_err < 1e-6, (
+        f"Beam energy imbalance: W={W_ext:.6e}, U={U_total:.6e}, rel={rel_err:.2e}"
+    )
+
+
+def test_energy_conservation_beam_pasternak():
+    """AC7: For a Pasternak beam, W_ext = U_b + U_f + U_s (shear layer)."""
+    lb = beam_char_length(EI, K_BEAM)
+    G = 1.5 * np.sqrt(EI * K_BEAM)
+    res = solve_beam_foundation_fem(EI, K_BEAM, P_BEAM, half_length=8 * lb,
+                                    n_elem=800, G_p=G)
+    w0 = float(res.evaluate(0.0)[0])
+    W_ext = P_BEAM * w0 / 2.0
+
+    x = res.x
+    n_elem = len(x) - 1
+    ndof = 2 * (n_elem + 1)
+    K_b = np.zeros((ndof, ndof))
+    K_f = np.zeros((ndof, ndof))
+    K_s = np.zeros((ndof, ndof))
+    elem_len = np.diff(x)
+    for e in range(n_elem):
+        le = elem_len[e]
+        kb = np.array([
+            [12.0, 6*le, -12.0, 6*le],
+            [6*le, 4*le**2, -6*le, 2*le**2],
+            [-12.0, -6*le, 12.0, -6*le],
+            [6*le, 2*le**2, -6*le, 4*le**2],
+        ]) * (EI / le**3)
+        kf = np.array([
+            [156.0, 22*le, 54.0, -13*le],
+            [22*le, 4*le**2, 13*le, -3*le**2],
+            [54.0, 13*le, 156.0, -22*le],
+            [-13*le, -3*le**2, -22*le, 4*le**2],
+        ]) * (K_BEAM * le / 420.0)
+        ks = np.array([
+            [36.0, 3*le, -36.0, 3*le],
+            [3*le, 4*le**2, -3*le, -le**2],
+            [-36.0, -3*le, 36.0, -3*le],
+            [3*le, -le**2, -3*le, 4*le**2],
+        ]) * (G / (30.0 * le))
+        idx = np.array([2*e, 2*e+1, 2*e+2, 2*e+3])
+        K_b[np.ix_(idx, idx)] += kb
+        K_f[np.ix_(idx, idx)] += kf
+        K_s[np.ix_(idx, idx)] += ks
+
+    d = np.zeros(ndof)
+    d[0::2] = res.w
+    d[1::2] = res.theta
+    U_b = 0.5 * d @ K_b @ d
+    U_f = 0.5 * d @ K_f @ d
+    U_s = 0.5 * d @ K_s @ d
+    U_total = U_b + U_f + U_s
+
+    rel_err = abs(W_ext - U_total) / W_ext
+    assert rel_err < 1e-6, (
+        f"Pasternak beam energy imbalance: W={W_ext:.6e}, U={U_total:.6e}, rel={rel_err:.2e}"
+    )
+
+
+def test_energy_conservation_plate_winkler():
+    """AC7: For the axisymmetric plate under point load, W_ext = P*w(0)/2 must
+    equal U_b + U_f from the consistent FEM stiffness matrices."""
+    D = winkler_plate_flexural_rigidity(E_ICE, H_ICE, NU_ICE)
+    l = winkler_plate_char_length(D, RHO_G)
+    # Use point load (load_radius=0) so W_ext = P*w(0)/2 is exact
+    res = solve_axisym_plate_fem(D, NU_ICE, RHO_G, 40 * l, P=P_ICE,
+                                 load_radius=0.0, n_outer=400,
+                                 grading=2.0, bc="free")
+    w0 = float(res.w[0])
+    W_ext = P_ICE * w0 / 2.0
+
+    # Rebuild stiffness matrices for energy computation
+    from tensorphysics.elastic_foundation.plates import _hermite
+    r = res.r
+    nnode = r.size
+    ndof = 2 * nnode
+    K_b = np.zeros((ndof, ndof))
+    K_f = np.zeros((ndof, ndof))
+    gp, gw = np.polynomial.legendre.leggauss(6)
+    for e in range(nnode - 1):
+        r1, r2 = r[e], r[e + 1]
+        le = r2 - r1
+        for xg, wg in zip(gp, gw):
+            xi = 0.5 * (xg + 1.0)
+            rr = r1 + xi * le
+            jac = 0.5 * le * wg
+            N, dN, d2N = _hermite(xi, le)
+            ke_b = 2.0 * np.pi * D * (
+                rr * np.outer(d2N, d2N)
+                + np.outer(dN, dN) / rr
+                + NU_ICE * (np.outer(d2N, dN) + np.outer(dN, d2N))
+            ) * jac
+            ke_f = 2.0 * np.pi * RHO_G * rr * np.outer(N, N) * jac
+            if r1 == 0.0:
+                ke_b[1, :] = 0.0
+                ke_b[:, 1] = 0.0
+                ke_f[1, :] = 0.0
+                ke_f[:, 1] = 0.0
+            idx = np.array([2*e, 2*e+1, 2*e+2, 2*e+3])
+            K_b[np.ix_(idx, idx)] += ke_b
+            K_f[np.ix_(idx, idx)] += ke_f
+
+    d = np.zeros(ndof)
+    d[0::2] = res.w
+    d[1::2] = res.theta
+    U_b = 0.5 * d @ K_b @ d
+    U_f = 0.5 * d @ K_f @ d
+    U_total = U_b + U_f
+
+    rel_err = abs(W_ext - U_total) / W_ext
+    assert rel_err < 1e-6, (
+        f"Plate energy imbalance: W={W_ext:.6e}, U={U_total:.6e}, rel={rel_err:.2e}"
+    )
