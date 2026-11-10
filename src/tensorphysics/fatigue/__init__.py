@@ -78,3 +78,19 @@ __all__ = [
     "detail_fatigue_assessment",
     "DetailFatigueResult",
 ]
+
+from .strain_life import (
+    StrainLifeMaterial, n_prime_from_coefficients, k_prime_from_coefficients,
+    elastic_strain_amplitude, plastic_strain_amplitude, total_strain_amplitude,
+    strain_life_curve, reversals_for_strain_amplitude, cycles_to_failure,
+    transition_reversals, transition_life, cyclic_strain_amplitude,
+    stress_amplitude_from_strain, NeuberNotchResult, neuber_notch_strain,
+    notch_factor_neuber, notch_factor_peterson, notch_factor,
+    DamageBlock, StrainLifeDamageResult, strain_life_damage,
+    endurance_limit_strain_amplitude,
+)
+from .ice_pressure_lowcycle import (
+    RAYLEIGH_COV, cycles_from_exposure, nominal_stress_range_MPa,
+    weibull_shape_from_cov, pulse_amplitude_blocks,
+    IcePressureLowCycleResult, ice_pressure_low_cycle_assessment,
+)
