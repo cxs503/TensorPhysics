@@ -91,6 +91,7 @@ def calibrate_load(
     *,
     probe_displacement_m: float = 1.0e-5,
     target_ratio: float = 1.05,
+    load_offset_m: float = 0.0,
 ) -> dict[str, Any]:
     """Find the applied displacement that puts the ligament root at ``target_ratio*sigma_t``.
 
@@ -100,7 +101,9 @@ def calibrate_load(
     """
     from .fem_export import faces_on_plane
 
-    probe = solve_bend(model, applied_displacement_m=probe_displacement_m)
+    probe = solve_bend(
+        model, applied_displacement_m=probe_displacement_m, load_offset_m=load_offset_m
+    )
     faces = faces_on_plane(model.mesh, axis="x", coord=model.crack_plane_x_m)
     if not faces:
         raise RuntimeError(
@@ -136,6 +139,7 @@ def calibrate_load(
         "scale_factor": scale,
         "applied_displacement_m": probe_displacement_m * scale,
         "ligament_area_m2": ligament_area,
+        "load_offset_m": float(load_offset_m),
     }
 
 

@@ -88,6 +88,10 @@ class BendModel:
     crack_plane_x_m: float
     notch_gap_effective_m: float
     element_ids_original: np.ndarray  # mesh element e -> original box element id
+    #: Mesh *before* the notch was cut (needed to add elements back, e.g. crack advance).
+    base_mesh: SolidMesh | None = None
+    #: Boolean mask over ``base_mesh`` elements: True where the element survived the notch cut.
+    notch_mask: np.ndarray | None = None
 
 
 def second_moment_of_area(width_m: float, height_m: float) -> float:
@@ -130,6 +134,12 @@ def build_bend_model(
         gap = int(round(spec.notch_gap_m / dx)) * dx
     else:
         gap = 0.0
+    if spec.notch_gap_m > 0.0 and gap <= 0.0:
+        raise ValueError(
+            f"requested notch_gap_m={spec.notch_gap_m:.6g} m snapped to zero on a "
+            f"dx={dx:.6g} m mesh; a silent plain beam would be tested instead of a "
+            "notched specimen (choose notch_gap_m >= 0.5 * dx)"
+        )
     if gap > 0.0:
         gap = max(gap, dx)
 
@@ -170,6 +180,8 @@ def build_bend_model(
         notch_gap_effective_m=notch_gap_effective,
         crack_plane_x_m=crack_plane_x,
         element_ids_original=original_ids,
+        base_mesh=mesh,
+        notch_mask=keep,
     )
 
 
@@ -196,11 +208,17 @@ def _support_dofs(mesh: SolidMesh, spec: BeamSpec) -> tuple[np.ndarray, np.ndarr
     return dofs, support_ids
 
 
-def _load_patch_dofs(mesh: SolidMesh, spec: BeamSpec, patch_width_m: float) -> np.ndarray:
+def _load_patch_dofs(
+    mesh: SolidMesh,
+    spec: BeamSpec,
+    patch_width_m: float,
+    load_offset_m: float = 0.0,
+) -> np.ndarray:
     tol = 1e-9 * spec.height_m
     nodes = mesh.nodes
     top = np.abs(nodes[:, 1] - spec.height_m) <= tol
-    mid = np.abs(nodes[:, 0] - 0.5 * spec.length_m) <= 0.5 * patch_width_m + 1e-12
+    x_load = 0.5 * spec.length_m + float(load_offset_m)
+    mid = np.abs(nodes[:, 0] - x_load) <= 0.5 * patch_width_m + 1e-12
     ids = np.nonzero(top & mid)[0]
     if ids.size == 0:
         raise ValueError("the load patch selected no nodes; widen patch_width_m")
@@ -228,6 +246,7 @@ def solve_bend(
     applied_displacement_m: float,
     patch_width_m: float | None = None,
     formulation: str = "full",
+    load_offset_m: float = 0.0,
 ) -> BendSolution:
     """Displacement-controlled linear-elastic solve of the notched specimen.
 
@@ -239,7 +258,7 @@ def solve_bend(
     C = isotropic_elasticity(spec.E_pa, spec.nu)
     fixed_dofs, support_ids = _support_dofs(mesh, spec)
     patch = patch_width_m if patch_width_m is not None else 2.0 * model.dx_m
-    load_dofs = _load_patch_dofs(mesh, spec, patch)
+    load_dofs = _load_patch_dofs(mesh, spec, patch, load_offset_m)
     # A dof must never be both supported and loaded; resolving the two sets through
     # one dof->value map keeps the dof order and the value order in lockstep.
     prescribed: dict[int, float] = {int(d): 0.0 for d in fixed_dofs}
@@ -257,7 +276,7 @@ def solve_bend(
     u = solution.u.reshape(-1, 3)
     tol = 1e-9 * spec.height_m
     top = np.abs(mesh.nodes[:, 1] - spec.height_m) <= tol
-    mid = np.abs(mesh.nodes[:, 0] - 0.5 * spec.length_m) <= 0.5 * patch + 1e-12
+    mid = np.abs(mesh.nodes[:, 0] - (0.5 * spec.length_m + float(load_offset_m))) <= 0.5 * patch + 1e-12
     midspan_deflection = float(-np.mean(u[top & mid, 1]))
     # Support reactions are +y for a downward applied displacement, so their sum is
     # the magnitude of the transverse load carried by the specimen.
