@@ -23,7 +23,12 @@ from dataclasses import dataclass, field
 
 from .elastica import ElasticaExact
 from .elastica_fem import ElasticaFEMSolver
-from .von_karman_plate import VonKarmanPlateExact
+from .von_karman_plate import (
+    VonKarmanPlateExact,
+    VonKarmanPlateFEM,
+    plate_cubic_coefficient,
+    load_path_work,
+)
 from .shallow_arch import VonMisesTruss, ShallowArchModel
 
 __all__ = [
@@ -109,8 +114,9 @@ def camp_berger_reference(
     if w0_h_values is None:
         w0_h_values = np.array([0.5, 1.0, 2.0, 3.0, 4.0, 5.0])
     
-    # Coefficient from Camp/Berger/Yamaki
-    c = 0.376 + 0.01 * (nu - 0.3)  # slight ν dependence
+    # Coefficient from Camp/Berger/Yamaki -- single source of truth in
+    # von_karman_plate.plate_cubic_coefficient (avoids divergent duplicates).
+    c = plate_cubic_coefficient(nu)
     
     P_norm = w0_h_values + c * w0_h_values**3
     
@@ -164,126 +170,180 @@ def budiansky_roth_reference(
 # Energy conservation checks
 # ============================================================================
 
+def _elastica_load_and_deflection(exact: ElasticaExact, theta_B: float) -> Tuple[float, float]:
+    """(P, delta) of the exact elastica for a given free-end angle.
+
+    Uses the elliptic-type integrals directly (no deformed-shape tabulation),
+    so it is cheap enough to sample a whole loading path.
+    """
+    I_L, _, I_y = exact._compute_integrals(theta_B)
+    P = exact.EI * I_L**2 / (2.0 * exact.L**2)
+    delta = exact.L * I_y / I_L
+    return P, delta
+
+
 def verify_energy_conservation_elastica(
     L: float = 1.0, EI: float = 1.0,
     theta_B_values: np.ndarray = None,
+    n_path: int = 400,
 ) -> Dict[str, np.ndarray]:
-    """Verify energy conservation for elastica using FEM solver.
-    
-    For the discrete elastica model:
-    U_strain = Σ 1/2 * k * (Δθ_i)²
-    W_ext = P * δ_tip
-    
-    For a conservative system loaded monotonically: W_ext = 2 * U_strain
-    (because the load increases linearly from 0 to P, so average load is P/2)
-    
-    Actually, for a dead load (constant P): W_ext = P * δ
-    And U_strain should equal P * δ for equilibrium.
-    
+    """Genuine energy check for the elastica: work of deformation vs U.
+
+    For a cantilever under a *dead* end load P the quasi-static energy balance
+    reads (Clausius / work of deformation)
+
+        U = int_0^delta P(delta') d delta' ,
+
+    with U = (EI/2) int (dtheta/ds)^2 ds the bending energy of the elastica
+    (``ElasticaExact.strain_energy``).  Note that U != P*delta except in the
+    linear limit: P*delta >= U with U/(P delta) -> 1/2 as P -> 0, so comparing
+    U with P*delta (as the first version of this routine did) produces a
+    spurious 50-70% "error" that is a property of the criterion, not of the
+    solution.  This routine therefore integrates the load path numerically.
+
+    A second, independent consistency check is the generalised-force identity
+    dU/ddelta = P, evaluated here with central differences in theta_B.
+
+    Parameters
+    ----------
+    L, EI : float
+        Beam length and flexural rigidity.
+    theta_B_values : ndarray, optional
+        Free-end angles at which to check the balance.
+    n_path : int
+        Number of load-path samples used for the integral int P d delta.
+
     Returns
     -------
-    dict with energy values and error percentages.
+    dict with
+        theta_B, P, delta, U_strain, W_deform,
+        error_pct            : |W_deform - U| / U * 100
+        dU_ddelta, P_from_derivative, generalized_force_error_pct
     """
     if theta_B_values is None:
         theta_B_values = np.array([0.3, 0.5, 0.7, 0.9, 1.1, 1.3])
-    
+    theta_B_values = np.asarray(theta_B_values, dtype=float)
+
     exact = ElasticaExact(L=L, EI=EI)
-    
-    W_ext = np.zeros_like(theta_B_values, dtype=float)
-    U_strain = np.zeros_like(theta_B_values, dtype=float)
-    errors = np.zeros_like(theta_B_values, dtype=float)
-    
+
+    P_out = np.zeros_like(theta_B_values)
+    delta_out = np.zeros_like(theta_B_values)
+    U_out = np.zeros_like(theta_B_values)
+    W_out = np.zeros_like(theta_B_values)
+    err_out = np.zeros_like(theta_B_values)
+    dU_ddelta_out = np.zeros_like(theta_B_values)
+    gforce_err_out = np.zeros_like(theta_B_values)
+
     for i, tb in enumerate(theta_B_values):
-        sol = exact.compute_from_theta_B(tb)
-        P = sol.P
-        
-        # External work: W = P * δ (dead load)
-        W_ext[i] = P * sol.y_tip
-        
-        # Strain energy from the exact solution
-        # U = (EI/2) ∫₀^L (dθ/ds)² ds
-        # From the first integral: (dθ/ds)² = (2P/EI)(sin θ_B - sin θ)
-        # So: U = P * ∫₀^L (sin θ_B - sin θ(s)) ds
-        #
-        # We integrate over the arc length using the shape data
-        if len(sol.s_array) > 1 and len(sol.theta_array) > 1:
-            sin_diff = np.sin(tb) - np.sin(sol.theta_array)
-            sin_diff = np.maximum(sin_diff, 0)
-            U_strain[i] = P * np.trapezoid(sin_diff, sol.s_array)
+        P, delta = _elastica_load_and_deflection(exact, tb)
+        P_out[i] = P
+        delta_out[i] = delta
+        U_out[i] = exact.strain_energy(tb)
+
+        # Deformation work along the monotonic loading path 0 -> theta_B.
+        path = np.linspace(1e-9, tb, n_path)
+        PD = [_elastica_load_and_deflection(exact, t) for t in path]
+        P_path = np.array([p for p, _ in PD])
+        d_path = np.array([d for _, d in PD])
+        P_path = np.concatenate(([0.0], P_path))
+        d_path = np.concatenate(([0.0], d_path))
+        W_out[i] = float(np.trapezoid(P_path, d_path))
+
+        err_out[i] = abs(W_out[i] - U_out[i]) / U_out[i] * 100.0 if U_out[i] > 0 else 0.0
+
+        # Generalised force: dU/ddelta = P.
+        dtheta = 1e-6
+        if tb - dtheta > 0.0 and tb + dtheta < 0.5 * np.pi:
+            dU = (exact.strain_energy(tb + dtheta) - exact.strain_energy(tb - dtheta)) / (2 * dtheta)
+            dd = (_elastica_load_and_deflection(exact, tb + dtheta)[1]
+                  - _elastica_load_and_deflection(exact, tb - dtheta)[1]) / (2 * dtheta)
+            dU_ddelta_out[i] = dU / dd
+            gforce_err_out[i] = abs(dU_ddelta_out[i] - P) / P * 100.0
         else:
-            U_strain[i] = W_ext[i]
-        
-        # Error
-        if W_ext[i] > 1e-15:
-            errors[i] = abs(W_ext[i] - U_strain[i]) / W_ext[i] * 100
-        else:
-            errors[i] = 0.0
-    
+            dU_ddelta_out[i] = np.nan
+            gforce_err_out[i] = np.nan
+
     return {
         'theta_B': theta_B_values,
-        'W_ext': W_ext,
-        'U_strain': U_strain,
-        'error_pct': errors,
+        'P': P_out,
+        'delta': delta_out,
+        'U_strain': U_out,
+        'W_deform': W_out,
+        'error_pct': err_out,
+        'dU_ddelta': dU_ddelta_out,
+        'P_from_derivative': P_out,
+        'generalized_force_error_pct': gforce_err_out,
     }
 
 
 def verify_energy_conservation_plate(
     a: float = 1.0, h: float = 0.01, E: float = 210e9, nu: float = 0.3,
     w0_h_values: np.ndarray = None,
+    n_elem: int = 16, n_steps: int = 10,
 ) -> Dict[str, np.ndarray]:
-    """Verify energy conservation for von Karman plate.
-    
-    For the plate: W_ext = ∫₀^{w₀} P(w') dw'
-    
-    For the cubic law: P = (16πD/a²) * (w₀/h + c*(w₀/h)³) * h
-    W_ext = (16πD/a²) * (w₀²/(2h) + c*w₀⁴/(4h³))
-    
-    U_strain = U_bending + U_membrane
-    
+    """Genuine energy check for the von Karman plate: W_ext vs FE strain energy.
+
+    A circular clamped plate is loaded by the centre force predicted by the
+    closed-form law, the von Karman finite element model is brought to that
+    load along a monotonic path of ``n_steps`` increments, and
+
+        W_ext = int_0^{w0} P dw0      (dead-load work, :func:`load_path_work`)
+        U_FE  = membrane + bending strain energy of the converged FE state
+                (:meth:`VonKarmanPlateFEM.energy`)
+
+    are compared.  Neither quantity is derived from the other, so the residual
+    is a real check of the incremental/Newton solution (it is dominated by the
+    trapezoidal load-path quadrature, i.e. O(dP^2)).
+
+    The first version of this routine split W_ext into a "bending" and a
+    "membrane" part and then re-added them, so its reported error was
+    identically 0 and the check could never fail.
+
     Returns
     -------
-    dict with energy values.
+    dict with w0_h, P, w0, w_ext, u_total, u_bending, u_membrane, error_pct,
+    converged.
     """
     if w0_h_values is None:
-        w0_h_values = np.array([0.5, 1.0, 2.0, 3.0, 4.0])
-    
+        w0_h_values = np.array([0.5, 1.0, 2.0])
+
     ref = VonKarmanPlateExact(a=a, h=h, E=E, nu=nu)
-    D = ref.D
-    
-    w0_h_ref, P_norm, P_vals = ref.compute_load_deflection_curve(w0_h_values)
-    w0_vals = w0_h_ref * h
-    
-    W_ext = np.zeros_like(w0_vals)
-    U_bending = np.zeros_like(w0_vals)
-    U_membrane = np.zeros_like(w0_vals)
-    errors = np.zeros_like(w0_vals)
-    
-    for i, w0 in enumerate(w0_vals):
-        w0_h = w0 / h
-        c = 0.376
-        
-        # External work
-        W_ext[i] = 16 * np.pi * D / a**2 * (w0**2 / (2*h) + c * w0**4 / (4 * h**3))
-        
-        # Bending energy (approximate)
-        U_bending[i] = 16 * np.pi * D * w0**2 / (6 * a**2)
-        
-        # Membrane energy
-        U_membrane[i] = W_ext[i] - U_bending[i]
-        
-        # Check
-        U_total = U_bending[i] + U_membrane[i]
-        if W_ext[i] > 1e-15:
-            errors[i] = abs(W_ext[i] - U_total) / W_ext[i] * 100
-        else:
-            errors[i] = 0.0
-    
+    fem = VonKarmanPlateFEM(a=a, h=h, E=E, nu=nu, n_elem=n_elem)
+
+    w0_h_values = np.asarray(w0_h_values, dtype=float)
+    _, _, P_values = ref.compute_load_deflection_curve(w0_h_values)
+
+    P_out = np.zeros_like(w0_h_values)
+    w0_out = np.zeros_like(w0_h_values)
+    W_out = np.zeros_like(w0_h_values)
+    U_out = np.zeros_like(w0_h_values)
+    U_bend = np.zeros_like(w0_h_values)
+    U_mem = np.zeros_like(w0_h_values)
+    err_out = np.zeros_like(w0_h_values)
+    conv = np.zeros(w0_h_values.shape, dtype=bool)
+
+    for i, P in enumerate(P_values):
+        res = fem.solve(float(P), n_steps=n_steps, max_iter=60, tol=1e-10)
+        energy = fem.energy(res['u'])
+        P_out[i] = P
+        w0_out[i] = res['w0']
+        conv[i] = bool(res['converged'])
+        W_out[i] = load_path_work(res['history'])
+        U_out[i] = energy['total']
+        U_bend[i] = energy['bending']
+        U_mem[i] = energy['membrane']
+        err_out[i] = abs(W_out[i] - U_out[i]) / U_out[i] * 100.0 if U_out[i] > 0 else 0.0
+
     return {
         'w0_h': w0_h_values,
-        'W_ext': W_ext,
-        'U_bending': U_bending,
-        'U_membrane': U_membrane,
-        'error_pct': errors,
+        'P': P_out,
+        'w0': w0_out,
+        'w_ext': W_out,
+        'u_total': U_out,
+        'u_bending': U_bend,
+        'u_membrane': U_mem,
+        'error_pct': err_out,
+        'converged': conv,
     }
 
 
@@ -347,31 +407,73 @@ def convergence_order_plate(
     a: float = 1.0, h: float = 0.01, E: float = 210e9, nu: float = 0.3,
     P_target: float = None,
     n_elem_list: List[int] = None,
+    n_steps: int = 6,
 ) -> Dict:
-    """Study convergence of von Karman plate FEM."""
+    """Observed convergence order of the von Karman plate FEM.
+
+    Computes the centre deflection on a sequence of meshes at a fixed load and
+    estimates the order p from the Richardson ratio of the successive
+    differences,
+
+        p = log2( |w_h - w_h/2| / |w_h/2 - w_h/4| ).
+
+    The first version of this function did not solve anything: it returned
+    ``convergence_order = 4.0`` (the theoretical order of cubic Hermite
+    elements) with the note "Theoretical order for cubic Hermite elements",
+    i.e. the "verification" could never fail.
+
+    Parameters
+    ----------
+    P_target : float, optional
+        Centre load [N].  Defaults to the closed-form load for w0/h = 2.
+    n_elem_list : list of int, optional
+        Meshes (default [8, 16, 32], halving between levels).
+    n_steps : int
+        Load increments per solve (accuracy of the incremental path).
+
+    Returns
+    -------
+    dict with n_elem, h_values, w0, differences, convergence_order, P_target,
+    converged.
+    """
     if n_elem_list is None:
-        n_elem_list = [5, 10, 20, 40]
-    
+        n_elem_list = [8, 16, 32]
+    if len(n_elem_list) < 3:
+        raise ValueError(
+            "convergence_order_plate needs at least 3 meshes for a Richardson "
+            f"order estimate (got {len(n_elem_list)})"
+        )
+
     ref = VonKarmanPlateExact(a=a, h=h, E=E, nu=nu)
-    
+
     if P_target is None:
         _, _, P_vals = ref.compute_load_deflection_curve(np.array([2.0]))
-        P_target = P_vals[0]
-    
-    w0_h_ref, P_norm_ref, _ = ref.compute_load_deflection_curve(np.array([2.0]))
-    w0_exact = w0_h_ref[0] * h
-    
-    h_values = np.array([a / n for n in n_elem_list])
-    
-    # Theoretical order for cubic Hermite elements
-    convergence_order = 4.0
-    
+        P_target = float(P_vals[0])
+
+    w0 = np.zeros(len(n_elem_list))
+    converged = np.zeros(len(n_elem_list), dtype=bool)
+    for i, n in enumerate(n_elem_list):
+        fem = VonKarmanPlateFEM(a=a, h=h, E=E, nu=nu, n_elem=n)
+        res = fem.solve(P_target, n_steps=n_steps, max_iter=60, tol=1e-10)
+        w0[i] = res['w0']
+        converged[i] = bool(res['converged'])
+
+    h_values = np.array([a / n for n in n_elem_list], dtype=float)
+    differences = np.abs(np.diff(w0))
+
+    if len(differences) >= 2 and np.all(differences > 0):
+        order = float(np.log2(differences[:-1] / differences[1:])[-1])
+    else:
+        order = float('nan')
+
     return {
         'n_elem': n_elem_list,
         'h_values': h_values,
-        'w0_exact': w0_exact,
-        'convergence_order': convergence_order,
-        'note': 'Theoretical order for cubic Hermite elements',
+        'w0': w0,
+        'differences': differences,
+        'convergence_order': order,
+        'P_target': P_target,
+        'converged': converged,
     }
 
 
@@ -409,14 +511,21 @@ def full_verification_elastica(
     # 3. Convergence order
     conv_check = convergence_order_elastica(L, EI, P_target=P_test[2])
     
-    # Pass/fail
+    # Pass/fail.  The convergence window is asymmetric on purpose:
+    # ElasticaFEMSolver is a lumped rigid-link model with piecewise-constant
+    # rotation, so its observed order against the exact solution is ~1.0 (not
+    # the O(h^2) one would expect from a Hermite beam element).  Measured
+    # orders: 1.00 at P = 2.0 (see docs/m8870_r1_audit.md).  A monotone
+    # first-order model is accepted; super-convergence would indicate the
+    # mesh sequence is not what it claims to be.
     results = {
         'load_deflection_error_pct': load_deflection_error,
         'linear_limit_error_pct': linear_check['error_pct'],
         'convergence_order': conv_check['convergence_order'],
+        'convergence_order_expected': 'first order (lumped rigid-link model)',
         'pass_load_deflection': np.all(load_deflection_error < 5.0),
         'pass_linear_limit': linear_check['error_pct'] < 1.0,
-        'pass_convergence': 1.0 < conv_check['convergence_order'] < 3.0,
+        'pass_convergence': 0.85 <= conv_check['convergence_order'] <= 3.0,
     }
     
     results['all_pass'] = all([
@@ -430,47 +539,68 @@ def full_verification_elastica(
 
 def full_verification_plate(
     a: float = 1.0, h: float = 0.01, E: float = 210e9, nu: float = 0.3,
+    w0_h_check: np.ndarray = None,
+    n_elem: int = 16, n_steps: int = 8,
 ) -> Dict:
-    """Complete von Karman plate verification pipeline."""
+    """Complete von Karman plate verification pipeline.
+
+    The closed-form load-deflection law is now checked against the *independent*
+    von Karman finite element solution (load from the law -> converged FE
+    deflection).  The first version compared the law against
+    ``camp_berger_reference``, which is generated from the same law, so the
+    reported error was identically zero.
+    """
     ref = VonKarmanPlateExact(a=a, h=h, E=E, nu=nu)
-    
-    # 1. Compare with Camp/Berger
-    w0_h_test = np.array([0.5, 1.0, 2.0, 3.0, 4.0])
-    camp_ref = camp_berger_reference(w0_h_test, nu)
-    
-    w0_h_calc, P_norm_calc, _ = ref.compute_load_deflection_curve(w0_h_test)
-    
-    P_error = np.abs(P_norm_calc - camp_ref['P_normalized']) / camp_ref['P_normalized'] * 100
-    
-    # 2. Linear limit
+
+    if w0_h_check is None:
+        w0_h_check = np.array([0.5, 1.0, 2.0, 3.0])
+    w0_h_check = np.asarray(w0_h_check, dtype=float)
+
+    _, _, P_check = ref.compute_load_deflection_curve(w0_h_check)
+
+    fem = VonKarmanPlateFEM(a=a, h=h, E=E, nu=nu, n_elem=n_elem)
+    w0_fem = np.zeros_like(w0_h_check)
+    converged = np.zeros(w0_h_check.shape, dtype=bool)
+    for i, P in enumerate(P_check):
+        res = fem.solve(float(P), n_steps=n_steps, max_iter=60, tol=1e-10)
+        w0_fem[i] = res['w0']
+        converged[i] = bool(res['converged'])
+    w0_h_fem = w0_fem / h
+
+    # error in the deflection predicted for the same load
+    fe_error = np.abs(w0_h_fem - w0_h_check) / w0_h_check * 100.0
+
+    # linear limit: deflection must match w0 = P a^2/(16 pi D)
     P_small = 1.0
     w0_linear = ref.linear_solution(P_small)
-    w0_h_small = w0_linear / h
     P_norm_small = P_small * a**2 / (16 * np.pi * ref.D * h)
-    linear_ratio = P_norm_small / w0_h_small
-    linear_error = abs(linear_ratio - 1.0) * 100
-    
-    # 3. Membrane stiffening
+    linear_error = abs(P_norm_small / (w0_linear / h) - 1.0) * 100.0
+
+    # membrane stiffening: secant stiffness must grow with deflection
     w0_h_fine = np.linspace(0.1, 5.0, 50)
     _, P_norm_fine, _ = ref.compute_load_deflection_curve(w0_h_fine)
     ratio = P_norm_fine / w0_h_fine
-    stiffening_detected = ratio[-1] > ratio[0]
-    
+    stiffening_detected = bool(ratio[-1] > ratio[0])
+
     results = {
-        'P_error_pct': P_error,
+        'w0_h_check': w0_h_check,
+        'w0_h_fem': w0_h_fem,
+        'P_error_pct': fe_error,          # closed form vs FE, same load
         'linear_limit_error_pct': linear_error,
         'stiffening_detected': stiffening_detected,
-        'pass_load_deflection': np.all(P_error < 5.0),
+        'fem_converged': converged,
+        'fem_n_elem': n_elem,
+        'pass_load_deflection': bool(np.all(fe_error < 5.0) and np.all(converged)),
         'pass_linear_limit': linear_error < 1.0,
         'pass_stiffening': stiffening_detected,
     }
-    
+
     results['all_pass'] = all([
         results['pass_load_deflection'],
         results['pass_linear_limit'],
         results['pass_stiffening'],
     ])
-    
+
     return results
 
 
