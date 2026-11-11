@@ -1,0 +1,117 @@
+{
+  "schema_version": "criterion-conflict-config/1.0",
+  "default_statistic": "unspecified",
+  "default_tolerance_relative": 0.1,
+  "statistics": [
+    {
+      "name": "pointwise",
+      "aliases": [
+        "pointwise",
+        "逐点",
+        "per-point",
+        "单点"
+      ]
+    },
+    {
+      "name": "mean",
+      "aliases": [
+        "mean",
+        "average",
+        "平均",
+        "均值"
+      ]
+    },
+    {
+      "name": "worst",
+      "aliases": [
+        "worst",
+        "maximum",
+        "max",
+        "最坏",
+        "最差",
+        "最大"
+      ]
+    },
+    {
+      "name": "p95",
+      "aliases": [
+        "p95",
+        "95th-percentile"
+      ]
+    },
+    {
+      "name": "unspecified",
+      "aliases": []
+    }
+  ],
+  "metrics": [
+    {
+      "id": "synthetic.metric.alpha",
+      "aliases": [
+        "synthetic.metric.alpha",
+        "alpha metric",
+        "syn alpha"
+      ],
+      "canonical_unit": "1",
+      "units": {
+        "1": 1.0,
+        "%": 0.01,
+        "pct": 0.01,
+        "permille": 0.001,
+        "‰": 0.001
+      },
+      "default_unit": "1",
+      "tolerance_relative": 0.1,
+      "dimension": "dimensionless"
+    },
+    {
+      "id": "synthetic.metric.beta",
+      "aliases": [
+        "synthetic.metric.beta",
+        "beta metric",
+        "syn beta"
+      ],
+      "canonical_unit": "s",
+      "units": {
+        "s": 1.0,
+        "sec": 1.0,
+        "ms": 0.001,
+        "min": 60.0
+      },
+      "default_unit": "s",
+      "tolerance_relative": 0.2,
+      "dimension": "time"
+    },
+    {
+      "id": "synthetic.metric.gamma",
+      "aliases": [
+        "synthetic.metric.gamma",
+        "gamma metric",
+        "syn gamma"
+      ],
+      "canonical_unit": "1",
+      "units": {
+        "1": 1.0
+      },
+      "default_unit": "1",
+      "tolerance_relative": 0.05,
+      "dimension": "count"
+    },
+    {
+      "id": "synthetic.metric.delta",
+      "aliases": [
+        "synthetic.metric.delta",
+        "delta metric",
+        "syn delta"
+      ],
+      "canonical_unit": "MPa",
+      "units": {
+        "MPa": 1.0,
+        "kPa": 0.001
+      },
+      "default_unit": "MPa",
+      "tolerance_relative": 0.25,
+      "dimension": "stress"
+    }
+  ]
+}
