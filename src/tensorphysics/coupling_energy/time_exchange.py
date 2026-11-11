@@ -364,6 +364,7 @@ class LadderResult:
     tail_booking: bool
     recenter: bool = False
     subcycle: bool = False
+    recenter_order: int = 1
     levels: list[ChainResult] = field(default_factory=list)
 
     @property
@@ -397,6 +398,7 @@ class LadderResult:
             "stamp_offset": self.stamp_offset,
             "tail_booking": self.tail_booking,
             "recenter": self.recenter,
+            "recenter_order": int(self.recenter_order),
             "subcycle": self.subcycle,
             "levels": [lv.as_dict() for lv in self.levels],
             "observed_order": order,
@@ -411,14 +413,16 @@ class LadderResult:
 
 def run_ladder(chain: ExchangeChain, scheme: ExchangeScheme | str, ratio: int, *,
                stamp_offset: float = 0.0, tail_booking: bool = False,
-               recenter: bool = False, subcycle: bool = False) -> ChainResult:
+               recenter: bool = False, subcycle: bool = False,
+               recenter_order: int = 1) -> ChainResult:
     """One exchange-cadence level: coarse step ``h = ratio * dt_fine``.
 
     The fine step is held fixed while ``ratio`` varies, which is the only knob a
     partitioned code really has: the exchange cadence, not the solver step.
     """
     if stamp_offset > 0.0:
-        stamp = StampRule(StampConvention.WINDOW_MIDPOINT, float(stamp_offset), bool(recenter))
+        stamp = StampRule(StampConvention.WINDOW_MIDPOINT, float(stamp_offset),
+                          bool(recenter), order=int(recenter_order))
     else:
         stamp = StampRule()
     operator = operator_for(scheme, stamp)
@@ -440,6 +444,7 @@ def run_ladder(chain: ExchangeChain, scheme: ExchangeScheme | str, ratio: int, *
             "tail booking removes them again")
     state = np.asarray(chain.y0, dtype=float)
     q_prev: float | None = None
+    q_prev2: float | None = None
     m_prev: float | None = None  # kept for traceability of the published stream
     time_trace: list[float] = []
     state_trace: list[float] = []
@@ -481,6 +486,7 @@ def run_ladder(chain: ExchangeChain, scheme: ExchangeScheme | str, ratio: int, *
             defect_sum += abs(applied - exact)
             exact_sum += abs(exact)
             interval_diffs.append(abs(applied - exact))
+            q_prev2 = q_prev
             q_prev = chain.sample(t_lo, 0.0)
             m_prev = q_prev
             time_trace.append(t_hi)
@@ -495,12 +501,13 @@ def run_ladder(chain: ExchangeChain, scheme: ExchangeScheme | str, ratio: int, *
         q_lo = chain.sample(t_lo, stamp_offset)
         q_hi = chain.sample(t_hi, stamp_offset)
         transfer = operator.provisional_transfer(n, t_lo, t_hi, q_lo=q_lo,
-                                                 q_hi=q_hi, q_prev=q_prev)
+                                                 q_hi=q_hi, q_prev=q_prev,
+                                                 q_prev2=q_prev2)
         ledger.book_applied(n, transfer.integral)
         provisional = chain.advance(state, transfer.rate, h)
 
         # -- deferred correction (predictor-corrector only) ---------------------
-        corrected = operator.corrected_transfer(transfer, q_hi)
+        corrected = operator.corrected_transfer(transfer, q_hi, q_prev2=q_prev2)
         if abs(corrected.rate - transfer.rate) > 0.0:
             ledger.book_correction(n, corrected.integral - transfer.integral)
             state = chain.advance(state, corrected.rate, h)
@@ -512,6 +519,7 @@ def run_ladder(chain: ExchangeChain, scheme: ExchangeScheme | str, ratio: int, *
         interval_diffs.append(abs(applied - exact))
         defect_sum += abs(applied - exact)
         exact_sum += abs(exact)
+        q_prev2 = q_prev
         q_prev = q_lo
         m_prev = q_lo
         time_trace.append(t_hi)
@@ -553,7 +561,7 @@ def run_cadence_ladder(chain: ExchangeChain | str, scheme: ExchangeScheme | str,
                        ratios: Sequence[int] = (1, 2, 4, 8, 16, 32),
                        stamp_offset_ratio: float = 0.0,
                        tail_booking: bool = False, recenter: bool = False,
-                       subcycle: bool = False,
+                       subcycle: bool = False, recenter_order: int = 1,
                        **chain_kwargs) -> LadderResult:
     """Run a full cadence ladder for one chain and one operator.
 
@@ -569,11 +577,13 @@ def run_cadence_ladder(chain: ExchangeChain | str, scheme: ExchangeScheme | str,
     offset = stamp_offset_ratio * chain.dt_fine
     ladder = LadderResult(chain=chain.name, scheme=ExchangeScheme(scheme).value,
                           stamp_offset=offset, tail_booking=bool(tail_booking),
-                          recenter=bool(recenter), subcycle=bool(subcycle))
+                          recenter=bool(recenter), subcycle=bool(subcycle),
+                          recenter_order=int(recenter_order))
     for ratio in ratios:
         ladder.levels.append(run_ladder(chain, scheme, ratio,
                                         stamp_offset=offset,
                                         tail_booking=tail_booking,
                                         recenter=recenter,
-                                        subcycle=subcycle))
+                                        subcycle=subcycle,
+                                        recenter_order=int(recenter_order)))
     return ladder
