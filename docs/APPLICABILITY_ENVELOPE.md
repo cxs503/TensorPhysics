@@ -2,7 +2,7 @@
 
 **Module** `tensorphysics.applicability` | **campaign node** P155W1-N09 | **mission** 8238
 | configuration `src/tensorphysics/applicability/configs/default_capabilities.v1.json` (digest `a3daea28b05f361a`)
-| envelope artifact `artifacts/applicability/envelopes.json` (suite digest `07fa0b114ec802b7`)
+| envelope artifact `artifacts/applicability/envelopes.json` (suite digest `56fe7015279cf087`)
 
 Reproduce:
 
@@ -10,7 +10,8 @@ Reproduce:
 PYTHONPATH=src python tools/make_applicability_report.py            # artifacts + figures + this document
 PYTHONPATH=src python -m tensorphysics.applicability --out /tmp/envelopes.json --figures /tmp/fig
 PYTHONPATH=src python -m tensorphysics.applicability.benchmarks     # synthetic self-check table
-PYTHONPATH=src python -m pytest tests/test_applicability_envelope.py -q
+PYTHONPATH=src python -m pytest tests/test_applicability_envelope.py tests/test_applicability_artifact.py -q
+PYTHONPATH=src python -m tensorphysics.applicability --envelope artifacts/applicability/envelopes.json     --query '{"<capability id>": {"<axis>": 42.0}}'      # offline gate, no probe
 ```
 
 ---
@@ -110,7 +111,7 @@ analytic scalar in a test and a repository kernel in production.
 ### 3.1 Envelopes of the three real capabilities
 
 All numbers are read from `artifacts/applicability/envelopes.json`
-(suite digest `07fa0b114ec802b7`); `*` marks an open interval end (no failure found
+(suite digest `56fe7015279cf087`); `*` marks an open interval end (no failure found
 inside the searched span).
 
 | capability | axis (scale) | searched span | in-domain interval | boundary +/- width | width / span | confidence | declared | compat |
@@ -247,10 +248,113 @@ Queries sent through the artifact builder (2 inside, 4 outside):
 
 | criterion | evidence | verdict |
 |---|---|---|
-| mechanism lives in TensorPhysics with pytest coverage | `src/tensorphysics/applicability/`, `tests/test_applicability_envelope.py` (21 tests) | PASS |
+| mechanism lives in TensorPhysics with pytest coverage | `src/tensorphysics/applicability/`, `tests/test_applicability_envelope.py` (mechanism) and `tests/test_applicability_artifact.py` (round trip + offline gate) | PASS |
 | >= 10 synthetic black-box capabilities | `artifacts/applicability/synthetic_selfcheck.json`: 13 / 13 pass | PASS |
 | >= 3 real capabilities, mechanism boundary not wider than the declaration | section 3.1: 3 / 3 `NOT_WIDER` or `CONSERVATIVE`, containment margins 0 | PASS |
 | boundary refined to 0.1 % of the axis span | `width/span` column of section 3.1 (0.000869, 0.000869) and the continuous-axis synthetic cases; the count axis is documented as quantum-limited | PASS (with documented quantum exception) |
 | `domain_status` in {IN, OUT, UNKNOWN}; OUT forces `OUT_OF_DOMAIN` and refuses REAL | section 3.3, `assign_grade`, `GradeWriteError` tests | PASS |
 | zero domain semantics in code/tools/tests | capability ids and axis names appear only in the JSON configuration; enforced by a test | PASS |
 | no fabricated numbers in this document | every number injected by `tools/make_applicability_report.py` from the probe artifact | PASS |
+| the persisted artifact is consumable | section 8: reloaded 3 envelopes, digest `56fe7015279cf087` recomputed and equal to the stored one (True), 11 offline queries | PASS |
+| the suite digest identifies content, not the clock | `test_suite_digest_is_reproducible_across_runs` (two runs one second apart) and section 8 | PASS |
+| the offline gate is fail-closed | section 8: 3 OUT -> `OUT_OF_DOMAIN`, 3 UNKNOWN -> `WITHHELD`, 2 mechanical errors reported | PASS |
+
+## 8. Consumer side: the artifact is loadable, and the digest is reproducible
+
+Producing an envelope artifact is only half of the mechanism; the other half is
+that a **later process can consume it**. `ApplicabilityEnvelope.from_dict` and
+`load_envelopes` rebuild the exact frozen dataclasses the probe produced (the
+classification code is the same object, not a copy), so a publishing pipeline can
+gate a grade without importing any evaluator and without repeating the scan. The
+command line exposes it directly:
+
+```bash
+python -m tensorphysics.applicability --envelope <artifact.json> --query '<json>' --out <verdicts.json>
+```
+
+Two guarantees are enforced on load, both fail-closed:
+
+* **schema** must be `tensorphysics.applicability.envelopes.v1` (anything else is
+  an `ArtifactError`);
+* **suite digest** is recomputed from the reloaded envelopes and compared with the
+  stored value -- a hand-edited interval is rejected instead of certified
+  (`ArtifactError: suite digest mismatch`). The escape hatch is explicit
+  (`verify_digest=False`).
+
+That check only means something if the digest is *reproducible*. It was not: the
+digest hashed the whole serialized envelope including `generated_utc`, so two
+identical probe runs one second apart hashed differently and the digest printed in
+a report could never be reproduced -- so no consumer could ever verify an artifact.
+The digest now hashes content only (`generated_utc` excluded,
+`probe.CONTENT_VOLATILE_FIELDS`); the timestamp stays inside the artifact but is
+not part of its identity. `test_suite_digest_is_reproducible_across_runs` pins this.
+
+Reload of `artifacts/applicability/envelopes.json`:
+
+| stored digest | recomputed after reload | equal |
+|---|---|---|
+| `56fe7015279cf087` | `56fe7015279cf087` | True |
+
+Offline verdicts (query points derived from the envelopes themselves, no domain
+knowledge in the generator; `artifacts/applicability/offline_gate.json`):
+
+| query | point | domain_status | effective grade | accepted | note |
+|---|---|---|---|---|---|
+| `multigrid-contraction-vs-damping::inside` | `{"damping": 0.6066060902268281}` | IN | `REAL` | True |  |
+| `multigrid-contraction-vs-damping::past-detected-boundary` | `{"damping": 1.4066060902268283}` | OUT | `OUT_OF_DOMAIN` | False |  |
+| `multigrid-contraction-vs-damping::beyond-searched-span` | `{"damping": 3.4000000000000004}` | UNKNOWN | `WITHHELD` | False |  |
+| `stationary-iteration-stability::inside` | `{"relaxation": 0.6038483275726315}` | IN | `REAL` | True |  |
+| `stationary-iteration-stability::past-detected-boundary` | `{"relaxation": 1.3038483275726316}` | OUT | `OUT_OF_DOMAIN` | False |  |
+| `stationary-iteration-stability::beyond-searched-span` | `{"relaxation": 3.0}` | UNKNOWN | `WITHHELD` | False |  |
+| `stationary-solve-error-vs-grid::inside` | `{"grid_n": 13.0}` | IN | `REAL` | True |  |
+| `stationary-solve-error-vs-grid::past-detected-boundary` | `{"grid_n": 139.0}` | OUT | `OUT_OF_DOMAIN` | False |  |
+| `stationary-solve-error-vs-grid::beyond-searched-span` | `{"grid_n": 508.0}` | UNKNOWN | `WITHHELD` | False |  |
+| `unknown-capability` | `{}` | — | `ERROR` | — | capability not in artifact (available: multigrid-contraction-vs-damping, stationary-iteration-stability, stationary-solve-error-vs-grid) |
+| `missing-axis` | `{}` | — | `ERROR` | — | query is missing axes: damping |
+
+The pattern is the one the live path implements: a point inside a detected
+interval is `IN` and keeps the requested grade; a point past a detected boundary
+but inside the searched span is `OUT` -> `OUT_OF_DOMAIN` (refused); a point
+outside the searched span is `UNKNOWN` -> `WITHHELD` (the artifact never
+extrapolates); a query for a capability or an axis that the artifact does not
+contain is reported as an error instead of being answered. What is *not* provided:
+verification of the *producer* identity (the digest is tamper evidence, not a
+signature) and re-evaluation of a point property at query time -- the offline
+consumer sees only the persisted intervals, whereas the live path additionally
+re-evaluates the acceptance criterion at the queried point.
+
+## 9. Joint (multi-axis) coverage: one axis at a time is not enough
+
+Everything above probes **one axis at a time**, every other axis sitting at its
+nominal value. That leaves a hole that is invisible in the numbers: a capability
+whose criterion fails only when two parameters are unfavourable *together* keeps
+both 1-D intervals full, and the offline gate of section 8 then writes `REAL` for
+a point the capability fails. Closing that hole is the second stage of this node
+(`tensorphysics.applicability.interaction`, report
+`docs/reports/p155w1_n09/APPLICABILITY_INTERACTION.md`).
+
+Method: for each configured axis pair, a joint lattice (the same sampling law,
+midpoints included) is evaluated; a node is a **witness** when every 1-D interval
+places it inside yet the evaluation fails; the lattice cell containing a witness
+becomes a conservative out-of-domain box, so `classify` returns `OUT` there and
+`REAL` is refused. Cells tile the plane, so boxes leave no gaps, and each box
+provably contains a failure - the price is a boundary layer of at most one cell,
+which shrinks with the lattice spacing.
+
+| capability | baseline false certifications (61x61 truth lattice) | matured | boxes | over-refusal of the searched box | coarse -> fine lattice |
+|---|---|---|---|---|---|
+| `syn-joint-product-corner` | 2754 | 0 | 102 | 7.61 % | 11.96 % -> 3.28 % |
+| `syn-joint-sum-diagonal` | 1830 | 0 | 78 | 6.32 % | 8.57 % -> 3.57 % |
+| `syn-joint-ratio-hyperbola` | 1841 | 0 | 69 | 8.57 % | 14.59 % -> 5.62 % |
+
+* baseline false certifications **6425**, matured **0**,
+  criterion C6 `PASS` (per-axis envelopes of the three
+  real capabilities are bit-identical before/after, so nothing above moves).
+* the joint scan is configuration driven (`interaction: {enabled, samples,
+  max_pairs, max_rays}`, defaults {'enabled': True, 'samples': 13, 'max_pairs': 3, 'max_rays': 24}) and single-axis
+  capabilities get no joint region at all, hence no extra cost.
+* what remains open: the conservative boxes certify only failures that were
+  *sampled*; a failure region thinner than one joint cell can still be aliased, so
+  the guarantee is resolution-limited rather than continuous. Dense
+  `classify(..., verify=True)` on a critical point re-runs the evaluator and is the
+  escape hatch.

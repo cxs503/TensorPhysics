@@ -9,6 +9,10 @@ C2. >=3 real capability auto-detected boundaries not wider than human declaratio
 C3. >=10 out-of-domain call samples all return OUT_OF_DOMAIN, none write REAL.
 C4. Zero domain semantics: axis names / capability ids from config only.
 C5. Determinism: same config -> envelope diff=0; evaluation count <= budget.
+C6. Joint (multi-axis) coverage: on a dense truth lattice, an offline gate built
+    from the one-axis-only envelope certifies points the capability fails; the
+    matured envelope must certify none of them, and its conservative over-refusal
+    must shrink as the joint lattice is refined.
 
 Every criterion is checked by a dedicated function that returns a structured
 result.  The :func:`run_full_verification` entry point runs all five and
@@ -23,10 +27,14 @@ import pathlib
 from dataclasses import dataclass, field
 from typing import Any, Mapping
 
+from dataclasses import replace
+
 from .benchmarks import SYNTHETIC_CASES, synthetic_registry, _boundary_value
 from .capability import CapabilityRegistry
 from .envelope import DomainStatus, GradeWriteError, assign_grade
 from .evaluation import CRITERION, ERROR, LAW, PASS, PATHOLOGY
+from .capability import InteractionConfig
+from .interaction import INTERACTION_CASES, synthetic_interaction_registry
 from .probe import probe_capability, probe_registry
 
 __all__ = [
@@ -38,6 +46,7 @@ __all__ = [
     "verify_c3_out_of_domain",
     "verify_c4_zero_domain_semantics",
     "verify_c5_determinism_and_budget",
+    "verify_c6_interaction_coverage",
 ]
 
 DEFAULT_CONFIG = pathlib.Path(__file__).resolve().parent / "configs" / "default_capabilities.v1.json"
@@ -533,7 +542,8 @@ def _envelope_material(envelope_dict: dict) -> dict:
 
 
 def verify_c5_determinism_and_budget(config_path: pathlib.Path | None = None,
-                                     max_evals_per_axis: int = 500) -> CriterionResult:
+                                     max_evals_per_axis: int = 500,
+                                     max_evals_interaction: int = 2000) -> CriterionResult:
     """C5: same config -> envelope diff=0; eval count <= budget."""
     config_path = config_path or DEFAULT_CONFIG
     registry = CapabilityRegistry.from_config_file(config_path)
@@ -578,6 +588,22 @@ def verify_c5_determinism_and_budget(config_path: pathlib.Path | None = None,
                 "within_budget": within_budget,
                 "envelope_match": match,
             })
+        interaction_evals = sum(region.nodes_evaluated
+                                for region in suite1.envelopes()[capability_id].interactions)
+        total_evals += interaction_evals
+        interaction_budget_ok = interaction_evals <= max_evals_interaction
+        budget_ok = budget_ok and interaction_budget_ok
+        if interaction_evals:
+            details.append({
+                "capability_id": capability_id,
+                "axis": "<joint>",
+                "samples": interaction_evals,
+                "boundaries": sum(len(region.boxes)
+                                  for region in suite1.envelopes()[capability_id].interactions),
+                "estimated_total_evals": interaction_evals,
+                "within_budget": interaction_budget_ok,
+                "envelope_match": match,
+            })
 
     # Also check synthetic cases
     synth_reg = synthetic_registry()
@@ -602,7 +628,147 @@ def verify_c5_determinism_and_budget(config_path: pathlib.Path | None = None,
             f"all_envelopes_match={all_match}",
             f"total_scan_evaluations={total_evals}",
             f"budget_per_axis={max_evals_per_axis}",
+            f"budget_per_joint_scan={max_evals_interaction}",
             f"budget_ok={budget_ok}",
+        ],
+    )
+
+
+# ---------------------------------------------------------------------------
+# C6: joint (multi-axis) coverage of the fail-closed gate
+# ---------------------------------------------------------------------------
+
+TRUTH_GRID = 61
+OVER_REFUSAL_BOUND = 0.10
+
+
+def _lattice_points(spec, first: str, second: str, n: int = TRUTH_GRID):
+    axis_a, axis_b = spec.axis(first), spec.axis(second)
+    for i in range(n):
+        for j in range(n):
+            yield {first: axis_a.low + (axis_a.high - axis_a.low) * i / (n - 1),
+                   second: axis_b.low + (axis_b.high - axis_b.low) * j / (n - 1)}
+
+
+def _false_rates(envelope, case, spec, first: str, second: str) -> dict[str, float]:
+    """Count (offline-gate verdict, closed-form truth) pairs on the truth lattice."""
+    false_in = false_out = true_in = true_out = 0
+    for point in _lattice_points(spec, first, second):
+        verdict_in = envelope.classify(point, verify=False).domain_status is DomainStatus.IN
+        if case.truth_ok(point):
+            true_in += 1
+            false_out += 0 if verdict_in else 1
+        else:
+            true_out += 1
+            false_in += 1 if verdict_in else 0
+    total = max(1, true_in + true_out)
+    return {
+        "false_in": false_in, "false_out": false_out,
+        "true_in": true_in, "true_out": true_out,
+        "false_in_fraction": false_in / max(1, true_out),
+        "false_out_fraction_of_box": false_out / total,
+        "false_out_fraction_of_in": false_out / max(1, true_in),
+    }
+
+
+def verify_c6_interaction_coverage(rel_tol: float = 1e-3, samples: int | None = None,
+                                   coarse_samples: int = 9, fine_samples: int = 25,
+                                   bound: float = OVER_REFUSAL_BOUND,
+                                   config_path: pathlib.Path | None = None) -> CriterionResult:
+    """C6: joint failures are never certified, and the conservativeness converges.
+
+    For every synthetic joint case three envelopes are compared on a dense truth
+    lattice (``TRUTH_GRID`` points per axis, closed-form truth):
+
+    * ``baseline``  -- the shipped one-axis-only envelope (joint probe disabled):
+      the *defect* -- an offline gate built from it writes ``REAL`` for points the
+      capability fails;
+    * ``matured``   -- the envelope with the joint probe at the configured lattice:
+      false certification must be exactly zero;
+    * ``fine``      -- the joint probe at ``fine_samples``: the conservative
+      over-refusal must be smaller than at ``coarse_samples`` (a convergence
+      check, not a promise of zero).
+
+    The criterion passes when no matured envelope certifies a failing point, the
+    baseline does certify at least one (otherwise the case would not exercise the
+    defect), the matured over-refusal stays below ``bound`` of the searched box,
+    and the over-refusal decreases with the lattice refinement.
+    """
+    registry = synthetic_interaction_registry()
+    details: list[dict[str, Any]] = []
+    passed = True
+    # the per-axis results must not move: a single-axis capability gets no joint
+    # region at all, and a multi-axis capability keeps bit-identical 1-D envelopes
+    config_path = config_path or DEFAULT_CONFIG
+    real_registry = CapabilityRegistry.from_config_file(config_path)
+    invariance: list[dict[str, Any]] = []
+    for capability_id in real_registry.ids():
+        real_spec = real_registry.get(capability_id)
+        plain = probe_capability(replace(real_spec, interaction=InteractionConfig(enabled=False)),
+                                 rel_tol=rel_tol).envelope
+        joint = probe_capability(real_spec, rel_tol=rel_tol).envelope
+        same = {name: plain.axes[name].to_dict() == joint.axes[name].to_dict()
+                for name in plain.axes}
+        invariance.append({
+            "capability_id": capability_id,
+            "axes_unchanged": same,
+            "interaction_regions": len(joint.interactions),
+            "passed": all(same.values())
+            and (len(joint.interactions) == 0 if len(real_spec.axes) < 2 else True),
+        })
+        passed = passed and invariance[-1]["passed"]
+    worst_over_refusal = 0.0
+    baseline_total_false_in = 0
+    matured_total_false_in = 0
+    for case in INTERACTION_CASES:
+        spec = registry.get(case.capability_id)
+        first, second = case.truth["axes"]
+        baseline_spec = replace(spec, interaction=InteractionConfig(enabled=False))
+        baseline = probe_capability(baseline_spec, rel_tol=rel_tol).envelope
+        matured = probe_capability(spec, rel_tol=rel_tol,
+                                   interaction_samples=samples).envelope
+        coarse = probe_capability(spec, rel_tol=rel_tol,
+                                  interaction_samples=coarse_samples).envelope
+        fine = probe_capability(spec, rel_tol=rel_tol,
+                                interaction_samples=fine_samples).envelope
+        rows = {}
+        for label, envelope in (("baseline", baseline), ("matured", matured),
+                                ("coarse", coarse), ("fine", fine)):
+            rows[label] = _false_rates(envelope, case, spec, first, second)
+            rows[label]["boxes"] = sum(len(r.boxes) for r in envelope.interactions)
+            rows[label]["interaction_evaluations"] = sum(r.nodes_evaluated
+                                                         for r in envelope.interactions)
+        baseline_total_false_in += int(rows["baseline"]["false_in"])
+        matured_total_false_in += int(rows["matured"]["false_in"])
+        worst_over_refusal = max(worst_over_refusal, rows["matured"]["false_out_fraction_of_box"])
+        case_passed = (
+            rows["matured"]["false_in"] == 0
+            and rows["baseline"]["false_in"] > 0
+            and rows["matured"]["false_out_fraction_of_box"] <= bound
+            and rows["fine"]["false_out_fraction_of_box"]
+            < rows["coarse"]["false_out_fraction_of_box"]
+        )
+        passed = passed and case_passed
+        details.append({"capability_id": case.capability_id, "pair": [first, second],
+                        "lattice_points": TRUTH_GRID * TRUTH_GRID,
+                        "rates": rows, "passed": case_passed,
+                        "note": case.note})
+    details.append({"real_capability_invariance": invariance})
+    return CriterionResult(
+        criterion_id="C6",
+        passed=passed,
+        metric_name="joint_false_certification",
+        metric_value=matured_total_false_in,
+        threshold=0,
+        details=details,
+        notes=[
+            f"baseline_false_certifications={baseline_total_false_in} "
+            f"(one-axis-only envelope, the defect)",
+            f"matured_false_certifications={matured_total_false_in}",
+            f"worst_matured_over_refusal_of_box={worst_over_refusal:.4f} (bound {bound})",
+            f"truth_lattice={TRUTH_GRID}x{TRUTH_GRID} per case, closed-form truth",
+            f"real_capability_axes_unchanged="
+            f"{all(item['passed'] for item in invariance)}",
         ],
     )
 
@@ -613,19 +779,21 @@ def verify_c5_determinism_and_budget(config_path: pathlib.Path | None = None,
 
 def run_full_verification(config_path: pathlib.Path | None = None,
                           rel_tol: float = 1e-3) -> VerificationResult:
-    """Run all five acceptance criteria and return the combined result."""
+    """Run all acceptance criteria and return the combined result."""
     c1 = verify_c1_synthetic_boundaries(rel_tol=rel_tol)
     c2 = verify_c2_real_boundaries(config_path)
     c3 = verify_c3_out_of_domain(config_path)
     c4 = verify_c4_zero_domain_semantics(config_path)
     c5 = verify_c5_determinism_and_budget(config_path)
+    c6 = verify_c6_interaction_coverage(rel_tol=rel_tol)
+    criteria = [c1, c2, c3, c4, c5, c6]
 
     result = VerificationResult(
-        criteria=[c1, c2, c3, c4, c5],
+        criteria=criteria,
         summary={
-            "criteria_passed": sum(1 for c in [c1, c2, c3, c4, c5] if c.passed),
-            "criteria_total": 5,
-            "all_passed": all(c.passed for c in [c1, c2, c3, c4, c5]),
+            "criteria_passed": sum(1 for c in criteria if c.passed),
+            "criteria_total": len(criteria),
+            "all_passed": all(c.passed for c in criteria),
         },
     )
     return result
