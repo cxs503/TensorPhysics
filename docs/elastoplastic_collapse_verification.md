@@ -1,6 +1,6 @@
 # Elastoplastic Collapse and Grillage Ultimate Strength Verification Report
 
-**Generated:** 2026-11-10T10:59:53.761862  
+**Generated:** 2026-11-11T10:49:46.292054  
 **Module:** tensorphysics.elastoplastic_collapse
 
 ## Executive Summary
@@ -23,8 +23,8 @@ Verification of the J2 flow theory with linear isotropic hardening:
 
 | Metric | Value | Criterion | Status |
 |--------|-------|-----------|--------|
-| Elastic error | 9.95e-17 | < 1e-10 | ✅ |
-| Yield violation | 1.90e-16 | < 1e-3 | ✅ |
+| Elastic error | 1.41e-16 | < 1e-10 | ✅ |
+| Yield violation | 1.33e-15 | < 1e-3 | ✅ |
 | Tangent symmetry | 0.00e+00 | < 1e-10 | ✅ |
 
 ### Physical Interpretation
@@ -47,9 +47,9 @@ Progressive collapse analysis of a stiffened plate under axial compression:
 
 | Metric | Value |
 |--------|-------|
-| Ultimate strength σ_u | 374.2 MPa |
-| Strain at ultimate ε_u | 0.0500 |
-| Failure mode | yielding |
+| Ultimate strength σ_u | 267.9 MPa |
+| Strain at ultimate ε_u | 0.0015 |
+| Failure mode | interactive |
 | Converged | True |
 
 ### Physical Interpretation
@@ -71,9 +71,9 @@ Verification of grillage discretization convergence:
 
 | Metric | Value | Criterion | Status |
 |--------|-------|-----------|--------|
-| σ_u (3x3) | 391.9 MPa | - | - |
-| σ_u (5x5) | 395.5 MPa | - | - |
-| Relative error | 0.0091 | < 2% | ✅ |
+| σ_u (3x3) | 268.8 MPa | - | - |
+| σ_u (5x5) | 268.8 MPa | - | - |
+| Relative error | 0.0000 | < 2% | ✅ |
 
 ### Physical Interpretation
 The grillage model shows mesh-independent results, confirming:
@@ -92,13 +92,13 @@ Measurement of grillage interaction effects:
 
 | Metric | Value |
 |--------|-------|
-| σ_u (isolated) | 374.3 MPa |
-| σ_u (grillage) | 395.5 MPa |
-| δ_iso | 0.0566 |
+| σ_u (isolated) | 268.8 MPa |
+| σ_u (grillage) | 268.8 MPa |
+| δ_iso | 0.0000 |
 | Sign | positive |
 
 ### Physical Interpretation
-Grillage provides significant boundary restraint, increasing capacity
+Grillage interaction below the imperfection-spread uncertainty (|delta_iso| <= 0.0001)
 
 ## 5. Tripping Mode Switch
 

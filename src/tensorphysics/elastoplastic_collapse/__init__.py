@@ -19,7 +19,18 @@ This package provides a unified verification surface for:
    P = P0 (A/A0)^(-0.3) verification for ice belt design, plus the rigid-plastic
    pressure capacity of the ice-belt panel (strip or stiffened T-section).
 
-6. **Progressive (fiber-based) collapse**
+6. **Panel section properties** (:mod:`panel_section`)
+   Exact elastic *and* plastic section properties of one stiffener with its
+   attached plate: centroid, second moment, equal-area axis, plastic section
+   modulus ``Z_p``, torsional / warping constants and the tripping stress.
+
+7. **Panel ultimate strength** (:mod:`panel_ultimate`)
+   Iso-strain element assembly with all competing modes (plate, column,
+   tripping, web / flange local buckling), a strength band from the plate
+   element curve, a four-method cross-check and the exact rigid-plastic
+   ``N-M`` interaction surface.
+
+8. **Progressive (fiber-based) collapse**
    Incremental Smith method: element load-end shortening curves integrated over
    the discretised cross-section with the mid-span column equilibrium
    M = N·δ, giving the ultimate strength, a genuine limit point and the
@@ -50,7 +61,9 @@ from .stiffened_plate_collapse import (  # noqa: F401
 )
 from .grillage_error_bound import (  # noqa: F401
     GrillageModel,
+    discretization_convergence_study,
     grillage_convergence_study,
+    imperfection_quantiles,
     isolated_element_deviation,
 )
 from .tripping_mode import (  # noqa: F401
@@ -66,6 +79,21 @@ from .iacs_icebelt_pressure import (  # noqa: F401
     icebelt_stiffened_panel_capacity,
     icebelt_design_ratio,
     plastic_section_modulus,
+)
+from .panel_section import (  # noqa: F401
+    StiffenedPanelSection,
+    SectionGeometryError,
+)
+from .panel_ultimate import (  # noqa: F401
+    PLATE_CURVES,
+    PanelUltimateResult,
+    check_ultimate_bounds,
+    compare_ultimate_methods,
+    panel_strength_band,
+    panel_ultimate_axial,
+    plastic_axial_bending_interaction,
+    plate_ultimate_stress,
+    stiffener_ultimate_stress,
 )
 from .progressive_collapse import (  # noqa: F401
     PanelFiber,
@@ -86,7 +114,9 @@ __all__ = [
     "CollapseResult",
     "faulkner_effective_width",
     "GrillageModel",
+    "discretization_convergence_study",
     "grillage_convergence_study",
+    "imperfection_quantiles",
     "isolated_element_deviation",
     "TrippingAnalysis",
     "TrippingResult",
@@ -98,6 +128,17 @@ __all__ = [
     "icebelt_stiffened_panel_capacity",
     "icebelt_design_ratio",
     "plastic_section_modulus",
+    "StiffenedPanelSection",
+    "SectionGeometryError",
+    "PLATE_CURVES",
+    "PanelUltimateResult",
+    "check_ultimate_bounds",
+    "compare_ultimate_methods",
+    "panel_strength_band",
+    "panel_ultimate_axial",
+    "plastic_axial_bending_interaction",
+    "plate_ultimate_stress",
+    "stiffener_ultimate_stress",
     "PanelFiber",
     "ProgressiveCollapseResult",
     "ProgressiveCollapseSolver",
