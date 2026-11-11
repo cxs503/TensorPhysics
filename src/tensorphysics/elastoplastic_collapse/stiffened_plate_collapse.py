@@ -43,6 +43,7 @@ from typing import List, Tuple, Optional
 import numpy as np
 
 from .von_mises_plasticity import VonMisesMaterial, return_mapping
+from .panel_section import StiffenedPanelSection
 
 __all__ = [
     "StiffenedPlateGeometry",
@@ -170,6 +171,23 @@ class StiffenedPlateGeometry:
             "Z_top": I / z_top if z_top > 0 else float('inf'),
             "Z_bot": I / z_bot if z_bot > 0 else float('inf'),
         }
+
+    def panel_section(self) -> StiffenedPanelSection:
+        """Full cross-section (elastic **and** plastic, plus torsion).
+
+        Adds the plastic section modulus, the torsional constants and the
+        tripping stress on top of :meth:`section_properties`; see
+        :mod:`tensorphysics.elastoplastic_collapse.panel_section`.
+        """
+        return StiffenedPanelSection(
+            a=self.a, b=self.b, t=self.t, h_s=self.h_s, t_w=self.t_w,
+            material=self.material, b_f=self.b_f, t_f=self.t_f,
+        )
+
+    @property
+    def sigma_cr_tripping(self) -> float:
+        """Elastic tripping stress of the stiffener [Pa] (``inf`` for flat bars)."""
+        return self.panel_section().sigma_tripping
 
     def euler_buckling_stress(self) -> float:
         """Euler column buckling stress [Pa]."""
@@ -329,12 +347,21 @@ class SmithCollapseSolver:
         self.sigma_cr_plate = res.sigma_cr_plate
         self.sigma_cr_column = res.sigma_cr_column
         self.progressive_result = res
+        self.sigma_cr_tripping = self.geom.sigma_cr_tripping
+
+        # Defect fix (p167w2-n04): the fiber solver only knows plate and column
+        # buckling, so 'tripping' -- a failure mode advertised by this class but
+        # never returned -- was unreachable.  Tripping governs when the elastic
+        # torsional buckling stress is lower than both plate and column buckling.
+        mode = res.failure_mode
+        if self.sigma_cr_tripping < min(self.sigma_cr_plate, self.sigma_cr_column):
+            mode = "tripping"
 
         return CollapseResult(
             sigma_u=float(res.sigma_u),
             eps_u=float(res.eps_u),
             load_displacement=[(float(e), float(sg)) for e, sg in res.load_displacement],
-            failure_mode=res.failure_mode,
+            failure_mode=mode,
             converged=bool(res.converged),
         )
 
