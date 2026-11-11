@@ -80,6 +80,25 @@ _PARA_ID = re.compile(r"[（(](\d{1,2})[)）]")
 
 
 # --------------------------------------------------------------------------- parsing
+def _criterion_text(item: Any) -> str:
+    """Deterministic text of one declared criterion (str or structured mapping).
+
+    Structured criteria (``{"metric": ..., "threshold": ...}``) are rendered as
+    ``key=value; ...`` in declaration order, so the text stays stable for hashing
+    and remains readable by the judgeability classifier; no key is interpreted.
+    """
+    if isinstance(item, Mapping):
+        parts: list[str] = []
+        for key, value in item.items():
+            if value is None or value == "":
+                continue
+            if isinstance(value, (list, tuple)):
+                value = "[" + ", ".join(str(v) for v in value) + "]"
+            parts.append(f"{key}={value}")
+        return " ".join("; ".join(parts).split())
+    return " ".join(str(item).split())
+
+
 def parse_acceptance_criteria(metadata: Mapping[str, Any]) -> list[tuple[str, str]]:
     """Machine criteria of one node as ``[(cid, text), ...]``.
 
@@ -98,10 +117,22 @@ def parse_acceptance_criteria(metadata: Mapping[str, Any]) -> list[tuple[str, st
     passed.
     """
     declared = metadata.get("acceptance_criteria") or []
+    if isinstance(declared, (str, bytes)):
+        # Some producers store the list JSON-encoded in a single string.  Iterating
+        # that string would yield one bogus criterion per character (found by the
+        # P106W3A2-N08 judgeability census: 145 nodes, ~28k fragment clauses), so the
+        # payload is decoded first and only then enumerated.
+        try:
+            decoded = json.loads(declared)
+        except (TypeError, ValueError):
+            decoded = [declared]
+        declared = decoded if isinstance(decoded, list) else [decoded]
+    elif isinstance(declared, Mapping):
+        declared = [declared]
     if declared:
         out: list[tuple[str, str]] = []
         for idx, text in enumerate(declared, start=1):
-            clean = " ".join(str(text).split())
+            clean = _criterion_text(text)
             if clean:
                 out.append((f"C{idx}", clean))
         if out:
