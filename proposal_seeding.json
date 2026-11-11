@@ -1,0 +1,45 @@
+{
+  "scan_coverage_threshold": 0.95,
+  "limitation_keywords": [
+    "局限",
+    "limitation",
+    "未做",
+    "untested",
+    "honest",
+    "FAIL",
+    "TODO",
+    "后续",
+    "gap",
+    "missing",
+    "deficit",
+    "WITHHELD",
+    "NOT_SUPPORTED",
+    "MOCK",
+    "STUB",
+    "待改进",
+    "需修复"
+  ],
+  "generation_rate_threshold": 0.8,
+  "dedup_recall_threshold": 0.8,
+  "dedup_precision_threshold": 0.85,
+  "similarity_threshold": 0.7,
+  "priority_weights": {
+    "evidence_grade": 0.3,
+    "domain_criticality": 0.3,
+    "gap_severity": 0.2,
+    "dependency_count": 0.2
+  },
+  "domain_criticality": {
+    "resistance": 0.9,
+    "propulsion": 0.85,
+    "seakeeping": 0.8,
+    "maneuvering": 0.8,
+    "stability": 0.95,
+    "structure": 0.85,
+    "vibration": 0.7,
+    "green_shipping": 0.75,
+    "ice_navigation": 0.9
+  },
+  "output_format": "json",
+  "max_proposals": 100
+}
