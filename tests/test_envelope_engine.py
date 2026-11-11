@@ -19,7 +19,7 @@ import math
 
 import pytest
 
-from tensorphysics.envelope import EnvelopeEngine, case_from_dict
+from tensorphysics.envelope import EnvelopeEngine, case_from_dict, check_area_vs_grid
 from tensorphysics.envelope import benchmarks as synth
 
 
@@ -256,7 +256,7 @@ def test_parabolic_band_area_matches_closed_form():
     result = run(synth.parabolic_band_case(), n_lines=120, n_scan=96)
     assert len(result.components) == 1
     assert result.components[0].clipped is True  # the band runs off both span ends
-    assert result.components[0].area_method == "trapezoid"
+    assert result.components[0].area_method == "shell_trapezoid"
     assert abs(result.area - expected) / expected <= 1e-4
 
 
@@ -273,6 +273,95 @@ def test_plane_scan_grid_cross_check_agrees_in_topology():
     result = run(synth.disc_case(), n_lines=120, n_scan=120, n_grid_check=48)
     assert result.grid_check is not None
     assert result.grid_check.feasible_components_estimate() == len(result.components)
-    # the cell count is a first-order estimate on a deliberately coarse lattice,
-    # quoted only as an order-of-magnitude cross-check of the marched area
+    # the cell count is a first-order estimate on a deliberately coarse lattice;
+    # the machine check compares it with the marched area inside a band built
+    # from the declared tolerance and the grid's own drift (see
+    # check_area_vs_grid), so the raw number still agrees only to a few percent
     assert result.grid_check.cells.area == pytest.approx(result.area, rel=5e-2)
+
+# ---------------------------------------------------------------------------
+# Multi-interval lines: regions with a hole
+# ---------------------------------------------------------------------------
+
+def _summed_trapezoid(component) -> float:
+    """The pre-fix integration: concatenated interval lengths, repeated abscissae.
+
+    Kept in the test file as the *negative control*: it is the arithmetic the
+    engine used to apply whenever a line crossed a region more than once, and it
+    must be rejected by the area check rather than pass as a number.
+    """
+
+    total = 0.0
+    for index in range(len(component.u_values) - 1):
+        left = component.upper[index] - component.lower[index]
+        right = component.upper[index + 1] - component.lower[index + 1]
+        total += 0.5 * (left + right) * (
+            component.u_values[index + 1] - component.u_values[index]
+        )
+    return total
+
+
+def test_ring_is_one_component_with_two_intervals_per_interior_line():
+    result = run(synth.ring_case(0.5, 0.8), n_lines=100, n_scan=96)
+    assert len(result.components) == 1
+    component = result.components[0]
+    assert component.complex_topology is True
+    assert component.multi_interval_lines > 10
+    assert component.clipped is False
+    assert result.grid_check is not None
+    assert result.grid_check.feasible_components_estimate() == 1
+
+
+def test_ring_area_matches_the_closed_form():
+    truth = synth.ring_area(0.5, 0.8)
+    result = run(synth.ring_case(0.5, 0.8), n_lines=100, n_scan=96)
+    assert result.components[0].area_method == "shell_tip_model"
+    assert abs(result.area - truth) / truth <= 1e-3
+    assert result.contracts.ok
+
+
+def test_ring_area_refines_towards_the_closed_form():
+    truth = synth.ring_area(0.5, 0.8)
+    errors = [
+        abs(run(synth.ring_case(0.5, 0.8), n_lines=n, n_scan=96, n_grid_check=0).area - truth)
+        / truth
+        for n in (100, 200, 400)
+    ]
+    assert errors[1] < errors[0] and errors[2] < errors[1]
+    assert errors[-1] <= 1e-4
+
+
+def test_summed_interval_lengths_under_report_a_ring_and_the_check_rejects_it():
+    truth = synth.ring_area(0.5, 0.8)
+    coarse = run(synth.ring_case(0.5, 0.8), n_lines=100, n_scan=96, n_grid_check=24)
+    fine = run(synth.ring_case(0.5, 0.8), n_lines=100, n_scan=96, n_grid_check=48)
+    coarse_area = coarse.grid_check.cells.area
+    fine_area = fine.grid_check.cells.area
+    summed = _summed_trapezoid(fine.components[0])
+    # the pre-fix arithmetic is not a rounding-level mistake: ~30 % low
+    assert (truth - summed) / truth > 0.25
+    rejected = check_area_vs_grid(summed, coarse_area, fine_area, 1e-3)
+    assert rejected.passed is False
+    accepted = check_area_vs_grid(fine.area, coarse_area, fine_area, 1e-3)
+    assert accepted.passed is True
+
+
+def test_area_vs_grid_check_is_attached_to_every_plane_window():
+    result = run(synth.disc_case(), n_lines=100, n_scan=96, n_grid_check=32)
+    identified = [o for o in result.contracts.outcomes if o.id == "area_vs_grid:window"]
+    assert len(identified) == 1
+    metrics = identified[0].metrics
+    assert metrics["coarse_area"] != metrics["fine_area"]  # two resolutions were used
+    assert result.contracts.ok
+
+
+def test_slab_with_a_square_hole_area():
+    exact = 4.0 - 1.0
+    aligned = run(synth.slab_with_hole_case(), n_lines=101, n_scan=96, n_grid_check=0)
+    assert aligned.components[0].multi_interval_lines > 10
+    assert abs(aligned.area - exact) / exact <= 1e-3
+    # with the hole edges between two lines the boundary is a corner, and a
+    # corner is first order -- larger error, still bounded by one cell
+    unaligned = run(synth.slab_with_hole_case(), n_lines=51, n_scan=96, n_grid_check=0)
+    error = abs(unaligned.area - exact) / exact
+    assert 1e-3 < error <= 2e-2

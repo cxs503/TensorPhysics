@@ -566,6 +566,73 @@ def check_area_consistency(
     )
 
 
+def check_area_vs_grid(
+    marched_area: float,
+    coarse_area: float,
+    fine_area: float,
+    rel_tol: float,
+    safety: float = 3.0,
+    label: str = "window",
+) -> CheckOutcome:
+    """Marched area against an independent brute-force cell count.
+
+    A uniform feasibility-cell count is a first-order estimate of an area: its
+    own discretisation error is not known in advance, so it cannot certify a
+    precision tolerance on its own.  What it *can* do is catch a marching
+    blunder -- a region integrated over the wrong segment, a hole counted as
+    part of the region, a missed component -- which is exactly the failure this
+    check exists for (a ring region used to be reported 29.4 % low with every
+    contract green).
+
+    Decision rule, declared before looking at any number
+    ----------------------------------------------------
+    ``band = max(rel_tol * |A_fine|, safety * |A_fine - A_coarse|)``
+    ``pass iff |A_marched - A_fine| <= band`` (with ``A = 0`` handled exactly).
+
+    The second term is the grid's own resolution-to-resolution drift, i.e. the
+    scale on which the cell count moves when its lattice is refined by two; the
+    safety factor covers the fact that the drift is an estimate of the grid
+    error, not a bound.  The check is therefore a *blunder detector with a
+    resolution-aware band*, not a precision certificate: precision is certified
+    against closed-form areas (``check_area_consistency`` with an analytic
+    reference).
+    """
+
+    denominator = abs(fine_area) if fine_area != 0.0 else 1.0
+    difference = abs(marched_area - fine_area)
+    drift = abs(fine_area - coarse_area)
+    band = max(rel_tol * denominator, safety * drift)
+    both_empty = marched_area == 0.0 and fine_area == 0.0 and coarse_area == 0.0
+    passed = both_empty or difference <= band
+    return CheckOutcome(
+        id=f"area_vs_grid:{label}",
+        kind="area_vs_grid",
+        passed=passed,
+        detail=(
+            "marched area agrees with the brute-force cell count inside the "
+            "resolution-aware band"
+            if passed
+            else (
+                f"marched area {marched_area:.12g} is {difference:.3e} away from the "
+                f"cell count {fine_area:.12g}, outside the band {band:.3e} "
+                f"(declared tolerance {rel_tol:.0e}, grid drift {drift:.3e}, "
+                f"safety factor {safety:g})"
+            )
+        ),
+        metrics={
+            "marched_area": marched_area,
+            "coarse_area": coarse_area,
+            "fine_area": fine_area,
+            "difference": difference,
+            "grid_drift": drift,
+            "band": band,
+            "relative_difference": difference / denominator,
+            "tolerance": rel_tol,
+            "safety_factor": safety,
+        },
+    )
+
+
 def check_infeasible_expectation(
     status: str, policy: ContractPolicy, label: str = "window"
 ) -> CheckOutcome | None:

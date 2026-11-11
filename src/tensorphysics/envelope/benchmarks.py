@@ -11,6 +11,7 @@ import this module, so a synthetic case can never drift between the two.
 
 from __future__ import annotations
 
+import math
 from typing import Any, Mapping
 
 from .case import WindowCase, case_from_dict
@@ -28,6 +29,9 @@ __all__ = [
     "lattice_case",
     "offset_bands_case",
     "parabolic_band_case",
+    "ring_area",
+    "ring_case",
+    "slab_with_hole_case",
     "strip_case",
     "table_case",
     "two_disc_case",
@@ -487,6 +491,111 @@ def analytic_band(
 
 
 
+
+def _ring_value(inner: float, outer: float, centre: tuple[float, float]) -> dict[str, Any]:
+    """Margin of a ring: positive between ``inner`` and ``outer`` radius."""
+
+    radius_sq = {
+        "op": "sum",
+        "terms": [
+            _square_of_offset("alpha", centre[0]),
+            _square_of_offset("beta", centre[1]),
+        ],
+    }
+    return {
+        "op": "min",
+        "args": [
+            {"op": "sub", "a": {"op": "const", "value": outer * outer}, "b": radius_sq},
+            {"op": "sub", "a": radius_sq, "b": {"op": "const", "value": inner * inner}},
+        ],
+    }
+
+
+def ring_area(inner: float, outer: float) -> float:
+    """Closed-form area of the ring used by :func:`ring_case`."""
+
+    return math.pi * (outer * outer - inner * inner)
+
+
+def ring_case(inner: float = 0.5, outer: float = 0.8) -> WindowCase:
+    """A ring: every interior line crosses the region twice (a hole).
+
+    This is the case that separates "sum the interval lengths on a line" from
+    "integrate the intervals": the region is one 4-connected component whose
+    interior lines carry two disjoint feasible intervals, and its area is known
+    in closed form (``ring_area``).
+    """
+
+    return _case(
+        {
+            "case_id": "synth_ring",
+            "title": f"ring {inner} <= r <= {outer}: two intervals per interior line",
+            "mode": "plane",
+            "axes": [
+                {"name": "alpha", "lo": -1.0, "hi": 1.0},
+                {"name": "beta", "lo": -1.0, "hi": 1.0},
+            ],
+            "conditions": [{"label": "one", "params": {}}],
+            "constraints": [
+                {
+                    "id": "c_ring",
+                    "kind": "inequality",
+                    "side": "ge",
+                    "value": _ring_value(inner, outer, (0.0, 0.0)),
+                }
+            ],
+            "contract": {"expect": {"components": 1}},
+        }
+    )
+
+
+def slab_with_hole_case() -> WindowCase:
+    """Square slab with a square hole: exact area on a cell-aligned lattice.
+
+    ``alpha`` in [-1, 1], ``beta`` in [-1, 1], feasible outside the open inner
+    square |alpha| < 0.5 and |beta| < 0.5 -> area ``4 - 1 = 3``.  Every interior
+    line crosses the region twice, and the hole edges are axis aligned, so the
+    area is exact for the marching *and* for a lattice whose cells align with
+    the hole (no curved-boundary discretisation error on either side).
+    """
+
+    return _case(
+        {
+            "case_id": "synth_slab_hole",
+            "title": "square slab minus a square hole: area 3",
+            "mode": "plane",
+            "axes": [
+                {"name": "alpha", "lo": -1.0, "hi": 1.0},
+                {"name": "beta", "lo": -1.0, "hi": 1.0},
+            ],
+            "conditions": [{"label": "one", "params": {}}],
+            "constraints": [
+                {
+                    "id": "c_hole",
+                    "kind": "inequality",
+                    "side": "ge",
+                    "value": {
+                        "op": "max",
+                        "args": [
+                            {
+                                "op": "sub",
+                                "a": {"op": "abs", "arg": {"op": "var", "name": "alpha"}},
+                                "b": {"op": "const", "value": 0.5},
+                            },
+                            {
+                                "op": "sub",
+                                "a": {"op": "abs", "arg": {"op": "var", "name": "beta"}},
+                                "b": {"op": "const", "value": 0.5},
+                            },
+                        ],
+                    },
+                }
+            ],
+            "contract": {"expect": {"components": 1}},
+        }
+    )
+
+
 SYNTHETIC_CASES = {
     "strip": strip_case,
     "folded": folded_case,
@@ -499,4 +608,6 @@ SYNTHETIC_CASES = {
     "disc": disc_case,
     "two_discs": two_disc_case,
     "parabolic_band": parabolic_band_case,
+    "ring": ring_case,
+    "slab_hole": slab_with_hole_case,
 }
