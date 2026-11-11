@@ -19,10 +19,13 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from tensorphysics.applicability.__main__ import build_artifact, _summary_lines  # noqa: E402
+from tensorphysics.applicability.capability import InteractionConfig  # noqa: E402
 from tensorphysics.applicability.artifact import (gate_queries, load_envelopes,  # noqa: E402
                                                  suite_digest)
 from tensorphysics.applicability.benchmarks import run_selfcheck  # noqa: E402
 from tensorphysics.applicability.figures import make_figures  # noqa: E402
+from tensorphysics.applicability.verification import (  # noqa: E402
+    verify_c6_interaction_coverage)
 
 CONFIG = ROOT / "src" / "tensorphysics" / "applicability" / "configs" / "default_capabilities.v1.json"
 OUTDIR = ROOT / "artifacts" / "applicability"
@@ -180,6 +183,64 @@ def main() -> int:
     doc = _document(numbers=numbers, real_rows=real_rows, real_table=real_table,
                    synth_table=synth_table, grade_rows=grade_rows, artifact=artifact,
                    selfcheck=selfcheck, offline=offline, offline_table=offline_table)
+
+    # ---- joint (multi-axis) coverage: the second stage of this node -----------
+    c6 = verify_c6_interaction_coverage()
+    joint_rows = [d for d in c6.details if "rates" in d]
+    joint_table = "\n".join(
+        "| `{}` | {} | {} | {} | {:.2f} % | {:.2f} % -> {:.2f} % |".format(
+            row["capability_id"],
+            row["rates"]["baseline"]["false_in"],
+            row["rates"]["matured"]["false_in"],
+            row["rates"]["matured"]["boxes"],
+            100.0 * row["rates"]["matured"]["false_out_fraction_of_box"],
+            100.0 * row["rates"]["coarse"]["false_out_fraction_of_box"],
+            100.0 * row["rates"]["fine"]["false_out_fraction_of_box"])
+        for row in joint_rows)
+    baseline_false = sum(int(row["rates"]["baseline"]["false_in"]) for row in joint_rows)
+    matured_false = sum(int(row["rates"]["matured"]["false_in"]) for row in joint_rows)
+    joint_section = f"""
+## 9. Joint (multi-axis) coverage: one axis at a time is not enough
+
+Everything above probes **one axis at a time**, every other axis sitting at its
+nominal value. That leaves a hole that is invisible in the numbers: a capability
+whose criterion fails only when two parameters are unfavourable *together* keeps
+both 1-D intervals full, and the offline gate of section 8 then writes `REAL` for
+a point the capability fails. Closing that hole is the second stage of this node
+(`tensorphysics.applicability.interaction`, report
+`docs/reports/p155w1_n09/APPLICABILITY_INTERACTION.md`).
+
+Method: for each configured axis pair, a joint lattice (the same sampling law,
+midpoints included) is evaluated; a node is a **witness** when every 1-D interval
+places it inside yet the evaluation fails; the lattice cell containing a witness
+becomes a conservative out-of-domain box, so `classify` returns `OUT` there and
+`REAL` is refused. Cells tile the plane, so boxes leave no gaps, and each box
+provably contains a failure - the price is a boundary layer of at most one cell,
+which shrinks with the lattice spacing.
+
+| capability | baseline false certifications (61x61 truth lattice) | matured | boxes | over-refusal of the searched box | coarse -> fine lattice |
+|---|---|---|---|---|---|
+{joint_table}
+
+* baseline false certifications **{baseline_false}**, matured **{matured_false}**,
+  criterion C6 `{'PASS' if c6.passed else 'FAIL'}` (per-axis envelopes of the three
+  real capabilities are bit-identical before/after, so nothing above moves).
+* the joint scan is configuration driven (`interaction: {{enabled, samples,
+  max_pairs, max_rays}}`, defaults {InteractionConfig().to_dict()}) and single-axis
+  capabilities get no joint region at all, hence no extra cost.
+* what remains open: the conservative boxes certify only failures that were
+  *sampled*; a failure region thinner than one joint cell can still be aliased, so
+  the guarantee is resolution-limited rather than continuous. Dense
+  `classify(..., verify=True)` on a critical point re-runs the evaluator and is the
+  escape hatch.
+"""
+    doc = doc + joint_section
+    doc = doc.replace(
+        "What is *not* established: joint multi-axis boundaries, the physical domains of the\n"
+        "  domain-specific solvers,",
+        "What is *not* established: joint multi-axis boundaries *between* the configured joint\n"
+        "  lattice points (section 9), the physical domains of the\n"
+        "  domain-specific solvers,")
     DOC.write_text(doc, encoding="utf-8")
     print("\n".join(_summary_lines(suite, registry)))
     print(f"\nartifact : {OUTDIR / 'envelopes.json'}")
