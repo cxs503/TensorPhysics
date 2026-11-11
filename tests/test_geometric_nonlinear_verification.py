@@ -60,7 +60,18 @@ class TestElasticaFEM:
         assert result.converged
     
     def test_mesh_refinement_convergence(self):
-        """FEM should show O(h²) convergence with mesh refinement."""
+        """Observed order of the lumped rigid-link elastica model.
+
+        ElasticaFEMSolver discretises the beam into rigid links with
+        piecewise-constant rotation, which is a *first-order* representation of
+        the continuous tangent angle: the measured order against the exact
+        elastica is 1.00 (P = 2.0, n_elem = 20...160, see
+        docs/m8870_r1_audit.md).  This test pins the observed first-order rate;
+        it used to assert 1 < p < 3 ("O(h^2) or better"), which the model only
+        passed marginally and which the exact solution's own quadrature bias
+        helped to fake (the elastica quadrature was ~1.2-1.5% low in P before
+        the fix in m14934).
+        """
         P = 2.0
         exact = ElasticaExact(L=1.0, EI=1.0)
         sol_exact = exact.compute_shape_at_load(P)
@@ -83,9 +94,11 @@ class TestElasticaFEM:
         p = np.polyfit(log_h, log_err, 1)[0]
         convergence_order = abs(p)
         
-        # Should be O(h²) or better
-        assert 1.0 < convergence_order < 3.0, \
-            f"Convergence order {convergence_order:.2f} not in [1.5, 2.5]"
+        # First-order lumped-link model: pin the observed rate.
+        assert 0.85 < convergence_order < 1.5, \
+            f"Observed order {convergence_order:.2f} not in [0.85, 1.5]"
+        # and the error must actually decrease monotonically
+        assert all(e2 < e1 for e1, e2 in zip(errors[:-1], errors[1:]))
     
     def test_five_load_points_accuracy(self):
         """5 load points vs exact ≤2% with fine mesh."""
