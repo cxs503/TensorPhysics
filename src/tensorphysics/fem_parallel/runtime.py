@@ -118,6 +118,8 @@ def _run_shmem(
     slot_floats = int(max(slot_floats, 256 * nranks))
     shm = shared_memory.SharedMemory(create=True, size=8 * slot_floats * nranks)
     barrier = ctx.Barrier(int(nranks))
+    # int64 generation flags for the lock-free SpinBarrier (2 generations/rank)
+    flags = shared_memory.SharedMemory(create=True, size=16 * int(nranks))
     procs, pipes = [], []
     payload = (worker, kwargs)
     t0 = time.perf_counter()
@@ -125,7 +127,8 @@ def _run_shmem(
         parent_conn, child_conn = ctx.Pipe(duplex=False)
         p = ctx.Process(
             target=_rank_entry,
-            args=(payload, r, nranks, shm, barrier, slot_floats, barrier_timeout, child_conn),
+            args=(payload, r, nranks, shm, barrier, slot_floats, barrier_timeout,
+                  child_conn, flags),
             daemon=False,
         )
         p.start()
@@ -179,6 +182,8 @@ def _run_shmem(
     spawn_and_run = time.perf_counter() - t0
     shm.close()
     shm.unlink()
+    flags.close()
+    flags.unlink()
     if failure is None:
         for p in procs:
             if p.exitcode not in (0, None):  # pragma: no cover - defensive
@@ -191,12 +196,13 @@ def _run_shmem(
 
 
 def _rank_entry(payload, rank: int, nranks: int, shm, barrier, slot_floats,
-                timeout: float, conn) -> None:
+                timeout: float, conn, flags=None) -> None:
     worker, kwargs = payload
     try:
         for var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
             os.environ.setdefault(var, "1")
-        comm = SharedMemoryComm(rank, nranks, shm, barrier, slot_floats, timeout)
+        comm = SharedMemoryComm(rank, nranks, shm, barrier, slot_floats, timeout,
+                                flags=flags)
         result = worker(comm, **kwargs)
         payload_out: Dict[str, Any] = {"rank": rank, "result": result}
     except Exception:  # noqa: BLE001 - propagate to parent
