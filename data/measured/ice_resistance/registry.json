@@ -4,27 +4,38 @@
   "owner": "TensorPhysics :: tensorphysics.ice.measured_anchor",
   "series": [
     {
+      "series_id": "AGULHAS2-FS2012",
+      "path": "series/agulhas2_fs2012/series.json",
+      "sha256": "51cc66f776571f81bc1a9a79dc83d6b8691ca075583c498492b147703cc7a424",
+      "grade": "MEASURED-SECONDARY",
+      "measured_quantity": "speed_power",
+      "n_points": 4,
+      "doi": null
+    },
+    {
       "series_id": "MTUIKKU-HZ2016",
       "path": "series/mtuikku_hz2016/series.json",
-      "sha256": "a08a501e48002f92a5915db49b784c177c478d7f5ed26dd20dd2885f4f137d8b",
+      "sha256": "2046e94abdecdfcf67116134530338b1e726510234b3fec3ffe9d3a5a603d6bb",
       "grade": "MEASURED-PRIMARY",
       "measured_quantity": "resistance",
       "n_points": 10,
       "doi": "10.1016/j.ijnaoe.2016.01.004"
     },
     {
-      "series_id": "AGULHAS2-FS2012",
-      "path": "series/agulhas2_fs2012/series.json",
-      "sha256": "589c31995c3afcb619460e7667bf32fb48bbf73839b69759465f6147410cf00f",
-      "grade": "MEASURED-SECONDARY",
-      "measured_quantity": "speed_power",
+      "series_id": "SALMI2014-UBIB",
+      "path": "series/salmi2014_ubib/series.json",
+      "grade": "MEASURED-PRIMARY",
+      "measured_quantity": "resistance",
       "n_points": 4,
-      "doi": null
+      "doi": null,
+      "sha256": "a2a41861396d09f82c1c4253bf3015075d8b68e84a92386fbf5bdddf38e383a4"
     }
   ],
   "gate": {
     "tolerance": 0.15,
     "double_entry_sample_fraction": 0.1,
     "min_series": 2
-  }
+  },
+  "governance_version": "measured_dataset/v1+governance-2026-11-10",
+  "n_series": 3
 }

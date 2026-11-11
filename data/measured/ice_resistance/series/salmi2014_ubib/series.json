@@ -1,0 +1,180 @@
+{
+  "schema_version": "1.0",
+  "series_id": "SALMI2014-UBIB",
+  "title": "UBIB upward-breaking concept, level-ice model tests (Otaniemi ice tank, 1:25), resistance at full scale, 1.0 m level ice",
+  "ice_state": "level",
+  "measured_quantity": "resistance",
+  "ship": {
+    "name": "UBIB concept hull (upward-breaking bow), Salmi (2014) test model",
+    "L_pp_m": 100.0,
+    "B_m": 10.0,
+    "T_m": 7.5,
+    "bow_angle_deg": 15.0,
+    "flare_deg": 75.0,
+    "displacement_t": null,
+    "ice_belt_breath_m": 5.5,
+    "source": "Salmi (2014) section 4.3: L=4.0 m, B_max=0.4 m, T=0.3 m at lambda=1:25",
+    "convention_notes": {
+      "bow_angle_deg": "V15 bow: the thesis calls the alternative bow 'A10 deg entrance angle'; the V bow is the 15 deg entrance angle variant, used as phi in R_break",
+      "flare_deg": "ASSUMPTION A2 -- the source does not tabulate the plating angle from the horizontal. 75 deg (15 deg from vertical, consistent with a 'V15' wedge) is used; the benchmark sweeps 60/70/75/80 deg and reports the band, because tan(alpha) drives R_crush",
+      "ice_belt_breath_m": "narrow ice belt; the benchmark repeats the adjudication with B = 5.5 m to bracket hull-width uncertainty"
+    }
+  },
+  "facility": {
+    "name": "Aalto University Otaniemi ice tank",
+    "kind": "ice_basin",
+    "model_scale": 25.0,
+    "reported_frame": "full_scale",
+    "model_ice": "40 mm model ice (target full-scale bending strength 500 kPa)",
+    "test_program": "level ice, towed/self-propelled runs at 3/6/9/12 knot equivalent speed"
+  },
+  "digitisation": {
+    "method": "verbatim transcription of the archived repository text extraction of Tables 5/8",
+    "passes": [
+      "pass_a",
+      "pass_b"
+    ],
+    "independent_paths": [
+      "pass A: column-major read, MN and knots kept, converted after transcription",
+      "pass B: row-major read, MN->kN and knots->m/s converted inline"
+    ],
+    "checks": [
+      "double_entry agreement over canonical + raw fields",
+      "digest re-verification"
+    ],
+    "tool": "benchmarks/ice_resistance/measured/build_salmi2014_series.py"
+  },
+  "uncertainty": {
+    "reported": false,
+    "definition": "the source reports single values per run; run-to-run scatter and model-ice variability are described qualitatively but not quantified",
+    "value_kN": null
+  },
+  "applicability": {
+    "ice_breaking_mode": "upward_bending",
+    "lindqvist_family_applicable": false,
+    "in_15pct_verdict_set": false,
+    "role": "external-validity probe: shows what the downward-bending closure family does when it is applied outside its breaking-mode envelope",
+    "limitations": [
+      "concept hull (UBIB), not a ship in service; results are the author's channel-corrected values",
+      "plating angle (flare) not tabulated: ASSUMPTION A2 = 75 deg, swept 60-80 deg",
+      "narrow ice belt (5.5 m of 10 m breadth): hull-width convention swept",
+      "no measured ice compressive strength / elastic modulus: module defaults used"
+    ]
+  },
+  "provenance": {
+    "citation": "Salmi, K. (2014) Alternative hull type for icebreaking vessels. MSc thesis, Aalto University School of Engineering, 3 June 2014",
+    "doi": null,
+    "url": "https://aaltodoc.aalto.fi/handle/123456789/13447",
+    "grade": "MEASURED-PRIMARY",
+    "tables": [
+      "Table 5 (channel-corrected measured resistance)",
+      "Table 8 (friction-corrected, R_alt)",
+      "Tables 6/7 (published UBIB theory, baselines only)"
+    ],
+    "retrieval_note": "Repository text-extraction bitstream retrieved HTTP 200 on 2026-11-10 from the worktree (aaltodoc DSpace 7 REST); the tables used are quoted verbatim into source/ so the digest is checkable offline. Captions precede table bodies in the extraction, which is why the 8-row block is attributed to Table 5 and the 4-row block to Table 8.",
+    "sources": [
+      {
+        "artifact": "source/salmi2014_tables5to8_excerpt.txt",
+        "sha256": "77117c652a53d25739595ccf13173f7f734d23ac82f53038237c07ab2d2c517a",
+        "bytes": 5047,
+        "kind": "publisher-text-excerpt",
+        "role": "verbatim quotation of Tables 5/6/7/8 from the open-access thesis"
+      }
+    ],
+    "scale": {
+      "model_scale": 25.0,
+      "reported_frame": "full_scale"
+    },
+    "limitations": [
+      "a single concept hull, tested in one campaign: it cannot separate ice-strength from geometry effects",
+      "measured resistance is post-processed by the author (channel friction replaced by theory)",
+      "upward-breaking mode: outside the Lindqvist-family envelope by construction"
+    ]
+  },
+  "points": [
+    {
+      "point_id": "UBIB-3KT",
+      "h_m": 1.0,
+      "V_ms": 1.543333,
+      "provenance_ref": "Salmi (2014) Table 5 (channel-corrected measured), 3 knot row",
+      "R_meas_kN": 620.001863,
+      "R_unc_kN": null,
+      "R_max_kN": null,
+      "R_min_kN": null,
+      "R_alt_kN": 219.57,
+      "sigma_f_kPa": 500.0,
+      "sigma_c_kPa": null,
+      "E_MPa": null,
+      "case_group": "level_ice_1m",
+      "literature_baselines_kN": {
+        "leiviska_ubib_sigma275": 117.86,
+        "leiviska_ubib_sigma500": 205.47,
+        "_note": "published UBIB theory (thesis Tables 6/7); context only, never truth"
+      },
+      "notes": "R_alt_kN is Table 8 (additionally friction-corrected by the author, factors 1.5-2.46) -- kept as an alternative, never merged into R_meas"
+    },
+    {
+      "point_id": "UBIB-6KT",
+      "h_m": 1.0,
+      "V_ms": 3.086667,
+      "provenance_ref": "Salmi (2014) Table 5 (channel-corrected measured), 6 knot row",
+      "R_meas_kN": 601.881276,
+      "R_unc_kN": null,
+      "R_max_kN": null,
+      "R_min_kN": null,
+      "R_alt_kN": 221.46,
+      "sigma_f_kPa": 500.0,
+      "sigma_c_kPa": null,
+      "E_MPa": null,
+      "case_group": "level_ice_1m",
+      "literature_baselines_kN": {
+        "leiviska_ubib_sigma275": 159.79,
+        "leiviska_ubib_sigma500": 247.4,
+        "_note": "published UBIB theory (thesis Tables 6/7); context only, never truth"
+      },
+      "notes": "R_alt_kN is Table 8 (additionally friction-corrected by the author, factors 1.5-2.46) -- kept as an alternative, never merged into R_meas"
+    },
+    {
+      "point_id": "UBIB-9KT",
+      "h_m": 1.0,
+      "V_ms": 4.63,
+      "provenance_ref": "Salmi (2014) Table 5 (channel-corrected measured), 9 knot row",
+      "R_meas_kN": 1236.314591,
+      "R_unc_kN": null,
+      "R_max_kN": null,
+      "R_min_kN": null,
+      "R_alt_kN": 662.24,
+      "sigma_f_kPa": 500.0,
+      "sigma_c_kPa": null,
+      "E_MPa": null,
+      "case_group": "level_ice_1m",
+      "literature_baselines_kN": {
+        "leiviska_ubib_sigma275": 213.23,
+        "leiviska_ubib_sigma500": 300.85,
+        "_note": "published UBIB theory (thesis Tables 6/7); context only, never truth"
+      },
+      "notes": "R_alt_kN is Table 8 (additionally friction-corrected by the author, factors 1.5-2.46) -- kept as an alternative, never merged into R_meas"
+    },
+    {
+      "point_id": "UBIB-12KT",
+      "h_m": 1.0,
+      "V_ms": 6.173333,
+      "provenance_ref": "Salmi (2014) Table 5 (channel-corrected measured), 12 knot row",
+      "R_meas_kN": 1039.788504,
+      "R_unc_kN": null,
+      "R_max_kN": null,
+      "R_min_kN": null,
+      "R_alt_kN": 566.68,
+      "sigma_f_kPa": 500.0,
+      "sigma_c_kPa": null,
+      "E_MPa": null,
+      "case_group": "level_ice_1m",
+      "literature_baselines_kN": {
+        "leiviska_ubib_sigma275": 319.61,
+        "leiviska_ubib_sigma500": 407.22,
+        "_note": "published UBIB theory (thesis Tables 6/7); context only, never truth"
+      },
+      "notes": "R_alt_kN is Table 8 (additionally friction-corrected by the author, factors 1.5-2.46) -- kept as an alternative, never merged into R_meas"
+    }
+  ]
+}
