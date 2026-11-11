@@ -1,0 +1,56 @@
+{
+  "mission_id": "m13942",
+  "node_id": "p495w4-n09",
+  "timestamp": "2026-11-11T06:17:29.457929",
+  "density_filter": {
+    "no_filter_compliance": 79.55941510203654,
+    "filtered_compliance": 87.51981231429572,
+    "compliance_change_pct": 10.0056004711068,
+    "no_filter_high_freq_db": -18.069508505420576,
+    "filtered_high_freq_db": -20.327016348252442,
+    "criteria": {
+      "no_filter_high_freq_gt_5db": false,
+      "filtered_high_freq_lt_0db": true,
+      "compliance_change_lt_30pct": true
+    }
+  },
+  "sensitivity": {
+    "compliance": 200.36790969090563,
+    "stats": {
+      "n": 100.0,
+      "n_rel": 100.0,
+      "max_abs": 1.316478687840572e-06,
+      "mean_abs": 5.603809260343057e-08,
+      "max_rel": 2.279744363340216e-06,
+      "mean_rel": 4.5668618615313275e-08,
+      "max_rel_top1pct": 8.218090563386169e-09,
+      "mean_rel_top1pct": 2.4359964368691186e-09,
+      "n_top1pct": 16.0,
+      "l2_rel": 1.1260437121246194e-09,
+      "worst_index": 49
+    },
+    "criterion": true
+  },
+  "hrefinement": {
+    "sizes": [
+      20,
+      40,
+      80,
+      120
+    ],
+    "compliances": [
+      31.227183536633884,
+      29.803289200539474,
+      31.1069682501027,
+      32.241868911347694
+    ],
+    "checkerboard_indices": [
+      0.04913570902469103,
+      0.026179218335307376,
+      0.013073284186764912,
+      0.00887537312618773
+    ],
+    "avg_order": 0.2131249152695741
+  },
+  "all_criteria_passed": false
+}
