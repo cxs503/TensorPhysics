@@ -54,6 +54,7 @@ class MMSLadder:
     recenter: bool
     corrected: bool
     levels: list[MMSLevel]
+    recenter_order: int = 1
 
     @property
     def steps(self) -> list[float]:
@@ -73,6 +74,7 @@ class MMSLadder:
             "convention": self.convention,
             "offset": self.offset,
             "recenter": self.recenter,
+            "recenter_order": int(self.recenter_order),
             "corrected": self.corrected,
             "levels": [lv.as_dict() for lv in self.levels],
             "observed_order": order,
@@ -82,9 +84,11 @@ class MMSLadder:
 
 def mms_quadrature_level(mms: CouplingMMS, scheme: ExchangeScheme | str, h: float, *,
                          offset: float = 0.0, recenter: bool = False,
-                         corrected: bool = True, t_end: float | None = None) -> MMSLevel:
+                         corrected: bool = True, t_end: float | None = None,
+                         recenter_order: int = 1) -> MMSLevel:
     """One quadrature level: interval integrals of ``q`` on a grid of step ``h``."""
-    stamp = (StampRule(StampConvention.WINDOW_MIDPOINT, offset, recenter)
+    stamp = (StampRule(StampConvention.WINDOW_MIDPOINT, offset, recenter,
+                       order=int(recenter_order))
              if offset > 0.0 else StampRule())
     operator = operator_for(scheme, stamp)
     t_end = float(t_end if t_end is not None else mms.period)
@@ -92,6 +96,7 @@ def mms_quadrature_level(mms: CouplingMMS, scheme: ExchangeScheme | str, h: floa
     if n < 2:
         raise CouplingLedgerError("the ladder level is too short")
     q_prev: float | None = None
+    q_prev2: float | None = None
     defect_sum = 0.0
     exact_sum = 0.0
     worst = 0.0
@@ -103,13 +108,15 @@ def mms_quadrature_level(mms: CouplingMMS, scheme: ExchangeScheme | str, h: floa
         else:
             q_lo, q_hi = mms.flux(t_lo), mms.flux(t_hi)
         transfer = operator.provisional_transfer(i, t_lo, t_hi, q_lo=q_lo,
-                                                 q_hi=q_hi, q_prev=q_prev)
+                                                 q_hi=q_hi, q_prev=q_prev,
+                                                 q_prev2=q_prev2)
         if corrected:
-            transfer = operator.corrected_transfer(transfer, q_hi)
+            transfer = operator.corrected_transfer(transfer, q_hi, q_prev2=q_prev2)
         exact = mms.interval_integral(t_lo, t_hi)
         defect_sum += abs(transfer.integral - exact)
         exact_sum += abs(exact)
         worst = max(worst, abs(transfer.integral - exact) / max(abs(exact), 1e-300))
+        q_prev2 = q_prev
         q_prev = q_lo
     return MMSLevel(h=h, intervals=n,
                     defect_l1=defect_sum / max(exact_sum, 1e-300),
@@ -120,7 +127,8 @@ def mms_order_ladder(mms: CouplingMMS | None, scheme: ExchangeScheme | str, *,
                      h_list: Sequence[float] = (0.25, 0.125, 0.0625, 0.03125, 0.015625),
                      offset: float = 0.0, offset_ratio: float = 0.0,
                      recenter: bool = False,
-                     corrected: bool = True, t_end: float | None = None) -> MMSLadder:
+                     corrected: bool = True, t_end: float | None = None,
+                     recenter_order: int = 1) -> MMSLadder:
     """Full quadrature ladder of one operator on one analytic flux."""
     mms = mms or CouplingMMS.harmonic()
     if offset > 0.0 and offset_ratio > 0.0:
@@ -130,7 +138,8 @@ def mms_order_ladder(mms: CouplingMMS | None, scheme: ExchangeScheme | str, *,
         offset_h = offset if offset_ratio <= 0.0 else offset_ratio * h
         levels.append(mms_quadrature_level(mms, scheme, h, offset=offset_h,
                                            recenter=recenter, corrected=corrected,
-                                           t_end=t_end))
+                                           t_end=t_end,
+                                           recenter_order=recenter_order))
     return MMSLadder(
         mms=mms.name,
         scheme=ExchangeScheme(scheme).value,
