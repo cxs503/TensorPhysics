@@ -213,6 +213,8 @@ class DistributedSystem:
         self.owned_dof = np.repeat(self.geo["owned"], self.ncomp)
         self.halo = build_halo_plan(self.grid, self.part, self.rank, self.ncomp)
         self.n_owned = int(self.owned_dof.sum())
+        # integer indices cost half of a boolean mask gather (no mask pass)
+        self._owned_idx = np.nonzero(self.owned_dof)[0]
         self.n_global = self.grid.num_nodes * self.ncomp
         self.Ke = self.kernel.element_matrix()
         self.fe = self.kernel.element_load()
@@ -276,11 +278,44 @@ class DistributedSystem:
 
     # -- linear algebra -----------------------------------------------------
     def dot(self, a: np.ndarray, b: np.ndarray) -> float:
-        local = float(np.dot(a[self.owned_dof], b[self.owned_dof]))
+        local = float(np.dot(a[self._owned_idx], b[self._owned_idx]))
         return self.comm.sum_scalar(local)
+
+    def dot_pair(self, a: np.ndarray, b: np.ndarray, c: np.ndarray,
+                 d: np.ndarray) -> Tuple[float, float]:
+        """``(a.b, c.d)`` with **one** global reduction (two local dots first).
+
+        ``dot``-then-``sum`` per quantity costs one collective each; the CG loop
+        needs two inner products per iteration, so fusing them removes one
+        global latency per step.
+        """
+        i = self._owned_idx
+        first = float(np.dot(a[i], b[i]))
+        second = float(np.dot(c[i], d[i]))
+        return self.comm.allreduce_sum_pair(first, second)
 
     def norm(self, a: np.ndarray) -> float:
         return float(np.sqrt(max(self.dot(a, a), 0.0)))
+
+    def exchange_with_reduction(self, x: np.ndarray, a: np.ndarray, b: np.ndarray,
+                                c: np.ndarray, d: np.ndarray):
+        """Ghost-exchange ``x`` and reduce ``(a.b, c.d)`` in one latency.
+
+        The two inner products must be computable *before* the exchange: that is
+        exactly the condition the reordered (latency-reduced) PCG needs, where
+        the products of step ``k+1`` are formed from vectors that are already
+        local.
+        """
+        plan = self.halo
+        sends = {p: x[plan.send_dof[p]] for p in plan.peers}
+        i = self._owned_idx
+        values = np.asarray(
+            [float(np.dot(a[i], b[i])), float(np.dot(c[i], d[i]))], dtype=np.float64
+        )
+        recv, red = self.comm.exchange_and_reduce(sends, plan.recv_lengths, values)
+        for p in plan.peers:
+            x[plan.recv_dof[p]] = recv[p]
+        return float(red[0]), float(red[1])
 
     def matvec(self, A: sp.csr_matrix, x: np.ndarray) -> np.ndarray:
         self.halo.exchange(self.comm, x)
