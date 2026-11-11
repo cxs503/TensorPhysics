@@ -28,6 +28,8 @@ __all__ = [
     "GradeWriteError",
     "Interval",
     "AxisEnvelope",
+    "InteractionBox",
+    "InteractionRegion",
     "ApplicabilityEnvelope",
     "Verdict",
     "GradeRecord",
@@ -183,6 +185,120 @@ class AxisEnvelope:
 
 
 @dataclass(frozen=True)
+class InteractionBox:
+    """A conservative out-of-domain *region* of the joint parameter plane.
+
+    The box is grown around a witnessed failure point (half the local lattice
+    spacing on each axis, clipped to the 1-D in-domain interval).  It therefore
+    contains at least one failure, which is what makes classifying its interior
+    ``OUT`` sound: the mechanism may refuse a good point at the border, but it
+    can never certify a bad one inside the box.
+    """
+
+    pair: tuple[str, str]
+    low: Mapping[str, Any]
+    high: Mapping[str, Any]
+    witness: Mapping[str, Any]
+    status: str
+    failure_type: str
+    reasons: tuple[str, ...] = ()
+    radius_fraction: Mapping[str, Any] = field(default_factory=dict)
+    boundary: Mapping[str, Any] | None = None
+    anchor: Mapping[str, Any] = field(default_factory=dict)
+
+    def contains(self, point: Mapping[str, float]) -> bool:
+        first, second = self.pair
+        if first not in point or second not in point:
+            return False
+        a, b = float(point[first]), float(point[second])
+        return (float(self.low[first]) <= a <= float(self.high[first])
+                and float(self.low[second]) <= b <= float(self.high[second]))
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "pair": list(self.pair),
+            "low": dict(self.low),
+            "high": dict(self.high),
+            "witness": dict(self.witness),
+            "status": self.status,
+            "failure_type": self.failure_type,
+            "reasons": list(self.reasons),
+            "radius_fraction": dict(self.radius_fraction),
+            "boundary": None if self.boundary is None else dict(self.boundary),
+            "anchor": dict(self.anchor),
+        }
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "InteractionBox":
+        context = "InteractionBox"
+        pair = payload.get("pair")
+        if not isinstance(pair, (list, tuple)) or len(pair) != 2:
+            raise EnvelopeFormatError(f"{context}: 'pair' must be two axis names")
+        return cls(
+            pair=(str(pair[0]), str(pair[1])),
+            low=dict(_field(payload, "low", context, dict)),
+            high=dict(_field(payload, "high", context, dict)),
+            witness=dict(_field(payload, "witness", context, dict)),
+            status=str(_field(payload, "status", context, str)),
+            failure_type=str(_field(payload, "failure_type", context, str)),
+            reasons=tuple(str(r) for r in payload.get("reasons") or ()),
+            radius_fraction=dict(payload.get("radius_fraction") or {}),
+            boundary=dict(payload["boundary"]) if payload.get("boundary") else None,
+            anchor=dict(payload.get("anchor") or {}),
+        )
+
+
+@dataclass(frozen=True)
+class InteractionRegion:
+    """The joint (multi-axis) part of one capability's envelope."""
+
+    pair: tuple[str, str]
+    boxes: tuple[InteractionBox, ...] = ()
+    witnesses: int = 0
+    nodes_evaluated: int = 0
+    samples: int = 0
+    spacing: Mapping[str, Any] = field(default_factory=dict)
+    failure_types: Mapping[str, int] = field(default_factory=dict)
+    notes: tuple[str, ...] = ()
+
+    def contains(self, point: Mapping[str, float]) -> InteractionBox | None:
+        for box in self.boxes:
+            if box.contains(point):
+                return box
+        return None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "pair": list(self.pair),
+            "boxes": [box.to_dict() for box in self.boxes],
+            "witnesses": self.witnesses,
+            "nodes_evaluated": self.nodes_evaluated,
+            "samples": self.samples,
+            "spacing": dict(self.spacing),
+            "failure_types": dict(self.failure_types),
+            "notes": list(self.notes),
+        }
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "InteractionRegion":
+        context = "InteractionRegion"
+        pair = payload.get("pair")
+        if not isinstance(pair, (list, tuple)) or len(pair) != 2:
+            raise EnvelopeFormatError(f"{context}: 'pair' must be two axis names")
+        boxes = tuple(InteractionBox.from_dict(b) for b in payload.get("boxes") or ())
+        return cls(
+            pair=(str(pair[0]), str(pair[1])),
+            boxes=boxes,
+            witnesses=int(payload.get("witnesses", len(boxes))),
+            nodes_evaluated=int(payload.get("nodes_evaluated", 0)),
+            samples=int(payload.get("samples", 0)),
+            spacing=dict(payload.get("spacing") or {}),
+            failure_types={str(k): int(v) for k, v in (payload.get("failure_types") or {}).items()},
+            notes=tuple(str(n) for n in payload.get("notes") or ()),
+        )
+
+
+@dataclass(frozen=True)
 class Verdict:
     """The stage-4 answer for one query point."""
 
@@ -224,6 +340,15 @@ class ApplicabilityEnvelope:
     declared: Mapping[str, Mapping[str, Any]] = field(default_factory=dict)
     samples_total: int = 0
     samples_in: int = 0
+    interactions: tuple[InteractionRegion, ...] = ()
+
+    def interaction_hit(self, point: Mapping[str, float]):
+        """The first joint box containing ``point`` (``None`` if outside them all)."""
+        for region in self.interactions:
+            box = region.contains(point)
+            if box is not None:
+                return box
+        return None
 
     def classify(self, point: Mapping[str, float], *, spec=None, verify: bool = True) -> Verdict:
         """Return the domain status of ``point`` (fail-closed)."""
@@ -256,6 +381,25 @@ class ApplicabilityEnvelope:
             else:
                 statuses[name] = {"status": DomainStatus.IN.value, "value": value,
                                   "reason": "inside detected in-domain interval"}
+        if overall is DomainStatus.IN and self.interactions:
+            box = self.interaction_hit(point)
+            if box is not None:
+                first, second = box.pair
+                statuses["interaction"] = {
+                    "status": DomainStatus.OUT.value,
+                    "reason": "joint failure witnessed inside a conservative box",
+                    "pair": [first, second],
+                    "box": {"low": dict(box.low), "high": dict(box.high)},
+                    "witness": dict(box.witness),
+                    "failure_type": box.failure_type,
+                }
+                reasons.append(
+                    f"{first}x{second}: inside a joint out-of-domain box "
+                    f"[{float(box.low[first]):.6g}, {float(box.high[first]):.6g}] x "
+                    f"[{float(box.low[second]):.6g}, {float(box.high[second]):.6g}] "
+                    f"(witnessed {box.failure_type} at "
+                    f"{float(box.witness[first]):.6g}x{float(box.witness[second]):.6g})")
+                overall = DomainStatus.OUT
         value: float | None = None
         reference: float | None = None
         if verify and spec is not None:
@@ -289,6 +433,7 @@ class ApplicabilityEnvelope:
             "samples_total": self.samples_total,
             "samples_in": self.samples_in,
             "axes": {name: env.to_dict() for name, env in self.axes.items()},
+            "interactions": [region.to_dict() for region in self.interactions],
         }
 
     @classmethod
@@ -327,6 +472,8 @@ class ApplicabilityEnvelope:
             declared={str(k): dict(v) for k, v in declared.items()},
             samples_total=int(payload.get("samples_total", 0)),
             samples_in=int(payload.get("samples_in", 0)),
+            interactions=tuple(InteractionRegion.from_dict(r)
+                               for r in payload.get("interactions") or ()),
         )
 
 

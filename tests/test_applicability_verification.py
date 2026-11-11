@@ -186,7 +186,7 @@ class TestC5DeterminismAndBudget:
 # ---------------------------------------------------------------------------
 
 class TestFullVerification:
-    """Run all five criteria together."""
+    """Run all criteria together (C1-C5 from the earlier node, C6 joint coverage)."""
 
     def test_all_five_criteria_pass(self):
         result = run_full_verification(CONFIG_PATH)
@@ -205,4 +205,5 @@ class TestFullVerification:
         # Round-trip
         reparsed = json.loads(text)
         assert reparsed["all_passed"] == result.all_passed
-        assert reparsed["criteria_total"] == 5
+        assert reparsed["criteria_total"] == len(result.criteria) >= 6
+        assert any(c["criterion_id"] == "C6" for c in reparsed["criteria"])

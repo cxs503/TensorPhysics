@@ -21,6 +21,7 @@ from .axis import AxisSpec
 from .capability import CapabilityRegistry, CapabilitySpec
 from .envelope import ApplicabilityEnvelope, AxisEnvelope, Interval, declaration_compat
 from .evaluation import ERROR, LAW, PASS, Evaluation, evaluate_point, law_violation
+from .interaction import interaction_pairs, scan_pair
 from .refine import DEFAULT_REL_TOL, Boundary, bisect_boundary
 
 __all__ = ["ScanRecord", "ProbeReport", "probe_axis", "probe_capability", "probe_registry",
@@ -256,14 +257,32 @@ def _digest(material: Any) -> str:
 
 
 def probe_capability(spec: CapabilitySpec, *, rel_tol: float = DEFAULT_REL_TOL,
-                     refine: bool = True) -> ProbeReport:
-    """Probe every axis of one capability and assemble its envelope."""
+                     refine: bool = True, interaction_samples: int | None = None
+                     ) -> ProbeReport:
+    """Probe every axis of one capability and assemble its envelope.
+
+    Multi-axis capabilities additionally get the joint scan of
+    :mod:`.interaction` (stage 2b): a capability can fail where two parameters
+    are unfavourable *together* while each 1-D scan stays inside, and the offline
+    gate would otherwise certify such a point as ``REAL``.  ``interaction_samples``
+    overrides the configured joint-lattice size (used by the acceptance evidence
+    to show that the conservative over-refusal shrinks with the lattice).
+    """
     scans: dict[str, ScanRecord] = {}
     axis_envelopes: dict[str, AxisEnvelope] = {}
     for axis in spec.axes:
         scan = probe_axis(spec, axis)
         scans[axis.name] = scan
         axis_envelopes[axis.name] = _build_axis_envelope(spec, scan, rel_tol=rel_tol, refine=refine)
+    interactions = ()
+    config = spec.interaction
+    if config.enabled and len(spec.axes) >= 2:
+        samples = int(interaction_samples or config.samples)
+        regions = []
+        for pair in interaction_pairs(spec, config.max_pairs):
+            regions.append(scan_pair(spec, pair, axis_envelopes, samples=samples,
+                                     rel_tol=rel_tol).region)
+        interactions = tuple(regions)
     envelope = ApplicabilityEnvelope(
         capability_id=spec.capability_id,
         axes=axis_envelopes,
@@ -273,6 +292,7 @@ def probe_capability(spec: CapabilitySpec, *, rel_tol: float = DEFAULT_REL_TOL,
         declared={k: v.to_dict() for k, v in spec.declared.items()},
         samples_total=sum(env.samples_total for env in axis_envelopes.values()),
         samples_in=sum(env.samples_in for env in axis_envelopes.values()),
+        interactions=interactions,
     )
     compat = declaration_compat(envelope, spec) if spec.declared else None
     return ProbeReport(capability_id=spec.capability_id, scans=scans, envelope=envelope, compat=compat)

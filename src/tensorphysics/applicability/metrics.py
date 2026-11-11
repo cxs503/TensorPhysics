@@ -27,6 +27,8 @@ from .capability import import_target
 __all__ = [
     "power_law",
     "bilinear",
+    "additive",
+    "ratio_product",
     "exponential_deviation",
     "reciprocal",
     "log_value",
@@ -53,6 +55,21 @@ def power_law(x: float, *, amplitude: float, exponent: float, offset: float = 0.
 def bilinear(x: float, y: float, *, amplitude: float) -> dict:
     """``value = amplitude * x * y`` -- two independent axes, known boundary."""
     value = amplitude * float(x) * float(y)
+    return {"value": float(value), "reference": 0.0,
+            "flags": {"finite": math.isfinite(value)}}
+
+
+def additive(a: float, b: float, *, amplitude: float = 1.0) -> dict:
+    """``value = amplitude * (a + b)`` -- joint failure on a diagonal of the plane."""
+    value = float(amplitude) * (float(a) + float(b))
+    return {"value": float(value), "reference": 0.0,
+            "flags": {"finite": math.isfinite(value)}}
+
+
+def ratio_product(s: float, t: float) -> dict:
+    """``value = s * t / (s + t)`` -- joint failure on a curved band of the plane."""
+    total = float(s) + float(t)
+    value = (float(s) * float(t) / total) if total != 0.0 else float("nan")
     return {"value": float(value), "reference": 0.0,
             "flags": {"finite": math.isfinite(value)}}
 

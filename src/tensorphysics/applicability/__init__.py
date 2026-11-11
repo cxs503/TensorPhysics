@@ -21,6 +21,11 @@ paragraph" into a reproducible artifact:
   ``domain_status in {IN, OUT, UNKNOWN}``; ``OUT`` forces the grading field to
   ``OUT_OF_DOMAIN`` and a ``REAL`` write is refused
   (:func:`~tensorphysics.applicability.envelope.assign_grade`).
+* **stage 2b/3b -- joint (multi-axis) probe.**  A capability can fail where two
+  parameters are unfavourable *together* while every 1-D scan stays inside; the
+  joint probe scans the axis pairs, records conservative out-of-domain cells
+  around each witnessed failure and bisects the witness ray, so the offline gate
+  cannot certify such a point (:mod:`~tensorphysics.applicability.interaction`).
 * **stage 5 -- consumer side.**  The written artifact can be reloaded in another
   process (:func:`~tensorphysics.applicability.artifact.load_envelopes`), its
   suite digest re-verified, and any later point gated without re-running the
@@ -43,13 +48,17 @@ from .artifact import (ARTIFACT_SCHEMA, ArtifactError, gate, gate_queries, load_
                        suite_digest)
 from .axis import AxisConfigError, AxisSpec
 from .capability import (ApplicabilityConfigError, CapabilityRegistry, CapabilitySpec, Criterion,
-                         DeclaredAxis, EvaluatorSpec, FailurePolicy, import_target)
+                         DeclaredAxis, EvaluatorSpec, FailurePolicy, InteractionConfig,
+                         import_target)
 from .envelope import (ApplicabilityEnvelope, AxisCompat, AxisEnvelope, DomainCompat,
-                       DomainStatus, EnvelopeFormatError, GradeRecord, GradeWriteError, Interval,
-                       OUT_OF_DOMAIN, Verdict, assign_grade, declaration_compat)
+                       DomainStatus, EnvelopeFormatError, GradeRecord, GradeWriteError,
+                       InteractionBox, InteractionRegion, Interval, OUT_OF_DOMAIN, Verdict,
+                       assign_grade, declaration_compat)
 from .evaluation import (CRITERION, ERROR, LAW, PASS, PATHOLOGY, Evaluation, evaluate_point,
                          law_violation)
 from .probe import EnvelopeSuite, ProbeReport, ScanRecord, probe_capability, probe_axis, probe_registry
+from .interaction import INTERACTION_CASES, InteractionCase, run_interaction_selfcheck, \
+    scan_interactions, scan_pair, synthetic_interaction_registry
 from .refine import Boundary, bisect_boundary
 
 __all__ = [
@@ -73,6 +82,15 @@ __all__ = [
     "ERROR",
     "EvaluatorSpec",
     "Evaluation",
+    "InteractionBox",
+    "InteractionConfig",
+    "InteractionRegion",
+    "InteractionCase",
+    "INTERACTION_CASES",
+    "run_interaction_selfcheck",
+    "scan_interactions",
+    "scan_pair",
+    "synthetic_interaction_registry",
     "EnvelopeSuite",
     "FailurePolicy",
     "GradeRecord",

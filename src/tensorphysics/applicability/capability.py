@@ -65,6 +65,7 @@ __all__ = [
     "Criterion",
     "DeclaredAxis",
     "FailurePolicy",
+    "InteractionConfig",
     "EvaluatorSpec",
     "CapabilityRegistry",
     "import_target",
@@ -360,6 +361,57 @@ class DeclaredAxis:
 
 
 @dataclass(frozen=True)
+class InteractionConfig:
+    """Knobs of the joint (multi-axis) probe; all values are configuration data.
+
+    ``enabled``
+        probe axis pairs jointly at all (ignored for single-axis capabilities);
+    ``samples``
+        lattice points per axis in the joint scan (``>= 5``), the cell midpoints
+        are added on top of it, so the detection resolution is half a spacing;
+    ``max_pairs``
+        how many axis pairs to scan (declaration order), so the cost of a
+        capability with many axes stays bounded and reproducible;
+    ``max_rays``
+        how many witness rays are bisected for the reported joint boundary (the
+        conservative boxes are kept for *every* witness; the bisection is the
+        expensive part, so it is capped and the cap is recorded).
+    """
+
+    enabled: bool = True
+    samples: int = 13
+    max_pairs: int = 3
+    max_rays: int = 24
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.enabled, bool):
+            raise ApplicabilityConfigError("interaction.enabled must be a bool")
+        if isinstance(self.samples, bool) or not isinstance(self.samples, int) or self.samples < 5:
+            raise ApplicabilityConfigError("interaction.samples must be an int >= 5")
+        if isinstance(self.max_pairs, bool) or not isinstance(self.max_pairs, int) \
+                or self.max_pairs < 1:
+            raise ApplicabilityConfigError("interaction.max_pairs must be an int >= 1")
+        if isinstance(self.max_rays, bool) or not isinstance(self.max_rays, int) \
+                or self.max_rays < 0:
+            raise ApplicabilityConfigError("interaction.max_rays must be an int >= 0")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"enabled": self.enabled, "samples": self.samples,
+                "max_pairs": self.max_pairs, "max_rays": self.max_rays}
+
+    @classmethod
+    def from_mapping(cls, mapping: Mapping[str, Any]) -> "InteractionConfig":
+        if mapping is None:
+            return cls()
+        if not isinstance(mapping, Mapping):
+            raise ApplicabilityConfigError("interaction must be a mapping")
+        unknown = sorted(set(mapping) - {"enabled", "samples", "max_pairs", "max_rays"})
+        if unknown:
+            raise ApplicabilityConfigError(f"unknown interaction keys: {unknown}")
+        return cls(**dict(mapping))
+
+
+@dataclass(frozen=True)
 class CapabilitySpec:
     """A registered capability: axes + evaluator + failure signals + declaration."""
 
@@ -369,6 +421,7 @@ class CapabilitySpec:
     policy: FailurePolicy
     declared: Mapping[str, DeclaredAxis] = field(default_factory=dict)
     labels: Mapping[str, str] = field(default_factory=dict)
+    interaction: InteractionConfig = field(default_factory=InteractionConfig)
 
     def __post_init__(self) -> None:
         if not isinstance(self.capability_id, str) or not self.capability_id.strip():
@@ -404,6 +457,7 @@ class CapabilitySpec:
             "evaluator": self.evaluator.to_dict(),
             "policy": self.policy.to_dict(),
             "declared": {k: v.to_dict() for k, v in sorted(self.declared.items())},
+            "interaction": self.interaction.to_dict(),
         }
 
     def to_dict(self) -> dict[str, Any]:
@@ -460,7 +514,8 @@ class CapabilityRegistry:
         for entry in raw:
             if not isinstance(entry, Mapping):
                 raise ApplicabilityConfigError("each capability must be a mapping")
-            allowed = {"capability_id", "axes", "evaluator", "policy", "declared", "labels"}
+            allowed = {"capability_id", "axes", "evaluator", "policy", "declared", "labels",
+                       "interaction"}
             unknown = sorted(set(entry) - allowed)
             if unknown:
                 raise ApplicabilityConfigError(f"unknown capability keys: {unknown}")
@@ -477,6 +532,7 @@ class CapabilityRegistry:
                 policy=FailurePolicy.from_mapping(entry["policy"]),
                 declared=declared,
                 labels=dict(entry.get("labels") or {}),
+                interaction=InteractionConfig.from_mapping(entry.get("interaction")),
             ))
         return cls(specs)
 
