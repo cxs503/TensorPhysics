@@ -378,13 +378,23 @@ def main() -> int:
             schema_errors.extend(f"{sid}: {e}" for e in errs)
 
     plausibility = {sid: measured_monotonicity(s) for sid, s in series.items()}
+    # A series that declares itself outside the 15 % verdict set (external-validity
+    # probe) is measured and recorded, but does not certify -- or decertify -- the
+    # truth source.
+    verdict_set = {
+        sid
+        for sid, s in series.items()
+        if bool((s.as_dict().get("applicability") or {}).get("in_15pct_verdict_set", True))
+    }
     schema_report = {
         "n_series": len(series),
         "n_points": sum(len(s.points) for s in series.values()),
         "all_valid": not schema_errors,
         "all_digests_verified": bool(reg_digest_ok and series),
         "registry_digests": per_series_schema,
-        "measured_plausibility_passed": all(p["passed"] for p in plausibility.values()),
+        "measured_plausibility_passed": all(p["passed"] for sid, p in plausibility.items() if sid in verdict_set),
+        "measured_plausibility_passed_all_series": all(p["passed"] for p in plausibility.values()),
+        "measured_plausibility_verdict_set": sorted(verdict_set),
         "errors": schema_errors,
         "series": [s.asset_record() for s in series.values()],
     }
@@ -457,7 +467,22 @@ def main() -> int:
     physics = physics_gates(lambda h, V: level_ice_resistance(h, V, ship_primary)["R_total_N"] / 1e3)
     physics["measured_series"] = plausibility
     physics["model_gates_passed"] = bool(physics["passed"])
-    physics["measured_gates_passed"] = all(p["passed"] for p in plausibility.values())
+    # The measured-plausibility gate protects the *verdict set*: a series that is
+    # admitted to the 15 % adjudication must not contradict R(h)/R(V) monotonicity.
+    # Series explicitly declared outside the verdict set (for example an
+    # out-of-envelope external-validity probe) are still measured and their
+    # violations are still recorded verbatim -- measured data is never "fixed" --
+    # but they do not gate C4, because their job is to stress the model, not to
+    # certify the truth source.
+    physics["measured_series_in_verdict_set"] = sorted(verdict_set)
+    physics["measured_gates_outside_verdict_set"] = {
+        sid: {"passed": p["passed"], "n_passed": p["n_passed"], "n_checks": p["n_checks"], "notes": p["notes"]}
+        for sid, p in plausibility.items()
+        if sid not in verdict_set
+    }
+    physics["measured_gates_passed"] = all(
+        p["passed"] for sid, p in plausibility.items() if sid in verdict_set
+    )
     physics["passed"] = bool(physics["model_gates_passed"] and physics["measured_gates_passed"])
 
     # ---- C5: legacy corpus must stay green -------------------------------
