@@ -1,0 +1,106 @@
+{
+ "impl_files": [
+  "scripts/c1_ice_resist_uikku_analysis.py",
+  "scripts/c1_ice_resist_diagnostic.py"
+ ],
+ "entry": "scripts/c1_ice_resist_uikku_analysis.py",
+ "run_artifacts": [
+  "docs/m15018/repro/uikku_comparison.regenerated.json",
+  "artifacts/ice_resistance/uikku_comparison.json"
+ ],
+ "tests": [],
+ "integration_callers": [],
+ "benchmark": {
+  "criterion": ">=80% points <25% rel error",
+  "result": "FAIL: best series 4/10 = 40% (Lindqvist buoy variant); Keinonen 0/10; Riska 3/10",
+  "ref_measured_kN": [
+   480.0,
+   560.0,
+   670.0,
+   720.0,
+   540.0,
+   830.0,
+   780.0,
+   150.0,
+   290.0,
+   390.0
+  ],
+  "got_lindqvist_variant_kN": [
+   412.9,
+   499.4,
+   666.3,
+   661.0,
+   1037.8,
+   1041.9,
+   1010.0,
+   621.4,
+   822.8,
+   710.3
+  ],
+  "got_keinonen_kN": [
+   1974.6,
+   2318.4,
+   3486.5,
+   3484.9,
+   2306.0,
+   2923.0,
+   2684.0,
+   1634.0,
+   2142.4,
+   1970.1
+  ],
+  "got_riska_kN": [
+   330.3,
+   399.5,
+   533.0,
+   528.7,
+   830.2,
+   833.4,
+   807.4,
+   497.1,
+   658.2,
+   567.8
+  ],
+  "lit_lindqvist_kN": [
+   320.0,
+   380.0,
+   510.0,
+   560.0,
+   426.0,
+   538.0,
+   572.0,
+   251.0,
+   322.0,
+   351.0
+  ],
+  "err_pct_mean": {
+   "lindqvist_variant": 76.1,
+   "keinonen": 428.6,
+   "riska": 56.8,
+   "repo_library_lindqvist": 319.8,
+   "lit_lindqvist": 28.3,
+   "lit_keinonen": 38.7,
+   "lit_riska": 51.4
+  }
+ },
+ "repro_cmd": "cd /root/tp-agent/work/m14881 && PYTHONPATH=src python scripts/c1_ice_resist_uikku_analysis.py (exit=1 by design, honest FAIL; replayed 2026-11-11 in m15018 worktree, points/statistics sha256 identical b6863c7d...294b)",
+ "external_anchor": [
+  "data/measured/ice_resistance/series/mtuikku_hz2016/series.json"
+ ],
+ "audit_report": "docs/m15018/C1_ICE_RESIST_AUDIT.md",
+ "audit_metrics": "docs/m15018/audit_c1_ice_resist.json",
+ "audit_script": "tools/m15018_c1_ice_resist_audit.py",
+ "verdict_level": 2,
+ "level_derivation": "L2 OK (real code + reproducible artifacts); L3 fails (no integration_callers); L4 fails (accuracy >15% everywhere, 2/6 artifacts not regenerated); L1 has no new pytest",
+ "findings": {
+  "F1_overstated_implementation_claim": "Keinonen impl = 3.84x (3.17-4.71) published Keinonen prediction; Lindqvist impl deviates 82.8% mean / 155.5% max from published Lindqvist (ratio 1.83) -> 40%/30%/0% measure bespoke variants, not the named laws",
+  "F2_unreproducible_artifacts": "uikku_error_summary.json (schema v2, lit_* n=0) and fig_error_distribution.png are orphans of an earlier script revision; repro_cmd regenerates only 4 of 6 artifacts",
+  "F3_dimension_mismatch": "R_f = 0.5 rho g h B (...) has dimension N/m, not N (missing length factor); 23.9 kN of 412.9 kN at pt103",
+  "F4_out_of_domain": "12 model-point applications outside the delivered applicability_domains.json (V=0.2 < 0.5 m/s; Keinonen brash domain used on level ice)",
+  "F5_prior_art_not_cited": "same MTUIKKU adjudication already registered at mission 9425 / docs/ICE_RESISTANCE_MEASURED_ANCHOR.md (honest-FAIL, median 198.3%); m14881 cites neither it nor the repo cross_impl_attribution divergence (60.4% mean vs library)",
+  "F6_no_tests_no_integration": "no pytest for keinonen_level/riska_ahead/lindqvist_buoyancy; library src/tensorphysics/ice/resistance.py untouched",
+  "F7_merge_filter": "commit f24d23f dropped 6 artifacts/*.json|png files (tp_pusher _EXCLUDE) -> doc artifact paths dangle on main"
+ },
+ "honest_fail_upheld": true,
+ "gate_predry": "maturity_gate.judge(2, evidence) -> (2, [])"
+}
