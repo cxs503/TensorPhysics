@@ -63,6 +63,22 @@ from .fatigue_assessment import (
     run_ice_fatigue_assessment,
     validate_against_reference,
 )
+from .whipping_strain_fatigue import (
+    DEFAULT_STEEL_YOUNGS_MODULUS_PA,
+    DetailFatigueResult,
+    StrainBayesPosterior,
+    VoyageFatigueLife,
+    WhippingMomentHistory,
+    bayesian_posterior_grid,
+    bayesian_response_scale_update,
+    damage_vs_scale_samples,
+    half_sine_force_signal,
+    ice_exposure_blocks_per_year,
+    moment_ranges_to_stress_ranges_mpa,
+    rainflow_miner_damage_from_moment,
+    voyage_fatigue_life,
+    whipping_moment_history,
+)
 
 __all__ = [
     # S-N curves
@@ -97,4 +113,19 @@ __all__ = [
     "IceFatigueResult",
     "run_ice_fatigue_assessment",
     "validate_against_reference",
+    # whipping + measured-strain Bayesian chain (P226W3-N02)
+    "DEFAULT_STEEL_YOUNGS_MODULUS_PA",
+    "DetailFatigueResult",
+    "StrainBayesPosterior",
+    "VoyageFatigueLife",
+    "WhippingMomentHistory",
+    "bayesian_posterior_grid",
+    "bayesian_response_scale_update",
+    "damage_vs_scale_samples",
+    "half_sine_force_signal",
+    "ice_exposure_blocks_per_year",
+    "moment_ranges_to_stress_ranges_mpa",
+    "rainflow_miner_damage_from_moment",
+    "voyage_fatigue_life",
+    "whipping_moment_history",
 ]
