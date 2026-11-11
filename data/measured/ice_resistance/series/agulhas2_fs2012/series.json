@@ -108,5 +108,46 @@
       "case_group": "d",
       "notes": "engine power reported as a range over the four level-ice periods, not per case"
     }
-  ]
+  ],
+  "facility": {
+    "name": "S.A. Agulhas II, Baltic Sea ice trials 2012-03-21/22",
+    "kind": "full_scale_trial",
+    "model_scale": null,
+    "reported_frame": "full_scale",
+    "model_ice": null,
+    "known_gaps": [
+      "no measured thrust or resistance: only speed and an engine-power band"
+    ]
+  },
+  "digitisation": {
+    "method": "two independent transcriptions of the reported trial periods",
+    "passes": [
+      "pass_a",
+      "pass_b"
+    ],
+    "independent_paths": [
+      "pass A: column-major CSV of the trial period table",
+      "pass B: row-major text of the same periods"
+    ],
+    "checks": [
+      "double_entry agreement",
+      "digest re-verification"
+    ],
+    "tool": "benchmarks/ice_resistance/measured/build_assets.py"
+  },
+  "uncertainty": {
+    "reported": false,
+    "definition": "the source reports an engine-power band, not a per-point uncertainty",
+    "value_kN": null
+  },
+  "applicability": {
+    "ice_breaking_mode": "downward_bending",
+    "lindqvist_family_applicable": true,
+    "in_15pct_verdict_set": false,
+    "role": "power-band screening only; cannot support a 15 % claim",
+    "limitations": [
+      "no resistance measurement",
+      "bow angles assumed, not measured"
+    ]
+  }
 }

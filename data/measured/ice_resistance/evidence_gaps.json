@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0",
+  "kind": "measured_evidence_gap_registry",
+  "library": "data/measured/ice_resistance",
+  "asset_mode": "measured_dataset/v1",
+  "generated_by": "benchmarks/ice_resistance/measured/build_evidence_gaps.py",
+  "statement": "A gap is registered only with dated retrieval attempts. No data point in this library was ever filled in from a source that is not archived under series/*/source/.",
+  "attempt_log": {
+    "path": "evidence_gaps/attempts_latest.json",
+    "sha256": "2d0d0c4ea16327956c3d865b3cddbd8a58d514dcee80e6359be8bd8d722701c1",
+    "n_attempts": 11,
+    "n_reachable": 5,
+    "generated_utc": "2026-11-10T21:32:14+00:00"
+  },
+  "gaps": [
+    {
+      "gap_id": "GAP-LINDQVIST-1989",
+      "target": "Lindqvist (1989), 'A straightforward method for calculation of ice resistance of ships', POAC'89 -- the original resistance table and its constant set",
+      "why_needed": "the 15 % verdict is currently taken against a *second-hand* transcription of the Lindqvist column (Hu & Zhou 2016, Table 8). Without the original the report cannot say whether the platform's Lindqvist branch or the source's transcription is the deviating one",
+      "unblock": "POAC proceedings volume (paper-level PDF) or a library scan of the 1989 paper; table rows can be appended as a new series under measured_dataset/v1 without code changes",
+      "status": "OPEN",
+      "affects": [
+        "C3 15pct verdict attribution",
+        "parameter provenance of the bending closure"
+      ],
+      "attempts": [
+        {
+          "utc": "2026-11-10T21:31:42+00:00",
+          "url": "https://www.poac.com/PapersOnline.html",
+          "http_status": 200,
+          "content_type": "text/html",
+          "error": null,
+          "what": "Lindqvist (1989) POAC'89 paper table (level-ice resistance)"
+        },
+        {
+          "utc": "2026-11-10T21:31:44+00:00",
+          "url": "https://doi.org/10.1016/0165-232X(89)90030-5",
+          "http_status": 404,
+          "content_type": null,
+          "error": "HTTPError: Not Found",
+          "what": "Lindqvist 1989 via publisher landing page"
+        }
+      ]
+    },
+    {
+      "gap_id": "GAP-RISKA-1997",
+      "target": "Riska (1997) level-ice resistance formulation and the Kämäräinen/Riska test tables",
+      "why_needed": "the second published law family used as a cross-check; without the original its predictions stay second-hand as well, so a systematic transcription error could hide in both columns at once",
+      "unblock": "Transport Canada / NRC report scan (TP 13110 series) or a university library copy",
+      "status": "OPEN",
+      "affects": [
+        "cross-law comparison table",
+        "closure re-derivation target"
+      ],
+      "attempts": [
+        {
+          "utc": "2026-11-10T21:31:45+00:00",
+          "url": "https://www.atomicklin.com/riska",
+          "http_status": null,
+          "content_type": null,
+          "error": "URLError: <urlopen error [Errno -2] Name or service not known>",
+          "what": "Riska (1997) ice resistance model tables"
+        },
+        {
+          "utc": "2026-11-10T21:31:45+00:00",
+          "url": "https://nrc-publications.canada.ca/eng/search/?q=riska+ice+resistance",
+          "http_status": 200,
+          "content_type": "text/html;charset=UTF-8",
+          "error": null,
+          "what": "Riska 1997 via NRC/Transport Canada landing page"
+        }
+      ]
+    },
+    {
+      "gap_id": "GAP-MTUIKKU-PRIMARY-PDF",
+      "target": "Publisher PDF of Hu & Zhou (2016), Int. J. Naval Arch. Ocean Eng. 8(2) 169-176 (DOI 10.1016/j.ijnaoe.2016.01.004)",
+      "why_needed": "series MTUIKKU-HZ2016 is the only series in the 15 % verdict set with measured resistance, and its digits currently come from an archived in-ecosystem transcription. Verification against the publisher PDF is the difference between 'MEASURED-PRIMARY' and 'MEASURED-PRIMARY via a secondary source'",
+      "unblock": "the article is gold OA (OpenAlex is_oa=true): the single blocking step is fetching https://www.sciencedirect.com/science/article/pii/S2092678215300133/pdf from an unfiltered host. One download closes the gap permanently because the tables are already transcribed and dual-entered",
+      "status": "OPEN",
+      "affects": [
+        "C1 provenance grade",
+        "C2 double entry (currently cannot check against the original)"
+      ],
+      "attempts": [
+        {
+          "utc": "2026-11-10T21:32:09+00:00",
+          "url": "https://doi.org/10.1016/j.ijnaoe.2016.01.004",
+          "http_status": 200,
+          "content_type": "text/html;charset=UTF-8",
+          "error": null,
+          "what": "Hu & Zhou (2016) DOI landing page (series A primary source)"
+        },
+        {
+          "utc": "2026-11-10T21:32:10+00:00",
+          "url": "https://api.openalex.org/works/doi:10.1016/j.ijnaoe.2016.01.004",
+          "http_status": 200,
+          "content_type": "application/json",
+          "error": null,
+          "what": "OpenAlex OA-status record for the series A DOI"
+        },
+        {
+          "utc": "2026-11-10T21:32:12+00:00",
+          "url": "https://www.sciencedirect.com/science/article/pii/S2092678215300133/pdf",
+          "http_status": 403,
+          "content_type": null,
+          "error": "HTTPError: Forbidden",
+          "what": "Gold-OA PDF endpoint reported by OpenAlex (Elsevier ScienceDirect)"
+        },
+        {
+          "utc": "2026-11-10T21:32:13+00:00",
+          "url": "https://doaj.org/article/a394245d3fac4a638ddb77eb95ebfb67",
+          "http_status": 403,
+          "content_type": null,
+          "error": "HTTPError: Forbidden",
+          "what": "DOAJ record mirror (IJNAOE is DOAJ-listed)"
+        }
+      ]
+    },
+    {
+      "gap_id": "GAP-INDEPENDENT-DOWNWARD-SERIES",
+      "target": "A second test campaign with a *downward-bending* hull and measured resistance at >= 4 ice thicknesses (a different ship and basin than MT Uikku)",
+      "why_needed": "with one campaign the FAIL verdict cannot be separated from a campaign-specific bias; the closure constant k_bend has no out-of-sample series to be validated on, which is exactly why the k_bend calibration of m9425 stays applied_to_validated_model=False",
+      "unblock": "an OA thesis/paper with digitised level-ice resistance tables for a second hull; the upward-bending campaign ingested in this node (SALMI2014-UBIB) is independent but outside the downward-bending envelope, so it sharpens external validity without closing this gap",
+      "status": "PARTIAL",
+      "affects": [
+        "out-of-sample validation of any closure re-calibration",
+        "C3 verdict generality"
+      ],
+      "attempts": [
+        {
+          "utc": "2026-11-10T21:31:46+00:00",
+          "url": "https://aaltodoc.aalto.fi/server/api/discover/search/objects?query=level%20ice%20resistance%20model%20tests",
+          "http_status": 200,
+          "content_type": "application/hal+json;charset=UTF-8",
+          "error": null,
+          "what": "Aalto DA (DSpace 7 REST) discover query: level ice resistance model tests"
+        },
+        {
+          "utc": "2026-11-10T21:31:47+00:00",
+          "url": "https://core.ac.uk/search?q=level%20ice%20resistance%20model%20tests",
+          "http_status": 403,
+          "content_type": null,
+          "error": "HTTPError: Forbidden",
+          "what": "Core.ac.uk aggregate search"
+        },
+        {
+          "utc": "2026-11-10T21:31:48+00:00",
+          "url": "https://www.diva-portal.org/smash/resultList.jsf?query=ice+resistance+model+test",
+          "http_status": null,
+          "content_type": null,
+          "error": "URLError: <urlopen error timed out>",
+          "what": "DiVA portal (Nordic theses)"
+        }
+      ],
+      "partial_progress": {
+        "series_added": "SALMI2014-UBIB",
+        "path": "series/salmi2014_ubib/series.json",
+        "what_it_closes": "a second, independent measured campaign (different hull, different breaking mode, different decade of the same basin)",
+        "what_it_does_not_close": "downward-bending coverage; the concept hull bends ice upwards",
+        "sha256": "a2a41861396d09f82c1c4253bf3015075d8b68e84a92386fbf5bdddf38e383a4"
+      }
+    }
+  ]
+}

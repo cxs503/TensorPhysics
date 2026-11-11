@@ -284,5 +284,48 @@
       },
       "notes": "force statistics not reported in the retrieved table (left empty, not imputed)"
     }
-  ]
+  ],
+  "facility": {
+    "name": null,
+    "kind": "ice_basin",
+    "model_scale": 31.56,
+    "reported_frame": "full_scale",
+    "model_ice": "not carried by the archived transcription",
+    "known_gaps": [
+      "basin name/licence: the archived in-ecosystem transcription did not carry it",
+      "model-ice preparation procedure and target strengths"
+    ]
+  },
+  "digitisation": {
+    "method": "two independent transcriptions of the archived Table 3/8 transcription",
+    "passes": [
+      "pass_a",
+      "pass_b"
+    ],
+    "independent_paths": [
+      "pass A: column-major CSV, SI-derived units (kPa/MPa) kept",
+      "pass B: row-major text, engineering units (MPa/GPa) converted inline"
+    ],
+    "checks": [
+      "double_entry agreement (sample + full population)",
+      "digest re-verification"
+    ],
+    "tool": "benchmarks/ice_resistance/measured/build_assets.py"
+  },
+  "uncertainty": {
+    "reported": true,
+    "definition": "per-point standard deviation of the measured towing force, tabulated next to the mean force by the source",
+    "value_kN": "points[].R_unc_kN"
+  },
+  "applicability": {
+    "ice_breaking_mode": "downward_bending",
+    "lindqvist_family_applicable": true,
+    "in_15pct_verdict_set": true,
+    "role": "primary adjudication truth for the 15 % criterion",
+    "limitations": [
+      "one ship, one campaign: cannot separate ice-strength from geometry effects",
+      "digitised summary forces only, not the raw force time series",
+      "secondary transcription (publisher PDF not reachable from the worktree)"
+    ]
+  }
 }
