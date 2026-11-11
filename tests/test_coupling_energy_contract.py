@@ -27,7 +27,7 @@ from tensorphysics.coupling_energy.exchange import (
     ExchangeSample,
     MultiRateSchedule,
     TemporalScheme,
-    quadrature_error,
+
     reconstruction_order_scan,
     reconstruction_poly,
 )
@@ -39,8 +39,6 @@ from tensorphysics.coupling_energy.ledger import (
 from tensorphysics.coupling_energy.solvers import (
     DEM2D,
     ContactLaw,
-    Q4Mesh,
-    Q4PlaneStressFEM,
     ThermalLBM2D,
 )
 
@@ -256,6 +254,7 @@ def test_quick_suite_produces_the_ratio_scheme_matrix():
     assert out["thermal"][0]["scheme"] == "zoh"
     assert any(r["exchange_mode"] == "independent" for r in out["thermal"])
 
+
 # ---------------------------------------------------------------------------
 # acceptance gate over the same suite (frozen criteria, three-valued outcomes)
 # ---------------------------------------------------------------------------
@@ -287,6 +286,7 @@ def test_quick_suite_is_gated_by_the_frozen_criteria():
     # a withheld record is not silently accepted
     with pytest.raises(A.AcceptanceError):
         A.assert_accepted(report)
+
 
 # ---------------------------------------------------------------------------
 # the committed acceptance record: the manuscript's numbers must be traceable
