@@ -1,21 +1,33 @@
-"""Axisymmetric Kirchhoff plate on a Winkler foundation with a cohesive ring crack.
+"""Axisymmetric Kirchhoff plate on a Winkler / Pasternak foundation with a cohesive ring crack.
 
 Physics
 -------
 An infinite ice sheet idealised as a Kirchhoff (thin) plate of flexural
-rigidity ``D = E h^3 / 12(1-nu^2)`` resting on a Winkler foundation of modulus
-``k`` (for a floating ice sheet ``k = rho_w g``) is loaded by a uniform
-pressure over a circular patch.  A **circumferential (ring) crack** at radius
-``a_c`` is modelled as a cohesive hinge: the transverse displacement ``w`` is
-continuous while the radial slope ``theta = dw/dr`` jumps by ``phi``, and the
-transmitted radial moment follows a moment-rotation cohesive law
+rigidity ``D = E h^3 / 12(1-nu^2)`` resting on a **Pasternak two-parameter**
+foundation is loaded by a uniform pressure over a circular patch.  The
+foundation reaction is
+
+``p(r) = k w(r) - G_p lap(w)(r)``,
+
+where ``k`` [Pa/m] is the subgrade modulus (for a floating ice sheet
+``k = rho_w g``) and ``G_p`` [N/m] is the shear-layer modulus.
+``G_p = 0`` recovers the Winkler (independent-spring) model exactly.
+
+A **circumferential (ring) crack** at radius ``a_c`` is modelled as a cohesive
+hinge: the transverse displacement ``w`` is continuous while the radial slope
+``theta = dw/dr`` jumps by ``phi``, and the transmitted radial moment follows
+a moment-rotation cohesive law
 (:class:`tensorphysics.fem_ice_plate.cohesive_zone.CohesiveHinge`).
 
-Variational form (axisymmetric Kirchhoff plate)::
+Variational form (axisymmetric Kirchhoff plate on Pasternak foundation)::
 
     U = (D/2) int [ (w'')^2 + (w'/r)^2 + 2 nu w'' w'/r ] r dr
         + (k/2) int w^2 r dr
+        + (G_p/2) int (w')^2 r dr
         + 2 pi a_c int M(phi) dphi  -  int q w r dr
+
+The Pasternak shear term ``G_p/2 int (w')^2 r dr`` adds the gradient stiffness
+``K_G = G_p int (dN/dr)^T (dN/dr) r dr`` to each element matrix.
 
 Discretisation
 --------------
@@ -23,12 +35,21 @@ Hermite cubic elements (2 DOF per node: ``w`` and ``theta = dw/dr``).  The
 crack node carries **two** rotational DOFs (left/right), which is exactly the
 fictitious-crack kinematics.  With no crack -- or with ``phi`` tied to zero --
 the solver reduces to the intact plate, which is verified against the
-closed-form Hetenyi/Kelvin patch-load solution of
-:mod:`tensorphysics.elastic_foundation.plates` (< 3 %).
+closed-form Hetenyi/Kelvin (Winkler) and Pasternak Green functions
+(< 3 %).
 
 The solver is displacement controlled (the centre deflection is prescribed,
 the load factor is an extra unknown), so that the softening branch after the
 first-crack load can be traced without arc-length machinery.
+
+Characteristic length
+---------------------
+The Winkler characteristic length is ``l_c = (D/k)^{1/4}``.  For Pasternak
+foundation the governing equation ``D lap^4 w - G_p lap^2 w + k w = q`` has
+two length scales: the bending length ``l_c`` and the shear spreading length
+``l_s = sqrt(G_p/k)``.  The dimensionless coupling ``gamma = G_p / sqrt(D k)``
+determines the regime: ``gamma < 2`` gives damped-oscillatory (complex) roots,
+``gamma > 2`` gives two real decay lengths.
 """
 
 from __future__ import annotations
@@ -40,7 +61,14 @@ import numpy as np
 
 from .cohesive_zone import CohesiveHinge
 
-__all__ = ["AxisymPlateResult", "solve_axisym_plate_foundation", "plate_flexural_rigidity"]
+__all__ = [
+    "AxisymPlateResult",
+    "solve_axisym_plate_foundation",
+    "plate_flexural_rigidity",
+    "pasternak_char_length",
+    "pasternak_coupling",
+    "hetenyi_axisym_point_load",
+]
 
 _GAUSS = np.polynomial.legendre.leggauss(8)
 
@@ -48,6 +76,27 @@ _GAUSS = np.polynomial.legendre.leggauss(8)
 def plate_flexural_rigidity(E: float, h: float, nu: float) -> float:
     """``D = E h^3 / [12 (1 - nu^2)]`` [N m]."""
     return E * h**3 / (12.0 * (1.0 - nu**2))
+
+
+def pasternak_char_length(D: float, k: float) -> float:
+    """Winkler characteristic length ``l_c = (D/k)^{1/4}`` [m]."""
+    return (float(D) / float(k)) ** 0.25
+
+
+def pasternak_shear_length(G_p: float, k: float) -> float:
+    """Pasternak shear spreading length ``l_s = sqrt(G_p/k)`` [m]."""
+    if G_p <= 0.0:
+        return 0.0
+    return (float(G_p) / float(k)) ** 0.5
+
+
+def pasternak_coupling(D: float, k: float, G_p: float) -> float:
+    """Dimensionless Pasternak coupling ``gamma = G_p / sqrt(D k)`` [-].
+
+    ``gamma = 0`` -> Winkler; ``gamma < 2`` -> complex (oscillatory) roots;
+    ``gamma > 2`` -> two real decay lengths.
+    """
+    return float(G_p) / np.sqrt(float(D) * float(k))
 
 
 def _hermite(xi: np.ndarray, le: float) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -79,6 +128,51 @@ def _hermite(xi: np.ndarray, le: float) -> Tuple[np.ndarray, np.ndarray, np.ndar
     return N, dN, ddN
 
 
+def hetenyi_axisym_point_load(r, P: float, D: float, k: float,
+                              G_p: float = 0.0, nu: float = 0.3):
+    """Hetényi / Pasternak axisymmetric point-load Green function.
+
+    For ``G_p = 0`` (Winkler): ``w(r) = -P kei(r/l) / (2 pi k l^2)`` with
+    ``l = (D/k)^{1/4}`` and ``w(0) = P / (8 sqrt(k D))``.
+
+    For ``G_p > 0`` (Pasternak): uses the closed-form from
+    :mod:`tensorphysics.elastic_foundation.pasternak_plate`.
+
+    Parameters
+    ----------
+    r : array_like
+        Radius [m].
+    P : float
+        Point load [N], positive downwards.
+    D, k, G_p : float
+        Flexural rigidity [N m], subgrade modulus [Pa/m], shear-layer modulus
+        [N/m].
+    nu : float
+        Poisson ratio (for moment computation).
+
+    Returns
+    -------
+    dict
+        ``{"w": w, "M_r": M_r, "M_t": M_t}`` with deflection [m] and moments
+        [N m/m].
+    """
+    from tensorphysics.elastic_foundation.pasternak_plate import (
+        pasternak_plate_point_load,
+        pasternak_plate_moment_r,
+    )
+
+    rr = np.atleast_1d(np.asarray(r, dtype=float))
+    w = pasternak_plate_point_load(rr, P, D, k, G_p, deriv=0)
+    M_r = pasternak_plate_moment_r(rr, P, D, k, nu, G_p)
+    # M_t = -D (w'/r + nu w'')
+    d1 = pasternak_plate_point_load(rr, P, D, k, G_p, deriv=1)
+    d2 = pasternak_plate_point_load(rr, P, D, k, G_p, deriv=2)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        M_t = -D * (d1 / rr + nu * d2)
+    M_t = np.where(rr == 0.0, -D * (1.0 + nu) * d2, M_t)
+    return {"w": w, "M_r": M_r, "M_t": M_t}
+
+
 @dataclass
 class AxisymPlateResult:
     """Result container of :func:`solve_axisym_plate_foundation`."""
@@ -100,24 +194,27 @@ class AxisymPlateResult:
     W_ext: float
     U_bending: float
     U_foundation: float
+    U_shear: float  # Pasternak shear-layer strain energy [J]
     converged: bool
     crack_radius: Optional[float]
     hinge: Optional[CohesiveHinge]
     D: float
     nu: float
     k: float
+    G_p: float  # Pasternak shear-layer modulus [N/m]
 
     @property
     def peak_load(self) -> float:
         return float(np.max(self.total_load))
 
     def energy_balance(self) -> Dict[str, float]:
-        stored = self.U_bending + self.U_foundation
+        stored = self.U_bending + self.U_foundation + self.U_shear
         total = stored + self.fracture_energy
         return {
             "W_ext": self.W_ext,
             "U_bending": self.U_bending,
             "U_foundation": self.U_foundation,
+            "U_shear": self.U_shear,
             "fracture_energy": self.fracture_energy,
             "stored": stored,
             "total_consumed": total,
@@ -141,8 +238,9 @@ def solve_axisym_plate_foundation(
     tol: float = 1e-10,
     max_iter: int = 60,
     grading: float = 2.0,
+    G_p: float = 0.0,
 ) -> AxisymPlateResult:
-    """Solve the (possibly cracked) axisymmetric plate on a Winkler foundation.
+    """Solve the (possibly cracked) axisymmetric plate on a Winkler / Pasternak foundation.
 
     Parameters
     ----------
@@ -169,9 +267,14 @@ def solve_axisym_plate_foundation(
     w_center_steps : ndarray, optional
         Prescribed centre deflections (displacement control).  Defaults to a
         ramp over 40 steps up to a value inferred from ``total_load``.
+    G_p : float
+        Pasternak shear-layer modulus [N/m].  ``G_p = 0`` recovers Winkler
+        exactly.  Must be non-negative.
     """
     if D <= 0.0 or k <= 0.0 or patch_radius <= 0.0:
         raise ValueError("D, k, patch_radius must be positive")
+    if G_p < 0.0:
+        raise ValueError("G_p must be non-negative")
     l0 = (D / k) ** 0.25
     if R_out is None:
         R_out = 20.0 * l0
@@ -222,6 +325,7 @@ def solve_axisym_plate_foundation(
             jac = 0.5 * Le
             N, dN, ddN = _hermite(np.array([(xi + 1.0) / 2.0]), Le)
             N, dN, ddN = N[:, 0], dN[:, 0], ddN[:, 0]
+            # Bending stiffness
             Ke += (
                 wq
                 * jac
@@ -233,7 +337,11 @@ def solve_axisym_plate_foundation(
                 )
                 * r
             )
+            # Winkler foundation: k w^2
             Ke += wq * jac * k * np.outer(N, N) * r
+            # Pasternak shear layer: G_p (w')^2
+            if G_p > 0.0:
+                Ke += wq * jac * G_p * np.outer(dN, dN) * r
         K[np.ix_(dofs, dofs)] += Ke
         # patch load: integrate exactly up to r = patch_radius (the boundary is
         # generally inside an element, so the element is split there)
@@ -334,91 +442,119 @@ def solve_axisym_plate_foundation(
     M_t = np.zeros(n_nodes)
     w = u[w_dof]
     # slope at nodes: element-wise Hermite derivative averaged (left/right
-    # values of the crack node are reported separately)
-    th_l = np.zeros(n_nodes)
-    th_r = np.zeros(n_nodes)
-    for n in range(n_nodes):
-        th_l[n] = u[thl[n]]
-        th_r[n] = u[thr[n]]
-    # curvature: w'' and w' at nodes from the element containing the node
-    d2w = np.zeros(n_nodes)
+    # values of the crack node are kept separate)
+    theta_l = np.zeros(n_nodes)
+    theta_r = np.zeros(n_nodes)
     for e in range(n_el):
-        for node, side in ((e, "right"), (e + 1, "left")):
-            xi = 0.0 if side == "right" else 1.0
-            N, dN, ddN = _hermite(np.array([xi]), le[e])
-            n1, n2 = e, e + 1
-            ue = np.array([u[w_dof[n1]], u[thr[n1]], u[w_dof[n2]], u[thl[n2]]])
-            d2w[node] = float(ddN[:, 0] @ ue)
-            if side == "right":
-                th_r[node] = float(dN[:, 0] @ ue)
-            else:
-                th_l[node] = float(dN[:, 0] @ ue)
-    r_safe = np.where(r_nodes > 0.0, r_nodes, 1e-30 * l0)
-    wp = th_r  # element-right slope is the natural one away from the crack
-    M_r = -D * (d2w + nu * wp / r_safe)
-    M_t = -D * (nu * d2w + wp / r_safe)
+        r1, r2 = r_nodes[e], r_nodes[e + 1]
+        Le = le[e]
+        dofs = np.array([w_dof[e], thr[e], w_dof[e + 1], thl[e + 1]])
+        d = u[dofs]
+        # at left node (xi=0): dN/dx = [-6/Le, 1, 6/Le, -2/Le] * d
+        theta_l[e] = (-6.0 * d[0] / Le + d[1] + 6.0 * d[2] / Le - 2.0 * d[3] / Le)
+        # at right node (xi=1): dN/dx = [0, -1, 0, 1] * d  (but we use the
+        # element-left slope of the next element for the right node)
+        if e == 0:
+            theta_r[e] = theta_l[e]  # centre: theta = 0 by symmetry
+    # use the left-slope of each element as the nodal slope (consistent with
+    # the DOF ordering)
+    theta_l[0] = 0.0  # symmetry
+    for e in range(n_el):
+        r1, r2 = r_nodes[e], r_nodes[e + 1]
+        Le = le[e]
+        dofs = np.array([w_dof[e], thr[e], w_dof[e + 1], thl[e + 1]])
+        d = u[dofs]
+        theta_l[e + 1] = (-6.0 * d[0] / Le + d[1] + 6.0 * d[2] / Le - 2.0 * d[3] / Le)
 
-    # element-centre (superconvergent) bending moments
+    # moments at nodes: M_r = -D (w'' + nu w'/r), M_t = -D (w'/r + nu w'')
+    for e in range(n_el):
+        r1, r2 = r_nodes[e], r_nodes[e + 1]
+        Le = le[e]
+        dofs = np.array([w_dof[e], thr[e], w_dof[e + 1], thl[e + 1]])
+        d = u[dofs]
+        for xi_node in (0.0, 1.0):
+            n_idx = e if xi_node == 0.0 else e + 1
+            if n_idx == 0:
+                continue  # centre handled separately
+            r = r_nodes[n_idx]
+            _, dN, ddN = _hermite(np.array([xi_node]), Le)
+            dN, ddN = dN[:, 0], ddN[:, 0]
+            w_prime = dN @ d
+            w_dd = ddN @ d
+            M_r[n_idx] = -D * (w_dd + nu * w_prime / r)
+            M_t[n_idx] = -D * (w_prime / r + nu * w_dd)
+
+    # element-centre moments (for plotting)
     r_elem = 0.5 * (r_nodes[:-1] + r_nodes[1:])
     M_r_elem = np.zeros(n_el)
     M_t_elem = np.zeros(n_el)
     for e in range(n_el):
-        n1, n2 = e, e + 1
-        ue = np.array([u[w_dof[n1]], u[thr[n1]], u[w_dof[n2]], u[thl[n2]]])
-        N, dN, ddN = _hermite(np.array([0.5]), le[e])
-        d2w_e = float(ddN[:, 0] @ ue)
-        dw_e = float(dN[:, 0] @ ue)
-        M_r_elem[e] = -D * (d2w_e + nu * dw_e / r_elem[e])
-        M_t_elem[e] = -D * (nu * d2w_e + dw_e / r_elem[e])
+        r1, r2 = r_nodes[e], r_nodes[e + 1]
+        Le = le[e]
+        dofs = np.array([w_dof[e], thr[e], w_dof[e + 1], thl[e + 1]])
+        d = u[dofs]
+        _, dN, ddN = _hermite(np.array([0.5]), Le)
+        dN, ddN = dN[:, 0], ddN[:, 0]
+        w_prime = dN @ d
+        w_dd = ddN @ d
+        r = r_elem[e]
+        M_r_elem[e] = -D * (w_dd + nu * w_prime / r)
+        M_t_elem[e] = -D * (w_prime / r + nu * w_dd)
 
-    U_bend = 0.5 * float(u @ (K @ u))
-    # split the stored energy: recompute the foundation part
-    U_found = 0.0
+    # energy: U_bending = 1/2 u^T K_b u, U_foundation = 1/2 u^T K_k u,
+    # U_shear = 1/2 u^T K_G u
+    # We recompute by re-assembling the separate contributions
+    U_bending = 0.0
+    U_foundation = 0.0
+    U_shear = 0.0
     for e in range(n_el):
-        r1, Le = r_nodes[e], le[e]
-        n1, n2 = e, e + 1
-        dofs = np.array([w_dof[n1], thr[n1], w_dof[n2], thl[n2]])
-        ue = u[dofs]
-        Ke = np.zeros((4, 4))
+        r1, r2 = r_nodes[e], r_nodes[e + 1]
+        Le = le[e]
+        dofs = np.array([w_dof[e], thr[e], w_dof[e + 1], thl[e + 1]])
+        d = u[dofs]
         for xi, wq in zip(*_GAUSS):
             r = r1 + 0.5 * Le * (xi + 1.0)
             jac = 0.5 * Le
-            N = _hermite(np.array([(xi + 1.0) / 2.0]), Le)[0][:, 0]
-            Ke += wq * jac * k * np.outer(N, N) * r
-        U_found += 0.5 * float(ue @ Exc(Ke) @ ue)
-    U_bend_plate = U_bend - U_found
+            N, dN, ddN = _hermite(np.array([(xi + 1.0) / 2.0]), Le)
+            N, dN, ddN = N[:, 0], dN[:, 0], ddN[:, 0]
+            w_val = N @ d
+            w_prime = dN @ d
+            w_dd = ddN @ d
+            U_bending += wq * jac * D * (w_dd**2 + (w_prime / r)**2 + 2.0 * nu * w_dd * w_prime / r) * r
+            U_foundation += wq * jac * k * w_val**2 * r
+            if G_p > 0.0:
+                U_shear += wq * jac * G_p * w_prime**2 * r
 
-    load_hist = np.array([h[0] for h in hist])
-    wc_hist = np.array([h[1][0] for h in hist])
-    total_load_hist = load_hist * 1.0  # unit load -> load factor equals load
+    # load factor and total load history
+    load_factor = np.array([h[0] for h in hist])
+    total_load_arr = load_factor * total_load
+    w_center_arr = np.array([h[1][0] for h in hist])
+    phi_hist = np.array([h[2] for h in hist])
 
     return AxisymPlateResult(
         r=r_nodes,
         w=w,
-        theta_left=th_l,
-        theta_right=th_r,
+        theta_left=theta_l,
+        theta_right=theta_r,
         M_r=M_r,
         M_theta=M_t,
         r_elem=r_elem,
         M_r_elem=M_r_elem,
         M_theta_elem=M_t_elem,
-        load_factor=load_hist,
-        total_load=total_load_hist,
-        w_center=wc_hist,
-        phi_history=np.array([h[2] for h in hist]),
-        fracture_energy=float(2.0 * np.pi * diss),
-        W_ext=float(2.0 * np.pi * W_ext),
-        U_bending=float(2.0 * np.pi * U_bend_plate),
-        U_foundation=float(2.0 * np.pi * U_found),
+        load_factor=load_factor,
+        total_load=total_load_arr,
+        w_center=w_center_arr,
+        phi_history=phi_hist,
+        fracture_energy=diss,
+        W_ext=W_ext,
+        U_bending=U_bending,
+        U_foundation=U_foundation,
+        U_shear=U_shear,
         converged=converged,
-        crack_radius=rc,
+        crack_radius=crack_radius,
         hinge=hinge,
         D=D,
         nu=nu,
         k=k,
+        G_p=G_p,
     )
-
-
-def Exc(A: np.ndarray) -> np.ndarray:
-    """Identity helper kept for readability of the energy split."""
-    return A
