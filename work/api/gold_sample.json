@@ -1,0 +1,802 @@
+[
+ {
+  "node_id": 3548,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "R_total mean increases with ice concentration/thickness (monotone)",
+  "machine": "RECORD_ONLY",
+  "subtype": "UNCLASSIFIED"
+ },
+ {
+  "node_id": 1158,
+  "repo": "ship-performance-platform",
+  "cid": "C1",
+  "text": "Ross法SPL偏差<5dB",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 901399,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "GCI<5%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3570,
+  "repo": "ship-performance-platform",
+  "cid": "C6",
+  "text": "RCS球 ≤1dB",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 789,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "EEXI improvement>=8%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 900796,
+  "repo": "TensorFEM",
+  "cid": "C6",
+  "text": "能量平衡：应变能=外功，误差<2%",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 3123,
+  "repo": "TensorFEM",
+  "cid": "C8",
+  "text": "scaling_law_error_<1pct",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 901198,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "C4: t ∈ [0.15, 0.25]",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 516,
+  "repo": "TensorPhysics",
+  "cid": "C6",
+  "text": "敏感度表",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 1123,
+  "repo": "ship-performance-platform",
+  "cid": "C2",
+  "text": "幂律自洽门禁通过率≥95%",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 1862,
+  "repo": "ship-performance-platform",
+  "cid": "C1",
+  "text": "浅水修正导数误差 < 5%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2067,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "水深影响单调性检查",
+  "machine": "RECORD_ONLY",
+  "subtype": "MONOTONIC"
+ },
+ {
+  "node_id": 330,
+  "repo": "TensorPlatform",
+  "cid": "C2",
+  "text": "锚溯源",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 900789,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "湿表面积三公式最大分歧 小于等于5%",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 1859,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "合规映射完整",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 900693,
+  "repo": "TensorDEM",
+  "cid": "C2",
+  "text": "Lindqvist对标误差≤15%(≥6工况)",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 2476,
+  "repo": "ship-performance-platform",
+  "cid": "C2",
+  "text": "C2: 对称性<1e-9",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 900845,
+  "repo": "ship-performance-platform",
+  "cid": "C7",
+  "text": "pytest + API 契约测试全绿",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 3459,
+  "repo": "TensorPlatform",
+  "cid": "C4",
+  "text": "resource_saving>=0.20",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2724,
+  "repo": "TensorLBM",
+  "cid": "C2",
+  "text": "second_moment_error < 0.10",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1721,
+  "repo": "ship-performance-platform",
+  "cid": "C7",
+  "text": "测试套件≥15项",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1236,
+  "repo": "ship-performance-platform",
+  "cid": "C8",
+  "text": "集成测试：被 EEXI/CII 模块消费（1 条测试）。 交付物：backend/physics/shore_power/ + tests/test_shore_power.py + artifacts/shore_power/{case,results}.json",
+  "machine": "RECORD_ONLY",
+  "subtype": "UNCLASSIFIED"
+ },
+ {
+  "node_id": 901429,
+  "repo": "TensorPhysics",
+  "cid": "C6",
+  "text": "测试覆盖≥80%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3559,
+  "repo": "TensorSPH",
+  "cid": "C3",
+  "text": "溃坝3D前沿 ≤15%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 900534,
+  "repo": "TensorPlatform",
+  "cid": "C1",
+  "text": "AC1 分类覆盖率100%，账本sha256可重算一致",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2977,
+  "repo": "TensorDEM",
+  "cid": "C3",
+  "text": "与Digby预测偏差≤15%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1735,
+  "repo": "TensorDEM",
+  "cid": "C1",
+  "text": "三档液桥体积分数下团聚体平均尺寸 <D> 与 Lian 解析解相对误差 <15%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 900462,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "C4 a1≤15% 单调",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2045,
+  "repo": "ship-performance-platform",
+  "cid": "C3",
+  "text": "单板 TL vs Sharp 解析全频段 ≤1 dB",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 3124,
+  "repo": "ship-performance-platform",
+  "cid": "C10",
+  "text": "pytest>=20_incl_3_negative_controls",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 974,
+  "repo": "ship-performance-platform",
+  "cid": "C6",
+  "text": "油耗m_fuel积分解误差<2%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3460,
+  "repo": "TensorPlatform",
+  "cid": "C8",
+  "text": "zero_domain_semantics",
+  "machine": "RECORD_ONLY",
+  "subtype": "UNCLASSIFIED"
+ },
+ {
+  "node_id": 774,
+  "repo": "TensorLBM",
+  "cid": "C5",
+  "text": "负控: 界面热导=0→绝热",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2024,
+  "repo": "ship-performance-platform",
+  "cid": "C2",
+  "text": "C2: 倒车可达航速<正车",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 901613,
+  "repo": "ship-performance-platform",
+  "cid": "C6",
+  "text": "负控 3 类：(i) w=0 → η_H = 1-t；(ii) t=0 → η_H = 1/(1-w)；(iii) w=t → η_H = 1",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 857,
+  "repo": "ship-performance-platform",
+  "cid": "C1",
+  "text": "调速器超调量误差<5%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1101,
+  "repo": "ship-performance-platform",
+  "cid": "C6",
+  "text": "负控一致性<1e-9",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 901185,
+  "repo": "TensorPlatform",
+  "cid": "C5",
+  "text": "E5: 网格无关性 <50%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3000,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "端到端pytest",
+  "machine": "RECORD_ONLY",
+  "subtype": "UNCLASSIFIED"
+ },
+ {
+  "node_id": 1958,
+  "repo": "TensorPlatform",
+  "cid": "C2",
+  "text": "C2 能力台账：新登记能力数 = 8 节点预期能力数",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1588,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "C4 与speed_loss链判定一致率≥90%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2910,
+  "repo": "ship-performance-platform",
+  "cid": "C8",
+  "text": "pytest 5个测试文件全PASS",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2520,
+  "repo": "ship-performance-platform",
+  "cid": "C7",
+  "text": "预测阻力增量 vs Schultz (2007) 实验数据误差 < 15%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 2798,
+  "repo": "TensorPlatform",
+  "cid": "C1",
+  "text": "C1: 声明-证据一致性 5/5 通过",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 900641,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "a_c与解析解偏差<=1%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 1304,
+  "repo": "ship-performance-platform",
+  "cid": "C3",
+  "text": "冲击压峰值标度指数 vs Plesset–Chapman ≤5%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 2361,
+  "repo": "ship-performance-platform",
+  "cid": "C3",
+  "text": "AC3: GM增大→参数横摇风险指标单调不增 (符号100%正确)",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_TOLERANCE"
+ },
+ {
+  "node_id": 3691,
+  "repo": "TensorPhysics",
+  "cid": "C4",
+  "text": "C4: Beaufort Sea 交叉验证误差<20%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 922,
+  "repo": "TensorDEM",
+  "cid": "C5",
+  "text": "滚动-滑动转换误差≤3%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 558,
+  "repo": "TensorPhysics",
+  "cid": "C2",
+  "text": "验收汇总表落盘",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 2082,
+  "repo": "TensorBEM",
+  "cid": "C4",
+  "text": "Wigley波形L2误差<5%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3459,
+  "repo": "TensorPlatform",
+  "cid": "C5",
+  "text": "zero_domain_semantics",
+  "machine": "RECORD_ONLY",
+  "subtype": "UNCLASSIFIED"
+ },
+ {
+  "node_id": 901576,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "C5: 推力崩溃单调下降",
+  "machine": "RECORD_ONLY",
+  "subtype": "MONOTONIC"
+ },
+ {
+  "node_id": 901572,
+  "repo": "TensorLBM",
+  "cid": "C4",
+  "text": "C4: τ_BGK=0.501时KBC稳定10000步而BGK≤100步发散",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3159,
+  "repo": "TensorPlatform",
+  "cid": "C5",
+  "text": "id=G5; text=负控：删除primary_quantities应报错; threshold=报错(不静默跳过)",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3541,
+  "repo": "ship-performance-platform",
+  "cid": "C2",
+  "text": "C2 雨流计数：ASTM E1049 通过",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2865,
+  "repo": "TensorPlatform",
+  "cid": "C5",
+  "text": "J5 对账 ≤30 s",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3673,
+  "repo": "TensorDEM",
+  "cid": "C6",
+  "text": "C6: pytest tests/test_ridge_keel_granular.py 覆盖 C1-C6",
+  "machine": "RECORD_ONLY",
+  "subtype": "UNCLASSIFIED"
+ },
+ {
+  "node_id": 900970,
+  "repo": "TensorPlatform",
+  "cid": "C2",
+  "text": "扫描+推导耗时≤60s",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2488,
+  "repo": "TensorBEM",
+  "cid": "C3",
+  "text": "辐射阻尼B_ij(ω) vs WAMIT误差<10%(峰值)/<15%(远离峰值)",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 2960,
+  "repo": "ship-performance-platform",
+  "cid": "C6",
+  "text": "AC6 pytest全绿",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 240,
+  "repo": "TensorDEM",
+  "cid": "C1",
+  "text": "Archard解析退化测试偏差<1e-10",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 764,
+  "repo": "TensorLBM",
+  "cid": "C3",
+  "text": "momentum_residual_lt_1e10",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 901541,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "C4: 临界峰Fh*(h/L)出现在[0.9,1.3]，h/L=0.5时峰值≥h/L=2时峰值的1.5倍",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 901544,
+  "repo": "TensorFEM",
+  "cid": "C1",
+  "text": "cohesive element patch test 误差 <1e-6",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 900934,
+  "repo": "ship-performance-platform",
+  "cid": "C9",
+  "text": "无MOCK：全部量由ODE积分产生",
+  "machine": "RECORD_ONLY",
+  "subtype": "UNCLASSIFIED"
+ },
+ {
+  "node_id": 1187,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "pytest>=10全绿",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1882,
+  "repo": "ship-performance-platform",
+  "cid": "C7",
+  "text": "扭转-横向耦合：影响≤5%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 901315,
+  "repo": "TensorLBM",
+  "cid": "C1",
+  "text": "Poiseuille 流屈服面位置与解析解偏差<2%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 2268,
+  "repo": "TensorLBM",
+  "cid": "C5",
+  "text": "C5: 漂移速度变化10-40%、Nansen偏角变化5-15°，显式回答是否落入观测带",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 900815,
+  "repo": "TensorPlatform",
+  "cid": "C3",
+  "text": "C3: GCI与理论收敛阶偏差<10%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 3366,
+  "repo": "TensorPlatform",
+  "cid": "C3",
+  "text": "Backtest accuracy >= 90% (false positive <5%)",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3030,
+  "repo": "TensorPhysics",
+  "cid": "C1",
+  "text": "C1: C_no_filter/C_filter≥5",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 900739,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "规范回裁保守度比逐冰级列出",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 496,
+  "repo": "TensorPlatform",
+  "cid": "C4",
+  "text": "冻结cohort跑5个cycle覆盖率与积压零漂移",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 901286,
+  "repo": "TensorFVM",
+  "cid": "C1",
+  "text": "波前位置 vs Ritter 解析解相对误差 ≤10%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 605,
+  "repo": "TensorLBM",
+  "cid": "C5",
+  "text": "lub_share_5pct_contour_provided = true",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2497,
+  "repo": "TensorFVM",
+  "cid": "C6",
+  "text": "Level 5：SA 平板 C_f(x) vs DNS 偏差 <5%（x/L>0.1）",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 3021,
+  "repo": "TensorPlatform",
+  "cid": "C4",
+  "text": "pytest test_backward_trace: 反向追溯返回≥3层上游输入",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 900403,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "恢复力矩阵误差 ≤3%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 901483,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "pytest ≥ 10 项 + 六要素报告",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1261,
+  "repo": "TensorFVM",
+  "cid": "C2",
+  "text": "C2:方腔偏差<2%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2148,
+  "repo": "TensorDEM",
+  "cid": "C5",
+  "text": "pytest≥8全绿",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 371,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "负控：m取负号时单调性检查必须失败",
+  "machine": "RECORD_ONLY",
+  "subtype": "MONOTONIC"
+ },
+ {
+  "node_id": 1575,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "d) 长波极限：λ/L→0时|H_33|→1（静水极限）",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_TOLERANCE"
+ },
+ {
+  "node_id": 1097,
+  "repo": "TensorLBM",
+  "cid": "C6",
+  "text": "稳定性回归R2>0.95",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1705,
+  "repo": "ship-performance-platform",
+  "cid": "C3",
+  "text": "C3: 摆动小角周期与 2π√(L/g) 偏差 ≤0.5%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3065,
+  "repo": "ship-performance-platform",
+  "cid": "C6",
+  "text": "pytest全绿",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 3000,
+  "repo": "ship-performance-platform",
+  "cid": "C1",
+  "text": "三重恒等式≤1e-9",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 3212,
+  "repo": "ship-performance-platform",
+  "cid": "C7",
+  "text": "3h_peak_vs_rayleigh < 2%",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 901483,
+  "repo": "ship-performance-platform",
+  "cid": "C1",
+  "text": "ISO 281 L_10 计算与手册算例偏差 ≤ 5%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2637,
+  "repo": "ship-performance-platform",
+  "cid": "C6",
+  "text": "AC6 回归AC：短期RAO与P143W2-N09基线在相同海况下偏差<3%",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 900784,
+  "repo": "TensorPlatform",
+  "cid": "C4",
+  "text": "预算：第3次重播被拒且审计行含reason=budget_cap",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1158,
+  "repo": "ship-performance-platform",
+  "cid": "C4",
+  "text": "与剥蚀率互裁自洽",
+  "machine": "RECORD_ONLY",
+  "subtype": "QUALITATIVE"
+ },
+ {
+  "node_id": 2461,
+  "repo": "TensorDEM",
+  "cid": "C7",
+  "text": "E7 pytest≥12全绿",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 1019,
+  "repo": "ship-performance-platform",
+  "cid": "C5",
+  "text": "能量守恒 |Δ|/total < 5%",
+  "machine": "JUDGEABLE",
+  "subtype": "SELF_REFERENCE"
+ },
+ {
+  "node_id": 2800,
+  "repo": "TensorPlatform",
+  "cid": "C2",
+  "text": "C2: 合成端点测试 100% 通过",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 3600,
+  "repo": "TensorPlatform",
+  "cid": "C1",
+  "text": "≥20份夹具precision≥0.90、recall≥0.80",
+  "machine": "THRESHOLD_ONLY",
+  "subtype": "NO_BASELINE"
+ },
+ {
+  "node_id": 2598,
+  "repo": "TensorFEM",
+  "cid": "C2",
+  "text": "C2: first 5 natural frequencies relative error < 2% vs Leissa",
+  "machine": "JUDGEABLE",
+  "subtype": "EXTERNAL_REFERENCE"
+ },
+ {
+  "node_id": 3313,
+  "repo": "TensorPlatform",
+  "cid": "C3",
+  "text": "无 gate 时恒等降级为 WITHHELD 异常数 0",
+  "machine": "WITHHELD_OK",
+  "subtype": "DECLARED_MISSING"
+ }
+]

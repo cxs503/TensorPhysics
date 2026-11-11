@@ -247,16 +247,35 @@ class NodeRecord:
     root_cause: RootCause | None = None
     rationale: str = ""
     evidence_grade: Grade = Grade.WITHHELD
+    #: Optional judgeability flag (P106W3A2-N08).  ``None`` keeps the historical
+    #: behaviour.  When supplied by
+    #: :func:`tensorphysics.acceptance_judgeability.gate.judgeability_flag` it is a
+    #: plain dict with ``supports_pass``; an ``ACCEPT`` whose criteria cannot carry
+    #: a PASS is then downgraded to ``WITHHELD`` instead of being reported.
+    judgeability: dict | None = None
 
     @property
     def verdict(self) -> Verdict:
-        """Roll-up of the node's criteria.
+        """Roll-up of the node's criteria, guarded by the judgeability flag.
 
         * every criterion ``ACCEPT`` -> ``ACCEPT``
         * any criterion ``FAIL``    -> ``FAIL`` (a measured miss is decisive)
         * nothing evaluated        -> ``WITHHELD``
         * otherwise                -> ``PARTIAL``
+
+        When a ``judgeability`` flag is attached and reports ``supports_pass=False``
+        (a hollow PASS: no judgeable clause, or KS below policy), an ``ACCEPT`` is
+        downgraded to ``WITHHELD`` -- "the report exists" is not a pass condition.
+        A ``FAIL`` is never softened here: honest FAIL is not overridable.
         """
+        rolled = self._verdict_rollup
+        if rolled is Verdict.ACCEPT and self.judgeability is not None:
+            if not bool(self.judgeability.get("supports_pass", True)):
+                return Verdict.WITHHELD
+        return rolled
+
+    @property
+    def _verdict_rollup(self) -> Verdict:
         if not self.criteria:
             return Verdict.WITHHELD
         verdicts = [c.verdict for c in self.criteria]
@@ -267,6 +286,13 @@ class NodeRecord:
         if all(v is Verdict.WITHHELD for v in verdicts):
             return Verdict.WITHHELD
         return Verdict.PARTIAL
+
+    @property
+    def judgeability_supported(self) -> bool | None:
+        """``None`` when no judgeability flag was attached (historical record)."""
+        if self.judgeability is None:
+            return None
+        return bool(self.judgeability.get("supports_pass", True))
 
     @property
     def measured_criteria(self) -> int:
@@ -286,6 +312,7 @@ class NodeRecord:
             "mission_status": self.mission_status,
             "is_maturity": self.is_maturity,
             "verdict": self.verdict.value,
+            "judgeability": self.judgeability,
             "criteria_total": len(self.criteria),
             "criteria_measured": self.measured_criteria,
             "evidence_grade": self.evidence_grade.value,
