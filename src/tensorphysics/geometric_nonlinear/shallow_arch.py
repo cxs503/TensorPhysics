@@ -105,10 +105,23 @@ class VonMisesTruss:
             # Current angle
             beta = np.arctan2(y_current, self.L/2)
             
-            # Equilibrium: P = 2 * N * sin(β)
-            P[i] = 2 * N * np.sin(beta)
+            # Equilibrium of the apex.  The bar force acting on the apex is
+            # N * (unit vector apex -> support), i.e. the vertical component of
+            # the two bars is -2 N sin(beta) (upward positive).  Balancing it
+            # with an applied downward load q gives
+            #     q = -2 N sin(beta).
+            # With N < 0 (bars compressed while the apex is pushed down) this
+            # is q > 0, as it must be.  The previous implementation returned
+            # +2 N sin(beta), i.e. the load with the *upward* sign, so the
+            # physical snap-through load appeared as a negative minimum and the
+            # reported "upper limit" was simply the first sample of the
+            # arbitrary displacement window (0.5 H above the initial apex).
+            P[i] = -2 * N * np.sin(beta)
         
         # Determine stability from dP/dv
+        if len(v_range) < 2:
+            # a single sample cannot carry a slope; do not index out of bounds
+            return P, np.array(['unknown'] * len(v_range))
         for i in range(len(v_range)):
             if i == 0:
                 dP_dv = (P[1] - P[0]) / (v_range[1] - v_range[0])
@@ -125,31 +138,50 @@ class VonMisesTruss:
         return P, np.array(stability)
     
     def find_limit_points(self, n_pts: int = 1000) -> dict:
-        """Find the upper and lower limit points."""
-        v_range = np.linspace(-0.5 * self.H, 2.5 * self.H, n_pts)
+        """Find the upper and lower limit points of the equilibrium path.
+
+        Limit points are *interior* extrema of q(v): a maximum that coincides
+        with an end of the sampled displacement window is not a limit point but
+        a truncation artefact, and is reported through
+        ``upper_is_interior`` / ``lower_is_interior`` so callers can reject it.
+        """
+        # Snap-through branch: apex descends from its initial position (v = 0)
+        # to the mirror configuration at v = 2H.  Both extrema of interest (the
+        # compression limit load and the post-snap-through minimum) are interior
+        # to this window; the far tension branch (v > 2H) is unbounded and must
+        # not enter the search, otherwise the load maximum is a truncation
+        # artefact of the window.
+        v_range = np.linspace(0.0, 2.0 * self.H, n_pts)
         P, stability = self.equilibrium_path(v_range)
         
         # Upper limit: maximum P
-        idx_upper = np.argmax(P)
+        idx_upper = int(np.argmax(P))
         q_limit_upper = P[idx_upper]
         w_at_upper = v_range[idx_upper]
+        upper_is_interior = 0 < idx_upper < len(P) - 1
         
         # Lower limit: minimum P after the upper limit (in snap-through region)
         if idx_upper < len(P) - 1:
             P_post = P[idx_upper:]
             v_post = v_range[idx_upper:]
-            idx_lower_rel = np.argmin(P_post)
+            idx_lower_rel = int(np.argmin(P_post))
             q_limit_lower = P_post[idx_lower_rel]
             w_at_lower = v_post[idx_lower_rel]
+            idx_lower_abs = idx_upper + idx_lower_rel
         else:
             q_limit_lower = 0.0
             w_at_lower = 0.0
+            idx_lower_abs = len(P) - 1
         
+        lower_is_interior = 0 < idx_lower_abs < len(P) - 1
+
         return {
             'q_limit_upper': q_limit_upper,
             'q_limit_lower': q_limit_lower,
             'w_at_upper': w_at_upper,
             'w_at_lower': w_at_lower,
+            'upper_is_interior': upper_is_interior,
+            'lower_is_interior': lower_is_interior,
             'v_range': v_range,
             'P': P,
             'stability': stability,
@@ -197,12 +229,14 @@ class ShallowArchModel:
         if idx_upper < len(P) - 1:
             P_post = P[idx_upper:]
             v_post = v_range[idx_upper:]
-            idx_lower_rel = np.argmin(P_post)
+            idx_lower_rel = int(np.argmin(P_post))
             q_limit_lower = P_post[idx_lower_rel]
             w_at_lower = v_post[idx_lower_rel]
+            idx_lower_abs = idx_upper + idx_lower_rel
         else:
             q_limit_lower = 0.0
             w_at_lower = 0.0
+            idx_lower_abs = len(P) - 1
         
         return ArchSolution(
             q_values=P,
@@ -216,15 +250,32 @@ class ShallowArchModel:
         )
     
     def analytical_limit_load(self) -> float:
-        """Analytical estimate of the snap-through load.
-        
-        For the von Mises truss:
-        P_snap ≈ EA * H / L0 * sin(α) * (1 - ...)
-        
-        More precisely, the limit load can be found from dP/dv = 0.
+        """Closed-form snap-through (limit) load of the von Mises truss.
+
+        With h the current rise and L1(h) = sqrt((L/2)^2 + h^2) the current bar
+        length, the applied downward load is
+
+            q(h) = 2 EA / L0 * h * (L0 / L1(h) - 1) * (L0 + L1(h)) / (2 L0)
+
+        for the Green-Lagrange strain used by :class:`VonMisesTruss`; in the
+        small-strain limit (L1 ~ L0) this reduces to
+        q = 2 EA / L0 * h * (L0/L1 - 1).  The limit load is max_h q(h), obtained
+        here by a dense scan of h in (0, H] -- it is an interior maximum for
+        every rise-span ratio, and it is *not* the same as
+        ``find_limit_points()['q_limit_upper']`` evaluated on an arbitrary
+        displacement window (that is why this method no longer delegates to it).
         """
-        result = self.truss.find_limit_points()
-        return result['q_limit_upper']
+        L = self.truss.L
+        H = self.truss.H
+        EA = self.truss.EA
+        L0 = self.truss.L0
+
+        h = np.linspace(1e-9, H, 2_000_001)
+        L1 = np.sqrt((L / 2) ** 2 + h**2)
+        eps = (L1**2 - L0**2) / (2 * L0**2)
+        N = EA * eps
+        q = -2 * N * (h / L1)
+        return float(np.max(q))
 
 
 def solve_snap_through(

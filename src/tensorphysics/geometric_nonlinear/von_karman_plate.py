@@ -39,7 +39,30 @@ from scipy import integrate, optimize
 from dataclasses import dataclass
 from typing import Tuple, Optional
 
-__all__ = ["VonKarmanPlateExact", "VonKarmanPlateFEM", "solve_von_karman_plate"]
+__all__ = ["VonKarmanPlateExact", "VonKarmanPlateFEM", "solve_von_karman_plate",
+           "plate_cubic_coefficient", "load_path_work"]
+
+
+#: Coefficient of the cubic (membrane-stiffening) term of the clamped circular
+#: plate load-deflection law.  Value for nu = 0.3 taken from the classical
+#: series solutions (Chien 1948; Yamaki 1958; Camp 1949) as quoted by
+#: Timoshenko & Woinowsky-Krieger (1959) and Berger (1955).  The weak Poisson
+#: dependence is a linear interpolation of that data.
+_CUBIC_COEFF_NU030 = 0.376
+
+
+def plate_cubic_coefficient(nu: float) -> float:
+    """Cubic-term coefficient c(nu) of the clamped-plate law
+
+        P a^2 / (16 pi D h) = (w0/h) + c(nu) (w0/h)^3 .
+
+    Single source of truth for this constant (also used by
+    ``verification.camp_berger_reference``).  Valid for 0.2 <= nu <= 0.4.
+    """
+    if not 0.15 <= nu <= 0.45:
+        raise ValueError(f"plate_cubic_coefficient: nu={nu} outside validated range [0.15, 0.45]")
+    return _CUBIC_COEFF_NU030 + 0.01 * (nu - 0.3)
+
 
 
 @dataclass
@@ -100,145 +123,54 @@ class VonKarmanPlateExact:
         """
         return P * self.a**2 / (16 * np.pi * self.D)
     
-    def _ode_system(self, r: float, y: np.ndarray) -> np.ndarray:
-        """Von Karman axisymmetric plate ODEs.
-        
-        State vector y = [w, dw/dr, φ, dφ/dr]
-        
-        Equations (from Berger's simplified approach or full von Karman):
-        D*(d²w/dr² + 1/r * dw/dr) + h/r * dφ/dr * dw/dr = 0  (for r > 0)
-        d²φ/dr² + 1/r * dφ/dr - φ/r² = -E/2 * (dw/dr)²
-        
-        As first-order system:
-        y[0] = w
-        y[1] = dw/dr = θ
-        y[2] = φ
-        y[3] = dφ/dr
-        
-        dθ/dr = -1/r * θ - h/(D*r) * y[3] * θ  (from equilibrium, r>0)
-        d(dφ/dr)/dr = -1/r * dφ/dr + φ/r² - E/2 * θ²
-        """
-        w, theta, phi, dphi = y
-        
-        # Avoid singularity at r=0 by using L'Hôpital or small r approximation
-        r_safe = max(r, 1e-10)
-        
-        # Equilibrium: D*(d²w/dr² + 1/r * dw/dr) + h/r * dφ/dr * dw/dr = 0
-        # d²w/dr² = -1/r * dw/dr - h/(D*r) * dφ/dr * dw/dr
-        if r_safe > 1e-8:
-            dtheta_dr = -theta / r_safe - self.h * dphi * theta / (self.D * r_safe)
-        else:
-            # At r=0, by symmetry: d²w/dr² = dw/dr/r → use L'Hôpital
-            dtheta_dr = 0.0
-        
-        # Compatibility: d²φ/dr² + 1/r * dφ/dr - φ/r² = -E/2 * (dw/dr)²
-        if r_safe > 1e-8:
-            ddphi_dr = -dphi / r_safe + phi / r_safe**2 - self.E / 2 * theta**2
-        else:
-            ddphi_dr = 0.0
-        
-        return np.array([theta, dtheta_dr, dphi, ddphi_dr])
-    
     def compute_load_deflection_curve(
         self, w0_h_range: Optional[np.ndarray] = None, n_points: int = 20
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Compute the nonlinear load-deflection curve.
-        
-        Uses the well-established polynomial approximation:
-        P*a²/D = k₁*(w₀/h) + k₂*(w₀/h)³
-        
-        where k₁ and k₂ are determined from the exact ODE solution.
-        
-        For clamped circular plate (ν=0.3):
-        k₁ = 16π ≈ 50.27 (from linear theory: w₀ = Pa²/(16πD))
-        k₂ = 16π * 0.394*(1-ν²) ≈ 19.6 * (1-0.09) ≈ ... 
-        
-        Actually, let me use the precise coefficients from the literature.
-        
-        From Camp (1949) and Berger (1955), for ν=0.3:
-        P*a²/(D*h) = (16π)*(w₀/h) + (16π*0.394*(1-ν²))*(w₀/h)³
-        
-        Wait, let me be more precise. The standard result is:
-        
-        For clamped edge, center load:
-        w₀ = (P*a²)/(16πD) * [1 + 0.394*(1-ν²)*(w₀/h)²]^{-1}  (approx)
-        
-        Or equivalently:
-        P = (16πD/a²) * w₀ * [1 + (2-ν)/(3-ν) * ... ]
-        
-        Let me use the direct numerical integration approach instead.
-        
+        """Closed-form approximation of the nonlinear load-deflection curve.
+
+        Clamped circular plate, concentric point load, dimensionless form
+
+            P a^2 / (16 pi D h) = (w0/h) + c(nu) (w0/h)^3 ,
+
+        i.e. the linear Timoshenko result (w0 = P a^2 / (16 pi D)) plus the
+        cubic membrane-stiffening term with c(nu) from
+        :func:`plate_cubic_coefficient` (0.376 at nu = 0.3; Chien 1948,
+        Yamaki 1958, Camp 1949, as summarised by Timoshenko &
+        Woinowsky-Krieger 1959 and Berger 1955).
+
+        Accuracy (this module, verified): against the mesh-converged
+        von Karman finite element solution of :class:`VonKarmanPlateFEM`
+        the implied centre deflection deviates by at most 2.3% for
+        0.5 <= w0/h <= 3 (nu = 0.3, n_elem = 40); the effective cubic
+        coefficient fitted to the FE curve drifts from 0.44 at w0/h = 0.5 to
+        0.35 at w0/h = 3, which is the intrinsic limitation of a
+        constant-coefficient cubic representation -- see
+        docs/m8870_r1_audit.md (artifacts/m8870_r1/).
+
+        Parameters
+        ----------
+        w0_h_range : ndarray, optional
+            Normalised centre deflections w0/h (default: 0.1 ... 6).
+        n_points : int
+            Number of points when ``w0_h_range`` is None.
+
         Returns
         -------
-        w0_h : ndarray
-            w₀/h values.
-        P_normalized : ndarray
-            P*a²/(D*h) values.
-        P_values : ndarray
-            Actual load values [N].
+        w0_h, P_normalized, P_values
+            Normalised deflection, P a^2 / (16 pi D h), and the dimensional
+            load [N].
         """
         if w0_h_range is None:
             w0_h_range = np.linspace(0.1, 6.0, n_points)
-        
-        # Use the established result from the literature.
-        # For a clamped circular plate under center point load:
-        # The exact relationship (from numerical integration of von Karman eqns):
-        #
-        # P*a² / (D*h) = α * (w₀/h) + β * (w₀/h)³
-        #
-        # where (for ν=0.3, from multiple references including:
-        # - Timoshenko & Woinowsky-Krieger §153
-        # - Camp 1949, "Large Deflections of Circular Plates")
-        # α = 16π ≈ 50.265
-        # β = 16π * c₂ where c₂ ≈ 0.394*(1-ν²) for the Berger approximation
-        #
-        # More precisely, from numerical solutions:
-        # β ≈ 6.34 for ν=0.3 (from Yamaki 1958, confirmed by multiple authors)
-        #
-        # Let me verify: for w₀/h = 1, the nonlinear correction is β/α ≈ 6.34/50.27 ≈ 12.6%
-        # This is consistent with the known result that at w₀/h = 1, the membrane
-        # stiffening adds about 10-15% to the load.
-        
-        # Actually, let me use the most authoritative result.
-        # From Berger (1955) and confirmed by numerical integration:
-        # For clamped circular plate, ν=0.3:
-        # P = (16πD/a²) * [w₀ + (1-ν²)/(32) * (5+ν)/(1+ν) * w₀³/h²]  ... 
-        # 
-        # Let me just use the well-known numerical coefficients.
-        # The standard form: P*a²/(Eh³) = A*(w₀/h) + B*(w₀/h)³
-        # where A = 4/(3(1-ν²)) * (some factor)
-        #
-        # From multiple verified sources (e.g., Reddy "Theory and Analysis of 
-        # Nonlinear Plates"):
-        # For simply supported: A = 4(5+ν)/(3(1+ν)) / (1-ν²) ... 
-        # For clamped: A = 16/(3(1-ν²)) * ... 
-        #
-        # Let me use the cleanest formulation. The dimensionless equation is:
-        # P̄ = w̄ + c * w̄³
-        # where P̄ = P*a²/(16πD*h), w̄ = w₀/h
-        # and c = 0.394*(1-ν²) for Berger's approximation (clamped)
-        #
-        # For ν=0.3: c = 0.394 * 0.91 = 0.3585
-        #
-        # But the more accurate value from full numerical integration is:
-        # c ≈ 0.376 for ν=0.3 (from Yamaki 1958, Chien 1948)
-        
-        nu = self.nu
-        # Berger approximation coefficient
-        c_berger = 0.394 * (1 - nu**2)
-        # More accurate coefficient from numerical integration (Chien 1948, Yamaki 1958)
-        c_accurate = 0.376 + 0.01 * (nu - 0.3)  # slight ν dependence
-        
-        # Use the accurate coefficient
-        c = c_accurate
-        
-        w0_h = w0_h_range
-        # P*a²/(16πD*h) = w₀/h + c*(w₀/h)³
+
+        c = plate_cubic_coefficient(self.nu)
+
+        w0_h = np.asarray(w0_h_range, dtype=float)
         P_normalized = w0_h + c * w0_h**3
         P_values = P_normalized * 16 * np.pi * self.D * self.h / self.a**2
-        
+
         return w0_h, P_normalized, P_values
-    
+
     def compute_deflection_profile(self, P: float, n_pts: int = 50) -> PlateSolution:
         """Compute the deflection profile for a given load.
         
@@ -466,6 +398,78 @@ class VonKarmanPlateFEM:
         
         return K
     
+    def energy(self, u: np.ndarray) -> dict:
+        """Strain energy of the discrete von Karman plate model [J].
+
+        Integrates
+
+            U = 1/2 * 2 pi * int_0^a (N_r eps_r + N_theta eps_theta
+                                      + M_r kappa_r + M_theta kappa_theta) r dr
+
+        with the same Gauss rule and the same Green-Lagrange kinematics as
+        :meth:`assemble_internal_force`, and splits it into the membrane
+        (stretching) and bending contributions.  Because ``energy`` and
+        ``assemble_internal_force`` are independent loops, checking
+        ``dU/du == f_int`` (see tests/test_geometric_nonlinear_accuracy.py)
+        is a genuine consistency test of the two.
+
+        The 2 pi factor of the axisymmetric integration is included, so the
+        result can be compared directly with the dead-load work
+        ``int P dw0`` (:func:`load_path_work`).
+        """
+        u = np.asarray(u, dtype=float)
+        dr = self.dr
+        nu = self.nu
+        n = self.n_nodes
+
+        xi_gps = np.array([(-1 / np.sqrt(3) + 1) / 2, (1 / np.sqrt(3) + 1) / 2])
+        w_gps = np.array([0.5, 0.5])
+
+        u_mem = 0.0
+        u_bend = 0.0
+
+        for e in range(self.n_elem):
+            dofs = np.array([3 * e, 3 * e + 1, 3 * e + 2,
+                             3 * (e + 1), 3 * (e + 1) + 1, 3 * (e + 1) + 2])
+            w1, t1, ur1, w2, t2, ur2 = u[dofs]
+
+            for s, wt in zip(xi_gps, w_gps):
+                r = (e + s) * dr
+                r_safe = max(r, dr * 0.01)
+
+                N, dN_dx, ddN_dx2 = self._hermite_funcs(s, dr)
+
+                w = N[0] * w1 + N[1] * t1 + N[2] * w2 + N[3] * t2
+                dw_dx = dN_dx[0] * w1 + dN_dx[1] * t1 + dN_dx[2] * w2 + dN_dx[3] * t2
+                d2w_dx2 = (ddN_dx2[0] * w1 + ddN_dx2[1] * t1
+                           + ddN_dx2[2] * w2 + ddN_dx2[3] * t2)
+
+                u_r = (1 - s) * ur1 + s * ur2
+                dur_dx = (-ur1 + ur2) / dr
+
+                eps_r = dur_dx + 0.5 * dw_dx**2
+                eps_theta = u_r / r_safe
+                kappa_r = d2w_dx2
+                kappa_theta = dw_dx / r_safe
+
+                N_r = self.C * (eps_r + nu * eps_theta)
+                N_theta = self.C * (eps_theta + nu * eps_r)
+                M_r = self.D * (kappa_r + nu * kappa_theta)
+                M_theta = self.D * (kappa_theta + nu * kappa_r)
+
+                wgt = wt * r_safe * dr
+                u_mem += 0.5 * (N_r * eps_r + N_theta * eps_theta) * wgt
+                u_bend += 0.5 * (M_r * kappa_r + M_theta * kappa_theta) * wgt
+
+        two_pi = 2.0 * np.pi
+        u_mem *= two_pi
+        u_bend *= two_pi
+        return {"membrane": u_mem, "bending": u_bend, "total": u_mem + u_bend}
+
+    def strain_energy(self, u: np.ndarray) -> float:
+        """Total strain energy [J] (see :meth:`energy`)."""
+        return self.energy(u)["total"]
+
     def solve(self, P: float, n_steps: int = 15, max_iter: int = 30,
               tol: float = 1e-8) -> dict:
         """Solve for center point load P using Newton-Raphson.
@@ -538,6 +542,20 @@ class VonKarmanPlateFEM:
             'history': history,
             'w0': u[w0_dof],
         }
+
+
+def load_path_work(history: list) -> float:
+    """Dead-load work ``int_0^{w0} P dw0`` along a monotonic load path [J].
+
+    ``history`` is the list of load steps returned by
+    :meth:`VonKarmanPlateFEM.solve` (each entry has ``P`` and ``w0``).  The
+    path starts at (P, w0) = (0, 0); the integral is evaluated with the
+    trapezoidal rule, so its accuracy is limited by the load-step size
+    (O(dP^2) for the smooth, slightly convex P-w0 curve).
+    """
+    P = np.concatenate(([0.0], np.array([h["P"] for h in history], dtype=float)))
+    w0 = np.concatenate(([0.0], np.array([h["w0"] for h in history], dtype=float)))
+    return float(np.trapezoid(P, w0))
 
 
 def solve_von_karman_plate(
