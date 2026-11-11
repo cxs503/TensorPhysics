@@ -439,6 +439,7 @@ class AxisymPlateFEMResult:
     k: float
     bc: str
     load_radius: float = 0.0
+    G_p: float = 0.0
 
     def _elem(self, rq: float) -> int:
         i = int(np.searchsorted(self.r, rq) - 1)
@@ -492,8 +493,9 @@ class AxisymPlateFEMResult:
 def solve_axisym_plate_fem(D: float, nu: float, k: float, R_out: float,
                            P: float = 0.0, load_radius: float = 0.0,
                            n_center: int = 12, n_outer: int = 240,
-                           grading: float = 2.0, bc: str = "free"):
-    """Axisymmetric Kirchhoff ring-element solution on a Winkler foundation.
+                           grading: float = 2.0, bc: str = "free",
+                           G_p: float = 0.0):
+    """Axisymmetric Kirchhoff ring-element solution on a Winkler/Pasternak bed.
 
     Parameters
     ----------
@@ -514,6 +516,10 @@ def solve_axisym_plate_fem(D: float, nu: float, k: float, R_out: float,
         used to cluster elements near the load.
     bc : {'free', 'simply_supported', 'clamped'}
         Outer-edge condition.
+    G_p : float
+        Pasternak shear-layer modulus [N/m].  The foundation weak form adds
+        ``2 pi G_p int w' v' r dr`` (from ``-G_p lap(w)`` after integrating by
+        parts); ``G_p = 0`` is the Winkler bed.
     """
     if bc not in ("free", "simply_supported", "clamped"):
         raise ValueError("bc must be free / simply_supported / clamped")
@@ -552,6 +558,8 @@ def solve_axisym_plate_fem(D: float, nu: float, k: float, R_out: float,
                 + nu * (np.outer(d2N, dN) + np.outer(dN, d2N))
             ) * jac
             ke += 2.0 * np.pi * k * rr * np.outer(N, N) * jac
+            if G_p:
+                ke += 2.0 * np.pi * G_p * rr * np.outer(dN, dN) * jac
             if a > 0.0 and r2 <= a * (1.0 + 1e-12):
                 q = P / (np.pi * a * a)
                 fe += 2.0 * np.pi * q * rr * N * jac
@@ -580,7 +588,7 @@ def solve_axisym_plate_fem(D: float, nu: float, k: float, R_out: float,
 
     return AxisymPlateFEMResult(
         r=r, w=sol[0::2], theta=sol[1::2], D=D, nu=nu, k=k, bc=bc,
-        load_radius=a,
+        load_radius=a, G_p=float(G_p),
     )
 
 
