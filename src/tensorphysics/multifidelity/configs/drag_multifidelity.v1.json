@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "case": {
+    "id": "calm_water_resistance_multifidelity",
+    "quantity": "total calm-water resistance R_T",
+    "reference_definition": "towing-tank EFD / benchmark value; relative error magnitudes are |R_T,model - R_T,ref| / R_T,ref",
+    "axes": {
+      "Fn": "Froude number V/sqrt(g Lpp)",
+      "Cb": "block coefficient",
+      "Re": "Reynolds number V Lpp / nu at full scale"
+    },
+    "provenance_note": "Error/cost priors are order-of-magnitude literature priors, NOT fitted values: Holtrop & Mennen (1982)/Holtrop (1984) report few-per-cent residual scatter on the fitting set, larger out of sample; ITTC-1978 performance-prediction procedure with a measured form factor is quoted at 3-5 % on resistance; CFD RANS at grid-converged KCS-like settings shows 2-3 % on total resistance (Tokyo-2015 workshop level); towing-tank repeatability is about 0.5-1 % on total resistance. Facility/CPU costs are order-of-magnitude times (seconds), not prices. The engine treats all of these as injected data."
+  },
+  "axes": {
+    "Fn": {
+      "lo": 0.08,
+      "hi": 0.48,
+      "scale": "linear"
+    },
+    "Cb": {
+      "lo": 0.48,
+      "hi": 0.88,
+      "scale": "linear"
+    },
+    "Re": {
+      "lo": 50000000.0,
+      "hi": 6000000000.0,
+      "scale": "log"
+    }
+  },
+  "models": [
+    {
+      "model_id": "holtrop_mennen_1982",
+      "label": "Holtrop-Mennen (1982) statistical regression",
+      "fidelity_level": 1,
+      "evidence": "REAL",
+      "error_prior": {
+        "median": 0.06,
+        "sigma": 0.4,
+        "provenance": "few-per-cent residual scatter reported by Holtrop & Mennen (1982); 6 % median adopted for out-of-sample hulls"
+      },
+      "cost": {
+        "median_s": 0.4,
+        "sigma": 0.25,
+        "provenance": "closed-form regression: sub-second CPU"
+      },
+      "domain": {
+        "Fn": [
+          0.1,
+          0.45
+        ],
+        "Cb": [
+          0.5,
+          0.85
+        ],
+        "Re": [
+          100000000.0,
+          5000000000.0
+        ]
+      },
+      "notes": "cheapest admissible model; breaks down on unconventional sterns and outside the fitting envelope"
+    },
+    {
+      "model_id": "ittc1978_prediction",
+      "label": "ITTC-1978 performance prediction (measured form factor)",
+      "fidelity_level": 2,
+      "evidence": "REAL",
+      "error_prior": {
+        "median": 0.04,
+        "sigma": 0.35,
+        "provenance": "ITTC 1978 procedure quoted at 3-5 % on resistance when a form factor is available"
+      },
+      "cost": {
+        "median_s": 4.0,
+        "sigma": 0.3,
+        "provenance": "requires resistance decomposition + form factor: seconds of CPU"
+      },
+      "domain": {
+        "Fn": [
+          0.1,
+          0.4
+        ],
+        "Cb": [
+          0.5,
+          0.85
+        ],
+        "Re": [
+          100000000.0,
+          5000000000.0
+        ]
+      },
+      "notes": "semi-empirical: inherits the parent-hull form factor"
+    },
+    {
+      "model_id": "cfd_rans_sst",
+      "label": "CFD RANS (k-omega SST, grid-converged)",
+      "fidelity_level": 3,
+      "evidence": "REAL",
+      "error_prior": {
+        "median": 0.025,
+        "sigma": 0.3,
+        "provenance": "grid-converged RANS on KCS-like hulls: 2-3 % on total resistance (Tokyo-2015 workshop level)"
+      },
+      "cost": {
+        "median_s": 7200.0,
+        "sigma": 0.4,
+        "provenance": "2 h on an HPC partition; mesh-iteration variability"
+      },
+      "domain": {
+        "Fn": [
+          0.05,
+          0.48
+        ],
+        "Cb": [
+          0.48,
+          0.88
+        ],
+        "Re": [
+          100000000.0,
+          6000000000.0
+        ]
+      },
+      "notes": "turbulence-model error grows with separation (unconventional sterns)"
+    },
+    {
+      "model_id": "efd_towing_tank",
+      "label": "EFD towing-tank campaign",
+      "fidelity_level": 4,
+      "evidence": "REAL",
+      "error_prior": {
+        "median": 0.012,
+        "sigma": 0.2,
+        "provenance": "ITTC repeatability of total resistance measurements: 0.5-1 %; 1.2 % median adopted including scale effects"
+      },
+      "cost": {
+        "median_s": 172800.0,
+        "sigma": 0.25,
+        "provenance": "two days of facility time including model set-up (order of magnitude)"
+      },
+      "domain": {
+        "Fn": [
+          0.05,
+          0.45
+        ],
+        "Cb": [
+          0.48,
+          0.88
+        ],
+        "Re": [
+          10000000.0,
+          10000000000.0
+        ]
+      },
+      "notes": "accuracy floor of the admissible set; the only model that can serve epsilon < 2 %"
+    }
+  ],
+  "strata": [
+    {
+      "name": "high_fn",
+      "bounds": {
+        "Fn": [
+          0.25,
+          0.48
+        ]
+      }
+    },
+    {
+      "name": "low_fn",
+      "bounds": {
+        "Fn": [
+          0.08,
+          0.25
+        ]
+      }
+    }
+  ],
+  "stratification_design": {
+    "declared_partition": "high_fn",
+    "mispartition_probe": "Cb above 0.75 (deliberately the wrong axis, used as a falsification probe for the stratification assumption)"
+  },
+  "validation": {
+    "n_per_stratum": 250,
+    "n_pooled_min": 400,
+    "seed": 11,
+    "min_n_per_stratum": 30,
+    "interval_level": 0.9
+  },
+  "budgets": {
+    "epsilon_range": [
+      0.02,
+      0.35
+    ],
+    "cost_range_s": [
+      500.0,
+      10000000.0
+    ],
+    "error_confidence": 0.95,
+    "cost_confidence": 0.95
+  },
+  "truths": [
+    {
+      "label": "prior_consistent",
+      "comment": "control: realisations drawn from the registered priors themselves; accuracy must reproduce alpha=0.95 and the interval level 0.90",
+      "sigma_inflation": 1.0,
+      "jump_prob": 0.0,
+      "cost_sigma_inflation": 1.0,
+      "cost_median_inflation": 1.0,
+      "regime_rules": []
+    },
+    {
+      "label": "deployment",
+      "comment": "out-of-sample deployment (primary): registered shapes 15 % optimistic, 12 % heavy-tail blow-ups, +35 % error growth in the high-Fn regime",
+      "sigma_inflation": 1.15,
+      "jump_prob": 0.12,
+      "jump_median": 2.2,
+      "jump_sigma": 0.4,
+      "cost_sigma_inflation": 1.0,
+      "cost_median_inflation": 1.0,
+      "regime_rules": [
+        {
+          "name": "high_fn",
+          "bounds": {
+            "Fn": [
+              0.25,
+              0.48
+            ]
+          },
+          "error_scale": 1.35,
+          "cost_scale": 1.0
+        }
+      ]
+    },
+    {
+      "label": "heteroscedastic_only",
+      "comment": "ablation: no heavy tail, but +70 % error growth in the high-Fn regime -- the case stratification is meant to repair",
+      "sigma_inflation": 1.0,
+      "jump_prob": 0.0,
+      "cost_sigma_inflation": 1.0,
+      "cost_median_inflation": 1.0,
+      "regime_rules": [
+        {
+          "name": "high_fn",
+          "bounds": {
+            "Fn": [
+              0.25,
+              0.48
+            ]
+          },
+          "error_scale": 1.7,
+          "cost_scale": 1.0
+        }
+      ]
+    },
+    {
+      "label": "heavy_tail_only",
+      "comment": "ablation: 15 % blow-ups, no regime growth -- stratification is expected NOT to help here (falsification probe of the method's own rationale)",
+      "sigma_inflation": 1.0,
+      "jump_prob": 0.15,
+      "jump_median": 2.2,
+      "jump_sigma": 0.4,
+      "cost_sigma_inflation": 1.0,
+      "cost_median_inflation": 1.0,
+      "regime_rules": []
+    }
+  ],
+  "acceptance": {
+    "accuracy_min": 0.9,
+    "cost_efficiency_min": 0.9,
+    "coverage_min": 0.85,
+    "negative_control_epsilons": [
+      0.005,
+      0.008,
+      0.01
+    ],
+    "n_backtest_queries": 2000,
+    "backtest_seed": 20261111,
+    "latent_seed": 7,
+    "objective": "min_cost"
+  }
+}
