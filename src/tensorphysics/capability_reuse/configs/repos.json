@@ -1,0 +1,108 @@
+{
+  "schema": "capability-reuse-repos/1",
+  "repos": [
+    {
+      "name": "TensorLBM",
+      "root": "/srv/tensor/workspace/TensorLBM"
+    },
+    {
+      "name": "TensorFEM",
+      "root": "/srv/tensor/workspace/TensorFEM"
+    },
+    {
+      "name": "TensorFVM",
+      "root": "/srv/tensor/workspace/TensorFVM"
+    },
+    {
+      "name": "TensorDEM",
+      "root": "/srv/tensor/workspace/TensorDEM"
+    },
+    {
+      "name": "TensorBEM",
+      "root": "/srv/tensor/workspace/TensorBEM"
+    },
+    {
+      "name": "TensorSPH",
+      "root": "/srv/tensor/workspace/TensorSPH"
+    },
+    {
+      "name": "TensorDG",
+      "root": "/srv/tensor/workspace/TensorDG"
+    },
+    {
+      "name": "TensorCAD",
+      "root": "/srv/tensor/workspace/TensorCAD"
+    },
+    {
+      "name": "TensorPlatform",
+      "root": "/srv/tensor/workspace/TensorPlatform"
+    },
+    {
+      "name": "TensorPhysics",
+      "root": "/srv/tensor/workspace/TensorPhysics"
+    },
+    {
+      "name": "TensorPapers",
+      "root": "/srv/tensor/workspace/TensorPapers"
+    },
+    {
+      "name": "ship-performance-platform",
+      "root": "/srv/tensor/workspace/ship-performance-platform"
+    }
+  ],
+  "repo_aliases": {
+    "ship-platform": "ship-performance-platform",
+    "ship_performance_platform": "ship-performance-platform",
+    "ship-performance": "ship-performance-platform"
+  },
+  "import_roots": [
+    "",
+    "src",
+    "backend",
+    "app",
+    "lib"
+  ],
+  "code_suffixes": [
+    ".py",
+    ".c",
+    ".cc",
+    ".cpp",
+    ".cu",
+    ".cuh",
+    ".h",
+    ".hpp"
+  ],
+  "skip_path_parts": [
+    "/.git/",
+    "/node_modules/",
+    "/__pycache__/",
+    "/site-packages/",
+    "/.venv/",
+    "/venv/",
+    "/build/",
+    "/dist/",
+    "/.pytest_cache/",
+    "/.mypy_cache/",
+    "/migrations/versions/",
+    "/frontend/",
+    "/frontend-vue/",
+    "/frontend_kunlun/"
+  ],
+  "evidence_limits": {
+    "lines_per_capability": 40,
+    "chars_per_line": 240,
+    "goal_chars": 3000,
+    "criteria_chars": 300
+  },
+  "db": {
+    "dsn_env": "CAPABILITY_REUSE_DB_URL",
+    "default_dsn": "postgresql://foundation:uGTN-KwuQv_7l8Tw0MMWUx_kf-nF2Rzz@127.0.0.1:5432/tensorplatform"
+  },
+  "extraction_params": {
+    "symbol_df_fraction": 0.02,
+    "min_symbol_len": 8,
+    "min_symbol_len_strict": 10,
+    "max_claims_per_file": 3,
+    "external_sweep": false
+  }
+}
