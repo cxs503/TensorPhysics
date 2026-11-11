@@ -62,9 +62,10 @@ library only) and vectorised evaluation on array operands (used by the
 brute-force cross-check without duplicating the constraint algebra).
 
 **Stage 2 — grid scan.** A uniform feasibility mask on the plane, plus per-cell
-binding constraint. Its area is a raw cell count and is quoted only as an
-order-of-magnitude cross-check — it is first order in the cell size, so it can
-never be the reported boundary.
+binding constraint. Its area is a raw cell count — first order in the cell
+size, so it is never the reported boundary, but it is no longer inert either: a
+second, twice-finer scan turns it into the machine check on the marched area
+(stage 3b).
 
 **Stage 3 — boundary marching.** 1-D: sample the span, bracket every constraint
 that changes sign, refine each bracket with Brent (bisection fallback) to
@@ -79,13 +80,31 @@ non-reproducible answer is reported as such.
 2-D: the 1-D primitive runs line by line along one axis for a ladder of
 positions along the other; intervals of neighbouring lines are linked into
 components by overlap (union-find), so two disjoint regions stay two components
-instead of fusing into one bounding box. A component's area is the analytic end
-blocks (assuming `L²` linear near a tapered end, which locates the tip from two
-knots) plus a trapezoid in between; a component that is clipped by the span, or
-that has more than one interval on a line, is reported with `area_method:
-trapezoid` and its degraded accuracy is visible rather than hidden.
+instead of fusing into one bounding box. A component's area is the integral along `u` of the feasible `v`-length, and it
+is *not* taken over the summed lengths. One line can cross the same connected
+region several times (a ring has an inner hole, a re-entrant boundary folds
+back); summing the intervals first leaves the integrand with a square-root kink
+wherever a gap opens or closes and costs an order of accuracy. The region is
+therefore split into **shells**: the outer shell (last upper bound minus first
+lower bound) minus one shell per gap between consecutive intervals. Each shell
+is a closed chord that tapers like `sqrt` at its own ends, so the analytic end
+blocks (which locate the tip from two knots under `L²` linear) apply to every
+shell and the area stays second order. `area_method` reports which integration
+was used (`shell_tip_model`, `shell_trapezoid` when the component is clipped by
+the span), and `multi_interval_lines` counts the lines that carry more than one
+interval.
 
-**Stage 4 — contract checks.** Five falsifiable checks, each with its own
+**Stage 3b — the area is checked, not just printed.** On a plane window the
+brute-force cell count is computed twice, at `n_grid_check` and at twice that,
+and `contracts.check_area_vs_grid` compares the marched area with the finer
+count inside a band `max(rel_tol·|A_fine|, 3·|A_fine − A_coarse|)`. The second
+term is the grid's own resolution-to-resolution drift, i.e. an estimate of the
+error the cell count carries; the check is a *blunder detector with a
+resolution-aware band*, not a precision certificate — precision is certified
+against closed-form areas. This is the check that was missing when a ring region
+was reported 29.4 % low with every contract green.
+
+**Stage 4 — contract checks.** Six falsifiable checks, each with its own
 metrics dictionary:
 
 * **monotonicity** — a constraint declared to move in one direction along an
@@ -108,6 +127,9 @@ metrics dictionary:
   identity of the binding constraint on each side can be declared in
   configuration and are then verified, which turns the active-set report into a
   falsifiable statement.
+* **area vs brute force** — the marched area of a plane window must agree with a
+  twice-refined brute-force cell count inside a band built from the declared
+  tolerance and the cell count's own drift; see stage 3b.
 
 **Stage 5 — orchestration and artifacts.** `EnvelopeEngine.run` fixes the order
 of the stages and the meaning of the status; `artifact.write_artifact` writes
@@ -195,9 +217,18 @@ evaluations within 60 s is met with two orders of magnitude of margin.
   block; its area degrades to a trapezoid (`area_method: "trapezoid"`,
   `clipped: true`), and `span_truncated` marks a 1-D window that ends on the
   span boundary rather than on a constraint.
-* **Complex topology.** A component with more than one interval on the same line
-  (a `C`-shaped region, for instance) is flagged `complex_topology: true` and its
-  area falls back to the trapezoid.
+* **Multi-interval lines are exact only where the boundary is smooth.** A
+  component with more than one interval on a line (a ring, a `C`-shaped region)
+  is integrated per shell and keeps second order (ring: 1.4e-4 relative area
+  error at 100 lines, closed form pi(R²−r²)). Where a boundary has a *corner*
+  that falls between two lines the taper is linear, not `sqrt`, and the error is
+  first order in the line spacing: the square-slab case measures 7e-5 when the
+  hole edge lands on a line and 1.3e-2 when it lands between two. Choose a
+  ladder that resolves the corner when a cornered region is integrated.
+* **The area check has a resolution-aware band.** `check_area_vs_grid` catches a
+  blunder (a region integrated over the wrong segment, a hole counted as part of
+  the region, a missed component); it does not certify 1e-3 against truth,
+  because the cell count it compares with cannot do that either.
 * **Convexity is a sufficient test.** See stage 4 above.
 * **Discrete feasibility is applied after the fact.** A lattice has no boundary
   to march, so it is snapped onto the continuous window and reported separately.
@@ -211,6 +242,7 @@ evaluations within 60 s is met with two orders of magnitude of margin.
 ```bash
 PYTHONPATH=src python -m pytest tests/test_envelope_engine.py tests/test_envelope_contracts.py -q
 python scripts/envelope_cases_acceptance.py --out artifacts/envelope
+python scripts/envelope_topology_acceptance.py --out artifacts/envelope_topology
 python scripts/generate_envelope_report.py
 ```
 
