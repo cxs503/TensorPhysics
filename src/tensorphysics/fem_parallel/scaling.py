@@ -28,7 +28,7 @@ import numpy as np
 
 from .operator import DistributedSystem
 from .partition import CartesianPartition
-from .pcg import ASMPreconditioner, JacobiPreconditioner, cg
+from .pcg import ASMPreconditioner, JacobiPreconditioner, cg, cg_latency_reduced
 from .problems import make_problem
 from .runtime import run
 
@@ -60,6 +60,7 @@ def solve_worker(
     maxiter: int = 4000,
     precond: str = "jacobi",
     local_reps: int = 5,
+    variant: str = "cg",
 ) -> Dict[str, Any]:
     """One benchmark point on one rank (module-level so it can be pickled)."""
     pr = make_problem(name, tuple(int(v) for v in n))
@@ -93,7 +94,8 @@ def solve_worker(
     comm.barrier()
 
     comm.reset_stats()
-    res = cg(
+    solver = cg_latency_reduced if variant == "reordered" else cg
+    res = solver(
         A, b, system,
         tol=tol, maxiter=maxiter, precond=pc, fixed_dof=system.bc_dof,
         record_every=0,
@@ -130,13 +132,15 @@ def run_point(
     backend: str = "auto",
     slot_floats: int = 1 << 18,
     barrier_timeout: float = 1800.0,
+    variant: str = "cg",
 ) -> Dict[str, Any]:
     """Run one benchmark point and aggregate the rank-level measurements."""
     n = tuple(int(v) for v in n)
     t_wall = time.perf_counter()
     ranks = run(
         solve_worker, nranks, backend=backend, slot_floats=slot_floats,
-        kwargs={"name": name, "n": n, "tol": tol, "maxiter": maxiter, "precond": precond},
+        kwargs={"name": name, "n": n, "tol": tol, "maxiter": maxiter, "precond": precond,
+                "variant": variant},
         barrier_timeout=barrier_timeout,
     )
     wall = time.perf_counter() - t_wall
@@ -147,6 +151,7 @@ def run_point(
             "grid": list(n),
             "nranks": int(nranks),
             "precond": precond,
+            "solver_variant": variant,
             "tol": tol,
             "backend": backend,
             "wall_including_launch": wall,

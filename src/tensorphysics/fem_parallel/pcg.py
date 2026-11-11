@@ -33,6 +33,7 @@ from .operator import DistributedSystem
 __all__ = [
     "SolveResult",
     "cg",
+    "cg_latency_reduced",
     "JacobiPreconditioner",
     "ASMPreconditioner",
     "local_operator",
@@ -186,8 +187,9 @@ def cg(
             t_pc += time.perf_counter() - t1
             if fixed_dof is not None:
                 z[fixed_dof] = 0.0
-        rz_new = system.dot(r, z)
-        rnorm = float(np.sqrt(max(system.dot(r, r), 0.0)))
+        # one collective for both inner products of this step
+        rz_new, rr_new = system.dot_pair(r, z, r, r)
+        rnorm = float(np.sqrt(max(rr_new, 0.0)))
         if record_every and (it % record_every == 0):
             history.append(rnorm)
         if rnorm <= tol * bnorm:
@@ -200,6 +202,130 @@ def cg(
         p = z + beta * p
         if fixed_dof is not None:
             p[fixed_dof] = 0.0
+
+    t_total = time.perf_counter() - t0
+    t_comm = _comm_snapshot(system) - t_comm0
+    return SolveResult(
+        iterations=it,
+        converged=converged,
+        residual_history=history,
+        x=x,
+        t_total=t_total,
+        t_matvec=t_mv,
+        t_precond=t_pc,
+        t_comm=t_comm,
+        n_owned=system.n_owned,
+    )
+
+
+def cg_latency_reduced(
+    A: sp.csr_matrix,
+    b: np.ndarray,
+    system: DistributedSystem,
+    x0: Optional[np.ndarray] = None,
+    tol: float = 1e-10,
+    maxiter: int = 20000,
+    precond=None,
+    fixed_dof: Optional[np.ndarray] = None,
+    record_every: int = 1,
+) -> SolveResult:
+    """PCG with the global-synchronisation count per iteration cut from 3 to 2.
+
+    Identical algebraic recurrences as :func:`cg` -- only the *order* of the
+    local work changes so that the ghost exchange and the two inner products of
+    the step can be published in the same collective:
+
+    * classic order: ``exchange(p)`` -> ``Ap = A p`` -> ``(p, Ap)`` likely
+      one reduction -> update -> ``(r, z)`` and ``(r, r)`` -> second reduction;
+    * reordered: after the update the *preconditioned residual* ``z_raw`` is
+      known locally, so its ghost exchange and the products ``(r, z_raw)`` and
+      ``(r, r)`` share one barrier; the matvec is then applied to ``z_raw`` and
+      ``A p_k = A z_raw + beta_k A p_{k-1}`` follows from linearity without an
+      extra exchange.
+
+    The iteration therefore costs one fused exchange+reduction and one scalar
+    reduction, i.e. two latencies instead of three.  Round-off differs from
+    :func:`cg` at the 1e-15 level only; the iterates agree to machine precision
+    in serial (see ``tests/test_fem_parallel_latency_reduced.py``).
+    """
+    comm = system.comm
+    owned = system.owned_dof if fixed_dof is None else (system.owned_dof & ~fixed_dof)
+    idx = np.nonzero(owned)[0]
+    t_comm0 = _comm_snapshot(system)
+    t0 = time.perf_counter()
+
+    def local_dot(u, v):
+        return float(np.dot(u[idx], v[idx]))
+
+    bnorm = comm.sum_scalar(local_dot(b, b)) ** 0.5
+    x = np.zeros_like(b) if x0 is None else x0.copy()
+    if fixed_dof is not None:
+        x[fixed_dof] = b[fixed_dof]
+
+    t_mv = 0.0
+    t_pc = 0.0
+
+    # first residual and preconditioned residual
+    Ax = _timed_matvec(A, system, x)
+    t_mv += Ax[1]
+    r = b - Ax[0]
+    if fixed_dof is not None:
+        r[fixed_dof] = 0.0
+    t1 = time.perf_counter()
+    z = r.copy() if precond is None else precond.apply(r)
+    t_pc += time.perf_counter() - t1
+    if fixed_dof is not None:
+        z[fixed_dof] = 0.0
+    # exchange z once so that A z can be formed after the fused collective
+    rz, rr = system.exchange_with_reduction(z, r, z, r, r)
+    rnorm = float(np.sqrt(max(rr, 0.0)))
+    p = z.copy()
+    # ghosts of z are already valid (exchanged in the fused collective above),
+    # so A z is a pure local matvec -- no second exchange
+    Az = A @ z
+    Ap = Az.copy()
+    pAp = local_dot(p, Ap)
+    pAp = comm.sum_scalar(pAp)
+    history = [rnorm]
+    converged = rnorm <= tol * bnorm
+    it = 0
+    for it in range(1, int(maxiter) + 1):
+        if pAp <= 0.0:  # pragma: no cover - indefiniteness guard
+            converged = False
+            break
+        alpha = rz / pAp
+        x += alpha * p
+        r -= alpha * Ap
+        if fixed_dof is not None:
+            r[fixed_dof] = 0.0
+            x[fixed_dof] = b[fixed_dof]
+        t1 = time.perf_counter()
+        z_new = r.copy() if precond is None else precond.apply(r)
+        t_pc += time.perf_counter() - t1
+        if fixed_dof is not None:
+            z_new[fixed_dof] = 0.0
+        # one collective: ghost exchange of z_new + (r, z_new) + (r, r)
+        rz_new, rr_new = system.exchange_with_reduction(z_new, r, z_new, r, r)
+        rnorm = float(np.sqrt(max(rr_new, 0.0)))
+        if record_every and (it % record_every == 0):
+            history.append(rnorm)
+        if rnorm <= tol * bnorm:
+            converged = True
+            break
+        if rz == 0.0:  # pragma: no cover
+            break
+        beta = rz_new / rz
+        p = z_new + beta * p
+        t_mv0 = time.perf_counter()
+        Az = A @ z_new  # ghosts already exchanged in the fused collective
+        t_mv += time.perf_counter() - t_mv0
+        # A p = A z_new + beta * A p_prev  (linearity: no second exchange)
+        Ap = Az + beta * Ap
+        if fixed_dof is not None:
+            p[fixed_dof] = 0.0
+            Ap[fixed_dof] = 0.0
+        pAp = comm.sum_scalar(local_dot(p, Ap))
+        rz = rz_new
 
     t_total = time.perf_counter() - t0
     t_comm = _comm_snapshot(system) - t_comm0

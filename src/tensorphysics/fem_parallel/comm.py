@@ -39,13 +39,15 @@ campaign acceptance criteria is measured rather than assumed.
 
 from __future__ import annotations
 
+import os
 import time
-from typing import Dict, Mapping
+from typing import Dict, Mapping, Tuple
 
 import numpy as np
 
 __all__ = [
     "Comm",
+    "SpinBarrier",
     "SerialComm",
     "SharedMemoryComm",
     "MPIComm",
@@ -97,6 +99,28 @@ class Comm:
 
     def allreduce_max(self, values: np.ndarray) -> np.ndarray:  # pragma: no cover
         raise NotImplementedError
+
+    def exchange_and_reduce(self, sends, recv_lengths, values):
+        """Exchange the ghost layer **and** reduce a small vector in one latency.
+
+        Default implementation keeps the two collectives separate (correct but
+        two latencies); backends that own their transport override it.  Callers
+        must pass values whose local partial sums are already computed, i.e. the
+        reduction must not depend on the exchanged data.
+        """
+        recv = self.exchange_phase(sends, recv_lengths)
+        return recv, self.allreduce_sum(np.asarray(values, dtype=np.float64))
+
+    def allreduce_sum_pair(self, first: float, second: float) -> Tuple[float, float]:
+        """Reduce two scalars in a **single** collective.
+
+        Conjugate gradients needs ``(r, z)`` and ``(r, r)`` in the same step;
+        sending them as one two-element vector halves the number of global
+        reductions per iteration, which dominates the cost at high rank counts
+        (one latency instead of two).
+        """
+        out = self.allreduce_sum(np.asarray([float(first), float(second)], dtype=np.float64))
+        return float(out[0]), float(out[1])
 
     def barrier(self) -> None:  # pragma: no cover - interface
         raise NotImplementedError
@@ -168,6 +192,55 @@ class SerialComm(Comm):
         self.stats["barrier_calls"] += 1
 
 
+class SpinBarrier:
+    """Sense-reversal barrier over a shared ``int64`` flag array (no lock).
+
+    ``multiprocessing.Barrier`` is built on a lock + condition variable: every
+    collective wakes ``size`` processes through the kernel, which costs tens of
+    milliseconds once the ranks exceed the free cores.  Here each rank publishes
+    its generation number with one aligned 8-byte store and spin-waits (with
+    ``sched_yield``) until every peer has published the same generation; the
+    latency is then pinned to the *slowest peer*, not to a centralised lock, and
+    the metadata stays O(1) per rank.
+
+    Two flag generations are enough: a rank can never run more than one
+    collective ahead of its peers, so the slot it writes is never one that a
+    peer is still reading.
+    """
+
+    def __init__(self, flags, size: int, rank: int, spin_rounds: int = 2000) -> None:
+        self._buf = flags
+        self._arr = np.frombuffer(flags.buf, dtype=np.int64, count=2 * int(size))
+        self.size = int(size)
+        self.rank = int(rank)
+        self.gen = 0
+        self.spin_rounds = int(spin_rounds)
+        self.stats = {"barrier_calls": 0, "barrier_time": 0.0}
+
+    def wait(self, timeout: float = 600.0) -> float:
+        t0 = time.perf_counter()
+        self.gen += 1
+        g = self.gen
+        base = ((g - 1) % 2) * self.size
+        self._arr[base + self.rank] = g
+        spins = 0
+        while True:
+            vals = self._arr[base : base + self.size]
+            if bool((vals >= g).all()):
+                break
+            spins += 1
+            if spins % self.spin_rounds == 0:
+                os.sched_yield()
+                if time.perf_counter() - t0 > timeout:  # pragma: no cover - lost peer
+                    raise RuntimeError(
+                        f"spin barrier timeout after {timeout}s on rank {self.rank}"
+                    )
+        dt = time.perf_counter() - t0
+        self.stats["barrier_calls"] += 1
+        self.stats["barrier_time"] += dt
+        return dt
+
+
 class SharedMemoryComm(Comm):
     """Process-level transport over a POSIX shared-memory arena.
 
@@ -186,7 +259,8 @@ class SharedMemoryComm(Comm):
     name = "shmem"
 
     def __init__(
-        self, rank: int, size: int, arena, barrier, slot_floats: int, timeout: float = 600.0
+        self, rank: int, size: int, arena, barrier, slot_floats: int, timeout: float = 600.0,
+        flags=None, spin_rounds: int = 2000,
     ) -> None:
         super().__init__()
         self.rank = int(rank)
@@ -199,12 +273,24 @@ class SharedMemoryComm(Comm):
         self._barrier = barrier
         self._slot_floats = int(slot_floats)
         self._timeout = float(timeout)
+        # spin barrier (preferred): one int64 flag array shared by all ranks
+        self._spin = (
+            SpinBarrier(flags, size, rank, spin_rounds=spin_rounds)
+            if flags is not None
+            else None
+        )
         # double buffering: generation alternates on every collective, so only
         # one barrier per collective is needed (a rank can never overwrite the
         # buffer a slower peer is still reading).
         self._half = int(slot_floats) // 2
-        self._chunk = self._half // int(size)
+        # keep a small tail free for the fused reduction vector (see
+        # ``exchange_and_reduce``), otherwise a size that divides the half
+        # exactly would leave no room for it
+        self._red_reserve = 8
+        self._chunk = max(1, (self._half - self._red_reserve) // int(size))
         self._gen = 0
+        # tail of each slot (after the peer chunks) holds the reduction vector
+        self._red_width = int(self._half - self._chunk * int(size))
         if self._chunk < 1:  # pragma: no cover - defensive
             raise ValueError(
                 f"shared-memory arena too small: slot_floats={slot_floats} "
@@ -213,6 +299,11 @@ class SharedMemoryComm(Comm):
 
     # -- primitives --------------------------------------------------------
     def _wait(self) -> float:
+        if self._spin is not None:
+            dt = self._spin.wait(timeout=self._timeout)
+            self.stats["barrier_time"] += dt
+            self.stats["barrier_calls"] += 1
+            return dt
         t0 = time.perf_counter()
         # A timeout turns a lost neighbour (crashed rank, mismatched collective
         # count) into a BrokenBarrierError instead of an unkillable hang.
@@ -264,6 +355,53 @@ class SharedMemoryComm(Comm):
 
     def allreduce_max(self, values):
         return self._reduce(values, op="max")
+
+    def exchange_and_reduce(self, sends, recv_lengths, values):
+        """Ghost exchange + small-vector reduction behind **one** barrier.
+
+        The exchange data live in the per-peer chunk region of the rank slot,
+        the reduction contribution in the tail region of the same slot; both are
+        published (and consumed) inside one generation, so the two collectives
+        cost one barrier instead of two -- the whole point of fusing them.
+        """
+        t0 = time.perf_counter()
+        arr = np.ascontiguousarray(np.asarray(values, dtype=np.float64).ravel())
+        n = int(arr.size)
+        if n > self._red_width:  # pragma: no cover - guard
+            raise RuntimeError(f"reduction vector {n} exceeds tail width {self._red_width}")
+        base = self._next_base()
+        own = self._slots[self.rank]
+        moved = 0
+        for peer, chunk in sends.items():
+            peer = int(peer)
+            chunk = np.ascontiguousarray(chunk, dtype=np.float64).ravel()
+            if chunk.size > self._chunk:  # pragma: no cover - guard
+                raise RuntimeError(
+                    f"rank {self.rank}: chunk for peer {peer} is {chunk.size} floats but "
+                    f"arena allows {self._chunk}; enlarge slot_floats"
+                )
+            off = base + peer * self._chunk
+            own[off : off + chunk.size] = chunk
+            moved += chunk.size
+        red_off = base + self._chunk * self.size
+        own[red_off : red_off + n] = arr
+        self._wait()
+        out = {}
+        my_off = base + self.rank * self._chunk
+        for peer, length in recv_lengths.items():
+            peer = int(peer)
+            length = int(length)
+            out[peer] = np.array(
+                self._slots[peer][my_off : my_off + length], dtype=np.float64, copy=True
+            )
+            moved += length
+        acc = np.array(self._slots[0][red_off : red_off + n], dtype=np.float64, copy=True)
+        for r in range(1, self.size):
+            acc += self._slots[r][red_off : red_off + n]
+        self.stats["exchange_time"] += time.perf_counter() - t0
+        self.stats["exchange_calls"] += 1
+        self.stats["exchange_bytes"] += moved * 8
+        return out, acc
 
     def _reduce(self, values, op: str):
         t0 = time.perf_counter()
