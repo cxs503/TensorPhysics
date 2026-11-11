@@ -108,7 +108,11 @@ def run_verification():
         w0_max=0.002,
     )
 
-    solver = SmithCollapseSolver(geom, n_steps=100, max_strain=0.05)
+    # Load-step resolution matters: the panel ultimate is a maximum over the
+    # path, and 40-100 steps over 5 % strain miss the limit point by up to 3 %
+    # (see docs/p167w2-n04-panel-collapse-maturity.md, T9).  400 steps over 2 %
+    # strain is converged to 1e-4.
+    solver = SmithCollapseSolver(geom, n_steps=400, max_strain=0.02)
     result = solver.solve()
 
     results["checks"]["stiffened_plate_collapse"] = {
