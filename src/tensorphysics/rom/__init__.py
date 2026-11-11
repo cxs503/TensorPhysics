@@ -17,6 +17,11 @@ from .fom_ns2d import NS2DSolver
 from .rom_integrator import ROMIntegrator
 from .energy import EnergyVerifier
 from .error_bound import ResidualErrorBound
+from .certified_bound import (
+    ConsistentPODGalerkinROM,
+    PosterioriResidualBound,
+    true_error,
+)
 
 __all__ = [
     'PODDecomposition',
@@ -26,4 +31,7 @@ __all__ = [
     'ROMIntegrator',
     'EnergyVerifier',
     'ResidualErrorBound',
+    'ConsistentPODGalerkinROM',
+    'PosterioriResidualBound',
+    'true_error',
 ]
