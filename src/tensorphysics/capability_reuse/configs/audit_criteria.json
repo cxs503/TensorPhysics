@@ -1,0 +1,36 @@
+{
+  "schema": "capability-reuse-criteria/1",
+  "criteria": {
+    "gold_precision_min": 0.9,
+    "gold_recall_min": 0.9,
+    "gold_min_edges": 30,
+    "gold_min_repos": 4,
+    "gold_min_negatives": 5,
+    "dual_caliber_jaccard_min": 0.85,
+    "sample_size": 20,
+    "sample_false_positive_max": 0.1,
+    "min_repos": 12,
+    "min_classes_per_repo": 3,
+    "hub_top_k": 25,
+    "orphan_top_k": 25
+  },
+  "notes": "Thresholds are data, not logic: the audit reads them here. They mirror the campaign node acceptance criteria verbatim.",
+  "edge_strength": {
+    "strong": [
+      "ast_import",
+      "c_include",
+      "ref_module",
+      "dependency_hint"
+    ],
+    "medium": [
+      "artifact_ref"
+    ],
+    "usage": [
+      "ref_symbol"
+    ],
+    "knowledge": [
+      "report_ref"
+    ],
+    "notes": "Headline reuse rate counts only the code calibres (AST import + lexical import surface). artifact_ref was downgraded from strong to medium after the 20-edge review (3/20 false positives, all of them artifact_ref); it is reported as a sensitivity tier, never merged into the headline. usage (symbol reference) and knowledge (report mention) are separate tiers."
+  }
+}
