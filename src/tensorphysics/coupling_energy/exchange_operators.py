@@ -123,6 +123,9 @@ class IntervalTransfer:
     predicted: bool = False
     recentered: bool = False
     q_lo_raw: float = 0.0
+    #: raw (un-de-stamped) sample of the previous interval, kept so the deferred
+    #: correction can apply the same de-stamping order as the provisional step
+    q_prev_raw: float | None = None
 
     @property
     def h(self) -> float:
@@ -168,14 +171,32 @@ class StampRule:
     With ``convention = WINDOW_MIDPOINT`` and ``recenter = False`` the operator
     consumes the published sample as if it were an endpoint value: that is the
     shipped practice, and it is what leaves a *constant* phase offset (hence a
-    staircase-saturating defect).  ``recenter = True`` applies the first-order
-    Taylor shift with the sampled slope, which removes the offset to ``O(h*offset)``
-    while keeping the quadrature order of the operator.
+    staircase-saturating defect).
+
+    ``recenter = True`` applies the Taylor shift that maps a window-midpoint
+    sample of displacement ``d`` back onto the interval endpoint.  Two orders are
+    available:
+
+    ``order = 1``
+        one-sided slope from the two newest samples; the residual rate bias is
+        ``-(d^2/2) q2`` (``q2`` = second derivative), a cadence-independent
+        floor, so the flux-defect staircase stops at ``O(d^2)`` however fine the
+        exchange cadence gets;
+    ``order = 2``
+        Newton forward difference over three samples (``q_lo, q_prev, q_prev2``);
+        the residual bias is ``O(d h^2 q3)`` (``q3`` = third derivative), i.e. it
+        is pushed below the trapezoid's own ``O(h^2)`` term, so the defect
+        converges at second order in the exchange cadence.
+
+    The order-2 rule needs a second history sample; without one it degrades to
+    the order-1 rule and reports that through :meth:`effective_order` rather than
+    silently claiming a floor it does not have.
     """
 
     convention: StampConvention = StampConvention.ENDPOINT
     offset: float = 0.0
     recenter: bool = False
+    order: int = 1
 
     def __post_init__(self) -> None:
         if self.offset < 0.0:
@@ -186,10 +207,28 @@ class StampRule:
         if self.recenter and self.convention is StampConvention.ENDPOINT:
             raise CouplingLedgerError(
                 "recentring only applies to a displaced (window) stamp convention")
+        if int(self.order) not in (1, 2):
+            raise CouplingLedgerError(
+                f"de-stamping order must be 1 or 2, got {self.order!r}")
+
+    def effective_order(self, q_prev: float | None,
+                        q_prev2: float | None) -> int:
+        """De-stamping order actually available from the supplied history."""
+        if not self.recenter:
+            return 0
+        if int(self.order) >= 2 and q_prev is not None and q_prev2 is not None:
+            return 2
+        return 1
 
     def endpoints(self, q_lo: float, q_hi: float | None, q_prev: float | None,
-                  h: float) -> tuple[float, float | None]:
-        """Map published samples to endpoint values of ``[t_lo, t_hi]``."""
+                  h: float, q_prev2: float | None = None
+                  ) -> tuple[float, float | None]:
+        """Map published samples to endpoint values of ``[t_lo, t_hi]``.
+
+        ``q_lo``/``q_hi`` are stamped at ``t_lo``/``t_hi`` but actually live at
+        ``t - offset``; ``q_prev``/``q_prev2`` are the same stream one and two
+        coarse intervals further back.
+        """
         if not math.isfinite(q_lo):
             raise CouplingLedgerError(f"non-finite sample {q_lo!r}")
         if self.convention is StampConvention.ENDPOINT or not self.recenter:
@@ -197,16 +236,26 @@ class StampRule:
         d = self.offset
         if h <= 0.0:
             raise CouplingLedgerError("interval length must be positive")
-        base = float(q_lo) if q_prev is None else float(q_prev)
-        est_lo = float(q_lo) + (d / h) * (float(q_lo) - base)
-        est_hi = None
-        if q_hi is not None:
-            est_hi = float(q_hi) + (d / h) * (float(q_hi) - float(q_lo))
+        u = d / h
+        order = self.effective_order(q_prev, q_prev2)
+
+        def shift(q_new: float, q_mid: float | None,
+                  q_mid2: float | None) -> float:
+            base = float(q_new) if q_mid is None else float(q_mid)
+            d1 = float(q_new) - base
+            if order >= 2:
+                second = float(q_mid2) if q_mid2 is not None else float(q_prev2)
+                d2 = float(q_new) - 2.0 * base + second
+                return float(q_new) + u * d1 + 0.5 * u * (u + 1.0) * d2
+            return float(q_new) + u * d1
+
+        est_lo = shift(q_lo, q_prev, q_prev2)
+        est_hi = None if q_hi is None else shift(q_hi, q_lo, q_prev)
         return est_lo, est_hi
 
     def as_dict(self) -> dict:
         return {"convention": self.convention.value, "offset": self.offset,
-                "recenter": self.recenter}
+                "recenter": self.recenter, "order": int(self.order)}
 
 
 #: The convention-free default: the producer publishes endpoint values.
@@ -239,7 +288,8 @@ class ExchangeOperator(abc.ABC):
     @abc.abstractmethod
     def provisional_transfer(self, index: int, t_lo: float, t_hi: float,
                              *, q_lo: float, q_hi: float | None,
-                             q_prev: float | None) -> IntervalTransfer:
+                             q_prev: float | None,
+                             q_prev2: float | None = None) -> IntervalTransfer:
         """Exchange that the receiver may apply *before* ``t_hi`` is known.
 
         ``q_hi`` is the realised value at ``t_hi`` when the caller already knows
@@ -248,7 +298,8 @@ class ExchangeOperator(abc.ABC):
         """
 
     def corrected_transfer(self, provisional: IntervalTransfer,
-                           q_hi: float) -> IntervalTransfer:
+                           q_hi: float,
+                           q_prev2: float | None = None) -> IntervalTransfer:
         """Deferred correction once ``q(t_hi)`` becomes available.
 
         The default is the identity: an operator whose provisional exchange is
@@ -272,14 +323,16 @@ class LagExchange(ExchangeOperator):
 
     def provisional_transfer(self, index: int, t_lo: float, t_hi: float,
                              *, q_lo: float, q_hi: float | None,
-                             q_prev: float | None) -> IntervalTransfer:
+                             q_prev: float | None,
+                             q_prev2: float | None = None) -> IntervalTransfer:
         if not math.isfinite(q_lo):
             raise CouplingLedgerError(f"non-finite lag sample {q_lo!r}")
-        value, _ = self.stamp.endpoints(q_lo, None, q_prev, t_hi - t_lo)
+        value, _ = self.stamp.endpoints(q_lo, None, q_prev, t_hi - t_lo, q_prev2)
         return IntervalTransfer(index=index, t_lo=t_lo, t_hi=t_hi, rate=float(value),
                                 scheme=self.scheme, q_lo=float(value),
                                 q_hi_used=float(value),
-                                recentered=self.stamp.recenter, q_lo_raw=float(q_lo))
+                                recentered=self.stamp.recenter, q_lo_raw=float(q_lo),
+                                q_prev_raw=q_prev)
 
 
 class CenteredExchange(ExchangeOperator):
@@ -294,17 +347,20 @@ class CenteredExchange(ExchangeOperator):
 
     def provisional_transfer(self, index: int, t_lo: float, t_hi: float,
                              *, q_lo: float, q_hi: float | None,
-                             q_prev: float | None) -> IntervalTransfer:
+                             q_prev: float | None,
+                             q_prev2: float | None = None) -> IntervalTransfer:
         if q_hi is None:
             raise CouplingLedgerError(
                 "the centered operator needs the interval endpoint q(t_hi); "
                 "a causal solver must use predictor_corrector")
-        q_lo_eff, q_hi_eff = self.stamp.endpoints(q_lo, q_hi, q_prev, t_hi - t_lo)
+        q_lo_eff, q_hi_eff = self.stamp.endpoints(q_lo, q_hi, q_prev, t_hi - t_lo,
+                                                  q_prev2)
         return IntervalTransfer(index=index, t_lo=t_lo, t_hi=t_hi,
                                 rate=0.5 * (float(q_lo_eff) + float(q_hi_eff)),
                                 scheme=self.scheme, q_lo=float(q_lo_eff),
                                 q_hi_used=float(q_hi_eff),
-                                recentered=self.stamp.recenter, q_lo_raw=float(q_lo))
+                                recentered=self.stamp.recenter, q_lo_raw=float(q_lo),
+                                q_prev_raw=q_prev)
 
 
 class PredictorCorrectorExchange(ExchangeOperator):
@@ -322,27 +378,32 @@ class PredictorCorrectorExchange(ExchangeOperator):
 
     def provisional_transfer(self, index: int, t_lo: float, t_hi: float,
                              *, q_lo: float, q_hi: float | None,
-                             q_prev: float | None) -> IntervalTransfer:
-        q_lo_eff, _ = self.stamp.endpoints(q_lo, None, q_prev, t_hi - t_lo)
+                             q_prev: float | None,
+                             q_prev2: float | None = None) -> IntervalTransfer:
+        q_lo_eff, _ = self.stamp.endpoints(q_lo, None, q_prev, t_hi - t_lo, q_prev2)
         q_lo_eff = float(q_lo_eff)
         if q_prev is None:
             q_hat = q_lo_eff
             predicted = False
         else:
-            q_prev_eff, _ = self.stamp.endpoints(q_prev, None, None, t_hi - t_lo)
+            q_prev_eff, _ = self.stamp.endpoints(q_prev, None, q_prev2, t_hi - t_lo,
+                                                 q_prev2)
             q_hat = 2.0 * q_lo_eff - float(q_prev_eff)
             predicted = True
         return IntervalTransfer(index=index, t_lo=t_lo, t_hi=t_hi,
                                 rate=0.5 * (q_lo_eff + q_hat),
                                 scheme=self.scheme, q_lo=q_lo_eff, q_hi_used=q_hat,
                                 provisional=True, predicted=predicted,
-                                recentered=self.stamp.recenter, q_lo_raw=float(q_lo))
+                                recentered=self.stamp.recenter, q_lo_raw=float(q_lo),
+                                q_prev_raw=q_prev)
 
     def corrected_transfer(self, provisional: IntervalTransfer,
-                           q_hi: float) -> IntervalTransfer:
+                           q_hi: float,
+                           q_prev2: float | None = None) -> IntervalTransfer:
         super().corrected_transfer(provisional, q_hi)
-        q_hi_eff = (self.stamp.endpoints(provisional.q_lo_raw, q_hi, None,
-                                         provisional.h)[1]
+        q_hi_eff = (self.stamp.endpoints(provisional.q_lo_raw, q_hi,
+                                         provisional.q_prev_raw, provisional.h,
+                                         q_prev2)[1]
                     if self.stamp.recenter and self.stamp.offset > 0.0 else float(q_hi))
         rate = 0.5 * (provisional.q_lo + float(q_hi_eff))
         return IntervalTransfer(index=provisional.index, t_lo=provisional.t_lo,
@@ -350,7 +411,8 @@ class PredictorCorrectorExchange(ExchangeOperator):
                                 scheme=self.scheme, q_lo=provisional.q_lo,
                                 q_hi_used=float(q_hi_eff),
                                 recentered=provisional.recentered,
-                                q_lo_raw=provisional.q_lo_raw)
+                                q_lo_raw=provisional.q_lo_raw,
+                                q_prev_raw=provisional.q_prev_raw)
 
 
 def operator_for(scheme: ExchangeScheme | str,
