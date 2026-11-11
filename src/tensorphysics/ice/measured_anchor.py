@@ -312,6 +312,14 @@ class MeasuredSeries:
     points: Tuple[MeasuredPoint, ...]
     schema_version: str = SCHEMA_VERSION
     path: Optional[str] = None
+    # governance block (v1+governance): declared facility/scale, digitisation
+    # method, uncertainty policy and applicability envelope.  Optional so that a
+    # bare document still loads, but they round-trip: dropping them silently was
+    # a defect (a loaded asset lost its applicability declaration).
+    facility: Optional[Dict[str, Any]] = None
+    digitisation: Optional[Dict[str, Any]] = None
+    uncertainty: Optional[Dict[str, Any]] = None
+    applicability: Optional[Dict[str, Any]] = None
 
     # -- construction ------------------------------------------------------
     @classmethod
@@ -351,10 +359,14 @@ class MeasuredSeries:
             points=tuple(pts),
             schema_version=doc["schema_version"],
             path=path,
+            facility=dict(doc["facility"]) if isinstance(doc.get("facility"), Mapping) else None,
+            digitisation=dict(doc["digitisation"]) if isinstance(doc.get("digitisation"), Mapping) else None,
+            uncertainty=dict(doc["uncertainty"]) if isinstance(doc.get("uncertainty"), Mapping) else None,
+            applicability=dict(doc["applicability"]) if isinstance(doc.get("applicability"), Mapping) else None,
         )
 
     def as_dict(self) -> Dict[str, Any]:
-        return {
+        doc: Dict[str, Any] = {
             "schema_version": self.schema_version,
             "series_id": self.series_id,
             "title": self.title,
@@ -364,6 +376,11 @@ class MeasuredSeries:
             "provenance": self.provenance,
             "points": [p.as_dict() for p in self.points],
         }
+        for key in ("facility", "digitisation", "uncertainty", "applicability"):
+            value = getattr(self, key)
+            if value is not None:
+                doc[key] = value
+        return doc
 
     # -- helpers -----------------------------------------------------------
     def point(self, point_id: str) -> MeasuredPoint:
