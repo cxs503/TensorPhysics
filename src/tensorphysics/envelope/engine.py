@@ -31,6 +31,7 @@ from .contracts import (
     ContractReport,
     check_active_expectation,
     check_area_consistency,
+    check_area_vs_grid,
     check_boundary_order,
     check_component_expectation,
     check_convexity,
@@ -277,6 +278,29 @@ class EnvelopeEngine:
                     n_grid_check,
                     n_grid_check,
                     counter,
+                )
+                # A second, twice-finer scan turns the brute-force cell count
+                # into a machine check on the marched area instead of a number
+                # that is merely printed next to it.
+                fine_grid = scan_plane(
+                    self.case.constraints,
+                    base,
+                    axes,
+                    2 * n_grid_check,
+                    2 * n_grid_check,
+                    counter,
+                )
+                contracts.append(
+                    ContractReport(
+                        (
+                            check_area_vs_grid(
+                                window_plane.area,
+                                grid_check.cells.area,
+                                fine_grid.cells.area,
+                                policy.area_rel_tol,
+                            ),
+                        )
+                    )
                 )
             if status is WindowStatus.INFEASIBLE:
                 nearest = nearest_feasible_point(
