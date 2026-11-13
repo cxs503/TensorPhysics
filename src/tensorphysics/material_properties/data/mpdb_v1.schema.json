@@ -1,0 +1,197 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tensorplatform.local/schemas/mpdb-1.0.0.json",
+  "title": "TensorPhysics material/fluid property record (MPDB v1)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "substance",
+    "substance_class",
+    "property",
+    "value",
+    "unit",
+    "conditions",
+    "domain",
+    "provenance",
+    "uncertainty"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": {
+      "const": "mpdb-1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "substance": {
+      "type": "string",
+      "minLength": 2
+    },
+    "substance_class": {
+      "enum": [
+        "cementitious",
+        "composite",
+        "gas",
+        "ice",
+        "liquid",
+        "metal",
+        "sediment"
+      ]
+    },
+    "property": {
+      "enum": [
+        "angle_of_repose",
+        "brine_volume",
+        "bulk_density",
+        "cohesion",
+        "compressive_strength",
+        "damping_loss_factor",
+        "density",
+        "dry_bulk_density",
+        "dynamic_viscosity",
+        "flexural_strength",
+        "fracture_toughness",
+        "freezing_temperature",
+        "friction_angle",
+        "grain_density",
+        "haz_strength_ratio",
+        "ice_friction_coefficient",
+        "kinematic_viscosity",
+        "latent_heat_fusion",
+        "median_grain_size",
+        "poisson_ratio",
+        "prandtl_number",
+        "salinity",
+        "shear_modulus",
+        "shear_strength",
+        "sound_speed",
+        "specific_heat",
+        "submerged_unit_weight",
+        "tensile_strength",
+        "thermal_conductivity",
+        "thermal_diffusivity",
+        "thermal_expansion",
+        "ultimate_strength",
+        "vapour_pressure",
+        "yield_strength",
+        "youngs_modulus"
+      ]
+    },
+    "value": {
+      "type": "number"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "conditions": {
+      "type": "object",
+      "properties": {
+        "T_K": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "p_Pa": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "salinity_g_per_kg": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "domain": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "number"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "source_id",
+        "citation",
+        "locator",
+        "method",
+        "evidence_class",
+        "access"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string"
+        },
+        "citation": {
+          "type": "string"
+        },
+        "locator": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "FORMULA_PRIMARY",
+            "TABLE_PRIMARY",
+            "DERIVED"
+          ]
+        },
+        "access": {
+          "enum": [
+            "offline_no_pdf",
+            "pdf_opened",
+            "api"
+          ]
+        },
+        "formula_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "variant": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uncertainty": {
+      "type": "object",
+      "required": [
+        "rel",
+        "basis"
+      ],
+      "properties": {
+        "rel": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "basis": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
