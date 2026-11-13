@@ -1,0 +1,153 @@
+{
+  "air": {
+    "class": "gas",
+    "label": "dry air at 1 atm (0.5-2 bar sampled)",
+    "use_cases": [
+      "above-water aerodynamics / wind heeling moment",
+      "FVM/DG convective-flux scaling (rho, mu, Pr)",
+      "cabin ventilation and HVAC boundary conditions"
+    ]
+  },
+  "alu_5083_H116": {
+    "class": "metal",
+    "label": "AA5083-H116 marine aluminium (strain hardened)",
+    "use_cases": [
+      "fast-craft hull and superstructure"
+    ]
+  },
+  "alu_5083_O": {
+    "class": "metal",
+    "label": "AA5083-O marine aluminium (annealed)",
+    "use_cases": [
+      "fast-craft plating"
+    ]
+  },
+  "alu_6082_T6": {
+    "class": "metal",
+    "label": "AA6082-T6 structural aluminium",
+    "use_cases": [
+      "extruded stiffeners"
+    ]
+  },
+  "clay": {
+    "class": "sediment",
+    "label": "soft marine clay",
+    "use_cases": [
+      "anchor holding capacity",
+      "grounding penetration"
+    ]
+  },
+  "concrete_C30": {
+    "class": "cementitious",
+    "label": "concrete C30/37 (EN 1992)",
+    "use_cases": [
+      "gravity-based caisson",
+      "ice-class bow reinforcement"
+    ]
+  },
+  "gfrp_laminate": {
+    "class": "composite",
+    "label": "marine GFRP single-skin laminate",
+    "use_cases": [
+      "yacht / small-craft shell"
+    ]
+  },
+  "gfrp_sandwich": {
+    "class": "composite",
+    "label": "GFRP/balsa sandwich (equivalent single layer)",
+    "use_cases": [
+      "cabin-noise panel",
+      "deckhouse"
+    ]
+  },
+  "gravel": {
+    "class": "sediment",
+    "label": "gravel / cobble bed (D50 = 20 mm)",
+    "use_cases": [
+      "grounding on coarse bed",
+      "scour-protection design"
+    ]
+  },
+  "ice_fresh": {
+    "class": "ice",
+    "label": "fresh-water (lake/river) ice Ih",
+    "use_cases": [
+      "lake/Baltic ice plate bending",
+      "model-ice scaling checks"
+    ]
+  },
+  "ice_sea": {
+    "class": "ice",
+    "label": "first-year sea ice (S = 5 g/kg typical, T dependent)",
+    "use_cases": [
+      "ice resistance (Lindqvist / Riska) strength inputs",
+      "ice plate FEM flexural capacity",
+      "ice-structure friction and crushing"
+    ]
+  },
+  "sand_quartz": {
+    "class": "sediment",
+    "label": "medium quartz sand (D50 = 0.3 mm)",
+    "use_cases": [
+      "grounding / seabed contact stiffness",
+      "propeller-jet scour"
+    ]
+  },
+  "seawater": {
+    "class": "liquid",
+    "label": "standard seawater (S = 5..40 g/kg)",
+    "use_cases": [
+      "full-scale ship resistance and propeller inflow",
+      "seakeeping added resistance / RAO in seawater",
+      "condenser cooling water for ORC and waste-heat chains"
+    ]
+  },
+  "silt": {
+    "class": "sediment",
+    "label": "silt (D50 = 0.03 mm)",
+    "use_cases": [
+      "harbour-basin grounding",
+      "manoeuvring in muddy water"
+    ]
+  },
+  "steel_AH36": {
+    "class": "metal",
+    "label": "IACS AH36 hull structural steel",
+    "use_cases": [
+      "ice belt",
+      "shell plating"
+    ]
+  },
+  "steel_EH36": {
+    "class": "metal",
+    "label": "IACS EH36 hull structural steel (-40 degC toughness)",
+    "use_cases": [
+      "polar-class shell plating"
+    ]
+  },
+  "steel_S235": {
+    "class": "metal",
+    "label": "EN 10025-2 S235 structural steel",
+    "use_cases": [
+      "hull scantling",
+      "superstructure"
+    ]
+  },
+  "steel_S355": {
+    "class": "metal",
+    "label": "EN 10025-2 S355 structural steel",
+    "use_cases": [
+      "hull girder",
+      "high-stress frames"
+    ]
+  },
+  "water": {
+    "class": "liquid",
+    "label": "fresh water (ordinary water substance, 0.1 MPa)",
+    "use_cases": [
+      "model-scale resistance / towing-tank Reynolds number",
+      "propeller open-water and cavitation scaling",
+      "LBM/FVM working fluid at 15 degC"
+    ]
+  }
+}

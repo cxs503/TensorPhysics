@@ -1,0 +1,350 @@
+[
+  {
+    "id": "water-density-4C",
+    "substance": "water",
+    "property": "density",
+    "unit": "kg/m^3",
+    "expected": 999.97,
+    "rel_tol": 0.0005,
+    "reference": "maximum density of water at 3.98 C (IAPWS R7-97 stated value)",
+    "conditions": {
+      "T_K": 277.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 999.9719941255901,
+    "rel_error": 1.9941854156073277e-06,
+    "passed": true,
+    "row_id": "water.density.T277.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "water-density-20C",
+    "substance": "water",
+    "property": "density",
+    "unit": "kg/m^3",
+    "expected": 998.21,
+    "rel_tol": 0.0005,
+    "reference": "Kell (1975) / IAPWS R7-97 table value at 20 C, 0.1 MPa",
+    "conditions": {
+      "T_K": 293.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 998.2041322005837,
+    "rel_error": 5.878321612050075e-06,
+    "passed": true,
+    "row_id": "water.density.T293.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "water-viscosity-20C",
+    "substance": "water",
+    "property": "dynamic_viscosity",
+    "unit": "Pa*s",
+    "expected": 0.0010016,
+    "rel_tol": 0.01,
+    "reference": "Kestin et al. (1978) Table 2 value at 20 C",
+    "conditions": {
+      "T_K": 293.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 0.0010017487594089526,
+    "rel_error": 0.00014852177411396833,
+    "passed": true,
+    "row_id": "water.dynamic_viscosity.T293.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "water-viscosity-0C",
+    "substance": "water",
+    "property": "dynamic_viscosity",
+    "unit": "Pa*s",
+    "expected": 0.0017914,
+    "rel_tol": 0.03,
+    "reference": "Kestin et al. (1978) Table 2 value at 0 C (Vogel fit band 3%)",
+    "conditions": {
+      "T_K": 273.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 0.0017530577450612427,
+    "rel_error": 0.02140351397720074,
+    "passed": true,
+    "row_id": "water.dynamic_viscosity.T273.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "water-kinematic-15C-ITTC",
+    "substance": "water",
+    "property": "kinematic_viscosity",
+    "unit": "m^2/s",
+    "expected": 1.139e-06,
+    "rel_tol": 0.01,
+    "reference": "ITTC 7.5-02-01-03 (2011) Table 1 fresh water at 15 C",
+    "conditions": {
+      "T_K": 288.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 1.1369924189470208e-06,
+    "rel_error": 0.0017625821360659998,
+    "passed": true,
+    "row_id": "water.kinematic_viscosity.T288.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "seawater-kinematic-15C-ITTC",
+    "substance": "seawater",
+    "property": "kinematic_viscosity",
+    "unit": "m^2/s",
+    "expected": 1.1883e-06,
+    "rel_tol": 0.02,
+    "reference": "ITTC 7.5-02-01-03 (2011) Table 1 seawater (35 g/kg) at 15 C",
+    "conditions": {
+      "T_K": 288.15,
+      "p_Pa": 101325.0,
+      "salinity_g_per_kg": 35.0
+    },
+    "computed": 1.1889859362585125e-06,
+    "rel_error": 0.0005772416548957493,
+    "passed": true,
+    "row_id": "seawater.kinematic_viscosity.T288.15K.p101325Pa.S35",
+    "interpolated": {}
+  },
+  {
+    "id": "seawater-density-25C-35ppt",
+    "substance": "seawater",
+    "property": "density",
+    "unit": "kg/m^3",
+    "expected": 1023.34,
+    "rel_tol": 0.001,
+    "reference": "Sharqawy et al. (2010) Table 4 / Millero & Poisson (1981) reference state",
+    "conditions": {
+      "T_K": 298.15,
+      "p_Pa": 101325.0,
+      "salinity_g_per_kg": 35.0
+    },
+    "computed": 1023.3430584772268,
+    "rel_error": 2.988720490524159e-06,
+    "passed": true,
+    "row_id": "seawater.density.T298.15K.p101325Pa.S35",
+    "interpolated": {}
+  },
+  {
+    "id": "seawater-freezing-35ppt",
+    "substance": "seawater",
+    "property": "freezing_temperature",
+    "unit": "K",
+    "expected": 271.25,
+    "rel_tol": 0.002,
+    "reference": "Millero & Leung (1976): Tf = 271.25 K at S = 35 g/kg, 1 atm",
+    "conditions": {
+      "p_Pa": 101325.0,
+      "salinity_g_per_kg": 35.0
+    },
+    "computed": 271.2276986588589,
+    "rel_error": 8.221692586576039e-05,
+    "passed": true,
+    "row_id": "seawater.freezing_temperature.p101325Pa.S35",
+    "interpolated": {}
+  },
+  {
+    "id": "air-density-15C",
+    "substance": "air",
+    "property": "density",
+    "unit": "kg/m^3",
+    "expected": 1.2255,
+    "rel_tol": 0.002,
+    "reference": "ISO 2533 standard atmosphere sea-level density 1.225 kg/m^3",
+    "conditions": {
+      "T_K": 288.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 1.2249781262066513,
+    "rel_error": 0.0004258456086077369,
+    "passed": true,
+    "row_id": "air.density.T288.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "air-viscosity-15C",
+    "substance": "air",
+    "property": "dynamic_viscosity",
+    "unit": "Pa*s",
+    "expected": 1.7894e-05,
+    "rel_tol": 0.02,
+    "reference": "Sutherland law / CRC table value 1.79e-5 Pa s at 15 C",
+    "conditions": {
+      "T_K": 288.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 1.7892976260350732e-05,
+    "rel_error": 5.721133616107751e-05,
+    "passed": true,
+    "row_id": "air.dynamic_viscosity.T288.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "air-conductivity-20C",
+    "substance": "air",
+    "property": "thermal_conductivity",
+    "unit": "W/(m*K)",
+    "expected": 0.02587,
+    "rel_tol": 0.02,
+    "reference": "CRC Handbook air thermal-conductivity table value at 20 degC (293 K)",
+    "conditions": {
+      "T_K": 293.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 0.02571427503543599,
+    "rel_error": 0.006019519310553206,
+    "passed": true,
+    "row_id": "air.thermal_conductivity.T293.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "air-sound-speed-15C",
+    "substance": "air",
+    "property": "sound_speed",
+    "unit": "m/s",
+    "expected": 340.29,
+    "rel_tol": 0.005,
+    "reference": "ISO 2533 standard atmosphere: a = sqrt(gamma R T)",
+    "conditions": {
+      "T_K": 288.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 340.2970287557621,
+    "rel_error": 2.0655193399936878e-05,
+    "passed": true,
+    "row_id": "air.sound_speed.T288.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "water-sound-speed-20C",
+    "substance": "water",
+    "property": "sound_speed",
+    "unit": "m/s",
+    "expected": 1482.3,
+    "rel_tol": 0.002,
+    "reference": "Bilaniuk & Wong (1993) Table 1 at 20 C",
+    "conditions": {
+      "T_K": 293.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 1482.3585388799997,
+    "rel_error": 3.949192471145331e-05,
+    "passed": true,
+    "row_id": "water.sound_speed.T293.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "ice-pure-density-0C",
+    "substance": "ice_fresh",
+    "property": "density",
+    "unit": "kg/m^3",
+    "expected": 916.8,
+    "rel_tol": 0.002,
+    "reference": "Hobbs (1974) Ice Physics Table 2.1",
+    "conditions": {
+      "T_K": 273.15,
+      "p_Pa": 101325.0
+    },
+    "computed": 916.8,
+    "rel_error": 0.0,
+    "passed": true,
+    "row_id": "ice_fresh.density.T273.15K.p101325Pa",
+    "interpolated": {}
+  },
+  {
+    "id": "seaice-flexural-ref",
+    "substance": "ice_sea",
+    "property": "flexural_strength",
+    "unit": "Pa",
+    "expected": 700000.0,
+    "rel_tol": 0.3,
+    "reference": "Timco & Weeks (2010) Table 4: typical first-year sea-ice flexural strength 0.7 MPa (published range 0.36-2.6 MPa); at T = -10 degC, S = 5 g/kg the brine volume is vb ~ 0.027",
+    "conditions": {
+      "T_K": 263.15,
+      "p_Pa": 101325.0,
+      "salinity_g_per_kg": 5.0
+    },
+    "computed": 666726.0298649314,
+    "rel_error": 0.047534243050098055,
+    "passed": true,
+    "row_id": "ice_sea.flexural_strength.T263.15K.p101325Pa.S5",
+    "interpolated": {}
+  },
+  {
+    "id": "steel-E-EN1993",
+    "substance": "steel_S355",
+    "property": "youngs_modulus",
+    "unit": "Pa",
+    "expected": 210000000000.0,
+    "rel_tol": 0.001,
+    "reference": "EN 1993-1-1:2005 Table 3.1",
+    "conditions": {},
+    "computed": 210000000000.0,
+    "rel_error": 0.0,
+    "passed": true,
+    "row_id": "steel_S355.youngs_modulus",
+    "interpolated": {}
+  },
+  {
+    "id": "steel-yield-S355",
+    "substance": "steel_S355",
+    "property": "yield_strength",
+    "unit": "Pa",
+    "expected": 355000000.0,
+    "rel_tol": 0.001,
+    "reference": "EN 10025-2:2019 Table 7 (t <= 16 mm)",
+    "conditions": {},
+    "computed": 355000000.0,
+    "rel_error": 0.0,
+    "passed": true,
+    "row_id": "steel_S355.yield_strength",
+    "interpolated": {}
+  },
+  {
+    "id": "aluminium-E-EN1999",
+    "substance": "alu_5083_H116",
+    "property": "youngs_modulus",
+    "unit": "Pa",
+    "expected": 70000000000.0,
+    "rel_tol": 0.001,
+    "reference": "EN 1999-1-1:2007 Table 3.2",
+    "conditions": {},
+    "computed": 70000000000.0,
+    "rel_error": 0.0,
+    "passed": true,
+    "row_id": "alu_5083_H116.youngs_modulus",
+    "interpolated": {}
+  },
+  {
+    "id": "quartz-grain-density",
+    "substance": "sand_quartz",
+    "property": "grain_density",
+    "unit": "kg/m^3",
+    "expected": 2650.0,
+    "rel_tol": 0.001,
+    "reference": "Soulsby (1997) Table 2-3",
+    "conditions": {},
+    "computed": 2650.0,
+    "rel_error": 0.0,
+    "passed": true,
+    "row_id": "sand_quartz.grain_density",
+    "interpolated": {}
+  },
+  {
+    "id": "concrete-E-C30",
+    "substance": "concrete_C30",
+    "property": "youngs_modulus",
+    "unit": "Pa",
+    "expected": 33000000000.0,
+    "rel_tol": 0.001,
+    "reference": "EN 1992-1-1:2004 Table 3.1",
+    "conditions": {},
+    "computed": 33000000000.0,
+    "rel_error": 0.0,
+    "passed": true,
+    "row_id": "concrete_C30.youngs_modulus",
+    "interpolated": {}
+  }
+]
