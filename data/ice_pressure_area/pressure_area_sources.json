@@ -1,0 +1,254 @@
+{
+  "schema": "ice_pressure_area_library.v1",
+  "reference_convention": "nominal_projected_contact",
+  "description": "Curated parameter library for the ice pressure-area relation p = p0*A**-ex, one record per primary/derived source. Every record declares units, area definition, geometry of the loaded footprint, test/rule conditions and the evidence class, so that an exponent can never be quoted without its area convention.",
+  "reading_discipline": [
+    "primary_source_verified=false means the primary document could not be opened in this build environment (no network egress). The number is a literature value, not a transcription of the standard.",
+    "role=regression_anchor records this repository's own transcription and may only detect drift, never serve as external truth.",
+    "an exponent is only consumable together with its area_definition; see src/tensorphysics/ice_pressure_area/conventions.py.",
+    "no value in this file is measured inside this repository; the in-repo records (evidence_class=repo_transcription) exist to expose contradictions between our own artifacts."
+  ],
+  "entries": [
+    {
+      "asset_id": "SANDERSON_1988_GLOBAL_PRESSURE_AREA",
+      "family": "sanderson_global",
+      "scale": "global",
+      "citation": "Sanderson, T.J.O. (1988) Ice Mechanics: Risks to Offshore Structures. Graham & Trotman, London. Global ice pressure-area relation p = C*A**-0.3 with C = 0.7 MPa at A = 1 m2 (as reproduced in Masterson & Frederking 1993, Cold Reg. Sci. Technol. 21:169-185)",
+      "evidence_class": "data_compilation",
+      "role": "accuracy_reference",
+      "primary_source_verified": false,
+      "verification_note": "Monograph not accessible offline. The exponent 0.30 and prefactor 0.7 MPa are the canonical global-pressure line as reproduced in the secondary literature; the prefactor magnitude carries a factor ~1.5 scatter between compilations and must not be used as a design datum.",
+      "area_definition": "panel_nominal_area",
+      "geometry": {
+        "footprint": "irregular",
+        "aspect_ratio": null,
+        "perimeter_factor_lambda": null,
+        "damage_width_over_sqrtA": 0.0
+      },
+      "conditions": {
+        "ice_type": "first_and_multi_year_mix",
+        "ice_thickness_m": [0.5, 3.0],
+        "ice_temperature_C": null,
+        "scale": "field",
+        "indentation_rate_mm_s": null,
+        "area_range_m2": [10.0, 10000.0]
+      },
+      "reported": {
+        "ex": 0.3,
+        "ex_band": [0.25, 0.35],
+        "p_ref_MPa": 0.7,
+        "A_ref_m2": 1.0,
+        "units": {"ex": "1", "p_ref_MPa": "MPa", "A_ref_m2": "m^2"}
+      },
+      "notes": "Global (structure-scale) pressure: the area is the nominal structure area over which the total ice load is averaged, not a contact patch."
+    },
+    {
+      "asset_id": "MASTERSON_FREDKING_1993_LOCAL_PRESSURE_AREA",
+      "family": "masterson_fredking_local",
+      "scale": "local",
+      "citation": "Masterson, D.M. & Frederking, R.M.W. (1993) Local contact pressures in ship/ice and structure/ice interactions. Cold Regions Science and Technology 21(2):169-185. Local pressure-area envelope p = p0*A**-0.7 over nominal contact areas of indenters and ship panels",
+      "evidence_class": "data_compilation",
+      "role": "accuracy_reference",
+      "primary_source_verified": false,
+      "verification_note": "Compilation not accessible offline. Exponent 0.70 with a band 0.55-0.80 is the upper (conservative) local pressure-area envelope quoted for small contact areas; the paper's data scatter is the reason for the wide band. The prefactor is not transcribed.",
+      "area_definition": "nominal_projected_contact",
+      "geometry": {
+        "footprint": "varied",
+        "aspect_ratio": null,
+        "perimeter_factor_lambda": null,
+        "damage_width_over_sqrtA": 0.0
+      },
+      "conditions": {
+        "ice_type": "first_year",
+        "ice_thickness_m": [0.3, 2.0],
+        "ice_temperature_C": null,
+        "scale": "mixed_field_and_medium_scale",
+        "indentation_rate_mm_s": null,
+        "area_range_m2": [0.05, 10.0]
+      },
+      "reported": {
+        "ex": 0.7,
+        "ex_band": [0.55, 0.8],
+        "p_ref_MPa": null,
+        "A_ref_m2": null,
+        "units": {"ex": "1"}
+      },
+      "notes": "Upper envelope of local contact pressure vs nominal contact area; representative of the 'local' end of the pressure-area family."
+    },
+    {
+      "asset_id": "ISO_19906_2010_A8_FIRST_YEAR",
+      "family": "iso19906",
+      "scale": "local",
+      "citation": "ISO 19906:2010 Petroleum and natural gas industries - Arctic offshore structures, Annex A (global and local ice actions), pressure-area form p = p0*A**-ex with ex = 0.45 for first-year ice; as transcribed in TensorPhysics src/tensorphysics/ice_plasticity/iso19906.py::typical_ice_belt_params",
+      "evidence_class": "standard_rule",
+      "role": "accuracy_reference",
+      "primary_source_verified": false,
+      "verification_note": "ISO 19906 is paywalled and was not opened. ex = 0.45 and p0 = 3.0 MPa are this repository's transcription (ice_plasticity/iso19906.py); the 0.40-0.55 band is literature scatter, not a clause value. This record is the one GAP-PP-2 must eventually re-verify against the standard.",
+      "area_definition": "nominal_projected_contact",
+      "geometry": {
+        "footprint": "rectangular_patch",
+        "aspect_ratio": 4.0,
+        "perimeter_factor_lambda": 4.25,
+        "damage_width_over_sqrtA": 0.0
+      },
+      "conditions": {
+        "ice_type": "first_year",
+        "ice_thickness_m": [0.3, 2.0],
+        "ice_temperature_C": null,
+        "scale": "design_rule",
+        "indentation_rate_mm_s": null,
+        "area_range_m2": [0.1, 100.0]
+      },
+      "reported": {
+        "ex": 0.45,
+        "ex_band": [0.4, 0.55],
+        "p_ref_MPa": 3.0,
+        "A_ref_m2": 1.0,
+        "units": {"ex": "1", "p_ref_MPa": "MPa", "A_ref_m2": "m^2"}
+      },
+      "notes": "Nominal contact area of the load patch; aspect ratio 4:1 follows the IACS patch geometry already used by the plate-buckling line of this repository."
+    },
+    {
+      "asset_id": "IACS_UR_I2_PC6_PATCH_PRESSURE",
+      "family": "iacs_ur_i",
+      "scale": "local",
+      "citation": "IACS Unified Requirement I2 (Polar Class hull structures, Rev. 2016) local ice pressure on shell plating p = p0*A**-0.45, applied at PC6 with p0 = 2.5 MPa at A = 1 m2; transcribed in TensorPhysics benchmarks/ice_nav_refs/assets/iacs_ur_i_pc6.json::IACS_PC6_PANEL_PRESSURE_TABLE",
+      "evidence_class": "standard_rule",
+      "role": "accuracy_reference",
+      "primary_source_verified": false,
+      "verification_note": "UR I2 could not be downloaded in the build environment; the pressure-area form is public and reproduced, the class reference pressure is a 2.0-3.0 MPa band. Must be re-verified before scantling use.",
+      "area_definition": "nominal_projected_contact",
+      "geometry": {
+        "footprint": "rectangular_patch",
+        "aspect_ratio": 4.0,
+        "perimeter_factor_lambda": 4.25,
+        "damage_width_over_sqrtA": 0.0
+      },
+      "conditions": {
+        "ice_type": "first_year",
+        "ice_thickness_m": [0.8, 1.5],
+        "ice_temperature_C": null,
+        "scale": "design_rule",
+        "indentation_rate_mm_s": null,
+        "area_range_m2": [0.25, 8.0]
+      },
+      "reported": {
+        "ex": 0.45,
+        "ex_band": [0.4, 0.5],
+        "p_ref_MPa": 2.5,
+        "A_ref_m2": 1.0,
+        "units": {"ex": "1", "p_ref_MPa": "MPa", "A_ref_m2": "m^2"}
+      },
+      "data_points": {
+        "area_m2": [0.5, 1.0, 2.0, 4.0, 8.0],
+        "pressure_MPa": [3.4151006418859886, 2.5, 1.8301071199320318, 1.3397168281703664, 0.9807301223709385],
+        "note": "the sha256-anchored asset values; used to check that the fit in this library recovers the declared exponent"
+      },
+      "notes": "Second independent rule-form record of ex = 0.45 for the nominal patch area; agrees with the ISO 19906 record, which is why the design-rule stratum can be pooled."
+    },
+    {
+      "asset_id": "JOHNSTON_ET_AL_1998_MSI_INDENTATION",
+      "family": "msi_indentation",
+      "scale": "medium_scale",
+      "citation": "Johnston, M.E., Frederking, R.M.W., Timco, G.W. & Sodhi, D.S. (1998) Pressure-area relationships from medium-scale ice indentation tests. IAHR Ice Symposium, Potsdam. Medium-scale field indentation of first-year sea ice at Hobson's Choice Ice Island",
+      "evidence_class": "medium_scale_test",
+      "role": "accuracy_reference",
+      "primary_source_verified": false,
+      "verification_note": "Proceedings not accessible offline. Exponent 0.55 with band 0.45-0.65 is the medium-scale field indentation value quoted in review compilations for nominal (indenter) contact area, cold first-year ice, with the test's own scatter as band width.",
+      "area_definition": "nominal_projected_contact",
+      "geometry": {
+        "footprint": "rectangular_indenter",
+        "aspect_ratio": 1.0,
+        "perimeter_factor_lambda": 4.0,
+        "damage_width_over_sqrtA": 0.0
+      },
+      "conditions": {
+        "ice_type": "first_year_columnar",
+        "ice_thickness_m": [0.7, 1.2],
+        "ice_temperature_C": [-20.0, -5.0],
+        "scale": "medium_scale",
+        "indentation_rate_mm_s": [0.5, 20.0],
+        "area_range_m2": [0.1, 5.0]
+      },
+      "reported": {
+        "ex": 0.55,
+        "ex_band": [0.45, 0.65],
+        "p_ref_MPa": null,
+        "A_ref_m2": null,
+        "units": {"ex": "1"}
+      },
+      "notes": "The only record in the library that carries an ice-temperature range, which is why the temperature meta-regression is rank-deficient (see calibration report)."
+    },
+    {
+      "asset_id": "TENSORPHYSICS_LOCAL_PRESSURE_IACS_EX015",
+      "family": "iacs_ur_i",
+      "scale": "local",
+      "citation": "TensorPhysics src/tensorphysics/ice_modules/local_pressure.py (LocalPressureModel.exponent = -0.15, P0_MPa = 14.0, docstring attribute: IACS Unified Interpretation I, Rev.3 2016) - in-repository transcription, verified in-tree",
+      "evidence_class": "repo_transcription",
+      "role": "regression_anchor",
+      "primary_source_verified": true,
+      "verification_note": "Verified in-tree: the exponent -0.15 and the 14.0 MPa reference pressure are literally present in local_pressure.py. Whether IACS UR I actually prescribes ex = 0.15 is NOT established (document inaccessible); the record exists because it contradicts IACS_UR_I2_PC6_PATCH_PRESSURE (ex = 0.45) inside this same repository.",
+      "area_definition": "nominal_projected_contact",
+      "geometry": {
+        "footprint": "rectangular_patch",
+        "aspect_ratio": 4.0,
+        "perimeter_factor_lambda": 4.25,
+        "damage_width_over_sqrtA": 0.0
+      },
+      "conditions": {
+        "ice_type": "first_year",
+        "ice_thickness_m": [0.3, 2.0],
+        "ice_temperature_C": null,
+        "scale": "design_rule",
+        "indentation_rate_mm_s": null,
+        "area_range_m2": [1.0, 50.0]
+      },
+      "reported": {
+        "ex": 0.15,
+        "ex_band": [0.1, 0.2],
+        "p_ref_MPa": 14.0,
+        "A_ref_m2": 1.0,
+        "units": {"ex": "1", "p_ref_MPa": "MPa", "A_ref_m2": "m^2"}
+      },
+      "notes": "Defect record: same family label as the corpus asset, exponent 3x smaller. The library's conflict detector must flag this pair."
+    },
+    {
+      "asset_id": "TENSORPHYSICS_FREDERKSON_REF_TABLE_EX015",
+      "family": "iacs_ur_i",
+      "scale": "model_scale",
+      "citation": "TensorPhysics src/tensorphysics/ice_modules/local_pressure.py::FREDERKSON_REF (5 tabulated average pressures 14.0/10.8/9.5/7.8/6.8 MPa at A = 1/5/10/25/50 m2, labelled 'Frederikson (2006) model tests', 'Calibrated to match IACS UR I pressure-area law') - in-repository transcription, verified in-tree",
+      "evidence_class": "repo_transcription",
+      "role": "regression_anchor",
+      "primary_source_verified": true,
+      "verification_note": "Verified in-tree: the five tabulated values are literally present in local_pressure.py. Their provenance is a self-declared calibration to the -0.15 law, i.e. a regression anchor, not a measured dataset.",
+      "area_definition": "nominal_projected_contact",
+      "geometry": {
+        "footprint": "flat_indenter",
+        "aspect_ratio": 1.0,
+        "perimeter_factor_lambda": 4.0,
+        "damage_width_over_sqrtA": 0.0
+      },
+      "conditions": {
+        "ice_type": "first_year",
+        "ice_thickness_m": [0.9, 1.1],
+        "ice_temperature_C": null,
+        "scale": "model_scale",
+        "indentation_rate_mm_s": null,
+        "area_range_m2": [1.0, 50.0]
+      },
+      "reported": {
+        "ex": 0.185,
+        "ex_band": [0.17, 0.2],
+        "p_ref_MPa": 14.0,
+        "A_ref_m2": 1.0,
+        "units": {"ex": "1", "p_ref_MPa": "MPa", "A_ref_m2": "m^2"}
+      },
+      "data_points": {
+        "area_m2": [1.0, 5.0, 10.0, 25.0, 50.0],
+        "pressure_MPa": [14.0, 10.8, 9.5, 7.8, 6.8],
+        "note": "declared ex of this table is 0.185 (log-space fit performed by this library); the model that consumes it uses 0.15 - a 23 % internal inconsistency recorded here on purpose"
+      },
+      "notes": "Regression anchor for the in-repo IACS model table."
+    }
+  ]
+}
