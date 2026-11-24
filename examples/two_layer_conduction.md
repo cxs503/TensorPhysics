@@ -161,3 +161,17 @@ At 64 cells the wall temperature, jump and stored-heat errors were
 residual on the four meshes was below 9e-16 J/m².
 The film-decay report now includes 20 rows; the original nodal DEM case
 at 64 segments remains the only failing row.
+
+## Transversely varying wall flux in a cooling square
+
+Run `OMP_NUM_THREADS=1 python examples/spatial_film_decay.py` for a separate
+homogeneous unit square (unit conductivity and volumetric capacity, unit
+thickness). Both x walls exchange heat with zero ambient perturbation at
+h=2 tan(1). The exact field is cos(2(x−1/2)) multiplied by
+exp(−4t)+0.5 cos(2πy) exp(−(4+4π²)t). The transverse cosine satisfies both
+the periodic SPH y boundary and the insulated FVM y boundary.
+The nonzero mean gives a separate analytic integral of stored heat change.
+Maximum local wall flux errors at t=0.02 s were 0.005097, 0.001286 and
+0.0003223 W/m² for FVM and 0.02246, 0.01184 and 0.006056 W/m² for SPH
+at 16, 32 and 64 cells per side. The SPH flux uses the wall-row ghost-pair
+powers; FVM uses its half-cell surface temperature and the film law.
