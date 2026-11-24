@@ -1,4 +1,4 @@
-"""Compare FEM, FVM and DEM with a decaying contact mode cooled by two wall films."""
+"""Compare FEM, FVM, DEM and SPH with a decaying contact mode cooled by two wall films."""
 import inspect
 import json
 import math
@@ -12,6 +12,7 @@ from two_layer_conduction import slab_fem_model
 from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
+from tensorsph import heat_conduction_2d as sph
 
 
 def measure(n, *, time_refinement=1):
@@ -106,6 +107,25 @@ def measure(n, *, time_refinement=1):
     inward = -history[:, 1]/links[0] - history[:, -2]/links[-1]
     cell_balance = float(abs(np.diff(time) @ (.5*(inward[1:]+inward[:-1]))
                              - mass @ (temp-cell_initial)))
+    dx = 1/n
+    field = torch.from_numpy(initial[None, :])
+    rhs = sph.prepare_slab_film_rhs(
+        field, sph.lattice_offsets(dx, 1.3*dx), dx, films, conductivity=torch.from_numpy(k),
+        specific_heat=torch.from_numpy(capacity), layered_x=True, contact_resistance_x=faces[0])
+    steps = math.ceil(time[-1]*max(k/capacity)/(.16*dx**2))*time_refinement
+    dt = time[-1]/steps
+    integrated_film = 0.
+    for _ in range(steps):
+        predictor, _, _ = rhs(field, (0., 0.))
+        rate, _, midwall = rhs(field + .5*dt*predictor, (0., 0.))
+        integrated_film -= dt * (films[0]*float(midwall[0]) + films[1]*float(midwall[1]))
+        field = field + dt*rate
+    final = field[0].numpy()
+    _, _, walls = rhs(field, (0., 0.))
+    jump_sph = 1.5*(final[m-1]-final[m]) - .5*(final[m-2]-final[m+1])
+    stored = np.mean(capacity*(final-initial))
+    values.append(("SPH", initial, final, walls.numpy(), jump_sph, stored))
+    sph_balance = float(abs(integrated_film-stored))
     wall_exact = decay * np.array([math.sin(phi), -amp*math.sin(psi)])
     rows = [{"solver": name, "cells": n,
              "errors": {"temperature_K": float(abs(final - decay*initial).max()),
@@ -119,6 +139,8 @@ def measure(n, *, time_refinement=1):
             row["simpson_heat_change_error_J_m2"] = reconstructed_error
             row["signed_storage_errors_J_m2"] = {"nodal_integration": float(integration_error),
                                                   "temperature_evolution": float(evolution_error)}
+        elif row["solver"] == "SPH":
+            row["discrete_heat_balance_residual_J_m2"] = sph_balance
         elif row["solver"] == "DEM_cell":
             row["discrete_heat_balance_residual_J_m2"] = cell_balance
     return rows
@@ -142,7 +164,7 @@ def main():
             previous[row["solver"]] = errors
             runs.append(row)
     print(json.dumps({"sources": [provenance(f) for f in
-                      (__file__, inspect.getfile(slab_fem_model), thermal.__file__, energy.__file__, contact_chain.__file__)],
+                      (__file__, inspect.getfile(slab_fem_model), thermal.__file__, energy.__file__, contact_chain.__file__, sph.__file__)],
                       "time_s": .015, "runs": runs}, indent=2))
     return 0 if all(row["passed"] for row in runs) else 1
 

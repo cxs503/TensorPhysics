@@ -103,7 +103,7 @@ def fvm(k, left, right, resistance=0., *, films=None):
             "right_flux_W_m2": -boundary["east"], "cell_temperature_K": t[0].tolist()}
 
 
-def sph(k, left, right, resistance=0., *, layered_x=False):
+def sph(k, left, right, resistance=0., *, layered_x=False, films=None):
     """Solve the y-invariant restriction of the periodic-y SPH operator."""
     n = len(k)
     dx = 1 / n
@@ -114,7 +114,15 @@ def sph(k, left, right, resistance=0., *, layered_x=False):
         faces = material.new_zeros(n - 1)
         faces[n // 2 - 1] = resistance
 
+    film_rhs = None
+    if films is not None:
+        film_rhs = sph_heat.prepare_slab_film_rhs(
+            material[None, :], offsets, dx, films, conductivity=material,
+            layered_x=layered_x, contact_resistance_x=faces)
+
     def rhs(t, walls):
+        if film_rhs is not None:
+            return film_rhs(t[None, :], walls)[0][0]
         return sph_heat.stencil_rhs_2d(t[None, :], offsets, conductivity=material,
                                        x_wall_temperatures=walls, layered_x=layered_x,
                                        dx=dx, contact_resistance_x=faces)[0]
@@ -130,20 +138,24 @@ def sph(k, left, right, resistance=0., *, layered_x=False):
     if resistance:
         traces = contact_traces(t[mid-1] + 0.5*(t[mid-1] - t[mid-2]),
                                 t[mid] - 0.5*(t[mid+1] - t[mid]))
-    _, power = sph_heat.stencil_rhs_with_wall_power_2d(
-        t[None, :], offsets, dx, (left, right), conductivity=material, layered_x=layered_x,
-        contact_resistance_x=faces)
-    # One periodic row has face area dx times unit thickness. Flip the right
-    # inward power to report both fluxes in the common positive-x convention.
-    factor = sph_heat.lattice_diffusion_factor_2d(1.3, dx, mode="moment")
-    flux = power / (dx * factor)
+    # One periodic row has wall area dx times unit thickness.
+    if film_rhs is None:
+        _, power = sph_heat.stencil_rhs_with_wall_power_2d(
+            t[None, :], offsets, dx, (left, right), conductivity=material, layered_x=layered_x,
+            contact_resistance_x=faces)
+        factor = sph_heat.lattice_diffusion_factor_2d(1.3, dx, mode="moment")
+        flux = power / (dx * factor)
+    else:
+        _, power, walls = film_rhs(t[None, :], (left, right))
+        traces.update(left_wall_K=float(walls[0]), right_wall_K=float(walls[1]))
+        flux = power / dx
     return {**traces, "left_flux_W_m2": float(flux[0]),
             "right_flux_W_m2": -float(flux[1]), "cell_temperature_K": t.tolist()}
 
 
 
-def sph_layered(k, left, right, resistance=0.):
-    return sph(k, left, right, resistance, layered_x=True)
+def sph_layered(k, left, right, resistance=0., *, films=None):
+    return sph(k, left, right, resistance, layered_x=True, films=films)
 
 
 def contact_traces(left, right):
@@ -189,7 +201,7 @@ def film_runs():
             expected = {"left_flux_W_m2": flux, "right_flux_W_m2": flux,
                         "left_wall_K": lw, "right_wall_K": rw}
             expected.update(contact_traces(ti, to) if resistance else {"interface_K": ti})
-            for solve in (fem, fvm, dem):
+            for solve in (fem, fvm, dem, sph_layered):
                 actual = solve(k, left, right, resistance, films=films)
                 errors = {key: abs(actual[key] - value) for key, value in expected.items()}
                 runs.append({"solver": solve.__name__, "cells_x": len(k), "conductivities": [10., 1.],

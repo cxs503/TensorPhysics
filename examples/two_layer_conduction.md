@@ -149,3 +149,15 @@ For the cell-centred network, absolute stored-heat errors are 5.1410e-5,
 This network satisfies the original limits at 64 and 128 cells. Its
 time-integrated film-power discrepancy is below 3e-15 J/m² on all four
 meshes. Reproduce both mappings with the same film-decay command above.
+
+The SPH film comparison uses the slab stencil with its wall temperatures
+solved from the external film laws at each stage. The steady campaign
+includes both flux directions, with or without layer contact resistance:
+76/76 total cases passed. For the transient film mode, inward film powers
+at midpoint times are integrated independently of the particle storage.
+At 64 cells the wall temperature, jump and stored-heat errors were
+6.303e-5 K, 1.488e-3 K and 3.474e-6 J/m². At 128 cells they were
+1.574e-5 K, 3.653e-4 K and 8.703e-7 J/m². The worst SPH heat balance
+residual on the four meshes was below 9e-16 J/m².
+The film-decay report now includes 20 rows; the original nodal DEM case
+at 64 segments remains the only failing row.
