@@ -276,3 +276,20 @@ At 64 cells FVM and SPH have complex temperature errors of 0.003015 and
 0.004120 K. At 128 cells all three methods meet every target. Maximum
 temperature errors are 0.000776 K (FVM), 0.000385 K (FEM) and 0.001061 K
 (SPH). Driven-wall phase errors are 0.0308°, 0.0114° and 0.0372° respectively.
+
+### Periodic heating through an imperfect material interface
+
+Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python examples/periodic_contact_heat.py`.
+The two half-slabs have (k,C)=(1,1) and (4,2), a unit cross section and a
+one-second period. Left and right wall temperature amplitudes are 1 and 0 K.
+The continuum calculation propagates the temperature and rightward flux
+backward through each homogeneous layer with wave number sqrt(iωC/k);
+at the interface the temperature jump is R times the common flux. Initial
+fields are taken from this periodic state. The benchmark compares complex
+cell averages, wall powers, contact jumps and interface fluxes. FVM
+independently extrapolates its jump from three cell averages on each side.
+A left-layer storage audit uses the measured wall input and contact transfer.
+
+At 128 cells across the slab and R=0.15 or 0.6 m² K/W, worst interface
+flux errors were 2.84e-5 (FVM) and 1.49e-5 (FEM) W/m². Four resolutions
+per resistance and solver passed the convergence and balance gates.
