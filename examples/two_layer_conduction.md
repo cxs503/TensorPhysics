@@ -175,3 +175,21 @@ Maximum local wall flux errors at t=0.02 s were 0.005097, 0.001286 and
 0.0003223 W/m² for FVM and 0.02246, 0.01184 and 0.006056 W/m² for SPH
 at 16, 32 and 64 cells per side. The SPH flux uses the wall-row ghost-pair
 powers; FVM uses its half-cell surface temperature and the film law.
+
+The spatial film study also runs Q4 FEM with consistent capacity, linear
+edge convection and Crank–Nicolson integration. The CPU solve uses sparse
+assembly and SciPy sparse LU. For FEM the temperature comparison is at
+nodes; wall comparisons are at edge midpoints. Integrating the two linear
+wall traces along each edge and averaging in time gives the inward heat.
+The stored heat is evaluated independently with the consistent capacity
+matrix. With `--extended` the four levels span 16 to 128 elements per side,
+up to 16,641 FEM nodes. The largest FEM discrete heat balance residual was
+2.55e-14 J.
+
+The report also reconstructs inward Fourier flux using three columns on
+each side (one-sided second-order derivatives). On the 128 grid, maximum
+film-law flux errors were 1.664e-4 (FEM), 8.061e-5 (FVM) and 3.059e-3
+(SPH) W/m². Gradient flux errors at the same locations were 2.583e-4,
+4.742e-4 and 5.740e-3 W/m², respectively. All decreased across both
+standard and extended meshes. Reproduce with
+`OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python examples/spatial_film_decay.py --extended`.
