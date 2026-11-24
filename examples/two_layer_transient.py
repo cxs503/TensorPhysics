@@ -1,10 +1,11 @@
-"""Verify FEM and SPH against the same unequal-capacity, finite-contact mode."""
+"""Verify FEM, FVM and SPH against the same unequal-capacity, finite-contact mode."""
 import json
 import math
 
 import torch
 
 from tensorfem import thermal
+from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
 from conduction_provenance import provenance
 
@@ -42,21 +43,43 @@ def fem(n):
     return final, initial, final[mid] - final[mid+1], heat
 
 
-def particles(n):
+def cell_data(n):
     mid, dx = n // 2, 1/n
     x = (torch.arange(n, dtype=torch.float64) + .5) * dx
     initial = mode(x[:mid], x[mid:])
-    k = x.new_tensor([1., 4.]).repeat_interleave(mid)
     cp = x.new_tensor([1., CAPACITY]).repeat_interleave(mid)
-    faces = x.new_zeros(n-1)
-    faces[mid-1] = RESISTANCE
+    k = x.new_tensor([1., 4.]).repeat_interleave(mid)
+    faces = x.new_zeros(1, n-1)
+    faces[0, mid-1] = RESISTANCE
+    return dx, initial, k, cp, faces
+
+
+def cell_result(final, initial, cp, dx):
+    mid = len(final) // 2
+    left = final[mid-1] + .5 * (final[mid-1] - final[mid-2])
+    right = final[mid] - .5 * (final[mid+1] - final[mid])
+    return final, initial, left-right, dx * (cp * (final - initial)).sum()
+
+
+def fvm(n):
+    dx, initial, k, cp, faces = cell_data(n)
+    bc = {s: {"type": "dirichlet", "values": 0.} for s in ("west", "east")}
+    time = torch.linspace(0, END, n+1, dtype=initial.dtype)
+    result = energy.solve_transient_conduction(
+        initial.new_full((n,), dx), [1.], k, cp, bc, time, initial, contact_resistance_x=faces)
+    final = torch.from_numpy(result[-1, 0])
+    return cell_result(final, initial, cp, dx)
+
+
+def particles(n):
+    dx, initial, k, cp, faces = cell_data(n)
     offsets = sph.lattice_offsets(dx, 1.3 * dx)
     factor = sph.lattice_diffusion_factor_2d(1.3, dx, mode="moment")
 
     def rhs(field):
         return sph.stencil_rhs_2d(field, offsets, conductivity=k, specific_heat=cp,
                                   x_wall_temperatures=(0., 0.), layered_x=True, dx=dx,
-                                  contact_resistance_x=faces) / factor
+                                  contact_resistance_x=faces[0]) / factor
 
     field = initial[None, :]
     steps = math.ceil(END * (4/CAPACITY) / (.16 * dx**2))
@@ -64,14 +87,12 @@ def particles(n):
     for _ in range(steps):
         field = field + dt * rhs(field + .5 * dt * rhs(field))
     final = field[0]
-    left = final[mid-1] + .5 * (final[mid-1] - final[mid-2])
-    right = final[mid] - .5 * (final[mid+1] - final[mid])
-    return final, initial, left-right, dx * (cp * (final - initial)).sum()
+    return cell_result(final, initial, cp, dx)
 
 
 def main():
     runs = []
-    for name, solve in (("FEM", fem), ("SPH", particles)):
+    for name, solve in (("FEM", fem), ("FVM", fvm), ("SPH", particles)):
         previous = None
         for n in (16, 32, 64):
             final, initial, jump, heat = solve(n)
@@ -86,7 +107,7 @@ def main():
                               (("temperature_K", .001), ("jump_K", .003), ("heat_change_J_m2", 1e-5)))
             runs.append({"solver": name, "cells": n, "errors": errors, "passed": passed})
             previous = errors
-    print(json.dumps({"sources": [provenance(f) for f in (__file__, thermal.__file__, sph.__file__)],
+    print(json.dumps({"sources": [provenance(f) for f in (__file__, thermal.__file__, energy.__file__, sph.__file__)],
                       "time_s": END, "analytic_jump_K": DECAY * JUMP,
                       "analytic_heat_change_J_m2": (DECAY - 1) * INITIAL_HEAT, "runs": runs}, indent=2))
     return 0 if all(run["passed"] for run in runs) else 1

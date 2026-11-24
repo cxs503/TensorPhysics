@@ -31,7 +31,7 @@ The CPU float64 verification comprised 60 cases with TensorFEM
 `064df7a`, TensorFVM `782f5b99`, TensorDEM `cc343bb` and TensorSPH
 `eabc543`.
 
-## Transient FEM and SPH with unequal heat capacities
+## Transient FEM, FVM and SPH with unequal heat capacities
 
 Run `OMP_NUM_THREADS=1 python examples/two_layer_transient.py` for a separate
 fixed-wall unit slab with a finite thermal contact, conductivities (1,4) and
@@ -41,8 +41,15 @@ continuous flux and the contact jump condition and both decay at the same
 analytic rate. At t=0.015 s the jump is 0.75365664 K and the change in stored
 heat per unit area is +0.02490182 J/m². The verification compares the field
 at each solver's own locations, the two interface traces and the integrated
-change in stored heat. FEM uses consistent mass and Crank–Nicolson, and SPH
+change in stored heat. FEM uses consistent mass, FVM uses cell heat capacities
+and face contact conductances, and both use Crank–Nicolson. SPH
 uses the calibrated particle operator and explicit midpoint. Each uses three
 spatial resolutions (16, 32, 64) with time-step refinement. The script checks
 all three errors decrease by a factor above three at each refinement and
 checks absolute tolerances on the finest grid.
+
+
+At 64 cells, FVM maximum temperature, interface-jump and stored-heat change
+errors were 0.0001754 K, 0.001723 K and 9.953e-7 J/m², respectively.
+The independent TensorFVM two-cell relaxation test refines time alone and
+verifies the Crank–Nicolson temporal order using an exact exponential.
