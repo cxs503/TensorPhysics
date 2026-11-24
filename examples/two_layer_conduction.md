@@ -73,3 +73,20 @@ SPH's left flux error rose from 0.001060 at 32 cells to 0.010843 W/m² at
 (`python examples/two_layer_transient.py --extended`) reduced left and right
 SPH errors to 0.008461 and 0.015902 W/m². The measured fluxes do not
 establish uniform second-order convergence of interface derivatives.
+
+The report additionally checks contact heat transfer against the exact Fourier
+flux. FEM and DEM use the jump across distinct interface nodes divided by R.
+FVM uses the cell temperature difference divided by the series resistance of
+both half cells and the contact. SPH counts each particle pair crossing the
+internal plane once. At 128 cells the relative errors are 0.00355% (FEM),
+0.00789% (FVM), 0.00556% (DEM) and 0.01254% (SPH). The contact-transfer gate
+requires the relative error to decrease by a factor above three at each
+refinement and to be below 0.1% at 64 cells and finer.
+
+For the SPH left gradient at 32 cells, applying the one-sided derivative to
+the analytic temperatures produces a signed flux error of +0.041355 W/m².
+Replacing those samples with the computed temperatures contributes
+−0.042415 W/m². Their near cancellation explains the small total error at
+that resolution. At 64 cells the contributions are +0.011412 and −0.022256
+W/m². The native pair-transfer error instead decreases monotonically across
+all four meshes.

@@ -133,18 +133,39 @@ def main(extended=False):
                       "jump_K": abs(float(jump) - DECAY * JUMP),
                       "heat_change_J_m2": abs(float(heat) - (DECAY - 1) * INITIAL_HEAT)}
             flux_left, flux_right = interface_fluxes(final, n, node_centred=name in ("FEM", "DEM"))
+            audit = {"left_W_m2": flux_left, "right_W_m2": flux_right,
+                     "left_relative_error": abs(flux_left / exact_flux - 1),
+                     "right_relative_error": abs(flux_right / exact_flux - 1)}
+            if name == "SPH":
+                dx, _, k, _, faces = cell_data(n)
+                power = sph.stencil_x_face_power_2d(
+                    final[None, :], sph.lattice_offsets(dx, 1.3 * dx), dx, n//2,
+                    (0., 0.), conductivity=k, layered_x=True, contact_resistance_x=faces[0])
+                flux = float(power) / (dx * sph.lattice_diffusion_factor_2d(1.3, dx, mode="moment"))
+                reference_gradients = interface_fluxes(DECAY * initial, n, node_centred=False)
+                for side, value, reference_gradient in zip(("left", "right"), (flux_left, flux_right),
+                                                           reference_gradients):
+                    audit[f"{side}_gradient_truncation_W_m2"] = reference_gradient - exact_flux
+                    audit[f"{side}_temperature_field_contribution_W_m2"] = value - reference_gradient
+            elif name == "FVM":
+                # Two half cells (conductivities 1 and 4) in series with the contact.
+                resistance = RESISTANCE + (0.5 + 0.5/4) / n
+                flux = float(final[n//2-1] - final[n//2]) / resistance
+            else:
+                # FEM and DEM have separate, coincident nodes on the two contact faces.
+                flux = float(jump) / RESISTANCE
+            audit["contact_transfer_W_m2"] = flux
+            audit["contact_transfer_relative_error"] = abs(flux / exact_flux - 1)
+            errors["contact_transfer_relative"] = audit["contact_transfer_relative_error"]
             passed = all(math.isfinite(v) for v in errors.values())
             if previous:
                 passed &= all(v < previous[k]/3 for k, v in errors.items())
             if n >= 64:
                 passed &= all(errors[k] < tol for k, tol in
-                              (("temperature_K", .001), ("jump_K", .003), ("heat_change_J_m2", 1e-5)))
+                              (("temperature_K", .001), ("jump_K", .003), ("heat_change_J_m2", 1e-5),
+                               ("contact_transfer_relative", .001)))
             runs.append({"solver": name, "cells": n, "errors": errors, "passed": passed,
-                         "interface_flux_audit": {
-                             "left_W_m2": flux_left, "right_W_m2": flux_right,
-                             "left_relative_error": abs(flux_left / exact_flux - 1),
-                             "right_relative_error": abs(flux_right / exact_flux - 1),
-                         }})
+                         "interface_flux_audit": audit})
             previous = errors
     print(json.dumps({"sources": [provenance(f) for f in (__file__, thermal.__file__, energy.__file__, contact_chain.__file__, sph.__file__)],
                       "time_s": END, "analytic_interface_flux_W_m2": exact_flux, "analytic_jump_K": DECAY * JUMP,
