@@ -113,6 +113,14 @@ def measure(n, resistance):
     jump = traces[m] - traces[m+1]
     wall_powers = harmonic_sol.reaction_power[ends].sum(dim=1).numpy()
     row = errors("FEM_harmonic", cells, jump, jump/resistance, wall_powers)
+    # Recover each material's Fourier flux from its own two nearest centers.
+    # These diagnostics do not use the conductance of the contact link.
+    axial = thermal.thermal_element_flux(model, harmonic_sol.temperature)[:,0].numpy()
+    from_left = 1.5*axial[m-1] - .5*axial[m-2]
+    from_right = 1.5*axial[m] - .5*axial[m+1]
+    row["left_fourier_flux_error_W_m2"] = float(abs(from_left-q))
+    row["right_fourier_flux_error_W_m2"] = float(abs(from_right-q))
+    row["fourier_flux_mismatch_W_m2"] = float(abs(from_left-from_right))
     storage_rate = 1j*omega*dx*(capacity[:m] @ cells[:m])
     row["left_layer_harmonic_balance_W_m2"] = float(abs(storage_rate - (wall_powers[0]-jump/resistance)))
     rows.append(row)
@@ -138,13 +146,18 @@ def main():
                 name = row["solver"]
                 errors = np.array([row[key] for key in ("temperature_error_K", "jump_error_K",
                                   "interface_flux_error_W_m2", "wall_flux_error_W_m2")])
+                if name == "FEM_harmonic":
+                    errors = np.append(errors, [row["left_fourier_flux_error_W_m2"],
+                                                row["right_fourier_flux_error_W_m2"]])
                 balance = (row["left_layer_harmonic_balance_W_m2"] if "left_layer_harmonic_balance_W_m2" in row
                            else row["left_layer_balance_J_m2"])
                 passed = np.isfinite(errors).all() and balance < 1e-10
                 if name in previous:
                     passed &= (errors < previous[name]/3).all()
                 if n == 128:
-                    passed &= (errors < [.001, .001, .002, .003]).all()
+                    passed &= (errors[:4] < [.001, .001, .002, .003]).all()
+                    if name == "FEM_harmonic":
+                        passed &= (errors[4:] < .002).all()
                     passed &= row["interface_phase_error_deg"] < .1
                 row["passed"] = bool(passed)
                 previous[name] = errors

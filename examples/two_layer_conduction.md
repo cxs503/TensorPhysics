@@ -339,3 +339,11 @@ contact-face power feeds an independent left-layer storage audit. The worst
 with phase error below 0.00112 degrees. This cell-centred FVM mapping and
 the prescribed DEM network use the same discrete resistances and capacities;
 both are tested against the continuum. All 40 campaign rows passed.
+
+The harmonic FEM contact rows additionally reconstruct the Fourier flux from
+the temperature gradients on either side. Each extrapolation uses two element
+centers belonging to the same material. At 128 cells, the largest errors
+over the two contact resistances were 1.62e-4 W/m² on the left and 8.35e-5
+W/m² on the right. The largest disagreement between those independent
+reconstructions was 7.90e-5 W/m². Both one-sided errors are checked against
+the continuum transfer solution at every refinement.
