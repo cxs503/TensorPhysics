@@ -216,3 +216,25 @@ at rates 8 and 8 + 2π² per second. The x-wall film coefficient is
 On the 128 grid the temperature errors were 2.674e-5 K (FEM) and
 2.677e-5 K (FVM). Independently reconstructed Fourier flux errors were
 5.158e-4 and 9.337e-4 W/m², below the 1e-3 W/m² acceptance limit.
+
+### Signed heat supplied by fixed-temperature walls
+
+Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python examples/asymmetric_slab_heat.py`.
+This separate homogeneous unit slab uses zero wall temperatures, unit material
+properties and the initial perturbation sin(πx) + 0.8 sin(2πx). Each mode
+decays by exp(−k²t). Its time-integrated Fourier flux toward +x is
+A expm1(−k²t) cos(kx)/k. Inward heat uses this sign at the left wall and
+the opposite sign at the right. The right-wall cumulative heat input changes
+from +0.00679407 J/m² at 0.03 s to −0.05187142 J/m² at 0.08 s.
+
+The temperature comparison uses the same analytic cell averages for each
+solver. DG uses the quadratic modal constant coefficient, FEM integrates
+the linear shape functions and FVM uses cell values. The initial condition
+is projected into each space. FEM uses the consistent-mass L2 projection;
+pointwise nodal initialization gave a 64-cell temperature error of 5.710e-4 K
+at 0.03 s, versus 2.646e-4 K with projection. At each wall the heat is
+obtained from integrated SIPG flux, integrated FEM constrained-node reactions
+or FVM half-cell conduction, respectively. The two times and four grid
+levels give 24 passing comparisons. The worst absolute discrete heat balance
+residual was 5.30e-13 J/m² or less. JSON output records each solver revision
+and the exact source-file hashes.
