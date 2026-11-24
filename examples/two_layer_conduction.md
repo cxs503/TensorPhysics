@@ -302,3 +302,10 @@ iω times the stored heat phasor of the left layer with net complex input power.
 The expanded campaign passes 24/24 cases. At 128 cells the maximum DEM
 contact-flux error over both resistances was 3.018e-5 W/m² and its largest
 left-layer balance residual was 1.83e-13 W/m².
+
+The direct complex FEM solve advances no time steps. It uses the assembled
+conductivity and consistent capacity, enforcing complex prescribed nodal
+temperatures in (K+iωC)T=f. At 128 cells, across both resistances, its
+maximum interface-flux error was 1.579e-5 W/m², its interface phase error
+was below 0.000288 degrees and its left-layer complex power imbalance was
+below 9.31e-13 W/m². All four solution paths pass on all eight configurations.

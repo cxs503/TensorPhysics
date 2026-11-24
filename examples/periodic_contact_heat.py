@@ -61,6 +61,7 @@ def measure(n, resistance):
 
     def errors(name, temp, jump, interface, wall_phasor):
         return dict(solver=name, cells=n, resistance_m2K_W=resistance,
+                    interface_phase_error_deg=float(abs(np.angle(interface/q, deg=True))),
                     temperature_error_K=float(np.max(abs(temp-avg))),
                     jump_error_K=float(abs(jump-resistance*q)),
                     interface_flux_error_W_m2=float(abs(interface-q)),
@@ -93,6 +94,15 @@ def measure(n, resistance):
     heat = sol.nodal_reaction_heat_steps()[:,ends].sum(dim=2).numpy()
     rows.append(record("FEM", cells, jump, jump/resistance, 2/period*(mid_phase @ heat),
                        heat[:,0].sum()))
+    harmonic_sol = thermal.solve_harmonic_thermal(model, omega)
+    traces = harmonic_sol.temperature.numpy().reshape(2, n+2).mean(axis=0)
+    cells = np.concatenate([.5*(part[1:]+part[:-1]) for part in (traces[:m+1], traces[m+1:])])
+    jump = traces[m] - traces[m+1]
+    wall_powers = harmonic_sol.reaction_power[ends].sum(dim=1).numpy()
+    row = errors("FEM_harmonic", cells, jump, jump/resistance, wall_powers)
+    storage_rate = 1j*omega*dx*(capacity[:m] @ cells[:m])
+    row["left_layer_harmonic_balance_W_m2"] = float(abs(storage_rate - (wall_powers[0]-jump/resistance)))
+    rows.append(row)
     links, stores = contact_chain.cell_centered_slab_network(np.full(n, dx), k, capacity,
                                                               contact_resistance=faces[0])
     temperatures = contact_chain.harmonic_contact_temperatures(links, stores, omega, t_left=1., t_right=0.)
@@ -115,13 +125,14 @@ def main():
                 name = row["solver"]
                 errors = np.array([row[key] for key in ("temperature_error_K", "jump_error_K",
                                   "interface_flux_error_W_m2", "wall_flux_error_W_m2")])
-                balance = (row["left_layer_harmonic_balance_W_m2"] if name == "DEM"
+                balance = (row["left_layer_harmonic_balance_W_m2"] if "left_layer_harmonic_balance_W_m2" in row
                            else row["left_layer_balance_J_m2"])
                 passed = np.isfinite(errors).all() and balance < 1e-10
                 if name in previous:
                     passed &= (errors < previous[name]/3).all()
                 if n == 128:
                     passed &= (errors < [.001, .001, .002, .003]).all()
+                    passed &= row["interface_phase_error_deg"] < .1
                 row["passed"] = bool(passed)
                 previous[name] = errors
                 rows.append(row)
