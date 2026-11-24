@@ -7,6 +7,7 @@ import torch
 
 from conduction_provenance import provenance
 from two_layer_conduction import slab_fem_model
+from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
 
@@ -54,12 +55,16 @@ def measure(n, resistance):
     def record(name, cells, jump, interface, wall_phasor, left_input):
         storage = dx*capacity[0]*(cells[-1,:m]-cells[0,:m]).sum()
         left_residual = storage - (left_input - dt @ (.5*(interface[1:]+interface[:-1])))
+        row = errors(name, harmonic(cells), harmonic(jump), harmonic(interface), wall_phasor)
+        row["left_layer_balance_J_m2"] = float(abs(left_residual))
+        return row
+
+    def errors(name, temp, jump, interface, wall_phasor):
         return dict(solver=name, cells=n, resistance_m2K_W=resistance,
-                    temperature_error_K=float(np.max(abs(harmonic(cells)-avg))),
-                    jump_error_K=float(abs(harmonic(jump)-resistance*q)),
-                    interface_flux_error_W_m2=float(abs(harmonic(interface)-q)),
-                    wall_flux_error_W_m2=float(np.max(abs(wall_phasor-wall_ref))),
-                    left_layer_balance_J_m2=float(abs(left_residual)))
+                    temperature_error_K=float(np.max(abs(temp-avg))),
+                    jump_error_K=float(abs(jump-resistance*q)),
+                    interface_flux_error_W_m2=float(abs(interface-q)),
+                    wall_flux_error_W_m2=float(np.max(abs(wall_phasor-wall_ref))))
 
     faces = np.zeros((1,n-1))
     faces[0,m-1] = resistance
@@ -88,6 +93,16 @@ def measure(n, resistance):
     heat = sol.nodal_reaction_heat_steps()[:,ends].sum(dim=2).numpy()
     rows.append(record("FEM", cells, jump, jump/resistance, 2/period*(mid_phase @ heat),
                        heat[:,0].sum()))
+    links, stores = contact_chain.cell_centered_slab_network(np.full(n, dx), k, capacity,
+                                                              contact_resistance=faces[0])
+    temperatures = contact_chain.harmonic_contact_temperatures(links, stores, omega, t_left=1., t_right=0.)
+    field = temperatures[1:-1]
+    link_flux = -np.diff(temperatures)/links
+    jump = (field[m-3:m][::-1]-field[m:m+3]) @ weights
+    row = errors("DEM", field, jump, link_flux[m], link_flux[[0,-1]]*[1.,-1.])
+    storage_rate = 1j*omega*(stores[1:m+1] @ field[:m])
+    row["left_layer_harmonic_balance_W_m2"] = float(abs(storage_rate-(link_flux[0]-link_flux[m])))
+    rows.append(row)
     return rows
 
 
@@ -100,7 +115,9 @@ def main():
                 name = row["solver"]
                 errors = np.array([row[key] for key in ("temperature_error_K", "jump_error_K",
                                   "interface_flux_error_W_m2", "wall_flux_error_W_m2")])
-                passed = np.isfinite(errors).all() and row["left_layer_balance_J_m2"] < 1e-10
+                balance = (row["left_layer_harmonic_balance_W_m2"] if name == "DEM"
+                           else row["left_layer_balance_J_m2"])
+                passed = np.isfinite(errors).all() and balance < 1e-10
                 if name in previous:
                     passed &= (errors < previous[name]/3).all()
                 if n == 128:
@@ -109,7 +126,7 @@ def main():
                 previous[name] = errors
                 rows.append(row)
     print(json.dumps({"sources": [provenance(f) for f in (__file__, inspect.getfile(slab_fem_model),
-                      energy.__file__, thermal.__file__)], "period_s": 1., "runs": rows}, indent=2))
+                      energy.__file__, thermal.__file__, contact_chain.__file__)], "period_s": 1., "runs": rows}, indent=2))
     return 0 if all(r["passed"] for r in rows) else 1
 
 

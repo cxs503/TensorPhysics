@@ -293,3 +293,12 @@ A left-layer storage audit uses the measured wall input and contact transfer.
 At 128 cells across the slab and R=0.15 or 0.6 m² K/W, worst interface
 flux errors were 2.84e-5 (FVM) and 1.49e-5 (FEM) W/m². Four resolutions
 per resistance and solver passed the convergence and balance gates.
+
+TensorDEM also solves the fixed, cell-centred contact network directly at the
+driving frequency. Each cell stores C*dx and each link contains its adjacent
+half-cell resistances plus the specified contact resistance. The independent
+reference remains the continuum transfer solution. The DEM balance compares
+iω times the stored heat phasor of the left layer with net complex input power.
+The expanded campaign passes 24/24 cases. At 128 cells the maximum DEM
+contact-flux error over both resistances was 3.018e-5 W/m² and its largest
+left-layer balance residual was 1.83e-13 W/m².
