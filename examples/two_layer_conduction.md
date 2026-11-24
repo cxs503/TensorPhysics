@@ -9,7 +9,7 @@ tolerances and pass flags. It exits unsuccessfully if any case misses its gate.
 The unit-area slab has two equal 0.5 m layers, a 20 K wall-temperature
 difference and zero internal heating. Both heat-flow directions are tested.
 For layer conductivities 10 and 1 W/(m K), perfect contact gives an exact
-heat-flux magnitude of 36.363636 W/m². FEM, FVM and DEM also exercise a
+heat-flux magnitude of 36.363636 W/m². FEM, FVM, DEM and layered SPH also exercise a
 finite interface resistance of 0.3 m² K/W, with distinct left and right
 interface temperatures. The DEM comparison uses prescribed link resistances.
 
@@ -20,8 +20,13 @@ errors of 0.15603, 0.07785 and 0.03888 W/m² at 16, 32 and 64 cells along x
 for the forward conductivity-contrast case. With the optional layered
 pair resistance, the maximum over both heat-flow directions and all three
 meshes was below 1.9e-9 W/m². The option assumes a one-dimensional,
-grid-aligned material profile. SPH uses perfect contact in this comparison.
+grid-aligned material profile. With a contact resistance of 0.3 m² K/W and
+the same 10:1 conductivity contrast, the analytic flux magnitude is
+23.529412 W/m² and the interface jump magnitude is 7.058824 K. In the 12
+finite-contact SPH runs, one-sided extrapolation from the solved particle
+temperatures gave jump errors below 4.1e-11 K. Wall flux errors were below
+2.0e-9 W/m².
 
-The CPU float64 verification comprised 48 cases with TensorFEM
+The CPU float64 verification comprised 60 cases with TensorFEM
 `064df7a`, TensorFVM `782f5b99`, TensorDEM `cc343bb` and TensorSPH
-`c11a912`.
+`eabc543`.

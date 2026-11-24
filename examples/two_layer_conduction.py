@@ -83,15 +83,21 @@ def fvm(k, left, right, resistance=0.):
             "right_flux_W_m2": -boundary["east"], "cell_temperature_K": t[0].tolist()}
 
 
-def sph(k, left, right, *, layered_x=False):
+def sph(k, left, right, resistance=0., *, layered_x=False):
     """Solve the y-invariant restriction of the periodic-y SPH operator."""
     n = len(k)
     dx = 1 / n
     offsets = sph_heat.lattice_offsets(dx, 1.3 * dx)
     material = torch.from_numpy(k)
+    faces = None
+    if resistance:
+        faces = material.new_zeros(n - 1)
+        faces[n // 2 - 1] = resistance
+
     def rhs(t, walls):
         return sph_heat.stencil_rhs_2d(t[None, :], offsets, conductivity=material,
-                                       x_wall_temperatures=walls, layered_x=layered_x)[0]
+                                       x_wall_temperatures=walls, layered_x=layered_x,
+                                       dx=dx, contact_resistance_x=faces)[0]
     # Dirichlet forcing is affine. Applying the homogeneous operator to
     # unit vectors gives the small steady verification system directly.
     eye = torch.eye(n, dtype=material.dtype)
@@ -100,19 +106,24 @@ def sph(k, left, right, *, layered_x=False):
     t = torch.linalg.solve(matrix, -forcing)
     mid = n // 2
     face = (k[mid-1] * t[mid-1] + k[mid] * t[mid]) / (k[mid-1] + k[mid])
+    traces = {"interface_K": float(face)}
+    if resistance:
+        traces = contact_traces(t[mid-1] + 0.5*(t[mid-1] - t[mid-2]),
+                                t[mid] - 0.5*(t[mid+1] - t[mid]))
     _, power = sph_heat.stencil_rhs_with_wall_power_2d(
-        t[None, :], offsets, dx, (left, right), conductivity=material, layered_x=layered_x)
+        t[None, :], offsets, dx, (left, right), conductivity=material, layered_x=layered_x,
+        contact_resistance_x=faces)
     # One periodic row has face area dx times unit thickness. Flip the right
     # inward power to report both fluxes in the common positive-x convention.
     factor = sph_heat.lattice_diffusion_factor_2d(1.3, dx, mode="moment")
     flux = power / (dx * factor)
-    return {"interface_K": float(face), "left_flux_W_m2": float(flux[0]),
+    return {**traces, "left_flux_W_m2": float(flux[0]),
             "right_flux_W_m2": -float(flux[1]), "cell_temperature_K": t.tolist()}
 
 
 
-def sph_layered(k, left, right):
-    return sph(k, left, right, layered_x=True)
+def sph_layered(k, left, right, resistance=0.):
+    return sph(k, left, right, resistance, layered_x=True)
 
 
 def contact_traces(left, right):
@@ -153,7 +164,7 @@ def main():
                                     jump_K=flux*resistance)
                 for solver, cells in ((fem, 16), (fvm, 16), (dem, 16), (sph, 16), (sph, 32), (sph, 64),
                                       (sph_layered, 16), (sph_layered, 32), (sph_layered, 64)):
-                    if solver in (sph, sph_layered) and resistance:
+                    if solver is sph and resistance:
                         continue
                     k = np.repeat([k1, k2], cells // 2)
                     result = solver(k, left, right, resistance=resistance) if resistance else solver(k, left, right)
