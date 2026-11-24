@@ -31,7 +31,7 @@ The CPU float64 verification comprised 60 cases with TensorFEM
 `064df7a`, TensorFVM `782f5b99`, TensorDEM `cc343bb` and TensorSPH
 `eabc543`.
 
-## Transient FEM, FVM and SPH with unequal heat capacities
+## Transient FEM, FVM, DEM and SPH with unequal heat capacities
 
 Run `OMP_NUM_THREADS=1 python examples/two_layer_transient.py` for a separate
 fixed-wall unit slab with a finite thermal contact, conductivities (1,4) and
@@ -42,7 +42,8 @@ analytic rate. At t=0.015 s the jump is 0.75365664 K and the change in stored
 heat per unit area is +0.02490182 J/m². The verification compares the field
 at each solver's own locations, the two interface traces and the integrated
 change in stored heat. FEM uses consistent mass, FVM uses cell heat capacities
-and face contact conductances, and both use Crank–Nicolson. SPH
+and face contact conductances, and DEM uses fixed links and lumped nodal
+heat capacities. All three use Crank–Nicolson. SPH
 uses the calibrated particle operator and explicit midpoint. Each uses three
 spatial resolutions (16, 32, 64) with time-step refinement. The script checks
 all three errors decrease by a factor above three at each refinement and
@@ -53,3 +54,10 @@ At 64 cells, FVM maximum temperature, interface-jump and stored-heat change
 errors were 0.0001754 K, 0.001723 K and 9.953e-7 J/m², respectively.
 The independent TensorFVM two-cell relaxation test refines time alone and
 verifies the Crank–Nicolson temporal order using an exact exponential.
+
+The DEM chain uses unit cross section, separate nodes on the two sides of
+the contact, and prescribed link resistances. Each bulk segment assigns half
+its heat capacity to each end. On 64 segments the maximum temperature,
+interface-jump and stored-heat errors were 0.0001507 K, 0.0001676 K and
+5.890e−6 J/m². The contact network comparison verifies heat transport for
+these specified links; it does not infer real grain contact areas.

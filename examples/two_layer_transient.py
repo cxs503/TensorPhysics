@@ -1,9 +1,10 @@
-"""Verify FEM, FVM and SPH against the same unequal-capacity, finite-contact mode."""
+"""Verify FEM, FVM, DEM and SPH against the same unequal-capacity, finite-contact mode."""
 import json
 import math
 
 import torch
 
+from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
@@ -41,6 +42,25 @@ def fem(n):
     delta = final - initial
     heat = torch.trapezoid(delta[:mid+1], x[:mid+1]) + CAPACITY * torch.trapezoid(delta[mid+1:], x[mid:])
     return final, initial, final[mid] - final[mid+1], heat
+
+
+def dem(n):
+    # Unit area. Each segment contributes half its capacity to each end;
+    # the zero-thickness contact links two coincident, distinct nodes.
+    mid = n // 2
+    x = torch.linspace(0, 1, n+1, dtype=torch.float64)
+    initial = mode(x[:mid+1], x[mid:])
+    resistance = x.new_full((n+1,), 1/n)
+    resistance[mid] = RESISTANCE
+    resistance[mid+1:] /= 4
+    capacity = x.new_full((n+2,), 1/n)
+    capacity[mid+1:] *= CAPACITY
+    capacity[[0, mid, mid+1, n+1]] *= .5
+    time = torch.linspace(0, END, n+1, dtype=x.dtype)
+    history = contact_chain.transient_contact_temperatures(
+        resistance, capacity, time, initial, t_left=0., t_right=0.)
+    final = torch.from_numpy(history[-1])
+    return final, initial, final[mid]-final[mid+1], (capacity * (final-initial)).sum()
 
 
 def cell_data(n):
@@ -92,7 +112,7 @@ def particles(n):
 
 def main():
     runs = []
-    for name, solve in (("FEM", fem), ("FVM", fvm), ("SPH", particles)):
+    for name, solve in (("FEM", fem), ("FVM", fvm), ("DEM", dem), ("SPH", particles)):
         previous = None
         for n in (16, 32, 64):
             final, initial, jump, heat = solve(n)
@@ -107,7 +127,7 @@ def main():
                               (("temperature_K", .001), ("jump_K", .003), ("heat_change_J_m2", 1e-5)))
             runs.append({"solver": name, "cells": n, "errors": errors, "passed": passed})
             previous = errors
-    print(json.dumps({"sources": [provenance(f) for f in (__file__, thermal.__file__, energy.__file__, sph.__file__)],
+    print(json.dumps({"sources": [provenance(f) for f in (__file__, thermal.__file__, energy.__file__, contact_chain.__file__, sph.__file__)],
                       "time_s": END, "analytic_jump_K": DECAY * JUMP,
                       "analytic_heat_change_J_m2": (DECAY - 1) * INITIAL_HEAT, "runs": runs}, indent=2))
     return 0 if all(run["passed"] for run in runs) else 1
