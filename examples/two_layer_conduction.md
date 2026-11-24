@@ -323,3 +323,19 @@ The uniform mode checks net storage, while the transverse cosine tests
 opposing signed wall fluxes. All 16 comparisons pass. At 128 cells per
 direction the largest wall flux error over the two modes was 4.59e-4 W/m²
 for FVM and 2.84e-4 W/m² for FEM.
+
+FVM also reports the signed power through every internal face and checks it
+against each cell's complex storage rate. Since refinement moves the first
+interior face toward the driven wall, the rate check uses a fixed normal
+coordinate interval [1/16,15/16] for each flux component. The absolute
+error check includes all interior faces. At 128 cells per side the worst
+interior error over both modes was 4.49e-4 W/m² and the maximum cell
+balance residual was below 5.80e-15 W. Over all interior faces the first
+refinement reduced the errors by factors 3.66 and 3.59 for modes 0 and 1.
+
+The periodic contact campaign now includes direct harmonic FVM. Its oriented
+contact-face power feeds an independent left-layer storage audit. The worst
+128-cell interface flux error over the two resistances was 3.018e-5 W/m²,
+with phase error below 0.00112 degrees. This cell-centred FVM mapping and
+the prescribed DEM network use the same discrete resistances and capacities;
+both are tested against the continuum. All 40 campaign rows passed.

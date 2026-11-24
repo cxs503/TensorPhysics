@@ -82,6 +82,19 @@ def measure(n, resistance):
     rows = [record("FVM", cells, jump, interface, harmonic(walls),
                    dt @ (.5*(walls[:-1,0]+walls[1:,0])))]
 
+    phasor, wall, interior = energy.solve_harmonic_conduction(
+        np.full(n,dx), [1.], k, capacity,
+        {"west": {"type": "dirichlet", "values": 1.}, "east": {"type": "dirichlet", "values": 0.}},
+        omega, contact_resistance_x=faces, return_interior_power=True)
+    field = phasor[0]
+    jump = (field[m-3:m][::-1]-field[m:m+3]) @ weights
+    contact_power = interior["x"][0,m-1]
+    wall_power = np.array([wall["west"][0], wall["east"][0]])
+    row = errors("FVM_harmonic", field, jump, contact_power, wall_power)
+    storage_rate = 1j*omega*dx*(capacity[:m] @ field[:m])
+    row["left_layer_harmonic_balance_W_m2"] = float(abs(storage_rate - (wall_power[0]-contact_power)))
+    rows.append(row)
+
     model, ends = slab_fem_model(k, 1., 0., resistance, None, torch.from_numpy(capacity))
     prescribed = np.column_stack((phase.real, phase.real, np.zeros(len(time)), np.zeros(len(time))))
     sol = thermal.solve_transient_thermal(model, torch.from_numpy(time),
