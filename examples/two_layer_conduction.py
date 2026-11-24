@@ -5,27 +5,16 @@ layers are 0.5 m thick. The horizontal walls are insulated. Flux is positive
 from left to right. Conductivities are in W/(m K), temperatures in K.
 Finite-contact cases insert an areal resistance in m² K/W at x=0.5.
 """
-import hashlib
 import json
-from pathlib import Path
-import subprocess
 
 import numpy as np
 import torch
 
+from conduction_provenance import provenance
 from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph_heat
-
-
-def provenance(filename):
-    path = Path(filename).resolve()
-    commit = subprocess.check_output(
-        ["git", "-C", str(path.parent), "rev-parse", "HEAD"], text=True
-    ).strip()
-    return {"commit": commit, "file": path.name,
-            "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
 def fem(k, left, right, resistance=0.):

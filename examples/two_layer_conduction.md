@@ -30,3 +30,19 @@ temperatures gave jump errors below 4.1e-11 K. Wall flux errors were below
 The CPU float64 verification comprised 60 cases with TensorFEM
 `064df7a`, TensorFVM `782f5b99`, TensorDEM `cc343bb` and TensorSPH
 `eabc543`.
+
+## Transient FEM and SPH with unequal heat capacities
+
+Run `OMP_NUM_THREADS=1 python examples/two_layer_transient.py` for a separate
+fixed-wall unit slab with a finite thermal contact, conductivities (1,4) and
+volumetric heat capacities (1,256/81). Temperatures are perturbations about
+a common reference. Each half starts from a sine profile chosen to satisfy
+continuous flux and the contact jump condition and both decay at the same
+analytic rate. At t=0.015 s the jump is 0.75365664 K and the change in stored
+heat per unit area is +0.02490182 J/m². The verification compares the field
+at each solver's own locations, the two interface traces and the integrated
+change in stored heat. FEM uses consistent mass and Crank–Nicolson, and SPH
+uses the calibrated particle operator and explicit midpoint. Each uses three
+spatial resolutions (16, 32, 64) with time-step refinement. The script checks
+all three errors decrease by a factor above three at each refinement and
+checks absolute tolerances on the finest grid.
