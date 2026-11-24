@@ -128,7 +128,7 @@ computed nodal temperatures. Halving the time step alone gives 1.12012e-5.
 At 128 segments the error falls to 2.80181e-6 J/m². The discrete balance
 between time-integrated inward film powers and nodal heat change closes
 within 3e-15 J/m² at every tested resolution. All other gates pass.
-The full transient film command currently returns exit status 1 for the
+The original point-sampled transient film command returns exit status 1 for the
 64-segment discrepancy and still emits all results, including the failed row.
 
 
@@ -159,8 +159,20 @@ At 64 cells the wall temperature, jump and stored-heat errors were
 6.303e-5 K, 1.488e-3 K and 3.474e-6 J/m². At 128 cells they were
 1.574e-5 K, 3.653e-4 K and 8.703e-7 J/m². The worst SPH heat balance
 residual on the four meshes was below 9e-16 J/m².
-The film-decay report now includes 20 rows; the original nodal DEM case
-at 64 segments remains the only failing row.
+The point-sampled film-decay report includes 20 rows. The original nodal DEM
+case at 64 segments remains its only failing row (`--sampled-dem`).
+
+The default nodal DEM initialization now projects the continuum initial
+condition onto the two lumped-capacity layers independently. Adding the
+constant (analytical layer heat minus sampled layer heat) divided by the
+layer capacity minimizes the capacity-weighted squared perturbation under
+the heat constraint. Only the initial state is projected. All final
+temperatures, wall values, interface jumps and heat changes use the original
+continuum references. At 64 segments the absolute heat-change error is
+2.416e-6 J/m² and the maximum point-temperature error is 3.622e-4 K
+(original point sampling gives 1.612e-4 K). The 128-segment heat-change
+error is 6.085e-7 J/m². All 20 rows pass the default campaign. Reproduce
+with `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python examples/two_layer_film_decay.py`.
 
 ## Transversely varying wall flux in a cooling square
 

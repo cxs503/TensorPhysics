@@ -1,4 +1,5 @@
 """Compare FEM, FVM, DEM and SPH with a decaying contact mode cooled by two wall films."""
+import argparse
 import inspect
 import json
 import math
@@ -15,7 +16,7 @@ from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
 
 
-def measure(n, *, time_refinement=1):
+def measure(n, *, time_refinement=1, sampled_dem=False):
     a, b = 1.5*math.pi, 4*math.pi/3
     phi, psi = .25, .4
     cap = 4*(b/a)**2
@@ -27,8 +28,9 @@ def measure(n, *, time_refinement=1):
     capacity = np.repeat([1., cap], n//2)
     time = np.linspace(0., .015, time_refinement*n+1)
     decay = math.exp(-a*a*time[-1])
-    heat0 = ((math.cos(phi)-math.cos(a/2+phi))/a
-             - cap*amp*(math.cos(psi)-math.cos(b/2+psi))/b)
+    layer_heat = np.array([(math.cos(phi)-math.cos(a/2+phi))/a,
+                           -cap*amp*(math.cos(psi)-math.cos(b/2+psi))/b])
+    heat0 = layer_heat.sum()
 
     def mode(xl, xr):
         return np.r_[np.sin(a*xl+phi), -amp*np.sin(b*(1-xr)+psi)]
@@ -52,23 +54,30 @@ def measure(n, *, time_refinement=1):
     links = np.r_[1/films[0], 1/(n*k[:m]), resistance, 1/(n*k[m:]), 1/films[1]]
     nodal_capacity = np.r_[np.ones(m+1), np.full(m+1, cap)] / n
     nodal_capacity[[0, m, m+1, -1]] *= .5
+    nodal_start = initial.copy()
+    initial_errors = []
+    for part, mass, target in zip(np.split(nodal_start, 2), np.split(nodal_capacity, 2), layer_heat):
+        if not sampled_dem:
+            # Minimum capacity-weighted squared change subject to the layer heat integral.
+            part += (target - mass @ part) / mass.sum()
+        initial_errors.append(float(mass @ part - target))
     history = contact_chain.transient_contact_temperatures(
-        links, np.r_[0., nodal_capacity, 0.], time, np.r_[0., initial, 0.],
+        links, np.r_[0., nodal_capacity, 0.], time, np.r_[0., nodal_start, 0.],
         t_left=0., t_right=0.)
     final = history[-1, 1:-1]
     values.append(("DEM", initial, final, final[[0,-1]], final[m]-final[m+1],
-                   nodal_capacity @ (final-initial)))
+                   nodal_capacity @ (final-nodal_start)))
 
     # Independent endpoint powers at every step, positive into the rods.
     film_power = -history[:, 1]*films[0] - history[:, -2]*films[1]
     dem_balance = float(abs(np.diff(time) @ (.5*(film_power[1:]+film_power[:-1]))
-                            - nodal_capacity @ (final-initial)))
+                            - nodal_capacity @ (final-nodal_start)))
 
     # Split the signed continuum discrepancy into nodal-integration and
     # evolution contributions, using exact samples at the same nodes.
-    exact_sample_change = (decay - 1) * (nodal_capacity @ initial)
+    exact_sample_change = nodal_capacity @ (decay*initial - nodal_start)
     integration_error = exact_sample_change - (decay - 1) * heat0
-    evolution_error = nodal_capacity @ (final-initial) - exact_sample_change
+    evolution_error = nodal_capacity @ (final-nodal_start) - exact_sample_change
 
     # Integrate the reconstructed continuum field separately in each material;
     # averaging across the contact would erase its temperature discontinuity.
@@ -135,6 +144,8 @@ def measure(n, *, time_refinement=1):
             for name, initial, final, walls, contact_jump, heat in values]
     for row in rows:
         if row["solver"] == "DEM":
+            row["initial_layer_heat_errors_J_m2"] = initial_errors
+            row["initialization"] = "point_samples" if sampled_dem else "conservative_layer_projection"
             row["discrete_heat_balance_residual_J_m2"] = dem_balance
             row["simpson_heat_change_error_J_m2"] = reconstructed_error
             row["signed_storage_errors_J_m2"] = {"nodal_integration": float(integration_error),
@@ -146,14 +157,16 @@ def measure(n, *, time_refinement=1):
     return rows
 
 
-def main():
+def main(sampled_dem=False):
     runs = []
     previous = {}
     for n in (16, 32, 64, 128):
-        for row in measure(n):
+        for row in measure(n, sampled_dem=sampled_dem):
             errors = row["errors"]
             last = previous.get(row["solver"])
             row["passed"] = all(math.isfinite(v) for v in errors.values())
+            if row.get("initialization") == "conservative_layer_projection":
+                row["passed"] &= max(map(abs, row["initial_layer_heat_errors_J_m2"])) < 1e-14
             if last:
                 row["passed"] &= all(v < last[k]/3 for k, v in errors.items())
             if n >= 64:
@@ -170,4 +183,6 @@ def main():
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sampled-dem", action="store_true", help="reproduce the original nodal initialization")
+    raise SystemExit(main(parser.parse_args().sampled_dem))
