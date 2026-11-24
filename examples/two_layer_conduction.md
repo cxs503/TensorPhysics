@@ -309,3 +309,17 @@ temperatures in (K+iωC)T=f. At 128 cells, across both resistances, its
 maximum interface-flux error was 1.579e-5 W/m², its interface phase error
 was below 0.000288 degrees and its left-layer complex power imbalance was
 below 9.31e-13 W/m². All four solution paths pass on all eight configurations.
+
+### Anisotropic harmonic square
+
+Run `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python examples/harmonic_square.py`.
+The unit square has principal conductivities (2, 0.5), volumetric capacity
+3, angular frequency 2π, and insulated horizontal walls. The west wall is
+driven by cos(b y), with b=0 or π, and the east wall is held at zero. The
+continuum phasor is cos(b y) sinh(λ(1−x))/sinh(λ), with
+λ²=(0.5 b² + 3 iω)/2. FVM compares cell and boundary-face averages;
+Q4 FEM compares nodal temperatures and local hat-weighted wall loads.
+The uniform mode checks net storage, while the transverse cosine tests
+opposing signed wall fluxes. All 16 comparisons pass. At 128 cells per
+direction the largest wall flux error over the two modes was 4.59e-4 W/m²
+for FVM and 2.84e-4 W/m² for FEM.
