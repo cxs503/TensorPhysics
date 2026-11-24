@@ -238,3 +238,12 @@ or FVM half-cell conduction, respectively. The two times and four grid
 levels give 24 passing comparisons. The worst absolute discrete heat balance
 residual was 5.30e-13 J/m² or less. JSON output records each solver revision
 and the exact source-file hashes.
+
+SPH also runs in the same campaign, bringing the total to 32 comparisons.
+A transverse periodic row with unit thickness represents the uniform slab.
+The explicit midpoint integrator advances cell-average initial temperatures,
+integrates ghost-pair powers at its midpoint and divides by the row's wall
+area. Rate and power use the same second-moment calibration. On 64 particles
+the maximum wall heat errors at 0.03 and 0.08 s were 8.444e-5 and
+6.053e-5 J/m². Halving the time step changed the final temperatures by
+at most 8.891e-8 K across the two runs.
