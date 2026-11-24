@@ -1,4 +1,5 @@
 """Verify FEM, FVM, DEM and SPH against the same unequal-capacity, finite-contact mode."""
+import argparse
 import json
 import math
 
@@ -110,28 +111,48 @@ def particles(n):
     return cell_result(final, initial, cp, dx)
 
 
-def main():
+def interface_fluxes(field, n, *, node_centred):
+    """Second-order, one-sided Fourier fluxes at the material interface."""
+    # Distances into each rod from the interface, in units of dx, are
+    # (0,1,2) for nodal data and (1/2,3/2,5/2) for cell-centred data.
+    split = n // 2 + int(node_centred)
+    weights = field.new_tensor([-1.5, 2., -.5] if node_centred else [-2., 3., -1.])
+    grad_left = n * torch.dot(weights, field[split-3:split].flip((0,)))
+    grad_right = n * torch.dot(weights, field[split:split+3])
+    return float(grad_left), float(-4 * grad_right)
+
+
+def main(extended=False):
     runs = []
+    exact_flux = -A * math.cos(A/2) * DECAY
     for name, solve in (("FEM", fem), ("FVM", fvm), ("DEM", dem), ("SPH", particles)):
         previous = None
-        for n in (16, 32, 64):
+        for n in ((16, 32, 64, 128) if extended else (16, 32, 64)):
             final, initial, jump, heat = solve(n)
             errors = {"temperature_K": float((final - DECAY * initial).abs().max()),
                       "jump_K": abs(float(jump) - DECAY * JUMP),
                       "heat_change_J_m2": abs(float(heat) - (DECAY - 1) * INITIAL_HEAT)}
+            flux_left, flux_right = interface_fluxes(final, n, node_centred=name in ("FEM", "DEM"))
             passed = all(math.isfinite(v) for v in errors.values())
             if previous:
                 passed &= all(v < previous[k]/3 for k, v in errors.items())
-            if n == 64:
+            if n >= 64:
                 passed &= all(errors[k] < tol for k, tol in
                               (("temperature_K", .001), ("jump_K", .003), ("heat_change_J_m2", 1e-5)))
-            runs.append({"solver": name, "cells": n, "errors": errors, "passed": passed})
+            runs.append({"solver": name, "cells": n, "errors": errors, "passed": passed,
+                         "interface_flux_audit": {
+                             "left_W_m2": flux_left, "right_W_m2": flux_right,
+                             "left_relative_error": abs(flux_left / exact_flux - 1),
+                             "right_relative_error": abs(flux_right / exact_flux - 1),
+                         }})
             previous = errors
     print(json.dumps({"sources": [provenance(f) for f in (__file__, thermal.__file__, energy.__file__, contact_chain.__file__, sph.__file__)],
-                      "time_s": END, "analytic_jump_K": DECAY * JUMP,
+                      "time_s": END, "analytic_interface_flux_W_m2": exact_flux, "analytic_jump_K": DECAY * JUMP,
                       "analytic_heat_change_J_m2": (DECAY - 1) * INITIAL_HEAT, "runs": runs}, indent=2))
     return 0 if all(run["passed"] for run in runs) else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--extended", action="store_true", help="also run the 128-cell refinement")
+    raise SystemExit(main(parser.parse_args().extended))

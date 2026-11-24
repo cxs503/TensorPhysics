@@ -61,3 +61,15 @@ its heat capacity to each end. On 64 segments the maximum temperature,
 interface-jump and stored-heat errors were 0.0001507 K, 0.0001676 K and
 5.890e−6 J/m². The contact network comparison verifies heat transport for
 these specified links; it does not infer real grain contact areas.
+
+The transient report also reconstructs the left and right Fourier fluxes
+using independent three-point, one-sided temperature derivatives. It reports
+both relative errors against 2.38815776 W/m² at t=0.015 s. These diagnostics
+are separate from the temperature, jump and storage acceptance checks.
+With 64 segments the larger absolute flux errors were 0.003730 (FEM),
+0.011194 (FVM), 0.005703 (DEM), and 0.027944 W/m² (SPH).
+SPH's left flux error rose from 0.001060 at 32 cells to 0.010843 W/m² at
+64 cells even as the temperature converged. The extra 128-cell level
+(`python examples/two_layer_transient.py --extended`) reduced left and right
+SPH errors to 0.008461 and 0.015902 W/m². The measured fluxes do not
+establish uniform second-order convergence of interface derivatives.
