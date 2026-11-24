@@ -193,3 +193,14 @@ film-law flux errors were 1.664e-4 (FEM), 8.061e-5 (FVM) and 3.059e-3
 4.742e-4 and 5.740e-3 W/m², respectively. All decreased across both
 standard and extended meshes. Reproduce with
 `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python examples/spatial_film_decay.py --extended`.
+
+### Grid-aligned anisotropic cooling
+
+Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python examples/spatial_film_decay.py --anisotropic --extended`
+for FEM and FVM with conductivity components 2 and 0.5 W/(m K) along x
+and y and unit volumetric heat capacity. The two analytical modes decay
+at rates 8 and 8 + 2π² per second. The x-wall film coefficient is
+4 tan(1) W/(m² K). Each refinement must achieve temperature order ≥1.9.
+On the 128 grid the temperature errors were 2.674e-5 K (FEM) and
+2.677e-5 K (FVM). Independently reconstructed Fourier flux errors were
+5.158e-4 and 9.337e-4 W/m², below the 1e-3 W/m² acceptance limit.
