@@ -83,7 +83,7 @@ def fvm(k, left, right, resistance=0.):
             "right_flux_W_m2": -boundary["east"], "cell_temperature_K": t[0].tolist()}
 
 
-def sph(k, left, right):
+def sph(k, left, right, *, layered_x=False):
     """Solve the y-invariant restriction of the periodic-y SPH operator."""
     n = len(k)
     dx = 1 / n
@@ -91,7 +91,7 @@ def sph(k, left, right):
     material = torch.from_numpy(k)
     def rhs(t, walls):
         return sph_heat.stencil_rhs_2d(t[None, :], offsets, conductivity=material,
-                                       x_wall_temperatures=walls)[0]
+                                       x_wall_temperatures=walls, layered_x=layered_x)[0]
     # Dirichlet forcing is affine. Applying the homogeneous operator to
     # unit vectors gives the small steady verification system directly.
     eye = torch.eye(n, dtype=material.dtype)
@@ -101,7 +101,7 @@ def sph(k, left, right):
     mid = n // 2
     face = (k[mid-1] * t[mid-1] + k[mid] * t[mid]) / (k[mid-1] + k[mid])
     _, power = sph_heat.stencil_rhs_with_wall_power_2d(
-        t[None, :], offsets, dx, (left, right), conductivity=material)
+        t[None, :], offsets, dx, (left, right), conductivity=material, layered_x=layered_x)
     # One periodic row has face area dx times unit thickness. Flip the right
     # inward power to report both fluxes in the common positive-x convention.
     factor = sph_heat.lattice_diffusion_factor_2d(1.3, dx, mode="moment")
@@ -109,6 +109,10 @@ def sph(k, left, right):
     return {"interface_K": float(face), "left_flux_W_m2": float(flux[0]),
             "right_flux_W_m2": -float(flux[1]), "cell_temperature_K": t.tolist()}
 
+
+
+def sph_layered(k, left, right):
+    return sph(k, left, right, layered_x=True)
 
 
 def contact_traces(left, right):
@@ -147,8 +151,9 @@ def main():
                     del expected["interface_K"]
                     expected.update(left_interface_K=interface, right_interface_K=right+flux*0.5/k2,
                                     jump_K=flux*resistance)
-                for solver, cells in ((fem, 16), (fvm, 16), (dem, 16), (sph, 16), (sph, 32), (sph, 64)):
-                    if solver is sph and resistance:
+                for solver, cells in ((fem, 16), (fvm, 16), (dem, 16), (sph, 16), (sph, 32), (sph, 64),
+                                      (sph_layered, 16), (sph_layered, 32), (sph_layered, 64)):
+                    if solver in (sph, sph_layered) and resistance:
                         continue
                     k = np.repeat([k1, k2], cells // 2)
                     result = solver(k, left, right, resistance=resistance) if resistance else solver(k, left, right)
