@@ -5,6 +5,7 @@ import math
 
 import numpy as np
 import torch
+from scipy.integrate import simpson
 
 from conduction_provenance import provenance
 from two_layer_conduction import slab_fem_model
@@ -68,6 +69,14 @@ def measure(n, *, time_refinement=1):
     integration_error = exact_sample_change - (decay - 1) * heat0
     evolution_error = nodal_capacity @ (final-initial) - exact_sample_change
 
+    # Integrate the reconstructed continuum field separately in each material;
+    # averaging across the contact would erase its temperature discontinuity.
+    change = final - initial
+    reconstructed_heat = (simpson(change[:m+1], x=x[:m+1])
+                          + cap * simpson(change[m+1:], x=x[m:]))
+    exact_change = (decay-1)*heat0
+    reconstructed_error = float(abs(reconstructed_heat - exact_change))
+
     centers = (np.arange(n)+.5)/n
     initial = mode(centers[:m], centers[m:])
     faces = np.zeros((1, n-1))
@@ -80,6 +89,23 @@ def measure(n, *, time_refinement=1):
     walls = final[[0,-1]] / (1 + np.asarray(films)/(2*n*k[[0,-1]]))
     contact_jump = 1.5*(final[m-1]-final[m]) - .5*(final[m-2]-final[m+1])
     values.append(("FVM", initial, final, walls, contact_jump, np.mean(capacity*(final-initial))))
+    # A second prescribed contact network places one store in each material
+    # segment, so no segment shares its capacity with a wall or contact node.
+    # Project the two sine modes onto those volumes before marching.
+    cell_initial = initial * np.repeat(np.sinc(np.array([a,b])/(2*n*np.pi)), m)
+    links, network_capacity = contact_chain.cell_centered_slab_network(
+        np.full(n, 1/n), k, capacity, films=films, contact_resistance=faces[0])
+    mass = network_capacity[1:-1]
+    history = contact_chain.transient_contact_temperatures(
+        links, network_capacity, time, np.r_[0., cell_initial, 0.], t_left=0., t_right=0.)
+    temp = history[-1, 1:-1]
+    wall_t = temp[[0,-1]] / (np.asarray(films)*links[[0,-1]])
+    q_interface = (temp[m-1] - temp[m])/links[m]
+    values.append(("DEM_cell", cell_initial, temp, wall_t, resistance*q_interface,
+                   mass @ (temp-cell_initial)))
+    inward = -history[:, 1]/links[0] - history[:, -2]/links[-1]
+    cell_balance = float(abs(np.diff(time) @ (.5*(inward[1:]+inward[:-1]))
+                             - mass @ (temp-cell_initial)))
     wall_exact = decay * np.array([math.sin(phi), -amp*math.sin(psi)])
     rows = [{"solver": name, "cells": n,
              "errors": {"temperature_K": float(abs(final - decay*initial).max()),
@@ -90,8 +116,11 @@ def measure(n, *, time_refinement=1):
     for row in rows:
         if row["solver"] == "DEM":
             row["discrete_heat_balance_residual_J_m2"] = dem_balance
+            row["simpson_heat_change_error_J_m2"] = reconstructed_error
             row["signed_storage_errors_J_m2"] = {"nodal_integration": float(integration_error),
                                                   "temperature_evolution": float(evolution_error)}
+        elif row["solver"] == "DEM_cell":
+            row["discrete_heat_balance_residual_J_m2"] = cell_balance
     return rows
 
 

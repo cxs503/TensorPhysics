@@ -129,4 +129,23 @@ At 128 segments the error falls to 2.80181e-6 J/m². The discrete balance
 between time-integrated inward film powers and nodal heat change closes
 within 3e-15 J/m² at every tested resolution. All other gates pass.
 The full transient film command currently returns exit status 1 for the
-64-segment discrepancy and still emits all twelve results.
+64-segment discrepancy and still emits all results, including the failed row.
+
+
+The additional `DEM_cell` case puts one capacity in each physical segment,
+uses the analytic cell-average initial mode and compares with analytic
+cell averages at the final time. Both ambient reservoirs have zero capacity.
+Each internal link contains two half-segment resistances and any interface
+resistance. This prescribed one-dimensional network has the same spatial
+resistances as a cell-centred finite-volume model. The four-level film
+campaign now has 16 rows, of which 15 pass. The original 64-segment nodal
+DEM failure is retained. On the same mesh its separate, per-material Simpson
+integral of the numerical nodal temperature change differs from the
+continuum value by 1.3043e-6 J/m². Its physical nodal storage and film-power
+balance are still evaluated with its own lumped capacities.
+
+For the cell-centred network, absolute stored-heat errors are 5.1410e-5,
+1.2948e-5, 3.2426e-6 and 8.1099e-7 J/m² at 16, 32, 64 and 128 segments.
+This network satisfies the original limits at 64 and 128 cells. Its
+time-integrated film-power discrepancy is below 3e-15 J/m² on all four
+meshes. Reproduce both mappings with the same film-decay command above.
