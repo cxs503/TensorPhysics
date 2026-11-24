@@ -17,7 +17,7 @@ from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph_heat
 
 
-def fem(k, left, right, resistance=0.):
+def slab_fem_model(k, left, right, resistance, films, capacity):
     n = len(k)
     mid = n // 2
     x = torch.linspace(0, 1, n + 1, dtype=torch.float64)
@@ -34,25 +34,53 @@ def fem(k, left, right, resistance=0.):
     stride = len(x)
     elements = torch.stack((i, i + 1, i + stride + 1, i + stride), dim=1)
     fixed = torch.tensor([0, stride, stride-1, 2*stride-1])
-    model = thermal.ThermalModel(nodes, elements, torch.from_numpy(k), 1., 1., fixed,
-                                 x.new_tensor([left, left, right, right]), element_type="q4", **kwargs)
+    ends = fixed.reshape(2, 2)
+    if films is None:
+        prescribed = x.new_tensor([left, left, right, right])
+    else:
+        kwargs.update(convection_edges=ends, convection_coefficient=x.new_tensor(films),
+                      ambient_temperature=x.new_tensor([left, right]))
+        fixed = fixed[:0]
+        prescribed = x.new_empty(0)
+    model = thermal.ThermalModel(nodes, elements, torch.from_numpy(k), 1., capacity, fixed,
+                                 prescribed, element_type="q4", **kwargs)
+    return model, ends
+
+
+def fem(k, left, right, resistance=0., *, films=None):
+    n = len(k)
+    mid = n // 2
+    model, ends = slab_fem_model(k, left, right, resistance, films, 1.)
+    stride = len(model.nodes) // 2
     t = thermal.solve_steady_thermal(model)
-    reaction = thermal.assemble_thermal(model).conductivity @ t
+    wall_data = {}
+    if films is None:
+        reaction = thermal.assemble_thermal(model).conductivity @ t
+        left_flux, right_flux = reaction[ends[0]].sum(), -reaction[ends[1]].sum()
+    else:
+        wall_t = t[ends].mean(dim=1)
+        wall_data = {"left_wall_K": float(wall_t[0]), "right_wall_K": float(wall_t[1])}
+        # Fourier flux from the adjacent elements, independently of the film law.
+        left_flux = k[0] * n * (wall_t[0] - t[ends[0]+1].mean())
+        right_flux = k[-1] * n * (t[ends[1]-1].mean() - wall_t[1])
     face = float(t[[mid, stride + mid]].mean())
     traces = {"interface_K": face}
     if resistance:
         traces = contact_traces(face, float(t[[mid+1, stride+mid+1]].mean()))
-    return {**traces,
-            "left_flux_W_m2": float(reaction[fixed[:2]].sum()),
-            "right_flux_W_m2": -float(reaction[fixed[2:]].sum()),
+    return {**traces, **wall_data,
+            "left_flux_W_m2": float(left_flux),
+            "right_flux_W_m2": float(right_flux),
             "nodal_temperature_K": t.tolist()}
 
 
-def fvm(k, left, right, resistance=0.):
+def fvm(k, left, right, resistance=0., *, films=None):
     n = len(k)
     dx = np.full(n, 1 / n)
     bc = {side: {"type": "dirichlet", "values": value}
           for side, value in (("west", left), ("east", right))}
+    if films is not None:
+        for side, h in zip(("west", "east"), films):
+            bc[side].update(type="robin", film_coefficient=h)
     rx = np.zeros((1, n - 1))
     rx[0, n//2-1] = resistance
     t, info = energy.solve_steady_energy(dx, np.array([1.]), k[None, :],
@@ -68,6 +96,9 @@ def fvm(k, left, right, resistance=0.):
         a = t[0, i-1] + 0.5*(t[0, i-1] - t[0, i-2])
         b = t[0, i] - 0.5*(t[0, i+1] - t[0, i])
         traces = contact_traces(a, b)
+    if films is not None:
+        traces.update(left_wall_K=float(1.5*t[0, 0] - .5*t[0, 1]),
+                      right_wall_K=float(1.5*t[0, -1] - .5*t[0, -2]))
     return {**traces, "left_flux_W_m2": boundary["west"],
             "right_flux_W_m2": -boundary["east"], "cell_temperature_K": t[0].tolist()}
 
@@ -139,6 +170,31 @@ def dem(k, left, right, resistance=0.):
             "nodal_temperature_K": t.tolist()}
 
 
+def film_runs():
+    """Two external films, unit cross section and an optional contact jump."""
+    runs = []
+    films = (12., 3.)
+    for resistance in (0., .3):
+        for left, right in ((310., 290.), (290., 310.)):
+            k = np.repeat([10., 1.], 8)
+            flux = (left-right) / (1/films[0] + .5/k[0] + resistance + .5/k[-1] + 1/films[1])
+            lw, rw = left - flux/films[0], right + flux/films[1]
+            ti, to = lw - .5*flux/k[0], rw + .5*flux/k[-1]
+            expected = {"left_flux_W_m2": flux, "right_flux_W_m2": flux,
+                        "left_wall_K": lw, "right_wall_K": rw}
+            expected.update(contact_traces(ti, to) if resistance else {"interface_K": ti})
+            for solve in (fem, fvm):
+                actual = solve(k, left, right, resistance, films=films)
+                errors = {key: abs(actual[key] - value) for key, value in expected.items()}
+                runs.append({"solver": solve.__name__, "cells_x": len(k), "conductivities": [10., 1.],
+                             "ambient_K": [left, right], "film_coefficients_W_m2_K": films,
+                             "contact_resistance_m2_K_W": resistance, "expected": expected,
+                             "result": actual, "absolute_errors": errors,
+                             "absolute_tolerances": dict.fromkeys(expected, 1e-8),
+                             "passed": all(error <= 1e-8 for error in errors.values())})
+    return runs
+
+
 def main():
     runs = []
     for k1, k2 in ((1., 1.), (10., 1.)):
@@ -167,6 +223,7 @@ def main():
                                  "wall_K": [left, right], "contact_resistance_m2_K_W": resistance, "expected": expected, "result": result,
                                  "cells_x": cells, "absolute_errors": errors, "absolute_tolerances": tolerances,
                                  "passed": all(errors[key] <= tolerances[key] for key in errors)})
+    runs.extend(film_runs())
     print(json.dumps({"sources": [provenance(path) for path in
                                   (__file__, thermal.__file__, energy.__file__, sph_heat.__file__, contact_chain.__file__)],
                       "runs": runs}, indent=2))

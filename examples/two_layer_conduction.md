@@ -90,3 +90,25 @@ Replacing those samples with the computed temperatures contributes
 that resolution. At 64 cells the contributions are +0.011412 and −0.022256
 W/m². The native pair-transfer error instead decreases monotonically across
 all four meshes.
+
+## Convective cooling and finite contact
+
+The steady command also runs eight FEM/FVM cases with ambient temperatures
+310 and 290 K (and the reversed pair), film coefficients 12 and 3 W/(m² K),
+and perfect or finite contact. With R=0.3 m² K/W and conductivities 10 and
+1 W/(m K), the forward exact flux is 15.789474 W/m² and jump is 4.736842 K.
+The FEM comparison uses adjacent element gradients for flux and boundary
+nodes for temperature. FVM uses its boundary ledger and extrapolates the
+surface temperatures from adjacent cell values.
+
+Run `OMP_NUM_THREADS=1 python examples/two_layer_film_decay.py` for the
+transient comparison. On a unit slab with a contact at x=0.5 and zero ambient
+temperature perturbation, the modes sin(ax+φ) and −A sin(b(1−x)+ψ) have
+a=3π/2, b=4π/3, φ=0.25 and ψ=0.4. Continuity of conductive flux sets A;
+the contact resistance is the jump divided by flux. The film coefficients
+a cot(φ) and 4b cot(ψ) satisfy the Robin conditions. Conductivities (1,4)
+and volumetric heat capacities (1,4(b/a)²) give common decay exp(−a²t).
+The comparison uses Crank–Nicolson and halves both the mesh spacing and the
+time step at each refinement. At t=0.015 s and 64 cells, maximum wall
+temperature errors were 2.685e-5 K (FEM) and 2.830e-5 K (FVM). Stored heat
+changes are compared with the analytic integral over the two layers.
