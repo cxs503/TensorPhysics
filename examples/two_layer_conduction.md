@@ -256,3 +256,23 @@ crossings independently from FVM face-power histories and SPH midpoint
 ghost-pair powers. At 64 cells the timing errors for power and cumulative
 heat were 4.39e-6 and 1.78e-5 s (FVM), and 7.30e-6 and 2.94e-5 s (SPH).
 The longer run checks both errors against 5e-5 s.
+
+### Periodically heated wall
+
+Run `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python examples/periodic_wall_heat.py`.
+On a unit slab with unit properties, the left wall oscillates as cos(ωt),
+the right wall is held at zero and the period is 0.08 s. The initial field
+is sampled from the continuum periodic solution. With λ=√(iω), the
+temperature phasor is sinh(λ(1−x))/sinh(λ), and the two inward heat-flux
+phasors are λ coth(λ) and −λ/sinh(λ). Compare complex cell averages and
+wall fluxes integrated against exp(−iωt) over a full cycle. FEM uses its
+interval reaction heats, FVM its per-face endpoint powers and SPH its
+midpoint particle powers. The cycle heat balance compares measured supply
+with the actual discrete storage change.
+
+The 16, 32, 64 and 128 cell ladder checks convergence separately from the
+absolute targets (0.003 K, 0.08 W/m², 0.5 degrees at the driven wall).
+At 64 cells FVM and SPH have complex temperature errors of 0.003015 and
+0.004120 K. At 128 cells all three methods meet every target. Maximum
+temperature errors are 0.000776 K (FVM), 0.000385 K (FEM) and 0.001061 K
+(SPH). Driven-wall phase errors are 0.0308°, 0.0114° and 0.0372° respectively.
