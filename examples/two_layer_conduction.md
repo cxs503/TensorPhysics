@@ -112,3 +112,21 @@ The comparison uses Crank–Nicolson and halves both the mesh spacing and the
 time step at each refinement. At t=0.015 s and 64 cells, maximum wall
 temperature errors were 2.685e-5 K (FEM) and 2.830e-5 K (FVM). Stored heat
 changes are compared with the analytic integral over the two layers.
+
+The steady film comparison includes a DEM chain with a film resistance
+1/(hA) on each external link and fixed ambient reservoirs. Surface
+temperatures and material-side heat fluxes come from the physical chain.
+This gives twelve film cases and 72 steady cases overall.
+
+The transient film comparison also uses lumped half-segment capacities on
+the wall and contact nodes, with zero capacity at the prescribed ambient
+reservoirs. It reports four resolutions per solver. At 64 segments the DEM
+stored-heat change error is 1.12033e-5 J/m² against the existing absolute
+limit of 1e-5. Of the signed error, +9.91130e-6 is obtained by integrating
+the exact mode with the lumped capacities, and +1.29198e-6 comes from the
+computed nodal temperatures. Halving the time step alone gives 1.12012e-5.
+At 128 segments the error falls to 2.80181e-6 J/m². The discrete balance
+between time-integrated inward film powers and nodal heat change closes
+within 3e-15 J/m² at every tested resolution. All other gates pass.
+The full transient film command currently returns exit status 1 for the
+64-segment discrepancy and still emits all twelve results.

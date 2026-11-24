@@ -1,4 +1,4 @@
-"""Compare FEM and FVM with a decaying contact mode cooled by two wall films."""
+"""Compare FEM, FVM and DEM with a decaying contact mode cooled by two wall films."""
 import inspect
 import json
 import math
@@ -8,11 +8,12 @@ import torch
 
 from conduction_provenance import provenance
 from two_layer_conduction import slab_fem_model
+from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
 
 
-def measure(n):
+def measure(n, *, time_refinement=1):
     a, b = 1.5*math.pi, 4*math.pi/3
     phi, psi = .25, .4
     cap = 4*(b/a)**2
@@ -22,7 +23,7 @@ def measure(n):
     films = (a/math.tan(phi), 4*b/math.tan(psi))
     k = np.repeat([1., 4.], n//2)
     capacity = np.repeat([1., cap], n//2)
-    time = np.linspace(0., .015, n+1)
+    time = np.linspace(0., .015, time_refinement*n+1)
     decay = math.exp(-a*a*time[-1])
     heat0 = ((math.cos(phi)-math.cos(a/2+phi))/a
              - cap*amp*(math.cos(psi)-math.cos(b/2+psi))/b)
@@ -44,6 +45,29 @@ def measure(n):
             + cap*(delta[m+1:-1].sum()+delta[m+2:].sum()))/(2*n)
     values = [("FEM", np.tile(initial, 2), fem_t.numpy(), walls, final[m]-final[m+1], heat)]
 
+    # Massless ambient reservoirs surround two rods with lumped nodal
+    # capacities. Coincident interface nodes are linked by the contact.
+    links = np.r_[1/films[0], 1/(n*k[:m]), resistance, 1/(n*k[m:]), 1/films[1]]
+    nodal_capacity = np.r_[np.ones(m+1), np.full(m+1, cap)] / n
+    nodal_capacity[[0, m, m+1, -1]] *= .5
+    history = contact_chain.transient_contact_temperatures(
+        links, np.r_[0., nodal_capacity, 0.], time, np.r_[0., initial, 0.],
+        t_left=0., t_right=0.)
+    final = history[-1, 1:-1]
+    values.append(("DEM", initial, final, final[[0,-1]], final[m]-final[m+1],
+                   nodal_capacity @ (final-initial)))
+
+    # Independent endpoint powers at every step, positive into the rods.
+    film_power = -history[:, 1]*films[0] - history[:, -2]*films[1]
+    dem_balance = float(abs(np.diff(time) @ (.5*(film_power[1:]+film_power[:-1]))
+                            - nodal_capacity @ (final-initial)))
+
+    # Split the signed continuum discrepancy into nodal-integration and
+    # evolution contributions, using exact samples at the same nodes.
+    exact_sample_change = (decay - 1) * (nodal_capacity @ initial)
+    integration_error = exact_sample_change - (decay - 1) * heat0
+    evolution_error = nodal_capacity @ (final-initial) - exact_sample_change
+
     centers = (np.arange(n)+.5)/n
     initial = mode(centers[:m], centers[m:])
     faces = np.zeros((1, n-1))
@@ -57,31 +81,39 @@ def measure(n):
     contact_jump = 1.5*(final[m-1]-final[m]) - .5*(final[m-2]-final[m+1])
     values.append(("FVM", initial, final, walls, contact_jump, np.mean(capacity*(final-initial))))
     wall_exact = decay * np.array([math.sin(phi), -amp*math.sin(psi)])
-    return [{"solver": name, "cells": n,
+    rows = [{"solver": name, "cells": n,
              "errors": {"temperature_K": float(abs(final - decay*initial).max()),
                         "wall_K": float(abs(walls-wall_exact).max()),
                         "jump_K": float(abs(contact_jump-decay*jump)),
                         "heat_change_J_m2": float(abs(heat-(decay-1)*heat0))}}
             for name, initial, final, walls, contact_jump, heat in values]
+    for row in rows:
+        if row["solver"] == "DEM":
+            row["discrete_heat_balance_residual_J_m2"] = dem_balance
+            row["signed_storage_errors_J_m2"] = {"nodal_integration": float(integration_error),
+                                                  "temperature_evolution": float(evolution_error)}
+    return rows
 
 
 def main():
     runs = []
     previous = {}
-    for n in (16, 32, 64):
+    for n in (16, 32, 64, 128):
         for row in measure(n):
             errors = row["errors"]
             last = previous.get(row["solver"])
             row["passed"] = all(math.isfinite(v) for v in errors.values())
             if last:
                 row["passed"] &= all(v < last[k]/3 for k, v in errors.items())
-            if n == 64:
+            if n >= 64:
                 limits = {"temperature_K": .001, "wall_K": .001, "jump_K": .003, "heat_change_J_m2": 1e-5}
                 row["passed"] &= all(value < limits[key] for key, value in errors.items())
+            if "discrete_heat_balance_residual_J_m2" in row:
+                row["passed"] &= row["discrete_heat_balance_residual_J_m2"] < 1e-12
             previous[row["solver"]] = errors
             runs.append(row)
     print(json.dumps({"sources": [provenance(f) for f in
-                      (__file__, inspect.getfile(slab_fem_model), thermal.__file__, energy.__file__)],
+                      (__file__, inspect.getfile(slab_fem_model), thermal.__file__, energy.__file__, contact_chain.__file__)],
                       "time_s": .015, "runs": runs}, indent=2))
     return 0 if all(row["passed"] for row in runs) else 1
 

@@ -151,7 +151,7 @@ def contact_traces(left, right):
             "jump_K": float(left-right)}
 
 
-def dem(k, left, right, resistance=0.):
+def dem(k, left, right, resistance=0., *, films=None):
     """Unit-area contact network with one thermal resistance per slab segment.
 
     This verifies the network solve with prescribed conductances. Particle
@@ -161,10 +161,16 @@ def dem(k, left, right, resistance=0.):
     edges = 1 / (n * k)
     if resistance:
         edges = np.insert(edges, n // 2, resistance)
-    t = contact_chain.lattice_network_temperatures(len(edges) + 1, 1, (edges[:, None], 1.), left, right)[:, 0]
+    network_edges = edges if films is None else np.r_[1/films[0], edges, 1/films[1]]
+    t = contact_chain.lattice_network_temperatures(
+        len(network_edges) + 1, 1, (network_edges[:, None], 1.), left, right)[:, 0]
+    wall_data = {}
+    if films is not None:
+        t = t[1:-1]  # physical nodes between the prescribed ambient reservoirs
+        wall_data = {"left_wall_K": float(t[0]), "right_wall_K": float(t[-1])}
     mid = n // 2
     traces = contact_traces(t[mid], t[mid+1]) if resistance else {"interface_K": float(t[mid])}
-    return {**traces,
+    return {**traces, **wall_data,
             "left_flux_W_m2": float((t[0] - t[1]) / edges[0]),
             "right_flux_W_m2": float((t[-2] - t[-1]) / edges[-1]),
             "nodal_temperature_K": t.tolist()}
@@ -183,7 +189,7 @@ def film_runs():
             expected = {"left_flux_W_m2": flux, "right_flux_W_m2": flux,
                         "left_wall_K": lw, "right_wall_K": rw}
             expected.update(contact_traces(ti, to) if resistance else {"interface_K": ti})
-            for solve in (fem, fvm):
+            for solve in (fem, fvm, dem):
                 actual = solve(k, left, right, resistance, films=films)
                 errors = {key: abs(actual[key] - value) for key, value in expected.items()}
                 runs.append({"solver": solve.__name__, "cells_x": len(k), "conductivities": [10., 1.],
