@@ -247,3 +247,12 @@ area. Rate and power use the same second-moment calibration. On 64 particles
 the maximum wall heat errors at 0.03 and 0.08 s were 8.444e-5 and
 6.053e-5 J/m². Halving the time step changed the final temperatures by
 at most 8.891e-8 K across the two runs.
+
+At the right wall the instantaneous inward power crosses zero at
+ln(1.6)/(3π²) = 0.01587377 s. Cumulative inward heat returns to zero
+later, at 0.03738919 s, the positive root of
+expm1(−π²t) − 0.4 expm1(−4π²t) = 0. The campaign interpolates the two
+crossings independently from FVM face-power histories and SPH midpoint
+ghost-pair powers. At 64 cells the timing errors for power and cumulative
+heat were 4.39e-6 and 1.78e-5 s (FVM), and 7.30e-6 and 2.94e-5 s (SPH).
+The longer run checks both errors against 5e-5 s.
