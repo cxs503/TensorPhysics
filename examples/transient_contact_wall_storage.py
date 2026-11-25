@@ -41,7 +41,14 @@ def measure(n, wall_flux_order):
     means = points*np.sinc(np.sqrt(decay*capacity/k)*dx/(2*np.pi))
     times = np.linspace(0.,1.,2*n+1)
     signal = np.exp(-decay*times)
+    mean_signal = signal[:-1]*(-np.expm1(-decay*np.diff(times)))/(decay*np.diff(times))
+    def trace_errors(left,right):
+        return dict(max_interval_left_trace_error_K=float(abs(left-hot*mean_signal).max()),
+                    max_interval_right_trace_error_K=float(abs(right-cold*mean_signal).max()),
+                    max_interval_jump_error_K=float(abs(left-right-(hot-cold)*mean_signal).max()))
+
     if wall_flux_order in ("DEM","SPH"):
+        trace_metrics = {}
         contacts = np.zeros(n-1)
         contacts[mid-1] = resistance
         if wall_flux_order=="DEM":
@@ -65,13 +72,16 @@ def measure(n, wall_flux_order):
             external = heats[:,[0,-1]]*np.array([1,-1])
             sample,reference = "cell_mean",means
         else:
-            from tensorsph.heat_conduction_2d import solve_transient_layered_slab
+            from tensorsph.heat_conduction_2d import layered_slab_contact_temperatures, solve_transient_layered_slab
             films = tuple((h,lambda t,a=a: a*np.exp(-decay*t)) for h,a in zip(film,air))
             u,q,surface,external,mean = solve_transient_layered_slab(points,times,dx,(None,None),
                     conductivity=k,volumetric_heat_capacity=capacity,contact_resistance_x=contacts,
                     method="sdirk2",x_wall_films=films,wall_areal_heat_capacity=wall_capacity,
                     initial_wall_temperatures=walls,return_wall_temperatures=True,return_external_heat=True,
                     return_x_heat=True,return_interval_temperature=True)
+            flux = q/q.new_tensor(np.diff(times))[:,None]
+            left,right = layered_slab_contact_temperatures(mean,flux,dx,k)
+            trace_metrics = trace_errors(left[:,mid-1].numpy(),right[:,mid-1].numpy())
             u,q,surface,external,mean = (v.numpy() for v in (u,q,surface,external,mean))
             sample,reference = "particle",points
         ref_interval = -np.diff(signal)/decay
@@ -79,7 +89,7 @@ def measure(n, wall_flux_order):
         wall_residual = wall_capacity*np.diff(surface,axis=0)+material_heat-external
         stored = dx*(u*capacity).reshape(len(times),2,mid).sum(axis=2)
         layer_residual = np.diff(stored,axis=0)-material_heat+np.column_stack((q[:,mid],-q[:,mid]))
-        return dict(solver=wall_flux_order,n=n,steps=len(times)-1,
+        return dict(solver=wall_flux_order,n=n,steps=len(times)-1,**trace_metrics,
                     **{f"max_interval_{sample}_error_K":float(abs(mean-(ref_interval/np.diff(times))[:,None]*reference).max()),
                        f"max_{sample}_error_K":float(abs(u-signal[:,None]*reference).max())},
                     max_wall_temperature_error_K=float(abs(surface-signal[:,None]*walls).max()),
@@ -150,7 +160,8 @@ def measure(n, wall_flux_order):
         wall_residual = wall_capacity*np.diff(surface,axis=0)+wall_heat-.5*dt[:,None]*(external[:-1]+external[1:])
         stored = dx*np.column_stack((field[:,:mid] @ capacity[:mid],field[:,mid:] @ capacity[mid:]))
         layer_residual = np.diff(stored,axis=0)-wall_heat+np.column_stack((contact_heat,-contact_heat))
-        return dict(solver="FEM",n=n,steps=len(dt),
+        avg = result.interval_temperature.numpy().reshape(len(dt),2,n+2).mean(axis=1)
+        return dict(solver="FEM",n=n,steps=len(dt),**trace_errors(avg[:,mid],avg[:,mid+1]),
                     max_cell_mean_error_K=float(abs(field-signal[:,None]*means).max()),
                     max_wall_temperature_error_K=float(abs(surface-signal[:,None]*walls).max()),
                     max_step_mean_wall_flux_error_W_m2=float(abs((wall_heat-exact_interval[:,None]*inward)/dt[:,None]).max()),
