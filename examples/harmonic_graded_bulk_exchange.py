@@ -6,6 +6,7 @@ import json
 import math
 
 import numpy as np
+from scipy.integrate import solve_bvp
 from scipy.special import airy
 import torch
 
@@ -50,6 +51,43 @@ def reference(omega,wall_c,materials,resistance,ambient=AMBIENT):
         right,qr = evaluate(x,1)
         return np.where(x<.5,left,right),np.where(x<.5,ql,qr)
     return evaluate
+
+
+def static_and_lag(materials,resistance,wall_c,ambient):
+    """Collocate the DC field and the coefficient of i*omega on both half slabs."""
+    def equations(x,y):
+        out = np.empty_like(y)
+        for layer,(k,c,h,slope) in enumerate(materials):
+            t,q,t1,q1 = y[4*layer:4*layer+4]
+            loss = h+slope*x
+            out[4*layer:4*layer+4] = [-q/k,-loss*t,-q1/k,-loss*t1-c*t]
+        return out
+    def boundaries(at_left,at_right):
+        # Both materials use local x in [0,.5]. The first layer's
+        # right endpoint touches the second layer's left endpoint.
+        west,high = at_left.reshape(2,4)
+        low,east = at_right.reshape(2,4)
+        return np.array([west[1]+FILMS[0]*(west[0]-ambient[0]),
+                         -east[1]+FILMS[1]*(east[0]-ambient[1]),
+                         west[3]+FILMS[0]*west[2]+wall_c[0]*west[0],
+                         -east[3]+FILMS[1]*east[2]+wall_c[1]*east[0],
+                         low[1]-high[1],low[0]-high[0]-resistance*low[1],
+                         low[3]-high[3],low[2]-high[2]-resistance*low[3]])
+    x = np.linspace(0.,.5,17)
+    solution = solve_bvp(equations,boundaries,x,np.zeros((8,len(x))),tol=1e-10)
+    if not solution.success:
+        raise RuntimeError(solution.message)
+    def component(index):
+        def evaluate(x,layer=None):
+            if layer is None:
+                x = np.asarray(x)
+                left = evaluate(np.minimum(x,.5),0)
+                right = evaluate(np.maximum(x,.5),1)
+                return tuple(np.where(x<.5,a,b) for a,b in zip(left,right))
+            pair = solution.sol(np.asarray(x)-layer*.5)[4*layer+index:4*layer+index+2]
+            return pair[0],pair[1]
+        return evaluate
+    return component(0),component(2)
 
 
 def measure(n,omega,wall_c,contact=False,quasistatic=False):
@@ -105,6 +143,19 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False):
     factor = sph.lattice_diffusion_factor_2d(1.3,dx,mode="moment")
     cut = sph.stencil_x_face_power_2d(field[None,:],offsets,dx,m,wall,conductivity=k,layered_x=True,contact_resistance_x=contacts)/(dx*factor)
     rows.append(("SPH",field.numpy(),analytic(x)[0],wall.numpy(),inward.numpy(),cut.item(),dx*(loss+1j*omega*c)*field.numpy()))
+    if quasistatic:
+        steady,tangent = static_and_lag(materials,resistance,wall_c,ambient)
+        # Compare both reference constructions, including the two contact traces.
+        dc_airy = reference(0.,wall_c,materials,resistance,ambient)
+        small = 1e-5
+        small_airy = reference(small,wall_c,materials,resistance,ambient)
+        reference_error = np.zeros(4)
+        for side in (0,1):
+            locations = edges[side*m:side*m+m+1]
+            dc = np.asarray(steady(locations,side))-np.asarray(dc_airy(locations,side)).real
+            lag = np.asarray(tangent(locations,side))-np.asarray(small_airy(locations,side)).imag/small
+            reference_error = np.maximum(reference_error,np.max(abs(np.vstack((dc,lag))),axis=1))
+        checks = dict(zip(("steady_K","steady_W_m2","lag_K_s","lag_W_s_m2"),reference_error.tolist()))
     for name,u,ref,wall,inward,cut,volume_power in rows:
         errors = dict(temperature_K=float(abs(u-ref).max()),amplitude_K=float(abs(abs(u)-abs(ref)).max()),
                       phase_rad=float(abs(np.angle(u/ref)).max()),wall_temperature_K=float(abs(wall-wall_ref).max()),
@@ -112,9 +163,6 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False):
         if quasistatic:
             # Real drive: T(0) is real and Im(T)/omega tends to the first
             # frequency derivative. The Airy solution is analytic near zero.
-            steady = reference(0.,wall_c,materials,resistance,ambient)
-            small = 1e-5
-            tangent = reference(small,wall_c,materials,resistance,ambient)
             def samples(solution):
                 if name=="FEM":
                     return (np.r_[solution(edges[:m+1],0)[0],solution(edges[m:],1)[0]]
@@ -123,12 +171,16 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False):
                     return .5*(solution(x[:,None]+.5*dx*z)[0] @ w)
                 return solution(x)[0]
             errors.update(steady_temperature_K=float(abs(u.real-samples(steady).real).max()),
-                          temperature_lag_K_s=float(abs(u.imag/omega-samples(tangent).imag/small).max()),
+                          temperature_lag_K_s=float(abs(u.imag/omega-samples(tangent)).max()),
                           steady_cut_power_W_m2=float(abs(cut.real-steady(.5)[1].real)),
-                          cut_power_lag_W_s_m2=float(abs(cut.imag/omega-tangent(.5)[1].imag/small)))
+                          cut_power_lag_W_s_m2=float(abs(cut.imag/omega-tangent(.5)[1])))
         balance = float(abs(FILMS*(ambient-wall)-1j*omega*wall_c*wall-inward).max())
         residual = volume_power.reshape(2,m).sum(1)-inward+np.array([cut,-cut])
-        yield dict(max_layer_balance_W_m2=float(abs(residual).max()),solver=name,cells=n,omega=omega,wall_capacity=wall_c.tolist(),errors=errors,wall_balance_W_m2=balance)
+        row = dict(max_layer_balance_W_m2=float(abs(residual).max()),solver=name,cells=n,omega=omega,
+                   wall_capacity=wall_c.tolist(),errors=errors,wall_balance_W_m2=balance)
+        if quasistatic:
+            row["reference_discrepancies"] = checks
+        yield row
 
 
 if __name__=="__main__":
@@ -146,6 +198,8 @@ if __name__=="__main__":
                 name,errors = row["solver"],row["errors"]
                 orders = {k:math.log2(previous[name][k]/v) for k,v in errors.items()} if name in previous else {}
                 passed = max(row["wall_balance_W_m2"],row["max_layer_balance_W_m2"])<1e-10
+                if args.quasistatic:
+                    passed &= max(row["reference_discrepancies"].values())<1e-7
                 if n==128:
                     passed &= (min(orders.values())>1.8 and errors["temperature_K"]<1e-4
                                and errors["phase_rad"]<2e-4 and errors["inward_power_W_m2"]<2e-4
