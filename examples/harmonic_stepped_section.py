@@ -8,7 +8,7 @@ import torch
 from conduction_provenance import provenance
 import two_layer_conduction
 from tensorfem import thermal
-from tensorfvm.cht import energy
+from tensorfvm.cht import energy, rod
 
 
 def propagate(x, t, p, wave, k_area):
@@ -113,6 +113,20 @@ def shoulder(n):
                    interface_power_error_W=float(max(abs(before-left_power),abs(after-right_power))),
                    shoulder_balance_W=float(abs(before+net_input-after)))
 
+    cell, faces, incoming, outgoing = rod.solve_harmonic_stepped_rod(
+        np.full(n,1/n),area.repeat(m),k.repeat(m),c.repeat(m),exact[[0,-1]],omega,
+        film_coefficient=h,ambient_temperature=ambient,shoulder_areal_heat_capacity=cw)
+    # Integrate the continuum axial phasor over each finite volume.
+    midpoints = x[:-1]+.5/n
+    exact_cell = np.concatenate([propagate(midpoints+offset,center,p,w,ka)[0]*np.sinh(w/(2*n))/(w/(2*n))
+                                 for offset,p,w,ka in zip((-.5,0.),(left_power,right_power),wave,k*area)])
+    before, after = outgoing[m-1], incoming[m]
+    net_input = exposed*(h*(ambient-faces[m])-1j*omega*cw*faces[m])
+    yield dict(solver="shoulder-FVM",n=n,temperature_error_K=float(abs(cell-exact_cell).max()),
+               interface_power_error_W=float(max(abs(before-left_power),abs(after-right_power))),
+               shoulder_balance_W=float(abs(before+net_input-after)),
+               cell_balance_W=float(abs(1j*omega*(c*area).repeat(m)*cell/n-incoming+outgoing).max()))
+
 
 if __name__ == "__main__":
     rows, previous = [], {}
@@ -126,5 +140,5 @@ if __name__ == "__main__":
             rows.append(row)
             previous[name] = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
-                     (__file__,two_layer_conduction.__file__,thermal.__file__,energy.__file__)]),indent=2,allow_nan=False))
+                     (__file__,two_layer_conduction.__file__,thermal.__file__,energy.__file__,rod.__file__)]),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
