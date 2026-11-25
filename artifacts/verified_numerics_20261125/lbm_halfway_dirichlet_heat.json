@@ -1,0 +1,88 @@
+{
+  "reference": "T=.4+.3*x+exp(-alpha*(pi^2+b^2)*t)*sin(pi*x)*cos(b*y); compare cell and time-averaged face quantities",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_halfway_dirichlet_heat.py",
+  "order_metrics": [
+    "max_wall_flux_error_W_m2",
+    "max_temperature_error_K"
+  ],
+  "runs": [
+    {
+      "n": 8,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 0.0013708602425163696,
+      "max_temperature_error_K": 0.00022756208308283288,
+      "max_cell_balance_J": 9.283481101907132e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 0.00034305739835271964,
+      "max_temperature_error_K": 5.722586654599571e-05,
+      "max_cell_balance_J": 1.3806637040245096e-19,
+      "orders": [
+        1.998559612679852,
+        1.9915208833542033
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 8.578520380936316e-05,
+      "max_temperature_error_K": 1.4326998869940155e-05,
+      "max_cell_balance_J": 2.1605957599885083e-20,
+      "orders": [
+        1.9996492409215294,
+        1.9979309695199516
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.013038096202653116,
+      "max_temperature_error_K": 0.0009710379536057578,
+      "max_cell_balance_J": 8.131516293641283e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.003640245858305524,
+      "max_temperature_error_K": 0.00028127994389259836,
+      "max_cell_balance_J": 1.7448878713438587e-19,
+      "orders": [
+        1.8406254285302335,
+        1.787520997537704
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.0009352069326433177,
+      "max_temperature_error_K": 7.285223390907092e-05,
+      "max_cell_balance_J": 2.1652279714188052e-20,
+      "orders": [
+        1.9606783621423478,
+        1.9489615715659847
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "34b50c9d3c36821fcfeeb19caab9937ad8726b88",
+      "file": "lbm_halfway_dirichlet_heat.py",
+      "source_sha256": "754cd58a7149c44062b62a68e36f893c45168dacfe11f803e1521c6575b80af8"
+    },
+    {
+      "commit": "9af0aa87a810b6d6acbf6b859758cdf2e0de3944",
+      "file": "thermal_common.py",
+      "source_sha256": "5e5714f38260e172e45b134b670c3fbb24ea8c3c32627765c18ea49740c42864"
+    }
+  ]
+}
