@@ -55,13 +55,12 @@ def reference_integrals(lengths, areas, conductivity, capacity, omega, resistanc
     return np.asarray(components), np.asarray(capacity_norms)
 
 
-def measure(n, omega, solver="FVM", phased=False, reactive=False):
+def measure(n, omega, solver="FVM", phased=False, reactive=False, *, resistance=.32, sensitivity=False):
     lengths = np.array([.37, .63])
     areas = np.array([.8, 1.4])
     conductivity = np.array([.9, 3.7])
     capacity = np.array([1.6, .85])
     end_capacity = np.array([.28, .63])  # per unit end area
-    resistance = .32  # K/W for the whole contact
     storage = 1j*omega*areas*end_capacity
 
     # Propagate [T, P] with P positive rightward. At the interface the
@@ -80,6 +79,7 @@ def measure(n, omega, solver="FVM", phased=False, reactive=False):
     contact = np.zeros(2*n-1)
     contact[n-1] = resistance*min(areas)
     columns = []
+    contact_currents = []
     jump_error = power_error = continuity = balance = 0.
     drives = list(np.eye(2))
     if phased or reactive:
@@ -130,6 +130,7 @@ def measure(n, omega, solver="FVM", phased=False, reactive=False):
                              reactive_balance_W_K=float(abs(np.vdot(drive, ends).imag+omega*parts.sum())))
         else:
             columns.append(ends)
+            contact_currents.append(p_left)
         target_power = contact_power @ drive
         jump_error = max(jump_error, abs(jump-resistance*target_power))
         power_error = max(power_error, abs(p_left-target_power), abs(p_right-target_power))
@@ -137,6 +138,16 @@ def measure(n, omega, solver="FVM", phased=False, reactive=False):
         bulk_storage = 1j*omega*np.dot(widths*np.repeat(areas*capacity, n), cell)
         balance = max(balance, abs(drive.sum()-storage @ ends-bulk_storage))
 
+    if sensitivity:
+        # Differentiate the contact transfer and the two end equations at fixed drives.
+        transfer_r = layers[1] @ [[0., -1.], [0., 0.]] @ layers[0]
+        boundary_r = np.vstack((np.zeros(2), [storage[1], -1.] @ transfer_r))
+        west_r = -west_state @ boundary_r @ west_state
+        exact_r = np.vstack((west_r[0], (transfer_r @ west_state+transfer @ west_r)[0]))
+        # For a reciprocal complex-symmetric system dZ/dR = q qᵀ under unit drives.
+        computed_r = np.outer(contact_currents, contact_currents)
+        extra.update(derivative=np.stack((computed_r.real, computed_r.imag), axis=-1).tolist(),
+                     exact_derivative=np.stack((exact_r.real, exact_r.imag), axis=-1).tolist())
     z = np.column_stack(columns)
     # For arbitrary complex drives d the real part of dᴴ Z d must be
     # nonnegative for a passive rod. The Hermitian part tests all drives.
