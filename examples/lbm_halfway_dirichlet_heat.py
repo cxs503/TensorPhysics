@@ -1,4 +1,5 @@
 """Verify cell-centered D3Q7 wall heat against a decaying slab mode and a steady ramp."""
+import argparse
 import json
 import math
 
@@ -9,7 +10,7 @@ from conduction_provenance import provenance
 from tensorlbm import thermal_common as lbm
 
 
-def measure(n, mode):
+def measure(n, mode, flux_side=None):
     dx, alpha, capacity = 1/n, .08, 1.7
     dt = dx**2/(8*alpha)
     x = (torch.arange(n, dtype=torch.float64)+.5)*dx
@@ -25,11 +26,20 @@ def measure(n, mode):
     for step in range(n*n//16):
         post = lbm.thermal_collide_bgk_3d(g,field,zero,zero,zero,1.)
         fx, fy, fz = lbm.thermal_link_fluxes_3d(post, dt=dt, spacing=dx, volumetric_heat_capacity=capacity, periodic="yz")
-        g, (low,high) = lbm.thermal_temperature_wall_pair_3d(lbm.thermal_stream_3d(post), "x", (.4,.7),
-            dt=dt,spacing=dx,volumetric_heat_capacity=capacity)
-        updated = lbm.thermal_macroscopic_3d(g)
         decay = math.exp(-rate*dt*step)
         average = decay*(-math.expm1(-rate*dt))/(rate*dt)
+        units = dict(dt=dt, spacing=dx, volumetric_heat_capacity=capacity)
+        streamed = lbm.thermal_stream_3d(post)
+        if flux_side is None:
+            g, (low,high) = lbm.thermal_temperature_wall_pair_3d(streamed, "x", (.4,.7), **units)
+        else:
+            types = ["temperature", "temperature"]
+            values = [.4, .7]
+            types[flux_side] = "flux"
+            slope = (.3, -.3)[flux_side]
+            values[flux_side] = -capacity*alpha*(slope+math.pi*average*lateral[None,:])
+            g, (low,high) = lbm.thermal_mixed_wall_pair_3d(streamed, "x", types, values, **units)
+        updated = lbm.thermal_macroscopic_3d(g)
         for wall, slope in ((low,.3),(high,-.3)):
             exact = -capacity*alpha*(slope+math.pi*average*lateral)
             max_flux = max(max_flux, float((wall-exact).abs().max()))
@@ -44,17 +54,23 @@ def measure(n, mode):
 
 if __name__ == "__main__":
     rows = []
-    for mode in (0,1):
-        previous = None
-        for n in (8,16,32):
-            row = measure(n, mode)
-            errors = np.array([row["max_wall_flux_error_W_m2"], row["max_temperature_error_K"]])
-            orders = [] if previous is None else np.log2(previous/errors).tolist()
-            row.update(orders=orders, passed=bool(all(v > 1.7 for v in orders) and row["max_cell_balance_J"] < 1e-14))
-            rows.append(row)
-            previous = errors
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mixed", action="store_true", help="apply the analytic flux on one side and temperature on the other")
+    mixed = parser.parse_args().mixed
+    for flux_side in ((0,1) if mixed else (None,)):
+        for mode in (0,1):
+            previous = None
+            for n in ((8,16,32,64) if mixed else (8,16,32)):
+                row = measure(n, mode, flux_side)
+                row["prescribed_flux_side"] = ("lower","upper")[flux_side] if mixed else None
+                errors = np.array([row["max_wall_flux_error_W_m2"], row["max_temperature_error_K"]])
+                orders = [] if previous is None else np.log2(previous/errors).tolist()
+                min_order = {16: 1., 32: 1.7, 64: 1.8}.get(n, 0.) if mixed else 1.7
+                row.update(orders=orders, passed=bool(all(v > min_order for v in orders) and row["max_cell_balance_J"] < 1e-14))
+                rows.append(row)
+                previous = errors
     print(json.dumps(dict(reference="T=.4+.3*x+exp(-alpha*(pi^2+b^2)*t)*sin(pi*x)*cos(b*y); compare cell and time-averaged face quantities",
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_halfway_dirichlet_heat.py",
+        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_halfway_dirichlet_heat.py"+(" --mixed" if mixed else ""),
         order_metrics=["max_wall_flux_error_W_m2","max_temperature_error_K"], runs=rows,
         sources=[provenance(p) for p in (__file__,lbm.__file__)]), indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
