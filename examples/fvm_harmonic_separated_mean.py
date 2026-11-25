@@ -7,7 +7,7 @@ import numpy as np
 from conduction_provenance import provenance
 
 
-def measure(n, omega, power, fem=False):
+def measure(n, omega, power, fem=False, drifting=False):
     lengths = np.array([.37, .63])
     areas = np.array([.8, 1.4])
     k, c = np.array([.9, 3.7]), np.array([1.6, .85])
@@ -26,12 +26,26 @@ def measure(n, omega, power, fem=False):
     faces_by_layer = [t-power*np.linspace(0., length, n+1)/(cond*area)
                       for t, length, cond, area in zip((0., east_contact), lengths, k, areas)]
     cells = np.concatenate([(f[:-1]+f[1:])/2 for f in faces_by_layer])
-    ends = np.array([0., faces_by_layer[-1][-1]])
+    section_power = [np.full(n+1, power), np.full(n+1, power)]
+    slopes = np.zeros(2, dtype=complex)
+    if drifting:
+        slopes = np.array([.45-.12j, -.31+.22j])  # dP/dx, W/m
+        # Use the contact as origin in both layers. The integrated Fourier
+        # law gives T and the layer-specific quadratic cell means exactly.
+        coordinates = (np.linspace(-lengths[0], 0., n+1), np.linspace(0., lengths[1], n+1))
+        faces_by_layer, means = [], []
+        for x, base, slope, ka in zip(coordinates, (west_contact, east_contact), slopes, k*areas):
+            face = base-(power*x+.5*slope*x**2)/ka
+            faces_by_layer.append(face)
+            means.append((face[:-1]+face[1:])/2+slope*np.diff(x)**2/(12*ka))
+        cells = np.concatenate(means)
+        section_power = [power+slope*x for slope,x in zip(slopes, coordinates)]
+    ends = np.array([faces_by_layer[0][0], faces_by_layer[-1][-1]])
     traces = np.array([west_contact, east_contact])
     mass = widths*np.repeat(areas*c, n)
     shift = (mass @ cells+end_mass @ ends+trace_mass @ traces)/(mass.sum()+end_mass.sum()+trace_mass.sum())
     cells, ends, traces = cells-shift, ends-shift, traces-shift
-    end_load = end_mass*(rate+1j*omega*ends)+np.array([power, -power])
+    end_load = end_mass*(rate+1j*omega*ends)+np.array([section_power[0][0], -section_power[-1][-1]])
     sheet_profile = np.zeros_like(resistance)
     sheet_profile[n-1] = sheet
     trace_loads = np.zeros((2, len(resistance)), dtype=complex)
@@ -64,34 +78,49 @@ def measure(n, omega, power, fem=False):
     from tensorfvm.cht import rod
     field, faces, west, east, sides, mean = rod.solve_harmonic_stepped_rod(
         widths, np.repeat(areas, n), np.repeat(k, n), np.repeat(c, n), end_load, omega,
-        source=np.repeat(c, n)*(rate+1j*omega*cells), end_types=("power", "power"),
+        source=np.repeat(c, n)*(rate+1j*omega*cells)+np.repeat(slopes/areas,n), end_types=("power", "power"),
         end_areal_heat_capacity=end_capacity, shoulder_areal_heat_capacity=shoulder_capacity,
         interface_heat_capacity=sheet_profile, interface_capacity_left_fraction=fraction,
         contact_resistance=resistance, trace_power=trace_loads, flux_order=2,
-        return_traces=True, separate_mean=True)
-    return dict(cells_per_layer=n, omega_rad_s=omega, through_power_W=[power.real, power.imag],
-                mean_rate_error_K_s=float(abs(1j*omega*mean-rate)),
+        return_traces=True, separate_mean=not drifting, return_mean_rate=drifting)
+    diagnostics = {}
+    if drifting:
+        computed_traces = np.asarray(sides)[:, n-1]
+        contact_power = (computed_traces[0]-computed_traces[1])/drop_resistance
+        trace_input = trace_loads[:, n-1]+[east[n-1]-contact_power, contact_power-west[n]]
+        stored = trace_mass*(mean+1j*omega*computed_traces)
+        diagnostics = dict(contact_power_error_W=float(abs(contact_power-power)),
+                           contact_storage_residual_W=float(max(abs(trace_input-stored))))
+    return dict(**diagnostics, cells_per_layer=n, omega_rad_s=omega, through_power_W=[power.real, power.imag],
+                mean_rate_error_K_s=float(abs((mean if drifting else 1j*omega*mean)-rate)),
                 relative_temperature_error_K=float(max(max(abs(field-cells)), max(abs(faces[[0,-1]]-ends)),
                                                        max(abs(np.asarray(sides)[:, n-1]-traces)))),
-                section_power_error_W=float(max(max(abs(west-power)), max(abs(east-power)))))
+                section_power_error_W=float(max(max(abs(west-np.concatenate([p[:-1] for p in section_power]))),
+                                                max(abs(east-np.concatenate([p[1:] for p in section_power]))))))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--fem", action="store_true", help="verify the sparse consistent-mass LINE2 solver")
-    fem = parser.parse_args().fem
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--drifting", action="store_true", help="verify zero and finite frequencies with varying section powers")
+    modes.add_argument("--fem", action="store_true", help="verify the sparse consistent-mass LINE2 solver")
+    args = parser.parse_args()
+    fem, drifting = args.fem, args.drifting
     if fem:
         from tensorfem import thermal as module
         path, option = "../TensorFEM/src", " --fem"
     else:
         from tensorfvm.cht import rod as module
-        path, option = "../TensorFVM/src", ""
-    rows = [measure(n, omega, power, fem) for n in (16, 32, 64) for omega in (1., 1e-4, 1e-8, 1e-12)
+        path, option = "../TensorFVM/src", " --drifting" if drifting else ""
+    frequencies = (0., 1e-12, 1e-4, 1.) if drifting else (1., 1e-4, 1e-8, 1e-12)
+    rows = [measure(n, omega, power, fem, drifting) for n in (16, 32, 64) for omega in frequencies
             for power in (0j, .35-.21j)]
     for row in rows:
         row["passed"] = max(row["mean_rate_error_K_s"], row["relative_temperature_error_K"],
                             row["section_power_error_W"]) < 1e-9
-    print(json.dumps(dict(reference="Uniform temperature pole plus piecewise linear temperature with constant axial power and a resistive jump",
+        if drifting:
+            row["passed"] &= max(row["contact_power_error_W"], row["contact_storage_residual_W"]) < 1e-9
+    print(json.dumps(dict(reference=("Common mean heating and piecewise quadratic temperature with varying axial power and a resistive jump" if drifting else "Uniform temperature pole plus piecewise linear temperature with constant axial power and a resistive jump"),
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_harmonic_separated_mean.py{option}",
                           runs=rows, sources=[provenance(f) for f in (__file__, module.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
