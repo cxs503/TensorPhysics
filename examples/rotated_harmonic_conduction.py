@@ -76,6 +76,7 @@ def fem_case(n,shear,k,s,warp=0.):
              (0,cells[0],cells[1]),(2,cells[-1],cells[-2]))
     raw = thermal.thermal_element_edge_power(model,result.temperature).numpy()
     raw_errors,edge_errors,patch_errors,sampled_errors,field_errors = [],[],[],[],[]
+    cubic_errors,cubic_sampled,cubic_field,wide_quadratic = [],[],[],[]
     fields = torch.stack((result.temperature,torch.from_numpy(exact)))
     for edge,normal,(local,outer,inner) in zip(sides,normals,pairs):
         conn = np.column_stack((edge[:-1],edge[1:]))
@@ -94,6 +95,19 @@ def fem_case(n,shear,k,s,warp=0.):
         patch_errors.append(float(err[0]))
         sampled_errors.append(float(err[1]))
         field_errors.append(float(abs(fit[0]-fit[1]).max()/length))
+        # Center a three-cell tangential strip wherever the endpoint permits.
+        # Keep the target element first, as required by the patch API.
+        index = np.arange(len(outer))
+        strip = np.clip(index-1,0,len(outer)-3)[:,None]+np.arange(3)
+        block = (outer[strip][:,:,None]+(inner-outer)[strip][:,:,None]*np.arange(3)).reshape(len(outer),9)
+        wide = np.column_stack((outer,block[block!=outer[:,None]].reshape(len(outer),8)))
+        quadratic = thermal.recover_q4_patch_boundary_power(model,result.temperature,wide,local).numpy()
+        wide_quadratic.append(float(abs(quadratic/length+values@weights/2).max()))
+        cubic = thermal.recover_q4_patch_boundary_power(model,fields,wide,local,degree=3).numpy()
+        cubic_err = abs(cubic/length+values@weights/2).max(axis=1)
+        cubic_errors.append(float(cubic_err[0]))
+        cubic_sampled.append(float(cubic_err[1]))
+        cubic_field.append(float(abs(cubic[0]-cubic[1]).max()/length))
         raw_errors.append(float(abs(raw[outer,local]/length + values@weights/2).max()))
         np.add.at(target,conn,(length/2)*(values*weights) @ shapes)
         np.add.at(area,conn,length/2)
@@ -107,6 +121,8 @@ def fem_case(n,shear,k,s,warp=0.):
     prior = dict(recovered_edge_error_W_m2=max(edge_errors)) if edge_errors else {}
     return dict(**prior,solver="FEM-Q4",shear=shear,warp=warp,temperature_error_K=float(abs(nodal-exact).max()),
                 side_wall_error_W_m2=side_error(sides[:2]),end_wall_error_W_m2=side_error(sides[2:]),
+                cubic_edge_error_W_m2=max(cubic_errors),cubic_sampled_error_W_m2=max(cubic_sampled),
+                cubic_field_contribution_W_m2=max(cubic_field),wide_quadratic_error_W_m2=max(wide_quadratic),
                 raw_edge_error_W_m2=max(raw_errors),patch_edge_error_W_m2=max(patch_errors),sampled_patch_error_W_m2=max(sampled_errors),field_contribution_W_m2=max(field_errors),all_boundary_error_W_m2=float(norm_error.max()),
                 max_balance_residual_W=float(abs(storage-power[fixed].sum())))
 
@@ -139,6 +155,9 @@ if __name__ == "__main__":
                     if name[0] == "FEM-Q4":
                         row["passed"] &= (row["patch_edge_error_W_m2"] < min(.025,row["raw_edge_error_W_m2"])
                                           and orders["patch_edge_error_W_m2"] > 1.8)
+                        row["passed"] &= (row["cubic_edge_error_W_m2"] < min(.002,row["patch_edge_error_W_m2"],row["wide_quadratic_error_W_m2"])
+                                          and orders["cubic_edge_error_W_m2"] > 1.8
+                                          and orders["cubic_sampled_error_W_m2"] > 2.7)
                         if not row["warp"]:
                             row["passed"] &= (row["recovered_edge_error_W_m2"] < min(.015,row["raw_edge_error_W_m2"])
                                           and orders["recovered_edge_error_W_m2"] > 1.8)
