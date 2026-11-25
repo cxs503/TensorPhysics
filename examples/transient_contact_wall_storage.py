@@ -41,26 +41,50 @@ def measure(n, wall_flux_order):
     means = points*np.sinc(np.sqrt(decay*capacity/k)*dx/(2*np.pi))
     times = np.linspace(0.,1.,2*n+1)
     signal = np.exp(-decay*times)
-    if wall_flux_order=="SPH":
-        from tensorsph.heat_conduction_2d import solve_transient_layered_slab
-
+    if wall_flux_order in ("DEM","SPH"):
         contacts = np.zeros(n-1)
         contacts[mid-1] = resistance
-        films = tuple((h,lambda t,a=a: a*np.exp(-decay*t)) for h,a in zip(film,air))
-        u,q,surface,external,mean = solve_transient_layered_slab(points,times,dx,(None,None),
-                conductivity=k,volumetric_heat_capacity=capacity,contact_resistance_x=contacts,
-                method="sdirk2",x_wall_films=films,wall_areal_heat_capacity=wall_capacity,
-                initial_wall_temperatures=walls,return_wall_temperatures=True,return_external_heat=True,
-                return_x_heat=True,return_interval_temperature=True)
-        u,q,surface,external,mean = (v.numpy() for v in (u,q,surface,external,mean))
+        if wall_flux_order=="DEM":
+            from tensordem.thermal import affine_contact_interval, cell_centered_slab_network
+
+            # Interior chain endpoints are the physical wall surfaces. Attach
+            # film links from the surfaces to the prescribed ambient reservoirs.
+            r,c = cell_centered_slab_network(np.full(n,dx),k,capacity,contact_resistance=contacts)
+            r = np.r_[1/film[0],r,1/film[1]]
+            c = np.r_[0.,wall_capacity[0],c[1:-1],wall_capacity[1],0.]
+            state = np.r_[air[0],walls[0],means,walls[1],air[1]]
+            states,heats,averages = [state],[],[]
+            for i,dt in enumerate(np.diff(times)):
+                driving = air[:,None]*signal[i:i+2]
+                state,step_heat,average = affine_contact_interval(r,c,dt,state,t_left=driving[0],
+                                            t_right=driving[1],return_interval_temperature=True)
+                states.append(state)
+                heats.append(step_heat)
+                averages.append(average)
+            states = np.asarray(states)
+            heats = np.asarray(heats)
+            u,surface = states[:,2:-2],states[:,[1,-2]]
+            mean,q = np.asarray(averages)[:,2:-2],heats[:,1:-1]
+            external = heats[:,[0,-1]]*np.array([1,-1])
+            sample,reference = "cell_mean",means
+        else:
+            from tensorsph.heat_conduction_2d import solve_transient_layered_slab
+            films = tuple((h,lambda t,a=a: a*np.exp(-decay*t)) for h,a in zip(film,air))
+            u,q,surface,external,mean = solve_transient_layered_slab(points,times,dx,(None,None),
+                    conductivity=k,volumetric_heat_capacity=capacity,contact_resistance_x=contacts,
+                    method="sdirk2",x_wall_films=films,wall_areal_heat_capacity=wall_capacity,
+                    initial_wall_temperatures=walls,return_wall_temperatures=True,return_external_heat=True,
+                    return_x_heat=True,return_interval_temperature=True)
+            u,q,surface,external,mean = (v.numpy() for v in (u,q,surface,external,mean))
+            sample,reference = "particle",points
         ref_interval = -np.diff(signal)/decay
         material_heat = q[:,[0,-1]]*np.array([1,-1])
         wall_residual = wall_capacity*np.diff(surface,axis=0)+material_heat-external
         stored = dx*(u*capacity).reshape(len(times),2,mid).sum(axis=2)
         layer_residual = np.diff(stored,axis=0)-material_heat+np.column_stack((q[:,mid],-q[:,mid]))
-        return dict(solver="SPH",n=n,steps=len(times)-1,
-                    max_interval_particle_error_K=float(abs(mean-(ref_interval/np.diff(times))[:,None]*points).max()),
-                    max_particle_error_K=float(abs(u-signal[:,None]*points).max()),
+        return dict(solver=wall_flux_order,n=n,steps=len(times)-1,
+                    **{f"max_interval_{sample}_error_K":float(abs(mean-(ref_interval/np.diff(times))[:,None]*reference).max()),
+                       f"max_{sample}_error_K":float(abs(u-signal[:,None]*reference).max())},
                     max_wall_temperature_error_K=float(abs(surface-signal[:,None]*walls).max()),
                     max_cumulative_wall_heat_error_J_m2=float(abs((material_heat-ref_interval[:,None]*inward).cumsum(0)).max()),
                     max_cumulative_external_heat_error_J_m2=float(abs((external-ref_interval[:,None]*(inward-decay*wall_capacity*walls)).cumsum(0)).max()),
@@ -175,6 +199,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dg",action="store_true",help="also verify P1 DG heat transfer across the contact")
     parser.add_argument("--sph",action="store_true",help="also verify the SPH contact, wall storage and external heat")
+    parser.add_argument("--dem",action="store_true",help="also verify a DEM thermal chain with affine reservoir intervals")
     args = parser.parse_args()
     rows = []
     for order in (1,2):
@@ -210,7 +235,10 @@ if __name__ == "__main__":
     if args.sph:
         from tensorsph.heat_conduction_2d import solve_transient_layered_slab
         sources.append(inspect.getfile(solve_transient_layered_slab))
-    for name,enabled in (("DG",args.dg),("SPH",args.sph)):
+    if args.dem:
+        from tensordem.thermal import affine_contact_interval
+        sources.append(inspect.getfile(affine_contact_interval))
+    for name,enabled in (("DG",args.dg),("SPH",args.sph),("DEM",args.dem)):
         if not enabled:
             continue
         previous = None
