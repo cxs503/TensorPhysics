@@ -1,4 +1,4 @@
-"""FEM/FVM transient rod with two spatial heating modes at distinct frequencies."""
+"""Transient and harmonic rod responses with two spatial heating modes at distinct frequencies."""
 import json
 
 import numpy as np
@@ -7,6 +7,7 @@ import torch
 from conduction_provenance import provenance
 from tensorfem import thermal
 from tensorfvm.cht import energy
+from tensorlbm import scalar, scalar_harmonic
 
 
 def measure(n):
@@ -56,10 +57,30 @@ def measure(n):
     wall = np.column_stack((powers["west"][:,0], powers["east"][:,0]))
     fvm_heat = .5*dt[:,None]*(wall[:-1]+wall[1:])
     generation = .5*dt*h*(source[1:]+source[:-1]).sum(axis=1)
+    # Choose an integer number of lattice steps per output interval. Sum
+    # the physical midpoint face powers over those steps using a geometric sum.
+    # n/2 substeps keeps dt/h² and the collision relaxation time fixed.
+    lattice_dt = dt[0]/(n//2)
+    tau = scalar.tau_from_diffusivity((k/capacity)*lattice_dt/h**2)
+    lbm_cells = np.zeros_like(source)
+    lbm_heat = np.zeros_like(fem_heat)
+    lbm_generation = np.zeros_like(dt)
+    for w, amp, avg in modes:
+        phase = np.exp(1j*w*time)
+        slab = scalar_harmonic.solve_harmonic_scalar_slab(n, 1, tau, w*lattice_dt, 0., 0.,
+                                              source=amp*avg*lattice_dt/capacity)
+        lbm_cells += (phase[:,None]*slab.scalar.numpy()).real
+        oriented = slab.x_transfer.numpy()[0, [0, -1]]*np.array([1, -1])
+        inward = capacity*h/lattice_dt*oriented
+        duration = lattice_dt*np.diff(phase)/(2j*np.sin(w*lattice_dt/2))
+        lbm_heat += (duration[:, None]*inward).real
+        lbm_generation += (duration*amp*avg.mean()).real
     reports = []
-    for name, cells, heat in (("FEM", fem_cells, fem_heat), ("FVM", history[:,0], fvm_heat)):
+    for name, cells, heat, generated in (("FEM", fem_cells, fem_heat, generation),
+                                         ("FVM", history[:,0], fvm_heat, generation),
+                                         ("LBM", lbm_cells, lbm_heat, lbm_generation)):
         stored = capacity*np.diff(cells.mean(axis=1))
-        balance = abs(stored-heat.sum(axis=1)-generation).max()
+        balance = abs(stored-heat.sum(axis=1)-generated).max()
         # Divide by interval duration to compare errors on different time grids.
         reports.append(dict(solver=name, cells=n, steps=len(dt),
                      max_cell_temperature_error_K=float(abs(cells-exact).max()),
@@ -83,7 +104,7 @@ def main():
             runs.append(report)
             previous[name] = errors
     print(json.dumps(dict(runs=runs, sources=[provenance(f) for f in
-                     (__file__, energy.__file__, thermal.__file__)]), indent=2, allow_nan=False))
+                     (__file__, energy.__file__, thermal.__file__, scalar.__file__, scalar_harmonic.__file__)]), indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in runs) else 1
 
 
