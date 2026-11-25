@@ -1,0 +1,306 @@
+{
+  "reference": "Uniform temperature pole plus piecewise linear temperature with constant axial power and a resistive jump",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fvm_harmonic_separated_mean.py --fem",
+  "runs": [
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 2.482534153247273e-16,
+      "relative_temperature_error_K": 1.0290350499155638e-17,
+      "section_power_error_W": 3.469446951953614e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 1.8660335847599644e-15,
+      "section_power_error_W": 1.0833922398223817e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 2.482534153247273e-16,
+      "relative_temperature_error_K": 1.1440549803788006e-17,
+      "section_power_error_W": 3.1031676915590914e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 5.8896782097451966e-15,
+      "section_power_error_W": 2.3289094694347587e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 2.482534153247273e-16,
+      "relative_temperature_error_K": 1.1440592500814872e-17,
+      "section_power_error_W": 3.1031676915590914e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 4.603494622138641e-15,
+      "section_power_error_W": 1.6566265880254738e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 2.482534153247273e-16,
+      "relative_temperature_error_K": 1.1440592505083756e-17,
+      "section_power_error_W": 3.1031676915590914e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 3.9146186763847585e-15,
+      "section_power_error_W": 1.673237687884099e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 3.7238012298709097e-16,
+      "relative_temperature_error_K": 2.6054194515510902e-17,
+      "section_power_error_W": 6.471152196764744e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 1.2412670766236366e-16,
+      "relative_temperature_error_K": 2.238586544070965e-15,
+      "section_power_error_W": 2.1335499928326824e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 3.7238012298709097e-16,
+      "relative_temperature_error_K": 2.7311418878991987e-17,
+      "section_power_error_W": 6.514602677223521e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 1.2412670766236366e-16,
+      "relative_temperature_error_K": 4.931537849265551e-15,
+      "section_power_error_W": 2.3958191003526095e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 3.7238012298709097e-16,
+      "relative_temperature_error_K": 2.731135945520305e-17,
+      "section_power_error_W": 6.514602677223521e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 7.356484287028932e-15,
+      "section_power_error_W": 1.4723149084369176e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 3.7238012298709097e-16,
+      "relative_temperature_error_K": 2.7311359449258422e-17,
+      "section_power_error_W": 6.514602677223521e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 6.990879649140764e-15,
+      "section_power_error_W": 1.6287131644095534e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 3.1401849173675503e-16,
+      "relative_temperature_error_K": 2.880166963724119e-17,
+      "section_power_error_W": 7.308133888242661e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 3.0587097682922677e-14,
+      "section_power_error_W": 1.3646219776078966e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 2.355138688025663e-16,
+      "relative_temperature_error_K": 3.069660175084987e-17,
+      "section_power_error_W": 7.45186910330857e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 1.2412670766236366e-16,
+      "relative_temperature_error_K": 5.702538200221861e-14,
+      "section_power_error_W": 2.1338337790618488e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 3.1401849173675503e-16,
+      "relative_temperature_error_K": 3.069658690185342e-17,
+      "section_power_error_W": 7.510696592376807e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 2.3191705973062892e-14,
+      "section_power_error_W": 1.409291695594666e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 3.1401849173675503e-16,
+      "relative_temperature_error_K": 3.069658690036641e-17,
+      "section_power_error_W": 7.510696592376807e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 1.7554167342883506e-16,
+      "relative_temperature_error_K": 2.3210034825575826e-14,
+      "section_power_error_W": 1.424276084871765e-13,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "1d9d917cbff6d41e5afba9fe98b48c8850ce9d52",
+      "file": "fvm_harmonic_separated_mean.py",
+      "source_sha256": "cc52502a9be79594b13857088e27698ffe8e0a31e9034ec384a513892acfad40"
+    },
+    {
+      "commit": "4ab1a8d4cf317871147079ab5d06ff3dac1d56be",
+      "file": "thermal.py",
+      "source_sha256": "69d169d8dd60d162762d32e22180f4f8e772d7e8f101121aba104dea189bd27e"
+    }
+  ]
+}
