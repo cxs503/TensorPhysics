@@ -82,7 +82,7 @@ def measure(n, times, resistance, reference, solver="SPH", surface_capacities=(0
         temperature, _, _, _, endpoints, heat, means = rod.solve_transient_stepped_rod(
             np.full(n, 1./n), 1., conductivity, capacity, (1., 0.), subtime, initial,
             interface_heat_capacity=surface, interface_capacity_left_fraction=surface_capacities[0]/total if total else .5,
-            initial_trace_temperatures=(1., 0.) if total else None, return_traces=True,
+            initial_trace_temperatures=(1., 0.) if total else (None, None), return_traces=True,
             contact_resistance=contacts, method="sdirk2", return_step_heat=True, return_interval_temperatures=True)
         cuts = np.column_stack((heat["left"][:, 0], heat["contact"][:, left-1], heat["right"][:, -1]))
         measured = cuts.reshape(len(times)-1, count, 3).sum(axis=1)
