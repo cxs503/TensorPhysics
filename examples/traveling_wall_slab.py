@@ -48,7 +48,10 @@ def responses(n, omega, k, capacity, traces):
             getattr(t, part), offsets, dx, tuple(getattr(w, part) for w in walls),
             conductivity=k, power_by_row=True)
         power.append(exchange/factor)
-    yield "SPH", t.numpy(), torch.complex(*power).numpy()/dx, omega
+    raw_flux = torch.complex(*power)/dx
+    yield "SPH", t.numpy(), raw_flux.numpy(), omega
+    recovered = sph.recover_dirichlet_wall_flux_2d(t, dx, k, raw_flux.mean(dim=1))
+    yield "SPH recovered", t.numpy(), recovered.numpy(), omega
     tau = .9
     dt = scalar.scalar_diffusivity(tau)*dx**2/(k/capacity)
     slab = scalar_harmonic.solve_harmonic_scalar_slab(n, n, tau, omega*dt, *traces)
@@ -91,6 +94,8 @@ def main():
                     passed &= (orders > [1.7, .45 if name == "SPH" else 1.7, 1.7]).all()
                 if n == 128:
                     limits = (.16,.004) if name == "SPH" else (.006,.0003)
+                    if name == "SPH recovered":
+                        limits = (.012,.0008)
                     passed &= (modal_errors < limits).all()
                     passed &= min(modal_orders) > (.85 if name == "SPH" else 1.8)
                     passed &= (errors < [.001, .015, .002]).all()
