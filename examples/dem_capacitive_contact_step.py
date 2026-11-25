@@ -1,4 +1,5 @@
 """Finite-layer contact transient with a heat-storing sheet between two contact resistances."""
+import argparse
 import json
 
 import mpmath as mp
@@ -54,17 +55,66 @@ def measure(n, times, initial_sheet, exact_heat, exact_temperature):
             links, capacity, dt, state, t_left=(1., 1.), t_right=(0., 0.), allow_massless=True)
         heats.append(heat[sheet-1:sheet+1])
         temperatures.append(state[sheet])
+    return summarize(n, initial_sheet, heats, temperatures, exact_heat, exact_temperature)
+
+
+def measure_fem(n, times, initial_sheet, exact_heat, exact_temperature):
+    import torch
+    from tensorfem import thermal
+
+    left = 2*n//5
+    grid = torch.linspace(0., 1., n+1, dtype=torch.float64)
+    # Distinct coincident nodes represent the two material traces and the sheet.
+    nodes = torch.cat((grid[:left+1], grid[left:], grid[left:left+1]))
+    start = torch.cat((torch.arange(left), torch.arange(left+1, n+1)))
+    sheet = n+2
+    lump = torch.zeros_like(nodes)
+    lump[sheet] = SHEET_CAPACITY
+    model = thermal.ThermalModel(
+        nodes[:,None], torch.stack((start, start+1), dim=1),
+        grid.new_tensor([1.]*left + [3.]*(n-left)), 1., grid.new_tensor([4.]*left + [2.]*(n-left)),
+        torch.tensor([0, n+1]), grid.new_tensor([1., 0.]), nodal_heat_capacity=lump,
+        contact_pairs=torch.tensor([[left, sheet], [sheet, left+1]]),
+        contact_conductance=1./grid.new_tensor([LEFT_R, RIGHT_R]))
+    initial = torch.zeros_like(nodes)
+    initial[:left+1] = 1.
+    initial[sheet] = initial_sheet
+    count = n//5
+    time = np.r_[times[0], np.concatenate([np.linspace(a,b,count+1)[1:] for a,b in zip(times[:-1], times[1:])])]
+    result = thermal.solve_transient_thermal(model, torch.from_numpy(time), initial,
+                                             sparse=True, method="sdirk2")
+    local = thermal.thermal_element_nodal_heat_steps(model, result).numpy()
+    heats = np.column_stack((-local[:,left-1,1], local[:,left,0])).reshape(-1,count,2).sum(axis=1)
+    temperatures = result.temperature[count::count,sheet].numpy()
+    row = summarize(n, initial_sheet, heats, temperatures, exact_heat, exact_temperature)
+    trace = result.interval_temperature[:, [left, sheet, left+1]].numpy()
+    link_power = -np.diff(trace, axis=1)/np.array([LEFT_R, RIGHT_R])
+    link_heat = (link_power*np.diff(time)[:,None]).reshape(-1,count,2).sum(axis=1)
+    row["max_element_link_heat_discrepancy_J_m2"] = float(abs(heats-link_heat).max())
+    row["substeps_per_interval"] = count
+    return row
+
+
+def summarize(n, initial_sheet, heats, temperatures, exact_heat, exact_temperature):
     heats = np.array(heats)
     stored = SHEET_CAPACITY*np.diff(np.r_[initial_sheet, temperatures])
     residual = stored - heats[:, 0] + heats[:, 1]
     return dict(cells=n, max_left_right_heat_errors_J_m2=abs(heats-exact_heat).max(axis=0).tolist(),
                 max_sheet_temperature_error_K=float(abs(temperatures-exact_temperature).max()),
                 max_sheet_balance_residual_J_m2=float(abs(residual).max()),
-                interval_left_right_heat_J_m2=heats.tolist(), sheet_endpoint_temperature_K=temperatures)
+                interval_left_right_heat_J_m2=heats.tolist(), sheet_endpoint_temperature_K=np.asarray(temperatures).tolist())
 
 
 if __name__ == "__main__":
-    from tensordem.thermal import contact_chain
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--solver", choices=("DEM", "FEM"), default="DEM")
+    solver = parser.parse_args().solver
+    if solver == "FEM":
+        from tensorfem import thermal as implementation
+        solve = measure_fem
+    else:
+        from tensordem.thermal import contact_chain as implementation
+        solve = measure
 
     times = np.r_[0., .00025*2.**np.arange(12)]
     studies = []
@@ -74,12 +124,14 @@ if __name__ == "__main__":
         rows = []
         previous = None
         for n in (40, 80, 160, 320):
-            row = measure(n, times, initial, heat, temperature)
+            row = solve(n, times, initial, heat, temperature)
             errors = np.array(row["max_left_right_heat_errors_J_m2"] + [row["max_sheet_temperature_error_K"]])
             orders = [] if previous is None else np.log2(previous/errors).tolist()
             row.update(orders=orders, passed=bool(row["max_sheet_balance_residual_J_m2"] < 1e-10
                        and (not orders or min(orders) > 0.) and (n != 320 or
                            (min(orders) > 1.85 and max(errors[:2]) < 5e-5 and errors[2] < 5e-4))))
+            if solver == "FEM":
+                row["passed"] &= row["max_element_link_heat_discrepancy_J_m2"] < 1e-10
             rows.append(row)
             previous = errors
         q_diff = float(abs(heat-audit_heat).max())
@@ -91,8 +143,8 @@ if __name__ == "__main__":
                             reference_temperature_discrepancy_K=t_diff, runs=rows,
                             passed=q_diff < 1e-12 and t_diff < 1e-12 and reference_balance < 1e-12 and all(row["passed"] for row in rows)))
     passed = all(study["passed"] for study in studies)
-    print(json.dumps(dict(times_s=times.tolist(), resistance_m2_K_W=[LEFT_R, RIGHT_R],
+    print(json.dumps(dict(solver=solver, times_s=times.tolist(), resistance_m2_K_W=[LEFT_R, RIGHT_R],
         sheet_capacity_J_m2_K=SHEET_CAPACITY, studies=studies, passed=passed,
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDEM/src python examples/dem_capacitive_contact_step.py",
-        sources=[provenance(__file__), provenance(contact_chain.__file__)]), indent=2, allow_nan=False))
+        reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../Tensor{solver}/src python examples/dem_capacitive_contact_step.py --solver {solver}",
+        sources=[provenance(__file__), provenance(implementation.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
