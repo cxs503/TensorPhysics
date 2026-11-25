@@ -39,6 +39,31 @@ def measure(cells, width, solver="dg"):
         walls = sections[:, [0, -1]] * [-1, 1]
         storage = states[indices, :, 0].numpy().mean(axis=1)
         source_mean = 2/math.pi
+    elif solver.startswith("fem-"):
+        from tensorfem import thermal
+
+        x = torch.linspace(0., 1., cells+1, dtype=torch.float64)
+        elements = torch.stack((torch.arange(cells), torch.arange(1, cells+1)), dim=1)
+        model = thermal.ThermalModel(x[:, None], elements, 1., 1., 1.,
+                                     torch.tensor([0, cells]), x.new_zeros(2))
+        # Integrate each sine against its LINE2 hat, including the half hats at the walls.
+        load = np.zeros(cells+1)
+        for k in (1, 2):
+            load[1:-1] += np.sin(k*math.pi*x.numpy()[1:-1])*np.sinc(k/(2*cells))**2/cells
+            end_load = (1-np.sinc(k/cells))/(k*math.pi)
+            load[0] += end_load
+            load[-1] += (-1)**(k+1)*end_load
+        active = np.diff(np.clip(grid*rate-start, 0, stop-start))
+        nodal_heat = amplitude*active[:, None]*load
+        result = thermal.solve_transient_thermal(
+            model, torch.from_numpy(grid), torch.zeros_like(x), theta=.5,
+            method=solver.removeprefix("fem-"), sparse=True, nodal_step_heat=torch.from_numpy(nodal_heat))
+        reaction = result.nodal_reaction_heat_steps().numpy()
+        walls = -np.add.reduceat(reaction[:, [0, -1]], steps[:-1], axis=0)
+        temperatures = result.temperature.numpy()[steps]
+        storage = (.5*(temperatures[:, :-1] + temperatures[:, 1:])).mean(axis=1)
+        source_mean = 2/math.pi
+        local_errors["max_step_free_node_residual"] = float(abs(reaction[:, 1:-1]).max())
     elif solver.startswith("fvm-"):
         from tensorfvm.cht import rod
 
@@ -99,8 +124,8 @@ def measure(cells, width, solver="dg"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("dg", "theta", "sdirk2", "fvm-theta", "fvm-sdirk2"), default="dg",
-                        help="exact-time DG, SPH (theta/sdirk2), or finite volume (fvm-theta/fvm-sdirk2)")
+    parser.add_argument("--solver", choices=("dg", "theta", "sdirk2", "fvm-theta", "fvm-sdirk2", "fem-theta", "fem-sdirk2"), default="dg",
+                        help="exact-time DG, SPH (theta/sdirk2), finite volume (fvm-*), or sparse LINE2 (fem-*)")
     solver = parser.parse_args().solver
     if solver == "dg":
         from tensordg import heat_1d as implementation
@@ -111,10 +136,15 @@ if __name__ == "__main__":
         if solver.startswith("fvm-"):
             from tensorfvm.cht import rod as implementation
             path = "../TensorFVM/src"
+        elif solver.startswith("fem-"):
+            from tensorfem import thermal as implementation
+            path = "../TensorFEM/src"
         else:
             from tensorsph import heat_conduction_2d as implementation
             path = "../TensorSPH/src"
         settings = dict(base_temperature=305., subdivisions_per_smooth_interval="cells/8")
+        if solver.startswith("fem-"):
+            settings.update(formulation="excess temperature relative to 305 K", sparse=True)
         required_order, tolerance = 1.8, .003
     runs = []
     for width in (.05, .5):
@@ -130,6 +160,8 @@ if __name__ == "__main__":
             if solver.startswith("fvm-"):
                 row["passed"] &= max(row["max_step_cell_balance_error"],
                                      row["max_step_shared_face_mismatch"]) < 1e-10
+            if solver.startswith("fem-"):
+                row["passed"] &= row["max_step_free_node_residual"] < 1e-10
             runs.append(row)
             previous = row
     passed = all(row["passed"] for row in runs)
