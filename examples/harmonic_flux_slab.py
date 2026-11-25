@@ -6,6 +6,7 @@ import numpy as np
 import torch
 
 from conduction_provenance import provenance
+from tensordg import heat_1d
 from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
 
@@ -32,10 +33,13 @@ def measure(n, omega):
     )
     fv_flux = np.concatenate(([powers["west"].mean()/width],
                               interior["x"].mean(axis=0)/width, [-powers["east"].mean()/width]))
+    _, dg, dg_flux = heat_1d.solve_harmonic_heat_1d(omega,ncells=n,degree=1,conductivity=k,capacity=capacity,
+        wall_types=("neumann","neumann"),wall_values=(west,east))
     faces = np.arange(1,n)*width
     flux = (west*np.sinh(wave*(1-faces))-east*np.sinh(wave*faces))/np.sinh(wave)
     for solver, field, ref, sections in (("FVM", fv, cell_mean, fv_flux),
-                                         ("SPH", particle.numpy(), exact, section.numpy())):
+                                         ("SPH", particle.numpy(), exact, section.numpy()),
+                                         ("DG_P1",dg[:,0].numpy()[None,:],cell_mean,dg_flux.numpy())):
         residual = 1j*omega*capacity*field.mean()-west-east
         # Sample at a fixed x/L=1/2 by averaging the two adjoining locations.
         ratio = field[:,n//2-1:n//2+1].mean()/ref[n//2-1:n//2+1].mean()
@@ -85,7 +89,7 @@ def main():
                 previous[name] = errors
                 rows.append(row)
     print(json.dumps(dict(runs=rows, sources=[provenance(f) for f in
-                     (__file__, energy.__file__, sph.__file__)]), indent=2, allow_nan=False))
+                     (__file__, energy.__file__, sph.__file__, heat_1d.__file__)]), indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in rows) else 1
 
 
