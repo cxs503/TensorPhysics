@@ -9,7 +9,7 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def measure(steps, method, alternating=False, compare_fem=False, compare_sph=False, massless=False, single_store=None):
+def measure(steps, method, alternating=False, compare_fem=False, compare_sph=False, massless=False, single_store=None, bulk_exchange=False):
     # T-base = 0.3*x + (0.7-1.4*x)*sin(omega*t), so the two wall
     # temperatures oscillate in opposite phases and the axial flux is uniform.
     n, area, k, cv = 12, 1.5, 2., 1.2
@@ -33,6 +33,14 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
     def amplitude(x):
         return .7-1.4*x
 
+    loss = 3. if bulk_exchange else 0.
+    def reservoir(t, x):
+        # cv*T_t = H*(Tb-T) for the affine temperature profile (T_xx=0).
+        return .3*x + amplitude(x)*(math.sin(omega*t) + cv*omega/loss*math.cos(omega*t))
+
+    def volume_source(t):
+        return 0. if bulk_exchange else cv*omega*amplitude(centers)*math.cos(omega*t)
+
     def applied(t):
         wave = math.sin(omega*t)
         wall = .3*ends + amplitude(ends)*wave
@@ -42,7 +50,8 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
 
     field, faces, left, right, heats, means = rod.solve_transient_stepped_rod(
         np.full(n, 1/n), np.full(n, area), k, cv, base+ambient, times, base+.3*centers,
-        source=lambda t: cv*omega*amplitude(centers)*math.cos(omega*t),
+        source=volume_source,
+        heat_loss_coefficient=loss, bulk_ambient_temperature=(lambda t: base+reservoir(t, centers)) if bulk_exchange else 0.,
         end_types=("robin", "robin"), end_film_coefficient=film, end_areal_heat_capacity=capacity,
         initial_end_temperature=base+.3*ends, temperature_reference=base, method=method,
         end_applied_power=applied, return_step_heat=True, return_interval_temperatures=True)
@@ -73,6 +82,12 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         return (abs(external_heat-conductive_heat-exact_storage)/dt[:, None]).max(axis=0).tolist()
 
     storage = {"fvm": storage_errors(heats["end_input"], conduction)}
+    exact_bulk = area*cv/n*amplitude(centers)*np.diff(wave, axis=0)
+    def bulk_power_error(cell_heat):
+        return float((abs(cell_heat-exact_bulk)/dt[:, None]).max())
+    bulk_errors = {}
+    if bulk_exchange:
+        bulk_errors["fvm_bulk_power_error_W"] = bulk_power_error(heats["bulk_exchange"])
     fem_errors = {}
     if compare_fem:
         import torch
@@ -82,7 +97,7 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         x = torch.linspace(0., 1., n+1, dtype=torch.float64)
         elements = torch.stack((torch.arange(n), torch.arange(1, n+1)), dim=1)
         model = thermal.ThermalModel(x[:, None], elements, k, 1., cv, elements.new_empty(0), x[:0],
-            thickness=area, convection_edges=elements.new_tensor([[0,0], [n,n]]),
+            thickness=area, heat_loss_coefficient=loss, convection_edges=elements.new_tensor([[0,0], [n,n]]),
             convection_area=x.new_full((2,), area), convection_coefficient=torch.from_numpy(film),
             ambient_temperature=torch.from_numpy(ambient), wall_areal_heat_capacity=torch.from_numpy(capacity))
         # Consistent LINE2 projection of the spatially affine volume source.
@@ -91,8 +106,18 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         volume_power[:-1] += projection[:, 0]
         volume_power[1:] += projection[:, 1]
 
+        if bulk_exchange:
+            mass = area/(6*n)*x.new_tensor([[2.,1.],[1.,2.]])
+            def reservoir_load(t):
+                return loss*reservoir(t, x)[elements] @ mass
+
         def nodal_power(t):
             load = volume_power*math.cos(omega*t)
+            if bulk_exchange:
+                element_load = reservoir_load(t)
+                load = x.new_zeros(n+1)
+                load[:-1] += element_load[:, 0]
+                load[1:] += element_load[:, 1]
             load[[0,-1]] += torch.from_numpy(applied(float(t)))
             return load
 
@@ -102,13 +127,20 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         first = times[:-1]+gamma*dt if method == "sdirk2" else times[:-1]
         cosine = (1-gamma)*np.cos(omega*first)+gamma*np.cos(omega*times[1:])
         distributed = torch.from_numpy(dt*cosine)[:, None, None]*projection
+        if bulk_exchange:
+            stage_load = torch.stack([(1-gamma)*reservoir_load(a)+gamma*reservoir_load(b)
+                                      for a, b in zip(first, times[1:])])
+            distributed = torch.from_numpy(dt)[:, None, None]*stage_load
+            fem_means = result.interval_temperature[:, elements].mean(2).numpy()
+            bulk_errors["fem_bulk_power_error_W"] = bulk_power_error(
+                distributed.sum(2).numpy() - dt[:, None]*loss*area/n*fem_means)
         local = thermal.thermal_element_nodal_heat_steps(model, result, element_nodal_step_heat=distributed)
         face_heat = torch.stack((local[:,0,0], local[:,-1,1]), dim=1).numpy()
         wall_t = result.temperature[:, [0,-1]].numpy()
         recovered = face_heat + area*capacity*np.diff(wall_t, axis=0)
         film_fem = area*film*(ambient-result.interval_temperature[:, [0,-1]].numpy())*dt[:, None]
         heater = (result.additional_stage_power[:, [0,-1]].numpy()
-                  - cosine[:, None]*volume_power[[0,-1]].numpy())*dt[:, None]
+                  - torch.stack((distributed[:,0,0], distributed[:,-1,1]), dim=1).numpy()/dt[:, None])*dt[:, None]
         storage["fem"] = storage_errors(heater+film_fem, face_heat)
         fem_errors = dict(fem_wall_error_K=float(abs(wall_t-exact_wall).max()),
                           fem_cumulative_end_error_J=float(abs(recovered.cumsum(axis=0)-exact_heat[1:]).max()),
@@ -123,13 +155,16 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         # The slab integrates per unit area. Convert each end input to W/m²
         # and the returned heats back to J before comparing to the rod.
         wall_loads = tuple(lambda t, i=i: applied(t)[i]/area for i in range(2))
-        state, cuts, wall, external, wall_mean, components = sph.solve_transient_layered_slab(
+        state, cuts, wall, bulk, external, wall_mean, components = sph.solve_transient_layered_slab(
             .3*centers, times, 1/n, (None, None), conductivity=np.full(n, k),
-            volumetric_heat_capacity=cv, heat_source=lambda t: cv*omega*amplitude(centers)*math.cos(omega*t),
+            volumetric_heat_capacity=cv, heat_source=volume_source, heat_loss_coefficient=loss,
+            bulk_ambient_temperature=(lambda t: reservoir(t, centers)) if bulk_exchange else 0., return_bulk_exchange=True,
             x_wall_films=tuple(zip(film, ambient)), x_wall_inward_flux=wall_loads,
             wall_areal_heat_capacity=capacity, initial_wall_temperatures=tuple(.3*x if c else None for x, c in zip(ends, capacity)),
             method=method, return_x_heat=True, return_external_heat=True,
             return_wall_temperatures=True, return_interval_wall_temperatures=True, return_wall_heat_components=True)
+        if bulk_exchange:
+            bulk_errors["sph_bulk_power_error_W"] = bulk_power_error(area*bulk.numpy())
         external = area*external.numpy()
         film_sph = area*components["film"].numpy()
         heater_sph = area*components["applied"].numpy()
@@ -144,7 +179,7 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
                           sph_component_sum_residual_J=float(abs(external-film_sph-heater_sph).max()),
                           sph_film_law_residual_J=float(abs(film_sph-area*film*(ambient-wall_mean.numpy())*dt[:, None]).max()),
                           sph_wall_balance_residual_J=float(abs(external-conduction_sph-storage_sph).max()))
-    return dict(wall_capacity_J_m2_K=capacity.tolist(), storage_power_errors_W=storage, **sph_errors, **fem_errors, min_dt_s=float(dt.min()), max_dt_s=float(dt.max()),
+    return dict(**bulk_errors, wall_capacity_J_m2_K=capacity.tolist(), storage_power_errors_W=storage, **sph_errors, **fem_errors, min_dt_s=float(dt.min()), max_dt_s=float(dt.max()),
                 interval_heater_power_error_W=float((abs(heats["end_applied"]-applied_heat)/dt[:, None]).max()),
                 interval_film_power_error_W=float((abs(heats["end_film"]-film_heat)/dt[:, None]).max()),
                 max_input_split_residual_J=float(abs(split_residual).max()),
@@ -165,6 +200,7 @@ if __name__ == "__main__":
     storage_group = parser.add_mutually_exclusive_group()
     storage_group.add_argument("--single-store", choices=("west", "east"), help="retain surface heat capacity only at the selected end")
     storage_group.add_argument("--massless", action="store_true", help="apply heaters and convection at walls without surface storage")
+    parser.add_argument("--bulk-exchange", action="store_true", help="drive the interior with a space- and time-dependent reservoir")
     args = parser.parse_args()
     files = [__file__, rod.__file__]
     path = "../TensorFVM/src"
@@ -182,11 +218,12 @@ if __name__ == "__main__":
         path += ":../TensorSPH/src"
         sph_metrics = ("sph_particle_error_K", "sph_wall_error_K", "sph_cumulative_end_error_J",
                        "sph_interval_film_error_W", "sph_interval_heater_error_W")
+    bulk_metrics = [name+"_bulk_power_error_W" for name, active in (("fvm", True), ("fem", args.compare_fem), ("sph", args.compare_sph)) if args.bulk_exchange and active]
     runs = []
     for method in ("theta", "sdirk2"):
         previous = None
         for steps in (32, 64, 128):
-            row = measure(steps, method, args.alternating, args.compare_fem, args.compare_sph, args.massless, args.single_store)
+            row = measure(steps, method, args.alternating, args.compare_fem, args.compare_sph, args.massless, args.single_store, args.bulk_exchange)
             row["passed"] = max(row["max_wall_energy_residual_J"], row["max_input_split_residual_J"]) < 1e-11
             for key in ("max_cell_error_K", "max_wall_error_K", "max_section_error_W",
                         "west_cumulative_error_J", "east_cumulative_error_J",
@@ -213,6 +250,12 @@ if __name__ == "__main__":
                         row["passed"] &= error < 1e-10
                     elif steps == 128:
                         row["passed"] &= error < .005
+            for key in bulk_metrics:
+                if previous:
+                    row[key+"_order"] = math.log2(previous[key]/row[key])
+                    row["passed"] &= row[key+"_order"] > 1.8
+                if steps == 128:
+                    row["passed"] &= row[key] < .001
             runs.append(row)
             previous = row
     passed = all(r["passed"] for r in runs)
@@ -220,6 +263,6 @@ if __name__ == "__main__":
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_periodic_end_power.py"
                           + (" --alternating" if args.alternating else "") + (" --compare-fem" if args.compare_fem else "")
                           + (" --compare-sph" if args.compare_sph else "") + (" --massless" if args.massless else "")
-                          + (f" --single-store {args.single_store}" if args.single_store else "")),
+                          + (f" --single-store {args.single_store}" if args.single_store else "") + (" --bulk-exchange" if args.bulk_exchange else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
