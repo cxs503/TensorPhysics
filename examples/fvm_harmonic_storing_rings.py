@@ -9,7 +9,7 @@ from conduction_provenance import provenance
 from tensorfvm.cht import annulus, storing_rings
 
 
-def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=(.5, .5), sheet_k=(0., 0.), *, return_wall_rates=False):
+def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=(.5, .5), sheet_k=(0., 0.), *, return_wall_rates=False, return_bulk_storage=False):
     """Solve the six continuum coefficients using wall and sheet jump conditions."""
     from scipy.special import iv, ivp, kv, kvp
 
@@ -35,10 +35,19 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
         samples.append([sheet, incoming, outgoing])
     coeff = np.linalg.solve(equations, rhs)
     fields = np.asarray(samples) @ coeff
+    result = (fields,)
     if return_wall_rates:
         wall_flux = np.array([basis(0, edges[0])[1], basis(2, edges[-1])[1]]) @ coeff
-        return fields, 2*np.pi*edges[[0, -1]]*wall_flux
-    return fields
+        result += (2*np.pi*edges[[0, -1]]*wall_flux,)
+    if return_bulk_storage:
+        from scipy.integrate import quad_vec
+        rates = []
+        for i, (a, b) in enumerate(zip(edges, edges[1:])):
+            integral, _ = quad_vec(lambda r: r*(basis(i, r)[0] @ coeff), a, b,
+                                   epsabs=1e-13, epsrel=1e-12)
+            rates.append(2j*np.pi*omega*capacities[i]*integral)
+        result += (np.asarray(rates),)
+    return result if len(result) > 1 else fields
 
 
 def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_driven=False):
@@ -50,21 +59,23 @@ def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_drive
     for mode in range(4):
         for omega in (1., 8., 24.):
             if bulk_storage:
-                expected, wall_ref = bulk_reference(edges, omega, mode, walls, generation, capacities, fractions, sheet_k, return_wall_rates=True)
+                expected, wall_ref, storage_ref = bulk_reference(edges, omega, mode, walls, generation, capacities, fractions, sheet_k, return_wall_rates=True, return_bulk_storage=True)
             elif mode:
                 expected, wall_ref = reference.angular_reference(omega, mode, walls, generation, fractions, sheet_k, return_wall_rates=True)
             else:
                 expected, wall_ref = reference.continuum(omega, walls, generation, fractions, return_wall_rates=True)
+            previous_storage = None
             previous = None
             previous_wall = None
             for n in (4, 8, 16, 32):
                 mesh = np.r_[np.concatenate([np.geomspace(a, b, n+1)[:-1]
                                              for a, b in zip(edges, edges[1:])]), edges[-1]]
-                temp, incoming, outgoing, wall_rates = storing_rings.solve_storing_rings(
+                temp, incoming, outgoing, wall_rates, storage = storing_rings.solve_storing_rings(
                     mesh, np.repeat(reference.K, n), [n, 2*n], walls, omega,
                     contact_resistances=reference.CONTACT, sheet_capacities=reference.CAPACITY,
                     sheet_conductivities=sheet_k, inner_resistance_fractions=fractions, sheet_generation=generation, azimuthal_mode=mode,
-                    volumetric_heat_capacity=np.repeat(capacities, n) if bulk_storage else None, return_wall_rates=True)
+                    volumetric_heat_capacity=np.repeat(capacities, n) if bulk_storage else None,
+                    return_wall_rates=True, return_bulk_storage=True)
                 wall_error = float(abs(wall_rates/wall_ref-1).max())
                 angular_loss = sheet_k*(mode/edges[1:-1])**2*temp
                 balance = max(abs(incoming-outgoing+generation-angular_loss-1j*omega*np.asarray(reference.CAPACITY)*temp))
@@ -75,7 +86,19 @@ def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_drive
                 wall_order = np.log2(previous_wall/wall_error) if previous_wall is not None and (mode or bulk_storage) else None
                 passed &= (wall_error < 1e-10 if mode == 0 and not bulk_storage else
                            n < 32 or (wall_error < .001 and wall_order > 1.8))
-                rows.append(dict(wall_rate_max_relative_error=wall_error, wall_rate_order=wall_order,
+                storage_error = float(abs(storage/storage_ref-1).max()) if bulk_storage else None
+                storage_order = np.log2(previous_storage/storage_error) if previous_storage is not None else None
+                passed &= (n < 32 or (storage_error < .001 and storage_order > 1.8)) if bulk_storage else np.all(storage == 0.)
+                previous_storage = storage_error
+                global_balance = None
+                if mode == 0:
+                    net_sheet = 2*np.pi*edges[1:-1] @ (generation-1j*omega*np.asarray(reference.CAPACITY)*temp)
+                    global_balance = float(abs(wall_rates[0]-wall_rates[1]+net_sheet-storage.sum()))
+                    passed &= global_balance < 1e-9
+                rows.append(dict(bulk_storage_rates_W_m=[[z.real, z.imag] for z in storage],
+                                 bulk_storage_max_relative_error=storage_error, bulk_storage_order=storage_order,
+                                 axisymmetric_balance_W_m=global_balance,
+                                 wall_rate_max_relative_error=wall_error, wall_rate_order=wall_order,
                                  radial_wall_rates_W_m=[[z.real, z.imag] for z in wall_rates],
                                  mode=mode, omega=omega, cells_per_layer=n, max_relative_error=error,
                                  order=order, sheet_balance_W_m2=float(balance), passed=bool(passed)))
