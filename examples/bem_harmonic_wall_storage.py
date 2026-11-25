@@ -46,10 +46,12 @@ def measure(panels_per_side, omega, quadratic):
                 external_flux_error_W_m2=float(max(abs(external-h*(ambient-wall)))))
 
 
-def two_walls(n, omega):
+def two_walls(n, omega, bulk_exchange=False):
     """Independent slab solution with flux drive on the left, film on the right."""
     k, c, h = 1.3, 2., 2.4
     capacities = np.array([.45, .8])
+    loss = 3.5 if bulk_exchange else 0.
+    reservoir = .25-.4j
     drive, ambient, heater = -.35+.6j, .9-.3j, .4+.2j
     mesh = square_mesh(n)
     left, right = mesh.normals[:, 0] == -1, mesh.normals[:, 0] == 1
@@ -57,12 +59,13 @@ def two_walls(n, omega):
         mesh, np.where(right, "film", "flux"), np.select([left, right], [drive, ambient]),
         omega, conductivity=k, volumetric_heat_capacity=c, film_coefficients=h,
         volumetric_source=heater, wall_areal_heat_capacity=left*capacities[0]+right*capacities[1],
-        quadratic=True)
+        heat_loss_coefficient=loss, bulk_ambient_temperature=reservoir, quadratic=True)
 
     # Write T=P+A cosh(lambda x)+B sinh(lambda x). The outward derivatives
     # at x=0 and x=1 give the two material influxes with opposite signs.
-    wave = np.sqrt(1j*omega*c/k)
-    p = heater/(1j*omega*c)
+    admittance = loss+1j*omega*c
+    wave = np.sqrt(admittance/k)
+    p = (heater+loss*reservoir)/admittance
     sh, ch = np.sinh(wave), np.cosh(wave)
     yl, yr = 1j*omega*capacities + [0., h]
     a, b = np.linalg.solve([[yl, -k*wave],
@@ -86,12 +89,14 @@ def two_walls(n, omega):
     nodes, gauss = np.polynomial.legendre.leggauss(10)
     x, y = np.meshgrid((1+nodes)/2, (1+nodes)/2)
     probe = result.temperature(np.column_stack((x.ravel(), y.ravel()))).reshape(x.shape)
-    bulk_rate = 1j*omega*c*(gauss @ probe @ gauss)/4
+    mean = (gauss @ probe @ gauss)/4
+    bulk_rate = 1j*omega*c*mean
+    distributed_heat = loss*(reservoir-mean)
 
     def trace_error(samples, exact):
         return float(np.max(abs(samples-exact[:, None])))
 
-    return dict(panels=mesh.panel_count, omega_rad_s=omega,
+    row = dict(panels=mesh.panel_count, omega_rad_s=omega,
                 # Report signed phasors so that phase and orientation can be inspected.
                 end_influx_W_m2=[[z.real, z.imag] for z in flux @ weights],
                 exact_end_influx_W_m2=[[z.real, z.imag] for z in exact_flux],
@@ -101,21 +106,26 @@ def two_walls(n, omega):
                 external_flux_error_W_m2=trace_error(external, exact_external),
                 surface_storage_error_W_m2=trace_error(storage, exact_surface),
                 bulk_storage_error_W_m=float(abs(bulk_rate-1j*omega*c*exact_mean)),
-                energy_residual_W_m=float(abs((external-storage).sum(axis=0) @ weights+heater-bulk_rate)))
+                energy_residual_W_m=float(abs((external-storage).sum(axis=0) @ weights+heater+distributed_heat-bulk_rate)))
+    if bulk_exchange:
+        row["distributed_heat_error_W_m"] = float(abs(distributed_heat-loss*(reservoir-exact_mean)))
+        row["distributed_heat_W_m"] = [distributed_heat.real, distributed_heat.imag]
+    return row
 
 
-def verify_two_walls():
+def verify_two_walls(bulk_exchange=False):
     rows = []
     passed = True
     for omega in (.5, 4.):
-        series = [two_walls(n, omega) for n in (8, 16, 32)]
+        series = [two_walls(n, omega, bulk_exchange) for n in (8, 16, 32)]
         rows.extend(series)
         for metric in series[-1]:
             if "_error_" in metric or metric == "energy_residual_W_m":
                 errors = [row[metric] for row in series]
                 passed &= all(b < a for a, b in zip(errors, errors[1:])) and errors[-1] < 2e-5
     print(json.dumps(dict(reference="Heated unit square slab with two storing walls, left flux and right film",
-                          reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_wall_storage.py --two-walls",
+                          bulk_exchange_W_m3_K=3.5 if bulk_exchange else 0.,
+                          reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_wall_storage.py --two-walls"+(" --bulk-exchange" if bulk_exchange else ""),
                           solver=provenance(harmonic_conduction.__file__), benchmark=provenance(__file__),
                           runs=rows, passed=passed), indent=2, allow_nan=False))
     return passed
@@ -124,8 +134,10 @@ def verify_two_walls():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--two-walls", action="store_true", help="verify mixed drives and whole-slab energy balance")
-    if parser.parse_args().two_walls:
-        raise SystemExit(0 if verify_two_walls() else 1)
+    parser.add_argument("--bulk-exchange", action="store_true", help="run the two-wall slab with distributed reservoir exchange")
+    args = parser.parse_args()
+    if args.two_walls or args.bulk_exchange:
+        raise SystemExit(0 if verify_two_walls(args.bulk_exchange) else 1)
     rows = []
     passed = True
     for quadratic in (False, True):
