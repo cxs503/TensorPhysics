@@ -16,7 +16,7 @@ def measure(omega, duration, angle):
     powers = np.array([.8+.1j, .27-.32j, -.3+.2j])
     p1, pc, p2 = powers
     initial = [.4, 0., -.6]
-    start = angle/omega
+    start = angle/omega if omega else 0.
     final, heat, mean = contact_chain.harmonic_contact_interval(
         resistances, [c1, 0., c2], omega, start, duration, initial, t_left=None, t_right=None,
         nodal_power=powers, allow_massless=True, return_interval_temperature=True)
@@ -52,13 +52,38 @@ def measure(omega, duration, angle):
                 node_energy_residual_J=float(abs(balance).max()))
 
 
+def steady_drift(n, balanced):
+    # Linear conductance law and nodal conservation give each link's current
+    # by a prefix sum, independently of the solver's constrained matrix.
+    r = np.geomspace(.07, 1.8, n-1)
+    capacity = np.linspace(.3, 2.4, n)
+    capacity[1::3] = 0.
+    p = np.cos(np.arange(n)*.7)+1j*np.sin(np.arange(n)*.41)
+    if balanced:
+        p[-1] = -p[:-1].sum()
+    rate = p.sum()/capacity.sum()
+    q = np.cumsum(p-capacity*rate)[:-1]
+    exact = np.r_[0., -np.cumsum(r*q)]
+    exact -= capacity@exact/capacity.sum()
+    t, drift = contact_chain.harmonic_contact_temperatures(r, capacity, 0., nodal_power=p,
+                                                         allow_massless=True, separate_mean=True)
+    return dict(nodes=n, balanced_power=balanced, relative_temperature_error_K=float(abs(t-exact).max()),
+                contact_power_error_W=float(abs(-np.diff(t)/r-q).max()),
+                mean_heating_rate_error_K_s=float(abs(drift-rate)),
+                centered_mean_error_K=float(abs(capacity@t)/capacity.sum()))
+
+
 if __name__ == "__main__":
     rows = [measure(w, dt, phase) for w in (4., 1e-4, 1e-12, 1e-16)
             for dt in (.023, .73) for phase in (0., .83)]
+    rows.extend(measure(0., dt, 0.) for dt in (.023, .73))
+    static = [steady_drift(n, balanced) for n in (3, 9, 33) for balanced in (False, True)]
+    for row in static:
+        row["passed"] = all(value < 1e-12 for key, value in row.items() if "_error_" in key)
     for row in rows:
         row["passed"] = max(row[k] for k in ("endpoint_error_K", "mean_error_K", "link_heat_error_J",
                                              "node_energy_residual_J")) < 1e-12
     print(json.dumps(dict(reference="Independent real-time modal ODE with a driven algebraic contact",
         reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDEM/src python examples/dem_insulated_contact_harmonic.py",
-        runs=rows, sources=[provenance(__file__), provenance(contact_chain.__file__)]), indent=2, allow_nan=False))
-    raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
+        runs=rows, zero_frequency_profiles=static, sources=[provenance(__file__), provenance(contact_chain.__file__)]), indent=2, allow_nan=False))
+    raise SystemExit(0 if all(row["passed"] for row in rows+static) else 1)
