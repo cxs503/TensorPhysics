@@ -1,0 +1,79 @@
+{
+  "runs": [
+    {
+      "columns": 8,
+      "temperature_error_K": 0.09801596994848805,
+      "wall_heat_error_J_m2": 0.020324034822835832,
+      "interior_cut_heat_error_J_m2": 0.006151628168261647,
+      "column_energy_residual_J_m2": 8.326672684688674e-17,
+      "wall_trace_error_K": 0.0,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "temperature_error_K": 0.019944489002176324,
+      "wall_heat_error_J_m2": 0.00423533680524571,
+      "interior_cut_heat_error_J_m2": 0.003297449690168104,
+      "column_energy_residual_J_m2": 2.498001805406602e-16,
+      "wall_trace_error_K": 0.0,
+      "orders": [
+        2.2970266691181798,
+        2.2626382349598897,
+        0.8996176548712699
+      ],
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "temperature_error_K": 0.004456675368293084,
+      "wall_heat_error_J_m2": 0.0010041700670382417,
+      "interior_cut_heat_error_J_m2": 0.0009527061071383201,
+      "column_energy_residual_J_m2": 4.3021142204224816e-16,
+      "wall_trace_error_K": 0.0,
+      "orders": [
+        2.1619503790393213,
+        2.0764730751088147,
+        1.791247506006176
+      ],
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "temperature_error_K": 0.0011097302392013564,
+      "wall_heat_error_J_m2": 0.0002483537189715834,
+      "interior_cut_heat_error_J_m2": 0.0002452073789674103,
+      "column_energy_residual_J_m2": 1.205632815803881e-15,
+      "wall_trace_error_K": 0.0,
+      "orders": [
+        2.005758857412664,
+        2.0155353702772123,
+        1.958028842685689
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "7fc784ae6c6db1f45a8096705a6fae14ecbc1f92",
+      "file": "sph_two_wall_pulses.py",
+      "source_sha256": "51735973534af0506c1d8d4f34899662ee1b26bad79cf2f32f6f92213e97396c"
+    },
+    {
+      "commit": "99e90ae4f3198c8b414b8aad9ff2ca5e9506ceac",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "d6bdca3260c55fbcaf8c5c0bed046414552fb33998c47e9505df0fc048897e3f"
+    }
+  ],
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_two_wall_pulses.py",
+  "reference": "Superpose four Fourier-series Dirichlet steps in a homogeneous one-meter slab with unit conductivity and volumetric heat capacity. Compare particle centers with continuum point temperatures, and difference the exact cumulative heat at every cut to obtain interval heat. Rightward heat is positive at both ends. Two switches fall inside the same output interval and the last coincides with an output time. Doubling from 64 to 128 modes at the seven sample times on x=j/128 gave zero change in float64 for both fields.",
+  "orders": [
+    "temperature",
+    "wall interval heat",
+    "interior interval heat"
+  ],
+  "sph_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py",
+    "passed": 155
+  }
+}
