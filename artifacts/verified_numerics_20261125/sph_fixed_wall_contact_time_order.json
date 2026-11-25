@@ -1,0 +1,126 @@
+{
+  "runs": [
+    {
+      "steps": 32,
+      "theta": 0.5,
+      "temperature_error_K": 0.001658458425213949,
+      "contact_flux_error_W_m2": 0.004957327477539741,
+      "all_cut_flux_error_W_m2": 0.021658576023515064,
+      "column_energy_residual_J_m2": 4.2327252813834093e-16,
+      "temperature_contact_all_cut_orders": [],
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "theta": 0.5,
+      "temperature_error_K": 0.00041295724611961626,
+      "contact_flux_error_W_m2": 0.0012416636438841167,
+      "all_cut_flux_error_W_m2": 0.0054211607210307156,
+      "column_energy_residual_J_m2": 2.688821387764051e-16,
+      "temperature_contact_all_cut_orders": [
+        2.0057785158059103,
+        1.9972881526959934,
+        1.998264709635687
+      ],
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "theta": 0.5,
+      "temperature_error_K": 0.00010314988941195757,
+      "contact_flux_error_W_m2": 0.00031086944184122167,
+      "all_cut_flux_error_W_m2": 0.001358147673319543,
+      "column_energy_residual_J_m2": 1.444157293750692e-16,
+      "temperature_contact_all_cut_orders": [
+        2.0012501512055,
+        1.9978936994069538,
+        1.9969614247193932
+      ],
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "theta": 0.5,
+      "temperature_error_K": 2.5795639021330974e-05,
+      "contact_flux_error_W_m2": 7.772532599825688e-05,
+      "all_cut_flux_error_W_m2": 0.00033967172048809946,
+      "column_energy_residual_J_m2": 1.0375814790686277e-16,
+      "temperature_contact_all_cut_orders": [
+        1.9995431833520112,
+        1.9998521404593235,
+        1.9994273382386656
+      ],
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "theta": 1.0,
+      "temperature_error_K": 0.03700811810956828,
+      "contact_flux_error_W_m2": 0.11033776720300592,
+      "all_cut_flux_error_W_m2": 0.46592882255825335,
+      "column_energy_residual_J_m2": 4.683753385137379e-16,
+      "temperature_contact_all_cut_orders": [],
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "theta": 1.0,
+      "temperature_error_K": 0.019053117090158667,
+      "contact_flux_error_W_m2": 0.05608813368477862,
+      "all_cut_flux_error_W_m2": 0.23693937594794337,
+      "column_energy_residual_J_m2": 3.2482697087665713e-16,
+      "temperature_contact_all_cut_orders": [
+        0.9578147334319737,
+        0.9761592077750886,
+        0.9755916050853839
+      ],
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "theta": 1.0,
+      "temperature_error_K": 0.009674803584187708,
+      "contact_flux_error_W_m2": 0.02825735004090421,
+      "all_cut_flux_error_W_m2": 0.11946736244981687,
+      "column_energy_residual_J_m2": 1.6284716630732277e-16,
+      "temperature_contact_all_cut_orders": [
+        0.977722764573604,
+        0.9890694017390671,
+        0.9879014348420706
+      ],
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "theta": 1.0,
+      "temperature_error_K": 0.004877069301981951,
+      "contact_flux_error_W_m2": 0.01417332230393023,
+      "all_cut_flux_error_W_m2": 0.059983220791272676,
+      "column_energy_residual_J_m2": 1.0538445116559103e-16,
+      "temperature_contact_all_cut_orders": [
+        0.9882178993963123,
+        0.9954482033789194,
+        0.9939856442954155
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "62998e1b69ff431f6c9bf00ff44988b1d7a50629",
+      "file": "sph_fixed_wall_contact_time_order.py",
+      "source_sha256": "e7c35e34ae03b8ed768132c6268a349238396f705b1bbb54ebf40349ca144dd7"
+    },
+    {
+      "commit": "99e90ae4f3198c8b414b8aad9ff2ca5e9506ceac",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "d6bdca3260c55fbcaf8c5c0bed046414552fb33998c47e9505df0fc048897e3f"
+    }
+  ],
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_fixed_wall_contact_time_order.py",
+  "reference": "Two half-meter layers, 12 uniform columns, h/dx=0.9. The slab has sinusoidally prescribed wall temperatures, contact resistance 0.32, and distributed heating C dT/dt. Fourier flux is uniform in space. Compare every time sample and all 13 interval-mean section fluxes with the continuous piecewise-linear temperature and exact sinusoidal mean flux across one period.",
+  "sph_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py",
+    "passed": 155
+  }
+}
