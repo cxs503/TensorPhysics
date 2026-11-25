@@ -9,7 +9,7 @@ from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
 
 
-def measure(n, steps, solver="SPH"):
+def measure(n, steps, solver="SPH", *, dirichlet_flux_order=2, rannacher=False):
     dx, k, capacity, end = 1/n, 2., 3., .0125
     x = (torch.arange(n, dtype=torch.float64)+.5)*dx
     cy, sy = torch.cos(2*torch.pi*x), torch.sin(2*torch.pi*x)
@@ -31,13 +31,15 @@ def measure(n, steps, solver="SPH"):
     times = np.linspace(0., end, steps+1)
     extra = {}
     if solver == "FVM":
-        extra["startup"] = "two backward Euler half steps"
+        extra["startup"] = "two backward Euler half steps" if rannacher else "Crank-Nicolson"
+        extra["dirichlet_flux_order"] = dirichlet_flux_order
         widths = np.full(n,dx)
         bc = {"west":dict(type="dirichlet",values=west),
               "east":dict(type="dirichlet",values=lambda time: -west(time))}
         states, powers, heats = energy.solve_transient_conduction(
             widths,widths,k,capacity,bc,times,exact(0.).numpy(),periodic_y=True,
-            return_wall_power=True,return_face_heat=True,rannacher=True)
+            return_wall_power=True,return_face_heat=True,rannacher=rannacher,
+            dirichlet_flux_order=dirichlet_flux_order)
         fields = torch.from_numpy(states)
         final = fields[-1]
         raw = torch.from_numpy(np.stack([powers[side][-1]/dx for side in ("west","east")]))
@@ -87,13 +89,13 @@ def measure(n, steps, solver="SPH"):
     return metrics, (final, reported, inward_heat.sum())
 
 
-def campaign(solver):
+def campaign(solver, **options):
     rows = []
     keys = ("max_temperature_error_K","raw_wall_error_W_m2","recovered_wall_error_W_m2",
             "integrated_heat_error_J_m2")
     wall_key = keys[2] if solver == "SPH" else keys[1]
     for n in (16,32,64,128):
-        row, _ = measure(n,n//4 if solver == "FVM" else n//8,solver)
+        row, _ = measure(n,n//4 if solver == "FVM" else n//8,solver,**options)
         row["passed"] = row["max_interval_balance_J_m2"] < 1e-12
         if solver == "FVM":
             row["passed"] &= row["max_cell_heat_residual_J"] < 1e-12
@@ -102,37 +104,46 @@ def campaign(solver):
             if solver == "FVM":
                 for key in ("max_face_mean_flux_error_W_m2","last_face_mean_flux_error_W_m2"):
                     row["orders"][key] = float(np.log2(rows[-1][key]/row[key]))
-            row["passed"] &= min(row["orders"][key] for key in
-                                 (keys[0],wall_key,keys[3])) > 1.8
+            row["passed"] &= min(row["orders"][key] for key in (keys[0],wall_key)) > 1.8
+            # The quadratic closure reaches its asymptotic total-heat rate
+            # later than its pointwise temperature and wall flux.
+            if solver != "FVM" or options.get("dirichlet_flux_order") == 1 or n == 128:
+                row["passed"] &= row["orders"][keys[3]] > 1.8
         if n == 128:
             if solver == "FVM":
-                row["passed"] &= (row["max_face_mean_flux_error_W_m2"] < .025
-                                  and row["orders"]["max_face_mean_flux_error_W_m2"] > .9
+                quadratic = row["dirichlet_flux_order"] == 2
+                row["passed"] &= (row["max_face_mean_flux_error_W_m2"] < (.001 if quadratic else .025)
+                                  and row["orders"]["max_face_mean_flux_error_W_m2"] > (1.8 if quadratic else .9)
                                   and row["orders"]["last_face_mean_flux_error_W_m2"] > 1.8)
             row["passed"] &= (row[keys[0]] < 2e-4 and row[wall_key] < .001
                               and row[keys[3]] < 5e-6)
         rows.append(row)
     # Holding the lattice fixed isolates the temporal discretization error.
     steps = (4,8,16,32,64)
-    samples = [measure(64,count,solver)[1] for count in steps]
+    samples = [measure(64,count,solver,**options)[1] for count in steps]
     temporal = []
     for start in range(len(steps)-2):
         time_orders = {}
         for i,key in enumerate(("temperature",wall_key.removesuffix("_error_W_m2"),"total_heat")):
             coarse,medium,fine = (sample[i] for sample in samples[start:start+3])
             time_orders[key] = float(torch.log2(abs(coarse-medium).max()/abs(medium-fine).max()))
-        temporal.append(dict(solver=solver,n=64,steps=steps[start:start+3],orders=time_orders))
+        temporal.append(dict(solver=solver,**options,n=64,steps=steps[start:start+3],orders=time_orders))
     temporal[-1]["passed"] = min(temporal[-1]["orders"].values())>1.8
     return rows, temporal
 
 
 if __name__ == "__main__":
     rows, temporal = [], []
-    for solver in ("SPH","FVM"):
-        run, refinement = campaign(solver)
+    for solver, options in (("SPH",{}),("FVM",dict(dirichlet_flux_order=1,rannacher=True)),
+                            ("FVM",dict(dirichlet_flux_order=2,rannacher=False))):
+        run, refinement = campaign(solver,**options)
         rows.extend(run)
         temporal.extend(refinement)
-    print(json.dumps(dict(runs=rows,temporal_refinement=temporal,
+    # Separate the influence of the boundary stencil from startup damping.
+    comparison = [measure(128,32,"FVM",dirichlet_flux_order=order,rannacher=damp)[0]
+                  for order,damp in ((1,False),(2,True))]
+    comparison.extend(row for row in rows if row["solver"] == "FVM" and row["n"] == 128)
+    print(json.dumps(dict(runs=rows,temporal_refinement=temporal,fvm_startup_comparison=comparison,
                           sources=[provenance(f) for f in (__file__,sph.__file__,energy.__file__)]),
                      indent=2,allow_nan=False))
     raise SystemExit(0 if all(row.get("passed",True) for row in rows+temporal) else 1)
