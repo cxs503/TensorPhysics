@@ -36,6 +36,25 @@ def manufactured(n, cell_means, resistance, curved=False):
     return k, c, phase @ modal_t, source, walls, flux
 
 
+def wall_recovery(field, exact, raw, flux, dx, walls, material):
+    # Section flux points right on both ends. The recovery API takes inward flux.
+    signs = np.array([[1.], [-1.]])
+    target = flux[:, [0, -1]].T*signs
+    original = raw[:, [0, -1]].T*signs
+    means = original.mean(axis=1)
+    checks = {}
+    for name, temperatures, boundary, wall_means in (
+            ("center_fit", field, None, means),
+            ("fixed_wall_fit", field, walls, means),
+            ("exact_input", exact, walls, target.mean(axis=1))):
+        fit = sph.recover_dirichlet_wall_flux_2d(temperatures, dx, wall_mean_flux=wall_means,
+                                                x_wall_temperatures=boundary, **material).numpy()
+        checks[name] = dict(max_error_W_m2=abs(fit-target).max(axis=1).tolist(),
+                            mean_defect_W_m2=float(abs(fit.mean(axis=1)-wall_means).max()))
+    checks["raw_max_error_W_m2"] = abs(original-target).max(axis=1).tolist()
+    return checks
+
+
 def measure(n, curved=False):
     dx, resistance = 1/n, .2
     contact = np.zeros(n-1)
@@ -71,6 +90,9 @@ def measure(n, curved=False):
             modal_errors = dict(modal_cut_disagreement_W_m2=modal_defect,
                 modal_amplitude_error_W_m2=float(abs(abs(actual)-abs(reference_modes)).max()),
                 modal_phase_error_rad=float(abs(np.angle(actual*reference_modes.conj())).max()))
+            if curved:
+                modal_errors["wall_recovery_west_east"] = wall_recovery(
+                    u, exact, cut_flux_density, flux, dx, walls, material)
             net = power.sum().item()/factor
             local = (5j*c*field-source-rate.numpy()/factor)*dx**2
         else:
@@ -127,6 +149,16 @@ if __name__ == "__main__":
                 # the final two refinements, where wall errors dominate SPH.
                 row["passed"] = bool(row["passed"] and
                     (cut_order is None or cut_order > (min_order if n >= 128 else 0.)))
+                if name == "SPH":
+                    wall = row["wall_recovery_west_east"]
+                    row["passed"] &= max(wall["exact_input"]["max_error_W_m2"]) < 1e-10
+                    row["passed"] &= all(wall[key]["mean_defect_W_m2"] < 1e-12
+                                         for key in ("center_fit", "fixed_wall_fit"))
+                    for key in ("center_fit", "fixed_wall_fit"):
+                        row["passed"] &= all(fit < raw for fit, raw in zip(
+                            wall[key]["max_error_W_m2"], wall["raw_max_error_W_m2"]))
+                        if n == 256:
+                            row["passed"] &= max(wall[key]["max_error_W_m2"]) < .01
                 previous[name+"_cut"] = cut_error
             previous[name] = errors
             rows.append(row)
