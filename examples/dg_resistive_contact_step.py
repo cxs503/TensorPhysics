@@ -63,9 +63,15 @@ def measure(n, times, resistance, reference, surface_capacities=(0., 0.)):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--trace-storage", action="store_true", help="store heat on both material traces")
-    storing = parser.parse_args().trace_storage
-    capacities = (.08, .2) if storing else (0., 0.)
+    parser.add_argument("--trace-storage", nargs="?", const="both", choices=("both", "left", "right"),
+                        help="store heat on the selected material trace(s); defaults to both when given alone")
+    side = parser.parse_args().trace_storage
+    storing = side is not None
+    capacities = (.08 if side in ("left", "both") else 0., .2 if side in ("right", "both") else 0.)
+    channels = ["west_heat", "interface_heat", "east_heat", "left_mean_trace", "right_mean_trace"]
+    if storing:
+        channels.extend(["left_storage", "right_storage"])
+    active = np.array([True]*5 + ([value > 0. for value in capacities] if storing else []))
     times = np.r_[0., .00025*2.**np.arange(12)]
     studies = []
     for resistance in (.05, .3):
@@ -76,8 +82,8 @@ if __name__ == "__main__":
             row = measure(n, times, resistance, reference, capacities)
             errors = np.array(row["west_interface_east_heat_errors_J_m2"] + row["left_right_trace_errors_K"]
                               + row.get("max_trace_storage_errors_J_m2", []))
-            orders = [] if previous is None else np.log2(previous/errors).tolist()
-            row.update(orders=orders, passed=bool(row["max_layer_balance_error_J_m2"] < 1e-9
+            orders = [] if previous is None else np.log2(previous[active]/errors[active]).tolist()
+            row.update(orders=orders, passed=bool(np.all(errors[~active] == 0.) and row["max_layer_balance_error_J_m2"] < 1e-9
                        and row["max_jump_residual_K"] < 1e-10 and (not orders or min(orders) > 0.)
                        and (n != 320 or (min(orders) > 1.85 and max(errors[:3]) < 5e-5 and max(errors[3:5]) < .004 and (not storing or max(errors[5:]) < .0001)))))
             previous = errors
@@ -90,8 +96,9 @@ if __name__ == "__main__":
                             reference_left_right_trace_K=(reference[:,3:5]/np.diff(times)[:,None]).tolist(),
                             runs=rows))
     passed = all(row["passed"] for study in studies for row in study["runs"])
-    print(json.dumps(dict(times_s=times.tolist(), surface_capacities_J_m2_K=capacities, studies=studies, passed=passed,
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/dg_resistive_contact_step.py" + (" --trace-storage" if storing else ""),
+    print(json.dumps(dict(times_s=times.tolist(), surface_capacities_J_m2_K=capacities,
+        order_channels=np.array(channels)[active].tolist(), studies=studies, passed=passed,
+        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/dg_resistive_contact_step.py" + (f" --trace-storage {side}" if storing else ""),
         sources=[provenance(p) for p in (__file__, reference_model.__file__, poisson.__file__, diffusion.__file__)]),
         indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
