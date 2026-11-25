@@ -1,0 +1,1280 @@
+{
+  "cases": [
+    {
+      "runs": [
+        {
+          "energy_residual_W_m": 0.005716222514397892,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 1.1102230246251565e-16,
+          "interior_error_K": 0.005795828132549465,
+          "boundary_flux_error_W_m2": 0.04408116738344876,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0013983413674761211,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 5,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 5.551115123125783e-17,
+          "interior_error_K": 0.0011970522782667897,
+          "boundary_flux_error_W_m2": 0.01171465248871775,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.2755286545995705,
+            1.9118482729494044
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.00034344621515003935,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 10,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 1.1102230246251565e-16,
+          "interior_error_K": 0.0002918075149922483,
+          "boundary_flux_error_W_m2": 0.0030279733194462964,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.036397216823127,
+            1.951889759374398
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 8.496130684823061e-05,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 20,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 5.551115123125783e-17,
+          "interior_error_K": 7.23942795564144e-05,
+          "boundary_flux_error_W_m2": 0.000765324313226928,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.011069429622594,
+            1.9842093554785871
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.015874909615183473,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.011783415915565504,
+          "boundary_flux_error_W_m2": 0.13327292946158978,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0031907421244986097,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 4,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0023733715592984452,
+          "boundary_flux_error_W_m2": 0.036727813047031876,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.3117479431663153,
+            1.8594388697949826
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.000699453885149893,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 9,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0005732176651328169,
+          "boundary_flux_error_W_m2": 0.00977638190377602,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.0497830013274014,
+            1.909500444843787
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0001627901216058148,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 19,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.00014089146032162235,
+          "boundary_flux_error_W_m2": 0.002500317229836464,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.024498900510882,
+            1.9671894939392
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "89420122ca05d72f70740779dcb2ff1f1324cd16",
+          "file": "bem_harmonic_conduction.py",
+          "source_sha256": "4c5981c8ffb0efe6bcf3b0096c32506375b4e4de2a2cc6c5bfecf35dddb94135"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "harmonic_conduction.py",
+          "source_sha256": "2b125b7da460bfb61a4a2e6196ce30910168ccd579f85683689ed0d8d8c903cd"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "geometry.py",
+          "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+        }
+      ],
+      "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_conduction.py --affine"
+    },
+    {
+      "runs": [
+        {
+          "energy_residual_W_m": 0.0029728072258625583,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 3,
+          "worst_flux_condition": "flux",
+          "panels": 16,
+          "omega_rad_s": 1.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.015028898365188255,
+          "interior_error_K": 0.016845474367304172,
+          "boundary_flux_error_W_m2": 1.1102230246251565e-16,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0007651604826655331,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 6,
+          "worst_flux_condition": "flux",
+          "panels": 32,
+          "omega_rad_s": 1.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.004063534475179606,
+          "interior_error_K": 0.004237292510087175,
+          "boundary_flux_error_W_m2": 1.1102230246251565e-16,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.9911464253942026,
+            1.8869322226888716
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.00019268266460733407,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 27,
+          "worst_flux_condition": "flux",
+          "panels": 64,
+          "omega_rad_s": 1.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.0010494757674449052,
+          "interior_error_K": 0.0010691352015659696,
+          "boundary_flux_error_W_m2": 2.220446049250313e-16,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.9866984186158254,
+            1.9530662792253706
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 4.8258017380994814e-05,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 29,
+          "worst_flux_condition": "flux",
+          "panels": 128,
+          "omega_rad_s": 1.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.00026522825271723413,
+          "interior_error_K": 0.00026836619211225256,
+          "boundary_flux_error_W_m2": 5.551115123125783e-17,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.994169463959237,
+            1.9843624870580305
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.034178186815513524,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 0,
+          "worst_flux_condition": "flux",
+          "panels": 16,
+          "omega_rad_s": 6.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.026171918879391375,
+          "interior_error_K": 0.025932378843871732,
+          "boundary_flux_error_W_m2": 2.220446049250313e-16,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.00881488344156329,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 0,
+          "worst_flux_condition": "flux",
+          "panels": 32,
+          "omega_rad_s": 6.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.007462971071303757,
+          "interior_error_K": 0.007340434789232369,
+          "boundary_flux_error_W_m2": 2.220446049250313e-16,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.8208171298493931,
+            1.8101977052131024
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0022209117315529106,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 14,
+          "worst_flux_condition": "flux",
+          "panels": 64,
+          "omega_rad_s": 6.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.0019519706476271896,
+          "interior_error_K": 0.0018773587954192526,
+          "boundary_flux_error_W_m2": 2.220446049250313e-16,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.9671611191785672,
+            1.9348187349968649
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0005563070283404403,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 13,
+          "worst_flux_condition": "flux",
+          "panels": 128,
+          "omega_rad_s": 6.0,
+          "boundary": "flux",
+          "wall_temperature_error_K": 0.000498141005242109,
+          "interior_error_K": 0.0004735206484358234,
+          "boundary_flux_error_W_m2": 4.440892098500626e-16,
+          "order_metrics": [
+            "interior_error_K",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.9872051576255714,
+            1.9703052801525003
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "89420122ca05d72f70740779dcb2ff1f1324cd16",
+          "file": "bem_harmonic_conduction.py",
+          "source_sha256": "4c5981c8ffb0efe6bcf3b0096c32506375b4e4de2a2cc6c5bfecf35dddb94135"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "harmonic_conduction.py",
+          "source_sha256": "2b125b7da460bfb61a4a2e6196ce30910168ccd579f85683689ed0d8d8c903cd"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "geometry.py",
+          "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+        }
+      ],
+      "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_conduction.py --affine --boundary flux"
+    },
+    {
+      "runs": [
+        {
+          "energy_residual_W_m": 0.007301925667128944,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "film",
+          "panels": 16,
+          "omega_rad_s": 1.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.007303337580006949,
+          "interior_error_K": 0.010826111937841765,
+          "boundary_flux_error_W_m2": 0.0208726323754095,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0018182083544666548,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 4,
+          "worst_flux_condition": "film",
+          "panels": 32,
+          "omega_rad_s": 1.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.0019557339057708943,
+          "interior_error_K": 0.0026216070073546757,
+          "boundary_flux_error_W_m2": 0.005615627336773878,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            2.0459918708308322,
+            1.8940934550034996,
+            1.900845824665132
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0004503996891949983,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 9,
+          "worst_flux_condition": "film",
+          "panels": 64,
+          "omega_rad_s": 1.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.0005085961563378828,
+          "interior_error_K": 0.0006563173428482184,
+          "boundary_flux_error_W_m2": 0.0014552400562178722,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.9979859730199339,
+            1.9481900393981508,
+            1.943117628548343
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.00011188463948124624,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 19,
+          "worst_flux_condition": "film",
+          "panels": 128,
+          "omega_rad_s": 1.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.00012880132346394693,
+          "interior_error_K": 0.00016433105174755173,
+          "boundary_flux_error_W_m2": 0.00036846187084093164,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.997788440554231,
+            1.9816699203218093,
+            1.9813731414925706
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.03391401561186933,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "film",
+          "panels": 16,
+          "omega_rad_s": 6.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.017483459077635485,
+          "interior_error_K": 0.021643736466148658,
+          "boundary_flux_error_W_m2": 0.04996699248532518,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.008281440174830717,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 5,
+          "worst_flux_condition": "film",
+          "panels": 32,
+          "omega_rad_s": 6.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.004941420409335173,
+          "interior_error_K": 0.005696317298354768,
+          "boundary_flux_error_W_m2": 0.01391851434620432,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.925848165120706,
+            1.8439701578229104,
+            1.8229929395969888
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.002032625541156253,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 10,
+          "worst_flux_condition": "film",
+          "panels": 64,
+          "omega_rad_s": 6.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.0013177762835197082,
+          "interior_error_K": 0.0014376850161025019,
+          "boundary_flux_error_W_m2": 0.003677728458043043,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.9862818812222451,
+            1.9201183583775197,
+            1.9068203361177287
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0005028230874992675,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 20,
+          "worst_flux_condition": "film",
+          "panels": 128,
+          "omega_rad_s": 6.0,
+          "boundary": "film",
+          "wall_temperature_error_K": 0.00033776965829678365,
+          "interior_error_K": 0.0003605263298992198,
+          "boundary_flux_error_W_m2": 0.0009392619981687445,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            1.9955710977568153,
+            1.9692154183799955,
+            1.9639938250264493
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "89420122ca05d72f70740779dcb2ff1f1324cd16",
+          "file": "bem_harmonic_conduction.py",
+          "source_sha256": "4c5981c8ffb0efe6bcf3b0096c32506375b4e4de2a2cc6c5bfecf35dddb94135"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "harmonic_conduction.py",
+          "source_sha256": "2b125b7da460bfb61a4a2e6196ce30910168ccd579f85683689ed0d8d8c903cd"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "geometry.py",
+          "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+        }
+      ],
+      "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_conduction.py --affine --boundary film"
+    },
+    {
+      "runs": [
+        {
+          "energy_residual_W_m": 7.651346703440537e-06,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 48,
+          "worst_flux_panel": 3,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 1.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 9.601462991881228e-06,
+          "interior_error_K": 5.382291745868323e-06,
+          "boundary_flux_error_W_m2": 0.00017963752779566366,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 3.2782642012942386e-07,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 96,
+          "worst_flux_panel": 7,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 1.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 6.3445403193204e-07,
+          "interior_error_K": 1.2769270748768557e-07,
+          "boundary_flux_error_W_m2": 2.5451154863766387e-05,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            5.397472553648088,
+            2.819285746550316,
+            3.9196667031257055
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 1.3796003938868905e-08,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 192,
+          "worst_flux_panel": 15,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 1.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 4.05271368732699e-08,
+          "interior_error_K": 4.796903026537329e-09,
+          "boundary_flux_error_W_m2": 3.4055420678397286e-06,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            4.734429050529453,
+            2.901774762408997,
+            3.9685554785332333
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 9.39804339430049e-10,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 384,
+          "worst_flux_panel": 31,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 1.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 2.5511741445024403e-09,
+          "interior_error_K": 2.262968207141347e-10,
+          "boundary_flux_error_W_m2": 4.432562546773293e-07,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            4.405815053359968,
+            2.9416715596640937,
+            3.989654970147215
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 3.1039053345789784e-10,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 768,
+          "worst_flux_panel": 63,
+          "worst_flux_condition": "temperature",
+          "panels": 256,
+          "omega_rad_s": 1.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 1.579667935156631e-10,
+          "interior_error_K": 5.609086333589531e-11,
+          "boundary_flux_error_W_m2": 5.639279300664503e-08,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            2.0123786221699764,
+            2.9745582855396693,
+            4.013468157569844
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.00018838753467855158,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 48,
+          "worst_flux_panel": 1,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 6.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 9.439646420025794e-05,
+          "interior_error_K": 5.3304325645004746e-05,
+          "boundary_flux_error_W_m2": 0.001392097754778341,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 8.294195580167608e-06,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 96,
+          "worst_flux_panel": 1,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 6.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 6.817124577838467e-06,
+          "interior_error_K": 1.2020510490637673e-06,
+          "boundary_flux_error_W_m2": 0.00023433224694197863,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            5.470682541142328,
+            2.5706331173203982,
+            3.791497569136231
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 3.4121631636731114e-07,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 192,
+          "worst_flux_panel": 0,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 6.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 4.486548646666941e-07,
+          "interior_error_K": 4.4008084705390794e-08,
+          "boundary_flux_error_W_m2": 3.2998515694339795e-05,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            4.771585770976664,
+            2.828082462888713,
+            3.9254853882507916
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 1.5526681308675795e-08,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 384,
+          "worst_flux_panel": 31,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 6.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 2.8575291881082172e-08,
+          "interior_error_K": 1.8614168185199033e-09,
+          "boundary_flux_error_W_m2": 4.632458695925819e-06,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            4.563295532192545,
+            2.8325511140704673,
+            3.9727659141167075
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 1.8287854248017929e-09,
+          "quadratic": true,
+          "graded": false,
+          "boundary_unknowns": 768,
+          "worst_flux_panel": 63,
+          "worst_flux_condition": "temperature",
+          "panels": 256,
+          "omega_rad_s": 6.0,
+          "boundary": "mixed",
+          "wall_temperature_error_K": 1.7922834107949783e-09,
+          "interior_error_K": 9.410379080938183e-11,
+          "boundary_flux_error_W_m2": 6.151144704963327e-07,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2",
+            "wall_temperature_error_K"
+          ],
+          "orders": [
+            4.30600449680946,
+            2.9128512922205934,
+            3.994897543346579
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "89420122ca05d72f70740779dcb2ff1f1324cd16",
+          "file": "bem_harmonic_conduction.py",
+          "source_sha256": "4c5981c8ffb0efe6bcf3b0096c32506375b4e4de2a2cc6c5bfecf35dddb94135"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "harmonic_conduction.py",
+          "source_sha256": "2b125b7da460bfb61a4a2e6196ce30910168ccd579f85683689ed0d8d8c903cd"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "geometry.py",
+          "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+        }
+      ],
+      "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_conduction.py --affine --boundary mixed --quadratic"
+    },
+    {
+      "runs": [
+        {
+          "energy_residual_W_m": 0.005716222514396435,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.005795828132549414,
+          "boundary_flux_error_W_m2": 0.04408116738344869,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.001398341367475165,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 5,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0011970522782668615,
+          "boundary_flux_error_W_m2": 0.011714652488718096,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.2755286545994715,
+            1.9118482729493593
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.00034344621515199064,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 10,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.00029180751499215536,
+          "boundary_flux_error_W_m2": 0.003027973319454452,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.0363972168236733,
+            1.951889759370555
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 8.496130684830344e-05,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 20,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 7.239427955618743e-05,
+          "boundary_flux_error_W_m2": 0.0007653243131690047,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.011069429626658,
+            1.9842093555916624
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.01587490961520888,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.011783415915565459,
+          "boundary_flux_error_W_m2": 0.13327292946158903,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0031907421244796765,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 4,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0023733715592985554,
+          "boundary_flux_error_W_m2": 0.03672781304703308,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.3117479431662424,
+            1.8594388697949273
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.0006994538851222063,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 9,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0005732176651327636,
+          "boundary_flux_error_W_m2": 0.009776381903783195,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.0497830013276026,
+            1.9095004448427753
+          ],
+          "passed": true
+        },
+        {
+          "energy_residual_W_m": 0.00016279012163348462,
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 19,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.00014089146032173473,
+          "boundary_flux_error_W_m2": 0.002500317229903636,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.0244989005095975,
+            1.9671894939015002
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "89420122ca05d72f70740779dcb2ff1f1324cd16",
+          "file": "bem_harmonic_conduction.py",
+          "source_sha256": "4c5981c8ffb0efe6bcf3b0096c32506375b4e4de2a2cc6c5bfecf35dddb94135"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "harmonic_conduction.py",
+          "source_sha256": "2b125b7da460bfb61a4a2e6196ce30910168ccd579f85683689ed0d8d8c903cd"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "geometry.py",
+          "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+        }
+      ],
+      "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_conduction.py --heated"
+    },
+    {
+      "runs": [
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.005795828132549386,
+          "boundary_flux_error_W_m2": 0.04408116738344869,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 5,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.001197052278266825,
+          "boundary_flux_error_W_m2": 0.011714652488718514,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.2755286545995084,
+            1.9118482729493076
+          ],
+          "passed": true
+        },
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 10,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0002918075149921992,
+          "boundary_flux_error_W_m2": 0.003027973319455095,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.0363972168234126,
+            1.9518897593703
+          ],
+          "passed": true
+        },
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 20,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 1.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 7.239427955620768e-05,
+          "boundary_flux_error_W_m2": 0.0007653243131632484,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.011069429626471,
+            1.98420935560282
+          ],
+          "passed": true
+        },
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 16,
+          "worst_flux_panel": 2,
+          "worst_flux_condition": "temperature",
+          "panels": 16,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.011783415915565466,
+          "boundary_flux_error_W_m2": 0.13327292946158903,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [],
+          "passed": true
+        },
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 32,
+          "worst_flux_panel": 4,
+          "worst_flux_condition": "temperature",
+          "panels": 32,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0023733715592985554,
+          "boundary_flux_error_W_m2": 0.03672781304703308,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.3117479431662438,
+            1.8594388697949273
+          ],
+          "passed": true
+        },
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 64,
+          "worst_flux_panel": 9,
+          "worst_flux_condition": "temperature",
+          "panels": 64,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0005732176651327657,
+          "boundary_flux_error_W_m2": 0.009776381903783195,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.0497830013275973,
+            1.9095004448427753
+          ],
+          "passed": true
+        },
+        {
+          "quadratic": false,
+          "graded": false,
+          "boundary_unknowns": 128,
+          "worst_flux_panel": 19,
+          "worst_flux_condition": "temperature",
+          "panels": 128,
+          "omega_rad_s": 6.0,
+          "boundary": "temperature",
+          "wall_temperature_error_K": 0.0,
+          "interior_error_K": 0.0001408914603217363,
+          "boundary_flux_error_W_m2": 0.0025003172299005194,
+          "order_metrics": [
+            "interior_error_K",
+            "boundary_flux_error_W_m2"
+          ],
+          "orders": [
+            2.024498900509587,
+            1.9671894939032983
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "89420122ca05d72f70740779dcb2ff1f1324cd16",
+          "file": "bem_harmonic_conduction.py",
+          "source_sha256": "4c5981c8ffb0efe6bcf3b0096c32506375b4e4de2a2cc6c5bfecf35dddb94135"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "harmonic_conduction.py",
+          "source_sha256": "2b125b7da460bfb61a4a2e6196ce30910168ccd579f85683689ed0d8d8c903cd"
+        },
+        {
+          "commit": "59fe10b76599c8d0f1113d7cd105856b944c9754",
+          "file": "geometry.py",
+          "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+        }
+      ],
+      "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_conduction.py"
+    }
+  ],
+  "reference": "Two oblique exponential thermal waves plus affine particular temperature (-0.25+0.4i)+(0.31+0.17i)x+(-0.23+0.42i)y. Generated power density is i*omega*C times this affine polynomial. The unit-circumradius polygon is centered at (0.35,-0.2) so the integrated linear source is nonzero. Include k*n dot grad(T) in the exact inward flux. Check integrated numerical inward heat plus analytic generated heat against analytic storage integrated independently over triangles.",
+  "regression": {
+    "repository": "TensorBEM",
+    "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_harmonic_conduction.py tests/test_geometry.py tests/test_kernels.py tests/test_kernels_batch.py",
+    "passed": 64
+  }
+}
