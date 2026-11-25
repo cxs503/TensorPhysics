@@ -1,0 +1,1482 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3286134557006735,
+        -0.18913322461601034
+      ],
+      "flux_relative_error": 0.0015851726511477537,
+      "flux_phase_error_rad": 3.1995249772538814e-05,
+      "max_trace_error_K": 0.0010433646868080572,
+      "jump_error_K": 0.001564363395703409,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3286134557006735,
+        -0.18913322461601034
+      ],
+      "flux_relative_error": 0.0003960219619837052,
+      "flux_phase_error_rad": 9.275131719226848e-06,
+      "max_trace_error_K": 0.00026257997622796417,
+      "jump_error_K": 0.000393918980292705,
+      "passed": true,
+      "flux_relative_error_order": 2.000987637511787,
+      "max_trace_error_K_order": 1.990414701795873
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3286134557006735,
+        -0.18913322461601034
+      ],
+      "flux_relative_error": 9.89415097549865e-05,
+      "flux_phase_error_rad": 2.4862590096047642e-06,
+      "max_trace_error_K": 6.585556327470814e-05,
+      "jump_error_K": 9.88239409978704e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.0009326203555866,
+      "max_trace_error_K_order": 1.9953796785051623
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.23281159815110147,
+        -0.1339945383320905
+      ],
+      "flux_relative_error": 0.0014343380252411374,
+      "flux_phase_error_rad": 4.092628270257127e-05,
+      "max_trace_error_K": 0.0011888145181220165,
+      "jump_error_K": 0.0017139107563275517,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.23281159815110147,
+        -0.1339945383320905
+      ],
+      "flux_relative_error": 0.0003517254384331631,
+      "flux_phase_error_rad": 1.072396074550835e-05,
+      "max_trace_error_K": 0.00031109117991934835,
+      "jump_error_K": 0.0004445043610322618,
+      "passed": true,
+      "flux_relative_error_order": 2.0278634724971396,
+      "max_trace_error_K_order": 1.9341142425099382
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.23281159815110147,
+        -0.1339945383320905
+      ],
+      "flux_relative_error": 8.676287650134142e-05,
+      "flux_phase_error_rad": 2.6956899750561537e-06,
+      "max_trace_error_K": 7.995955514260801e-05,
+      "jump_error_K": 0.00011357997172264903,
+      "passed": true,
+      "flux_relative_error_order": 2.0192998917636817,
+      "max_trace_error_K_order": 1.9599951413130468
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3087076590583391,
+        -0.3143502045049562
+      ],
+      "flux_relative_error": 0.009356191219844712,
+      "flux_phase_error_rad": 0.008738954860224605,
+      "max_trace_error_K": 0.0011504838053860995,
+      "jump_error_K": 0.001893760461774199,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3087076590583391,
+        -0.3143502045049562
+      ],
+      "flux_relative_error": 0.002346869051045482,
+      "flux_phase_error_rad": 0.002194473625687416,
+      "max_trace_error_K": 0.00029156033821704926,
+      "jump_error_K": 0.000479971962405109,
+      "passed": true,
+      "flux_relative_error_order": 1.9951840018658122,
+      "max_trace_error_K_order": 1.9803742916124534
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3087076590583391,
+        -0.3143502045049562
+      ],
+      "flux_relative_error": 0.0005873116868933181,
+      "flux_phase_error_rad": 0.0005494456906487391,
+      "max_trace_error_K": 7.33621151048728e-05,
+      "jump_error_K": 0.00012081123660611326,
+      "passed": true,
+      "flux_relative_error_order": 1.9985390942516748,
+      "max_trace_error_K_order": 1.9906873400780045
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.16146819361868336,
+        -0.23880763107352992
+      ],
+      "flux_relative_error": 0.007683453814279929,
+      "flux_phase_error_rad": 0.006575325240857478,
+      "max_trace_error_K": 0.00102751119680145,
+      "jump_error_K": 0.00175588073099971,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.16146819361868336,
+        -0.23880763107352992
+      ],
+      "flux_relative_error": 0.0018885341729118106,
+      "flux_phase_error_rad": 0.0016160947283044172,
+      "max_trace_error_K": 0.00026929265645471255,
+      "jump_error_K": 0.00045488004349637367,
+      "passed": true,
+      "flux_relative_error_order": 2.0244880777869523,
+      "max_trace_error_K_order": 1.9319073215117073
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.16146819361868336,
+        -0.23880763107352992
+      ],
+      "flux_relative_error": 0.0004659611065113303,
+      "flux_phase_error_rad": 0.0003981348243537068,
+      "max_trace_error_K": 6.93234337174229e-05,
+      "jump_error_K": 0.00011613782542521051,
+      "passed": true,
+      "flux_relative_error_order": 2.018985445349269,
+      "max_trace_error_K_order": 1.9577598677083496
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.623345782650712,
+        -0.1451264665407061
+      ],
+      "flux_relative_error": 0.001498793470242128,
+      "flux_phase_error_rad": 7.651857201610815e-05,
+      "max_trace_error_K": 0.0009328906946952343,
+      "jump_error_K": 0.00154806144331204,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.623345782650712,
+        -0.1451264665407061
+      ],
+      "flux_relative_error": 0.0003753379836799549,
+      "flux_phase_error_rad": 1.8604138694663732e-05,
+      "max_trace_error_K": 0.0002362582879580735,
+      "jump_error_K": 0.00039142472854929877,
+      "passed": true,
+      "flux_relative_error_order": 1.997539395988666,
+      "max_trace_error_K_order": 1.9813431126485088
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.623345782650712,
+        -0.1451264665407061
+      ],
+      "flux_relative_error": 9.388387690122062e-05,
+      "flux_phase_error_rad": 4.582768627124121e-06,
+      "max_trace_error_K": 5.943896202822335e-05,
+      "jump_error_K": 9.839903332947212e-05,
+      "passed": true,
+      "flux_relative_error_order": 1.999240972555748,
+      "max_trace_error_K_order": 1.9908841123811252
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.5252347756065993,
+        -0.12228440331134617
+      ],
+      "flux_relative_error": 0.001309237338183733,
+      "flux_phase_error_rad": 7.913964937830342e-05,
+      "max_trace_error_K": 0.000858903098848914,
+      "jump_error_K": 0.0015107791867750634,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.5252347756065993,
+        -0.12228440331134617
+      ],
+      "flux_relative_error": 0.00032396853089445546,
+      "flux_phase_error_rad": 1.896135496422623e-05,
+      "max_trace_error_K": 0.00022811748241929986,
+      "jump_error_K": 0.00039397137903002195,
+      "passed": true,
+      "flux_relative_error_order": 2.014801065385493,
+      "max_trace_error_K_order": 1.9127183603441593
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.5252347756065993,
+        -0.12228440331134617
+      ],
+      "flux_relative_error": 8.039328445871293e-05,
+      "flux_phase_error_rad": 4.629074609384751e-06,
+      "max_trace_error_K": 5.9094825759827785e-05,
+      "jump_error_K": 0.00010093366261056909,
+      "passed": true,
+      "flux_relative_error_order": 2.0107067838275063,
+      "max_trace_error_K_order": 1.9486732946674634
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.27726604010106337,
+        -0.4324175626259596
+      ],
+      "flux_relative_error": 0.006701331409184017,
+      "flux_phase_error_rad": 0.0058676857894300665,
+      "max_trace_error_K": 0.000877271691588973,
+      "jump_error_K": 0.001691572869388966,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.27726604010106337,
+        -0.4324175626259596
+      ],
+      "flux_relative_error": 0.001676111131788153,
+      "flux_phase_error_rad": 0.0014702946403134765,
+      "max_trace_error_K": 0.00023071690700074708,
+      "jump_error_K": 0.00043383372801805584,
+      "passed": true,
+      "flux_relative_error_order": 1.9993299485300877,
+      "max_trace_error_K_order": 1.9268999864254002
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.27726604010106337,
+        -0.4324175626259596
+      ],
+      "flux_relative_error": 0.0004189603888961275,
+      "flux_phase_error_rad": 0.00036778220050384056,
+      "max_trace_error_K": 5.917166645481624e-05,
+      "jump_error_K": 0.00010987986590525156,
+      "passed": true,
+      "flux_relative_error_order": 2.000232053545649,
+      "max_trace_error_K_order": 1.9631452975282462
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.11347688832191226,
+        -0.30266215414951914
+      ],
+      "flux_relative_error": 0.004739536575604538,
+      "flux_phase_error_rad": 0.0037268099467194066,
+      "max_trace_error_K": 0.0007648810879022639,
+      "jump_error_K": 0.0012839832910117514,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.11347688832191226,
+        -0.30266215414951914
+      ],
+      "flux_relative_error": 0.0011630901435936993,
+      "flux_phase_error_rad": 0.0009115030135489268,
+      "max_trace_error_K": 0.00019514798878152991,
+      "jump_error_K": 0.00033718306480872464,
+      "passed": true,
+      "flux_relative_error_order": 2.026783086473678,
+      "max_trace_error_K_order": 1.9706668826524518
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.11347688832191226,
+        -0.30266215414951914
+      ],
+      "flux_relative_error": 0.00028715770109308936,
+      "flux_phase_error_rad": 0.0002239215361784652,
+      "max_trace_error_K": 4.937418737423087e-05,
+      "jump_error_K": 8.676028852218529e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.018047757062369,
+      "max_trace_error_K_order": 1.9827396853979828
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.579267859750119,
+        -0.3765241088375773
+      ],
+      "flux_relative_error": 0.001484910022592878,
+      "flux_phase_error_rad": 2.9618183137898455e-14,
+      "max_trace_error_K": 0.0009942378246144367,
+      "jump_error_K": 0.0015523584045007166,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.579267859750119,
+        -0.3765241088375773
+      ],
+      "flux_relative_error": 0.000371300616885506,
+      "flux_phase_error_rad": 1.35930122531578e-13,
+      "max_trace_error_K": 0.000251371921220017,
+      "jump_error_K": 0.00039311032332491335,
+      "passed": true,
+      "flux_relative_error_order": 1.9997158970371454,
+      "max_trace_error_K_order": 1.9837674833252104
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.579267859750119,
+        -0.3765241088375773
+      ],
+      "flux_relative_error": 9.280326406402306e-05,
+      "flux_phase_error_rad": 5.622988724107426e-13,
+      "max_trace_error_K": 6.318872466415824e-05,
+      "jump_error_K": 9.88966582002542e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.000340258478698,
+      "max_trace_error_K_order": 1.9920844532923305
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.505991680322215,
+        -0.32889459220943973
+      ],
+      "flux_relative_error": 0.0013319103085878137,
+      "flux_phase_error_rad": 2.3399470950029427e-14,
+      "max_trace_error_K": 0.0009760220074175626,
+      "jump_error_K": 0.0014654140939807244,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.505991680322215,
+        -0.32889459220943973
+      ],
+      "flux_relative_error": 0.00032948480779648737,
+      "flux_phase_error_rad": 1.3724724897651063e-13,
+      "max_trace_error_K": 0.00025901027029957656,
+      "jump_error_K": 0.0003847617208285309,
+      "passed": true,
+      "flux_relative_error_order": 2.01521308327231,
+      "max_trace_error_K_order": 1.913904373225745
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.505991680322215,
+        -0.32889459220943973
+      ],
+      "flux_relative_error": 8.177134796727437e-05,
+      "flux_phase_error_rad": 5.662842430148968e-13,
+      "max_trace_error_K": 6.708531624955044e-05,
+      "jump_error_K": 9.895437707667975e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.010544617686081,
+      "max_trace_error_K_order": 1.948940378427503
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.19029009356134283,
+        -0.6623864352012426
+      ],
+      "flux_relative_error": 0.005715247572467455,
+      "flux_phase_error_rad": 0.0053704963815274466,
+      "max_trace_error_K": 0.0010396491458133771,
+      "jump_error_K": 0.0020265281292255726,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.19029009356134283,
+        -0.6623864352012426
+      ],
+      "flux_relative_error": 0.0014285290643965725,
+      "flux_phase_error_rad": 0.0013440863561789047,
+      "max_trace_error_K": 0.00027778934911878105,
+      "jump_error_K": 0.0005259000924272088,
+      "passed": true,
+      "flux_relative_error_order": 2.0002856051129947,
+      "max_trace_error_K_order": 1.904033548655213
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.19029009356134283,
+        -0.6623864352012426
+      ],
+      "flux_relative_error": 0.0003570327110899594,
+      "flux_phase_error_rad": 0.00033609896903458554,
+      "max_trace_error_K": 7.178941022400727e-05,
+      "jump_error_K": 0.00013395884752083692,
+      "passed": true,
+      "flux_relative_error_order": 2.0004022250420084,
+      "max_trace_error_K_order": 1.9521483346824389
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.00045603855110839706,
+        -0.49203478038583165
+      ],
+      "flux_relative_error": 0.004226340139502884,
+      "flux_phase_error_rad": 0.0034917707325716895,
+      "max_trace_error_K": 0.0008034539224548027,
+      "jump_error_K": 0.0013531066948390626,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.00045603855110839706,
+        -0.49203478038583165
+      ],
+      "flux_relative_error": 0.0010410787400411097,
+      "flux_phase_error_rad": 0.0008571516310155281,
+      "max_trace_error_K": 0.00023116334511319027,
+      "jump_error_K": 0.00036758147336893445,
+      "passed": true,
+      "flux_relative_error_order": 2.0213296929857942,
+      "max_trace_error_K_order": 1.7973026365816092
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.00045603855110839706,
+        -0.49203478038583165
+      ],
+      "flux_relative_error": 0.00025776109838077473,
+      "flux_phase_error_rad": 0.0002112010366158731,
+      "max_trace_error_K": 6.246984180274254e-05,
+      "jump_error_K": 9.628861976698033e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.013972736355564,
+      "max_trace_error_K_order": 1.8876808705238457
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3286134557006735,
+        -0.18913322461601034
+      ],
+      "flux_relative_error": 0.0015851726511477639,
+      "flux_phase_error_rad": 3.199524977304719e-05,
+      "max_trace_error_K": 0.0010433646868080605,
+      "jump_error_K": 0.001564363395703415,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3286134557006735,
+        -0.18913322461601034
+      ],
+      "flux_relative_error": 0.0003960219619833276,
+      "flux_phase_error_rad": 9.275131717322716e-06,
+      "max_trace_error_K": 0.0002625799762279628,
+      "jump_error_K": 0.000393918980292705,
+      "passed": true,
+      "flux_relative_error_order": 2.0009876375131723,
+      "max_trace_error_K_order": 1.990414701795885
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3286134557006735,
+        -0.18913322461601034
+      ],
+      "flux_relative_error": 9.894150975510705e-05,
+      "flux_phase_error_rad": 2.486259009985477e-06,
+      "max_trace_error_K": 6.585556327468061e-05,
+      "jump_error_K": 9.88239409978704e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.0009326203524536,
+      "max_trace_error_K_order": 1.995379678505758
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.23281159815110147,
+        -0.1339945383320905
+      ],
+      "flux_relative_error": 0.0014343380252405825,
+      "flux_phase_error_rad": 4.0926282702571247e-05,
+      "max_trace_error_K": 0.0011888145181220137,
+      "jump_error_K": 0.001713910756327553,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.23281159815110147,
+        -0.1339945383320905
+      ],
+      "flux_relative_error": 0.0003517254384331604,
+      "flux_phase_error_rad": 1.0723960745418763e-05,
+      "max_trace_error_K": 0.0003110911799193555,
+      "jump_error_K": 0.00044450436103225826,
+      "passed": true,
+      "flux_relative_error_order": 2.0278634724965925,
+      "max_trace_error_K_order": 1.9341142425099016
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.23281159815110147,
+        -0.1339945383320905
+      ],
+      "flux_relative_error": 8.676287650110278e-05,
+      "flux_phase_error_rad": 2.6956899745187845e-06,
+      "max_trace_error_K": 7.995955514260659e-05,
+      "jump_error_K": 0.00011357997172264551,
+      "passed": true,
+      "flux_relative_error_order": 2.019299891767638,
+      "max_trace_error_K_order": 1.9599951413131056
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3087076590583391,
+        -0.3143502045049562
+      ],
+      "flux_relative_error": 0.009356191219844042,
+      "flux_phase_error_rad": 0.008738954860223885,
+      "max_trace_error_K": 0.0011504838053861292,
+      "jump_error_K": 0.0018937604617742035,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3087076590583391,
+        -0.3143502045049562
+      ],
+      "flux_relative_error": 0.0023468690510453586,
+      "flux_phase_error_rad": 0.002194473625687326,
+      "max_trace_error_K": 0.00029156033821706515,
+      "jump_error_K": 0.0004799719624051145,
+      "passed": true,
+      "flux_relative_error_order": 1.9951840018657852,
+      "max_trace_error_K_order": 1.980374291612412
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.3087076590583391,
+        -0.3143502045049562
+      ],
+      "flux_relative_error": 0.0005873116868932119,
+      "flux_phase_error_rad": 0.00054944569064829,
+      "max_trace_error_K": 7.336211510484871e-05,
+      "jump_error_K": 0.00012081123660611326,
+      "passed": true,
+      "flux_relative_error_order": 1.9985390942518597,
+      "max_trace_error_K_order": 1.990687340078557
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.16146819361868336,
+        -0.23880763107352992
+      ],
+      "flux_relative_error": 0.007683453814279929,
+      "flux_phase_error_rad": 0.006575325240857478,
+      "max_trace_error_K": 0.0010275111968014931,
+      "jump_error_K": 0.0017558807309997048,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.16146819361868336,
+        -0.23880763107352992
+      ],
+      "flux_relative_error": 0.0018885341729123714,
+      "flux_phase_error_rad": 0.0016160947283047373,
+      "max_trace_error_K": 0.0002692926564546827,
+      "jump_error_K": 0.00045488004349635524,
+      "passed": true,
+      "flux_relative_error_order": 2.024488077786524,
+      "max_trace_error_K_order": 1.931907321511928
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "zero_temperature_phasor",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.16146819361868336,
+        -0.23880763107352992
+      ],
+      "flux_relative_error": 0.0004659611065108884,
+      "flux_phase_error_rad": 0.0003981348243547429,
+      "max_trace_error_K": 6.932343371740219e-05,
+      "jump_error_K": 0.00011613782542538766,
+      "passed": true,
+      "flux_relative_error_order": 2.018985445351065,
+      "max_trace_error_K_order": 1.9577598677086208
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.623345782650712,
+        -0.1451264665407061
+      ],
+      "flux_relative_error": 0.0014987934702424565,
+      "flux_phase_error_rad": 7.651857201602357e-05,
+      "max_trace_error_K": 0.0009328906946951945,
+      "jump_error_K": 0.0015480614433120282,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.623345782650712,
+        -0.1451264665407061
+      ],
+      "flux_relative_error": 0.00037533798367968914,
+      "flux_phase_error_rad": 1.8604138693776407e-05,
+      "max_trace_error_K": 0.00023625828795806434,
+      "jump_error_K": 0.0003914247285493062,
+      "passed": true,
+      "flux_relative_error_order": 1.9975393959900039,
+      "max_trace_error_K_order": 1.981343112648503
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.623345782650712,
+        -0.1451264665407061
+      ],
+      "flux_relative_error": 9.388387690163782e-05,
+      "flux_phase_error_rad": 4.582768628856015e-06,
+      "max_trace_error_K": 5.9438962028197795e-05,
+      "jump_error_K": 9.839903332946471e-05,
+      "passed": true,
+      "flux_relative_error_order": 1.9992409725483156,
+      "max_trace_error_K_order": 1.9908841123816894
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.5252347756065993,
+        -0.12228440331134617
+      ],
+      "flux_relative_error": 0.001309237338183733,
+      "flux_phase_error_rad": 7.913964937830342e-05,
+      "max_trace_error_K": 0.0008589030988488894,
+      "jump_error_K": 0.0015107791867750367,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.5252347756065993,
+        -0.12228440331134617
+      ],
+      "flux_relative_error": 0.0003239685308946206,
+      "flux_phase_error_rad": 1.8961354965153882e-05,
+      "max_trace_error_K": 0.00022811748241915932,
+      "jump_error_K": 0.0003939713790299421,
+      "passed": true,
+      "flux_relative_error_order": 2.0148010653847575,
+      "max_trace_error_K_order": 1.9127183603450066
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.5252347756065993,
+        -0.12228440331134617
+      ],
+      "flux_relative_error": 8.039328445849559e-05,
+      "flux_phase_error_rad": 4.6290746094599465e-06,
+      "max_trace_error_K": 5.9094825759799196e-05,
+      "jump_error_K": 0.00010093366261054234,
+      "passed": true,
+      "flux_relative_error_order": 2.0107067838321417,
+      "max_trace_error_K_order": 1.9486732946672725
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.27726604010106337,
+        -0.4324175626259596
+      ],
+      "flux_relative_error": 0.006701331409183988,
+      "flux_phase_error_rad": 0.005867685789430157,
+      "max_trace_error_K": 0.000877271691588985,
+      "jump_error_K": 0.0016915728693889603,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.27726604010106337,
+        -0.4324175626259596
+      ],
+      "flux_relative_error": 0.0016761111317868508,
+      "flux_phase_error_rad": 0.001470294640311929,
+      "max_trace_error_K": 0.00023071690700079546,
+      "jump_error_K": 0.0004338337280180607,
+      "passed": true,
+      "flux_relative_error_order": 1.9993299485312024,
+      "max_trace_error_K_order": 1.926899986425117
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.27726604010106337,
+        -0.4324175626259596
+      ],
+      "flux_relative_error": 0.000418960388898283,
+      "flux_phase_error_rad": 0.000367782200505388,
+      "max_trace_error_K": 5.917166645468457e-05,
+      "jump_error_K": 0.00010987986590524877,
+      "passed": true,
+      "flux_relative_error_order": 2.0002320535371054,
+      "max_trace_error_K_order": 1.9631452975317591
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.11347688832191226,
+        -0.30266215414951914
+      ],
+      "flux_relative_error": 0.004739536575604079,
+      "flux_phase_error_rad": 0.003726809946719083,
+      "max_trace_error_K": 0.0007648810879023042,
+      "jump_error_K": 0.0012839832910117924,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.11347688832191226,
+        -0.30266215414951914
+      ],
+      "flux_relative_error": 0.0011630901435933387,
+      "flux_phase_error_rad": 0.0009115030135477609,
+      "max_trace_error_K": 0.00019514798878138997,
+      "jump_error_K": 0.0003371830648086671,
+      "passed": true,
+      "flux_relative_error_order": 2.0267830864739858,
+      "max_trace_error_K_order": 1.9706668826535623
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "zero_temperature_phasor"
+      ],
+      "exact_flux_W_m2": [
+        0.11347688832191226,
+        -0.30266215414951914
+      ],
+      "flux_relative_error": 0.0002871577010950093,
+      "flux_phase_error_rad": 0.00022392153617673742,
+      "max_trace_error_K": 4.9374187373882034e-05,
+      "jump_error_K": 8.676028852182934e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.018047757052276,
+      "max_trace_error_K_order": 1.982739685407141
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.579267859750119,
+        -0.3765241088375773
+      ],
+      "flux_relative_error": 0.001484910022592878,
+      "flux_phase_error_rad": 2.9618183137898455e-14,
+      "max_trace_error_K": 0.0009942378246143365,
+      "jump_error_K": 0.0015523584045007166,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.579267859750119,
+        -0.3765241088375773
+      ],
+      "flux_relative_error": 0.00037130061688350757,
+      "flux_phase_error_rad": 1.3458227798490862e-13,
+      "max_trace_error_K": 0.000251371921220017,
+      "jump_error_K": 0.00039311032332491335,
+      "passed": true,
+      "flux_relative_error_order": 1.9997158970449103,
+      "max_trace_error_K_order": 1.983767483325065
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.579267859750119,
+        -0.3765241088375773
+      ],
+      "flux_relative_error": 9.280326406391204e-05,
+      "flux_phase_error_rad": 5.618272582115003e-13,
+      "max_trace_error_K": 6.31887246641815e-05,
+      "jump_error_K": 9.88966582002542e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.0003402584726593,
+      "max_trace_error_K_order": 1.9920844532917994
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.505991680322215,
+        -0.32889459220943973
+      ],
+      "flux_relative_error": 0.0013319103085880357,
+      "flux_phase_error_rad": 2.3862826810426057e-14,
+      "max_trace_error_K": 0.0009760220074174927,
+      "jump_error_K": 0.0014654140939807314,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.505991680322215,
+        -0.32889459220943973
+      ],
+      "flux_relative_error": 0.0003294848078057022,
+      "flux_phase_error_rad": 1.1796011449414654e-13,
+      "max_trace_error_K": 0.00025901027030581566,
+      "jump_error_K": 0.00038476172082717183,
+      "passed": true,
+      "flux_relative_error_order": 2.015213083232202,
+      "max_trace_error_K_order": 1.91390437319089
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.505991680322215,
+        -0.32889459220943973
+      ],
+      "flux_relative_error": 8.177134796727437e-05,
+      "flux_phase_error_rad": 5.665156312918029e-13,
+      "max_trace_error_K": 6.708531624939685e-05,
+      "jump_error_K": 9.895437707663321e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.010544617726429,
+      "max_trace_error_K_order": 1.948940378465558
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.19029009356134283,
+        -0.6623864352012426
+      ],
+      "flux_relative_error": 0.005715247572468766,
+      "flux_phase_error_rad": 0.005370496381528766,
+      "max_trace_error_K": 0.0010396491458135565,
+      "jump_error_K": 0.0020265281292255726,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.19029009356134283,
+        -0.6623864352012426
+      ],
+      "flux_relative_error": 0.001428529064396574,
+      "flux_phase_error_rad": 0.0013440863561788663,
+      "max_trace_error_K": 0.00027778934911894623,
+      "jump_error_K": 0.0005259000924272088,
+      "passed": true,
+      "flux_relative_error_order": 2.000285605113324,
+      "max_trace_error_K_order": 1.904033548654604
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.19029009356134283,
+        -0.6623864352012426
+      ],
+      "flux_relative_error": 0.00035703271110879085,
+      "flux_phase_error_rad": 0.0003360989690561469,
+      "max_trace_error_K": 7.178941022618222e-05,
+      "jump_error_K": 0.0001339588475208267,
+      "passed": true,
+      "flux_relative_error_order": 2.000402224965916,
+      "max_trace_error_K_order": 1.9521483346395885
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.00045603855110839706,
+        -0.49203478038583165
+      ],
+      "flux_relative_error": 0.00422634013950337,
+      "flux_phase_error_rad": 0.0034917707325725837,
+      "max_trace_error_K": 0.0008034539224549455,
+      "jump_error_K": 0.0013531066948390953,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.00045603855110839706,
+        -0.49203478038583165
+      ],
+      "flux_relative_error": 0.0010410787400371407,
+      "flux_phase_error_rad": 0.0008571516310086329,
+      "max_trace_error_K": 0.00023116334511267208,
+      "jump_error_K": 0.00036758147336894015,
+      "passed": true,
+      "flux_relative_error_order": 2.0213296929914604,
+      "max_trace_error_K_order": 1.7973026365850997
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.00045603855110839706,
+        -0.49203478038583165
+      ],
+      "flux_relative_error": 0.00025776109837533854,
+      "flux_phase_error_rad": 0.00021120103660418604,
+      "max_trace_error_K": 6.24698418012633e-05,
+      "jump_error_K": 9.628861976677486e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.01397273638049,
+      "max_trace_error_K_order": 1.8876808705547738
+    }
+  ],
+  "sources": [
+    {
+      "commit": "58ee0983f45fb14a4af8b05346be639816fb03c9",
+      "file": "sph_ambient_driven_contact.py",
+      "source_sha256": "ad28e2403fd4f30ec97bc9be695f522a64c907d25dd98df27c7272dfe59da55c"
+    },
+    {
+      "commit": "4d1bd5933ee17b4c5bcb32ae6e9765acd827d463",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "3126a6f83b0d3757b39315a6ca1816fe2ca3429b8246a6fb3b657eae01d2bcdc"
+    }
+  ],
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_ambient_driven_contact.py"
+}
