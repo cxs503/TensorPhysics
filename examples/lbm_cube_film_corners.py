@@ -13,7 +13,7 @@ from tensorlbm import thermal_common as lbm
 from lbm_directional_diffusion import diffusion_eigenmode
 
 
-def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False, correct_first=False):
+def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False, correct_first=False, observe=None):
     dx, alpha, capacity = 1/n, .08, 1.7
     dt = (tau-.5)*dx**2/(4*alpha)
     beta = np.array([1.1, 1.75, 2.3])
@@ -71,6 +71,7 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False, correct_f
         div = torch.zeros_like(field)
         average = math.exp(-rate*step*dt)*(-math.expm1(-rate*dt))/(rate*dt)
         wall_inputs = []
+        step_fluxes = []
         for a,pair in enumerate(walls):
             dim = 2-a
             wall_t = tuple(base+average*surface for _,base,surface in pair)
@@ -85,6 +86,8 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False, correct_f
             wall_inputs.append(values)
             g,flux = lbm.thermal_mixed_wall_pair_3d(g,"xyz"[a],(kinds[a],)*2,values,
                 film_coefficients=(h[a],h[a]),**units)
+            if observe is not None:
+                step_fluxes.append(flux)
             for side in (0,1):
                 error = float((flux[side]-target[side]).abs().max())
                 if step == 0 and kinds[a] == "temperature":
@@ -116,6 +119,8 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False, correct_f
                     wall_inputs[a],film_coefficients=(h[a],h[a]),**units)
             sequence_error = float((g-reverse).abs().max())
         updated = lbm.thermal_macroscopic_3d(g)
+        if observe is not None:
+            observe(step, step_fluxes, updated)
         residual = capacity*dx**3*(updated-field)+dt*dx**2*div
         balance = max(balance,float(residual.abs().max()))
         corner_balance = max(corner_balance,max(abs(residual[idx].item()) for idx in corner))
