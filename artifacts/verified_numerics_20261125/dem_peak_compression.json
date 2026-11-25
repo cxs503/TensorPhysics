@@ -1,0 +1,26 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "5e2546997b1e9fee98adc52d81b7d473bc86741f",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_dem3d_contact_impact.py tests/test_dem3d_contact_impact_convention.py tests/test_contact_impact_dashpot_convention.py tests/test_dem3d_restitution_verification.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Maximum compression occurs at the first zero of relative velocity. Compare analytic overlap and time since first touch with independent solve_ivp events at seven damping ratios from zero to eight. IceDEM3D identical spheres at target restitution 0.08: compare peak sampled overlap and time at three step sizes.",
+  "suite": {
+    "tests": 43,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_overdamped_dem_pair_at_three_time_steps": {
+      "peak_overlap_relative_error_0.2": 0.00242191815891879,
+      "peak_time_relative_error_0.2": 0.0017387915883472216,
+      "peak_overlap_relative_error_0.1": 0.0005423553175681883,
+      "peak_time_relative_error_0.1": 0.0009469408863570505,
+      "peak_overlap_relative_error_0.05": 0.0006027416612358616,
+      "peak_time_relative_error_0.05": 0.0001550901844415975
+    },
+    "test_peak_compression_against_velocity_zero_event": {
+      "max_relative_peak_overlap_error": 1.8895995879120164e-13,
+      "max_relative_peak_time_error": 2.724487302430134e-13
+    }
+  }
+}
