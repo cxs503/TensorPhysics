@@ -1,4 +1,5 @@
 """Oblique harmonic thermal wave in a slab with rotated principal conductivities."""
+import argparse
 import json
 
 import numpy as np
@@ -23,16 +24,31 @@ def material(angle):
     return k,s
 
 
-def dg_case(n,degree,k,s):
+def dg_case(n,degree,k,s,storing_walls=False):
     nx,ny = n,3*n//2
     x,y = np.linspace(0,1,nx+1),np.linspace(0,1,ny+1)
     def trace(x,y):
         return torch.exp(s[0]*x+s[1]*y)
     data = dict(conductivity=(k[0,0],k[1,1],k[0,1]),
                 dirichlet_values=dict.fromkeys(("left","right","bottom","top"),trace))
+    if storing_walls:
+        # Right and top films supply k*n.grad(T) plus the local storage.
+        gradient_flux = k@s
+        storage = {"right": .8, "top": .35}
+        films = {"right": 2.4, "top": 1.7}
+        def ambient(side, axis):
+            factor = 1+(gradient_flux[axis]+1j*OMEGA*storage[side])/films[side]
+            return lambda x,y: factor*trace(x,y)
+        data.update(bc=dict(left="dirichlet", bottom="neumann", right="robin", top="robin"),
+                    dirichlet_values={"left": trace},
+                    neumann_flux={"bottom": lambda x,y: -gradient_flux[1]*trace(x,y)},
+                    robin_films={side: (films[side], ambient(side, axis))
+                                 for axis, side in enumerate(("right", "top"))},
+                    wall_areal_heat_capacity=storage)
     _,_,coeff = transient_diffusion_2d.solve_harmonic_diffusion_2d(
         OMEGA,ncells=(nx,ny),degree=degree,capacity=CAPACITY,**data)
-    fx,fy = (v.numpy() for v in poisson_2d_bc.poisson_face_powers_2d(coeff,**data))
+    rate = dict(temperature_rate=1j*OMEGA*coeff) if storing_walls else {}
+    fx,fy = (v.numpy() for v in poisson_2d_bc.poisson_face_powers_2d(coeff,**rate,**data))
     ex,ey = np.exp(s[0]*x),np.exp(s[1]*y)
     ax,ay = np.diff(ex)*nx/s[0],np.diff(ey)*ny/s[1]
     q = -k@s
@@ -40,7 +56,16 @@ def dg_case(n,degree,k,s):
     errors_y = abs(nx*fy-q[1]*np.outer(ax,ey))
     means = coeff[:,:,0,0].numpy()
     balance = 1j*OMEGA*CAPACITY*means/(nx*ny)+np.diff(fx,axis=0)+np.diff(fy,axis=1)
-    return dict(solver=f"DG-P{degree}",temperature_error_K=float(abs(means-np.outer(ax,ay)).max()),
+    wall_errors = {}
+    if storing_walls:
+        # At the positive face all normal Legendre modes are one; only
+        # tangential mode zero contributes to the segment average.
+        for side, numerical, exact in (("right", coeff[-1,:,:,0].sum(1).numpy(), ex[-1]*ay),
+                                       ("top", coeff[:,-1,0,:].sum(1).numpy(), ax*ey[-1])):
+            wall_errors[f"{side}_storage_error_W_m2"] = float(OMEGA*storage[side]*abs(numerical-exact).max())
+        wall_errors["right_bulk_flux_error_W_m2"] = float(errors_x[-1].max())
+        wall_errors["top_bulk_flux_error_W_m2"] = float(errors_y[:,-1].max())
+    return dict(**wall_errors,solver=f"DG-P{degree}",temperature_error_K=float(abs(means-np.outer(ax,ay)).max()),
                 side_wall_error_W_m2=float(errors_x[[0,-1]].max()),
                 end_wall_error_W_m2=float(errors_y[:,[0,-1]].max()),
                 interior_flux_error_W_m2=float(max(errors_x[1:-1].max(),errors_y[:,1:-1].max())),
@@ -158,7 +183,41 @@ def fem_case(n,shear,k,s,warp=0.):
                 max_balance_residual_W=float(abs(storage-power[fixed].sum())))
 
 
+def verify_storing_walls():
+    rows = []
+    for angle in (-30., 30.):
+        k, s = material(angle)
+        for degree in (1, 2):
+            previous = None
+            for n in (4, 8, 16, 32):
+                row = dg_case(n, degree, k, s, storing_walls=True)
+                errors = {key: value for key, value in row.items() if "_error_" in key}
+                orders = {} if previous is None else {
+                    key: float(np.log2(previous[key]/value)) for key, value in errors.items()}
+                row.update(nx=n, ny=3*n//2, angle_deg=angle, orders=orders,
+                           passed=bool(row["max_balance_residual_W"] < 1e-10))
+                if n == 32:
+                    wall_metrics = [key for key in errors if key.startswith(("right_", "top_"))]
+                    row["wall_order_above_1p8"] = all(orders[key] > 1.8 for key in wall_metrics)
+                    row["passed"] &= (errors["temperature_error_K"] < .001 and
+                                      max(errors[key] for key in wall_metrics) < .01 and
+                                      errors["interior_flux_error_W_m2"] < .04)
+                    if degree == 2:
+                        row["passed"] &= row["wall_order_above_1p8"]
+                previous = errors
+                rows.append(row)
+    print(json.dumps(dict(reference="Oblique exponential thermal wave, left fixed temperature, bottom prescribed flux, right and top films with surface heat capacity",
+                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG:../TensorFEM/src python examples/rotated_harmonic_conduction.py --dg-storing-walls",
+                          runs=rows, sources=[provenance(f) for f in (__file__, transient_diffusion_2d.__file__, poisson_2d_bc.__file__)]),
+                     indent=2, allow_nan=False))
+    return all(row["passed"] for row in rows)
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dg-storing-walls", action="store_true", help="verify DG with two storing films and mixed wall data")
+    if parser.parse_args().dg_storing_walls:
+        raise SystemExit(0 if verify_storing_walls() else 1)
     rows = []
     for angle in (-30.,30.):
         k,s = material(angle)
