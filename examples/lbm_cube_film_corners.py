@@ -59,6 +59,7 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
     temp_error = flux_error = corner_balance = balance = sequence_error = 0.
     face_errors = np.zeros((3,2))
     first_three_error = later_error = 0.
+    dirichlet_start = {}
     peak_step = peak_axis = peak_side = 0
     steps = round(.09765625/dt)
     for step in range(steps):
@@ -81,6 +82,16 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
                 film_coefficients=(h[a],h[a]),**units)
             for side in (0,1):
                 error = float((flux[side]-target[side]).abs().max())
+                if step == 0 and kinds[a] == "temperature" and not eigen_start:
+                    # Apply the quadratic first-step defect to the smooth cosine mode.
+                    wall_mode = pair[side][2]
+                    normal_curvature = -beta[a]**2*wall_mode
+                    laplacian = -(beta @ beta)*wall_mode
+                    prediction = (capacity*dx/(4*dt))*(alpha*dt*laplacian/2
+                        - dx**2*(1/6+(tau-1)/2)*normal_curvature)
+                    remainder = float((flux[side]-target[side]-prediction).abs().max())
+                    dirichlet_start[("lower","upper")[side]] = dict(raw_error_W_m2=error,
+                        curvature_prediction_residual_W_m2=remainder)
                 face_errors[a,side] = max(face_errors[a,side],error)
                 if step < 3:
                     first_three_error = max(first_three_error,error)
@@ -103,7 +114,7 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
         corner_balance = max(corner_balance,max(abs(residual[idx].item()) for idx in corner))
         temp_error = max(temp_error,float((updated-ramp-mode*math.exp(-rate*(step+1)*dt)).abs().max()))
         field = updated
-    return dict(initial_temperature_error_K=initial_error, first_three_flux_error_W_m2=first_three_error,
+    return dict(first_step_dirichlet=dirichlet_start, initial_temperature_error_K=initial_error, first_three_flux_error_W_m2=first_three_error,
                 subsequent_flux_error_W_m2=later_error if steps>3 else None, peak_flux_step=peak_step, peak_flux_axis="xyz"[peak_axis], peak_flux_side=("lower","upper")[peak_side],
                 wall_types_xyz=kinds, lower_upper_flux_errors_xyz_W_m2=face_errors.tolist(), n=n,tau=tau,steps=steps,temperature_error_K=temp_error,wall_flux_error_W_m2=flux_error,
                 max_cell_balance_J=balance,max_corner_balance_J=corner_balance,axis_order_error_K=sequence_error)
@@ -131,6 +142,9 @@ if __name__ == "__main__":
                     and row["max_corner_balance_J"] < 1e-14 and row["axis_order_error_K"] == 0.
                     and all(order > order_floor for order in row["orders"])
                     and (n < 32 or np.all(errors < limits)))
+                if mixed and n == 32:
+                    row["passed"] &= all(face["curvature_prediction_residual_W_m2"] < 1e-4
+                                         for face in row["first_step_dirichlet"].values())
                 if args.compare_starts:
                     other = measure(n,tau,kinds,eigen_start=True)
                     row["bulk_eigenmode_start"] = other
