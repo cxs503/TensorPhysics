@@ -1,0 +1,210 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cells": 32,
+      "ends": [
+        "power",
+        "temperature"
+      ],
+      "cell_mean_error_K": 6.199456947797444e-09,
+      "wall_temperature_error_K": 3.918103175237775e-09,
+      "wall_power_error_W": 1.4088965549774457e-08,
+      "balance_error_W": 3.765876499528531e-13,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "power",
+        "temperature"
+      ],
+      "cell_mean_error_K": 3.885816113324836e-10,
+      "wall_temperature_error_K": 2.445403879391961e-10,
+      "wall_power_error_W": 8.828653363934791e-10,
+      "balance_error_W": 1.0942358130705543e-12,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "power",
+        "temperature"
+      ],
+      "cell_mean_error_K": 2.8762769943568856e-11,
+      "wall_temperature_error_K": 8.753886504564434e-12,
+      "wall_power_error_W": 3.447642171749976e-11,
+      "balance_error_W": 3.844746743197902e-11,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "power",
+        "temperature"
+      ],
+      "cell_mean_error_K": 3.808509063674137e-12,
+      "wall_temperature_error_K": 3.865352482534945e-12,
+      "wall_power_error_W": 1.2098766433155106e-11,
+      "balance_error_W": 1.6345147457741405e-11,
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "ends": [
+        "robin",
+        "temperature"
+      ],
+      "cell_mean_error_K": 6.770733307348564e-09,
+      "wall_temperature_error_K": 2.944887000921881e-09,
+      "wall_power_error_W": 8.83469919443769e-09,
+      "balance_error_W": 3.517186542012496e-13,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "robin",
+        "temperature"
+      ],
+      "cell_mean_error_K": 4.241087481204886e-10,
+      "wall_temperature_error_K": 1.8383161659585312e-10,
+      "wall_power_error_W": 5.516525014570561e-10,
+      "balance_error_W": 1.0516032489249483e-12,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "robin",
+        "temperature"
+      ],
+      "cell_mean_error_K": 3.001332515850663e-11,
+      "wall_temperature_error_K": 8.29913915367797e-12,
+      "wall_power_error_W": 2.5007995674286576e-11,
+      "balance_error_W": 3.8474112784570025e-11,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "robin",
+        "temperature"
+      ],
+      "cell_mean_error_K": 2.1032064978498966e-12,
+      "wall_temperature_error_K": 2.1032064978498966e-12,
+      "wall_power_error_W": 8.776979143476638e-12,
+      "balance_error_W": 1.6441958905488718e-11,
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "ends": [
+        "temperature",
+        "power"
+      ],
+      "cell_mean_error_K": 1.2552959560707677e-08,
+      "wall_temperature_error_K": 1.372234237351222e-08,
+      "wall_power_error_W": 4.835754463528019e-09,
+      "balance_error_W": 1.1191048088221578e-13,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "temperature",
+        "power"
+      ],
+      "cell_mean_error_K": 8.21614776214119e-10,
+      "wall_temperature_error_K": 8.590745892433915e-10,
+      "wall_power_error_W": 3.0255797867084766e-10,
+      "balance_error_W": 2.2737367544323206e-13,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "temperature",
+        "power"
+      ],
+      "cell_mean_error_K": 5.2864379540551454e-11,
+      "wall_temperature_error_K": 5.4001247917767614e-11,
+      "wall_power_error_W": 1.7969181698163084e-11,
+      "balance_error_W": 9.041656312547275e-13,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "temperature",
+        "power"
+      ],
+      "cell_mean_error_K": 4.376943252282217e-12,
+      "wall_temperature_error_K": 4.433786671143025e-12,
+      "wall_power_error_W": 3.680611371237319e-12,
+      "balance_error_W": 5.050182494414912e-12,
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "ends": [
+        "temperature",
+        "robin"
+      ],
+      "cell_mean_error_K": 7.800224466336658e-09,
+      "wall_temperature_error_K": 3.2096068025566638e-09,
+      "wall_power_error_W": 1.0032910502388859e-08,
+      "balance_error_W": 7.283063041541027e-14,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "temperature",
+        "robin"
+      ],
+      "cell_mean_error_K": 4.881712811766192e-10,
+      "wall_temperature_error_K": 2.0128254618612118e-10,
+      "wall_power_error_W": 6.265352681111835e-10,
+      "balance_error_W": 2.078337502098293e-13,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "temperature",
+        "robin"
+      ],
+      "cell_mean_error_K": 3.063860276597552e-11,
+      "wall_temperature_error_K": 1.2732925824820995e-11,
+      "wall_power_error_W": 3.817390847871138e-11,
+      "balance_error_W": 8.535394613318203e-13,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "temperature",
+        "robin"
+      ],
+      "cell_mean_error_K": 2.6147972675971687e-12,
+      "wall_temperature_error_K": 1.3073986337985843e-12,
+      "wall_power_error_W": 3.934630399271555e-12,
+      "balance_error_W": 4.8965276278067904e-12,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "0d7142a9db061466279e71dd2a04c79a627a9016",
+      "file": "fvm_mixed_end_fin.py",
+      "source_sha256": "87b80b596b615a2dff121fa3f97871906dea9152d62afa313e163b6f84950fdb"
+    },
+    {
+      "commit": "df1268e016caee5076a807c1abf919bd4d36a495",
+      "file": "rod.py",
+      "source_sha256": "103cc1d84288e5b03fa19dafe29e89b8b42ea4b0b79474995e7c422f7f900f34"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorFVM/src python examples/fvm_mixed_end_fin.py"
+}
