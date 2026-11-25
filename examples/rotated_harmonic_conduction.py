@@ -5,6 +5,7 @@ import numpy as np
 import torch
 
 from conduction_provenance import provenance
+import q4_boundary_patches as patches
 from tensorfem import thermal, thermal_analytic
 from tensordg import poisson_2d_bc, transient_diffusion_2d
 
@@ -65,21 +66,6 @@ def fem_solution(n,shear,k,s,warp):
     return model,result,sides,exact
 
 
-def boundary_pairs(nx,ny):
-    cells = np.arange(nx*ny).reshape(ny,nx)
-    return ((3,cells[:,0],cells[:,1]),(1,cells[:,-1],cells[:,-2]),
-             (0,cells[0],cells[1]),(2,cells[-1],cells[-2]))
-
-
-def cubic_patches(outer,inner):
-    # Center a three-cell tangential strip wherever the endpoint permits.
-    # Keep the target element first, as required by the patch API.
-    index = np.arange(len(outer))
-    strip = np.clip(index-1,0,len(outer)-3)[:,None]+np.arange(3)
-    block = (outer[strip][:,:,None]+(inner-outer)[strip][:,:,None]*np.arange(3)).reshape(len(outer),9)
-    return np.column_stack((outer,block[block!=outer[:,None]].reshape(len(outer),8)))
-
-
 def fem_case(n,shear,k,s,warp=0.):
     nx,ny = n,3*n//2
     model,result,sides,exact = fem_solution(n,shear,k,s,warp)
@@ -95,7 +81,7 @@ def fem_case(n,shear,k,s,warp=0.):
     unit,weights = np.polynomial.legendre.leggauss(8)
     shapes = np.column_stack(((1-unit)/2,(1+unit)/2))
     normals = [(-1,shear),(1,-shear),(0,-1),(0,1)]
-    pairs = boundary_pairs(nx,ny)
+    pairs = patches.boundary_pairs(nx,ny)
     raw = thermal.thermal_element_edge_power(model,result.temperature).numpy()
     raw_errors,edge_errors,patch_errors,sampled_errors,field_errors = [],[],[],[],[]
     cubic_errors,cubic_sampled,cubic_field,wide_quadratic = [],[],[],[]
@@ -113,7 +99,7 @@ def fem_case(n,shear,k,s,warp=0.):
             extrapolated_temperature_error_K=float(abs(extrapolated.numpy()-exact).max()))
     fields = torch.stack(fields)
     extrapolated_errors,fine_errors,extrapolated_powers = [],[],[]
-    fine_pairs = {e:(o,i) for e,o,i in boundary_pairs(2*nx,2*ny)} if warp else {}
+    fine_pairs = {e:(o,i) for e,o,i in patches.boundary_pairs(2*nx,2*ny)} if warp else {}
     for edge,normal,(local,outer,inner) in zip(sides,normals,pairs):
         conn = np.column_stack((edge[:-1],edge[1:]))
         ends = points[conn]
@@ -131,14 +117,14 @@ def fem_case(n,shear,k,s,warp=0.):
         patch_errors.append(float(err[0]))
         sampled_errors.append(float(err[1]))
         field_errors.append(float(abs(fit[0]-fit[1]).max()/length))
-        wide = cubic_patches(outer,inner)
+        wide = patches.cubic_patches(outer,inner)
         quadratic = thermal.recover_q4_patch_boundary_power(model,result.temperature,wide,local).numpy()
         wide_quadratic.append(float(abs(quadratic/length+values@weights/2).max()))
         cubic = thermal.recover_q4_patch_boundary_power(model,fields,wide,local,degree=3).numpy()
         cubic_err = abs(cubic/length+values@weights/2).max(axis=1)
         if warp:
             extrapolated_errors.append(float(cubic_err[2]))
-            fine_patch = cubic_patches(*fine_pairs[local])
+            fine_patch = patches.cubic_patches(*fine_pairs[local])
             fine_power = thermal.recover_q4_patch_boundary_power(fine_model,fine.temperature,
                                                                   fine_patch,local,degree=3)
             # Two child edge powers sum to the power over the same physical edge.
@@ -218,6 +204,6 @@ if __name__ == "__main__":
                 previous[name] = row
                 rows.append(row)
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
-        (__file__,thermal.__file__,thermal_analytic.__file__,transient_diffusion_2d.__file__,poisson_2d_bc.__file__)]),
+        (__file__,patches.__file__,thermal.__file__,thermal_analytic.__file__,transient_diffusion_2d.__file__,poisson_2d_bc.__file__)]),
         indent=2,allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
