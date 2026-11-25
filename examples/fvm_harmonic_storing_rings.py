@@ -50,7 +50,7 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
     return result if len(result) > 1 else fields
 
 
-def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_driven=False):
+def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_driven=False, films=(None, None)):
     edges = np.array(reference.RADII)[[0, 1, 3, 4]]
     walls = reference.WALLS if wall_driven else np.zeros(2)
     generation = np.zeros(2) if wall_driven else np.array([1., .6j])
@@ -64,6 +64,12 @@ def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_drive
                 expected, wall_ref = reference.angular_reference(omega, mode, walls, generation, fractions, sheet_k, return_wall_rates=True)
             else:
                 expected, wall_ref = reference.continuum(omega, walls, generation, fractions, return_wall_rates=True)
+            # For increasing-r heat rates, the ambient shift has opposite signs
+            # at bore and exterior. Use the exact solution to prescribe the loads.
+            boundary = walls.astype(complex).copy()
+            for j, (h, radius, sign) in enumerate(zip(films, edges[[0, -1]], (1, -1))):
+                if h is not None:
+                    boundary[j] += sign*wall_ref[j]/(2*np.pi*radius*h)
             area = 2*np.pi*edges[1:-1]
             # Continuum angular divergence follows from the analytic radial
             # rates on either side of each layer and its integrated storage.
@@ -78,7 +84,7 @@ def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_drive
                 mesh = np.r_[np.concatenate([np.geomspace(a, b, n+1)[:-1]
                                              for a, b in zip(edges, edges[1:])]), edges[-1]]
                 temp, incoming, outgoing, wall_rates, storage, angular = storing_rings.solve_storing_rings(
-                    mesh, np.repeat(reference.K, n), [n, 2*n], walls, omega,
+                    mesh, np.repeat(reference.K, n), [n, 2*n], boundary, omega, film_coefficients=films,
                     contact_resistances=reference.CONTACT, sheet_capacities=reference.CAPACITY,
                     sheet_conductivities=sheet_k, inner_resistance_fractions=fractions, sheet_generation=generation, azimuthal_mode=mode,
                     volumetric_heat_capacity=np.repeat(capacities, n) if bulk_storage else None,
@@ -129,16 +135,21 @@ if __name__ == "__main__":
     parser.add_argument("--sheet-conductivities", nargs=2, type=float, default=(0., 0.),
                         metavar=("RING1", "RING2"), help="circumferential conductivity times thickness in W/K")
     parser.add_argument("--wall-driven", action="store_true", help="apply wall temperature phasors with zero sheet generation")
+    parser.add_argument("--film-walls", choices=("none", "bore", "exterior", "both"), default="none",
+                        help="impose ambient temperatures through bore/exterior films of 7/3 W/(m² K)")
     args = parser.parse_args()
+    films = (7. if args.film_walls in ("bore", "both") else None,
+             3. if args.film_walls in ("exterior", "both") else None)
     bulk_storage = args.bulk_storage
     fractions = args.inner_fractions
-    runs = measure(bulk_storage, fractions, args.sheet_conductivities, args.wall_driven)
+    runs = measure(bulk_storage, fractions, args.sheet_conductivities, args.wall_driven, films)
     passed = all(row["passed"] for row in runs)
-    print(json.dumps(dict(passed=passed, wall_driven=args.wall_driven, bulk_storage=bulk_storage, sheet_conductivities_W_K=args.sheet_conductivities,
+    print(json.dumps(dict(passed=passed, film_coefficients_W_m2_K=films, wall_driven=args.wall_driven, bulk_storage=bulk_storage, sheet_conductivities_W_K=args.sheet_conductivities,
                           inner_resistance_fractions=fractions, runs=runs, sources=[provenance(p) for p in
                           (__file__, reference.__file__, annulus.__file__, storing_rings.__file__)],
                           reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_harmonic_storing_rings.py" + (" --bulk-storage" if bulk_storage else "")
                           + (" --wall-driven" if args.wall_driven else "")
+                          + f" --film-walls {args.film_walls}"
                           + f" --inner-fractions {fractions[0]} {fractions[1]}"
                           + f" --sheet-conductivities {args.sheet_conductivities[0]} {args.sheet_conductivities[1]}"),
                      allow_nan=False, indent=2))
