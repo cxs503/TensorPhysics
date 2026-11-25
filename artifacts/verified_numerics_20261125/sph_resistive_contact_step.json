@@ -1,0 +1,301 @@
+{
+  "reference": "Finite-layer Laplace impedances in series; Talbot and de Hoog inversions",
+  "cut_order": [
+    "west",
+    "interface",
+    "east"
+  ],
+  "times_s": [
+    0.0,
+    0.00025,
+    0.0005,
+    0.001,
+    0.002,
+    0.004,
+    0.008,
+    0.016,
+    0.032,
+    0.064,
+    0.128,
+    0.256,
+    0.512
+  ],
+  "studies": [
+    {
+      "contact_resistance_m2_K_W": 0.05,
+      "reference_discrepancy_J_m2": 2.380104804702462e-52,
+      "initial_interface_flux_W_m2": 20.0,
+      "reference_first_interval_mean_flux_W_m2": 16.38092690133429,
+      "reference_interval_heat_J_m2": [
+        [
+          3.7803339670829322e-112,
+          0.004095231725333573,
+          8.31633501421395e-77
+        ],
+        [
+          -1.7530323789873635e-83,
+          0.0035099688011263038,
+          6.196130411055798e-58
+        ],
+        [
+          2.4609798869579445e-69,
+          0.006190547366384674,
+          3.779960842745356e-31
+        ],
+        [
+          1.0082252003375247e-39,
+          0.010540709921934692,
+          2.0539134082945144e-17
+        ],
+        [
+          1.2028242044367153e-21,
+          0.017269870968923552,
+          3.1460330425908344e-10
+        ],
+        [
+          2.720809822854959e-12,
+          0.027225382789917082,
+          2.3623057175732906e-06
+        ],
+        [
+          2.474116922866469e-07,
+          0.04145976608980356,
+          0.00035538167793580774
+        ],
+        [
+          0.00012990576548790802,
+          0.06142302046354649,
+          0.006657956290144571
+        ],
+        [
+          0.004640112885043668,
+          0.08953020608405732,
+          0.03879892224189646
+        ],
+        [
+          0.03816970363214426,
+          0.13393960291634027,
+          0.11658332099084362
+        ],
+        [
+          0.1411740108195363,
+          0.22172714213380407,
+          0.2415205828404106
+        ],
+        [
+          0.3600854627144858,
+          0.4071470206665335,
+          0.4292798086843866
+        ]
+      ],
+      "runs": [
+        {
+          "cells": 40,
+          "max_west_interface_east_interval_errors_J_m2": [
+            0.00013664446743177905,
+            0.0005258952886065061,
+            0.00014465231754299396
+          ],
+          "max_layer_balance_error_J_m2": 5.483113962867492e-14,
+          "first_interval_mean_interface_flux_W_m2": 14.277345746908267,
+          "west_interface_east_orders": [],
+          "passed": true
+        },
+        {
+          "cells": 80,
+          "max_west_interface_east_interval_errors_J_m2": [
+            3.4190102783188125e-05,
+            0.0001781935805126719,
+            3.609588733331781e-05
+          ],
+          "max_layer_balance_error_J_m2": 2.096135764961815e-13,
+          "first_interval_mean_interface_flux_W_m2": 15.668152579283605,
+          "west_interface_east_orders": [
+            1.9987763831185297,
+            1.5613302078602287,
+            2.0026830626888312
+          ],
+          "passed": true
+        },
+        {
+          "cells": 160,
+          "max_west_interface_east_interval_errors_J_m2": [
+            8.549294520876494e-06,
+            4.828522976653513e-05,
+            9.019592222866968e-06
+          ],
+          "max_layer_balance_error_J_m2": 8.350750646535232e-13,
+          "first_interval_mean_interface_flux_W_m2": 16.187785982268153,
+          "west_interface_east_orders": [
+            1.999701479556186,
+            1.8837915164243126,
+            2.0007003541428574
+          ],
+          "passed": true
+        },
+        {
+          "cells": 320,
+          "max_west_interface_east_interval_errors_J_m2": [
+            2.1374327252299263e-06,
+            1.224769681320518e-05,
+            2.2546216277286035e-06
+          ],
+          "max_layer_balance_error_J_m2": 3.508068835422762e-12,
+          "first_interval_mean_interface_flux_W_m2": 16.331936114081472,
+          "west_interface_east_orders": [
+            1.9999263626658372,
+            1.9790714675968557,
+            2.0001768708492897
+          ],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "contact_resistance_m2_K_W": 0.3,
+      "reference_discrepancy_J_m2": 5.242674308507565e-53,
+      "initial_interface_flux_W_m2": 3.3333333333333335,
+      "reference_first_interval_mean_flux_W_m2": 3.217013533113024,
+      "reference_interval_heat_J_m2": [
+        [
+          6.294993268846125e-113,
+          0.000804253383278256,
+          1.4355034945095887e-77
+        ],
+        [
+          -2.9896118275773876e-84,
+          0.0007812071676064947,
+          1.063900111005465e-58
+        ],
+        [
+          4.219305823927902e-70,
+          0.001522249954022624,
+          6.672919938183077e-32
+        ],
+        [
+          1.802803238649154e-40,
+          0.0029364293360509192,
+          3.813296217072922e-18
+        ],
+        [
+          2.2868526815095634e-22,
+          0.005587658502489447,
+          6.361157959037329e-11
+        ],
+        [
+          5.734351407423764e-13,
+          0.010442156814619335,
+          5.442711388850994e-07
+        ],
+        [
+          6.089373198407846e-08,
+          0.019064128494031222,
+          9.776795793233797e-05
+        ],
+        [
+          3.9199862848479984e-05,
+          0.03380888220301252,
+          0.0022758946487645326
+        ],
+        [
+          0.0017715692246412498,
+          0.05796507533279299,
+          0.01687800651570791
+        ],
+        [
+          0.018601078253427567,
+          0.09673280446492322,
+          0.0641457924700524
+        ],
+        [
+          0.08492072137221607,
+          0.16389022731306715,
+          0.15973515525543658
+        ],
+        [
+          0.24549012672118897,
+          0.29676013441770865,
+          0.30866132945318403
+        ]
+      ],
+      "runs": [
+        {
+          "cells": 40,
+          "max_west_interface_east_interval_errors_J_m2": [
+            9.535455259515602e-05,
+            2.6786543742829405e-05,
+            6.771651723280758e-05
+          ],
+          "max_layer_balance_error_J_m2": 4.705957845629882e-14,
+          "first_interval_mean_interface_flux_W_m2": 3.1249771863927864,
+          "west_interface_east_orders": [],
+          "passed": true
+        },
+        {
+          "cells": 80,
+          "max_west_interface_east_interval_errors_J_m2": [
+            2.383953097795377e-05,
+            7.37847367198645e-06,
+            1.6921601780600648e-05
+          ],
+          "max_layer_balance_error_J_m2": 2.0568269309961806e-13,
+          "first_interval_mean_interface_flux_W_m2": 3.1874996384250784,
+          "west_interface_east_orders": [
+            1.999945967715115,
+            1.8601141297651396,
+            2.0006416361815638
+          ],
+          "passed": true
+        },
+        {
+          "cells": 160,
+          "max_west_interface_east_interval_errors_J_m2": [
+            5.959934556848401e-06,
+            1.984104481967796e-06,
+            4.229923075999009e-06
+          ],
+          "max_layer_balance_error_J_m2": 7.793349299234364e-13,
+          "first_interval_mean_interface_flux_W_m2": 3.2090771151851527,
+          "west_interface_east_orders": [
+            1.999987457956296,
+            1.8948344086013802,
+            2.0001628065655055
+          ],
+          "passed": true
+        },
+        {
+          "cells": 320,
+          "max_west_interface_east_interval_errors_J_m2": [
+            1.4899848529148496e-06,
+            5.03296309059e-07,
+            1.057450778427227e-06
+          ],
+          "max_layer_balance_error_J_m2": 3.0994234956338573e-12,
+          "first_interval_mean_interface_flux_W_m2": 3.215000347876788,
+          "west_interface_east_orders": [
+            1.9999988248178178,
+            1.97900807640569,
+            2.0000409159817125
+          ],
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_resistive_contact_step.py",
+  "sources": [
+    {
+      "commit": "3e01d4eeb2937878b32415b3ceb0ed7f4c72ed12",
+      "file": "sph_resistive_contact_step.py",
+      "source_sha256": "76214b0a34a9dc32bf98635e364de11d27ea7791f5879e5dac7aa11462252c5e"
+    },
+    {
+      "commit": "6b8dc454005b84c400215bbf53c44f879a558a8f",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "cb8f74386b6ef0b6ceee5c6052e4f9f8282827b5f2a523c61f801bf1f9c6fdd6"
+    }
+  ]
+}
