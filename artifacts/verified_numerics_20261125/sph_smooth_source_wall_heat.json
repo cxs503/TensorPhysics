@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 256,
+      "steps": 8,
+      "method": "theta",
+      "field_error_K": 0.05458775002845617,
+      "interval_mean_error_K": 0.09616991365935967,
+      "cumulative_wall_error_over_peak": 0.09265000766874505,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "steps": 16,
+      "method": "theta",
+      "field_error_K": 0.013563071145838768,
+      "interval_mean_error_K": 0.025958283307805807,
+      "cumulative_wall_error_over_peak": 0.023419353414547744,
+      "passed": true,
+      "field_error_K_order": 2.0088933427545905,
+      "interval_mean_error_K_order": 1.889390646563229,
+      "cumulative_wall_error_over_peak_order": 1.9840898506767153
+    },
+    {
+      "columns": 256,
+      "steps": 32,
+      "method": "theta",
+      "field_error_K": 0.0034123539338163367,
+      "interval_mean_error_K": 0.006594473780122567,
+      "cumulative_wall_error_over_peak": 0.005905667000477277,
+      "passed": true,
+      "field_error_K_order": 1.9908446934993989,
+      "interval_mean_error_K_order": 1.9768655308238314,
+      "cumulative_wall_error_over_peak_order": 1.9875293295450582
+    },
+    {
+      "columns": 256,
+      "steps": 8,
+      "method": "sdirk2",
+      "field_error_K": 0.011852565695318562,
+      "interval_mean_error_K": 0.03214055412683636,
+      "cumulative_wall_error_over_peak": 0.02389030447886289,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "steps": 16,
+      "method": "sdirk2",
+      "field_error_K": 0.0025064440582364123,
+      "interval_mean_error_K": 0.008289140190575583,
+      "cumulative_wall_error_over_peak": 0.006375002539003266,
+      "passed": true,
+      "field_error_K_order": 2.2414854496956487,
+      "interval_mean_error_K_order": 1.9551004344969392,
+      "cumulative_wall_error_over_peak_order": 1.9059274192010414
+    },
+    {
+      "columns": 256,
+      "steps": 32,
+      "method": "sdirk2",
+      "field_error_K": 0.0005857887452136445,
+      "interval_mean_error_K": 0.002069104607484995,
+      "cumulative_wall_error_over_peak": 0.0016881784877977553,
+      "passed": true,
+      "field_error_K_order": 2.0971896546870856,
+      "interval_mean_error_K_order": 2.002215877533495,
+      "cumulative_wall_error_over_peak_order": 1.916958471136812
+    }
+  ],
+  "sources": [
+    {
+      "commit": "45df02ae2f309146032eb00a21cf8e44fe90eacb",
+      "file": "sph_smooth_source_wall_heat.py",
+      "source_sha256": "7b8ab462ea44825826cddaa3869d5066555eed1cd786703d0bef00a3076d0a71"
+    },
+    {
+      "commit": "61fd46976f8fe4ebb47454650f28c0ff258a5cf9",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "bb6d07d0bbe9ab60239c51c9a98cb0834aee3a3f63892f9ec2ff2c45ec141a10"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_smooth_source_wall_heat.py"
+}
