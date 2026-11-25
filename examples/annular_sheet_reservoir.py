@@ -1,7 +1,9 @@
 """Two radial material regions coupled by a conducting sheet and a thermal reservoir."""
+import argparse
 import json
 
 import numpy as np
+from scipy import special
 from conduction_provenance import provenance
 from tensorbem import layered_annulus
 from tensorfvm.cht import annulus
@@ -12,8 +14,17 @@ KI,KO = 1.5,2.3
 R,FRAC,H,KS = .4,.3,1.1,.18
 
 
-def radial(r,k,mode,trace,flux):
+def radial(r,k,mode,trace,flux,omega=0.,capacity=1.):
     """Harmonic continuation from the material face at r=B."""
+    if omega:
+        wave = np.sqrt(1j*omega*capacity/k)
+        x = wave*B
+        matrix = [[special.iv(mode,x),special.kv(mode,x)],
+                  [-k*wave*special.ivp(mode,x),-k*wave*special.kvp(mode,x)]]
+        a,b = np.linalg.solve(matrix,[trace,flux])
+        y = wave*r
+        return (a*special.iv(mode,y)+b*special.kv(mode,y),
+                -k*wave*(a*special.ivp(mode,y)+b*special.kvp(mode,y)))
     z = np.log(r/B)
     if mode==0:
         return trace-B*flux*z/k, B*flux/r
@@ -21,17 +32,20 @@ def radial(r,k,mode,trace,flux):
             (B*flux*np.cosh(mode*z)-mode*k*trace*np.sinh(mode*z))/r)
 
 
-def measure(n):
+def measure(n,omega=0.):
     theta = 2*np.pi*(np.arange(2*n)+.5)/(2*n)
     wall = np.zeros((2,len(theta)))
     ambient,source,exact_sheet,exact_in,exact_out = np.zeros((5,len(theta)))
     fvm_errors = {}
     bem_targets = []
+    sheet_capacity = .43
+    balance = 0.
     for m,ts,qi,qo,ta in ((0,2.,.8,-.3,.6),(3,.7+.2j,.4-.5j,-.2+.6j,.2+.5j)):
         inner,outer = ts+FRAC*R*qi,ts-(1-FRAC)*R*qo
-        west = radial(A,KI,m,inner,qi)[1]
-        east = -radial(C,KO,m,outer,qo)[1]
-        generation = qo-qi+(H+KS*(m/B)**2)*ts-H*ta
+        west = radial(A,KI,m,inner,qi,omega,1.2)[1]
+        east = -radial(C,KO,m,outer,qo,omega,2.3)[1]
+        admittance = H+KS*(m/B)**2+1j*omega*sheet_capacity
+        generation = qo-qi+admittance*ts-H*ta
         def sample(v):
             return np.real(v*np.exp(1j*m*theta))
         wall += np.stack((sample(west),sample(east)))
@@ -41,27 +55,26 @@ def measure(n):
         exact_in += sample(qi)
         exact_out += sample(qo)
         edges = (np.linspace(A,B,n+1),np.linspace(B,C,n+1))
-        def solve(temperature):
-            options = dict(azimuthal_mode=m,cell_location="volume_centroid",distributed_source=True)
-            ui,pi = annulus.solve_annular_conduction(edges[0],KI,1.,(None,temperature),0.,
-                       wall_fluxes=(west,None),film_coefficients=(None,1/(FRAC*R)),**options)
-            uo,po = annulus.solve_annular_conduction(edges[1],KO,1.,(temperature,None),0.,
-                       wall_fluxes=(None,east),film_coefficients=(1/((1-FRAC)*R),None),**options)
-            return np.r_[ui,uo],pi[-1]/(2*np.pi*B),po[0]/(2*np.pi*B)
-        # Each independent FVM domain supplies its contact flux as an affine
-        # function of the unknown sheet temperature. Close the modal power balance.
-        _,i0,o0 = solve(0.)
-        _,i1,o1 = solve(1.)
-        recovered = (generation+H*ta+i0-o0)/(H+KS*(m/B)**2+(o1-o0)-(i1-i0))
-        field,i,o = solve(recovered)
+        radii = np.r_[edges[0],edges[1][1:]]
+        field,pi,po,recovered = annulus.solve_annular_sheet(radii,np.repeat([KI,KO],n),np.repeat([1.2,2.3],n),
+               (None,None),omega,n,wall_fluxes=(west,east),sheet_capacity=sheet_capacity,sheet_film=H,ambient=ta,
+               sheet_conductivity=KS,sheet_source=generation,azimuthal_mode=m,resistance=R,
+               inner_resistance_fraction=FRAC,cell_location="volume_centroid",distributed_source=True)
+        i,o = pi[-1]/(2*np.pi*B),po[0]/(2*np.pi*B)
+        balance = max(balance,abs(o-i+admittance*recovered-generation-H*ta))
         centers = [(2/3)*np.diff(e**3)/np.diff(e**2) for e in edges]
-        target = np.r_[radial(centers[0],KI,m,inner,qi)[0],radial(centers[1],KO,m,outer,qo)[0]]
+        target = np.r_[radial(centers[0],KI,m,inner,qi,omega,1.2)[0],radial(centers[1],KO,m,outer,qo,omega,2.3)[0]]
         for key,value in dict(temperature_K=np.max(abs(field-target)),sheet_K=abs(recovered-ts),
                               incoming_W_m2=abs(i-qi),outgoing_W_m2=abs(o-qo),
                               reservoir_W_m2=abs(H*(recovered-ts))).items():
             fvm_errors[key] = float(max(fvm_errors.get(key,0.),value))
+        if omega:
+            continue
         bem_targets.append([sample(radial(r,k,m,t,q)[0]) for r,k,t,q in
                             ((.54,KI,inner,qi),(.87,KO,outer,qo))])
+    row = dict(cells_per_layer=n,omega_rad_s=omega,fvm_errors=fvm_errors,sheet_balance_W_m2=float(balance))
+    if omega:
+        return row
     bem = layered_annulus.solve_annulus_contact((A,B,C),(KI,KO),(None,None),R,2*n,formulation="circular",
              wall_fluxes=wall,inner_resistance_fraction=FRAC,interface_source=source,
              sheet_conductivity=KS,sheet_film=(H,ambient))
@@ -73,19 +86,27 @@ def measure(n):
                       outgoing_W_m2=float(abs(bem.outer_interface_flux-exact_out).max()),
                       reservoir_W_m2=float(abs(bem.sheet_reservoir_flux-H*(exact_sheet-ambient)).max()))
     balance = bem.heat_rates[0]-bem.heat_rates[2]+2*np.pi*B*np.mean(source-bem.sheet_reservoir_flux)
-    return dict(cells_per_layer=n,panels_per_circle=2*n,fvm_errors=fvm_errors,bem_errors=bem_errors,
+    return dict(**row,panels_per_circle=2*n,bem_errors=bem_errors,
                 bem_net_power_residual_W_m=float(abs(balance)))
 
 
 if __name__=="__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--harmonic",action="store_true",help="also verify FVM storage and phase against modified Bessel functions")
+    args = parser.parse_args()
     rows = []
-    for n in (8,16,32,64):
-        row = measure(n)
-        errors = row["fvm_errors"]
-        orders = {k:float(np.log2(rows[-1]["fvm_errors"][k]/e)) for k,e in errors.items()} if rows else {}
-        row.update(fvm_orders=orders,passed=max(row["bem_errors"].values())<1e-10 and
-                   row["bem_net_power_residual_W_m"]<1e-10 and all(v>1.8 for v in orders.values()))
-        rows.append(row)
+    for omega in ((0.,.6,6.) if args.harmonic else (0.,)):
+        previous = {}
+        for n in (8,16,32,64):
+            row = measure(n,omega)
+            errors = row["fvm_errors"]
+            orders = {k:float(np.log2(previous[k]/e)) for k,e in errors.items()} if previous else {}
+            passed = row["sheet_balance_W_m2"]<1e-10 and all(v>1.8 for v in orders.values())
+            if not omega:
+                passed &= max(row["bem_errors"].values())<1e-10 and row["bem_net_power_residual_W_m"]<1e-10
+            row.update(fvm_orders=orders,passed=bool(passed))
+            rows.append(row)
+            previous = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
                     (__file__,annulus.__file__,layered_annulus.__file__)]),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
