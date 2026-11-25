@@ -26,13 +26,16 @@ def measure(n, omega):
         np.full(n, width), np.full(4, width), k, capacity, sides, omega,
         periodic_y=True, return_interior_power=True,
     )
-    particle = sph.solve_harmonic_slab_2d(
+    particle, section = sph.solve_harmonic_slab_2d(
         torch.zeros((4,n)), width, (None,None), omega, conductivity=k,
-        volumetric_heat_capacity=capacity, x_wall_inward_flux=(west,east),
-    ).numpy()
+        volumetric_heat_capacity=capacity, x_wall_inward_flux=(west,east), return_x_flux=True,
+    )
+    fv_flux = np.concatenate(([powers["west"].mean()/width],
+                              interior["x"].mean(axis=0)/width, [-powers["east"].mean()/width]))
     faces = np.arange(1,n)*width
     flux = (west*np.sinh(wave*(1-faces))-east*np.sinh(wave*faces))/np.sinh(wave)
-    for solver, field, ref in (("FVM", fv, cell_mean), ("SPH", particle, exact)):
+    for solver, field, ref, sections in (("FVM", fv, cell_mean, fv_flux),
+                                         ("SPH", particle.numpy(), exact, section.numpy())):
         residual = 1j*omega*capacity*field.mean()-west-east
         # Sample at a fixed x/L=1/2 by averaging the two adjoining locations.
         ratio = field[:,n//2-1:n//2+1].mean()/ref[n//2-1:n//2+1].mean()
@@ -40,7 +43,13 @@ def measure(n, omega):
                    max_temperature_error_K=float(abs(field-ref).max()),
                    relative_amplitude_error=float(abs(abs(ratio)-1)),
                    phase_error_rad=float(abs(np.angle(ratio))), storage_residual_W_m2=float(abs(residual)))
+        row["max_internal_flux_error_W_m2"] = float(abs(sections[1:-1]-flux).max())
+        row["max_wall_flux_error_W_m2"] = float(max(abs(sections[0]-west), abs(sections[-1]+east)))
+        row["max_column_balance_W_m2"] = float(abs(np.diff(sections)
+                                           +1j*omega*capacity*width*field.mean(axis=0)).max())
+        row["midplane_flux_phase_error_rad"] = float(abs(np.angle(sections[n//2]/flux[n//2-1])))
         if solver == "FVM":
+            # Preserve the full facewise check in addition to the section means.
             row["max_internal_flux_error_W_m2"] = float(abs(interior["x"]/width-flux).max())
             row["max_wall_flux_error_W_m2"] = float(max(abs(powers["west"]/width-west).max(),
                                                         abs(powers["east"]/width-east).max()))
@@ -61,17 +70,17 @@ def main():
                 if row["cells_per_penetration_depth"] < 4 and not args.include_underresolved:
                     continue
                 name = row["solver"]
-                metrics = ["max_temperature_error_K"]
-                if name == "FVM":
-                    metrics.append("max_internal_flux_error_W_m2")
+                metrics = ["max_temperature_error_K", "max_internal_flux_error_W_m2"]
                 errors = np.array([row[key] for key in metrics])
                 orders = np.log2(previous[name]/errors) if name in previous else []
                 row["orders"] = dict(zip(metrics, orders))
                 passed = (np.isfinite(errors).all() and all(order > 1.8 for order in orders)
                           and row["storage_residual_W_m2"] < 1e-10
-                          and row.get("max_wall_flux_error_W_m2", 0.) < 1e-12)
+                          and row["max_column_balance_W_m2"] < 1e-10
+                          and row["max_wall_flux_error_W_m2"] < 1e-12)
                 if n >= 128:
-                    passed &= max(row["relative_amplitude_error"],row["phase_error_rad"]) < 2e-3
+                    passed &= max(row["relative_amplitude_error"], row["phase_error_rad"],
+                                  row["midplane_flux_phase_error_rad"]) < 2e-3
                 row["passed"] = bool(passed)
                 previous[name] = errors
                 rows.append(row)
