@@ -10,7 +10,7 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls, interface):
+def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls, interface, films=None):
     from tensorfem import thermal
 
     n = len(conductivity)
@@ -23,6 +23,12 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls,
         contact = dict(contact_pairs=torch.tensor([[interface, interface+1]]), contact_conductance=1/resistance)
     fixed = [node for node, wall in zip((0, len(x)-1), walls) if wall is not None]
     prescribed = [wall for wall in walls if wall is not None]
+    if films is not None:
+        fixed, prescribed = [], []
+        end = len(x)-1
+        contact.update(convection_edges=torch.tensor([[0, 0], [end, end]]),
+                       convection_coefficient=torch.tensor(films, dtype=x.dtype),
+                       ambient_temperature=torch.tensor([w or 0. for w in walls], dtype=torch.complex128))
     model = thermal.ThermalModel(
         x[:, None], torch.stack((start, start+1), dim=1), conductivity, 1., capacity,
         torch.tensor(fixed, dtype=torch.long), torch.tensor(prescribed, dtype=torch.complex128),
@@ -38,7 +44,7 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls,
     return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux
 
 
-def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5):
+def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None):
     k = (1., 2.5)
     capacity = (1.3, .7)
     loss = (2., 4.)
@@ -50,12 +56,18 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     # Solve k*T''=(H+i*w*C)*T-H*Ta in each layer. At the interface
     # the left and right traces are free[0]-Z[0]*q and free[1]+Z[1]*q.
     free, impedance = [], []
-    for conductivity, cv, h, ta, wall, length in zip(k, capacity, loss, ambient, walls, lengths):
+    for side, (conductivity, cv, h, ta, wall, length) in enumerate(zip(k, capacity, loss, ambient, walls, lengths)):
         shift = h + 1j*omega*cv
         wave = cmath.sqrt(shift/conductivity)
         particular = h*ta/shift
         z = cmath.tanh(length*wave)
-        if wall is None:
+        if films is not None:
+            film = films[side]
+            admittance = conductivity*wave
+            denominator = film + admittance*z
+            free.append(particular + film*((wall or 0.)-particular)/(cmath.cosh(length*wave)*denominator))
+            impedance.append((1 + film*z/admittance)/denominator)
+        elif wall is None:
             free.append(particular)
             impedance.append(1/(conductivity*wave*z))
         else:
@@ -72,11 +84,18 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     i = interface-1
     contact[i] = resistance
     conductivity = layers(k)
-    field, cuts = heat.solve_harmonic_layered_slab(
-        torch.zeros(n), 1/n, walls, omega, conductivity=conductivity,
+    options = dict(conductivity=conductivity,
         volumetric_heat_capacity=layers(capacity), contact_resistance_x=contact,
-        heat_loss_coefficient=layers(loss), ambient_temperature=layers(ambient, torch.complex128),
+        heat_loss_coefficient=layers(loss),
         return_x_flux=True, backend=backend)
+    bulk_ambient = layers(ambient, torch.complex128)
+    if films is None:
+        field, cuts = heat.solve_harmonic_layered_slab(torch.zeros(n), 1/n, walls, omega,
+                                                        ambient_temperature=bulk_ambient, **options)
+    else:
+        field, _, _, cuts = heat.solve_harmonic_layered_films(
+            layers(loss)*bulk_ambient, 1/n, tuple(w or 0. for w in walls), omega,
+            film_coefficients=films, **options)
     left, right = heat.layered_slab_contact_temperatures(field, cuts, 1/n, conductivity)
     flux = complex(cuts[i+1])
     comparison = {}
@@ -87,7 +106,8 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         _, _, entering, leaving, traces = rod.solve_harmonic_stepped_rod(
             np.full(n, 1/n), np.ones(n), conductivity.numpy(), layers(capacity).numpy(),
             tuple(0. if w is None else w for w in walls), omega,
-            end_types=tuple("power" if w is None else "temperature" for w in walls),
+            end_types=("robin", "robin") if films is not None else tuple("power" if w is None else "temperature" for w in walls),
+            end_film_coefficient=films if films is not None else 0.,
             heat_loss_coefficient=layers(loss).numpy(), bulk_ambient_temperature=layers(ambient, torch.complex128).numpy(),
             contact_resistance=contact.numpy(), return_traces=True)
         q = leaving[i]
@@ -99,7 +119,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
                           solver_trace_difference_K=float(max(abs(tl-complex(left[i])), abs(tr-complex(right[i])))))
     if compare_fem:
         fl, fr, ql, qr = fem_contact(conductivity, layers(capacity), layers(loss),
-                                     layers(ambient, torch.complex128), omega, resistance, walls, interface)
+                                     layers(ambient, torch.complex128), omega, resistance, walls, interface, films)
         comparison.update(fem_flux_relative_error=abs(ql/exact_flux-1),
                           fem_max_trace_error_K=max(abs(fl-exact_left), abs(fr-exact_right)),
                           fem_interface_imbalance_W_m2=abs(ql-qr),
@@ -107,8 +127,11 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
                           fem_sph_flux_difference_W_m2=abs(ql-flux))
         if compare_fvm:
             comparison["fem_fvm_flux_difference_W_m2"] = float(abs(ql-q))
+    if films is not None:
+        comparison.update(wall_film_W_m2_K=films, wall_reservoir_phasors_K=[
+            [complex(w or 0.).real, complex(w or 0.).imag] for w in walls])
     return dict(**comparison, columns=n, left_thickness_m=left_thickness, omega_rad_s=omega, contact_resistance_m2_K_W=resistance, backend=backend,
-                wall_conditions=["insulated" if w is None else "zero_temperature_phasor" for w in walls],
+                wall_conditions=["insulated" if w is None else ("film" if films is not None else "zero_temperature_phasor") for w in walls],
                 exact_flux_W_m2=[exact_flux.real, exact_flux.imag], flux_relative_error=abs(flux/exact_flux-1),
                 flux_phase_error_rad=abs(cmath.phase(flux/exact_flux)),
                 max_trace_error_K=max(abs(complex(left[i])-exact_left), abs(complex(right[i])-exact_right)),
@@ -121,6 +144,7 @@ if __name__ == "__main__":
     parser.add_argument("--compare-fem", action="store_true", help="also verify the unit-area linear finite elements")
     parser.add_argument("--left-thickness", type=float, choices=(.25, .5, .75), default=.5,
                         help="left material thickness in the unit-length slab (m)")
+    parser.add_argument("--films", action="store_true", help="drive one or both walls through finite surface films")
     args = parser.parse_args()
     files = [__file__, heat.__file__]
     path = "../TensorSPH/src"
@@ -135,14 +159,18 @@ if __name__ == "__main__":
         files.append(thermal.__file__)
         path += ":../TensorFEM/src"
         metrics.extend(["fem_flux_relative_error", "fem_max_trace_error_K"])
+    boundaries = [((0., 0.), None), ((None, 0.), None), ((None, None), None)]
+    if args.films:
+        west, east = .35+.5j, -.4+.15j
+        boundaries = [((west, east), (3., 7.)), ((west, None), (3., 0.)), ((None, east), (0., 7.))]
     runs = []
     for backend in ("torch", "banded"):
-        for walls in ((0., 0.), (None, 0.), (None, None)):
+        for walls, films in boundaries:
             for omega in (0., 12.):
                 for resistance in (0., .25):
                     previous = None
                     for n in (16, 32, 64):
-                        row = measure(n, omega, resistance, walls, backend, args.compare_fvm, args.compare_fem, args.left_thickness)
+                        row = measure(n, omega, resistance, walls, backend, args.compare_fvm, args.compare_fem, args.left_thickness, films)
                         row["passed"] = True
                         for metric in metrics:
                             if previous:
@@ -167,6 +195,6 @@ if __name__ == "__main__":
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(f) for f in files],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/sph_ambient_driven_contact.py"
                           + (" --compare-fvm" if args.compare_fvm else "") + (" --compare-fem" if args.compare_fem else "")
-                          + f" --left-thickness {args.left_thickness}"),
+                          + f" --left-thickness {args.left_thickness}" + (" --films" if args.films else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
