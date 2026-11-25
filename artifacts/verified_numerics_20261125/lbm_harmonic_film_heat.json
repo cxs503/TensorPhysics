@@ -1,0 +1,666 @@
+{
+  "reference": "Harmonic slab admittance with independently driven unequal Robin films; project final cycle of three onto exp(i omega t)",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_harmonic_dirichlet_heat.py --films",
+  "order_metrics": [
+    "temperature_phasor_error_K",
+    "wall_flux_phasor_error_W_m2"
+  ],
+  "runs": [
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.038680677832750726,
+        0.048242022225659875
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.005107411362490488,
+        0.0032047146828309003
+      ],
+      "wall_temperature_phase_errors_deg": [
+        13.129215496518707,
+        8.529423884813852
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.012278436420573191,
+        0.04800708154918165
+      ],
+      "wall_flux_phase_errors_deg": [
+        2.26365646022338,
+        6.882689601715159
+      ],
+      "n": 8,
+      "steps_per_period": 16,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.026443834406016095,
+      "temperature_amplitude_error_K": 0.015904078532897076,
+      "temperature_phase_error_deg": 7.2366867437109725,
+      "wall_flux_phasor_error_W_m2": 0.08683564000618775,
+      "wall_flux_amplitude_error_W_m2": 0.04800708154918165,
+      "wall_flux_phase_error_deg": 6.882689601715159,
+      "max_interval_energy_residual_J_m2": 8.673617379884035e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.01027279927885567,
+        0.013238160837608396
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0006846635484724917,
+        0.0038276821478169243
+      ],
+      "wall_temperature_phase_errors_deg": [
+        3.5423788153371514,
+        2.2322140576593608
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.002915306156644648,
+        0.010484582483539673
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.6444393459782375,
+        1.9594397754859392
+      ],
+      "n": 16,
+      "steps_per_period": 64,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.0104353204303474,
+      "temperature_amplitude_error_K": 0.0045926239015765535,
+      "temperature_phase_error_deg": 2.265092780309539,
+      "wall_flux_phasor_error_W_m2": 0.023828689507695476,
+      "wall_flux_amplitude_error_W_m2": 0.010484582483539673,
+      "wall_flux_phase_error_deg": 1.9594397754859392,
+      "max_interval_energy_residual_J_m2": 8.673617379884035e-18,
+      "orders": [
+        1.3414564844824155,
+        1.8655876797804534
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.0025913321987192785,
+        0.003359188433932971
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0003143832811691172,
+        0.0011731291051420012
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.8874874398853683,
+        0.5519407607132326
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.0007101224666987704,
+        0.002462421203168752
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.1655093273825012,
+        0.502241412623225
+      ],
+      "n": 32,
+      "steps_per_period": 256,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.0031578860052764216,
+      "temperature_amplitude_error_K": 0.0011839941621445416,
+      "temperature_phase_error_deg": 0.6005711186569845,
+      "wall_flux_phasor_error_W_m2": 0.006046539181078942,
+      "wall_flux_amplitude_error_W_m2": 0.002462421203168752,
+      "wall_flux_phase_error_deg": 0.502241412623225,
+      "max_interval_energy_residual_J_m2": 7.589415207398531e-18,
+      "orders": [
+        1.7244439028153171,
+        1.9785180730675198
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.0006489952290022023,
+        0.0008423824139494669
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        8.765617007883142e-05,
+        0.0003068185076669505
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.22171333830649514,
+        0.13737799801009157
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.00017622996496602372,
+        0.000604785356137505
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.04163666791094748,
+        0.12626643802987336
+      ],
+      "n": 64,
+      "steps_per_period": 1024,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.0008638420062691741,
+      "temperature_amplitude_error_K": 0.00030210360919991075,
+      "temperature_phase_error_deg": 0.1532677436748405,
+      "wall_flux_phasor_error_W_m2": 0.0015162883451089759,
+      "wall_flux_amplitude_error_W_m2": 0.000604785356137505,
+      "wall_flux_phase_error_deg": 0.12626643802987336,
+      "max_interval_energy_residual_J_m2": 5.502326025363935e-18,
+      "orders": [
+        1.8701197154446105,
+        1.995565502656291
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.024945517375078146,
+        0.025218038688131373
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0009932473147385434,
+        0.006855281639194355
+      ],
+      "wall_temperature_phase_errors_deg": [
+        6.50726896454746,
+        3.650020254764333
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.006982860422821924,
+        0.019299309398957742
+      ],
+      "wall_flux_phase_errors_deg": [
+        1.699668824287913,
+        4.5722577764025765
+      ],
+      "n": 8,
+      "steps_per_period": 32,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.023717379722042135,
+      "temperature_amplitude_error_K": 0.010670688597664124,
+      "temperature_phase_error_deg": 5.0153197014483695,
+      "wall_flux_phasor_error_W_m2": 0.04539246963863695,
+      "wall_flux_amplitude_error_W_m2": 0.019299309398957742,
+      "wall_flux_phase_error_deg": 4.5722577764025765,
+      "max_interval_energy_residual_J_m2": 1.0408340855860843e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.006400813589410228,
+        0.006545217486539968
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0009574104153585727,
+        0.0025725795439412447
+      ],
+      "wall_temperature_phase_errors_deg": [
+        1.6487805894519316,
+        0.8985957984495456
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.0016600178814257238,
+        0.004187913170536461
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.4504197698115349,
+        1.2054380628048555
+      ],
+      "n": 16,
+      "steps_per_period": 128,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.007918265845887035,
+      "temperature_amplitude_error_K": 0.0027307870907816167,
+      "temperature_phase_error_deg": 1.3863956344212527,
+      "wall_flux_phasor_error_W_m2": 0.0117813914757721,
+      "wall_flux_amplitude_error_W_m2": 0.004187913170536461,
+      "wall_flux_phase_error_deg": 1.2054380628048555,
+      "max_interval_energy_residual_J_m2": 1.2576745200831851e-17,
+      "orders": [
+        1.5826882208658946,
+        1.945943039225915
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.0016076795584550497,
+        0.001647112821057587
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0002856074518720608,
+        0.00069755605355587
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.4114890100057118,
+        0.22221537498905541
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.000408179603118064,
+        0.0009992883217339044
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.11404538407231224,
+        0.30459234629026605
+      ],
+      "n": 32,
+      "steps_per_period": 512,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.0022542887567856764,
+      "temperature_amplitude_error_K": 0.0006911986862291886,
+      "temperature_phase_error_deg": 0.35704106131267715,
+      "wall_flux_phasor_error_W_m2": 0.002964803077904039,
+      "wall_flux_amplitude_error_W_m2": 0.0009992883217339044,
+      "wall_flux_phase_error_deg": 0.30459234629026605,
+      "max_interval_energy_residual_J_m2": 1.0733601507606494e-17,
+      "orders": [
+        1.8125121795501578,
+        1.9905017536359735
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        0.45,
+        1.8
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.00040233927056982304,
+        0.0004123788215424509
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        7.430167526967235e-05,
+        0.0001777680064924403
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.10279409604564382,
+        0.055377159161119835
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.0001015972582475988,
+        0.0002467346958816563
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.02859832087497004,
+        0.07633768016226963
+      ],
+      "n": 64,
+      "steps_per_period": 2048,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.0006000887543986093,
+      "temperature_amplitude_error_K": 0.000175155210630773,
+      "temperature_phase_error_deg": 0.09028789716828503,
+      "wall_flux_phasor_error_W_m2": 0.0007422818787763864,
+      "wall_flux_amplitude_error_W_m2": 0.0002467346958816563,
+      "wall_flux_phase_error_deg": 0.07633768016226963,
+      "max_interval_energy_residual_J_m2": 7.643625316022806e-18,
+      "orders": [
+        1.909424526046194,
+        1.997897230137111
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.06444517333405402,
+        0.02895161146117611
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.004288918056484181,
+        0.0038429177019322636
+      ],
+      "wall_temperature_phase_errors_deg": [
+        8.516980273237229,
+        13.142896600243553
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.06414337201459697,
+        0.009191186086500686
+      ],
+      "wall_flux_phase_errors_deg": [
+        6.8713842088146295,
+        2.266692390584514
+      ],
+      "n": 8,
+      "steps_per_period": 16,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.03544568072130645,
+      "temperature_amplitude_error_K": 0.021193948636509585,
+      "temperature_phase_error_deg": 19.67704953218013,
+      "wall_flux_phasor_error_W_m2": 0.11600131200129711,
+      "wall_flux_amplitude_error_W_m2": 0.06414337201459697,
+      "wall_flux_phase_error_deg": 6.8713842088146295,
+      "max_interval_energy_residual_J_m2": 1.0408340855860843e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.01768791876379645,
+        0.0076882691993784445
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.005119795397882709,
+        0.000506349348532692
+      ],
+      "wall_temperature_phase_errors_deg": [
+        2.2291875086360156,
+        3.5465233953955777
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.014002038512625381,
+        0.0021826821446175038
+      ],
+      "wall_flux_phase_errors_deg": [
+        1.9570690062140572,
+        0.6451407910742063
+      ],
+      "n": 16,
+      "steps_per_period": 64,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.013983022620155197,
+      "temperature_amplitude_error_K": 0.006132992946519478,
+      "temperature_phase_error_deg": 2.270540831565953,
+      "wall_flux_phasor_error_W_m2": 0.03183825377483327,
+      "wall_flux_amplitude_error_W_m2": 0.014002038512625381,
+      "wall_flux_phase_error_deg": 1.9570690062140572,
+      "max_interval_energy_residual_J_m2": 1.0842021724855044e-17,
+      "orders": [
+        1.341933584186755,
+        1.8653080066443755
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.004488526889879213,
+        0.0019393110062552229
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0015690980535777999,
+        0.00023372476122572594
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.5511962222288478,
+        0.888549795624654
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.0032879181247708056,
+        0.0005316940814499294
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.5016763940626984,
+        0.16567864463277573
+      ],
+      "n": 32,
+      "steps_per_period": 256,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.00423032322035002,
+      "temperature_amplitude_error_K": 0.001582475065233846,
+      "temperature_phase_error_deg": 0.8996992077508912,
+      "wall_flux_phasor_error_W_m2": 0.008079348401782918,
+      "wall_flux_amplitude_error_W_m2": 0.0032879181247708056,
+      "wall_flux_phase_error_deg": 0.5016763940626984,
+      "max_interval_energy_residual_J_m2": 8.565197162635485e-18,
+      "orders": [
+        1.724836449903833,
+        1.9784503612518363
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.0011255992802751632,
+        0.00048569267908494585
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.00041037748166478094,
+        6.520909086259186e-05
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.13719274074182713,
+        0.22198005420214448
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.0008074893212476342,
+        0.0001319514218014184
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.12612689871321708,
+        0.0416785623848134
+      ],
+      "n": 64,
+      "steps_per_period": 1024,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.0011570328153961116,
+      "temperature_amplitude_error_K": 0.00040393399923860374,
+      "temperature_phase_error_deg": 0.41155725387708203,
+      "wall_flux_phasor_error_W_m2": 0.0020260787044953676,
+      "wall_flux_amplitude_error_W_m2": 0.0008074893212476342,
+      "wall_flux_phase_error_deg": 0.12612689871321708,
+      "max_interval_energy_residual_J_m2": 7.081195439045951e-18,
+      "orders": [
+        1.8703381152424112,
+        1.9955487267717869
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.03371437235772342,
+        0.018724633375258225
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.009228111266591621,
+        0.0006706171532275262
+      ],
+      "wall_temperature_phase_errors_deg": [
+        3.6441274790113227,
+        6.551002427662942
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.02565981645341231,
+        0.005309172630330844
+      ],
+      "wall_flux_phase_errors_deg": [
+        4.578248619183032,
+        1.6897611872374785
+      ],
+      "n": 8,
+      "steps_per_period": 32,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.03187645188812127,
+      "temperature_amplitude_error_K": 0.014344103395810492,
+      "temperature_phase_error_deg": 5.037839518585291,
+      "wall_flux_phasor_error_W_m2": 0.06068587024390197,
+      "wall_flux_amplitude_error_W_m2": 0.02565981645341231,
+      "wall_flux_phase_error_deg": 4.578248619183032,
+      "max_interval_energy_residual_J_m2": 2.0816681711721685e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.008751677618615016,
+        0.004807411818620503
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0034568362676020703,
+        0.0006983197210182479
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.8969235967904248,
+        1.661932553082247
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.005559280750472073,
+        0.0012659152240775962
+      ],
+      "wall_flux_phase_errors_deg": [
+        1.2070789139421378,
+        0.44823214507108433
+      ],
+      "n": 16,
+      "steps_per_period": 128,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.010626069822558027,
+      "temperature_amplitude_error_K": 0.0036724258387315634,
+      "temperature_phase_error_deg": 1.7815541690923733,
+      "wall_flux_phasor_error_W_m2": 0.01575301971350687,
+      "wall_flux_amplitude_error_W_m2": 0.005559280750472073,
+      "wall_flux_phase_error_deg": 1.2070789139421378,
+      "max_interval_energy_residual_J_m2": 1.5178830414797062e-17,
+      "orders": [
+        1.5848829566924836,
+        1.9457322396899408
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.0022024490902817586,
+        0.0012076911954836875
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.0009370575443767848,
+        0.00020924126507046448
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.221783562257078,
+        0.41492293129797253
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.0013257771700877496,
+        0.00031155825873058207
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.30501059192452246,
+        0.11352190963891151
+      ],
+      "n": 32,
+      "steps_per_period": 512,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.0030231329695926752,
+      "temperature_amplitude_error_K": 0.000929177404095427,
+      "temperature_phase_error_deg": 0.3576397459938249,
+      "wall_flux_phasor_error_W_m2": 0.003964408362507163,
+      "wall_flux_amplitude_error_W_m2": 0.0013257771700877496,
+      "wall_flux_phase_error_deg": 0.30501059192452246,
+      "max_interval_energy_residual_J_m2": 1.4474099002681484e-17,
+      "orders": [
+        1.8134917566950204,
+        1.9904509236735617
+      ],
+      "passed": true
+    },
+    {
+      "film_coefficients_W_m2K": [
+        1.8,
+        0.45
+      ],
+      "wall_temperature_phasor_errors_K": [
+        0.0005514201575190509,
+        0.0003022526639111333
+      ],
+      "wall_temperature_amplitude_errors_K": [
+        0.00023878827844603379,
+        5.4484260023329734e-05
+      ],
+      "wall_temperature_phase_errors_deg": [
+        0.05526832485642847,
+        0.10366177209311496
+      ],
+      "wall_flux_amplitude_errors_W_m2": [
+        0.00032729850289781037,
+        7.756644225645482e-05
+      ],
+      "wall_flux_phase_errors_deg": [
+        0.07644272187456815,
+        0.028469019334754167
+      ],
+      "n": 64,
+      "steps_per_period": 2048,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.0008045055919252761,
+      "temperature_amplitude_error_K": 0.00023537833241948913,
+      "temperature_phase_error_deg": 0.10070452180702928,
+      "wall_flux_phasor_error_W_m2": 0.0009925562835356682,
+      "wall_flux_amplitude_error_W_m2": 0.00032729850289781037,
+      "wall_flux_phase_error_deg": 0.07644272187456815,
+      "max_interval_energy_residual_J_m2": 1.1275702593849246e-17,
+      "orders": [
+        1.9098700819902001,
+        1.9978847594915692
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "2787484f1c8f132f75930c60eca8628888294a1d",
+      "file": "lbm_harmonic_dirichlet_heat.py",
+      "source_sha256": "7425722ab017b1443005608b1952b712a1565d9fca2d4087cc2353e40cf63ea0"
+    },
+    {
+      "commit": "8d3ad0018b088ea0d2bc51d161ac19cc088ed629",
+      "file": "thermal_common.py",
+      "source_sha256": "055a782b4fb823a4efe8899ea365a9211e5f549058f9726531c1a82ae2ef8a11"
+    }
+  ]
+}
