@@ -1,0 +1,210 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cells": 32,
+      "ends": [
+        "power",
+        "power"
+      ],
+      "cell_mean_error_K": 1.2963880635652458e-08,
+      "wall_temperature_error_K": 1.4132410797174089e-08,
+      "wall_power_error_W": 1.3145040611561853e-13,
+      "balance_error_W": 2.4780177909633494e-12,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "power",
+        "power"
+      ],
+      "cell_mean_error_K": 8.49752268550219e-10,
+      "wall_temperature_error_K": 8.872120815794915e-10,
+      "wall_power_error_W": 1.9184653865522705e-13,
+      "balance_error_W": 9.623413177450857e-12,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "power",
+        "power"
+      ],
+      "cell_mean_error_K": 6.59383658785373e-11,
+      "wall_temperature_error_K": 6.713207767461427e-11,
+      "wall_power_error_W": 5.204725539442734e-13,
+      "balance_error_W": 4.580158474709606e-11,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "power",
+        "power"
+      ],
+      "cell_mean_error_K": 4.814637577510439e-11,
+      "wall_temperature_error_K": 4.8203219193965197e-11,
+      "wall_power_error_W": 1.7852386235972517e-13,
+      "balance_error_W": 1.7336976299020534e-10,
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "ends": [
+        "power",
+        "robin"
+      ],
+      "cell_mean_error_K": 6.118227702245349e-09,
+      "wall_temperature_error_K": 4.222954430588288e-09,
+      "wall_power_error_W": 1.2668666116155691e-08,
+      "balance_error_W": 2.5659474545136618e-12,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "power",
+        "robin"
+      ],
+      "cell_mean_error_K": 3.8130565371830016e-10,
+      "wall_temperature_error_K": 2.6562929633655585e-10,
+      "wall_power_error_W": 7.967173587530851e-10,
+      "balance_error_W": 9.729994587814872e-12,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "power",
+        "robin"
+      ],
+      "cell_mean_error_K": 2.1032064978498966e-11,
+      "wall_temperature_error_K": 2.177102942368947e-11,
+      "wall_power_error_W": 6.505818106461447e-11,
+      "balance_error_W": 4.597211500367848e-11,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "power",
+        "robin"
+      ],
+      "cell_mean_error_K": 3.291233952040784e-11,
+      "wall_temperature_error_K": 3.291233952040784e-11,
+      "wall_power_error_W": 6.224443183100448e-11,
+      "balance_error_W": 1.7219647929778148e-10,
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "ends": [
+        "robin",
+        "power"
+      ],
+      "cell_mean_error_K": 1.262418436454027e-08,
+      "wall_temperature_error_K": 1.3793282960250508e-08,
+      "wall_power_error_W": 3.33656169360097e-09,
+      "balance_error_W": 2.504663143554353e-12,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "robin",
+        "power"
+      ],
+      "cell_mean_error_K": 8.282654562208336e-10,
+      "wall_temperature_error_K": 8.656684258312453e-10,
+      "wall_power_error_W": 2.1262147598122283e-10,
+      "balance_error_W": 1.1544543099262228e-11,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "robin",
+        "power"
+      ],
+      "cell_mean_error_K": 6.178879630169831e-11,
+      "wall_temperature_error_K": 6.292566467891447e-11,
+      "wall_power_error_W": 2.722533309906794e-11,
+      "balance_error_W": 4.354738791789714e-11,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "robin",
+        "power"
+      ],
+      "cell_mean_error_K": 4.0188297134591267e-11,
+      "wall_temperature_error_K": 4.0245140553452075e-11,
+      "wall_power_error_W": 5.871747532637528e-11,
+      "balance_error_W": 1.7977441757466295e-10,
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "ends": [
+        "robin",
+        "robin"
+      ],
+      "cell_mean_error_K": 6.881634817546001e-09,
+      "wall_temperature_error_K": 3.737113729584962e-09,
+      "wall_power_error_W": 1.121130033254758e-08,
+      "balance_error_W": 2.4140689447449404e-12,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "ends": [
+        "robin",
+        "robin"
+      ],
+      "cell_mean_error_K": 4.29622559749987e-10,
+      "wall_temperature_error_K": 2.3521806724602357e-10,
+      "wall_power_error_W": 7.057892048578651e-10,
+      "balance_error_W": 1.1593392912345735e-11,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "ends": [
+        "robin",
+        "robin"
+      ],
+      "cell_mean_error_K": 2.148681232938543e-11,
+      "wall_temperature_error_K": 1.8815171642927453e-11,
+      "wall_power_error_W": 5.6052940067274903e-11,
+      "balance_error_W": 4.361400129937465e-11,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "ends": [
+        "robin",
+        "robin"
+      ],
+      "cell_mean_error_K": 2.120259523508139e-11,
+      "wall_temperature_error_K": 1.8133050616597757e-11,
+      "wall_power_error_W": 5.395062174784471e-11,
+      "balance_error_W": 1.800621873826458e-10,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "9f30efff0ea2320fd523ef9b72e7d68a68700688",
+      "file": "fvm_mixed_end_fin.py",
+      "source_sha256": "0688bc4fa5381d184cee522c2dfb8b8060df17bc5852b44a46c3bff0a72a385a"
+    },
+    {
+      "commit": "9594d9c3ca346561fe7b38622e824d397ee4039b",
+      "file": "rod.py",
+      "source_sha256": "5a7fd4fe3d974defda4bd484f0fcb61fa4c14f07b233360cd5c25fd4c885315f"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorFVM/src python examples/fvm_mixed_end_fin.py --free-ends"
+}
