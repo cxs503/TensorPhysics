@@ -1,0 +1,37 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "7154bb6fa01ab49253c6e4aea158b1e394c14526",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit homogeneous slab, k=C=L=1. Exact temperature T=(1+x)t + x\u00b3/6 + x\u00b2/2 - x/2; impose its two boundary temperatures. Compare temperatures and integrated Fourier flux on every cut at each step through 0.125 s; verify local storage against the difference in cut heats. Three cell-centered grids, dt=0.5 dx\u00b2. CPU float64.",
+  "suite": {
+    "tests": 146,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_unequal_wall_temperature_ramps_against_cubic_slab[theta]": {
+      "max_field_error_12_K": 0.0024432724592198807,
+      "max_section_heat_error_12_J_per_m2": 0.0008915589025661752,
+      "max_cell_balance_error_12_J_per_m2": 1.2663481374630692e-16,
+      "max_field_error_24_K": 0.0006290086451283261,
+      "max_section_heat_error_24_J_per_m2": 0.00022287069564880246,
+      "max_cell_balance_error_24_J_per_m2": 4.579669976578771e-16,
+      "max_field_error_48_K": 0.00015949936248899066,
+      "max_section_heat_error_48_J_per_m2": 5.565628926426647e-05,
+      "max_cell_balance_error_48_J_per_m2": 8.803721640582296e-16
+    },
+    "test_unequal_wall_temperature_ramps_against_cubic_slab[sdirk2]": {
+      "max_field_error_12_K": 0.0024432633905382417,
+      "max_section_heat_error_12_J_per_m2": 0.0008915433069439649,
+      "max_cell_balance_error_12_J_per_m2": 2.3245294578089215e-16,
+      "max_field_error_24_K": 0.0006290085758158259,
+      "max_section_heat_error_24_J_per_m2": 0.00022287045244745451,
+      "max_cell_balance_error_24_J_per_m2": 4.753142324176451e-16,
+      "max_field_error_48_K": 0.00015949936195036596,
+      "max_section_heat_error_48_J_per_m2": 5.5656285466471056e-05,
+      "max_cell_balance_error_48_J_per_m2": 1.016547956922409e-15
+    }
+  },
+  "step_sensitivity": "A preliminary run with dt=0.125/n gave Crank-Nicolson max temperature error reduction factors of 3.15 and 3.40. The fixed diffusion-number study below checks joint refinement with dt proportional to dx\u00b2."
+}
