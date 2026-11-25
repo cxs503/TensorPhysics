@@ -1,0 +1,759 @@
+{
+  "cases": [
+    {
+      "runs": [
+        {
+          "subcell_heat_error_J_m2": 0.002107375416630586,
+          "columns": 8,
+          "impulses": [],
+          "temperature_error_K": 0.01858127085549599,
+          "wall_heat_error_J_m2": 0.0020578740838585532,
+          "interior_cut_heat_error_J_m2": 0.0019852767888149034,
+          "column_energy_residual_J_m2": 6.938893903907228e-18,
+          "interface_heat_mismatch_J_m2": 1.9081958235744878e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "subcell_heat_error_J_m2": 0.0005054988057216839,
+          "columns": 16,
+          "impulses": [],
+          "temperature_error_K": 0.007932978967102211,
+          "wall_heat_error_J_m2": 0.0005385929712415707,
+          "interior_cut_heat_error_J_m2": 0.0004447404202259919,
+          "column_energy_residual_J_m2": 1.0408340855860843e-17,
+          "interface_heat_mismatch_J_m2": 5.204170427930421e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.2279145483523424,
+            1.9338874024670494,
+            2.1583047279654504,
+            2.059667755980048
+          ],
+          "passed": true
+        },
+        {
+          "subcell_heat_error_J_m2": 0.00012942650424323243,
+          "columns": 32,
+          "impulses": [],
+          "temperature_error_K": 0.0025943896962403734,
+          "wall_heat_error_J_m2": 0.0001372699847133549,
+          "interior_cut_heat_error_J_m2": 0.00012048793690179471,
+          "column_energy_residual_J_m2": 1.3877787807814457e-17,
+          "interface_heat_mismatch_J_m2": 9.71445146547012e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.6124675247642561,
+            1.9721792004312368,
+            1.8840748170616475,
+            1.9655745978210244
+          ],
+          "passed": true
+        },
+        {
+          "subcell_heat_error_J_m2": 3.347368191979061e-05,
+          "columns": 64,
+          "impulses": [],
+          "temperature_error_K": 0.0007258202192470531,
+          "wall_heat_error_J_m2": 3.448673757490417e-05,
+          "interior_cut_heat_error_J_m2": 3.1040520198276356e-05,
+          "column_energy_residual_J_m2": 8.673617379884035e-18,
+          "interface_heat_mismatch_J_m2": 2.5673907444456745e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.8377110473850646,
+            1.9929026397752334,
+            1.9566640723913766,
+            1.9510339325008006
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "5995da96a7e8d35cc8090ad9faba45c7fab61b2c",
+          "file": "thermal.py",
+          "source_sha256": "068ed73e7aa97a89031a361fa082591c192edcfa794fd6da2023d05fea635b5f"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --fem-ramps"
+    },
+    {
+      "runs": [
+        {
+          "columns": 8,
+          "impulses": [
+            {
+              "time_s": 0.013,
+              "inward_heat_J": [
+                0.03608439187530682,
+                -1.917648502700048e-06
+              ]
+            },
+            {
+              "time_s": 0.028,
+              "inward_heat_J": [
+                1.1505891016200292e-06,
+                -0.021650635125184094
+              ]
+            },
+            {
+              "time_s": 0.047,
+              "inward_heat_J": [
+                -0.03608439187530682,
+                1.917648502700048e-06
+              ]
+            },
+            {
+              "time_s": 0.09,
+              "inward_heat_J": [
+                -1.1505891016200292e-06,
+                0.021650635125184094
+              ]
+            }
+          ],
+          "temperature_error_K": 0.020713759986696056,
+          "wall_heat_error_J_m2": 0.003298046623565948,
+          "interior_cut_heat_error_J_m2": 0.0018855633011016087,
+          "column_energy_residual_J_m2": 1.3877787807814457e-17,
+          "interface_heat_mismatch_J_m2": 2.0816681711721685e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "columns": 16,
+          "impulses": [
+            {
+              "time_s": 0.013,
+              "inward_heat_J": [
+                0.018042195912175804,
+                -2.5477606721316467e-11
+              ]
+            },
+            {
+              "time_s": 0.028,
+              "inward_heat_J": [
+                1.5286564032789886e-11,
+                -0.010825317547305481
+              ]
+            },
+            {
+              "time_s": 0.047,
+              "inward_heat_J": [
+                -0.018042195912175804,
+                2.5477606721316467e-11
+              ]
+            },
+            {
+              "time_s": 0.09,
+              "inward_heat_J": [
+                -1.5286564032789886e-11,
+                0.010825317547305481
+              ]
+            }
+          ],
+          "temperature_error_K": 0.007411351517838449,
+          "wall_heat_error_J_m2": 0.0009418099906260552,
+          "interior_cut_heat_error_J_m2": 0.0006649671639910142,
+          "column_energy_residual_J_m2": 1.3877787807814457e-17,
+          "interface_heat_mismatch_J_m2": 9.020562075079397e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.4827808987295055,
+            1.808103862101499,
+            1.5036405773076271
+          ],
+          "passed": true
+        },
+        {
+          "columns": 32,
+          "impulses": [
+            {
+              "time_s": 0.013,
+              "inward_heat_J": [
+                0.009021097956087902,
+                -8.994310440449471e-21
+              ]
+            },
+            {
+              "time_s": 0.028,
+              "inward_heat_J": [
+                5.396586264269691e-21,
+                -0.005412658773652741
+              ]
+            },
+            {
+              "time_s": 0.047,
+              "inward_heat_J": [
+                -0.009021097956087902,
+                8.994310440449471e-21
+              ]
+            },
+            {
+              "time_s": 0.09,
+              "inward_heat_J": [
+                -5.396586264269691e-21,
+                0.005412658773652741
+              ]
+            }
+          ],
+          "temperature_error_K": 0.0019974193407784058,
+          "wall_heat_error_J_m2": 0.000261377102850735,
+          "interior_cut_heat_error_J_m2": 0.0002409239633548617,
+          "column_energy_residual_J_m2": 2.0816681711721685e-17,
+          "interface_heat_mismatch_J_m2": 2.0816681711721685e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.8915994074040656,
+            1.849303262942873,
+            1.4647052047481786
+          ],
+          "passed": true
+        },
+        {
+          "columns": 64,
+          "impulses": [
+            {
+              "time_s": 0.013,
+              "inward_heat_J": [
+                0.004510548978043951,
+                -2.2419006171134744e-39
+              ]
+            },
+            {
+              "time_s": 0.028,
+              "inward_heat_J": [
+                1.345140370268093e-39,
+                -0.0027063293868263704
+              ]
+            },
+            {
+              "time_s": 0.047,
+              "inward_heat_J": [
+                -0.004510548978043951,
+                2.2419006171134744e-39
+              ]
+            },
+            {
+              "time_s": 0.09,
+              "inward_heat_J": [
+                -1.345140370268093e-39,
+                0.0027063293868263704
+              ]
+            }
+          ],
+          "temperature_error_K": 0.0005254295365089701,
+          "wall_heat_error_J_m2": 6.718466079726898e-05,
+          "interior_cut_heat_error_J_m2": 6.585516004395386e-05,
+          "column_energy_residual_J_m2": 2.2551405187698492e-17,
+          "interface_heat_mismatch_J_m2": 4.85722573273506e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.926568038268867,
+            1.959928975590687,
+            1.8712095059140894
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "5995da96a7e8d35cc8090ad9faba45c7fab61b2c",
+          "file": "thermal.py",
+          "source_sha256": "068ed73e7aa97a89031a361fa082591c192edcfa794fd6da2023d05fea635b5f"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --fem"
+    },
+    {
+      "runs": [
+        {
+          "columns": 8,
+          "temperature_error_K": 0.025737997504045124,
+          "interval_temperature_error_K": 0.03280163400767415,
+          "wall_heat_error_J_m2": 0.006265521303138982,
+          "interior_cut_heat_error_J_m2": 0.004459935152379982,
+          "link_heat_residual_J_m2": 1.734723475976807e-17,
+          "column_energy_residual_J_m2": 1.1622647289044608e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "columns": 16,
+          "temperature_error_K": 0.01243491229333471,
+          "interval_temperature_error_K": 0.009779248550737299,
+          "wall_heat_error_J_m2": 0.0016269346254769793,
+          "interior_cut_heat_error_J_m2": 0.0012279192761688491,
+          "link_heat_residual_J_m2": 8.673617379884035e-17,
+          "column_energy_residual_J_m2": 2.3418766925686896e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.0495034798926046,
+            1.9452782685933367,
+            1.8608070128970453,
+            1.7459721681143372
+          ],
+          "passed": true
+        },
+        {
+          "columns": 32,
+          "temperature_error_K": 0.003987456126682165,
+          "interval_temperature_error_K": 0.0025486912712240767,
+          "wall_heat_error_J_m2": 0.00041273756080350416,
+          "interior_cut_heat_error_J_m2": 0.000331636558568894,
+          "link_heat_residual_J_m2": 2.498001805406602e-16,
+          "column_energy_residual_J_m2": 3.2786273695961654e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.6408557815445397,
+            1.9788596403122765,
+            1.8885407616956529,
+            1.9399669839992557
+          ],
+          "passed": true
+        },
+        {
+          "columns": 64,
+          "temperature_error_K": 0.001101400034671185,
+          "interval_temperature_error_K": 0.0006437453286253021,
+          "wall_heat_error_J_m2": 0.00010355014231885201,
+          "interior_cut_heat_error_J_m2": 9.070131652248736e-05,
+          "link_heat_residual_J_m2": 1.3079815008865125e-15,
+          "column_energy_residual_J_m2": 1.1635657715114434e-15,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.856130086214484,
+            1.9948951990660984,
+            1.8704076571305055,
+            1.9851946636739515
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "eb47cec4623c67346126f064ac1c4ec6405f9668",
+          "file": "contact_chain.py",
+          "source_sha256": "fcb1bd0cf330f28e6f7c0545e6a2455f9ef918277327009114fc4477104949f4"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --dem-ramps"
+    },
+    {
+      "runs": [
+        {
+          "interval_temperature_error_K": 0.04800551970873301,
+          "interval_wall_error_K": 1.1102230246251565e-16,
+          "columns": 8,
+          "temperature_error_K": 0.03726433545056562,
+          "wall_heat_error_J_m2": 0.008129780935188406,
+          "interior_cut_heat_error_J_m2": 0.0053091723262330415,
+          "column_energy_residual_J_m2": 4.163336342344337e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "interval_temperature_error_K": 0.014727234734547345,
+          "interval_wall_error_K": 1.1102230246251565e-16,
+          "columns": 16,
+          "temperature_error_K": 0.018317980962693547,
+          "wall_heat_error_J_m2": 0.001999069537363278,
+          "interior_cut_heat_error_J_m2": 0.001504934517660528,
+          "column_energy_residual_J_m2": 2.185751579730777e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.024535035713883,
+            2.0238878211034876,
+            1.8187862553610439,
+            1.7047137299126844
+          ],
+          "passed": true
+        },
+        {
+          "interval_temperature_error_K": 0.0038162651154517446,
+          "interval_wall_error_K": 1.1102230246251565e-16,
+          "columns": 32,
+          "temperature_error_K": 0.005939756285437858,
+          "wall_heat_error_J_m2": 0.0005056651259063016,
+          "interior_cut_heat_error_J_m2": 0.00041057411417889933,
+          "column_energy_residual_J_m2": 2.740863092043355e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.6247848540009444,
+            1.9830744679247752,
+            1.873986137574912,
+            1.9482532637800434
+          ],
+          "passed": true
+        },
+        {
+          "interval_temperature_error_K": 0.0009608319270122956,
+          "interval_wall_error_K": 1.1102230246251565e-16,
+          "columns": 64,
+          "temperature_error_K": 0.0016417886066264487,
+          "wall_heat_error_J_m2": 0.00012649559381374548,
+          "interior_cut_heat_error_J_m2": 0.0001089315347781658,
+          "column_energy_residual_J_m2": 8.075137780672037e-16,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.85513535633361,
+            1.9990951510747677,
+            1.9142210086736065,
+            1.989805403107925
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "99e90ae4f3198c8b414b8aad9ff2ca5e9506ceac",
+          "file": "heat_conduction_2d.py",
+          "source_sha256": "d6bdca3260c55fbcaf8c5c0bed046414552fb33998c47e9505df0fc048897e3f"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --sph-ramps"
+    },
+    {
+      "runs": [
+        {
+          "subcell_heat_error_J_m2": 0.0031180713884565612,
+          "reconstruction_face_mismatch_J_m2": 2.7755575615628914e-17,
+          "columns": 8,
+          "time_steps": 23,
+          "temperature_error_K": 0.0181602623633923,
+          "wall_heat_error_J_m2": 0.002305018469212994,
+          "interior_cut_heat_error_J_m2": 0.0029030182056639046,
+          "column_energy_residual_J_m2": 7.632783294297951e-17,
+          "interface_heat_mismatch_J_m2": 2.0816681711721685e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "subcell_heat_error_J_m2": 0.0008955107673780903,
+          "reconstruction_face_mismatch_J_m2": 1.734723475976807e-17,
+          "columns": 16,
+          "time_steps": 80,
+          "temperature_error_K": 0.004057350501729007,
+          "wall_heat_error_J_m2": 0.0005619647074194892,
+          "interior_cut_heat_error_J_m2": 0.0005946135982848669,
+          "column_energy_residual_J_m2": 4.7704895589362195e-17,
+          "interface_heat_mismatch_J_m2": 3.9898639947466563e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            2.1621752026396854,
+            2.036226876370444,
+            2.287529257659704,
+            1.7998712750136854
+          ],
+          "passed": true
+        },
+        {
+          "subcell_heat_error_J_m2": 0.00023802234027809482,
+          "reconstruction_face_mismatch_J_m2": 6.938893903907228e-18,
+          "columns": 32,
+          "time_steps": 310,
+          "temperature_error_K": 0.0010154304364568545,
+          "wall_heat_error_J_m2": 0.0001389476028529138,
+          "interior_cut_heat_error_J_m2": 0.00014418620822502677,
+          "column_energy_residual_J_m2": 3.664603343001005e-17,
+          "interface_heat_mismatch_J_m2": 2.7538735181131813e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            1.998446528716498,
+            2.015938583830819,
+            2.0440192830231467,
+            1.9116137906669755
+          ],
+          "passed": true
+        },
+        {
+          "subcell_heat_error_J_m2": 6.419634624765108e-05,
+          "reconstruction_face_mismatch_J_m2": 6.5052130349130266e-18,
+          "columns": 64,
+          "time_steps": 1231,
+          "temperature_error_K": 0.00025268194851724157,
+          "wall_heat_error_J_m2": 3.462302403696438e-05,
+          "interior_cut_heat_error_J_m2": 3.576295076376454e-05,
+          "column_energy_residual_J_m2": 1.7889335846010823e-17,
+          "interface_heat_mismatch_J_m2": 1.734723475976807e-17,
+          "wall_trace_error_K": 0.0,
+          "orders": [
+            2.0066969014880414,
+            2.0047373022485075,
+            2.0113954919460064,
+            1.8905338948018968
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "1dcd11b673946358a43073009a6ae8538d3aea49",
+          "file": "rod.py",
+          "source_sha256": "a058886533e8fd86091826c3a019e9f274da6438aad914705094f82b472f3bac"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --fvm-ramps"
+    },
+    {
+      "runs": [
+        {
+          "columns": 8,
+          "degree": 1,
+          "temperature_error_K": 0.01716103713115885,
+          "wall_heat_error_J_m2": 0.002099698473290841,
+          "interior_cut_heat_error_J_m2": 0.0019157965956242418,
+          "column_energy_residual_J_m2": 1.169203622808368e-15,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "columns": 16,
+          "degree": 1,
+          "temperature_error_K": 0.007733563532712706,
+          "wall_heat_error_J_m2": 0.0005378563860615818,
+          "interior_cut_heat_error_J_m2": 0.0004280730529853116,
+          "column_energy_residual_J_m2": 7.108896804552955e-15,
+          "orders": [
+            1.1499314961449252,
+            1.964889251996963,
+            2.1620154685979878
+          ],
+          "passed": true
+        },
+        {
+          "columns": 32,
+          "degree": 1,
+          "temperature_error_K": 0.0024870583975924454,
+          "wall_heat_error_J_m2": 0.00013623475534726287,
+          "interior_cut_heat_error_J_m2": 0.00011950932243139437,
+          "column_energy_residual_J_m2": 1.0266093530830744e-14,
+          "orders": [
+            1.6366929605358826,
+            1.9811262062518828,
+            1.840733860050145
+          ],
+          "passed": true
+        },
+        {
+          "columns": 64,
+          "degree": 1,
+          "temperature_error_K": 0.0006963677652283007,
+          "wall_heat_error_J_m2": 3.4295390428200345e-05,
+          "interior_cut_heat_error_J_m2": 3.096949976495386e-05,
+          "column_energy_residual_J_m2": 2.86541623761849e-14,
+          "orders": [
+            1.8365190557949993,
+            1.9900082166060007,
+            1.9482031761379048
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "45eba464e5900d5a9034a433f81595898932f75a",
+          "file": "heat_1d.py",
+          "source_sha256": "0f459a08a93aa8a5ec5b208565e9a4ae663ded8c84959ad398467b483a32d9fe"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --dg-ramps"
+    },
+    {
+      "runs": [
+        {
+          "columns": 8,
+          "degree": 2,
+          "temperature_error_K": 0.0003477319519361449,
+          "wall_heat_error_J_m2": 6.734892540366522e-05,
+          "interior_cut_heat_error_J_m2": 6.842588778776387e-05,
+          "column_energy_residual_J_m2": 4.701100619897147e-15,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "columns": 16,
+          "degree": 2,
+          "temperature_error_K": 2.6348343369758664e-05,
+          "wall_heat_error_J_m2": 3.7245949360761865e-06,
+          "interior_cut_heat_error_J_m2": 4.558325500225724e-06,
+          "column_energy_residual_J_m2": 8.677086826835989e-15,
+          "orders": [
+            3.722191476048168,
+            4.176499486101364,
+            3.9079663947298893
+          ],
+          "passed": true
+        },
+        {
+          "columns": 32,
+          "degree": 2,
+          "temperature_error_K": 1.6876754783123893e-06,
+          "wall_heat_error_J_m2": 2.2837279801263266e-07,
+          "interior_cut_heat_error_J_m2": 2.889170502527738e-07,
+          "column_energy_residual_J_m2": 2.824129818890242e-14,
+          "orders": [
+            3.9646028352402247,
+            4.02762081204994,
+            3.9797766967915273
+          ],
+          "passed": true
+        },
+        {
+          "columns": 64,
+          "degree": 2,
+          "temperature_error_K": 1.0772515249279913e-07,
+          "wall_heat_error_J_m2": 1.4213241320004677e-08,
+          "interior_cut_heat_error_J_m2": 1.8140075462580452e-08,
+          "column_energy_residual_J_m2": 6.577377531513662e-14,
+          "orders": [
+            3.969610470304415,
+            4.006083315512327,
+            3.9934029835368756
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "45eba464e5900d5a9034a433f81595898932f75a",
+          "file": "heat_1d.py",
+          "source_sha256": "0f459a08a93aa8a5ec5b208565e9a4ae663ded8c84959ad398467b483a32d9fe"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --dg-ramps --dg-degree 2"
+    },
+    {
+      "runs": [
+        {
+          "columns": 8,
+          "time_steps": 150,
+          "switch_shift_s": 0.0003333333333333333,
+          "lattice_tau": 0.692,
+          "dt_s": 0.001,
+          "temperature_error_K": 0.013659114508533854,
+          "wall_heat_error_J_m2": 0.0012814371161177437,
+          "interior_cut_heat_error_J_m2": 0.0012975611967177836,
+          "column_energy_residual_J_m2": 1.6479873021779667e-17,
+          "orders": [],
+          "passed": true
+        },
+        {
+          "columns": 16,
+          "time_steps": 600,
+          "switch_shift_s": 0.0003333333333333333,
+          "lattice_tau": 0.692,
+          "dt_s": 0.00025,
+          "temperature_error_K": 0.005495958392274569,
+          "wall_heat_error_J_m2": 0.00030601363174899074,
+          "interior_cut_heat_error_J_m2": 0.0002958308187318709,
+          "column_energy_residual_J_m2": 1.3877787807814457e-17,
+          "orders": [
+            1.3134209725583779,
+            2.06609485701909,
+            2.1329583209872145
+          ],
+          "passed": true
+        },
+        {
+          "columns": 32,
+          "time_steps": 2400,
+          "switch_shift_s": 0.0003333333333333333,
+          "lattice_tau": 0.692,
+          "dt_s": 6.25e-05,
+          "temperature_error_K": 0.0018042144030063767,
+          "wall_heat_error_J_m2": 7.684068914256409e-05,
+          "interior_cut_heat_error_J_m2": 7.693710651394958e-05,
+          "column_energy_residual_J_m2": 9.540979117872439e-18,
+          "orders": [
+            1.6070002913278445,
+            1.9936535580273498,
+            1.94302087750568
+          ],
+          "passed": true
+        },
+        {
+          "columns": 64,
+          "time_steps": 9600,
+          "switch_shift_s": 0.0003333333333333333,
+          "lattice_tau": 0.692,
+          "dt_s": 1.5625e-05,
+          "temperature_error_K": 0.0005081399663906527,
+          "wall_heat_error_J_m2": 1.9245054566831288e-05,
+          "interior_cut_heat_error_J_m2": 1.904110438176454e-05,
+          "column_energy_residual_J_m2": 5.637851296924623e-18,
+          "orders": [
+            1.8280729457638503,
+            1.997382696085313,
+            2.014562415905384
+          ],
+          "passed": true
+        }
+      ],
+      "sources": [
+        {
+          "commit": "dbdde83d7482a614e5d29a30967cf7ebd394f746",
+          "file": "sph_two_wall_pulses.py",
+          "source_sha256": "c2b1762458a214c6d519e6e6d2af39ab1f05d8ddd7d553b5e9382f3ac1036ee6"
+        },
+        {
+          "commit": "7113a789ffeacaafba49f6d7c1aaa1570c139cd4",
+          "file": "scalar.py",
+          "source_sha256": "3cdd3fa0a3ce6b04cb608648a037653ce5b7c60aa0750aeb2e39b274ed32e599"
+        }
+      ],
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorDEM/src:../TensorSPH/src:../TensorFVM/src:../TensorDG:../TensorLBM/src python examples/sph_two_wall_pulses.py --lbm-ramps"
+    }
+  ],
+  "reference": "Homogeneous unit-area slab with two independent affine wall histories. LINE2 consistent-capacity FEM uses Crank-Nicolson with step edges at slope changes and dt <= dx^2/2. Compare cell mean temperatures against exact Fourier cell averages. Compare assembled wall reaction heats, interior face heats and heat at 25%, 50%, and 75% of each element against differences of analytical cumulative heat. Local section recovery includes the net element nodal input from storage.",
+  "fem_ramp_orders": [
+    "cell mean temperature",
+    "interval wall heat",
+    "interval interior cut heat",
+    "interval subcell heat"
+  ],
+  "fem_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal.py",
+    "passed": 112
+  }
+}
