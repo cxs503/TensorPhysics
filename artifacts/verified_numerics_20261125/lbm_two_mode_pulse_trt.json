@@ -1,0 +1,785 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cells": 16,
+      "dt": 0.0009765625,
+      "end_time": 0.0625,
+      "width_over_interval": 0.05,
+      "pulse_duration_in_steps": 0.3242277876554809,
+      "start_in_steps": 7.781466903731541,
+      "stop_in_steps": 8.105694691387022,
+      "deposited_heat": 0.001989436788648692,
+      "exact_deposited_heat": 0.0019894367886486917,
+      "relative_heat_error": 2.220446049250313e-16,
+      "max_cumulative_wall_heat_error_over_peak": 0.006222090199264475,
+      "max_balance_over_peak": 6.94974157251748e-17,
+      "max_temperature_error_over_peak": 0.03007248054259734,
+      "max_projection_residual_over_peak": 8.339689887020976e-16,
+      "free_decay_controls": [
+        {
+          "steps_after_first_endpoint": 0,
+          "endpoint_time": 0.0087890625,
+          "relative_amplitude_errors": [
+            0.0048726345439502605,
+            0.019712196320159858
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031680085944670096,
+          "decay_rate_shift_over_interval": 0.0015441090982667629,
+          "remaining_shift_over_interval": 0.03988939622176022,
+          "exact_continuation_root": 0.03166288371503592,
+          "sampled_continuation_root": 0.031670307759575765,
+          "accumulated_shift_over_interval": 0.07752040561993477,
+          "subsequent_shift_over_interval": 0.041433505320026986
+        },
+        {
+          "steps_after_first_endpoint": 1,
+          "endpoint_time": 0.009765625,
+          "relative_amplitude_errors": [
+            0.006472507545519424,
+            0.026324648174771648
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03184524166179438,
+          "decay_rate_shift_over_interval": 0.0015501290011666077,
+          "remaining_shift_over_interval": 0.013809050740241828,
+          "exact_continuation_root": 0.03182745774717366,
+          "sampled_continuation_root": 0.0318354253552196,
+          "accumulated_shift_over_interval": 0.10359473119855332,
+          "subsequent_shift_over_interval": 0.015359179741408435
+        },
+        {
+          "steps_after_first_endpoint": 2,
+          "endpoint_time": 0.0107421875,
+          "relative_amplitude_errors": [
+            0.00700971814375051,
+            0.02859997095144151
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03190260271976847,
+          "decay_rate_shift_over_interval": 0.0014812795585302204,
+          "remaining_shift_over_interval": 0.0047509555365263575,
+          "exact_continuation_root": 0.03188422782853226,
+          "sampled_continuation_root": 0.0318932224073825,
+          "accumulated_shift_over_interval": 0.11272167584490518,
+          "subsequent_shift_over_interval": 0.006232235095056578
+        },
+        {
+          "steps_after_first_endpoint": 4,
+          "endpoint_time": 0.0126953125,
+          "relative_amplitude_errors": [
+            0.00725090309937193,
+            0.029667533540980617
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03192911393419526,
+          "decay_rate_shift_over_interval": 0.0013445018015554111,
+          "remaining_shift_over_interval": 0.0005644723591686356,
+          "exact_continuation_root": 0.03191117465798591,
+          "sampled_continuation_root": 0.03192059977707383,
+          "accumulated_shift_over_interval": 0.11704493677923772,
+          "subsequent_shift_over_interval": 0.0019089741607240466
+        },
+        {
+          "steps_after_first_endpoint": 8,
+          "endpoint_time": 0.0166015625,
+          "relative_amplitude_errors": [
+            0.00728187990544793,
+            0.02985702020709624
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03193263801413861,
+          "decay_rate_shift_over_interval": 0.0010712346329643304,
+          "remaining_shift_over_interval": 7.971960468952933e-06,
+          "exact_continuation_root": 0.031916350710318064,
+          "sampled_continuation_root": 0.03192585434157795,
+          "accumulated_shift_over_interval": 0.11787470434652848,
+          "subsequent_shift_over_interval": 0.0010792065934332833
+        }
+      ],
+      "discrete_decay_rates": [
+        9.869405458299099,
+        39.46529627601509
+      ],
+      "measured_decay_rates": [
+        9.869405458299445,
+        39.465296276014065
+      ],
+      "relative_decay_rate_errors": [
+        -2.0157118986174893e-05,
+        -0.0003323671296514563
+      ],
+      "max_relative_rate_mismatch": 3.5083047578154947e-14,
+      "modal_reversal_time": 0.03193268849716803,
+      "sampled_exact_reversal_time": 0.031179404056210395,
+      "sampling_shift_over_interval": 0.0018366209196053946,
+      "temperature_mode_shift_over_interval": 0.11895391093996176,
+      "wall_readout_shift_over_interval": -0.0023196407198868138,
+      "reversal_time": 0.031917999200707786,
+      "exact_reversal_time": 0.0311677735183681,
+      "reversal_error_over_interval": 0.11847089113968035,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "dt": 0.000244140625,
+      "end_time": 0.0625,
+      "width_over_interval": 0.05,
+      "pulse_duration_in_steps": 1.2969111506219235,
+      "start_in_steps": 31.125867614926165,
+      "stop_in_steps": 32.42277876554809,
+      "deposited_heat": 0.001989436788648692,
+      "exact_deposited_heat": 0.0019894367886486917,
+      "relative_heat_error": 2.220446049250313e-16,
+      "max_cumulative_wall_heat_error_over_peak": 0.0016677371673231823,
+      "max_balance_over_peak": 6.94974157251748e-17,
+      "max_temperature_error_over_peak": 0.008191691032114097,
+      "max_projection_residual_over_peak": 8.339689887020976e-16,
+      "free_decay_controls": [
+        {
+          "steps_after_first_endpoint": 0,
+          "endpoint_time": 0.008056640625,
+          "relative_amplitude_errors": [
+            0.00124130078683371,
+            0.004980055055802346
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03129495447427689,
+          "decay_rate_shift_over_interval": 9.687906584993013e-05,
+          "remaining_shift_over_interval": 0.009153422994022779,
+          "exact_continuation_root": 0.03129365376094792,
+          "sampled_continuation_root": 0.03129434098042551,
+          "accumulated_shift_over_interval": 0.01989666425632629,
+          "subsequent_shift_over_interval": 0.00925030205987271
+        },
+        {
+          "steps_after_first_endpoint": 1,
+          "endpoint_time": 0.00830078125,
+          "relative_amplitude_errors": [
+            0.0016205632988832708,
+            0.006511529099841429
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03133346436992062,
+          "decay_rate_shift_over_interval": 9.583987354241103e-05,
+          "remaining_shift_over_interval": 0.003072184025528893,
+          "exact_continuation_root": 0.03133229105712258,
+          "sampled_continuation_root": 0.031332857456831405,
+          "accumulated_shift_over_interval": 0.025978942417127695,
+          "subsequent_shift_over_interval": 0.0031680238990713042
+        },
+        {
+          "steps_after_first_endpoint": 2,
+          "endpoint_time": 0.008544921875,
+          "relative_amplitude_errors": [
+            0.00174720897613323,
+            0.007025747503180302
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031346381059229614,
+          "decay_rate_shift_over_interval": 9.481743623861257e-05,
+          "remaining_shift_over_interval": 0.00103246220710415,
+          "exact_continuation_root": 0.03134527126253178,
+          "sampled_continuation_root": 0.03134578062080026,
+          "accumulated_shift_over_interval": 0.028019686672856238,
+          "subsequent_shift_over_interval": 0.0011272796433427627
+        },
+        {
+          "steps_after_first_endpoint": 4,
+          "endpoint_time": 0.009033203125,
+          "relative_amplitude_errors": [
+            0.001803625641686235,
+            0.0072566240923157554
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031352180075013385,
+          "decay_rate_shift_over_interval": 9.278453107166479e-05,
+          "remaining_shift_over_interval": 0.00011671833988027925,
+          "exact_continuation_root": 0.031351111512419386,
+          "sampled_continuation_root": 0.03135159251010639,
+          "accumulated_shift_over_interval": 0.028937463445247058,
+          "subsequent_shift_over_interval": 0.00020950287095194406
+        },
+        {
+          "steps_after_first_endpoint": 8,
+          "endpoint_time": 0.010009765625,
+          "relative_amplitude_errors": [
+            0.0018106292212665132,
+            0.0072863082874510265
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031352909752777054,
+          "decay_rate_shift_over_interval": 8.872441725711848e-05,
+          "remaining_shift_over_interval": 1.4922459972465463e-06,
+          "exact_continuation_root": 0.03135187071068615,
+          "sampled_continuation_root": 0.03135234789884115,
+          "accumulated_shift_over_interval": 0.029056749652944636,
+          "subsequent_shift_over_interval": 9.021666325436502e-05
+        }
+      ],
+      "discrete_decay_rates": [
+        9.869592060524111,
+        39.477621833196395
+      ],
+      "measured_decay_rates": [
+        9.8695920605258,
+        39.47762183319779
+      ],
+      "relative_decay_rate_errors": [
+        -1.2503606776625986e-06,
+        -2.0157118986174893e-05
+      ],
+      "max_relative_rate_mismatch": 1.7119639039719914e-13,
+      "modal_reversal_time": 0.031352919202535225,
+      "sampled_exact_reversal_time": 0.031168343882113935,
+      "sampling_shift_over_interval": 9.006823257766278e-05,
+      "temperature_mode_shift_over_interval": 0.029146966316199,
+      "wall_readout_shift_over_interval": -0.00013884212231704917,
+      "reversal_time": 0.03135203997452444,
+      "exact_reversal_time": 0.0311677735183681,
+      "reversal_error_over_interval": 0.029098192426459613,
+      "orders": {
+        "max_temperature_error_over_peak": 1.8762106671765324,
+        "reversal_error_over_interval": 2.0255311845251125,
+        "max_cumulative_wall_heat_error_over_peak": 1.899507368927861
+      },
+      "passed": true,
+      "modal_rate_orders": [
+        4.010873234006727,
+        4.043416352550839
+      ]
+    },
+    {
+      "cells": 64,
+      "dt": 6.103515625e-05,
+      "end_time": 0.0625,
+      "width_over_interval": 0.05,
+      "pulse_duration_in_steps": 5.187644602487694,
+      "start_in_steps": 124.50347045970466,
+      "stop_in_steps": 129.69111506219235,
+      "deposited_heat": 0.0019894367886486917,
+      "exact_deposited_heat": 0.0019894367886486917,
+      "relative_heat_error": 0.0,
+      "max_cumulative_wall_heat_error_over_peak": 0.0004266408235629803,
+      "max_balance_over_peak": 3.827787350488143e-17,
+      "max_temperature_error_over_peak": 0.0021035981690206004,
+      "max_projection_residual_over_peak": 1.389948314503496e-15,
+      "free_decay_controls": [
+        {
+          "steps_after_first_endpoint": 0,
+          "endpoint_time": 0.0079345703125,
+          "relative_amplitude_errors": [
+            0.0003891386956129672,
+            0.0015576791036913118
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031207276995590626,
+          "decay_rate_shift_over_interval": 6.025889814401222e-06,
+          "remaining_shift_over_interval": 0.0010108533588642668,
+          "exact_continuation_root": 0.031207201109442306,
+          "sampled_continuation_root": 0.031207238836197596,
+          "accumulated_shift_over_interval": 0.0062266007414498465,
+          "subsequent_shift_over_interval": 0.001016879248678668
+        },
+        {
+          "steps_after_first_endpoint": 1,
+          "endpoint_time": 0.00799560546875,
+          "relative_amplitude_errors": [
+            0.0004310461429402057,
+            0.0017262069038535
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031211540291645936,
+          "decay_rate_shift_over_interval": 6.009926500462659e-06,
+          "remaining_shift_over_interval": 0.00033762063069417555,
+          "exact_continuation_root": 0.031211468800680035,
+          "sampled_continuation_root": 0.03121150223334177,
+          "accumulated_shift_over_interval": 0.006899849432933876,
+          "subsequent_shift_over_interval": 0.0003436305571946382
+        },
+        {
+          "steps_after_first_endpoint": 2,
+          "endpoint_time": 0.008056640625,
+          "relative_amplitude_errors": [
+            0.00044502144393399057,
+            0.0017824832849486771
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031212964100174437,
+          "decay_rate_shift_over_interval": 5.994074002625048e-06,
+          "remaining_shift_over_interval": 0.00011278179998686546,
+          "exact_continuation_root": 0.031212894343929848,
+          "sampled_continuation_root": 0.03121292614225739,
+          "accumulated_shift_over_interval": 0.007124704116139024,
+          "subsequent_shift_over_interval": 0.00011877587398949051
+        },
+        {
+          "steps_after_first_endpoint": 4,
+          "endpoint_time": 0.0081787109375,
+          "relative_amplitude_errors": [
+            0.00045123621130804814,
+            0.0018075552713672227
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031213598594492784,
+          "decay_rate_shift_over_interval": 5.962453402418281e-06,
+          "remaining_shift_over_interval": 1.258647331783883e-05,
+          "exact_continuation_root": 0.03121352979927978,
+          "sampled_continuation_root": 0.031213560836815524,
+          "accumulated_shift_over_interval": 0.007224931063408257,
+          "subsequent_shift_over_interval": 1.854892672025711e-05
+        },
+        {
+          "steps_after_first_endpoint": 8,
+          "endpoint_time": 0.0084228515625,
+          "relative_amplitude_errors": [
+            0.0004520043923645911,
+            0.0018106740062211468
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.031213677306529825,
+          "decay_rate_shift_over_interval": 5.8992562351138685e-06,
+          "remaining_shift_over_interval": 1.567666426590406e-07,
+          "exact_continuation_root": 0.031213609007743514,
+          "sampled_continuation_root": 0.031213639949053303,
+          "accumulated_shift_over_interval": 0.007237423967250741,
+          "subsequent_shift_over_interval": 6.056022877772909e-06
+        }
+      ],
+      "discrete_decay_rates": [
+        9.86960363125583,
+        39.478368242096444
+      ],
+      "measured_decay_rates": [
+        9.869603631256496,
+        39.47836824210344
+      ],
+      "relative_decay_rate_errors": [
+        -7.800044432570985e-08,
+        -1.2503606776625986e-06
+      ],
+      "max_relative_rate_mismatch": 1.7719159473017498e-13,
+      "modal_reversal_time": 0.031213678299266186,
+      "sampled_exact_reversal_time": 0.031167808426373098,
+      "sampling_shift_over_interval": 5.5124511960311e-06,
+      "temperature_mode_shift_over_interval": 0.0072434799901285145,
+      "wall_readout_shift_over_interval": -8.661222907436899e-06,
+      "reversal_time": 0.031213623451431388,
+      "exact_reversal_time": 0.0311677735183681,
+      "reversal_error_over_interval": 0.007240331218417108,
+      "orders": {
+        "max_temperature_error_over_peak": 1.9613021557001014,
+        "reversal_error_over_interval": 2.006801934105681,
+        "max_cumulative_wall_heat_error_over_peak": 1.9667980171502089
+      },
+      "passed": true,
+      "modal_rate_orders": [
+        4.0027181606769595,
+        4.010873234006727
+      ]
+    },
+    {
+      "cells": 16,
+      "dt": 0.0009765625,
+      "end_time": 0.0625,
+      "width_over_interval": 0.5,
+      "pulse_duration_in_steps": 3.242277876554809,
+      "start_in_steps": 7.781466903731541,
+      "stop_in_steps": 11.02374478028635,
+      "deposited_heat": 0.019894367886486918,
+      "exact_deposited_heat": 0.019894367886486918,
+      "relative_heat_error": 0.0,
+      "max_cumulative_wall_heat_error_over_peak": 0.006239715995775928,
+      "max_balance_over_peak": 5.63830304047728e-17,
+      "max_temperature_error_over_peak": 0.03008566021669674,
+      "max_projection_residual_over_peak": 6.765963648572735e-16,
+      "free_decay_controls": [
+        {
+          "steps_after_first_endpoint": 0,
+          "endpoint_time": 0.01171875,
+          "relative_amplitude_errors": [
+            0.006525130425875769,
+            0.02654369050270322
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03329909611948587,
+          "decay_rate_shift_over_interval": 0.0014795669949460076,
+          "remaining_shift_over_interval": 0.012974364158438664,
+          "exact_continuation_root": 0.03327813331068673,
+          "sampled_continuation_root": 0.033289726652035494,
+          "accumulated_shift_over_interval": 0.10560786024087886,
+          "subsequent_shift_over_interval": 0.014453931153384671
+        },
+        {
+          "steps_after_first_endpoint": 1,
+          "endpoint_time": 0.0126953125,
+          "relative_amplitude_errors": [
+            0.007029993673376866,
+            0.028720789380567657
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.033352989213161904,
+          "decay_rate_shift_over_interval": 0.0014124971739201513,
+          "remaining_shift_over_interval": 0.004463907925906156,
+          "exact_continuation_root": 0.03333274862387467,
+          "sampled_continuation_root": 0.03334404447031484,
+          "accumulated_shift_over_interval": 0.11418538629443722,
+          "subsequent_shift_over_interval": 0.005876405099826307
+        },
+        {
+          "steps_after_first_endpoint": 2,
+          "endpoint_time": 0.013671875,
+          "relative_amplitude_errors": [
+            0.007199608084396125,
+            0.029475753018783024
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.0333715167139459,
+          "decay_rate_shift_over_interval": 0.001345696886815092,
+          "remaining_shift_over_interval": 0.0015381622734437059,
+          "exact_continuation_root": 0.033351837552792946,
+          "sampled_continuation_root": 0.033362994988858655,
+          "accumulated_shift_over_interval": 0.11717793223400473,
+          "subsequent_shift_over_interval": 0.002883859160258798
+        },
+        {
+          "steps_after_first_endpoint": 4,
+          "endpoint_time": 0.015625,
+          "relative_amplitude_errors": [
+            0.007275965561361453,
+            0.029843553047167237
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03338009965543897,
+          "decay_rate_shift_over_interval": 0.0012122086858401752,
+          "remaining_shift_over_interval": 0.00018279847929480363,
+          "exact_continuation_root": 0.033361341366799996,
+          "sampled_continuation_root": 0.03337242325425954,
+          "accumulated_shift_over_interval": 0.11866678422912855,
+          "subsequent_shift_over_interval": 0.0013950071651349788
+        },
+        {
+          "steps_after_first_endpoint": 8,
+          "endpoint_time": 0.01953125,
+          "relative_amplitude_errors": [
+            0.007286274022246353,
+            0.02994116715322348
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.033381240908066726,
+          "decay_rate_shift_over_interval": 0.0009452316057363023,
+          "remaining_shift_over_interval": 2.5790879724492387e-06,
+          "exact_continuation_root": 0.033364196831995485,
+          "sampled_continuation_root": 0.03337525515899739,
+          "accumulated_shift_over_interval": 0.11911398070055478,
+          "subsequent_shift_over_interval": 0.0009478106937087516
+        }
+      ],
+      "discrete_decay_rates": [
+        9.869405458299099,
+        39.46529627601509
+      ],
+      "measured_decay_rates": [
+        9.869405458299445,
+        39.46529627601408
+      ],
+      "relative_decay_rate_errors": [
+        -2.0157118986174893e-05,
+        -0.0003323671296514563
+      ],
+      "max_relative_rate_mismatch": 3.5083047578154947e-14,
+      "modal_reversal_time": 0.033381257240332106,
+      "sampled_exact_reversal_time": 0.03262095706443922,
+      "sampling_shift_over_interval": 0.0012553414894068155,
+      "temperature_mode_shift_over_interval": 0.12006179139426353,
+      "wall_readout_shift_over_interval": -0.0022663492092199326,
+      "reversal_time": 0.03336690541630554,
+      "exact_reversal_time": 0.03261300752159034,
+      "reversal_error_over_interval": 0.1190507836744504,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "dt": 0.000244140625,
+      "end_time": 0.0625,
+      "width_over_interval": 0.5,
+      "pulse_duration_in_steps": 12.969111506219235,
+      "start_in_steps": 31.125867614926165,
+      "stop_in_steps": 44.0949791211454,
+      "deposited_heat": 0.019894367886486918,
+      "exact_deposited_heat": 0.019894367886486918,
+      "relative_heat_error": 0.0,
+      "max_cumulative_wall_heat_error_over_peak": 0.0016442156458214689,
+      "max_balance_over_peak": 4.8674412966620265e-17,
+      "max_temperature_error_over_peak": 0.008039562578150923,
+      "max_projection_residual_over_peak": 1.1276606080954558e-15,
+      "free_decay_controls": [
+        {
+          "steps_after_first_endpoint": 0,
+          "endpoint_time": 0.010986328125,
+          "relative_amplitude_errors": [
+            0.0017584682888682757,
+            0.007065437568990918
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03279262027413797,
+          "decay_rate_shift_over_interval": 9.076192730625875e-05,
+          "remaining_shift_over_interval": 0.0008865501134505448,
+          "exact_continuation_root": 0.03279145676524596,
+          "sampled_continuation_root": 0.03279204551751895,
+          "accumulated_shift_over_interval": 0.028196503516647334,
+          "subsequent_shift_over_interval": 0.0009773120407568035
+        },
+        {
+          "steps_after_first_endpoint": 1,
+          "endpoint_time": 0.01123046875,
+          "relative_amplitude_errors": [
+            0.0017932583891036025,
+            0.007212171492793074
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.032796346972764366,
+          "decay_rate_shift_over_interval": 8.974476977336812e-05,
+          "remaining_shift_over_interval": 0.00029805345481686093,
+          "exact_continuation_root": 0.03279520448104014,
+          "sampled_continuation_root": 0.03279577865737067,
+          "accumulated_shift_over_interval": 0.02878601733281391,
+          "subsequent_shift_over_interval": 0.0003877982245902291
+        },
+        {
+          "steps_after_first_endpoint": 2,
+          "endpoint_time": 0.011474609375,
+          "relative_amplitude_errors": [
+            0.001804877714648212,
+            0.00726156043847892
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.032797599805040975,
+          "decay_rate_shift_over_interval": 8.872848645528927e-05,
+          "remaining_shift_over_interval": 0.0001002141116001187,
+          "exact_continuation_root": 0.03279646882193607,
+          "sampled_continuation_root": 0.03279703792533657,
+          "accumulated_shift_over_interval": 0.02898487295934873,
+          "subsequent_shift_over_interval": 0.00018894259805540795
+        },
+        {
+          "steps_after_first_endpoint": 4,
+          "endpoint_time": 0.011962890625,
+          "relative_amplitude_errors": [
+            0.001810058013788085,
+            0.007284009721744367
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03279816267098217,
+          "decay_rate_shift_over_interval": 8.669649542228323e-05,
+          "remaining_shift_over_interval": 1.1329884872848056e-05,
+          "exact_continuation_root": 0.032797046901184734,
+          "sampled_continuation_root": 0.03279761365901131,
+          "accumulated_shift_over_interval": 0.029075789177109006,
+          "subsequent_shift_over_interval": 9.80263802951313e-05
+        },
+        {
+          "steps_after_first_endpoint": 8,
+          "endpoint_time": 0.012939453125,
+          "relative_amplitude_errors": [
+            0.0018107113826208998,
+            0.0072875584285547745
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03279823350132807,
+          "decay_rate_shift_over_interval": 8.263275149698541e-05,
+          "remaining_shift_over_interval": 1.4480497468559155e-07,
+          "exact_continuation_root": 0.032797143860511344,
+          "sampled_continuation_root": 0.03279771022331624,
+          "accumulated_shift_over_interval": 0.02909103800093247,
+          "subsequent_shift_over_interval": 8.277755647167101e-05
+        }
+      ],
+      "discrete_decay_rates": [
+        9.869592060524111,
+        39.477621833196395
+      ],
+      "measured_decay_rates": [
+        9.86959206052586,
+        39.47762183319768
+      ],
+      "relative_decay_rate_errors": [
+        -1.2503606776625986e-06,
+        -2.0157118986174893e-05
+      ],
+      "max_relative_rate_mismatch": 1.7719159473017498e-13,
+      "modal_reversal_time": 0.03279823441831629,
+      "sampled_exact_reversal_time": 0.03261348907308882,
+      "sampling_shift_over_interval": 7.60435646203677e-05,
+      "temperature_mode_shift_over_interval": 0.02917381555740414,
+      "wall_readout_shift_over_interval": -0.0001389764062281428,
+      "reversal_time": 0.0327973543399427,
+      "exact_reversal_time": 0.03261300752159034,
+      "reversal_error_over_interval": 0.029110882715796364,
+      "orders": {
+        "max_temperature_error_over_peak": 1.903887102884613,
+        "reversal_error_over_interval": 2.0319466260450456,
+        "max_cumulative_wall_heat_error_over_peak": 1.9240808385236707
+      },
+      "passed": true,
+      "modal_rate_orders": [
+        4.010873234006727,
+        4.043416352550839
+      ]
+    },
+    {
+      "cells": 64,
+      "dt": 6.103515625e-05,
+      "end_time": 0.0625,
+      "width_over_interval": 0.5,
+      "pulse_duration_in_steps": 51.87644602487694,
+      "start_in_steps": 124.50347045970466,
+      "stop_in_steps": 176.3799164845816,
+      "deposited_heat": 0.019894367886486915,
+      "exact_deposited_heat": 0.019894367886486918,
+      "relative_heat_error": 2.220446049250313e-16,
+      "max_cumulative_wall_heat_error_over_peak": 0.0004166068608648743,
+      "max_balance_over_peak": 5.484130691714229e-17,
+      "max_temperature_error_over_peak": 0.002039717922198504,
+      "max_projection_residual_over_peak": 1.5787248513336382e-15,
+      "free_decay_controls": [
+        {
+          "steps_after_first_endpoint": 0,
+          "endpoint_time": 0.01080322265625,
+          "relative_amplitude_errors": [
+            0.0004475172644613501,
+            0.0017918791067941253
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03265844215695971,
+          "decay_rate_shift_over_interval": 5.662684714921899e-06,
+          "remaining_shift_over_interval": 7.647608412921354e-05,
+          "exact_continuation_root": 0.03265836085740177,
+          "sampled_continuation_root": 0.03265840629758984,
+          "accumulated_shift_over_interval": 0.007163429568933435,
+          "subsequent_shift_over_interval": 8.213876884413544e-05
+        },
+        {
+          "steps_after_first_endpoint": 1,
+          "endpoint_time": 0.0108642578125,
+          "relative_amplitude_errors": [
+            0.00045051463052758756,
+            0.001804452034945836
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.032658764666870406,
+          "decay_rate_shift_over_interval": 5.646864154798925e-06,
+          "remaining_shift_over_interval": 2.5547360385519178e-05,
+          "exact_continuation_root": 0.03265868354307157,
+          "sampled_continuation_root": 0.032658728907685404,
+          "accumulated_shift_over_interval": 0.007214374113237252,
+          "subsequent_shift_over_interval": 3.11942245403181e-05
+        },
+        {
+          "steps_after_first_endpoint": 2,
+          "endpoint_time": 0.01092529296875,
+          "relative_amplitude_errors": [
+            0.0004515142254464255,
+            0.0018086524293292605
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.032658872402635715,
+          "decay_rate_shift_over_interval": 5.631048120107778e-06,
+          "remaining_shift_over_interval": 8.534410250347264e-06,
+          "exact_continuation_root": 0.03265879140540036,
+          "sampled_continuation_root": 0.03265883674360692,
+          "accumulated_shift_over_interval": 0.007231402879407115,
+          "subsequent_shift_over_interval": 1.4165458370455042e-05
+        },
+        {
+          "steps_after_first_endpoint": 4,
+          "endpoint_time": 0.01104736328125,
+          "relative_amplitude_errors": [
+            0.000451958809544184,
+            0.00181052810863358
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.03265892041612407,
+          "decay_rate_shift_over_interval": 5.599419430006779e-06,
+          "remaining_shift_over_interval": 9.524240751673562e-07,
+          "exact_continuation_root": 0.03265883963117223,
+          "sampled_continuation_root": 0.032658884957386294,
+          "accumulated_shift_over_interval": 0.007239016494272396,
+          "subsequent_shift_over_interval": 6.551843505174136e-06
+        },
+        {
+          "steps_after_first_endpoint": 8,
+          "endpoint_time": 0.01129150390625,
+          "relative_amplitude_errors": [
+            0.00045201392649518723,
+            0.0018107719044202497
+          ],
+          "analytic_midpoint_root_bracketed": true,
+          "discrete_rate_root": 0.032658926372310076,
+          "decay_rate_shift_over_interval": 5.536163765743339e-06,
+          "remaining_shift_over_interval": 1.1860880689639744e-08,
+          "exact_continuation_root": 0.032658845989519125,
+          "sampled_continuation_root": 0.03265889131414348,
+          "accumulated_shift_over_interval": 0.007240020313131137,
+          "subsequent_shift_over_interval": 5.5480246464329794e-06
+        }
+      ],
+      "discrete_decay_rates": [
+        9.86960363125583,
+        39.478368242096444
+      ],
+      "measured_decay_rates": [
+        9.86960363125647,
+        39.4783682421034
+      ],
+      "relative_decay_rate_errors": [
+        -7.800044432570985e-08,
+        -1.2503606776625986e-06
+      ],
+      "max_relative_rate_mismatch": 1.7630341631047486e-13,
+      "modal_reversal_time": 0.03265892644741998,
+      "sampled_exact_reversal_time": 0.032613043349910914,
+      "sampling_shift_over_interval": 5.657781606772027e-06,
+      "temperature_mode_shift_over_interval": 0.00724556833777757,
+      "wall_readout_shift_over_interval": -8.66960659259305e-06,
+      "reversal_time": 0.032658871546494876,
+      "exact_reversal_time": 0.03261300752159034,
+      "reversal_error_over_interval": 0.007242556512791749,
+      "orders": {
+        "max_temperature_error_over_peak": 1.9787473564227043,
+        "reversal_error_over_interval": 2.006987644469612,
+        "max_cumulative_wall_heat_error_over_peak": 1.9806410233496885
+      },
+      "passed": true,
+      "modal_rate_orders": [
+        4.0027181606769595,
+        4.010873234006727
+      ]
+    }
+  ],
+  "diffusivity": 1.0,
+  "relaxation_time": 1.5,
+  "even_relaxation_time": 0.9722222222222222,
+  "timing_shifts": "Signed in output intervals: analytic root to sampled analytic root, then to the temperature-mode root, then to the D3Q7 wall-exchange root.",
+  "sources": [
+    {
+      "commit": "74b94df3a0cb7d76a256b6bcc0469c57863e42a4",
+      "file": "lbm_two_mode_pulse.py",
+      "source_sha256": "5d2fcc6e407b648135c2ca06bbd7d6c9747bb25bb35ef52005fcb0ab18394378"
+    },
+    {
+      "commit": "74b94df3a0cb7d76a256b6bcc0469c57863e42a4",
+      "file": "dg_reversing_wall_pulse.py",
+      "source_sha256": "bd5a601c7b7926814fdf8684557e68e3797c784caab2b25fface920b05ee41b4"
+    },
+    {
+      "commit": "17388eb435c09da0f8d0f1f2acaeab0e01851a74",
+      "file": "thermal_common.py",
+      "source_sha256": "649fbd68d9d46d23a9d821975b4cdcb9981fbbae9c502e35040abdab682bd440"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_two_mode_pulse.py --tau 1.5 --tau-even 0.9722222222222222"
+}
