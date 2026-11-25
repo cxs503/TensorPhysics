@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "intervals": 4,
+      "field_error_K": 0.0,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.250000000000001,
+        "power_error_W": 8.881784197001252e-16,
+        "flux_error_W_m2": 6.661338147750939e-14,
+        "surface_temperature_error_K": 0.0
+      },
+      "upper": {
+        "reference_outward_power_W": 4.25,
+        "outward_power_W": 4.250000000000083,
+        "power_error_W": 8.260059303211165e-14,
+        "flux_error_W_m2": 9.50350909079134e-14,
+        "surface_temperature_error_K": 0.0
+      },
+      "passed": true
+    },
+    {
+      "intervals": 15,
+      "field_error_K": 5.684341886080802e-14,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.250000000000002,
+        "power_error_W": 1.7763568394002505e-15,
+        "flux_error_W_m2": 2.1316282072803006e-13,
+        "surface_temperature_error_K": 5.684341886080802e-14
+      },
+      "upper": {
+        "reference_outward_power_W": 4.25,
+        "outward_power_W": 4.25000000000005,
+        "power_error_W": 4.973799150320701e-14,
+        "flux_error_W_m2": 2.5934809855243657e-13,
+        "surface_temperature_error_K": 5.684341886080802e-14
+      },
+      "passed": true
+    },
+    {
+      "intervals": 32,
+      "field_error_K": 0.0,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.250000000000015,
+        "power_error_W": 1.509903313490213e-14,
+        "flux_error_W_m2": 1.056932319443149e-13,
+        "surface_temperature_error_K": 0.0
+      },
+      "upper": {
+        "reference_outward_power_W": 4.25,
+        "outward_power_W": 4.250000000000109,
+        "power_error_W": 1.092459456231154e-13,
+        "flux_error_W_m2": 1.2967404927621828e-13,
+        "surface_temperature_error_K": 0.0
+      },
+      "passed": true
+    },
+    {
+      "intervals": 63,
+      "field_error_K": 5.684341886080802e-14,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.250000000000003,
+        "power_error_W": 2.6645352591003757e-15,
+        "flux_error_W_m2": 3.1530333899354446e-13,
+        "surface_temperature_error_K": 5.684341886080802e-14
+      },
+      "upper": {
+        "reference_outward_power_W": 4.25,
+        "outward_power_W": 4.250000000000054,
+        "power_error_W": 5.417888360170764e-14,
+        "flux_error_W_m2": 3.1796787425264483e-13,
+        "surface_temperature_error_K": 5.684341886080802e-14
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "4f8ab5cea99437d3798f73d729c105ed2c070bff",
+      "file": "dem_lattice_surface_exchange.py",
+      "source_sha256": "fdcfc15a9116a472988b078ecc4ef66f90822a311ee9c5bf3c398d0b872dde49"
+    },
+    {
+      "commit": "96553ce7ba6692a250a1610d43b378eadf02ef65",
+      "file": "contact_chain.py",
+      "source_sha256": "79482a95bfd79095b75c7f86084cca81807b4a7f352d84633c96404a17992ede"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_lattice_surface_exchange.py"
+}
