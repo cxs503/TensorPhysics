@@ -1,0 +1,152 @@
+{
+  "reference": "Harmonic 1-D slab with independent complex Dirichlet temperatures; project final cycle of three onto exp(i omega t)",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_harmonic_dirichlet_heat.py",
+  "order_metrics": [
+    "temperature_phasor_error_K",
+    "wall_flux_phasor_error_W_m2"
+  ],
+  "runs": [
+    {
+      "n": 8,
+      "steps_per_period": 16,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.12346460486856392,
+      "temperature_amplitude_error_K": 0.03395311241212673,
+      "temperature_phase_error_deg": 15.787853465816625,
+      "wall_flux_phasor_error_W_m2": 0.42843687973690237,
+      "wall_flux_amplitude_error_W_m2": 0.09820975794683329,
+      "wall_flux_phase_error_deg": 15.405883101826289,
+      "max_interval_energy_residual_J_m2": 2.0816681711721685e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "steps_per_period": 64,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.048142822770028286,
+      "temperature_amplitude_error_K": 0.004401894096560444,
+      "temperature_phase_error_deg": 4.49942718449606,
+      "wall_flux_phasor_error_W_m2": 0.1180838478308437,
+      "wall_flux_amplitude_error_W_m2": 0.007304859711486422,
+      "wall_flux_phase_error_deg": 4.1898995115598625,
+      "max_interval_energy_residual_J_m2": 2.0383000842727483e-17,
+      "orders": [
+        1.3587048664814112,
+        1.8592710339194694
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "steps_per_period": 256,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.014420144238558122,
+      "temperature_amplitude_error_K": 0.0007075207419037222,
+      "temperature_phase_error_deg": 1.1527403738989508,
+      "wall_flux_phasor_error_W_m2": 0.02972618103815423,
+      "wall_flux_amplitude_error_W_m2": 0.00045055827899442846,
+      "wall_flux_phase_error_deg": 1.0537828003331993,
+      "max_interval_energy_residual_J_m2": 1.7889335846010823e-17,
+      "orders": [
+        1.7392351388727185,
+        1.990005603013297
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "steps_per_period": 1024,
+      "omega_rad_s": 16.084954386379742,
+      "temperature_phasor_error_K": 0.003931903140341044,
+      "temperature_amplitude_error_K": 0.0001596954266507855,
+      "temperature_phase_error_deg": 0.2906719887239629,
+      "wall_flux_phasor_error_W_m2": 0.007434869892452248,
+      "wall_flux_amplitude_error_W_m2": 2.5220535433856384e-05,
+      "wall_flux_phase_error_deg": 0.26354795119355695,
+      "max_interval_energy_residual_J_m2": 1.5124620306172787e-17,
+      "orders": [
+        1.8747859078599325,
+        1.999354729240603
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "steps_per_period": 32,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.0815580369092909,
+      "temperature_amplitude_error_K": 0.013105098026943929,
+      "temperature_phase_error_deg": 8.684792689636362,
+      "wall_flux_phasor_error_W_m2": 0.163356748473345,
+      "wall_flux_amplitude_error_W_m2": 0.01972897304932064,
+      "wall_flux_phase_error_deg": 8.226746090022887,
+      "max_interval_energy_residual_J_m2": 2.42861286636753e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "steps_per_period": 128,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.026808770465450917,
+      "temperature_amplitude_error_K": 0.0016189185895948421,
+      "temperature_phase_error_deg": 2.2868624912860165,
+      "wall_flux_phasor_error_W_m2": 0.04194531318046628,
+      "wall_flux_amplitude_error_W_m2": 0.0012388786947059582,
+      "wall_flux_phase_error_deg": 2.1052594315412723,
+      "max_interval_energy_residual_J_m2": 2.970713952610282e-17,
+      "orders": [
+        1.6051219959969036,
+        1.9614445323688725
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "steps_per_period": 512,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.007587843288061057,
+      "temperature_amplitude_error_K": 0.00032423480323390264,
+      "temperature_phase_error_deg": 0.579455137440432,
+      "wall_flux_phasor_error_W_m2": 0.01050432782571835,
+      "wall_flux_amplitude_error_W_m2": 8.02923806130229e-05,
+      "wall_flux_phase_error_deg": 0.5271457415543293,
+      "max_interval_energy_residual_J_m2": 2.7538735181131813e-17,
+      "orders": [
+        1.820943266155882,
+        1.9975257714906256
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "steps_per_period": 2048,
+      "omega_rad_s": 8.042477193189871,
+      "temperature_phasor_error_K": 0.002016350192664981,
+      "temperature_amplitude_error_K": 7.69646982706762e-05,
+      "temperature_phase_error_deg": 0.145687684894048,
+      "wall_flux_phasor_error_W_m2": 0.0026263559921060726,
+      "wall_flux_amplitude_error_W_m2": 8.521687191564986e-06,
+      "wall_flux_phase_error_deg": 0.13180138942449687,
+      "max_interval_energy_residual_J_m2": 1.8539857149502126e-17,
+      "orders": [
+        1.9119436601973296,
+        1.999849460416011
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "a0630357d0bf122e41b8b14a7a32e55b9ac3e898",
+      "file": "lbm_harmonic_dirichlet_heat.py",
+      "source_sha256": "1c3644021936fcfd6c2c380647f32e8d642c255ec032304b7f13b99ebc8b8183"
+    },
+    {
+      "commit": "9af0aa87a810b6d6acbf6b859758cdf2e0de3944",
+      "file": "thermal_common.py",
+      "source_sha256": "5e5714f38260e172e45b134b670c3fbb24ea8c3c32627765c18ea49740c42864"
+    }
+  ]
+}
