@@ -10,7 +10,7 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def fem_contact(conductivity, capacity, loss, volume_load, omega, resistance, walls, interface, films=None, wall_capacity=(0., 0.)):
+def fem_contact(conductivity, capacity, loss, volume_load, omega, resistance, walls, interface, films=None, wall_capacity=(0., 0.), applied=(0., 0.)):
     from tensorfem import thermal
 
     n = len(conductivity)
@@ -30,6 +30,10 @@ def fem_contact(conductivity, capacity, loss, volume_load, omega, resistance, wa
                        convection_coefficient=torch.tensor(films, dtype=x.dtype),
                        wall_areal_heat_capacity=torch.tensor(wall_capacity, dtype=x.dtype),
                        ambient_temperature=torch.tensor([w or 0. for w in walls], dtype=torch.complex128))
+    if any(applied):
+        nodal_heat = torch.zeros(len(x), dtype=torch.complex128)
+        nodal_heat[[0, -1]] = torch.tensor(applied, dtype=nodal_heat.dtype)
+        contact["nodal_heat"] = nodal_heat
     model = thermal.ThermalModel(
         x[:, None], torch.stack((start, start+1), dim=1), conductivity, 1., capacity,
         torch.tensor(fixed, dtype=torch.long), torch.tensor(prescribed, dtype=torch.complex128),
@@ -46,7 +50,7 @@ def fem_contact(conductivity, capacity, loss, volume_load, omega, resistance, wa
     return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state, field[model.elements], inward
 
 
-def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None, wall_capacity=(0., 0.), graded_source=False):
+def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None, wall_capacity=(0., 0.), graded_source=False, applied=(0., 0.)):
     k = (1., 2.5)
     capacity = (1.3, .7)
     loss = (2., 4.)
@@ -72,7 +76,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             admittance = conductivity*wave
             wall_admittance = film + 1j*omega*wall_capacity[side]
             denominator = wall_admittance + admittance*z
-            free.append(particular + (film*(wall or 0.)-wall_admittance*end_particular-conductivity*slope)/(cmath.cosh(length*wave)*denominator))
+            free.append(particular + (applied[side]+film*(wall or 0.)-wall_admittance*end_particular-conductivity*slope)/(cmath.cosh(length*wave)*denominator))
             impedance.append((1 + wall_admittance*z/admittance)/denominator)
         elif wall is None:
             free.append(particular-slope/(wave*cmath.sinh(length*wave)))
@@ -151,11 +155,13 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     else:
         field, sph_wall_t, _, cuts = heat.solve_harmonic_layered_films(
             source + layers(loss)*bulk_ambient, 1/n, tuple(w or 0. for w in walls), omega,
-            film_coefficients=films, wall_areal_heat_capacity=wall_capacity, **options)
+            wall_applied_flux=applied, film_coefficients=films, wall_areal_heat_capacity=wall_capacity, **options)
     left, right = heat.layered_slab_contact_temperatures(field, cuts, 1/n, conductivity)
     flux = complex(cuts[i+1])
     comparison = {"exact_layer_mean_K": [[t.real, t.imag] for t in exact_means]}
 
+    if any(applied):
+        comparison["applied_inward_flux_W_m2"] = [[q.real, q.imag] for q in applied]
     if graded_source:
         comparison["source_gradient_outward_W_m4"] = [[g.real, g.imag] for g in gradients]
     comparison["sph_face_flux_error_W_m2"] = float(abs(cuts-exact_cuts).max())
@@ -173,14 +179,14 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
 
     comparison["sph_layers"] = layer_diagnostics(field, flux, (cuts[0], -cuts[-1]))
     def wall_balance(temperatures, inward):
-        return max(abs(h*((ta or 0.)-complex(t)) - 1j*omega*c*complex(t) - complex(q))
-                   for h, ta, t, c, q in zip(films, walls, temperatures, wall_capacity, inward))
+        return max(abs(a + h*((ta or 0.)-complex(t)) - 1j*omega*c*complex(t) - complex(q))
+                   for a, h, ta, t, c, q in zip(applied, films, walls, temperatures, wall_capacity, inward))
 
     def wall_errors(temperatures, inward):
         rows = []
         for side, (t, q, (ref_t, ref_q)) in enumerate(zip(temperatures, inward, exact_walls)):
             # A wall with no film or active storage has exactly zero flux.
-            has_flux = films[side] != 0 or omega*wall_capacity[side] != 0
+            has_flux = applied[side] != 0 or films[side] != 0 or omega*wall_capacity[side] != 0
             rows.append(dict(temperature_error_K=abs(complex(t)-ref_t),
                              temperature_phase_error_rad=abs(cmath.phase(complex(t)/ref_t)),
                              inward_flux_error_W_m2=abs(complex(q)-ref_q),
@@ -199,7 +205,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             np.full(n, 1/n), np.ones(n), conductivity.numpy(), layers(capacity).numpy(),
             tuple(0. if w is None else w for w in walls), omega,
             end_types=("robin", "robin") if films is not None else tuple("power" if w is None else "temperature" for w in walls),
-            end_areal_heat_capacity=wall_capacity, end_film_coefficient=films if films is not None else 0.,
+            end_applied_power=applied, end_areal_heat_capacity=wall_capacity, end_film_coefficient=films if films is not None else 0.,
             source=source.numpy(), heat_loss_coefficient=layers(loss).numpy(), bulk_ambient_temperature=layers(ambient, torch.complex128).numpy(),
             contact_resistance=contact.numpy(), return_traces=True)
         comparison["fvm_face_flux_error_W_m2"] = max(float(abs(torch.from_numpy(entering)-exact_cuts[:-1]).max()),
@@ -219,7 +225,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             comparison["fvm_wall_balance_W_m2"] = wall_balance(faces[[0,-1]], (entering[0], -leaving[-1]))
     if compare_fem:
         fl, fr, ql, qr, fem_wall_state, nodal_field, nodal_power = fem_contact(conductivity, layers(capacity), layers(loss),
-                                     (layers(loss)*bulk_ambient)[:, None] + source_nodes, omega, resistance, walls, interface, films, wall_capacity)
+                                     (layers(loss)*bulk_ambient)[:, None] + source_nodes, omega, resistance, walls, interface, films, wall_capacity, applied)
         comparison["fem_layers"] = layer_diagnostics(nodal_field.mean(1), ql, fem_wall_state[1])
         comparison["fem_face_flux_error_W_m2"] = max(float(abs(nodal_power[:, 0]-exact_cuts[:-1]).max()),
                                                      float(abs(-nodal_power[:, 1]-exact_cuts[1:]).max()))
@@ -243,7 +249,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         comparison.update(wall_film_W_m2_K=films, wall_reservoir_phasors_K=[
             [complex(w or 0.).real, complex(w or 0.).imag] for w in walls])
     return dict(**comparison, columns=n, left_thickness_m=left_thickness, omega_rad_s=omega, contact_resistance_m2_K_W=resistance, backend=backend,
-                wall_conditions=["insulated" if w is None else ("film" if films is not None else "zero_temperature_phasor") for w in walls],
+                wall_conditions=[("applied_flux" if a else "insulated") if w is None else ("film" if films is not None else "zero_temperature_phasor") for w, a in zip(walls, applied)],
                 exact_flux_W_m2=[exact_flux.real, exact_flux.imag], flux_relative_error=abs(flux/exact_flux-1),
                 flux_phase_error_rad=abs(cmath.phase(flux/exact_flux)),
                 max_trace_error_K=max(abs(complex(left[i])-exact_left), abs(complex(right[i])-exact_right)),
@@ -259,6 +265,7 @@ if __name__ == "__main__":
     parser.add_argument("--films", action="store_true", help="drive one or both walls through finite surface films")
     parser.add_argument("--wall-storage", action="store_true", help="include west and east wall storage with the film boundaries")
     parser.add_argument("--graded-source", action="store_true", help="apply independent linear heat generation in both materials")
+    parser.add_argument("--surface-power", action="store_true", help="apply independent inward heat flux phasors at the two outer walls")
     args = parser.parse_args()
     files = [__file__, heat.__file__]
     path = "../TensorSPH/src"
@@ -277,6 +284,8 @@ if __name__ == "__main__":
     if args.films or args.wall_storage:
         west, east = .35+.5j, -.4+.15j
         boundaries = [((west, east), (3., 7.)), ((west, None), (3., 0.)), ((None, east), (0., 7.))]
+    if args.surface_power and not (args.films or args.wall_storage):
+        boundaries = [((None, None), (0., 0.))]
     runs = []
     for backend in ("torch", "banded"):
         for walls, films in boundaries:
@@ -285,7 +294,8 @@ if __name__ == "__main__":
                     previous = None
                     for n in (16, 32, 64):
                         row = measure(n, omega, resistance, walls, backend, args.compare_fvm, args.compare_fem, args.left_thickness, films,
-                                      (.35, .8) if args.wall_storage else (0., 0.), args.graded_source)
+                                      (.35, .8) if args.wall_storage else (0., 0.), args.graded_source,
+                                      (.45+.8j, -.35+.15j) if args.surface_power else (0., 0.))
                         row["passed"] = True
                         for metric in metrics:
                             if previous:
@@ -337,6 +347,7 @@ if __name__ == "__main__":
                           reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/sph_ambient_driven_contact.py"
                           + (" --compare-fvm" if args.compare_fvm else "") + (" --compare-fem" if args.compare_fem else "")
                           + f" --left-thickness {args.left_thickness}" + (" --films" if args.films else "")
-                          + (" --wall-storage" if args.wall_storage else "") + (" --graded-source" if args.graded_source else "")),
+                          + (" --wall-storage" if args.wall_storage else "") + (" --graded-source" if args.graded_source else "")
+                          + (" --surface-power" if args.surface_power else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
