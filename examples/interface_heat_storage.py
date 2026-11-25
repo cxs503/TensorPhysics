@@ -25,7 +25,7 @@ def reference(omega, resistance, sheet_capacity):
     return np.array([sheet, incoming, outgoing])/wall
 
 
-def models(n, resistance, sheet_capacity):
+def models(n, resistance, sheet_capacity, fraction=.5):
     mid = n//2
     dx = np.full(n, 1/n)
     k = np.repeat([1., 4.], mid)
@@ -33,7 +33,7 @@ def models(n, resistance, sheet_capacity):
     contacts, sheet = np.zeros(n-1), np.zeros(n-1)
     contacts[mid-1], sheet[mid-1] = resistance, sheet_capacity
     r, c = contact_chain.cell_centered_slab_network(dx, k, cv, contact_resistance=contacts,
-                                                    interface_heat_capacity=sheet)
+                                                    interface_heat_capacity=sheet, left_resistance_fraction=fraction)
     # Two independent LINE2 meshes, plus one global sheet node between the traces.
     x = np.linspace(0., 1., n+1)
     nodes = torch.from_numpy(np.r_[x[:mid+1], x[mid:], .5][:, None])
@@ -46,7 +46,7 @@ def models(n, resistance, sheet_capacity):
     model = thermal.ThermalModel(nodes, torch.stack((left, left+1), 1), torch.from_numpy(k),
                     1., torch.from_numpy(cv), ends, nodes.new_tensor([1., 0.]), nodal_heat_capacity=lump,
                     contact_pairs=torch.tensor([[mid, sheet_id], [sheet_id, mid+1]]),
-                    contact_conductance=2/resistance)
+                    contact_conductance=1/(resistance*nodes.new_tensor([fraction, 1-fraction])))
     return r, c, model
 
 
