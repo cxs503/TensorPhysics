@@ -1,4 +1,5 @@
 """Verify DG cell temperatures and integrated face heats for a pulse inside one output interval."""
+import argparse
 import json
 import math
 
@@ -41,11 +42,16 @@ def measure(n, degree, width, *, wall_penalty=None, return_section_heat=False, r
     deposited = amplitude*rate*np.diff(duration)[:, None]*cell_mode/n
     residual = np.diff(cell, axis=0)/n - deposited + np.diff(sections, axis=1)
     scale = math.pi*amplitude*dt*peak
+    face_error = abs(sections-exact_sections)/scale
+    wall_error = face_error[:, [0, -1]].max()
+    interior_error = face_error[:, 1:-1].max()
     metrics = dict(cells=n, degree=degree, width_over_interval=width,
                 max_interval_mean_error_over_peak=float(abs(averaged-exact_mean).max()/(amplitude*peak)),
                 max_cell_mean_error_over_peak=float(abs(cell-exact_cell).max()/(amplitude*peak)),
-                max_section_heat_error_over_scale=float(abs(sections-exact_sections).max()/scale),
-                crossing_section_error_over_scale=float(abs(sections[1]-exact_sections[1]).max()/scale),
+                max_section_heat_error_over_scale=float(face_error.max()),
+                max_wall_heat_error_over_scale=float(wall_error),
+                max_interior_face_heat_error_over_scale=float(interior_error),
+                crossing_section_error_over_scale=float(face_error[1].max()),
                 max_cell_balance_error_over_scale=float(abs(residual).max()/scale))
     if return_profiles:
         # Evaluate the Legendre expansion at local coordinate zero. For P2
@@ -62,20 +68,30 @@ def measure(n, degree, width, *, wall_penalty=None, return_section_heat=False, r
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--wall-penalty", type=float, default=20.,
+                        help="Dirichlet penalty coefficient (interior coefficient is 20)")
+    args = parser.parse_args()
     runs = []
     for degree in (1, 2):
+        minimum_order = 1.7 if degree == 1 else 3.5
+        error_limit = 0.004 if degree == 1 else 1e-6
         for width in (0.05, 0.5):
             previous = None
             for n in (8, 16, 32, 64):
-                row = measure(n, degree, width)
-                keys = ("max_interval_mean_error_over_peak", "max_cell_mean_error_over_peak", "max_section_heat_error_over_scale")
+                row = measure(n, degree, width, wall_penalty=args.wall_penalty)
+                keys = ("max_interval_mean_error_over_peak", "max_cell_mean_error_over_peak", "max_section_heat_error_over_scale",
+                        "max_wall_heat_error_over_scale", "max_interior_face_heat_error_over_scale",
+                        "crossing_section_error_over_scale")
                 orders = {} if previous is None else {k: float(np.log2(previous[k]/row[k])) for k in keys}
                 row.update(orders=orders, passed=row["max_cell_balance_error_over_scale"] < 1e-8
-                           and (n < 64 or (max(row[k] for k in keys) < 0.004 and min(orders.values()) > 1.7)))
+                           and (n < 64 or (max(row[k] for k in keys) < error_limit and min(orders.values()) > minimum_order)))
                 runs.append(row)
                 previous = row
     passed = all(row["passed"] for row in runs)
-    print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(__file__), provenance(heat_1d.__file__)],
-                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/dg_subinterval_heat_pulse.py"),
+    print(json.dumps(dict(passed=passed, wall_penalty=args.wall_penalty, interior_penalty=20.,
+                          heat_scale="pi * peak continuum center temperature * output interval duration", runs=runs, sources=[provenance(__file__), provenance(heat_1d.__file__)],
+                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/dg_subinterval_heat_pulse.py"
+                                       + f" --wall-penalty {args.wall_penalty:g}"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
