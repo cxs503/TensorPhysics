@@ -9,11 +9,11 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def measure(n, base, amplitude, method, transverse_mode=1, off_grid=False):
+def measure(n, base, amplitude, method, transverse_mode=1, off_grid=False, normal_mode=1):
     x = (torch.arange(n, dtype=torch.float64)+0.5)/n
     lateral = torch.cos(2*torch.pi*transverse_mode*x)
-    mode = lateral[:, None]*torch.sin(torch.pi*x)
-    rate = (1 + 4*transverse_mode**2)*math.pi**2
+    mode = lateral[:, None]*torch.sin(normal_mode*torch.pi*x)
+    rate = (normal_mode**2 + 4*transverse_mode**2)*math.pi**2
     switch = 1/rate
     times = [i*switch/16 for i in range(33)]
     if off_grid:
@@ -35,12 +35,14 @@ def measure(n, base, amplitude, method, transverse_mode=1, off_grid=False):
     t = torch.tensor(times, dtype=mode.dtype)
     heated_time = torch.minimum(t, t.new_tensor(switch))
     integral = heated_time.diff() - factors.diff()/rate
-    # Both inward wall fluxes are -pi*A*f*cos(2*pi*y) at unit conductivity.
-    exact_heat = -torch.pi*amplitude*integral[:, None, None]*lateral
-    interval_scale = torch.pi*amplitude*t.diff()[:, None, None]
+    # Inward normals reverse between the two boundaries.
+    wall_shape = torch.stack((-lateral, (-1)**normal_mode*lateral))
+    flux_scale = normal_mode*torch.pi*amplitude
+    exact_heat = flux_scale*integral[:, None, None]*wall_shape
+    interval_scale = flux_scale*t.diff()[:, None, None]
     interval_error = abs(walls-exact_heat)/interval_scale
     heating = t[1:] <= switch
-    cumulative_error = abs((walls-exact_heat).cumsum(dim=0)).max()/(torch.pi*amplitude*integral.sum())
+    cumulative_by_wall = (walls-exact_heat).cumsum(dim=0).abs().amax(dim=(0, 2))/(flux_scale*integral.sum())
     section_inward = torch.stack((sections[:, 0], -sections[:, -1]), dim=1)
     mean_error = abs(walls.mean(dim=2)-section_inward)/interval_scale[:, :, 0]
     generated = amplitude*rate*mode.mean()*heated_time.diff()
@@ -58,10 +60,11 @@ def measure(n, base, amplitude, method, transverse_mode=1, off_grid=False):
                      split_section_difference_over_scale=float(abs(sections[i]-cuts[i:i+2].sum(0)).max()/heat_scale),
                      split_wall_difference_over_scale=float(abs(walls[i]-rows[i:i+2].sum(0)).max()/heat_scale),
                      split_field_difference_over_amplitude=float(abs(fields[i+1]-detailed[i+2]).max()/amplitude))
-    return dict(**event, transverse_mode=transverse_mode, max_energy_imbalance_over_amplitude=float(abs(balance).max()/amplitude),
+    return dict(**event, normal_mode=normal_mode, transverse_mode=transverse_mode, max_energy_imbalance_over_amplitude=float(abs(balance).max()/amplitude),
                 heating_interval_wall_error_over_scale=float(interval_error[heating].max()),
                 decay_interval_wall_error_over_scale=float(interval_error[t[:-1] >= switch].max()),
-                cumulative_wall_error_over_scale=float(cumulative_error),
+                cumulative_wall_error_over_scale=float(cumulative_by_wall.max()),
+                cumulative_wall_errors_west_east=cumulative_by_wall.tolist(),
                 wall_mean_section_mismatch_over_scale=float(mean_error.max()), columns=n, wall_K=base, amplitude_K=amplitude, method=method,
                 max_history_error_over_amplitude=float(error.max()),
                 final_error_over_amplitude=float(error[-1].max()))
@@ -70,30 +73,33 @@ def measure(n, base, amplitude, method, transverse_mode=1, off_grid=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--off-grid", action="store_true", help="switch the source 37 percent into an output interval")
+    parser.add_argument("--normal-mode", type=int, choices=(1, 2), default=1,
+                        help="number of half-wavelengths between the isothermal walls")
     args = parser.parse_args()
     runs = []
     for method in ("theta", "sdirk2"):
         for base in (0., 305.):
-            for n in (16, 32, 64):
+            for cells_per_half_wave in (16, 32, 64):
+                n = cells_per_half_wave*args.normal_mode
                 for transverse_mode in (0, 1):
-                    row = measure(n, base, 2**-44, method, transverse_mode, args.off_grid)
+                    row = measure(n, base, 2**-44, method, transverse_mode, args.off_grid, args.normal_mode)
                     wall_error = max(row["heating_interval_wall_error_over_scale"],
                                      row["decay_interval_wall_error_over_scale"],
                                      row["cumulative_wall_error_over_scale"])
                     row["passed"] = (row["max_history_error_over_amplitude"] < 0.01
                                      and row["max_energy_imbalance_over_amplitude"] < 1e-11
                                      and row["wall_mean_section_mismatch_over_scale"] < 1e-12
-                                     and (n < 64 or (row["max_history_error_over_amplitude"] < 0.001
+                                     and (cells_per_half_wave < 64 or (row["max_history_error_over_amplitude"] < 0.001
                                                      and wall_error < 0.002)))
                     if args.off_grid:
                         row["passed"] &= (row["split_section_difference_over_scale"] < 1e-12
                                           and row["split_wall_difference_over_scale"] < 1e-12
                                           and row["split_field_difference_over_amplitude"] < 1e-12
-                                          and (n < 64 or row["crossing_wall_error_over_scale"] < 0.002))
+                                          and (cells_per_half_wave < 64 or row["crossing_wall_error_over_scale"] < 0.002))
                     runs.append(row)
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(__file__), provenance(heat.__file__)],
                           reproduction="OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_weak_transient_mode.py"
-                          + (" --off-grid" if args.off_grid else "")),
+                          + (" --off-grid" if args.off_grid else "") + f" --normal-mode {args.normal_mode}"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
