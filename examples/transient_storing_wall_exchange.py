@@ -118,9 +118,11 @@ if __name__ == "__main__":
             if name=="SPH":
                 mid = (np.arange(n)+.5)/n
                 ref_temperature = background(times[:,None],mid)+np.exp(-RATE*times[:,None])*np.cos(WAVE*(mid-PEAK))
-            errors = dict(temperature_K=float(abs(u-ref_temperature).max()),wall_temperature_K=float(abs(wall-target[1]).max()),
+            sample_key = "particle_temperature_K" if name=="SPH" else "cell_mean_K"
+            errors = dict(wall_temperature_K=float(abs(wall-target[1]).max()),
                           section_heat_J_m2=cumulative_error(heat,target[2]),bulk_heat_J_m3=n*cumulative_error(bulk,target[3]),
                           external_heat_J_m2=cumulative_error(external,target[4]))
+            errors[sample_key] = float(abs(u-ref_temperature).max())
             balance = float(abs(C/n*np.diff(u,axis=0)+np.diff(heat)-bulk).max())
             surface_balance = float(abs(CW*np.diff(wall,axis=0)+heat[:,[0,-1]]*SIGN-external).max())
             orders = {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()} if name in previous else {}
