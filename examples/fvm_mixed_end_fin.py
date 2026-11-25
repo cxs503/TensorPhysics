@@ -1,4 +1,5 @@
-"""Verify absolute-temperature fin solutions with one fixed wall and one power or film end."""
+"""Verify absolute-temperature fin solutions with fixed, power and film ends."""
+import argparse
 import json
 
 import numpy as np
@@ -7,7 +8,7 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def measure(n, fixed_left, free_type):
+def measure(n, types):
     k, exchange, ambient = 1.7, 4., 305.
     m = np.sqrt(exchange/k)
     h = 1/n
@@ -19,13 +20,14 @@ def measure(n, fixed_left, free_type):
     ends = np.array([0., 1.])
     exact_faces = ambient + 2*np.cosh(m*ends) - np.sinh(m*ends)
     exact_current = -k*m*(2*np.sinh(m*ends)-np.cosh(m*ends))
-    free = int(fixed_left)
-    inward = (1, -1)[free]*exact_current[free]
     values = exact_faces.copy()
     film = 3.0
-    values[free] = inward if free_type == "power" else exact_faces[free] + inward/film
-    types = ["temperature", "temperature"]
-    types[free] = free_type
+    for i, kind in enumerate(types):
+        inward = (1, -1)[i]*exact_current[i]
+        if kind == "power":
+            values[i] = inward
+        elif kind == "robin":
+            values[i] += inward/film
     cells, faces, left, right = rod.solve_steady_stepped_rod(
         np.full(n, h), 1., k, 1., values, end_types=types, end_film_coefficient=film,
         flux_order=2, heat_loss_coefficient=exchange, bulk_ambient_temperature=ambient,
@@ -39,16 +41,21 @@ def measure(n, fixed_left, free_type):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--free-ends", action="store_true", help="use only power and film end conditions")
+    args = parser.parse_args()
+    cases = ([(left, right) for left in ("power", "robin") for right in ("power", "robin")]
+             if args.free_ends else [("power", "temperature"), ("robin", "temperature"),
+                                     ("temperature", "power"), ("temperature", "robin")])
     runs = []
-    for fixed_left in (False, True):
-        for kind in ("power", "robin"):
-            for n in (32, 64, 128, 256):
-                r = measure(n, fixed_left, kind)
-                r["passed"] = r["balance_error_W"] < 1e-8 and (n < 256 or max(
-                    r["cell_mean_error_K"], r["wall_temperature_error_K"], r["wall_power_error_W"]) < 1e-7)
-                runs.append(r)
+    for types in cases:
+        for n in (32, 64, 128, 256):
+            r = measure(n, types)
+            r["passed"] = r["balance_error_W"] < 1e-8 and (n < 256 or max(
+                r["cell_mean_error_K"], r["wall_temperature_error_K"], r["wall_power_error_W"]) < 1e-7)
+            runs.append(r)
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(__file__), provenance(rod.__file__)],
-                          reproduction="PYTHONPATH=../TensorFVM/src python examples/fvm_mixed_end_fin.py"),
+                          reproduction="PYTHONPATH=../TensorFVM/src python examples/fvm_mixed_end_fin.py" + (" --free-ends" if args.free_ends else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
