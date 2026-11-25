@@ -57,15 +57,12 @@ def measure(n, mirrored, omega, storing=False, heated=False, balanced=False):
     outward = -state.reaction_power.numpy()[[0, -1]]
     jump = t[mid]-t[mid+1]
     actual = np.r_[outward, jump]
-    if balanced:
-        exact = strip.contact_admittance_reference(conductivity, capacity, resistance, omega, trace_capacity, trace_power)
-    if not balanced or omega <= 20.:
+    exact = strip.contact_admittance_reference(conductivity, capacity, resistance, omega, trace_capacity,
+                                               trace_power, (0.5-start, end-0.5), generation)
+    if omega <= 20.:
         transfer = strip.harmonic_reference(start, end, conductivity, capacity, generation, resistance,
                                             omega, trace_capacity, trace_power)
-        if balanced:
-            np.testing.assert_allclose(exact, transfer, rtol=1e-11, atol=1e-13)
-        else:
-            exact = transfer
+        np.testing.assert_allclose(exact, transfer, rtol=1e-11, atol=1e-13)
     element_load = np.column_stack((power*(1-right_fraction), power*right_fraction))
     local = thermal.thermal_element_nodal_power(
         model, state.temperature, omega, element_nodal_heat=torch.from_numpy(element_load)).numpy()
@@ -95,10 +92,8 @@ def main():
     heating = parser.add_mutually_exclusive_group()
     heating.add_argument("--balanced", action="store_true", help="drive only the two contact traces with opposite powers")
     heating.add_argument("--heated", action="store_true", help="apply independent phased heat loads at the two contact traces")
-    parser.add_argument("--high-frequency", action="store_true", help="resolve attenuated wall powers under balanced contact heating")
+    parser.add_argument("--high-frequency", action="store_true", help="resolve attenuated wall powers from strip or contact heating")
     args = parser.parse_args()
-    if args.high_frequency and not args.balanced:
-        parser.error("--high-frequency requires --balanced")
     frequencies = (200., 800.) if args.high_frequency else (2., 20.)
     grids = (128, 256, 512, 1024) if args.high_frequency else (16, 32, 64, 128, 256)
     runs = []

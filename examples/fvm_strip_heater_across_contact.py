@@ -10,16 +10,24 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def contact_admittance_reference(conductivities, capacities, resistance, omega, trace_capacity, trace_power):
-    """Outward wall powers and trace jump for two source-free half rods."""
+def contact_admittance_reference(conductivities, capacities, resistance, omega, trace_capacity, trace_power,
+                                 strip_widths=(0., 0.), generation=0.):
+    """Outward wall powers and trace jump for a strip extending from the contact into each half."""
     k = np.asarray(conductivities)
     z = np.sqrt(1j*omega*np.asarray(capacities)/k)
     attenuation = np.exp(-z/2)
     denominator = -np.expm1(-z)
     diagonal = k*z*(1+attenuation**2)/denominator + 1j*omega*np.asarray(trace_capacity)
     contact_matrix = np.array([[1., -1.], [-1., 1.]])/resistance
-    traces = np.linalg.solve(np.diag(diagonal) + contact_matrix, trace_power)
-    return np.r_[2*k*z*traces*attenuation/denominator, traces[0]-traces[1]]
+    # Integrate the Dirichlet wall and contact flux kernels over each heated
+    # segment. Distances are measured from the interface, with half length 0.5.
+    widths = np.asarray(strip_widths)
+    heated_fraction = -np.expm1(-z*widths)
+    scaled_source = generation * heated_fraction / (z*denominator)
+    contact_load = scaled_source * (-np.expm1(-z*(1-widths)))
+    wall_load = scaled_source * heated_fraction * np.exp(-z*(0.5-widths))
+    traces = np.linalg.solve(np.diag(diagonal) + contact_matrix, trace_power + contact_load)
+    return np.r_[wall_load + 2*k*z*traces*attenuation/denominator, traces[0]-traces[1]]
 
 
 def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega, trace_capacity=(0., 0.), trace_power=(0., 0.)):
@@ -79,10 +87,8 @@ def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0.,
             interface_heat_capacity=sheet, interface_capacity_left_fraction=fraction, trace_power=applied,
         )
         actual = np.array([-west[0], east[-1], upstream[mid-1]-downstream[mid-1]])
-        if generation == 0:
-            exact = contact_admittance_reference((k_left, k_right), capacities, resistance, omega, trace_capacity, trace_power)
-        else:
-            exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega, trace_capacity, trace_power)
+        exact = contact_admittance_reference((k_left, k_right), capacities, resistance, omega,
+                                             trace_capacity, trace_power, (interface-start, end-interface), generation)
         trace_t = np.array([upstream[mid-1], downstream[mid-1]])
         crossing = actual[2]/resistance
         trace_net = np.array([east[mid-1]-crossing, crossing-west[mid]])
