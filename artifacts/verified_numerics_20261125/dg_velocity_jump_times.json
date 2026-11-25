@@ -1,0 +1,17 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "88e43a10b081d40e547f5865184e2a2ae2c970ec",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_3d.py tests/test_advection_3d_porder_convergence.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "P0 on a 4x4x4 periodic cube with unit mean and a cosine mode in x. Between t=0.125 and 0.5 the x velocity switches from 0 to 1.3 at 0.14, to -0.8 at 0.166 and back to 0 at 0.183. Exact semidiscrete Fourier multiplier exp(-4*(forward+backward)-4i*(forward-backward)), with positive forward/backward travel distances. RK4, three timestep caps, absolute mass error asserted below 1e-14 for each.",
+  "suite": {
+    "tests": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "rms_error_dt_0.008": 4.502190517153113e-09,
+    "rms_error_dt_0.004": 4.745966073616038e-10,
+    "rms_error_dt_0.002": 3.9626520758849805e-11
+  }
+}
