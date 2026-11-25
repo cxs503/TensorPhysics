@@ -1,0 +1,1218 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        0.0004388793238640498,
+        0.0005882193706557848
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        0.00027334151229226663
+      ],
+      "max_wall_balance_residual_J_m2": 2.914335439641036e-16,
+      "final_external_heat_J_m2": [
+        0.47126197419790844,
+        0.8828966816006757
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.1005555464144378
+      ],
+      "passive_wall_heat_mismatch_J_m2": 5.551115123125783e-16,
+      "solver": "FVM",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.0010309854391319373,
+      "max_wall_temperature_errors_K": [
+        0.0008787888357452145,
+        0.0009762196867580952
+      ],
+      "max_section_heat_error_J_m2": 0.0006012487973156566,
+      "max_wall_heat_errors_J_m2": [
+        0.00043887932386377226,
+        0.0006012487973156566
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47126197419790883,
+        0.7823411351862385
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 6.292709409105868e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        0.00010977267204004271,
+        0.000147046665679329
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        5.987498192028479e-05
+      ],
+      "max_wall_balance_residual_J_m2": 2.896988204881268e-16,
+      "final_external_heat_J_m2": [
+        0.47159108084973245,
+        0.8832689244716149
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.1005766933356674
+      ],
+      "passive_wall_heat_mismatch_J_m2": 3.7730235602495554e-16,
+      "solver": "FVM",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.0002943664673217272,
+      "max_wall_temperature_errors_K": [
+        0.00022004050173629608,
+        0.00021383922114387444
+      ],
+      "max_section_heat_error_J_m2": 0.00015031136839938064,
+      "max_wall_heat_errors_J_m2": [
+        0.00010977267203959862,
+        0.00015031136839938064
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.471591080849733,
+        0.7826922311359477
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 8.326672684688674e-16,
+      "orders": [
+        1.808338715659588,
+        1.9977474439479896,
+        2.190679357828394,
+        2.0000079752757007,
+        1.999305365282668,
+        2.0000079752757007,
+        1.999305365277744,
+        2.0000802232890686,
+        2.190679357828395
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        2.744689585210125e-05,
+        3.6763545188778224e-05
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        1.4755172935061213e-05
+      ],
+      "max_wall_balance_residual_J_m2": 3.668940151690947e-16,
+      "final_external_heat_J_m2": [
+        0.4716734066259204,
+        0.8833618282944912
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058199688467692
+      ],
+      "passive_wall_heat_mismatch_J_m2": 5.1252405097734766e-15,
+      "solver": "FVM",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 8.211583643247256e-05,
+      "max_wall_temperature_errors_K": [
+        5.5018335531564766e-05,
+        5.2697046196648056e-05
+      ],
+      "max_section_heat_error_J_m2": 3.757926346314999e-05,
+      "max_wall_heat_errors_J_m2": [
+        2.744689584771587e-05,
+        3.757926346314999e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716734066259249,
+        0.7827798314098112
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 8.410427302513179e-16,
+      "orders": [
+        1.8418809519319967,
+        1.9997846981253187,
+        2.020732485527438,
+        1.9999454318051215,
+        1.9998040398293975,
+        1.9999454318051215,
+        1.9998040396047247,
+        1.999926270442951,
+        2.02073248552746
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        6.862010419550479e-06,
+        9.190955627680353e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        3.6846134753697884e-06
+      ],
+      "max_wall_balance_residual_J_m2": 3.7730235602495554e-16,
+      "final_external_heat_J_m2": [
+        0.47169399151135294,
+        0.8833850450879728
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058332389428842
+      ],
+      "passive_wall_heat_mismatch_J_m2": 6.224404672239281e-15,
+      "solver": "FVM",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 2.2374320575835327e-05,
+      "max_wall_temperature_errors_K": [
+        1.3756665076414265e-05,
+        1.3159333840606635e-05
+      ],
+      "max_section_heat_error_J_m2": 9.394947679985943e-06,
+      "max_wall_heat_errors_J_m2": [
+        6.862010413610786e-06,
+        9.394947679985943e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.471693991511359,
+        0.7828017211936832
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 8.110238826006255e-16,
+      "orders": [
+        1.875816605679347,
+        1.9997817236443873,
+        2.0016356394250563,
+        1.9999797583732275,
+        1.999939774057182,
+        1.9999797583732275,
+        1.999939773038908,
+        1.9999891172224795,
+        2.00163563942506
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        1.7155271910818115e-06,
+        2.2977555672598626e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        9.209100017507771e-07
+      ],
+      "max_wall_balance_residual_J_m2": 3.5366674866477155e-16,
+      "final_external_heat_J_m2": [
+        0.4716991379945814,
+        0.8833908488005732
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058365572668213
+      ],
+      "passive_wall_heat_mismatch_J_m2": 8.10002022053058e-15,
+      "solver": "FVM",
+      "cells": 256,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 5.981856640580041e-06,
+      "max_wall_temperature_errors_K": [
+        3.4391774483832904e-06,
+        3.288964291969787e-06
+      ],
+      "max_section_heat_error_J_m2": 2.3487573304059595e-06,
+      "max_wall_heat_errors_J_m2": [
+        1.7155271995750176e-06,
+        2.3487573304059595e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.471699137994573,
+        0.782807193073896
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 9.331711157923792e-16,
+      "orders": [
+        1.9031786330283849,
+        1.9999953104142272,
+        2.000381207837732,
+        1.9999874631048127,
+        1.9999793153788392,
+        1.9999874631048127,
+        1.9999793237700956,
+        1.9999895394109568,
+        2.0003812078389007
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        0.00045393725326769996,
+        0.0006160731044864143
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        0.00023490133354756807
+      ],
+      "max_wall_balance_residual_J_m2": 6.938893903907228e-17,
+      "final_external_heat_J_m2": [
+        0.4712469162685048,
+        0.882868461648423
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10055234035074044
+      ],
+      "passive_wall_heat_mismatch_J_m2": 0.0,
+      "solver": "SPH",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.0010238834484432302,
+      "max_wall_temperature_errors_K": [
+        0.0008700084449597689,
+        0.0008389333340984573
+      ],
+      "max_section_heat_error_J_m2": 0.0006243361181177409,
+      "max_wall_heat_errors_J_m2": [
+        0.000453937253267811,
+        0.0006243361181177409
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4712469162685048,
+        0.7823161212976825
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 4.701100619897147e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        0.000113538189946083,
+        0.00015403963019566813
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        5.854831907534455e-05
+      ],
+      "max_wall_balance_residual_J_m2": 8.326672684688674e-17,
+      "final_external_heat_J_m2": [
+        0.4715873153318264,
+        0.8832618712288
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10057589068735276
+      ],
+      "passive_wall_heat_mismatch_J_m2": 0.0,
+      "solver": "SPH",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.0002560744819473104,
+      "max_wall_temperature_errors_K": [
+        0.00021788320547933004,
+        0.00020910113955480147
+      ],
+      "max_section_heat_error_J_m2": 0.00015607898804864684,
+      "max_wall_heat_errors_J_m2": [
+        0.00011353818994619402,
+        0.00015607898804864684
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4715873153318264,
+        0.7826859805414476
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 6.192962809237201e-16,
+      "orders": [
+        1.9994160992652867,
+        1.9974744076633972,
+        2.004355247031521,
+        2.000046599494003,
+        1.9993152436770083,
+        2.000046599494003,
+        1.9993152436780663,
+        1.9997999894424179,
+        2.004355247031518
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        2.8387911313543235e-05,
+        3.850910317904077e-05
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        1.4710446121073487e-05
+      ],
+      "max_wall_balance_residual_J_m2": 9.194034422677078e-17,
+      "final_external_heat_J_m2": [
+        0.47167246561045895,
+        0.8833600658994621
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.1005817962444118
+      ],
+      "passive_wall_heat_mismatch_J_m2": 0.0,
+      "solver": "SPH",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 6.984625308248393e-05,
+      "max_wall_temperature_errors_K": [
+        5.4518320799501474e-05,
+        5.2537307575262204e-05
+      ],
+      "max_section_heat_error_J_m2": 3.901929706173757e-05,
+      "max_wall_heat_errors_J_m2": [
+        2.8387911313654257e-05,
+        3.901929706173757e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47167246561045895,
+        0.7827782696550464
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 6.526354977276494e-16,
+      "orders": [
+        1.8743088651059714,
+        1.9987419652804088,
+        1.9927867518757834,
+        2.000016636319762,
+        1.999829037642825,
+        2.000016636319762,
+        1.9998290376470564,
+        2.0000301343894344,
+        1.9927867518757798
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        7.097187912086245e-06,
+        9.627223468311463e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        3.6768668254857223e-06
+      ],
+      "max_wall_balance_residual_J_m2": 6.938893903907228e-17,
+      "final_external_heat_J_m2": [
+        0.4716937563338604,
+        0.8833846046468335
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058327374700604
+      ],
+      "passive_wall_heat_mismatch_J_m2": 0.0,
+      "solver": "SPH",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 1.9831976905804183e-05,
+      "max_wall_temperature_errors_K": [
+        1.3630799184816134e-05,
+        1.3131667233878819e-05
+      ],
+      "max_section_heat_error_J_m2": 9.754840761599937e-06,
+      "max_wall_heat_errors_J_m2": [
+        7.097187912197267e-06,
+        9.754840761599937e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716937563338604,
+        0.782801330899825
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 7.829837039147192e-16,
+      "orders": [
+        1.8163542274895472,
+        1.9998709758580162,
+        2.0002921707966306,
+        1.9999975602926865,
+        1.9999572941674095,
+        1.9999975602926865,
+        1.9999572941843353,
+        2.0000078413992552,
+        2.0002921707967736
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        1.774309711932709e-06,
+        2.406802484533621e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        9.191703411555105e-07
+      ],
+      "max_wall_balance_residual_J_m2": 8.153200337090993e-17,
+      "final_external_heat_J_m2": [
+        0.47169907921206056,
+        0.8833907387128351
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058364319205898
+      ],
+      "passive_wall_heat_mismatch_J_m2": 0.0,
+      "solver": "SPH",
+      "cells": 256,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 5.4916996534704055e-06,
+      "max_wall_temperature_errors_K": [
+        3.4077831801981873e-06,
+        3.2827512184141483e-06
+      ],
+      "max_section_heat_error_J_m2": 2.438713888830435e-06,
+      "max_wall_heat_errors_J_m2": [
+        1.7743097120437312e-06,
+        2.438713888830435e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47169907921206056,
+        0.7828070955207701
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 6.838469677680759e-16,
+      "orders": [
+        1.852503866205193,
+        1.999964698708726,
+        2.0000727712552764,
+        1.9999978120798259,
+        1.9999896459246138,
+        1.9999978120798259,
+        1.999989645992318,
+        2.0000020275765915,
+        2.0000727712558484
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        0.00016293237293518725,
+        0.00042342402585571204
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        5.384239855101003e-05
+      ],
+      "max_wall_balance_residual_J_m2": 2.393918396847994e-16,
+      "final_external_heat_J_m2": [
+        0.4715379211488373,
+        0.8829693593200906
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10063479478595849
+      ],
+      "passive_wall_heat_mismatch_J_m2": 9.315465065995454e-16,
+      "solver": "FEM",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.0011556100807166292,
+      "max_wall_temperature_errors_K": [
+        0.00027195188958789585,
+        0.000192294280539268
+      ],
+      "max_section_heat_error_J_m2": 0.0004744524651858484,
+      "max_wall_heat_errors_J_m2": [
+        0.0001629323729344101,
+        0.0004744524651858484
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4715379211488382,
+        0.7823345645341323
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 3.7643499428696714e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        4.071395843946446e-05,
+        0.00010578038059128048
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        1.3454435971477219e-05
+      ],
+      "max_wall_balance_residual_J_m2": 1.457167719820518e-16,
+      "final_external_heat_J_m2": [
+        0.471660139563333,
+        0.883287002965355
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.1005965208174717
+      ],
+      "passive_wall_heat_mismatch_J_m2": 5.828670879282072e-16,
+      "solver": "FEM",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.00029012994189636654,
+      "max_wall_temperature_errors_K": [
+        6.796265080977193e-05,
+        4.805155704096231e-05
+      ],
+      "max_section_heat_error_J_m2": 0.0001185348514347595,
+      "max_wall_heat_errors_J_m2": [
+        4.0713958439797526e-05,
+        0.0001185348514347595
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716601395633328,
+        0.7826904821478834
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 4.1752625662416776e-16,
+      "orders": [
+        1.9938835972322002,
+        2.0005374205405544,
+        2.0006607675397063,
+        2.0009522521574503,
+        2.0006778802196425,
+        2.0009522521574503,
+        2.0006778802383263,
+        2.001031061601396,
+        2.0006607675392747
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        1.0177724793947185e-05,
+        2.644112551497546e-05
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        3.36312800960914e-06
+      ],
+      "max_wall_balance_residual_J_m2": 2.3071822230491534e-16,
+      "final_external_heat_J_m2": [
+        0.47169067579697854,
+        0.8833663422204313
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058695470751913
+      ],
+      "passive_wall_heat_mismatch_J_m2": 5.35162192338845e-16,
+      "solver": "FEM",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 7.260266734288034e-05,
+      "max_wall_temperature_errors_K": [
+        1.6987719175076688e-05,
+        1.201117146287789e-05
+      ],
+      "max_section_heat_error_J_m2": 2.9629486406945738e-05,
+      "max_wall_heat_errors_J_m2": [
+        1.017772479372514e-05,
+        2.9629486406945738e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716906757969789,
+        0.7827793875129112
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 4.1234919125054947e-16,
+      "orders": [
+        1.9986047344149436,
+        2.0002499596572907,
+        2.000206314641741,
+        2.000205776301574,
+        2.000108408818314,
+        2.000205776301574,
+        2.000108408775037,
+        2.000216577004676,
+        2.0002063146411455
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        2.544436907503389e-06,
+        6.61013270719657e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        8.407401715510021e-07
+      ],
+      "max_wall_balance_residual_J_m2": 2.484991379336776e-16,
+      "final_external_heat_J_m2": [
+        0.471698309084865,
+        0.8833861732132391
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058456340938988
+      ],
+      "passive_wall_heat_mismatch_J_m2": 7.251144129583054e-16,
+      "solver": "FEM",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 1.8155259681296165e-05,
+      "max_wall_temperature_errors_K": [
+        4.246674136287876e-06,
+        3.002643469779409e-06
+      ],
+      "max_section_heat_error_J_m2": 7.407195467767913e-06,
+      "max_wall_heat_errors_J_m2": [
+        2.5444369075589e-06,
+        7.407195467767913e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47169830908486504,
+        0.7828016098038504
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 4.772996776460092e-16,
+      "orders": [
+        1.9996349865596506,
+        2.0000868502425075,
+        2.000071779224643,
+        2.000034305100073,
+        1.9999967629225492,
+        2.000034305100073,
+        1.9999967629854989,
+        2.0000324479555056,
+        2.000071779204163
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        6.361162491197447e-07,
+        1.6525363133457205e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        2.1018144537310324e-07
+      ],
+      "max_wall_balance_residual_J_m2": 2.8622937353617317e-16,
+      "final_external_heat_J_m2": [
+        0.47170021740552337,
+        0.8833911308096329
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058396560916777
+      ],
+      "passive_wall_heat_mismatch_J_m2": 2.7923626952364167e-15,
+      "solver": "FEM",
+      "cells": 256,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 4.539077996690288e-06,
+      "max_wall_temperature_errors_K": [
+        1.0616435393018264e-06,
+        7.506480191876719e-07
+      ],
+      "max_section_heat_error_J_m2": 1.8517988499278104e-06,
+      "max_wall_heat_errors_J_m2": [
+        6.361162467882764e-07,
+        1.8517988499278104e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4717002174055258,
+        0.7828071652004682
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 5.472053067829066e-16,
+      "orders": [
+        1.9999163817038743,
+        2.000033965643945,
+        2.000024693275426,
+        2.0000000132553573,
+        1.9999840789655021,
+        2.0000000132553573,
+        1.9999840736463181,
+        1.9999972617337052,
+        2.0000246932935246
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        0.0001629487656875095,
+        0.0004234615090867866
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        5.384281510674438e-05
+      ],
+      "max_wall_balance_residual_J_m2": 2.7755575615628914e-17,
+      "final_external_heat_J_m2": [
+        0.471537904756085,
+        0.8829693218368595
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10063479383329299
+      ],
+      "passive_wall_heat_mismatch_J_m2": 2.2551405187698492e-17,
+      "solver": "DG",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.0011556100807166292,
+      "max_wall_temperature_errors_K": [
+        0.00027195529728862855,
+        0.0001922957682383153
+      ],
+      "max_section_heat_error_J_m2": 0.0004744889957515319,
+      "max_wall_heat_errors_J_m2": [
+        0.0001629487656876205,
+        0.0004744889957515319
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.471537904756085,
+        0.7823345280035666
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 1.8663456197165473e-14,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        4.071501625563245e-05,
+        0.00010578269763894532
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        1.3454476261415271e-05
+      ],
+      "max_wall_balance_residual_J_m2": 2.7755575615628914e-17,
+      "final_external_heat_J_m2": [
+        0.47166013850551686,
+        0.8832870006483073
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10059652076615185
+      ],
+      "passive_wall_heat_mismatch_J_m2": 1.0408340855860843e-17,
+      "solver": "DG",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 0.0002901239659351962,
+      "max_wall_temperature_errors_K": [
+        6.796282283583199e-05,
+        4.805170093358235e-05
+      ],
+      "max_section_heat_error_J_m2": 0.00011853711716258708,
+      "max_wall_heat_errors_J_m2": [
+        4.0715016255743475e-05,
+        0.00011853711716258708
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47166013850551686,
+        0.7826904798821556
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 2.3350895869689303e-14,
+      "orders": [
+        1.9939133134975418,
+        2.000551846433914,
+        2.000667608803486,
+        2.0010357524337854,
+        2.000785540477167,
+        2.0010357524337854,
+        2.000785540480118,
+        2.0011271683172254,
+        2.000667608802608
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        1.0177791761933896e-05,
+        2.6441269363020048e-05
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        3.3631310170784134e-06
+      ],
+      "max_wall_balance_residual_J_m2": 2.7755575615628914e-17,
+      "final_external_heat_J_m2": [
+        0.47169067573001056,
+        0.8833663420765833
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058695470459894
+      ],
+      "passive_wall_heat_mismatch_J_m2": 1.6046192152785466e-17,
+      "solver": "DG",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 7.260227562611021e-05,
+      "max_wall_temperature_errors_K": [
+        1.6987729468398438e-05,
+        1.2011182203897075e-05
+      ],
+      "max_section_heat_error_J_m2": 2.9629627334437636e-05,
+      "max_wall_heat_errors_J_m2": [
+        1.0177791761933896e-05,
+        2.9629627334437636e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47169067573001067,
+        0.7827793873719837
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 3.720382834269953e-14,
+      "orders": [
+        1.9985828020146708,
+        2.000252737213138,
+        2.000209344719641,
+        2.0002264904407867,
+        2.0001363992043633,
+        2.0002264904407867,
+        2.000136399200429,
+        2.0002403292235784,
+        2.0002093447264273
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        2.544438571783214e-06,
+        6.610139959284389e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        8.407401430737815e-07
+      ],
+      "max_wall_balance_residual_J_m2": 2.5153490401663703e-17,
+      "final_external_heat_J_m2": [
+        0.4716983090832007,
+        0.883386173205987
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.10058456340896534
+      ],
+      "passive_wall_heat_mismatch_J_m2": 1.3660947373317356e-17,
+      "solver": "DG",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 1.8155236912842376e-05,
+      "max_wall_temperature_errors_K": [
+        4.246672067664825e-06,
+        3.00264336808298e-06
+      ],
+      "max_section_heat_error_J_m2": 7.407202295528492e-06,
+      "max_wall_heat_errors_J_m2": [
+        2.5444385718387252e-06,
+        7.407202295528492e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47169830908320076,
+        0.7828016097970226
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 3.73869297608416e-14,
+      "orders": [
+        1.9996290119750075,
+        2.0000884271705166,
+        2.0000731182201923,
+        2.0000398371732198,
+        2.000005312005794,
+        2.0000398371732198,
+        2.0000053120372687,
+        2.0000387138450995,
+        2.000073118196617
+      ],
+      "passed": true
+    },
+    {
+      "surface_capacity_J_m2_K": [
+        0.0,
+        0.28
+      ],
+      "max_external_heat_errors_J_m2": [
+        6.36109089680037e-07,
+        1.6525371435704983e-06
+      ],
+      "max_released_storage_errors_J_m2": [
+        0.0,
+        2.10181342968907e-07
+      ],
+      "max_wall_balance_residual_J_m2": 2.992397996059992e-17,
+      "final_external_heat_J_m2": [
+        0.4717002174126828,
+        0.8833911308088027
+      ],
+      "final_released_storage_J_m2": [
+        0.0,
+        0.1005839656089621
+      ],
+      "passive_wall_heat_mismatch_J_m2": 7.914675859144182e-18,
+      "solver": "DG",
+      "cells": 256,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.5738522479865364
+      ],
+      "max_cell_mean_error_K": 4.5390767050568215e-06,
+      "max_wall_temperature_errors_K": [
+        1.0616369957028304e-06,
+        7.506476535357187e-07
+      ],
+      "max_section_heat_error_J_m2": 1.8517994792022208e-06,
+      "max_wall_heat_errors_J_m2": [
+        6.361090897910593e-07,
+        1.8517994792022208e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4717002174126828,
+        0.782807165199839
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 3.895619382090175e-14,
+      "orders": [
+        1.9999149829547203,
+        2.0000421551783063,
+        2.0000253471714853,
+        2.000000852840071,
+        2.0000012545855634,
+        2.000000852840071,
+        2.0000012548058868,
+        1.9999981197362995,
+        2.0000253473343763
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "731a5143912f0c024660858abe51ad6f585bee15",
+      "file": "graded_film_decay.py",
+      "source_sha256": "55f657c4839f457b2408a1fb1ae4af746d4b855080d7fecc128a4816b3916652"
+    },
+    {
+      "commit": "4647d87121b148d7212da19f9c3e2409e287cbca",
+      "file": "rod.py",
+      "source_sha256": "2d911ffd6a32943d52ebc789fe7864f1db37433ba361577df96c6ec807e92492"
+    },
+    {
+      "commit": "fff373c9e630b1f24a41ad5d3d14f552a3d3bff7",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "1dfa8901bb43a884096cb302ad2055badda9718d9953683f6925d6bff9d8ef41"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src:../TensorFEM/src:../TensorDG python examples/graded_film_decay.py --all --wall-storage east"
+}
