@@ -13,7 +13,7 @@ from tensorlbm import thermal_common as lbm
 from lbm_directional_diffusion import diffusion_eigenmode
 
 
-def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
+def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False, correct_first=False):
     dx, alpha, capacity = 1/n, .08, 1.7
     dt = (tau-.5)*dx**2/(4*alpha)
     beta = np.array([1.1, 1.75, 2.3])
@@ -60,6 +60,7 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
     face_errors = np.zeros((3,2))
     first_three_error = later_error = 0.
     dirichlet_start = {}
+    first_dirichlet_error = 0.
     peak_step = peak_axis = peak_side = 0
     steps = round(.09765625/dt)
     for step in range(steps):
@@ -77,12 +78,18 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
             target = tuple((2*side-1)*capacity*alpha*slope[a]-h[a]*average*surface
                            for side,(_,_,surface) in enumerate(pair))
             values = {"temperature": wall_t, "flux": target, "film": tuple(v[0] for v in pair)}[kinds[a]]
+            if correct_first and step == 0 and kinds[a] == "temperature":
+                values = tuple(lbm.thermal_startup_wall_temperature_3d(t, -beta[a]**2*surface,
+                    -(beta @ beta)*surface, tau_T=tau, spacing=dx)
+                    for t,(_,_,surface) in zip(wall_t,pair))
             wall_inputs.append(values)
             g,flux = lbm.thermal_mixed_wall_pair_3d(g,"xyz"[a],(kinds[a],)*2,values,
                 film_coefficients=(h[a],h[a]),**units)
             for side in (0,1):
                 error = float((flux[side]-target[side]).abs().max())
-                if step == 0 and kinds[a] == "temperature" and not eigen_start:
+                if step == 0 and kinds[a] == "temperature":
+                    first_dirichlet_error = max(first_dirichlet_error,error)
+                if step == 0 and kinds[a] == "temperature" and not eigen_start and not correct_first:
                     # Apply the quadratic first-step defect to the smooth cosine mode.
                     wall_mode = pair[side][2]
                     normal_curvature = -beta[a]**2*wall_mode
@@ -114,7 +121,7 @@ def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
         corner_balance = max(corner_balance,max(abs(residual[idx].item()) for idx in corner))
         temp_error = max(temp_error,float((updated-ramp-mode*math.exp(-rate*(step+1)*dt)).abs().max()))
         field = updated
-    return dict(first_step_dirichlet=dirichlet_start, initial_temperature_error_K=initial_error, first_three_flux_error_W_m2=first_three_error,
+    return dict(first_step_dirichlet_flux_error_W_m2=first_dirichlet_error, first_step_dirichlet=dirichlet_start, initial_temperature_error_K=initial_error, first_three_flux_error_W_m2=first_three_error,
                 subsequent_flux_error_W_m2=later_error if steps>3 else None, peak_flux_step=peak_step, peak_flux_axis="xyz"[peak_axis], peak_flux_side=("lower","upper")[peak_side],
                 wall_types_xyz=kinds, lower_upper_flux_errors_xyz_W_m2=face_errors.tolist(), n=n,tau=tau,steps=steps,temperature_error_K=temp_error,wall_flux_error_W_m2=flux_error,
                 max_cell_balance_J=balance,max_corner_balance_J=corner_balance,axis_order_error_K=sequence_error)
@@ -125,7 +132,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mixed", action="store_true", help="cycle Dirichlet, Neumann and Robin conditions among the three axes")
     parser.add_argument("--compare-starts", action="store_true", help="compare gradient initialization with exact bulk diffusion eigenvectors")
+    parser.add_argument("--correct-first", action="store_true", help="compare the mixed-wall baseline with curvature-corrected first-step Dirichlet inputs")
     args = parser.parse_args()
+    if args.correct_first and not args.mixed:
+        parser.error("--correct-first requires --mixed")
     mixed = args.mixed
     cases = (("temperature","flux","film"),("film","temperature","flux"),("flux","film","temperature"))
     for kinds in (cases if mixed else (("film",)*3,)):
@@ -152,10 +162,16 @@ if __name__ == "__main__":
                         and other["max_cell_balance_J"] < 1e-14 and other["axis_order_error_K"] == 0.
                         and (n < 32 or (other["temperature_error_K"] < 1e-3
                             and other["wall_flux_error_W_m2"] < .0035)))
+                if args.correct_first:
+                    corrected = measure(n,tau,kinds,correct_first=True)
+                    row["curvature_corrected_start"] = corrected
+                    row["passed"] &= (corrected["max_cell_balance_J"] < 1e-14
+                                      and corrected["axis_order_error_K"] == 0.
+                                      and (n < 32 or corrected["first_step_dirichlet_flux_error_W_m2"] < 1e-4))
                 rows.append(row)
                 previous = errors
     print(json.dumps(dict(reference="Unit cube: affine temperature plus separated decaying cosine mode with h_i=k*beta_i*tan(beta_i/2)",
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_cube_film_corners.py"+(" --mixed" if mixed else "")+(" --compare-starts" if args.compare_starts else ""),
+        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_cube_film_corners.py"+(" --mixed" if mixed else "")+(" --compare-starts" if args.compare_starts else "")+(" --correct-first" if args.correct_first else ""),
         order_metrics=["temperature_error_K","wall_flux_error_W_m2"],runs=rows,
         sources=[provenance(p) for p in (__file__,lbm.__file__)]+([provenance(inspect.getfile(diffusion_eigenmode))] if args.compare_starts else [])),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)

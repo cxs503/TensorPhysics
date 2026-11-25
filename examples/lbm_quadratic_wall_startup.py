@@ -32,6 +32,9 @@ def measure(n, tau, curvature):
             center = xyz[axis].select(dim,index)
             wall = field.select(dim,index)+s*(side-center)+.5*c*(side**2-center**2-dx**2/12)
             wall_values.append(wall+.5*dt*alpha*laplacian)
+        adjusted = [lbm.thermal_startup_wall_temperature_3d(w,c,laplacian,tau_T=tau,spacing=dx)
+                    for w in wall_values]
+        _, corrected_flux = lbm.thermal_temperature_wall_pair_3d(g,"xyz"[axis],adjusted,**units)
         g, flux = lbm.thermal_temperature_wall_pair_3d(g,"xyz"[axis],wall_values,**units)
         # Normal cell average contributes H_nn*dx²/6. The postcollision
         # gradient correction samples the cell center, another (tau-1)*H_nn*dx²/2.
@@ -40,13 +43,14 @@ def measure(n, tau, curvature):
         tangential = gain*alpha*dt*(laplacian-c)/2
         exact = [-capacity*alpha*s, capacity*alpha*(s+c)]
         errors = [value-target for value,target in zip(flux,exact)]
-        diagnostics.append(dict(axis="xyz"[axis],normal_contribution_W_m2=normal,
+        diagnostics.append(dict(corrected_error_W_m2=max(float((q-target).abs().max()) for q,target in zip(corrected_flux,exact)),
+            axis="xyz"[axis],normal_contribution_W_m2=normal,
             tangential_contribution_W_m2=tangential,
             mean_signed_wall_errors_W_m2=[float(err.mean()) for err in errors],
             peak_error_W_m2=max(float(err.abs().max()) for err in errors),
             prediction_residual_W_m2=max(float((err-normal-tangential).abs().max()) for err in errors)))
     return dict(n=n,tau=tau,diagonal_curvature_K_m2=curvature,axes=diagnostics,
-                passed=all(v["prediction_residual_W_m2"] < 1e-12 for v in diagnostics))
+                passed=all(max(v["prediction_residual_W_m2"],v["corrected_error_W_m2"]) < 1e-12 for v in diagnostics))
 
 
 if __name__ == "__main__":
