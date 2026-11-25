@@ -9,7 +9,7 @@ from tensordg import heat_1d
 from conduction_provenance import provenance
 
 
-def measure(n, degree, width):
+def measure(n, degree, width, *, return_section_heat=False):
     amplitude, rate = 2**-44, math.pi**2
     dt = 1/(16*rate)
     output = np.arange(19)*dt
@@ -36,11 +36,14 @@ def measure(n, degree, width):
     deposited = amplitude*rate*np.diff(duration)[:, None]*cell_mode/n
     residual = np.diff(cell, axis=0)/n - deposited + np.diff(sections, axis=1)
     scale = math.pi*amplitude*dt*peak
-    return dict(cells=n, degree=degree, width_over_interval=width,
+    metrics = dict(cells=n, degree=degree, width_over_interval=width,
                 max_cell_mean_error_over_peak=float(abs(cell-exact_cell).max()/(amplitude*peak)),
                 max_section_heat_error_over_scale=float(abs(sections-exact_sections).max()/scale),
                 crossing_section_error_over_scale=float(abs(sections[1]-exact_sections[1]).max()/scale),
                 max_cell_balance_error_over_scale=float(abs(residual).max()/scale))
+    if return_section_heat:
+        return metrics, sections/scale
+    return metrics
 
 
 if __name__ == "__main__":

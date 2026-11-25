@@ -82,6 +82,7 @@ def measure(n, method, width, *, return_mean_profile=False, return_profiles=Fals
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fem", action="store_true", help="include sparse LINE2 section heats in the comparison")
+    parser.add_argument("--dg", action="store_true", help="include quadratic DG with exact-time integration")
     args = parser.parse_args()
     source_files = [__file__, rod.__file__, sph.__file__, sph.heat.__file__]
     paths = "../TensorFVM/src:../TensorSPH/src"
@@ -89,6 +90,10 @@ if __name__ == "__main__":
         import fem_subinterval_heat_pulse as fem
         paths += ":../TensorFEM/src"
         source_files.extend([fem.__file__, fem.thermal.__file__])
+    if args.dg:
+        import dg_subinterval_heat_pulse as dg
+        paths += ":../TensorDG"
+        source_files.extend([dg.__file__, dg.heat_1d.__file__])
     runs = []
     previous = {}
     for n in (16, 32, 64):
@@ -127,6 +132,19 @@ if __name__ == "__main__":
                                  fem_sph_section_difference_over_scale=fe_sph.tolist())
                     passed = (passed and max(fe_fv.max(), fe_sph.max(), fe["max_section_heat_error_over_scale"]) < tolerance
                               and fe["energy_imbalance_over_peak"] < 1e-10)
+                if args.dg:
+                    dg_metrics, dg_cuts = dg.measure(n, 2, width, return_section_heat=True)
+                    extra["dg"] = dg_metrics
+                    passed = (passed and dg_metrics["max_cell_balance_error_over_scale"] < 1e-8
+                              and max(dg_metrics["max_section_heat_error_over_scale"],
+                                      dg_metrics["max_cell_mean_error_over_peak"]) < tolerance)
+                    other_cuts = {"fvm": fv_cuts, "sph": sph_cuts}
+                    if args.fem:
+                        other_cuts["fem"] = fe_cuts
+                    for name, sections in other_cuts.items():
+                        difference = abs(dg_cuts-sections).max(axis=1)
+                        extra[f"dg_{name}_section_difference_over_scale"] = difference.tolist()
+                        passed = passed and difference.max() < tolerance
                 runs.append(dict(**extra, section_heat_difference_over_scale=cut_differences.tolist(),
                                  max_section_heat_difference_over_scale=float(cut_differences.max()),
                                  center_mean_difference_over_peak=differences.tolist(),
@@ -136,7 +154,7 @@ if __name__ == "__main__":
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs,
                           sources=[provenance(path) for path in source_files],
-                          reproduction=f"OMP_NUM_THREADS=1 PYTHONPATH={paths} python examples/fvm_sph_subinterval_heat_pulse.py"
-                          + (" --fem" if args.fem else "")),
+                          reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={paths} python examples/fvm_sph_subinterval_heat_pulse.py"
+                          + (" --fem" if args.fem else "") + (" --dg" if args.dg else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
