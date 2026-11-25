@@ -46,15 +46,20 @@ def dg_case(n,degree,k,s):
                 max_balance_residual_W=float(abs(balance).max()))
 
 
-def fem_case(n,shear,k,s):
+def fem_case(n,shear,k,s,warp=0.):
     nx,ny = n,3*n//2
     mesh = thermal_analytic.structured_quad_mesh(nx,ny,shear=shear,dtype=torch.float64)
-    points = mesh.nodes.numpy()
+    coords = mesh.nodes
+    if warp:
+        x,y = coords.T
+        displacement = warp*torch.sin(torch.pi*(x-shear*y))*torch.sin(torch.pi*y)
+        coords = coords+torch.stack((displacement,-.6*displacement),dim=1)
+    points = coords.numpy()
     ids = np.arange(len(points)).reshape(ny+1,nx+1)
     sides = [ids[:,0],ids[:,-1],ids[0,:],ids[-1,:]]
     fixed = np.unique(np.concatenate(sides))
     exact = np.exp(points@s)
-    model = thermal.ThermalModel(mesh.nodes,mesh.elements,torch.from_numpy(k[None]),1.,CAPACITY,
+    model = thermal.ThermalModel(coords,mesh.elements,torch.from_numpy(k[None]),1.,CAPACITY,
         torch.from_numpy(fixed),torch.from_numpy(exact[fixed]),element_type="q4")
     result = thermal.solve_harmonic_thermal(model,OMEGA,sparse=True)
     nodal = result.temperature.numpy()
@@ -70,26 +75,39 @@ def fem_case(n,shear,k,s):
     pairs = ((3,cells[:,0],cells[:,1]),(1,cells[:,-1],cells[:,-2]),
              (0,cells[0],cells[1]),(2,cells[-1],cells[-2]))
     raw = thermal.thermal_element_edge_power(model,result.temperature).numpy()
-    raw_errors,edge_errors = [],[]
+    raw_errors,edge_errors,patch_errors,sampled_errors,field_errors = [],[],[],[],[]
+    fields = torch.stack((result.temperature,torch.from_numpy(exact)))
     for edge,normal,(local,outer,inner) in zip(sides,normals,pairs):
         conn = np.column_stack((edge[:-1],edge[1:]))
         ends = points[conn]
         length = np.linalg.norm(ends[0,1]-ends[0,0])
         normal = np.array(normal)/np.linalg.norm(normal)
         values = np.exp((ends@s) @ shapes.T)*(normal@k@s)
-        outward = thermal.recover_q4_boundary_power(model,result.temperature,outer,inner,local)
+        if not warp:
+            outward = thermal.recover_q4_boundary_power(model,result.temperature,outer,inner,local)
+            edge_errors.append(float(abs(outward.numpy()/length + values@weights/2).max()))
+        along = np.arange(len(outer))+1
+        along[-1] -= 2
+        patch = np.column_stack((outer,inner,outer[along],inner[along]))
+        fit = thermal.recover_q4_patch_boundary_power(model,fields,patch,local).numpy()
+        err = abs(fit/length + values@weights/2).max(axis=1)
+        patch_errors.append(float(err[0]))
+        sampled_errors.append(float(err[1]))
+        field_errors.append(float(abs(fit[0]-fit[1]).max()/length))
         raw_errors.append(float(abs(raw[outer,local]/length + values@weights/2).max()))
-        edge_errors.append(float(abs(outward.numpy()/length + values@weights/2).max()))
         np.add.at(target,conn,(length/2)*(values*weights) @ shapes)
         np.add.at(area,conn,length/2)
     norm_error = abs(power[fixed]-target[fixed])/area[fixed]
     def side_error(edges):
         idx = np.concatenate([edge[1:-1] for edge in edges])
         return float((abs(power[idx]-target[idx])/area[idx]).max())
-    storage = 1j*OMEGA*CAPACITY*nodal[mesh.elements.numpy()].mean()
-    return dict(solver="FEM-Q4",shear=shear,temperature_error_K=float(abs(nodal-exact).max()),
+    capacity_matrix = thermal.assemble_thermal(model,sparse=True).capacity
+    weights = capacity_matrix @ torch.ones_like(coords[:,0])
+    storage = 1j*OMEGA*(weights.numpy()@nodal)
+    prior = dict(recovered_edge_error_W_m2=max(edge_errors)) if edge_errors else {}
+    return dict(**prior,solver="FEM-Q4",shear=shear,warp=warp,temperature_error_K=float(abs(nodal-exact).max()),
                 side_wall_error_W_m2=side_error(sides[:2]),end_wall_error_W_m2=side_error(sides[2:]),
-                raw_edge_error_W_m2=max(raw_errors),recovered_edge_error_W_m2=max(edge_errors),all_boundary_error_W_m2=float(norm_error.max()),
+                raw_edge_error_W_m2=max(raw_errors),patch_edge_error_W_m2=max(patch_errors),sampled_patch_error_W_m2=max(sampled_errors),field_contribution_W_m2=max(field_errors),all_boundary_error_W_m2=float(norm_error.max()),
                 max_balance_residual_W=float(abs(storage-power[fixed].sum())))
 
 
@@ -98,15 +116,19 @@ if __name__ == "__main__":
     for angle in (-30.,30.):
         k,s = material(angle)
         previous = {}
-        for n in (4,8,16,32):
-            for row in [dg_case(n,d,k,s) for d in (1,2)]+[fem_case(n,h,k,s) for h in (0.,.25)]:
-                name = row["solver"],row.get("shear",0.)
+        for n in (4,8,16,32,64):
+            cases = [fem_case(n,.25,k,s,.1)]
+            if n <= 32:
+                cases.extend(dg_case(n,d,k,s) for d in (1,2))
+                cases.extend(fem_case(n,h,k,s) for h in (0.,.25))
+            for row in cases:
+                name = row["solver"],row.get("shear",0.),row.get("warp",0.)
                 keys = [key for key in row if "_error_" in key]
                 if name in previous:
                     row["orders"] = {key:float(np.log2(previous[name][key]/row[key])) for key in keys}
                 row.update(nx=n,ny=3*n//2,angle_deg=angle)
                 row["passed"] = row["max_balance_residual_W"] < 1e-10
-                if n == 32:
+                if n == (64 if row.get("warp") else 32):
                     orders = row["orders"]
                     wall_order = .85 if name[0] == "DG-P1" else 1.8
                     wall_limit = {"DG-P1":1., "DG-P2":.006, "FEM-Q4":.002}[name[0]]
@@ -115,7 +137,10 @@ if __name__ == "__main__":
                                       and max(row["side_wall_error_W_m2"],row["end_wall_error_W_m2"]) < wall_limit
                                       and min(orders["side_wall_error_W_m2"],orders["end_wall_error_W_m2"]) > wall_order)
                     if name[0] == "FEM-Q4":
-                        row["passed"] &= (row["recovered_edge_error_W_m2"] < min(.015,row["raw_edge_error_W_m2"])
+                        row["passed"] &= (row["patch_edge_error_W_m2"] < min(.025,row["raw_edge_error_W_m2"])
+                                          and orders["patch_edge_error_W_m2"] > 1.8)
+                        if not row["warp"]:
+                            row["passed"] &= (row["recovered_edge_error_W_m2"] < min(.015,row["raw_edge_error_W_m2"])
                                           and orders["recovered_edge_error_W_m2"] > 1.8)
                         row["passed"] &= row["all_boundary_error_W_m2"] < .04 and orders["all_boundary_error_W_m2"] > .85
                     else:
