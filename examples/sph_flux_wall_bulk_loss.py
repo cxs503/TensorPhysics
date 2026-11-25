@@ -109,10 +109,7 @@ def measure(n, method, solver="sph"):
                 max_energy_residual_J_m2=float(abs(residual).max()))
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("sph", "fvm", "fem", "dg"), default="sph")
-    solver = parser.parse_args().solver
+def study(solver):
     if solver == "dg":
         from tensordg import transient_diffusion_2d as implementation
         from tensordg import poisson_2d_bc
@@ -147,7 +144,32 @@ if __name__ == "__main__":
             runs.append(row)
             previous = errors
     passed = all(row["passed"] for row in runs)
-    print(json.dumps(dict(solver=solver, passed=passed, runs=runs, sources=[provenance(path) for path in source_files],
-                          reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={module_path} python examples/sph_flux_wall_bulk_loss.py --solver {solver}"),
-                     indent=2, allow_nan=False))
-    raise SystemExit(0 if passed else 1)
+    return dict(solver=solver, passed=passed, runs=runs, sources=[provenance(path) for path in source_files],
+                reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={module_path} python examples/sph_flux_wall_bulk_loss.py --solver {solver}")
+
+
+def combined_study(solvers):
+    studies = [study(solver) for solver in solvers]
+    comparisons = []
+    for method in ("theta", "sdirk2"):
+        finest = [next(row for row in result["runs"] if row["method"] == method and row["columns"] == 64)
+                  for result in studies]
+        means = [row["final_mean_K"] for row in finest]
+        exact = finest[0]["exact_final_mean_K"]
+        max_error = max(abs(value-exact) for value in means)
+        comparisons.append(dict(method=method, columns=64, final_time_s=3., exact_final_mean_K=exact,
+                                final_mean_K=dict(zip(solvers, means)), final_mean_spread_K=max(means)-min(means),
+                                max_final_mean_error_K=max_error, passed=max_error < 1e-6))
+    passed = all(item["passed"] for item in studies+comparisons)
+    return dict(studies=studies, comparisons=comparisons, passed=passed,
+                reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src:../TensorDG:../TensorSPH/src python examples/sph_flux_wall_bulk_loss.py --solver all")
+
+
+if __name__ == "__main__":
+    solvers = ("sph", "fvm", "fem", "dg")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--solver", choices=(*solvers, "all"), default="sph")
+    selected = parser.parse_args().solver
+    result = combined_study(solvers) if selected == "all" else study(selected)
+    print(json.dumps(result, indent=2, allow_nan=False))
+    raise SystemExit(0 if result["passed"] else 1)
