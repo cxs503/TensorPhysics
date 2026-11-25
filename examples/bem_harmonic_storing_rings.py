@@ -4,7 +4,6 @@ import json
 import math
 
 import numpy as np
-from tensorbem import harmonic_rings, layered_annulus
 
 from conduction_provenance import provenance
 
@@ -59,6 +58,8 @@ def angular_reference(omega, mode, walls=WALLS, generation=(0., 0.)):
 
 
 if __name__ == "__main__":
+    from tensorbem import harmonic_rings, layered_annulus
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", type=int, choices=(0, 1, 2, 3), default=0)
     parser.add_argument("--sheet-driven", action="store_true", help="drive the two sheets in quadrature with isothermal walls")
