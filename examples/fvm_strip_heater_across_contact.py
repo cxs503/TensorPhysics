@@ -1,14 +1,38 @@
-"""Steady heat partition from a strip spanning two materials and a resistive contact."""
+"""Steady and harmonic heat partition from a strip spanning two materials and a resistive contact."""
+import argparse
 import json
 import math
 
 import numpy as np
+from scipy.linalg import expm
 from tensorfvm.cht import rod
 
 from conduction_provenance import provenance
 
 
-def measure(cells, mirrored):
+def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega):
+    # Propagate (T, rightward power, 1) exactly within each constant-source
+    # segment. The final component makes the volumetric source an affine load.
+    transfer = np.eye(3)
+    jump = np.array([[1., -resistance, 0.], [0., 1., 0.], [0., 0., 1.]])
+    edges = (0., start, 0.5, end, 1.)
+    for left, right in zip(edges[:-1], edges[1:]):
+        layer = int(left >= 0.5)
+        source = generation if left >= start and right <= end else 0.
+        generator = [[0., -1/conductivities[layer], 0.],
+                     [-1j*omega*capacities[layer], 0., source], [0., 0., 0.]]
+        transfer = expm((right-left)*np.array(generator)) @ transfer
+        if right == 0.5:
+            at_contact = transfer.copy()
+            transfer = jump @ transfer
+    # Both ends have zero temperature phasor. Solve for the left-end power.
+    left_power = -transfer[0, 2]/transfer[0, 1]
+    initial = np.array([0., left_power, 1.])
+    return np.array([-left_power, (transfer @ initial)[1],
+                     resistance*(at_contact @ initial)[1]])
+
+
+def measure(cells, mirrored, omega=0.):
     interface, resistance, generation = 0.5, 0.35, 12.
     start, end = (3/8, 5/6) if mirrored else (1/6, 5/8)
     k_left, k_right = (4., 1.) if mirrored else (1., 4.)
@@ -22,6 +46,31 @@ def measure(cells, mirrored):
     def integral(x):
         return generation / 2 * (np.maximum(x-start, 0.)**2 - np.maximum(x-end, 0.)**2)
 
+    contacts = np.zeros(cells-1)
+    contacts[mid-1] = resistance
+    source = np.diff(generated(faces)) / widths
+    if omega:
+        capacities = (2.5, 1.25) if mirrored else (1.25, 2.5)
+        capacity = np.repeat(capacities, mid)
+        field, _, west, east, (upstream, downstream) = rod.solve_harmonic_stepped_rod(
+            widths, np.ones(cells), np.repeat([k_left, k_right], mid), capacity,
+            (0., 0.), omega, source=source, flux_order=2, contact_resistance=contacts, return_traces=True,
+        )
+        actual = np.array([-west[0], east[-1], upstream[mid-1]-downstream[mid-1]])
+        exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega)
+        return {
+            "cells": cells, "strip_bounds_m": [start, end], "omega_rad_s": omega,
+            "wall_outward_amplitude_W": abs(actual[:2]).tolist(),
+            "reference_wall_amplitude_W": abs(exact[:2]).tolist(),
+            "contact_jump_amplitude_K": abs(actual[2]), "reference_jump_amplitude_K": abs(exact[2]),
+            "wall_and_jump_phase_rad": np.angle(actual).tolist(),
+            "reference_wall_and_jump_phase_rad": np.angle(exact).tolist(),
+            "max_wall_power_error_W": max(abs(actual[:2]-exact[:2])),
+            "contact_jump_error_K": abs(actual[2]-exact[2]),
+            "max_phase_error_rad": max(abs(np.angle(actual/exact))),
+            "max_cell_balance_error_W": max(abs(east-west+widths*(1j*omega*capacity*field-source))),
+        }
+
     # q(x) = q(0) + F(x). The two bulk temperature drops plus the
     # jump R*q(interface) sum to zero between equally hot ends.
     weighted = integral(interface)/k_left + (integral(1.)-integral(interface))/k_right
@@ -34,9 +83,6 @@ def measure(cells, mirrored):
     left_faces = wall - drop_left
     right_faces = left_faces[-1] - exact_jump - drop_right
 
-    contacts = np.zeros(cells-1)
-    contacts[mid-1] = resistance
-    source = np.diff(generated(faces)) / widths
     _, _, west_power, east_power, (upstream, downstream) = rod.solve_steady_stepped_rod(
         widths, np.ones(cells), np.repeat([k_left, k_right], mid), np.ones(cells),
         (wall, wall), source=source, flux_order=2, contact_resistance=contacts, return_traces=True,
@@ -59,26 +105,36 @@ def measure(cells, mirrored):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--omega", type=float, default=0., help="angular frequency in rad/s (0 for steady)")
+    omega = parser.parse_args().omega
+    if not math.isfinite(omega) or omega < 0:
+        parser.error("omega must be finite and nonnegative")
+    metrics = (("max_wall_power_error_W", "contact_jump_error_K") if omega else
+               ("max_face_temperature_error_K", "max_face_power_error_W"))
     runs = []
     for mirrored in (False, True):
         previous = None
         for cells in (16, 32, 64, 128):
-            row = measure(cells, mirrored)
+            row = measure(cells, mirrored, omega)
             passed = row["max_cell_balance_error_W"] < 1e-10
-            for metric in ("max_face_temperature_error_K", "max_face_power_error_W"):
+            for metric in metrics:
                 if previous:
                     order = math.log2(previous[metric]/row[metric])
                     row[metric+"_order"] = order
                     passed &= order > 1.85
             if cells == 128:
-                passed &= max(row["max_face_temperature_error_K"], row["max_face_power_error_W"]) < 2e-4
+                passed &= max(row[key] for key in metrics) < 2e-4
+                if omega:
+                    passed &= row["max_phase_error_rad"] < 5e-4
             row["passed"] = bool(passed)
             runs.append(row)
             previous = row
     passed = all(row["passed"] for row in runs)
     print(json.dumps({
         "passed": passed, "runs": runs, "sources": [provenance(__file__), provenance(rod.__file__)],
-        "reproduction": "PYTHONPATH=../TensorFVM/src python examples/fvm_strip_heater_across_contact.py",
+        "reproduction": "PYTHONPATH=../TensorFVM/src python examples/fvm_strip_heater_across_contact.py"
+                        + (f" --omega {omega}" if omega else ""),
     }, indent=2, allow_nan=False))
     return 0 if passed else 1
 
