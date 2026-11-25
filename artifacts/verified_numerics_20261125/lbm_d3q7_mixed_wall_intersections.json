@@ -1,0 +1,34 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "5bd921591b8c296d25f73ab1bfaa9035d9e200cd",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Pure D3Q7 diffusion on a unit cube, T=1.75+sin(pi*x/2) cos(pi*y/2) cos(pi*z) exp(-1.5*pi\u00b2*t). Fixed temperature on x- and y+, insulated on the other four faces. Check both orders of applying the two boundary types and all seven populations at every grid point and step against a periodic extension of lengths 4,4,2. Compare continuum solution at 1/64 s; tau=0.75 and 1.5, 8 and 16 intervals per axis.",
+  "suite": {
+    "tests": 72,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_mixed_wall_intersections_against_extended_mode[0.75]": {
+      "field_error_8_K": 0.009528246821091435,
+      "population_error_8": 4.440892098500626e-16,
+      "boundary_order_error_8": 0.0,
+      "fixed_wall_error_8_K": 2.220446049250313e-16,
+      "field_error_16_K": 0.0023745659413583198,
+      "population_error_16": 5.551115123125783e-16,
+      "boundary_order_error_16": 0.0,
+      "fixed_wall_error_16_K": 2.220446049250313e-16
+    },
+    "test_mixed_wall_intersections_against_extended_mode[1.5]": {
+      "field_error_8_K": 0.033415058741162684,
+      "population_error_8": 1.1102230246251565e-16,
+      "boundary_order_error_8": 0.0,
+      "fixed_wall_error_8_K": 2.220446049250313e-16,
+      "field_error_16_K": 0.008392285540934075,
+      "population_error_16": 2.220446049250313e-16,
+      "boundary_order_error_16": 0.0,
+      "fixed_wall_error_16_K": 2.220446049250313e-16
+    }
+  }
+}
