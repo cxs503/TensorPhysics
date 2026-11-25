@@ -9,7 +9,7 @@ from conduction_provenance import provenance
 from tensorlbm import thermal_common as lbm
 
 
-def measure(n, sign, flux_walls=False):
+def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_step_only=False):
     dx, alpha, capacity = 1/n, .08, 1.7
     velocity = sign*np.array([.62, -.38, .2])
     wave = 2*np.pi*np.array([1., -1., 1.])
@@ -17,8 +17,8 @@ def measure(n, sign, flux_walls=False):
         # Tangential advection; the x-mode has distinct left and right traces.
         velocity[0], wave[0] = 0., 1.65
     decay = -alpha*(wave@wave)-1j*(velocity@wave)
-    dt = dx**2/(8*alpha)  # BGK relaxation time of one lattice step.
-    steps = n*n//16
+    dt = (tau-.5)*dx**2/(4*alpha)
+    steps = 1 if first_step_only else round(n*n/(16*(2*tau-1)))
     centers = (np.arange(n)+.5)*dx
     z, y, x = np.meshgrid(centers, centers, centers, indexing="ij")
     phase = torch.from_numpy(np.exp(1j*(wave[0]*x+wave[1]*y+wave[2]*z)))
@@ -29,12 +29,16 @@ def measure(n, sign, flux_walls=False):
     background = .7
     field = background+cell_mode.real
     speeds = tuple(torch.full_like(field, u*dt/dx) for u in velocity)
-    g = lbm.thermal_equilibrium_3d(field, *speeds)
+    if gradient_start:
+        grad = torch.stack([(1j*k*cell_mode).real for k in wave])
+        g = lbm.thermal_gradient_initialization_3d(field, *speeds, grad, tau_T=tau, spacing=dx)
+    else:
+        g = lbm.thermal_equilibrium_3d(field, *speeds)
     peak_flux, peak_wrap = np.zeros(3), np.zeros(3)
     peak_t = peak_balance = 0.
     for step in range(steps):
         avg_phase = np.exp(decay*step*dt)*np.expm1(decay*dt)/(decay*dt)
-        post = lbm.thermal_collide_bgk_3d(g, field, *speeds, 1.)
+        post = lbm.thermal_collide_bgk_3d(g, field, *speeds, tau)
         fluxes = lbm.thermal_link_fluxes_3d(post, dt=dt, spacing=dx,
                                             volumetric_heat_capacity=capacity, periodic="yz" if flux_walls else True)
         g = lbm.thermal_stream_3d(post)
@@ -54,13 +58,16 @@ def measure(n, sign, flux_walls=False):
                 error = abs(flux-target)
                 peak_wrap[axis] = max(peak_wrap[axis], error.select(dim,-1).max().item())
             peak_flux[axis] = max(peak_flux[axis], error.max().item())
+        if step == 0:
+            first_flux = peak_flux.copy()
         updated = lbm.thermal_macroscopic_3d(g)
         balance = capacity*dx**3*(updated-field)+dt*dx**2*divergence
         peak_balance = max(peak_balance, balance.abs().max().item())
         target = background+(np.exp(decay*(step+1)*dt)*cell_mode).real
         peak_t = max(peak_t, abs(updated-target).max().item())
         field = updated
-    return dict(n=n, steps=steps, velocity_m_s=velocity.tolist(), temperature_error_K=peak_t,
+    diagnostics = dict(first_step_flux_errors_xyz_W_m2=first_flux.tolist()) if tau != 1. or gradient_start else {}
+    return dict(**diagnostics, n=n, steps=steps, velocity_m_s=velocity.tolist(), temperature_error_K=peak_t,
                 total_flux_errors_xyz_W_m2=peak_flux.tolist(), wrap_flux_errors_xyz_W_m2=([None, *peak_wrap[1:]] if flux_walls else peak_wrap.tolist()),
                 max_cell_energy_residual_J=peak_balance)
 
