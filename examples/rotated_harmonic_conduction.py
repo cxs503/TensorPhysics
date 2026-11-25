@@ -66,12 +66,20 @@ def fem_case(n,shear,k,s):
     unit,weights = np.polynomial.legendre.leggauss(8)
     shapes = np.column_stack(((1-unit)/2,(1+unit)/2))
     normals = [(-1,shear),(1,-shear),(0,-1),(0,1)]
-    for edge,normal in zip(sides,normals):
+    cells = np.arange(nx*ny).reshape(ny,nx)
+    pairs = ((3,cells[:,0],cells[:,1]),(1,cells[:,-1],cells[:,-2]),
+             (0,cells[0],cells[1]),(2,cells[-1],cells[-2]))
+    raw = thermal.thermal_element_edge_power(model,result.temperature).numpy()
+    raw_errors,edge_errors = [],[]
+    for edge,normal,(local,outer,inner) in zip(sides,normals,pairs):
         conn = np.column_stack((edge[:-1],edge[1:]))
         ends = points[conn]
         length = np.linalg.norm(ends[0,1]-ends[0,0])
         normal = np.array(normal)/np.linalg.norm(normal)
         values = np.exp((ends@s) @ shapes.T)*(normal@k@s)
+        outward = thermal.recover_q4_boundary_power(model,result.temperature,outer,inner,local)
+        raw_errors.append(float(abs(raw[outer,local]/length + values@weights/2).max()))
+        edge_errors.append(float(abs(outward.numpy()/length + values@weights/2).max()))
         np.add.at(target,conn,(length/2)*(values*weights) @ shapes)
         np.add.at(area,conn,length/2)
     norm_error = abs(power[fixed]-target[fixed])/area[fixed]
@@ -81,7 +89,7 @@ def fem_case(n,shear,k,s):
     storage = 1j*OMEGA*CAPACITY*nodal[mesh.elements.numpy()].mean()
     return dict(solver="FEM-Q4",shear=shear,temperature_error_K=float(abs(nodal-exact).max()),
                 side_wall_error_W_m2=side_error(sides[:2]),end_wall_error_W_m2=side_error(sides[2:]),
-                all_boundary_error_W_m2=float(norm_error.max()),
+                raw_edge_error_W_m2=max(raw_errors),recovered_edge_error_W_m2=max(edge_errors),all_boundary_error_W_m2=float(norm_error.max()),
                 max_balance_residual_W=float(abs(storage-power[fixed].sum())))
 
 
@@ -107,6 +115,8 @@ if __name__ == "__main__":
                                       and max(row["side_wall_error_W_m2"],row["end_wall_error_W_m2"]) < wall_limit
                                       and min(orders["side_wall_error_W_m2"],orders["end_wall_error_W_m2"]) > wall_order)
                     if name[0] == "FEM-Q4":
+                        row["passed"] &= (row["recovered_edge_error_W_m2"] < min(.015,row["raw_edge_error_W_m2"])
+                                          and orders["recovered_edge_error_W_m2"] > 1.8)
                         row["passed"] &= row["all_boundary_error_W_m2"] < .04 and orders["all_boundary_error_W_m2"] > .85
                     else:
                         row["passed"] &= orders["interior_flux_error_W_m2"] > wall_order
