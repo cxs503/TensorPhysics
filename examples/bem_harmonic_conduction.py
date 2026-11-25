@@ -8,7 +8,7 @@ from conduction_provenance import provenance
 from tensorbem import geometry, harmonic_conduction
 
 
-def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False):
+def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False, curved_source=False):
     if graded:
         local = np.arange(n//4)/(n//4)
         angle = (np.arange(4)[:, None]+(1-np.cos(np.pi*local))/2).ravel()*np.pi/2
@@ -16,8 +16,8 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
     else:
         mesh = geometry.regular_polygon(n)
     # Offset the affine-source domain so its gradient contributes net power.
-    center = np.array([.35, -.2]) if affine else np.zeros(2)
-    if affine:
+    center = np.array([.35, -.2]) if affine or curved_source else np.zeros(2)
+    if affine or curved_source:
         mesh = geometry.PanelMesh(mesh.vertices+center)
     points = harmonic_conduction.harmonic_boundary_points(mesh, quadratic=quadratic)
     count = len(points)
@@ -31,12 +31,21 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
         return amplitudes*np.exp(wave*((points-center) @ directions.T-1))
 
     boundary = modes(points)
-    base = -.25+.4j if heated or affine else 0j
-    source = 1j*omega*capacity*base
-    gradient = np.array([.31+.17j, -.23+.42j]) if affine else np.zeros(2)
+    base = -.25+.4j if heated or affine or curved_source else 0j
+    gradient = np.array([.31+.17j, -.23+.42j]) if affine or curved_source else np.zeros(2)
     source_gradient = 1j*omega*capacity*gradient
-    wall = base+points @ gradient+boundary.sum(1)
-    flux = k*(wave*np.sum(boundary*(normals @ directions.T), axis=1)+normals @ gradient)
+    hessian = (np.array([[.34+.12j, -.28+.19j], [-.28+.19j, .16-.4j]])
+               if curved_source else np.zeros((2, 2)))
+    storage = 1j*omega*capacity
+    source = storage*base-k*np.trace(hessian)
+    source_quadratic = storage*np.array([hessian[0, 0]/2, hessian[0, 1], hessian[1, 1]/2])
+
+    def polynomial(xy):
+        return base+xy @ gradient+.5*np.sum((xy @ hessian)*xy, axis=-1)
+
+    wall = polynomial(points)+boundary.sum(1)
+    flux = k*(wave*np.sum(boundary*(normals @ directions.T), axis=1)
+              +np.sum(normals*(gradient+points @ hessian), axis=1))
     # Fixed arcs stay in place as the polygon is refined.
     kinds = (np.repeat(["temperature", "flux", "film", "film"], count//4)
              if condition == "mixed" else np.full(count, condition))
@@ -44,11 +53,11 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
     values = np.select([kinds == "flux", kinds == "film"], [flux, wall+flux/film], default=wall)
     result = harmonic_conduction.solve_mixed_harmonic_conduction(
         mesh, kinds, values, omega, conductivity=k, volumetric_heat_capacity=capacity, film_coefficients=film, quadratic=quadratic,
-        volumetric_source=source, source_gradient=source_gradient)
+        volumetric_source=source, source_gradient=source_gradient, source_quadratic=source_quadratic)
     angles = np.arange(21)*2*np.pi/21+.137
     probes = center+np.concatenate([r*np.column_stack((np.cos(angles), np.sin(angles))) for r in (.15, .55, .83)])
     extra = {}
-    if heated or affine:
+    if heated or affine or curved_source:
         # Integrate the analytic storage over the actual polygon, using
         # triangles from the origin to each panel. No BEM flux enters storage.
         nodes, weights = np.polynomial.legendre.leggauss(10)
@@ -56,15 +65,16 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
         edge = mesh.vertices[:, None, :]+u[None, :, None]*mesh.vectors[:, None, :]
         xy = edge[:, :, None, :]*u[None, None, :, None]
         jac = mesh.vertices[:, 0]*mesh.ends[:, 1]-mesh.vertices[:, 1]*mesh.ends[:, 0]
-        field = base+xy @ gradient+modes(xy.reshape(-1, 2)).sum(1).reshape(n, len(u), len(u))
+        field = polynomial(xy)+modes(xy.reshape(-1, 2)).sum(1).reshape(n, len(u), len(u))
         volume_temperature = np.einsum("p,i,j,pij->", jac, weights/2, weights*u/2, field)
         panel_weights = np.array([5., 8., 5.])/18 if quadratic else np.array([1.])
         inward_rate = mesh.lengths @ (result.inward_flux.reshape(n, -1) @ panel_weights)
-        generated = (source+center @ source_gradient)*mesh.area
+        generation = storage*polynomial(xy)-k*np.trace(hessian)
+        generated = np.einsum("p,i,j,pij->", jac, weights/2, weights*u/2, generation)
         extra["energy_residual_W_m"] = float(abs(inward_rate+generated-1j*omega*capacity*volume_temperature))
     worst = np.argmax(abs(result.inward_flux-flux))
     return dict(**extra, quadratic=quadratic, graded=graded, boundary_unknowns=count, worst_flux_panel=int(worst//(count//n)), worst_flux_condition=str(kinds[worst]), panels=n, omega_rad_s=omega, boundary=condition,
-                wall_temperature_error_K=float(abs(result.wall_temperature-wall).max()), interior_error_K=float(abs(result.temperature(probes)-(base+probes @ gradient+modes(probes).sum(1))).max()),
+                wall_temperature_error_K=float(abs(result.wall_temperature-wall).max()), interior_error_K=float(abs(result.temperature(probes)-(polynomial(probes)+modes(probes).sum(1))).max()),
                 boundary_flux_error_W_m2=float(abs(result.inward_flux-flux).max()))
 
 
@@ -75,6 +85,7 @@ if __name__ == "__main__":
     parser.add_argument("--graded", action="store_true", help="cluster panel ends at quadrant boundaries")
     source_group = parser.add_mutually_exclusive_group()
     source_group.add_argument("--affine", action="store_true", help="verify an affine volume source on a translated polygon")
+    source_group.add_argument("--curved-source", action="store_true", help="verify quadratic volumetric heating with a cross term")
     source_group.add_argument("--heated", action="store_true", help="add uniform volumetric generation and check total heat balance")
     args = parser.parse_args()
     rows = []
@@ -82,7 +93,8 @@ if __name__ == "__main__":
         previous = None
         refinements = (16, 32, 64, 128, 256) if args.boundary == "mixed" else (16, 32, 64, 128)
         for n in refinements:
-            row = measure(n, omega, args.boundary, quadratic=args.quadratic, graded=args.graded, heated=args.heated, affine=args.affine)
+            row = measure(n, omega, args.boundary, quadratic=args.quadratic, graded=args.graded, heated=args.heated, affine=args.affine,
+                          curved_source=args.curved_source)
             metrics = ["interior_error_K"]
             if args.boundary != "flux":
                 metrics.append("boundary_flux_error_W_m2")
