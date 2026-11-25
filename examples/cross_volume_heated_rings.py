@@ -87,7 +87,8 @@ def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flu
         fluxes[side] = INWARD_FLUX
     rows = []
     previous = {}
-    for n in (4, 8, 16, 32):
+    levels = (4, 8, 16, 32, 64) if flux_wall is not None else (4, 8, 16, 32)
+    for n in levels:
         mesh = np.r_[np.concatenate([np.geomspace(a,b,n+1)[:-1] for a,b in zip(EDGES, EDGES[1:])]), EDGES[-1]]
         lo, hi = mesh[:-1], mesh[1:]
         # The FVM load is the exact shell-volume mean of the BEM source density.
@@ -112,11 +113,11 @@ def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flu
             difference = abs((boundary-volume)/reference)
             orders = np.log2(previous[omega]/errors) if omega in previous else None
             # Axisymmetric conduction with constant layer source uses exact half-shell drops.
-            fv_pass = errors[1] < 1e-10 if not mode else n < 32 or (errors[1] < .001 and orders[1] > 1.8)
-            passed = fv_pass and (n < 32 or (errors[0] < .01 and orders[0] > 1.7 and max(difference) < .01))
+            fv_pass = errors[1] < 1e-10 if not mode else n < levels[-1] or (errors[1] < .001 and orders[1] > 1.8)
+            passed = fv_pass and (n < levels[-1] or (errors[0] < .01 and orders[0] > 1.7 and max(difference) < .01))
             reference_jump = reference[-4::2]-reference[-3::2]
             jump_errors = [max(abs((x[-4::2]-x[-3::2])/reference_jump-1)) for x in (boundary, volume)]
-            passed &= n < 32 or (jump_errors[0] < .01 and jump_errors[1] < .001)
+            passed &= n < levels[-1] or (jump_errors[0] < .01 and jump_errors[1] < .001)
             balances = []
             power_errors = []
             volume_heat = 2*np.pi*(VOLUME @ np.diff(EDGES**(mode+2)))/((mode+2)*EDGES[-1]**mode)
@@ -127,7 +128,7 @@ def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flu
                 terms = np.r_[field[6], -field[7], volume_heat, 2*np.pi*EDGES[1:-1]*net, -angular_rate]
                 power_errors.append(float(abs(sum(terms))/sum(abs(terms))))
             passed &= max(balances) < 1e-10
-            passed &= n < 32 or max(power_errors) < .01
+            passed &= n < levels[-1] or max(power_errors) < .01
             rows.append(dict(bem_global_relative_residual=power_errors[0], fvm_global_relative_residual=power_errors[1],
                 bem_sheet_balance_W_m2=balances[0], fvm_sheet_balance_W_m2=balances[1], bem_jump_relative_error=jump_errors[0], fvm_jump_relative_error=jump_errors[1], mode=mode, omega_rad_s=omega, bem_panels=4*n, fvm_cells_per_layer=n,
                 bem_relative_error=errors[0], fvm_relative_error=errors[1],
