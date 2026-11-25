@@ -37,3 +37,16 @@ python examples/insulated_low_frequency_mode.py
 ## 待处理的 TensorBEM 收敛结果
 
 独立运行 `python -m tensorbem.benchmarks.conducting_sheet --reservoir`，22 行结果中有 20 行通过。多边形近似在 128 面元时，半径 0.87 m 处温度的收敛阶分别为 1.696 和 1.683，低于 1.8 门槛；加密到 256 面元后，两组的最低收敛阶分别为 1.854 和 1.856。该专项仍待验收。以上数值验证使用解析参考解。[完整报告](bem_reservoir.json)
+
+## 等面积多边形薄层热库验证
+
+TensorBEM 版本 `0dd9a7fe8acb7bc46870481624b6e4e0803e1459`。等面积多边形保留了各圆环的面积。128 面元时，常数、变薄层导热系数两组的最低收敛阶分别为 1.919 和 1.956，均超过 1.8 门槛。256 面元时分别为 1.964 和 1.982。等面积运行 22/22 组通过，默认内接运行 20/22 组通过。两种几何在 128 面元、常系数、半径 0.87 m 处的最大温度误差分别为 0.000271 K 和 0.0000672 K。收敛阶以单网格误差计算；报告另列固定空间采样点的双网格外推误差。[等面积报告](bem_reservoir_equal_area.json) · [默认内接报告](bem_reservoir_inscribed.json)
+
+从上述版本的 TensorBEM 仓库根目录运行，最后一条命令会因两组收敛阶不足返回 1。前两项分别验证了 75 个回归测试和 22 组解析对照。
+
+```bash
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+python -m pytest -q tests/test_layered_annulus.py tests/test_multiloop_annulus.py
+python -m tensorbem.benchmarks.conducting_sheet --reservoir --equal-area
+python -m tensorbem.benchmarks.conducting_sheet --reservoir
+```
