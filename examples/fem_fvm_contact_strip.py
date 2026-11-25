@@ -12,7 +12,7 @@ from conduction_provenance import provenance
 import fvm_strip_heater_across_contact as strip
 
 
-def measure(n, mirrored, omega, storing=False, heated=False, balanced=False):
+def measure(n, mirrored, omega, storing=False, heated=False, balanced=False, detached=False):
     trace_capacity = np.array([0.18, 0.42]) if storing else np.zeros(2)
     trace_power = np.array([0.8j, -0.35+0.2j]) if heated else np.zeros(2)
     generation = 12.
@@ -22,7 +22,7 @@ def measure(n, mirrored, omega, storing=False, heated=False, balanced=False):
     if mirrored:
         trace_power = trace_power[::-1]
         trace_capacity = trace_capacity[::-1]
-    fvm = strip.measure(n, mirrored, omega, trace_capacity, trace_power, generation)
+    fvm = strip.measure(n, mirrored, omega, trace_capacity, trace_power, generation, detached)
     start, end = fvm["strip_bounds_m"]
     conductivity = (4., 1.) if mirrored else (1., 4.)
     capacity = (2.5, 1.25) if mirrored else (1.25, 2.5)
@@ -57,8 +57,9 @@ def measure(n, mirrored, omega, storing=False, heated=False, balanced=False):
     outward = -state.reaction_power.numpy()[[0, -1]]
     jump = t[mid]-t[mid+1]
     actual = np.r_[outward, jump]
+    widths, gaps = strip.strip_segments(start, end)
     exact = strip.contact_admittance_reference(conductivity, capacity, resistance, omega, trace_capacity,
-                                               trace_power, (0.5-start, end-0.5), generation)
+                                               trace_power, widths, generation, gaps)
     if omega <= 20.:
         transfer = strip.harmonic_reference(start, end, conductivity, capacity, generation, resistance,
                                             omega, trace_capacity, trace_power)
@@ -93,6 +94,7 @@ def main():
     heating.add_argument("--balanced", action="store_true", help="drive only the two contact traces with opposite powers")
     heating.add_argument("--heated", action="store_true", help="apply independent phased heat loads at the two contact traces")
     parser.add_argument("--high-frequency", action="store_true", help="resolve attenuated wall powers from strip or contact heating")
+    parser.add_argument("--detached", action="store_true", help="place the volume source wholly inside one material")
     args = parser.parse_args()
     frequencies = (200., 800.) if args.high_frequency else (2., 20.)
     grids = (128, 256, 512, 1024) if args.high_frequency else (16, 32, 64, 128, 256)
@@ -101,7 +103,7 @@ def main():
         for mirrored in (False, True):
             previous = None
             for n in grids:
-                row = measure(n, mirrored, omega, args.storing, args.heated, args.balanced)
+                row = measure(n, mirrored, omega, args.storing, args.heated, args.balanced, args.detached)
                 fvm = row["fvm"]
                 passed = max(row["fem_energy_residual_W"], fvm["max_cell_balance_error_W"]) < 1e-9
                 passed &= max(row["fem_max_trace_balance_error_W"], fvm["max_trace_balance_error_W"]) < 1e-9
@@ -128,7 +130,8 @@ def main():
         "sources": [provenance(path) for path in (__file__, strip.__file__, thermal.__file__, rod.__file__)],
         "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/fem_fvm_contact_strip.py"
                         + (" --storing" if args.storing else "") + (" --heated" if args.heated else "")
-                        + (" --balanced" if args.balanced else "") + (" --high-frequency" if args.high_frequency else ""),
+                        + (" --balanced" if args.balanced else "") + (" --high-frequency" if args.high_frequency else "")
+                        + (" --detached" if args.detached else ""),
     }, indent=2, allow_nan=False))
     return 0 if passed else 1
 

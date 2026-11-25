@@ -11,8 +11,8 @@ from conduction_provenance import provenance
 
 
 def contact_admittance_reference(conductivities, capacities, resistance, omega, trace_capacity, trace_power,
-                                 strip_widths=(0., 0.), generation=0.):
-    """Outward wall powers and trace jump for a strip extending from the contact into each half."""
+                                 strip_widths=(0., 0.), generation=0., strip_gaps=(0., 0.)):
+    """Outward wall powers and trace jump for heated segments at given distances from the contact."""
     k = np.asarray(conductivities)
     z = np.sqrt(1j*omega*np.asarray(capacities)/k)
     attenuation = np.exp(-z/2)
@@ -22,10 +22,12 @@ def contact_admittance_reference(conductivities, capacities, resistance, omega, 
     # Integrate the Dirichlet wall and contact flux kernels over each heated
     # segment. Distances are measured from the interface, with half length 0.5.
     widths = np.asarray(strip_widths)
+    near = np.asarray(strip_gaps)
+    far = near + widths
     heated_fraction = -np.expm1(-z*widths)
     scaled_source = generation * heated_fraction / (z*denominator)
-    contact_load = scaled_source * (-np.expm1(-z*(1-widths)))
-    wall_load = scaled_source * heated_fraction * np.exp(-z*(0.5-widths))
+    contact_load = scaled_source * np.exp(-z*near) * (-np.expm1(-z*(1-near-far)))
+    wall_load = scaled_source * (-np.expm1(-z*(near+far))) * np.exp(-z*(0.5-far))
     traces = np.linalg.solve(np.diag(diagonal) + contact_matrix, trace_power + contact_load)
     return np.r_[wall_load + 2*k*z*traces*attenuation/denominator, traces[0]-traces[1]]
 
@@ -39,7 +41,7 @@ def harmonic_reference(start, end, conductivities, capacities, generation, resis
     left_store, right_store = (np.eye(3, dtype=complex) for _ in trace_capacity)
     left_store[1, 0], right_store[1, 0] = -1j*omega*np.asarray(trace_capacity)
     left_store[1, 2], right_store[1, 2] = trace_power
-    edges = (0., start, 0.5, end, 1.)
+    edges = sorted({0., start, 0.5, end, 1.})
     for left, right in zip(edges[:-1], edges[1:]):
         layer = int(left >= 0.5)
         source = generation if left >= start and right <= end else 0.
@@ -56,9 +58,18 @@ def harmonic_reference(start, end, conductivities, capacities, generation, resis
                      resistance*(left_store @ at_contact @ initial)[1]])
 
 
-def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0., 0.), generation=12.):
+def strip_segments(start, end):
+    """Heated widths and gaps from the contact in the two half rods."""
+    near = np.clip([0.5-end, start-0.5], 0., 0.5)
+    far = np.clip([0.5-start, end-0.5], 0., 0.5)
+    return far-near, near
+
+
+def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0., 0.), generation=12., detached=False):
     interface, resistance = 0.5, 0.35
     start, end = (3/8, 5/6) if mirrored else (1/6, 5/8)
+    if detached:
+        start, end = (5/8, 5/6) if mirrored else (1/6, 3/8)
     k_left, k_right = (4., 1.) if mirrored else (1., 4.)
     faces = np.linspace(0., 1., cells+1)
     widths = np.diff(faces)
@@ -87,8 +98,9 @@ def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0.,
             interface_heat_capacity=sheet, interface_capacity_left_fraction=fraction, trace_power=applied,
         )
         actual = np.array([-west[0], east[-1], upstream[mid-1]-downstream[mid-1]])
+        heated_widths, gaps = strip_segments(start, end)
         exact = contact_admittance_reference((k_left, k_right), capacities, resistance, omega,
-                                             trace_capacity, trace_power, (interface-start, end-interface), generation)
+                                             trace_capacity, trace_power, heated_widths, generation, gaps)
         trace_t = np.array([upstream[mid-1], downstream[mid-1]])
         crossing = actual[2]/resistance
         trace_net = np.array([east[mid-1]-crossing, crossing-west[mid]])
