@@ -7,7 +7,7 @@ from conduction_provenance import provenance
 from tensorfvm.cht import rod
 
 
-def measure(n):
+def measure(n, flux_order=1):
     m, dx, decay = n//2, 1/n, 1.7
     k, c, area = np.array([2.,5.]), np.array([3.,1.5]), np.array([.7,2.4])
     exposed, h, cw = area[1]-area[0], 1.8, .6
@@ -27,7 +27,7 @@ def measure(n):
     cell,face,left,right = rod.solve_transient_stepped_rod(np.full(n,dx),area.repeat(m),k.repeat(m),
                           c.repeat(m),lambda t:ends*np.exp(-decay*t),times,initial,
                           film_coefficient=h,ambient_temperature=lambda t:ambient*np.exp(-decay*t),
-                          shoulder_areal_heat_capacity=cw,initial_shoulder_temperature=temp)
+                          shoulder_areal_heat_capacity=cw,initial_shoulder_temperature=temp,flux_order=flux_order)
     powers = np.column_stack((right[:,m-1],left[:,m]))
     def integral(values):
         return .5*np.diff(times)[:,None]*(values[:-1]+values[1:])
@@ -36,7 +36,7 @@ def measure(n):
     layers = dx*cell.reshape(len(times),2,m).sum(axis=-1)*area*c
     residual = np.diff(layers,axis=0)-integral(np.column_stack((left[:,0]-powers[:,0],powers[:,1]-right[:,-1])))
     transferred = integral(powers).cumsum(axis=0)
-    return dict(n=n,steps=len(times)-1,temperature_error_K=float(abs(cell-signal[:,None]*initial).max()),
+    return dict(n=n,flux_order=flux_order,steps=len(times)-1,temperature_error_K=float(abs(cell-signal[:,None]*initial).max()),
                 shoulder_temperature_error_K=float(abs(face[:,m]-signal*temp).max()),
                 instantaneous_power_error_W=float(abs(powers-signal[:,None]*q).max()),
                 cumulative_heat_error_J=float(abs(transferred+np.expm1(-decay*times[1:,None])*q/decay).max()),
@@ -45,15 +45,17 @@ def measure(n):
 
 
 if __name__ == "__main__":
-    rows, previous = [], None
-    for n in (16,32,64,128,256):
-        row = measure(n)
-        errors = {k:v for k,v in row.items() if "_error_" in k}
-        orders = {} if previous is None else {k:np.log2(previous[k]/v) for k,v in errors.items()}
-        row.update(orders=orders,passed=all(v>(.95 if k=="instantaneous_power_error_W" else 1.7)
-                   for k,v in orders.items()) and max(row["shoulder_step_balance_J"],row["layer_step_balance_J"])<1e-10)
-        rows.append(row)
-        previous = errors
+    rows = []
+    for flux_order in (1,2):
+        previous = None
+        for n in (16,32,64,128,256):
+            row = measure(n,flux_order)
+            errors = {k:v for k,v in row.items() if "_error_" in k}
+            orders = {} if previous is None else {k:np.log2(previous[k]/v) for k,v in errors.items()}
+            row.update(orders=orders,passed=all(v>(.95 if flux_order==1 and k=="instantaneous_power_error_W" else 1.85 if flux_order==2 else 1.7)
+                       for k,v in orders.items()) and max(row["shoulder_step_balance_J"],row["layer_step_balance_J"])<1e-10)
+            rows.append(row)
+            previous = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in (__file__,rod.__file__)]),
                      indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
