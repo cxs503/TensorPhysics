@@ -4,7 +4,6 @@ import json
 
 import numpy as np
 import torch
-from numpy.polynomial import legendre
 
 from conduction_provenance import provenance
 from tensordg import poisson_2d_bc as dg
@@ -58,18 +57,12 @@ def measure(n, degree, axis, resistance, sparse, *, sinusoidal=False):
     target = np.sin(2*np.pi*t) if sinusoidal else .7-1.6*t
     derivative = 2*np.pi*np.cos(2*np.pi*t) if sinusoidal else -1.6
     face_factor = np.sinc(1/n) if sinusoidal else 1.
-    coeff = u.numpy() if axis=="x" else u.numpy().transpose(1,0,3,2)
-    traces, gradients, fluxes = [], [], []
-    for index, endpoint, tensor, jump in ((n//2-1, 1., left, 0.), (n//2, -1., right, resistance)):
-        block = coeff[index].transpose(1,2,0)
-        def midpoint(values):
-            return legendre.legval2d(endpoint, 0., values)
-        traces.append(midpoint(block))
-        normal = 2*n*midpoint(legendre.legder(block, axis=0))
-        tangent = 2*n*midpoint(legendre.legder(block, axis=1))
+    traces, normal, fluxes = (v[...,0].numpy() for v in
+        dg.poisson_interface_traces_2d(u, axis, n//2, conductivity=material))
+    gradients = []
+    for side, tensor, jump in ((0, left, 0.), (1, right, resistance)):
         kn, _, cross = tensor
-        gradients.append(np.max(abs(normal-(-target-cross*(.35-derivative*jump))/kn)))
-        fluxes.append(-kn*normal-cross*tangent)
+        gradients.append(np.max(abs(normal[side]-(-target-cross*(.35-derivative*jump))/kn)))
     numerical = (qx[n//2] if axis=="x" else qy[:,n//2]).numpy()*n
     # The source is affine in s and a single Fourier mode in t for the sinusoidal case.
     centers = field(x[:,None], y[None,:])[1]
