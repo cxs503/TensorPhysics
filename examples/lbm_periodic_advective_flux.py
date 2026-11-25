@@ -30,9 +30,8 @@ def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_st
     field = background+cell_mode.real
     speeds = tuple(torch.full_like(field, u*dt/dx) for u in velocity)
     if periodic_gradient:
-        if flux_walls:
-            raise ValueError("automatic centered gradients require three periodic axes")
-        g = lbm.thermal_gradient_initialization_3d(field, *speeds, tau_T=tau, spacing=dx)
+        g = lbm.thermal_gradient_initialization_3d(field, *speeds, tau_T=tau, spacing=dx,
+                                                  periodic="yz" if flux_walls else True)
     elif gradient_start:
         grad = torch.stack([(1j*k*cell_mode).real for k in wave])
         g = lbm.thermal_gradient_initialization_3d(field, *speeds, grad, tau_T=tau, spacing=dx)
@@ -57,6 +56,8 @@ def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_st
                                                   spacing=dx, volumetric_heat_capacity=capacity)
                 divergence += torch.cat((low[..., None], flux, high[..., None]), dim=dim).diff(dim=dim)
                 error = abs(flux-target[..., :-1])
+                if step == 0:
+                    first_near_wall = float(error[..., [0,-1]].max())
             else:
                 divergence += flux-flux.roll(1, dims=dim)
                 error = abs(flux-target)
@@ -71,6 +72,8 @@ def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_st
         peak_t = max(peak_t, abs(updated-target).max().item())
         field = updated
     diagnostics = dict(first_step_flux_errors_xyz_W_m2=first_flux.tolist()) if tau != 1. or gradient_start or periodic_gradient else {}
+    if flux_walls:
+        diagnostics["first_step_near_wall_x_flux_error_W_m2"] = first_near_wall
     return dict(**diagnostics, n=n, steps=steps, velocity_m_s=velocity.tolist(), temperature_error_K=peak_t,
                 total_flux_errors_xyz_W_m2=peak_flux.tolist(), wrap_flux_errors_xyz_W_m2=([None, *peak_wrap[1:]] if flux_walls else peak_wrap.tolist()),
                 max_cell_energy_residual_J=peak_balance)
