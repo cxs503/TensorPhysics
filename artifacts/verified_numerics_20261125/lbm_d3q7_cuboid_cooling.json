@@ -1,0 +1,38 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "8101b3602e6770ca7a6a251d0dfe2d4ba82f11ae",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Cuboid (Lz,Ly,Lx)=(0.75,1.25,1) m. Four separable sine modes, each decaying at its continuum Laplacian eigenvalue, give distinct integrated heat on all six faces. D3Q7 BGK at tau=1, k=C=1, zero flow, odd periodic extensions for all six zero-temperature planes. Sample at 1/64 s with 8/16/24 intervals per meter and dt=dx\u00b2/8; trapezoidal spatial and temporal integrations.",
+  "suite": {
+    "tests": 63,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "wall_heat_error_z-_8_J": 0.0020722096107914922,
+    "wall_heat_error_z+_8_J": 0.0008337294495982632,
+    "wall_heat_error_y-_8_J": 0.00020545778802054295,
+    "wall_heat_error_y+_8_J": 4.966172368899707e-05,
+    "wall_heat_error_x-_8_J": 0.0006312013672403818,
+    "wall_heat_error_x+_8_J": 0.0002661827994487852,
+    "storage_error_8_J": 0.0073721891611654156,
+    "balance_error_8_J": 0.006261484070731904,
+    "wall_heat_error_z-_16_J": 0.0006335440353161664,
+    "wall_heat_error_z+_16_J": 0.00018976101053560027,
+    "wall_heat_error_y-_16_J": 5.594758749419542e-05,
+    "wall_heat_error_y+_16_J": 2.3226271196122306e-05,
+    "wall_heat_error_x-_16_J": 0.00020081570016138722,
+    "wall_heat_error_x+_16_J": 8.828446216502944e-05,
+    "storage_error_16_J": 0.0018590901091541379,
+    "balance_error_16_J": 0.0016934642287917967,
+    "wall_heat_error_z-_24_J": 0.00029199345681575617,
+    "wall_heat_error_z+_24_J": 8.223632797143415e-05,
+    "wall_heat_error_y-_24_J": 2.5276944689652317e-05,
+    "wall_heat_error_y+_24_J": 1.1264938243112088e-05,
+    "wall_heat_error_x-_24_J": 9.306216508172746e-05,
+    "wall_heat_error_x+_24_J": 4.123361480864833e-05,
+    "storage_error_24_J": 0.0008275832246236181,
+    "balance_error_24_J": 0.0007636207672537532
+  }
+}
