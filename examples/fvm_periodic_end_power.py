@@ -9,7 +9,7 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def measure(steps, method, alternating=False, compare_fem=False):
+def measure(steps, method, alternating=False, compare_fem=False, compare_sph=False):
     # T-base = 0.3*x + (0.7-1.4*x)*sin(omega*t), so the two wall
     # temperatures oscillate in opposite phases and the axial flux is uniform.
     n, area, k, cv = 12, 1.5, 2., 1.2
@@ -106,7 +106,32 @@ def measure(steps, method, alternating=False, compare_fem=False):
                           fem_interval_heater_error_W=float((abs(heater-applied_heat)/dt[:, None]).max()),
                           fem_wall_balance_residual_J=float(abs(recovered-heater-film_fem).max()),
                           fem_fvm_cumulative_difference_J=float(abs((recovered-heats["end_input"]).cumsum(axis=0)).max()))
-    return dict(**fem_errors, min_dt_s=float(dt.min()), max_dt_s=float(dt.max()),
+    sph_errors = {}
+    if compare_sph:
+        from tensorsph import heat_conduction_2d as sph
+
+        # The slab integrates per unit area. Convert each end input to W/m²
+        # and the returned heats back to J before comparing to the rod.
+        wall_loads = tuple(lambda t, i=i: applied(t)[i]/area for i in range(2))
+        state, cuts, wall, external, wall_mean = sph.solve_transient_layered_slab(
+            .3*centers, times, 1/n, (None, None), conductivity=np.full(n, k),
+            volumetric_heat_capacity=cv, heat_source=lambda t: cv*omega*amplitude(centers)*math.cos(omega*t),
+            x_wall_films=tuple(zip(film, ambient)), x_wall_inward_flux=wall_loads,
+            wall_areal_heat_capacity=capacity, initial_wall_temperatures=.3*ends,
+            method=method, return_x_heat=True, return_external_heat=True,
+            return_wall_temperatures=True, return_interval_wall_temperatures=True)
+        external = area*external.numpy()
+        film_sph = area*film*(ambient-wall_mean.numpy())*dt[:, None]
+        heater_sph = external-film_sph
+        conduction_sph = area*cuts.numpy()[:, [0,-1]]*np.array([1., -1.])
+        storage_sph = area*capacity*np.diff(wall.numpy(), axis=0)
+        sph_errors = dict(sph_particle_error_K=float(abs(state.numpy()-exact_t).max()),
+                          sph_wall_error_K=float(abs(wall.numpy()-exact_wall).max()),
+                          sph_cumulative_end_error_J=float(abs(external.cumsum(axis=0)-exact_heat[1:]).max()),
+                          sph_interval_film_error_W=float((abs(film_sph-film_heat)/dt[:, None]).max()),
+                          sph_interval_heater_error_W=float((abs(heater_sph-applied_heat)/dt[:, None]).max()),
+                          sph_wall_balance_residual_J=float(abs(external-conduction_sph-storage_sph).max()))
+    return dict(**sph_errors, **fem_errors, min_dt_s=float(dt.min()), max_dt_s=float(dt.max()),
                 interval_heater_power_error_W=float((abs(heats["end_applied"]-applied_heat)/dt[:, None]).max()),
                 interval_film_power_error_W=float((abs(heats["end_film"]-film_heat)/dt[:, None]).max()),
                 max_input_split_residual_J=float(abs(split_residual).max()),
@@ -123,6 +148,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--alternating", action="store_true", help="alternate short and long steps in a 1:3 ratio")
     parser.add_argument("--compare-fem", action="store_true", help="recover end heat from linear finite elements")
+    parser.add_argument("--compare-sph", action="store_true", help="verify the same external heat on a layered particle slab")
     args = parser.parse_args()
     files = [__file__, rod.__file__]
     path = "../TensorFVM/src"
@@ -133,16 +159,23 @@ if __name__ == "__main__":
         path += ":../TensorFEM/src"
         fem_metrics = ("fem_wall_error_K", "fem_cumulative_end_error_J",
                        "fem_interval_film_error_W", "fem_interval_heater_error_W")
+    sph_metrics = ()
+    if args.compare_sph:
+        from tensorsph import heat_conduction_2d as sph
+        files.append(sph.__file__)
+        path += ":../TensorSPH/src"
+        sph_metrics = ("sph_particle_error_K", "sph_wall_error_K", "sph_cumulative_end_error_J",
+                       "sph_interval_film_error_W", "sph_interval_heater_error_W")
     runs = []
     for method in ("theta", "sdirk2"):
         previous = None
         for steps in (32, 64, 128):
-            row = measure(steps, method, args.alternating, args.compare_fem)
+            row = measure(steps, method, args.alternating, args.compare_fem, args.compare_sph)
             row["passed"] = max(row["max_wall_energy_residual_J"], row["max_input_split_residual_J"]) < 1e-11
             for key in ("max_cell_error_K", "max_wall_error_K", "max_section_error_W",
                         "west_cumulative_error_J", "east_cumulative_error_J",
                         "interval_end_power_error_W", "interval_wall_mean_error_K",
-                        "interval_heater_power_error_W", "interval_film_power_error_W", *fem_metrics):
+                        "interval_heater_power_error_W", "interval_film_power_error_W", *fem_metrics, *sph_metrics):
                 if previous:
                     order = math.log2(previous[key]/row[key])
                     row[key+"_order"] = order
@@ -153,11 +186,16 @@ if __name__ == "__main__":
                 row["passed"] &= row["fem_wall_balance_residual_J"] < 1e-11
                 if steps == 128:
                     row["passed"] &= row["fem_cumulative_end_error_J"] < .002
+            if args.compare_sph:
+                row["passed"] &= row["sph_wall_balance_residual_J"] < 1e-11
+                if steps == 128:
+                    row["passed"] &= row["sph_cumulative_end_error_J"] < .002
             runs.append(row)
             previous = row
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(f) for f in files],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_periodic_end_power.py"
-                          + (" --alternating" if args.alternating else "") + (" --compare-fem" if args.compare_fem else "")),
+                          + (" --alternating" if args.alternating else "") + (" --compare-fem" if args.compare_fem else "")
+                          + (" --compare-sph" if args.compare_sph else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
