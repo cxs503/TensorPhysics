@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "bulk_columns": 16,
+      "method": "theta",
+      "max_bulk_temperature_error_K": 5.10702591327572e-15,
+      "max_relative_cut_flux_error": 1.3788969965844444e-13,
+      "capacity_error_J_per_m2_K": 0.0,
+      "sheet_balance_errors_J_per_m2": [
+        1.7650811368064012e-16,
+        8.023096076392733e-17
+      ],
+      "total_balance_error_J_per_m2": 2.6107588313450947e-16,
+      "passed": true
+    },
+    {
+      "bulk_columns": 16,
+      "method": "sdirk2",
+      "max_bulk_temperature_error_K": 5.10702591327572e-15,
+      "max_relative_cut_flux_error": 1.3788969965844444e-13,
+      "capacity_error_J_per_m2_K": 0.0,
+      "sheet_balance_errors_J_per_m2": [
+        1.2983321015513916e-16,
+        7.979727989493313e-17
+      ],
+      "total_balance_error_J_per_m2": 2.0296264668928643e-16,
+      "passed": true
+    },
+    {
+      "bulk_columns": 32,
+      "method": "theta",
+      "max_bulk_temperature_error_K": 2.1760371282653068e-14,
+      "max_relative_cut_flux_error": 2.998712389512548e-13,
+      "capacity_error_J_per_m2_K": 0.0,
+      "sheet_balance_errors_J_per_m2": [
+        9.944302326037047e-16,
+        2.96637714392034e-16
+      ],
+      "total_balance_error_J_per_m2": 1.0117774673634727e-15,
+      "passed": true
+    },
+    {
+      "bulk_columns": 32,
+      "method": "sdirk2",
+      "max_bulk_temperature_error_K": 2.1760371282653068e-14,
+      "max_relative_cut_flux_error": 2.998712389512548e-13,
+      "capacity_error_J_per_m2_K": 0.0,
+      "sheet_balance_errors_J_per_m2": [
+        1.2234137314326432e-15,
+        2.979387569990166e-16
+      ],
+      "total_balance_error_J_per_m2": 1.1119577481011333e-15,
+      "passed": true
+    },
+    {
+      "bulk_columns": 64,
+      "method": "theta",
+      "max_bulk_temperature_error_K": 9.692247004977617e-14,
+      "max_relative_cut_flux_error": 2.077449323678593e-12,
+      "capacity_error_J_per_m2_K": 0.0,
+      "sheet_balance_errors_J_per_m2": [
+        2.462873655018072e-15,
+        9.50194783966296e-16
+      ],
+      "total_balance_error_J_per_m2": 2.5782327661705295e-15,
+      "passed": true
+    },
+    {
+      "bulk_columns": 64,
+      "method": "sdirk2",
+      "max_bulk_temperature_error_K": 9.692247004977617e-14,
+      "max_relative_cut_flux_error": 2.077449323678593e-12,
+      "capacity_error_J_per_m2_K": 0.0,
+      "sheet_balance_errors_J_per_m2": [
+        2.963775058706375e-15,
+        7.4593109467002705e-16
+      ],
+      "total_balance_error_J_per_m2": 2.2789929665645303e-15,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "be0136d3bcd73e331e5039d4fb8071a196b22282",
+      "file": "sph_layered_storing_contacts.py",
+      "source_sha256": "c16b6d1e4524733d834563af19ec66f3198f5fa03a233d6160ef8d7dad9fcbb5"
+    },
+    {
+      "commit": "32c62a50752bf499c2e144976ae93eacd929d2f5",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "896e9c4455beafaa9cea1973651e71cb34712d04669dcf36e4a26fdd99e37625"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_layered_storing_contacts.py"
+}
