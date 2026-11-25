@@ -21,14 +21,10 @@ def finite_volume(n, split):
     axial = 1.7
     ambient = np.where(hot, *reservoirs)
     coefficient = np.where(hot, *films)
-    # Only temperature differences drive this linear problem. Center the
-    # unknowns to reduce cancellation when extracting the two end powers.
-    baseline = walls.mean()
     cell, _, left, right = rod.solve_steady_stepped_rod(
-        widths, 1., axial, 1., walls-baseline, flux_order=2, heat_loss_coefficient=coefficient,
-        bulk_ambient_temperature=ambient-baseline, source_derivative_breaks=[int(hot.sum())],
+        widths, 1., axial, 1., walls, flux_order=2, heat_loss_coefficient=coefficient,
+        bulk_ambient_temperature=ambient, source_derivative_breaks=[int(hot.sum())],
     )
-    cell += baseline
     midpoint, powers = dem.reference(centers, split, axial, films, reservoirs, walls)
     # Integrate the exact hyperbolic profile over the cell rather than using
     # its midpoint value as the reference for a finite-volume average.
