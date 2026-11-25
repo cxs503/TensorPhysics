@@ -1,4 +1,5 @@
 """One short pulse in a fixed-temperature slab, verified with FVM cell means and SPH particles."""
+import argparse
 import json
 import math
 
@@ -79,6 +80,15 @@ def measure(n, method, width, *, return_mean_profile=False, return_profiles=Fals
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--fem", action="store_true", help="include sparse LINE2 section heats in the comparison")
+    args = parser.parse_args()
+    source_files = [__file__, rod.__file__, sph.__file__, sph.heat.__file__]
+    paths = "../TensorFVM/src:../TensorSPH/src"
+    if args.fem:
+        import fem_subinterval_heat_pulse as fem
+        paths += ":../TensorFEM/src"
+        source_files.extend([fem.__file__, fem.thermal.__file__])
     runs = []
     previous = {}
     for n in (16, 32, 64):
@@ -108,7 +118,16 @@ if __name__ == "__main__":
                                         cut_differences.max()) < tolerance
                 passed = passed and max(fv["cell_balance_error_over_heat_scale"],
                                         particles["cell_balance_error_over_heat_scale"]) < 1e-10
-                runs.append(dict(section_heat_difference_over_scale=cut_differences.tolist(),
+                extra = {}
+                if args.fem:
+                    fe, fe_cuts = fem.measure(n, method, width, sparse=True, return_section_heat=True)
+                    fe_fv = abs(fe_cuts-fv_cuts).max(axis=1)
+                    fe_sph = abs(fe_cuts-sph_cuts).max(axis=1)
+                    extra.update(fem=fe, fem_fvm_section_difference_over_scale=fe_fv.tolist(),
+                                 fem_sph_section_difference_over_scale=fe_sph.tolist())
+                    passed = (passed and max(fe_fv.max(), fe_sph.max(), fe["max_section_heat_error_over_scale"]) < tolerance
+                              and fe["energy_imbalance_over_peak"] < 1e-10)
+                runs.append(dict(**extra, section_heat_difference_over_scale=cut_differences.tolist(),
                                  max_section_heat_difference_over_scale=float(cut_differences.max()),
                                  center_mean_difference_over_peak=differences.tolist(),
                                  max_center_mean_difference_over_peak=worst, center_mean_difference_order=order,
@@ -116,7 +135,8 @@ if __name__ == "__main__":
                                  passed=passed and fv["source_heat_relative_error"] < 1e-12))
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs,
-                          sources=[provenance(path) for path in (__file__, rod.__file__, sph.__file__, sph.heat.__file__)],
-                          reproduction="OMP_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/fvm_sph_subinterval_heat_pulse.py"),
+                          sources=[provenance(path) for path in source_files],
+                          reproduction=f"OMP_NUM_THREADS=1 PYTHONPATH={paths} python examples/fvm_sph_subinterval_heat_pulse.py"
+                          + (" --fem" if args.fem else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)

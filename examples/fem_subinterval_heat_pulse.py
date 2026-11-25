@@ -9,7 +9,7 @@ from tensorfem import thermal
 from conduction_provenance import provenance
 
 
-def measure(n, method, width, sparse):
+def measure(n, method, width, sparse, *, return_section_heat=False):
     # Solve in excess above fixed 305 K ends. Unit k, capacity and area.
     rate, amplitude = math.pi**2, 2**-44
     dt = 1/(16*rate)
@@ -61,7 +61,7 @@ def measure(n, method, width, sparse):
     stored = result.temperature.numpy()[indices][:, elements.numpy()].mean(axis=2).sum(axis=1)/n
     source_heat = np.add.reduceat(deposited.sum(axis=1), indices[:-1])
     balance = np.diff(stored)-source_heat-fixed.sum(axis=1)
-    return dict(crossing_end_reaction_error_over_scale=float(abs(fixed[1]-exact_ends[1]).max()/scale),
+    metrics = dict(crossing_end_reaction_error_over_scale=float(abs(fixed[1]-exact_ends[1]).max()/scale),
                 max_section_heat_error_over_scale=float(section_error.max()),
                 free_node_residual_over_scale=float(abs(reactions[:, 1:-1]).max()/scale),
                 boundary_reconstruction_mismatch_over_scale=float(abs(
@@ -72,6 +72,9 @@ def measure(n, method, width, sparse):
                 decay_node_error_over_peak=float(error[indices[3:]].max()),
                 interval_mean_error_over_peak=float(abs(means/amplitude-exact_means).max()/peak),
                 source_integral_relative_error=float(abs(load.sum()*math.pi/2-1)))
+    if return_section_heat:
+        return metrics, sections/scale
+    return metrics
 
 
 if __name__ == "__main__":
