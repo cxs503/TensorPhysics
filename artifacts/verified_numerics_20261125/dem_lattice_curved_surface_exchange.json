@@ -1,0 +1,122 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "intervals": 16,
+      "field_error_K": 0.0008017463256919655,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.246365168933752,
+        "power_error_W": 0.0036348310662477346,
+        "flux_error_W_m2": 0.008943602693686437,
+        "surface_temperature_error_K": 0.0017887205387410177
+      },
+      "upper": {
+        "reference_outward_power_W": -0.85,
+        "outward_power_W": -0.8458242799254653,
+        "power_error_W": 0.004175720074534706,
+        "flux_error_W_m2": 0.010554635761445663,
+        "surface_temperature_error_K": 0.0017591059602750647
+      },
+      "orders": {},
+      "passed": true
+    },
+    {
+      "intervals": 32,
+      "field_error_K": 0.00020920950078107126,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.249089692907057,
+        "power_error_W": 0.0009103070929432633,
+        "flux_error_W_m2": 0.002334138840156541,
+        "surface_temperature_error_K": 0.0004668277680366373
+      },
+      "upper": {
+        "reference_outward_power_W": -0.85,
+        "outward_power_W": -0.8489538346913669,
+        "power_error_W": 0.0010461653086331069,
+        "flux_error_W_m2": 0.0027765679440998614,
+        "surface_temperature_error_K": 0.000462761324058647
+      },
+      "orders": {
+        "field_error_K": 1.9381974671445958,
+        "lower_surface_temperature_error_K": 1.9379657214525594,
+        "lower_power_error_W": 1.997463087427125,
+        "lower_flux_error_W_m2": 1.9379657214660198,
+        "upper_surface_temperature_error_K": 1.9265021873064598,
+        "upper_power_error_W": 1.9969141665602128,
+        "upper_flux_error_W_m2": 1.9265021874094252
+      },
+      "passed": true
+    },
+    {
+      "intervals": 64,
+      "field_error_K": 5.341488565591135e-05,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.249772322144205,
+        "power_error_W": 0.00022767785579524968,
+        "flux_error_W_m2": 0.0005966419587597471,
+        "surface_temperature_error_K": 0.0001193283917473309
+      },
+      "upper": {
+        "reference_outward_power_W": -0.85,
+        "outward_power_W": -0.8497383165282109,
+        "power_error_W": 0.0002616834717891203,
+        "flux_error_W_m2": 0.0007127683361598525,
+        "surface_temperature_error_K": 0.00011879472270948099
+      },
+      "orders": {
+        "field_error_K": 1.9696346166456749,
+        "lower_surface_temperature_error_K": 1.9679530349446095,
+        "lower_power_error_W": 1.9993593417823232,
+        "lower_flux_error_W_m2": 1.9679530348723018,
+        "upper_surface_temperature_error_K": 1.9617975463373065,
+        "upper_power_error_W": 1.999216125231584,
+        "upper_flux_error_W_m2": 1.9617975464027604
+      },
+      "passed": true
+    },
+    {
+      "intervals": 128,
+      "field_error_K": 1.3492681603111123e-05,
+      "lower": {
+        "reference_outward_power_W": -4.25,
+        "outward_power_W": -4.249943074197559,
+        "power_error_W": 5.692580244076595e-05,
+        "flux_error_W_m2": 0.00015085472521469967,
+        "surface_temperature_error_K": 3.017094502411055e-05
+      },
+      "upper": {
+        "reference_outward_power_W": -0.85,
+        "outward_power_W": -0.8499345701980383,
+        "power_error_W": 6.542980196166948e-05,
+        "flux_error_W_m2": 0.0001806153670231847,
+        "surface_temperature_error_K": 3.0102561197509203e-05
+      },
+      "orders": {
+        "field_error_K": 1.98506474285931,
+        "lower_surface_temperature_error_K": 1.983705552752128,
+        "lower_power_error_W": 1.999839351934296,
+        "lower_flux_error_W_m2": 1.983705551907595,
+        "upper_surface_temperature_error_K": 1.980512602593825,
+        "upper_power_error_W": 1.9998029959145978,
+        "upper_flux_error_W_m2": 1.9805126036903897
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "55b475b2b27d6be1328fad9f3f5761e73b071fc8",
+      "file": "dem_lattice_surface_exchange.py",
+      "source_sha256": "ef9a676ce645bfd39d585d1aeadc538a99be40e6cd6c2ec6597b586d2e66a8bd"
+    },
+    {
+      "commit": "96553ce7ba6692a250a1610d43b378eadf02ef65",
+      "file": "contact_chain.py",
+      "source_sha256": "79482a95bfd79095b75c7f86084cca81807b4a7f352d84633c96404a17992ede"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_lattice_surface_exchange.py --curved"
+}
