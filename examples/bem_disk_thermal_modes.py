@@ -22,31 +22,28 @@ def reference(points, mode, wave, conductivity):
     return t, -conductivity*np.column_stack((radial*cs-tangent*sn, radial*sn+tangent*cs))
 
 
-def arc_load_errors(mesh, traces, weights, mode, radial_flux):
+def arc_load_errors(solution, mode, radial_flux):
     """Integrate physical chord loads and compare with the same angular intervals on the unit circle."""
-    n = mesh.panel_count
+    n = solution.mesh.panel_count
     step = 2*np.pi/n
     mid = (np.arange(n)+.5)*step
 
     def arc_mean(center, width):
         return radial_flux*np.exp(1j*mode*center)*np.sinc(mode*width/(2*np.pi))
 
-    panel_load = mesh.lengths*(traces @ weights)
+    panel_load = solution.panel_inward_power(np.arange(n))
     panel_error = abs(panel_load/step-arc_mean(mid, step))
     # Use fixed arcs with off-node endpoints, including one crossing angle zero.
     windows = []
-    nodes, _ = np.polynomial.legendre.leggauss(traces.shape[1])
-    coeff = np.polynomial.legendre.legfit(nodes, traces.T, len(nodes)-1)
-    primitive = np.polynomial.legendre.legint(coeff, axis=0)
     for start, end in ((.19, 1.41), (5.83, 2*np.pi+.47)):
-        load = 0j
-        for j in range(int(np.floor(start/step)), int(np.ceil(end/step))):
-            center = (j+.5)*step
-            angles = np.array([max(start, j*step), min(end, (j+1)*step)])
-            # Radial projection intersects the chord at this reference coordinate.
-            xi = np.tan(angles-center)/np.tan(step/2)
-            values = np.polynomial.legendre.legval(xi, primitive[:, j%n])
-            load += mesh.lengths[j%n]*(values[1]-values[0])/2
+        panels = np.arange(int(np.floor(start/step)), int(np.ceil(end/step)))
+        center = (panels+.5)*step
+        def fraction(angle):
+            # Clip roundoff at vertices after radial projection onto the chord.
+            return np.clip((1+np.tan(angle-center)/np.tan(step/2))/2, 0., 1.)
+        first = fraction(np.maximum(start, panels*step))
+        last = fraction(np.minimum(end, (panels+1)*step))
+        load = solution.panel_inward_power(panels % n, first, last).sum()
         exact = (end-start)*arc_mean((end+start)/2, end-start)
         windows.append(float(abs(load-exact)))
     return dict(panel_arc_mean_flux_error_W_m2=float(panel_error.max()),
@@ -84,7 +81,7 @@ def measure(n, mode, omega, quadratic, circle_data=False):
         weights = np.array([5., 8., 5.])/18 if quadratic else np.ones(1)
         modal_power = mesh.lengths @ ((solution.inward_flux*phase).reshape(n, -1) @ weights)
         exact_power = 2*np.pi*conductivity*wave*ivp(mode, wave)/iv(mode, wave)
-        extra.update(arc_load_errors(mesh, solution.inward_flux.reshape(n, -1), weights, mode, exact_power/(2*np.pi)))
+        extra.update(arc_load_errors(solution, mode, exact_power/(2*np.pi)))
         extra["modal_inward_power_error_W_m"] = float(abs(modal_power-exact_power))
     return dict(**extra, panels=n, mode=mode, omega_rad_s=omega, quadratic=quadratic,
                 interior_temperature_error_K=float(abs(solution.temperature(probes)-exact_t).max()),
