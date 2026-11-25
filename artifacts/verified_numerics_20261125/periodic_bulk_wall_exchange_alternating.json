@@ -1,0 +1,436 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "fvm_bulk_power_error_W": 0.004031451185966632,
+      "fem_bulk_power_error_W": 0.004032975036551163,
+      "sph_bulk_power_error_W": 0.004031323713413304,
+      "wall_capacity_J_m2_K": [
+        0.25,
+        0.6
+      ],
+      "storage_power_errors_W": {
+        "fvm": [
+          0.008142178657643662,
+          0.021510693176641265
+        ],
+        "fem": [
+          0.008176779786655727,
+          0.021543953914112162
+        ],
+        "sph": [
+          0.008146316930910835,
+          0.021514964470571957
+        ]
+      },
+      "sph_particle_error_K": 0.002009247536326142,
+      "sph_wall_error_K": 0.0021178943837467656,
+      "sph_cumulative_end_error_J": 0.007355991645931703,
+      "sph_interval_film_error_W": 0.0377895628075405,
+      "sph_interval_heater_error_W": 0.06664820764115298,
+      "sph_component_sum_residual_J": 1.1102230246251565e-16,
+      "sph_film_law_residual_J": 2.7755575615628914e-17,
+      "sph_wall_balance_residual_J": 5.134781488891349e-16,
+      "fem_wall_error_K": 0.002120067242996182,
+      "fem_cumulative_end_error_J": 0.007355107156722052,
+      "fem_interval_film_error_W": 0.03779285322123963,
+      "fem_interval_heater_error_W": 0.06664820764115298,
+      "fem_wall_balance_residual_J": 4.440892098500626e-16,
+      "fem_fvm_cumulative_difference_J": 3.4250136265092518e-06,
+      "min_dt_s": 0.015625,
+      "max_dt_s": 0.046875,
+      "interval_heater_power_error_W": 0.06664820764115298,
+      "interval_film_power_error_W": 0.037782067607821546,
+      "max_input_split_residual_J": 1.1102230246251565e-16,
+      "max_wall_energy_residual_J": 2.914335439641036e-16,
+      "interval_end_power_error_W": 0.03316750430394677,
+      "interval_wall_mean_error_K": 0.006297011267958896,
+      "steps": 32,
+      "method": "theta",
+      "columns": 12,
+      "max_cell_error_K": 0.002007931878971858,
+      "max_wall_error_K": 0.002116736091469007,
+      "max_section_error_W": 0.01402371003681191,
+      "west_cumulative_error_J": 0.00735688916549293,
+      "east_cumulative_error_J": 0.0070464656947799575,
+      "passed": true
+    },
+    {
+      "fvm_bulk_power_error_W": 0.001054752454023718,
+      "fem_bulk_power_error_W": 0.001054976928627364,
+      "sph_bulk_power_error_W": 0.0010547369815829082,
+      "wall_capacity_J_m2_K": [
+        0.25,
+        0.6
+      ],
+      "storage_power_errors_W": {
+        "fvm": [
+          0.002425289196100522,
+          0.006186676801304951
+        ],
+        "fem": [
+          0.002434604614117634,
+          0.006194688243134887
+        ],
+        "sph": [
+          0.0024261566529899525,
+          0.006187428122581551
+        ]
+      },
+      "sph_particle_error_K": 0.0004891070326993319,
+      "sph_wall_error_K": 0.0005141279844294022,
+      "sph_cumulative_end_error_J": 0.001840376348059336,
+      "sph_interval_film_error_W": 0.00953933553300601,
+      "sph_interval_heater_error_W": 0.016766635467512003,
+      "sph_component_sum_residual_J": 1.1102230246251565e-16,
+      "sph_film_law_residual_J": 5.551115123125783e-17,
+      "sph_wall_balance_residual_J": 2.498001805406602e-16,
+      "fem_wall_error_K": 0.0005146211951304602,
+      "fem_cumulative_end_error_J": 0.001840231168585893,
+      "fem_interval_film_error_W": 0.009540550865304217,
+      "fem_interval_heater_error_W": 0.016766635467512003,
+      "fem_wall_balance_residual_J": 2.2898349882893854e-16,
+      "fem_fvm_cumulative_difference_J": 8.401454808099063e-07,
+      "min_dt_s": 0.0078125,
+      "max_dt_s": 0.0234375,
+      "interval_heater_power_error_W": 0.016766635467512003,
+      "interval_film_power_error_W": 0.009537357328293675,
+      "max_input_split_residual_J": 5.551115123125783e-17,
+      "max_wall_energy_residual_J": 2.914335439641036e-16,
+      "interval_end_power_error_W": 0.00825993087259036,
+      "interval_wall_mean_error_K": 0.0015895595547045227,
+      "steps": 64,
+      "method": "theta",
+      "columns": 12,
+      "max_cell_error_K": 0.0004887480477138162,
+      "max_wall_error_K": 0.0005138056876906605,
+      "max_section_error_W": 0.003375637375258922,
+      "west_cumulative_error_J": 0.001840592215472614,
+      "east_cumulative_error_J": 0.001765095534349559,
+      "passed": true,
+      "max_cell_error_K_order": 2.038547480544768,
+      "max_wall_error_K_order": 2.0425466438287594,
+      "max_section_error_W_order": 2.054636234140855,
+      "west_cumulative_error_J_order": 1.9989258247706785,
+      "east_cumulative_error_J_order": 1.9971535541456162,
+      "interval_end_power_error_W_order": 2.005568847424037,
+      "interval_wall_mean_error_K_order": 1.986040179189428,
+      "interval_heater_power_error_W_order": 1.990972862922519,
+      "interval_film_power_error_W_order": 1.9860401791819657,
+      "fem_wall_error_K_order": 2.0425272419500016,
+      "fem_cumulative_end_error_J_order": 1.998859352255227,
+      "fem_interval_film_error_W_order": 1.9859689668349694,
+      "fem_interval_heater_error_W_order": 1.990972862922519,
+      "sph_particle_error_K_order": 2.038433198970893,
+      "sph_wall_error_K_order": 2.0424311995882563,
+      "sph_cumulative_end_error_J_order": 1.9989190206998657,
+      "sph_interval_film_error_W_order": 1.9860271447365179,
+      "sph_interval_heater_error_W_order": 1.990972862922519,
+      "fvm_bulk_power_error_W_order": 1.93439480944018,
+      "fem_bulk_power_error_W_order": 1.934633026860389,
+      "sph_bulk_power_error_W_order": 1.9343703548213254
+    },
+    {
+      "fvm_bulk_power_error_W": 0.0002686913781419313,
+      "fem_bulk_power_error_W": 0.00026872082931261865,
+      "sph_bulk_power_error_W": 0.0002686896512381261,
+      "wall_capacity_J_m2_K": [
+        0.25,
+        0.6
+      ],
+      "storage_power_errors_W": {
+        "fvm": [
+          0.0006659062066350548,
+          0.0016593788901803446
+        ],
+        "fem": [
+          0.0006680829756170089,
+          0.0016610457498226576
+        ],
+        "sph": [
+          0.000666057028843999,
+          0.001659492298109318
+        ]
+      },
+      "sph_particle_error_K": 0.00012011857874261178,
+      "sph_wall_error_K": 0.0001261763549117445,
+      "sph_cumulative_end_error_J": 0.0004600220489909823,
+      "sph_interval_film_error_W": 0.002385761915030334,
+      "sph_interval_heater_error_W": 0.004194529237186846,
+      "sph_component_sum_residual_J": 5.551115123125783e-17,
+      "sph_film_law_residual_J": 1.3877787807814457e-17,
+      "sph_wall_balance_residual_J": 2.0469737016526324e-16,
+      "fem_wall_error_K": 0.00012629973969346953,
+      "fem_cumulative_end_error_J": 0.00045998084158938024,
+      "fem_interval_film_error_W": 0.0023860367834688625,
+      "fem_interval_heater_error_W": 0.004194529237185662,
+      "fem_wall_balance_residual_J": 3.608224830031759e-16,
+      "fem_fvm_cumulative_difference_J": 2.0824779608434683e-07,
+      "min_dt_s": 0.00390625,
+      "max_dt_s": 0.01171875,
+      "interval_heater_power_error_W": 0.004194529237185662,
+      "interval_film_power_error_W": 0.002385273021082194,
+      "max_input_split_residual_J": 2.7755575615628914e-17,
+      "max_wall_energy_residual_J": 1.942890293094024e-16,
+      "interval_end_power_error_W": 0.0020606504438032878,
+      "interval_wall_mean_error_K": 0.0003975455035024611,
+      "steps": 128,
+      "method": "theta",
+      "columns": 12,
+      "max_cell_error_K": 0.00012002872219729621,
+      "max_wall_error_K": 0.00012609577175271003,
+      "max_section_error_W": 0.000832161384107799,
+      "west_cumulative_error_J": 0.0004600776304053422,
+      "east_cumulative_error_J": 0.00044127399239979326,
+      "passed": true,
+      "max_cell_error_K_order": 2.025711263693995,
+      "max_wall_error_K_order": 2.0267029605901037,
+      "max_section_error_W_order": 2.020224684430051,
+      "west_cumulative_error_J_order": 2.0002208144860436,
+      "east_cumulative_error_J_order": 1.9999996442502006,
+      "interval_end_power_error_W_order": 2.003029912144032,
+      "interval_wall_mean_error_K_order": 1.999435162295421,
+      "interval_heater_power_error_W_order": 1.9990124072776088,
+      "interval_film_power_error_W_order": 1.9994351622647037,
+      "fem_wall_error_K_order": 2.0266592112680333,
+      "fem_cumulative_end_error_J_order": 2.0002413294035706,
+      "fem_interval_film_error_W_order": 1.9994562849362294,
+      "fem_interval_heater_error_W_order": 1.9990124072776088,
+      "sph_particle_error_K_order": 2.0256908988649154,
+      "sph_wall_error_K_order": 2.0266859626378277,
+      "sph_cumulative_end_error_J_order": 2.00022590387433,
+      "sph_interval_film_error_W_order": 1.999438700355843,
+      "sph_interval_heater_error_W_order": 1.9990124072772015,
+      "fvm_bulk_power_error_W_order": 1.972882510656173,
+      "fem_bulk_power_error_W_order": 1.9730313906902561,
+      "sph_bulk_power_error_W_order": 1.9728706195898214
+    },
+    {
+      "fvm_bulk_power_error_W": 0.000499886522546733,
+      "fem_bulk_power_error_W": 0.0004991930458857485,
+      "sph_bulk_power_error_W": 0.0005000011563596937,
+      "wall_capacity_J_m2_K": [
+        0.25,
+        0.6
+      ],
+      "storage_power_errors_W": {
+        "fvm": [
+          0.006959879290043602,
+          0.011579960073669682
+        ],
+        "fem": [
+          0.006910477833261375,
+          0.011508045522971688
+        ],
+        "sph": [
+          0.00694426692915151,
+          0.011565200007718879
+        ]
+      },
+      "sph_particle_error_K": 0.001379111243970721,
+      "sph_wall_error_K": 0.0014670465128719945,
+      "sph_cumulative_end_error_J": 0.0007590258641273495,
+      "sph_interval_film_error_W": 0.010390789360119612,
+      "sph_interval_heater_error_W": 0.008201855568396846,
+      "sph_component_sum_residual_J": 1.1102230246251565e-16,
+      "sph_film_law_residual_J": 1.1102230246251565e-16,
+      "sph_wall_balance_residual_J": 4.996003610813204e-16,
+      "fem_wall_error_K": 0.0014708103085441238,
+      "fem_cumulative_end_error_J": 0.0007590164135566901,
+      "fem_interval_film_error_W": 0.010396884116244584,
+      "fem_interval_heater_error_W": 0.008201855568396846,
+      "fem_wall_balance_residual_J": 2.7755575615628914e-16,
+      "fem_fvm_cumulative_difference_J": 1.7399603955579532e-06,
+      "min_dt_s": 0.015625,
+      "max_dt_s": 0.046875,
+      "interval_heater_power_error_W": 0.008201855568396255,
+      "interval_film_power_error_W": 0.01038658343856961,
+      "max_input_split_residual_J": 5.551115123125783e-17,
+      "max_wall_energy_residual_J": 4.163336342344337e-16,
+      "interval_end_power_error_W": 0.006632464108444314,
+      "interval_wall_mean_error_K": 0.001731097239750179,
+      "steps": 32,
+      "method": "sdirk2",
+      "columns": 12,
+      "max_cell_error_K": 0.001378986829244755,
+      "max_wall_error_K": 0.0014673117682188486,
+      "max_section_error_W": 0.008701359330961722,
+      "west_cumulative_error_J": 0.0007593697305635638,
+      "east_cumulative_error_J": 0.0007176990636389435,
+      "passed": true
+    },
+    {
+      "fvm_bulk_power_error_W": 0.00011776236088426965,
+      "fem_bulk_power_error_W": 0.00011786257470114414,
+      "sph_bulk_power_error_W": 0.00011775513383923315,
+      "wall_capacity_J_m2_K": [
+        0.25,
+        0.6
+      ],
+      "storage_power_errors_W": {
+        "fvm": [
+          0.001929623714598927,
+          0.002955131125338628
+        ],
+        "fem": [
+          0.001889251191210084,
+          0.0029222115347828925
+        ],
+        "sph": [
+          0.0019233554885575987,
+          0.0029509308103832232
+        ]
+      },
+      "sph_particle_error_K": 0.0003324792997000392,
+      "sph_wall_error_K": 0.00035706203386476343,
+      "sph_cumulative_end_error_J": 0.00019776620503419995,
+      "sph_interval_film_error_W": 0.0026135766962032867,
+      "sph_interval_heater_error_W": 0.002037833933061487,
+      "sph_component_sum_residual_J": 5.551115123125783e-17,
+      "sph_film_law_residual_J": 5.551115123125783e-17,
+      "sph_wall_balance_residual_J": 3.260195932663912e-16,
+      "fem_wall_error_K": 0.00035768565046190304,
+      "fem_cumulative_end_error_J": 0.00019780659174728488,
+      "fem_interval_film_error_W": 0.0026148964205733685,
+      "fem_interval_heater_error_W": 0.002037833933061487,
+      "fem_wall_balance_residual_J": 2.1510571102112408e-16,
+      "fem_fvm_cumulative_difference_J": 4.163881164866395e-07,
+      "min_dt_s": 0.0078125,
+      "max_dt_s": 0.0234375,
+      "interval_heater_power_error_W": 0.002037833933061487,
+      "interval_film_power_error_W": 0.0026125564193246,
+      "max_input_split_residual_J": 5.551115123125783e-17,
+      "max_wall_energy_residual_J": 3.677613769070831e-16,
+      "interval_end_power_error_W": 0.001644963030122737,
+      "interval_wall_mean_error_K": 0.00043542606987623245,
+      "steps": 64,
+      "method": "sdirk2",
+      "columns": 12,
+      "max_cell_error_K": 0.00033253469907057465,
+      "max_wall_error_K": 0.00035718652081551117,
+      "max_section_error_W": 0.002125807349827369,
+      "west_cumulative_error_J": 0.00019784132610201066,
+      "east_cumulative_error_J": 0.000186395274521578,
+      "passed": true,
+      "max_cell_error_K_order": 2.052031882888391,
+      "max_wall_error_K_order": 2.038425897874437,
+      "max_section_error_W_order": 2.0332299378368193,
+      "west_cumulative_error_J_order": 1.9404586774062151,
+      "east_cumulative_error_J_order": 1.945013753104874,
+      "interval_end_power_error_W_order": 2.011489802997398,
+      "interval_wall_mean_error_K_order": 1.9911870740934923,
+      "interval_heater_power_error_W_order": 2.0089138502212007,
+      "interval_film_power_error_W_order": 1.9911870740659003,
+      "fem_wall_error_K_order": 2.039847046230941,
+      "fem_cumulative_end_error_J_order": 1.9400405803665655,
+      "fem_interval_film_error_W_order": 1.9913255203977198,
+      "fem_interval_heater_error_W_order": 2.008913850221305,
+      "sph_particle_error_K_order": 2.0524024086822252,
+      "sph_wall_error_K_order": 2.0386679660202245,
+      "sph_cumulative_end_error_J_order": 1.9403531324282133,
+      "sph_interval_film_error_W_order": 1.991207854682796,
+      "sph_interval_heater_error_W_order": 2.008913850221305,
+      "fvm_bulk_power_error_W_order": 2.0857221312507543,
+      "fem_bulk_power_error_W_order": 2.082492149335585,
+      "sph_bulk_power_error_W_order": 2.0861414722061613
+    },
+    {
+      "fvm_bulk_power_error_W": 3.129057784190259e-05,
+      "fem_bulk_power_error_W": 3.130433190231171e-05,
+      "sph_bulk_power_error_W": 3.128974072382403e-05,
+      "wall_capacity_J_m2_K": [
+        0.25,
+        0.6
+      ],
+      "storage_power_errors_W": {
+        "fvm": [
+          0.0005293114635471774,
+          0.0007606277696132757
+        ],
+        "fem": [
+          0.0005066576716716842,
+          0.000745993924298638
+        ],
+        "sph": [
+          0.0005279359292895691,
+          0.000759818083112318
+        ]
+      },
+      "sph_particle_error_K": 8.115748735826323e-05,
+      "sph_wall_error_K": 8.761180027050397e-05,
+      "sph_cumulative_end_error_J": 5.067324551466523e-05,
+      "sph_interval_film_error_W": 0.0006534959993409473,
+      "sph_interval_heater_error_W": 0.000508666405535744,
+      "sph_component_sum_residual_J": 5.551115123125783e-17,
+      "sph_film_law_residual_J": 2.7755575615628914e-17,
+      "sph_wall_balance_residual_J": 2.5326962749261384e-16,
+      "fem_wall_error_K": 8.770432076110612e-05,
+      "fem_cumulative_end_error_J": 5.069630706078243e-05,
+      "fem_interval_film_error_W": 0.0006537775483970165,
+      "fem_interval_heater_error_W": 0.0005086664055345599,
+      "fem_wall_balance_residual_J": 2.220446049250313e-16,
+      "fem_fvm_cumulative_difference_J": 1.0182276104298894e-07,
+      "min_dt_s": 0.00390625,
+      "max_dt_s": 0.01171875,
+      "interval_heater_power_error_W": 0.0005086664055333756,
+      "interval_film_power_error_W": 0.0006532457707291902,
+      "max_input_split_residual_J": 2.7755575615628914e-17,
+      "max_wall_energy_residual_J": 3.365363543395006e-16,
+      "interval_end_power_error_W": 0.0004102989037979565,
+      "interval_wall_mean_error_K": 0.00010887429510997304,
+      "steps": 128,
+      "method": "sdirk2",
+      "columns": 12,
+      "max_cell_error_K": 8.118400879819632e-05,
+      "max_wall_error_K": 8.763866839256451e-05,
+      "max_section_error_W": 0.0005156397229804099,
+      "west_cumulative_error_J": 5.068797108065404e-05,
+      "east_cumulative_error_J": 4.771702760608676e-05,
+      "passed": true,
+      "max_cell_error_K_order": 2.0342374037048216,
+      "max_wall_error_K_order": 2.027038169476221,
+      "max_section_error_W_order": 2.043575546321354,
+      "west_cumulative_error_J_order": 1.9646284925180557,
+      "east_cumulative_error_J_order": 1.9657892029247597,
+      "interval_end_power_error_W_order": 2.003307955461497,
+      "interval_wall_mean_error_K_order": 1.999764408958568,
+      "interval_heater_power_error_W_order": 2.0022447675311077,
+      "interval_film_power_error_W_order": 1.999764408842516,
+      "fem_wall_error_K_order": 2.027972417804878,
+      "fem_cumulative_end_error_J_order": 1.9641379395671639,
+      "fem_interval_film_error_W_order": 1.9998820616144093,
+      "fem_interval_heater_error_W_order": 2.002244767527749,
+      "sph_particle_error_K_order": 2.034468415659776,
+      "sph_wall_error_K_order": 2.026977639470275,
+      "sph_cumulative_end_error_J_order": 1.9644997759822742,
+      "sph_interval_film_error_W_order": 1.9997751871666198,
+      "sph_interval_heater_error_W_order": 2.00224476752439,
+      "fvm_bulk_power_error_W_order": 1.9120782936257323,
+      "fem_bulk_power_error_W_order": 1.912671470603135,
+      "sph_bulk_power_error_W_order": 1.91202835008893
+    }
+  ],
+  "sources": [
+    {
+      "commit": "13beb4c97ce424352731e51344f088f0ed60b0b6",
+      "file": "fvm_periodic_end_power.py",
+      "source_sha256": "9535d8a4608e361b9a79014cf02c730e4fc08da92b41375811806a9007a20f9a"
+    },
+    {
+      "commit": "90d91580c1822a13c2e2014e75e5af1ef32eb2c4",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "41d842bac617db60c77e51286e11b74fbda76e7e",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "79dc969c01626e4af1e8328c8b7a9c8b0095342b3a18b0f69a1dd8ae71246fc9"
+    }
+  ],
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorFEM/src:../TensorSPH/src python examples/fvm_periodic_end_power.py --alternating --compare-fem --compare-sph --bulk-exchange"
+}
