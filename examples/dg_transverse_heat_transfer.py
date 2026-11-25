@@ -25,6 +25,14 @@ def measure(n, degree, method, cross):
         capacity=capacity, bc=bc, conductivity=material, method=method,
         neumann_flux=walls(1.), load_amplitude=lambda t: np.exp(-rate*t),
         return_interval_means=True, return_load_means=True)
+    # Compare both one-sided traces on the horizontal midplane at every output time.
+    local = x.new_tensor([-.65, .15, .8])
+    sample_x = x[:, None] + local/(2*n)
+    decay = torch.from_numpy(np.exp(-rate*times))[:, None, None, None]
+    wall_t, normal, wall_q = poisson_2d_bc.poisson_interface_traces_2d(
+        states, "y", n//2, conductivity=material, points=local)
+    reference_t = .6 + decay*torch.cos(torch.pi*sample_x)
+    reference_q = cross*torch.pi*decay*torch.sin(torch.pi*sample_x)
     dt = torch.from_numpy(np.diff(times))
     accumulated = (dt @ means.flatten(1)).reshape_as(states[0])
     hx, hy = poisson_2d_bc.poisson_face_powers_2d(accumulated, bc=bc,
@@ -39,6 +47,9 @@ def measure(n, degree, method, cross):
     expected_t = .6 + np.exp(-rate*times[-1])*torch.cos(torch.pi*x)*np.sinc(.5/n)
     stored = capacity*(averages[-1]-averages[0])/n**2
     return dict(cells_per_axis=n, degree=degree, method=method, cross_conductivity_W_mK=cross,
+        trace_history_temperature_error_K=float((wall_t-reference_t).abs().max()),
+        trace_history_normal_gradient_error_K_m=float(normal.abs().max()),
+        trace_history_flux_error_W_m2=float((wall_q-reference_q).abs().max()),
         temperature_error_K=float((averages[-1]-expected_t[:, None]).abs().max()),
         x_face_heat_error_J_m2=float((n*hx-expected_x[:, None]).abs().max()),
         y_face_heat_error_J_m2=float((n*hy-expected_y[:, None]).abs().max()),
@@ -49,7 +60,9 @@ def measure(n, degree, method, cross):
 
 if __name__ == "__main__":
     rows = []
-    metrics = ["temperature_error_K", "x_face_heat_error_J_m2", "y_face_heat_error_J_m2"]
+    metrics = ["temperature_error_K", "x_face_heat_error_J_m2", "y_face_heat_error_J_m2",
+               "trace_history_temperature_error_K", "trace_history_normal_gradient_error_K_m",
+               "trace_history_flux_error_W_m2"]
     for cross in (-.55, .55):
         for degree in (1, 2):
             for method in ("theta", "sdirk2"):
@@ -59,9 +72,11 @@ if __name__ == "__main__":
                     errors = np.array([row[key] for key in metrics])
                     row["orders"] = [] if previous is None else np.log2(previous/errors).tolist()
                     limits = (2e-3, 1e-3, 2e-4) if degree == 1 else (3e-6, 2e-6, 5e-7)
+                    limits += (2e-3, 4e-5, .15) if degree == 1 else (1.1e-4, 7e-6, .004)
                     row["passed"] = bool(max(row["max_cell_balance_J"], row["global_heat_drift_J"]) < 1e-11
                         and row["measured_midplane_heat_J"] * row["exact_midplane_heat_J"] > 0
-                        and all(order > 1 for order in row["orders"])
+                        and all(order > 1 for order in row["orders"][:3])
+                        and all(order > .9 for order in row["orders"][3:])
                         and (n < 16 or np.all(errors < limits)))
                     rows.append(row)
                     previous = errors
