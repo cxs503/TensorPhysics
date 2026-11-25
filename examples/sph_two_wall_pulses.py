@@ -1,4 +1,4 @@
-"""Verify SPH, FVM or DEM interval heat at every cut under independent Dirichlet wall pulses."""
+"""Verify SPH, FVM, FEM or DEM interval heat at every cut under independent Dirichlet wall pulses."""
 import argparse
 import json
 
@@ -139,15 +139,77 @@ def measure_dem(n):
                 column_energy_residual_J_m2=float(balance), wall_trace_error_K=float(wall_error))
 
 
+def measure_fem(n):
+    from dataclasses import replace
+    import torch
+    from tensorfem import thermal
+
+    dx = 1/n
+    x = torch.linspace(0., 1., n+1, dtype=torch.float64)
+    ids = torch.arange(n)
+    conn = torch.stack((ids, ids+1), dim=1)
+    fixed = torch.tensor([0, n])
+    model = thermal.ThermalModel(x[:, None], conn, 1., 1., 1., fixed, x.new_zeros(2))
+    state = torch.zeros_like(x)
+    schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+    indices = np.searchsorted(schedule, TIMES)
+    history, sections, reactions, impulses = [state], [], [], []
+    wall_error = balance = mismatch = 0.
+    for a, b in zip(schedule[:-1], schedule[1:]):
+        target = x.new_tensor([wall(a, 0), wall(a, 1)])
+        changed = not torch.equal(model.fixed_temperatures, target)
+        local = x.new_zeros((n, 2))
+        reaction = x.new_zeros(2)
+        if changed:
+            state, jump, local = thermal.apply_thermal_temperature_jump(
+                model, state, target, sparse=True, return_element_impulse=True)
+            reaction = jump[fixed].clone()
+            impulses.append(dict(time_s=float(a), inward_heat_J=reaction.tolist()))
+            model = replace(model, fixed_temperatures=target)
+        # Jump impulses belong to the window beginning at the switch.
+        # The stored endpoint histories use the left limit at reporting times.
+        grid = np.linspace(a, b, int(np.ceil(2*(b-a)/dx**2))+1)
+        stages = [(grid, .5)]
+        if changed:
+            stages = [([a, (a+grid[1])/2, grid[1]], 1.), (grid[1:], .5)]
+        for times, theta in stages:
+            if len(times) < 2:
+                continue
+            result = thermal.solve_transient_thermal(model, x.new_tensor(times), state, theta=theta, sparse=True)
+            local += thermal.thermal_element_nodal_heat_steps(model, result).sum(0)
+            reaction += result.nodal_reaction_heat_steps()[:, fixed].sum(0)
+            wall_error = max(wall_error, float(abs(result.temperature[:, fixed]-target).max()))
+            state = result.temperature[-1]
+        stored = dx*(state-history[-1])[conn].mean(1)
+        balance = max(balance, float(abs(stored-local.sum(1)).max()))
+        mismatch = max(mismatch, float(abs(local[:-1, 1]+local[1:, 0]).max()),
+                       float(abs(local[[0, -1], [0, 1]]-reaction).max()))
+        sections.append(-local[:-1, 1].numpy())
+        reactions.append(reaction.numpy()*[1., -1.])
+        history.append(state)
+    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx)
+    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
+    exact_heat = np.diff(cumulative, axis=0)
+    cells = torch.stack(history)[indices][:, conn].mean(2).numpy()
+    return dict(columns=n, impulses=impulses, temperature_error_K=float(abs(cells-means).max()),
+                wall_heat_error_J_m2=float(abs(np.add.reduceat(reactions, indices[:-1])-exact_heat[:, [0,-1]]).max()),
+                interior_cut_heat_error_J_m2=float(abs(np.add.reduceat(sections, indices[:-1])-exact_heat[:, 1:-1]).max()),
+                column_energy_residual_J_m2=balance, interface_heat_mismatch_J_m2=mismatch, wall_trace_error_K=wall_error)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
+    group.add_argument("--fem", action="store_true", help="run the consistent-capacity LINE2 slab")
     group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
     group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
     args = parser.parse_args()
     rows = []
     previous = None
-    if args.dem:
+    if args.fem:
+        from tensorfem import thermal as solver
+        run = measure_fem
+    elif args.dem:
         from tensordem.thermal import contact_chain as solver
         run = measure_dem
     elif args.fvm:
