@@ -1,0 +1,161 @@
+{
+  "reference": "Periodic elastic-perfectly sliding rolling spring: cycle loss = 4 M_cap max(A - M_cap/k, 0)",
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_wall_rolling_cycle.py",
+  "runs": [
+    {
+      "amplitude_over_yield": 0.6,
+      "steps_per_leg": 7,
+      "azimuth_direction": -1,
+      "measured_cycle_loss_J": 7.017103863032089e-18,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 8.324512515236454e-17,
+      "max_energy_error_J": 8.673617379884035e-19,
+      "max_cumulative_loss_error_J": 7.017103863032089e-18,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 0.6,
+      "steps_per_leg": 7,
+      "azimuth_direction": 1,
+      "measured_cycle_loss_J": 7.017103863032089e-18,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 8.324512515236454e-17,
+      "max_energy_error_J": 8.673617379884035e-19,
+      "max_cumulative_loss_error_J": 7.017103863032089e-18,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 0.6,
+      "steps_per_leg": 31,
+      "azimuth_direction": -1,
+      "measured_cycle_loss_J": 2.9335283678211135e-17,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 2.7906016140591684e-16,
+      "max_energy_error_J": 6.071532165918825e-18,
+      "max_cumulative_loss_error_J": 2.9335283678211135e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 0.6,
+      "steps_per_leg": 31,
+      "azimuth_direction": 1,
+      "measured_cycle_loss_J": 2.9335283678211135e-17,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 2.7906016140591684e-16,
+      "max_energy_error_J": 6.071532165918825e-18,
+      "max_cumulative_loss_error_J": 2.9335283678211135e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 1.0,
+      "steps_per_leg": 7,
+      "azimuth_direction": -1,
+      "measured_cycle_loss_J": 1.2698184569911582e-17,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 1.1395547294853964e-16,
+      "max_energy_error_J": 3.469446951953614e-18,
+      "max_cumulative_loss_error_J": 1.2698184569911582e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 1.0,
+      "steps_per_leg": 7,
+      "azimuth_direction": 1,
+      "measured_cycle_loss_J": 1.2698184569911582e-17,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 1.1395547294853964e-16,
+      "max_energy_error_J": 3.469446951953614e-18,
+      "max_cumulative_loss_error_J": 1.2698184569911582e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 1.0,
+      "steps_per_leg": 31,
+      "azimuth_direction": -1,
+      "measured_cycle_loss_J": 5.418751094850356e-17,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 2.0955000055363631e-16,
+      "max_energy_error_J": 8.673617379884035e-18,
+      "max_cumulative_loss_error_J": 5.418751094850356e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 1.0,
+      "steps_per_leg": 31,
+      "azimuth_direction": 1,
+      "measured_cycle_loss_J": 5.418751094850356e-17,
+      "reference_cycle_loss_J": 0.0,
+      "max_torque_error_Nm": 2.0955000055363631e-16,
+      "max_energy_error_J": 8.673617379884035e-18,
+      "max_cumulative_loss_error_J": 5.418751094850356e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 2.7,
+      "steps_per_leg": 7,
+      "azimuth_direction": -1,
+      "measured_cycle_loss_J": 0.21250000000000002,
+      "reference_cycle_loss_J": 0.21250000000000002,
+      "max_torque_error_Nm": 1.7772239894833365e-16,
+      "max_energy_error_J": 5.204170427930421e-18,
+      "max_cumulative_loss_error_J": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 2.7,
+      "steps_per_leg": 7,
+      "azimuth_direction": 1,
+      "measured_cycle_loss_J": 0.21250000000000002,
+      "reference_cycle_loss_J": 0.21250000000000002,
+      "max_torque_error_Nm": 1.7772239894833365e-16,
+      "max_energy_error_J": 5.204170427930421e-18,
+      "max_cumulative_loss_error_J": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 2.7,
+      "steps_per_leg": 31,
+      "azimuth_direction": -1,
+      "measured_cycle_loss_J": 0.2125,
+      "reference_cycle_loss_J": 0.21250000000000002,
+      "max_torque_error_Nm": 2.9504581591051765e-16,
+      "max_energy_error_J": 5.204170427930421e-18,
+      "max_cumulative_loss_error_J": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "amplitude_over_yield": 2.7,
+      "steps_per_leg": 31,
+      "azimuth_direction": 1,
+      "measured_cycle_loss_J": 0.2125,
+      "reference_cycle_loss_J": 0.21250000000000002,
+      "max_torque_error_Nm": 2.9504581591051765e-16,
+      "max_energy_error_J": 5.204170427930421e-18,
+      "max_cumulative_loss_error_J": 5.551115123125783e-17,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "sources": [
+    {
+      "commit": "46f31a317371826785772a44690f1d2fd2590bd5",
+      "file": "dem_wall_rolling_cycle.py",
+      "source_sha256": "a21eb6a0869d58ff3c20c987f419b1dbd7646d5e3d40abf3cfffc611d214f18c"
+    },
+    {
+      "commit": "7a5513fd990b9a1013673f8a5c362aace2d345fd",
+      "file": "granular3d_core.py",
+      "source_sha256": "c1f4e5ef706d56ecac0d06fd20fb65729974593a24bc3e444596ecf0b90071ec"
+    },
+    {
+      "commit": "7a5513fd990b9a1013673f8a5c362aace2d345fd",
+      "file": "kernel.py",
+      "source_sha256": "dc642a24dd7f4c80c73b2c2ab49b0369b5ee158e9c14f63afbeb5db18a5ac248"
+    },
+    {
+      "commit": "7a5513fd990b9a1013673f8a5c362aace2d345fd",
+      "file": "pluviation.py",
+      "source_sha256": "1f9a608bc5d79ebfb4395a17368e37ae66f71391dca8a337aa7d781ece885337"
+    }
+  ]
+}
