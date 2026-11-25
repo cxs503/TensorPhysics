@@ -12,14 +12,14 @@ EVENTS = ((.013, 0, 1.), (.028, 1, -.6), (.047, 0, -1.), (.09, 1, .6))
 TIMES = np.array([0., .01, .04, .056, .09, .115, .15])
 
 
-def reference(x, times, modes, cell_width=0.):
+def reference(x, times, modes, cell_width=0., events=EVENTS):
     """Continuum temperature [K] and cumulative rightward heat [J/m²], k=C=L=1."""
     wave = np.pi*np.arange(1, modes+1)
     # Average each sine over a centered cell; zero width samples its midpoint.
     mean_factor = np.sinc(wave*cell_width/(2*np.pi))
     temperature = np.zeros((len(times), len(x)))
     heat = np.zeros_like(temperature)
-    for start, side, amplitude in EVENTS:
+    for start, side, amplitude in events:
         # At the switching time the interior is continuous and the isolated
         # wall-flux singularity contributes zero instantaneous integrated heat.
         active = times > start
@@ -220,7 +220,7 @@ def measure_dg(n):
                 column_energy_residual_J_m2=float(abs(balance).max()))
 
 
-def measure_lbm(n):
+def measure_lbm(n, off_grid=False):
     import torch
     from tensorlbm import scalar
 
@@ -230,10 +230,18 @@ def measure_lbm(n):
     dt = .064*dx**2
     tau = scalar.tau_from_diffusivity(dt/dx**2)
     ticks = np.rint(TIMES/dt).astype(int)
-    events = np.array([t for t, _, _ in EVENTS])
-    if not (np.allclose(ticks*dt, TIMES, rtol=0, atol=1e-14)
-            and np.allclose(np.rint(events/dt)*dt, events, rtol=0, atol=1e-14)):
-        raise ValueError("pulse edges and output times must lie on lattice steps")
+    if not np.allclose(ticks*dt, TIMES, rtol=0, atol=1e-14):
+        raise ValueError("output times must lie on lattice steps")
+    # Shifting by one third of the coarsest step puts all four switches
+    # one third of a step past a lattice time on every refinement.
+    shift = .001/3 if off_grid else 0.
+    events = [(t+shift, side, change) for t, side, change in EVENTS]
+    levels = np.zeros((len(events)+1, 2))
+    for i, (_, side, change) in enumerate(events):
+        levels[i+1] = levels[i]
+        levels[i+1, side] += change
+    switches = [event[0] for event in events]
+    prescribed = scalar.scalar_wall_step_means(np.arange(ticks[-1]+1)*dt, switches, levels)
     zero = torch.zeros((1, n), dtype=torch.float64)
     populations = scalar.scalar_equilibrium(zero, zero, zero)
     cells = [zero[0]]
@@ -242,20 +250,19 @@ def measure_lbm(n):
     for begin, end in zip(ticks[:-1], ticks[1:]):
         integrated = zero.new_zeros(n+1)
         for step in range(begin, end):
-            midpoint = (step+.5)*dt
             before = populations.sum(0)
             post = scalar.scalar_collide_bgk(populations, before, zero, zero, tau)
-            populations, sides = scalar.scalar_stream_slab(post, wall(midpoint, 0), wall(midpoint, 1))
+            populations, sides = scalar.scalar_stream_slab(post, *prescribed[step])
             heat = dx*torch.cat((sides[0], scalar.scalar_link_transfer(post, "x")[0], -sides[1]))
             residual = dx*(populations.sum(0)[0]-before[0])+heat.diff()
             balance = max(balance, float(abs(residual).max()))
             integrated += heat
         cells.append(populations.sum(0)[0])
         intervals.append(integrated)
-    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx)
-    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
+    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx, events=events)
+    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64, events=events)
     error = abs(torch.stack(intervals).numpy()-np.diff(cumulative, axis=0))
-    return dict(columns=n, time_steps=int(ticks[-1]), lattice_tau=tau, dt_s=dt,
+    return dict(columns=n, time_steps=int(ticks[-1]), switch_shift_s=shift, lattice_tau=tau, dt_s=dt,
                 temperature_error_K=float(abs(torch.stack(cells).numpy()-means).max()),
                 wall_heat_error_J_m2=float(error[:, [0, -1]].max()),
                 interior_cut_heat_error_J_m2=float(error[:, 1:-1].max()),
@@ -267,6 +274,7 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--fem", action="store_true", help="run the consistent-capacity LINE2 slab")
     group.add_argument("--lbm", action="store_true", help="run the D2Q5 halfway-wall slab")
+    group.add_argument("--lbm-off-grid", action="store_true", help="shift both wall pulses between lattice times")
     group.add_argument("--dg", action="store_true", help="run the SIPG linear-element slab")
     group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
     group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
@@ -276,9 +284,10 @@ if __name__ == "__main__":
     if args.fem:
         from tensorfem import thermal as solver
         run = measure_fem
-    elif args.lbm:
+    elif args.lbm or args.lbm_off_grid:
         from tensorlbm import scalar as solver
-        run = measure_lbm
+        from functools import partial
+        run = partial(measure_lbm, off_grid=args.lbm_off_grid)
     elif args.dg:
         from tensordg import heat_1d as solver
         run = measure_dg
@@ -299,7 +308,7 @@ if __name__ == "__main__":
             errors = np.append(errors, row["interval_temperature_error_K"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
-                   row["column_energy_residual_J_m2"] < 1e-12 and (args.dg or args.lbm or row["wall_trace_error_K"] < 1e-14)
+                   row["column_energy_residual_J_m2"] < 1e-12 and (args.dg or args.lbm or args.lbm_off_grid or row["wall_trace_error_K"] < 1e-14)
                    and row.get("interface_heat_mismatch_J_m2", 0.) < 1e-12
                    and all(order > 0 for order in orders) and (n < 64 or min(orders) > 1.8)))
         rows.append(row)
