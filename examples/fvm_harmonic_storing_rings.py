@@ -10,7 +10,8 @@ from tensorfvm.cht import annulus, storing_rings
 
 
 def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=(.5, .5), sheet_k=(0., 0.), *,
-                   return_wall_rates=False, return_bulk_storage=False, films=(None, None), return_contact_temperatures=False):
+                   return_wall_rates=False, return_bulk_storage=False, films=(None, None), return_contact_temperatures=False,
+                   wall_fluxes=(None, None), return_wall_temperatures=False):
     """Solve the six continuum coefficients using wall and sheet jump conditions."""
     from scipy.special import iv, ivp, kv, kvp
 
@@ -36,6 +37,10 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
     equations = [bore if films[0] is None else bore+bore_flux/films[0],
                  exterior if films[1] is None else exterior-exterior_flux/films[1]]
     rhs = list(walls)
+    for i, q in enumerate(wall_fluxes):
+        if q is not None:
+            equations[i] = (bore_flux, -exterior_flux)[i]
+            rhs[i] = q
     samples = []
     traces = []
     for i, radius in enumerate(edges[1:-1]):
@@ -61,6 +66,8 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
                                    epsabs=1e-13, epsrel=1e-12)
             rates.append(2j*np.pi*omega*capacities[i]*integral)
         result += (np.asarray(rates),)
+    if return_wall_temperatures:
+        result += (np.array([bore, exterior]) @ coeff,)
     if return_contact_temperatures:
         result += (np.asarray(traces) @ coeff,)
     return result if len(result) > 1 else fields
