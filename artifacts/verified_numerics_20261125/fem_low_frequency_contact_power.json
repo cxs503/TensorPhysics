@@ -1,0 +1,28 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "cf23943c4e9d451129b125c66abc4b317db352b0",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal.py tests/test_thermal_poisson_2d.py tests/test_thermal_2d_analytic.py tests/test_thermal_2d_reference.py tests/test_thermal_transient_reference.py -o junit_family=legacy --junitxml=thermal.xml",
+  "reference": "Series thermal resistance and integrated layer capacity moments for unit slabs. Evaluate the central 60% of the contact edge.",
+  "suite": {
+    "tests": 167,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_low_frequency_contact_power_against_layer_capacity_moments[False]": {
+      "absolute_error_dc_W": 4.163336342344337e-17,
+      "absolute_error_lag_W_s": 1.3472894910096233e-16,
+      "complex_power_remainder_0.05_W": 0.00035012305114360577,
+      "complex_power_remainder_0.025_W": 8.744020127988114e-05,
+      "complex_power_remainder_0.0125_W": 2.1848129631443646e-05
+    },
+    "test_low_frequency_contact_power_against_layer_capacity_moments[True]": {
+      "absolute_error_dc_W": 4.163336342344337e-17,
+      "absolute_error_lag_W_s": 1.3472894910096233e-16,
+      "complex_power_remainder_0.05_W": 0.00035012305114358875,
+      "complex_power_remainder_0.025_W": 8.744020127991162e-05,
+      "complex_power_remainder_0.0125_W": 2.1848129631184623e-05
+    }
+  }
+}
