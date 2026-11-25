@@ -1,0 +1,25 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "0a2cf9b3508596d3eda88ff0646edef3bdc2a947",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_dem3d_contact_impact.py tests/test_dem3d_contact_impact_convention.py tests/test_contact_impact_dashpot_convention.py tests/test_dem3d_restitution_verification.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Integrate the normal load to velocity reversal and to force release with solve_ivp for damping ratios 0, 0.3, 1 and 4. Positive impulses on each particle are m_eff*v_in and m_eff*v_in*e. Compare sampled Euler force impulse with particle momentum change in an IceDEM3D pair at target restitution 0.08 and three time steps.",
+  "suite": {
+    "tests": 46,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_overdamped_dem_pair_at_three_time_steps": {
+      "impulse_momentum_relative_error_0.2": 2.220446049250313e-16,
+      "rebound_impulse_relative_error_0.2": 0.0021807109628402266,
+      "impulse_momentum_relative_error_0.1": 8.881784197001252e-16,
+      "rebound_impulse_relative_error_0.1": 0.00042159530185825744,
+      "impulse_momentum_relative_error_0.05": 1.1102230246251565e-15,
+      "rebound_impulse_relative_error_0.05": 0.0005423821519364713
+    },
+    "test_phase_impulses_against_integrated_contact_load": {
+      "maximum_phase_impulse_relative_error": 3.9523939676655573e-13
+    }
+  }
+}
