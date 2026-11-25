@@ -46,7 +46,7 @@ def dg_case(n,degree,k,s):
                 max_balance_residual_W=float(abs(balance).max()))
 
 
-def fem_case(n,shear,k,s,warp=0.):
+def fem_solution(n,shear,k,s,warp):
     nx,ny = n,3*n//2
     mesh = thermal_analytic.structured_quad_mesh(nx,ny,shear=shear,dtype=torch.float64)
     coords = mesh.nodes
@@ -62,6 +62,30 @@ def fem_case(n,shear,k,s,warp=0.):
     model = thermal.ThermalModel(coords,mesh.elements,torch.from_numpy(k[None]),1.,CAPACITY,
         torch.from_numpy(fixed),torch.from_numpy(exact[fixed]),element_type="q4")
     result = thermal.solve_harmonic_thermal(model,OMEGA,sparse=True)
+    return model,result,sides,exact
+
+
+def boundary_pairs(nx,ny):
+    cells = np.arange(nx*ny).reshape(ny,nx)
+    return ((3,cells[:,0],cells[:,1]),(1,cells[:,-1],cells[:,-2]),
+             (0,cells[0],cells[1]),(2,cells[-1],cells[-2]))
+
+
+def cubic_patches(outer,inner):
+    # Center a three-cell tangential strip wherever the endpoint permits.
+    # Keep the target element first, as required by the patch API.
+    index = np.arange(len(outer))
+    strip = np.clip(index-1,0,len(outer)-3)[:,None]+np.arange(3)
+    block = (outer[strip][:,:,None]+(inner-outer)[strip][:,:,None]*np.arange(3)).reshape(len(outer),9)
+    return np.column_stack((outer,block[block!=outer[:,None]].reshape(len(outer),8)))
+
+
+def fem_case(n,shear,k,s,warp=0.):
+    nx,ny = n,3*n//2
+    model,result,sides,exact = fem_solution(n,shear,k,s,warp)
+    coords = model.nodes
+    points = coords.numpy()
+    fixed = model.fixed_nodes.numpy()
     nodal = result.temperature.numpy()
     power = result.reaction_power.numpy()
     # Integrate the exact inward flux against the same boundary hats as
@@ -71,13 +95,25 @@ def fem_case(n,shear,k,s,warp=0.):
     unit,weights = np.polynomial.legendre.leggauss(8)
     shapes = np.column_stack(((1-unit)/2,(1+unit)/2))
     normals = [(-1,shear),(1,-shear),(0,-1),(0,1)]
-    cells = np.arange(nx*ny).reshape(ny,nx)
-    pairs = ((3,cells[:,0],cells[:,1]),(1,cells[:,-1],cells[:,-2]),
-             (0,cells[0],cells[1]),(2,cells[-1],cells[-2]))
+    pairs = boundary_pairs(nx,ny)
     raw = thermal.thermal_element_edge_power(model,result.temperature).numpy()
     raw_errors,edge_errors,patch_errors,sampled_errors,field_errors = [],[],[],[],[]
     cubic_errors,cubic_sampled,cubic_field,wide_quadratic = [],[],[],[]
-    fields = torch.stack((result.temperature,torch.from_numpy(exact)))
+    fields = [result.temperature,torch.from_numpy(exact)]
+    refinement = {}
+    if warp:
+        fine_model,fine,_,_ = fem_solution(2*n,shear,k,s,warp)
+        fine_shape = (2*ny+1,2*nx+1)
+        nested = fine_model.nodes.reshape(*fine_shape,2)[::2,::2].reshape(-1,2)
+        torch.testing.assert_close(nested,coords,rtol=0.,atol=1e-13)
+        aligned = fine.temperature.reshape(fine_shape)[::2,::2].reshape(-1)
+        extrapolated = aligned+(aligned-result.temperature)/3
+        fields.append(extrapolated)
+        refinement = dict(fine_nx=2*nx,fine_ny=2*ny,
+            extrapolated_temperature_error_K=float(abs(extrapolated.numpy()-exact).max()))
+    fields = torch.stack(fields)
+    extrapolated_errors,fine_errors,extrapolated_powers = [],[],[]
+    fine_pairs = {e:(o,i) for e,o,i in boundary_pairs(2*nx,2*ny)} if warp else {}
     for edge,normal,(local,outer,inner) in zip(sides,normals,pairs):
         conn = np.column_stack((edge[:-1],edge[1:]))
         ends = points[conn]
@@ -95,16 +131,21 @@ def fem_case(n,shear,k,s,warp=0.):
         patch_errors.append(float(err[0]))
         sampled_errors.append(float(err[1]))
         field_errors.append(float(abs(fit[0]-fit[1]).max()/length))
-        # Center a three-cell tangential strip wherever the endpoint permits.
-        # Keep the target element first, as required by the patch API.
-        index = np.arange(len(outer))
-        strip = np.clip(index-1,0,len(outer)-3)[:,None]+np.arange(3)
-        block = (outer[strip][:,:,None]+(inner-outer)[strip][:,:,None]*np.arange(3)).reshape(len(outer),9)
-        wide = np.column_stack((outer,block[block!=outer[:,None]].reshape(len(outer),8)))
+        wide = cubic_patches(outer,inner)
         quadratic = thermal.recover_q4_patch_boundary_power(model,result.temperature,wide,local).numpy()
         wide_quadratic.append(float(abs(quadratic/length+values@weights/2).max()))
         cubic = thermal.recover_q4_patch_boundary_power(model,fields,wide,local,degree=3).numpy()
         cubic_err = abs(cubic/length+values@weights/2).max(axis=1)
+        if warp:
+            extrapolated_errors.append(float(cubic_err[2]))
+            fine_patch = cubic_patches(*fine_pairs[local])
+            fine_power = thermal.recover_q4_patch_boundary_power(fine_model,fine.temperature,
+                                                                  fine_patch,local,degree=3)
+            # Two child edge powers sum to the power over the same physical edge.
+            restricted = fine_power.numpy().reshape(-1,2).sum(1)
+            fine_errors.append(float(abs(restricted/length+values@weights/2).max()))
+            richardson = restricted+(restricted-cubic[0])/3
+            extrapolated_powers.append(float(abs(richardson/length+values@weights/2).max()))
         cubic_errors.append(float(cubic_err[0]))
         cubic_sampled.append(float(cubic_err[1]))
         cubic_field.append(float(abs(cubic[0]-cubic[1]).max()/length))
@@ -119,7 +160,11 @@ def fem_case(n,shear,k,s,warp=0.):
     weights = capacity_matrix @ torch.ones_like(coords[:,0])
     storage = 1j*OMEGA*(weights.numpy()@nodal)
     prior = dict(recovered_edge_error_W_m2=max(edge_errors)) if edge_errors else {}
-    return dict(**prior,solver="FEM-Q4",shear=shear,warp=warp,temperature_error_K=float(abs(nodal-exact).max()),
+    if warp:
+        refinement.update(extrapolated_cubic_error_W_m2=max(extrapolated_errors),
+                          fine_cubic_error_W_m2=max(fine_errors),
+                          extrapolated_edge_power_error_W_m2=max(extrapolated_powers))
+    return dict(**refinement,**prior,solver="FEM-Q4",shear=shear,warp=warp,temperature_error_K=float(abs(nodal-exact).max()),
                 side_wall_error_W_m2=side_error(sides[:2]),end_wall_error_W_m2=side_error(sides[2:]),
                 cubic_edge_error_W_m2=max(cubic_errors),cubic_sampled_error_W_m2=max(cubic_sampled),
                 cubic_field_contribution_W_m2=max(cubic_field),wide_quadratic_error_W_m2=max(wide_quadratic),
@@ -158,6 +203,12 @@ if __name__ == "__main__":
                         row["passed"] &= (row["cubic_edge_error_W_m2"] < min(.002,row["patch_edge_error_W_m2"],row["wide_quadratic_error_W_m2"])
                                           and orders["cubic_edge_error_W_m2"] > 1.8
                                           and orders["cubic_sampled_error_W_m2"] > 2.7)
+                        if row["warp"]:
+                            row["passed"] &= (row["extrapolated_temperature_error_K"] < 2e-8
+                                              and row["extrapolated_edge_power_error_W_m2"] < min(3e-5,row["fine_cubic_error_W_m2"])
+                                              and orders["extrapolated_edge_power_error_W_m2"] > 2.2
+                                              and orders["extrapolated_cubic_error_W_m2"] > 2.7
+                                              and row["extrapolated_cubic_error_W_m2"] < row["cubic_edge_error_W_m2"])
                         if not row["warp"]:
                             row["passed"] &= (row["recovered_edge_error_W_m2"] < min(.015,row["raw_edge_error_W_m2"])
                                           and orders["recovered_edge_error_W_m2"] > 1.8)
