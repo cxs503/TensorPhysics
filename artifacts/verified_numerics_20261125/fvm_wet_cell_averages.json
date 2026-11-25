@@ -1,0 +1,50 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "5b6d8f7072fb9d26306d2043afbbf2ed4f7f6b2a",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_shallow_water_riemann.py tests/test_shallow_water_galilean.py tests/test_shallow_water_dam_break.py tests/test_shallow_water_dam_break_robustness.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Exact control-volume means split at all wave speeds, verified against Rankine-Hugoniot mass and momentum budgets and an internal shock at 30 percent of the cell width. Finite-volume mean absolute errors are normalized by case reference depth and reference depth times gravity-wave speed, respectively.",
+  "suite": {
+    "tests": 85,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_wet_control_volume_budgets_and_refinement[rarefaction-shock]": {
+      "integral_balance_error": 3.3306690738754696e-16,
+      "normalized_depth_error_200": 0.001980596873709554,
+      "normalized_discharge_error_200": 0.0017098266446921471,
+      "normalized_depth_error_400": 0.0010619319405067898,
+      "normalized_discharge_error_400": 0.0008847034949528919,
+      "normalized_depth_error_800": 0.0004865798993436306,
+      "normalized_discharge_error_800": 0.00042449883617962856
+    },
+    "test_wet_control_volume_budgets_and_refinement[rarefaction-rarefaction]": {
+      "integral_balance_error": 2.220446049250313e-16,
+      "normalized_depth_error_200": 0.002217067048893698,
+      "normalized_discharge_error_200": 0.0019862593736434944,
+      "normalized_depth_error_400": 0.0011225744650293491,
+      "normalized_discharge_error_400": 0.0010036104371122817,
+      "normalized_depth_error_800": 0.0005652430730162355,
+      "normalized_discharge_error_800": 0.0005052536885921944
+    },
+    "test_wet_control_volume_budgets_and_refinement[shock-shock]": {
+      "integral_balance_error": 2.220446049250313e-16,
+      "normalized_depth_error_200": 0.00245306795453267,
+      "normalized_discharge_error_200": 0.002148487832188959,
+      "normalized_depth_error_400": 0.0010206003168228741,
+      "normalized_discharge_error_400": 0.0009279067090078723,
+      "normalized_depth_error_800": 0.0004406357560449678,
+      "normalized_discharge_error_800": 0.00034403728916646595
+    },
+    "test_wet_control_volume_budgets_and_refinement[shock-rarefaction]": {
+      "integral_balance_error": 1.3877787807814457e-16,
+      "normalized_depth_error_200": 0.0016313119146692328,
+      "normalized_discharge_error_200": 0.0027421130349429322,
+      "normalized_depth_error_400": 0.0009439064636653916,
+      "normalized_discharge_error_400": 0.0014904927889947068,
+      "normalized_depth_error_800": 0.0005211843993327837,
+      "normalized_discharge_error_800": 0.000822958058132827
+    }
+  }
+}
