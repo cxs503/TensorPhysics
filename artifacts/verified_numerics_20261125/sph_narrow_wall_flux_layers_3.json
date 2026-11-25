@@ -1,0 +1,267 @@
+{
+  "reference": "T=.7+[(.4-.2i)+(.65+.3i) exp(i beta y)] r, r=integrated bulk and upstream contact resistance",
+  "layers": 3,
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_thin_contact_wall_flux.py --layers 3",
+  "order_metrics": [
+    "temperature_error_K",
+    "wall_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "sampled_wall_flux_error_W_m2": 1.1226435567921847e-15,
+      "columns": 3,
+      "rows": 24,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.014266633965322725,
+      "wall_flux_error_W_m2": 0.07481407780866721,
+      "mean_cut_error_W_m2": 3.3422138886441676e-16,
+      "recovered_mean_residual_W_m2": 1.1443916996305594e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.4011948156294295e-14,
+      "columns": 6,
+      "rows": 48,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.0074874975575901495,
+      "wall_flux_error_W_m2": 0.0071965046619891105,
+      "mean_cut_error_W_m2": 1.1673851243905792e-15,
+      "recovered_mean_residual_W_m2": 2.7755575615628914e-17,
+      "orders": [
+        0.9300894566183405,
+        3.377941502762648
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 9.220868421187463e-15,
+      "columns": 12,
+      "rows": 96,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.004348927435221686,
+      "wall_flux_error_W_m2": 0.009771498844055112,
+      "mean_cut_error_W_m2": 5.691449808321057e-15,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [
+        0.7838239906306228,
+        -0.44128351270148536
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.8352292191288798e-14,
+      "columns": 24,
+      "rows": 192,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.0024880067598939963,
+      "wall_flux_error_W_m2": 0.005715347081687131,
+      "mean_cut_error_W_m2": 3.867128681599768e-14,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [
+        0.805669231401584,
+        0.7737387601442506
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.1226435567921847e-15,
+      "columns": 3,
+      "rows": 24,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.014266633965322725,
+      "wall_flux_error_W_m2": 0.07481407780866721,
+      "mean_cut_error_W_m2": 3.3422138886441676e-16,
+      "recovered_mean_residual_W_m2": 1.1443916996305594e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.4011948156294295e-14,
+      "columns": 6,
+      "rows": 48,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.0074874975575901495,
+      "wall_flux_error_W_m2": 0.007196504661988886,
+      "mean_cut_error_W_m2": 1.2287917140018453e-15,
+      "recovered_mean_residual_W_m2": 1.1443916996305594e-16,
+      "orders": [
+        0.9300894566183405,
+        3.3779415027626927
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 9.220868421187463e-15,
+      "columns": 12,
+      "rows": 96,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.004348927435221686,
+      "wall_flux_error_W_m2": 0.00977149884405699,
+      "mean_cut_error_W_m2": 5.649401797217783e-15,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [
+        0.7838239906306228,
+        -0.4412835127018075
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.8352292191288798e-14,
+      "columns": 24,
+      "rows": 192,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.0024880067598940904,
+      "wall_flux_error_W_m2": 0.005715347081681751,
+      "mean_cut_error_W_m2": 3.8558678591833005e-14,
+      "recovered_mean_residual_W_m2": 1.2412670766236366e-16,
+      "orders": [
+        0.8056692314015294,
+        0.7737387601458858
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.1226435567921847e-15,
+      "columns": 3,
+      "rows": 24,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.014138410859434751,
+      "wall_flux_error_W_m2": 0.07426461511675704,
+      "mean_cut_error_W_m2": 1.79383492860469e-15,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.4011948156294295e-14,
+      "columns": 6,
+      "rows": 48,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.007421501205257003,
+      "wall_flux_error_W_m2": 0.00833200130846565,
+      "mean_cut_error_W_m2": 2.400014849469341e-15,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [
+        0.9298370253341903,
+        3.1559400020865387
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 9.220868421187463e-15,
+      "columns": 12,
+      "rows": 96,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.004311505846804358,
+      "wall_flux_error_W_m2": 0.00967691330895341,
+      "mean_cut_error_W_m2": 2.271715445230966e-14,
+      "recovered_mean_residual_W_m2": 7.850462293418876e-17,
+      "orders": [
+        0.7835192051710712,
+        -0.2158838716404545
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.8352292191288798e-14,
+      "columns": 24,
+      "rows": 192,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.0024668502249585817,
+      "wall_flux_error_W_m2": 0.0056627654269611385,
+      "mean_cut_error_W_m2": 1.5057645348762628e-13,
+      "recovered_mean_residual_W_m2": 2.7755575615628914e-17,
+      "orders": [
+        0.8055217115020017,
+        0.7730401683718944
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.1226435567921847e-15,
+      "columns": 3,
+      "rows": 24,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.014138410859434989,
+      "wall_flux_error_W_m2": 0.07426461511675768,
+      "mean_cut_error_W_m2": 1.903838269217419e-15,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.4011948156294295e-14,
+      "columns": 6,
+      "rows": 48,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.007421501205257218,
+      "wall_flux_error_W_m2": 0.008332001308463155,
+      "mean_cut_error_W_m2": 2.5667530371580075e-15,
+      "recovered_mean_residual_W_m2": 5.551115123125783e-17,
+      "orders": [
+        0.9298370253341729,
+        3.1559400020869828
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 9.220868421187463e-15,
+      "columns": 12,
+      "rows": 96,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.00431150584680463,
+      "wall_flux_error_W_m2": 0.009676913308954867,
+      "mean_cut_error_W_m2": 2.2595493456379277e-14,
+      "recovered_mean_residual_W_m2": 7.850462293418876e-17,
+      "orders": [
+        0.7835192051710218,
+        -0.21588387164110373
+      ],
+      "passed": true
+    },
+    {
+      "sampled_wall_flux_error_W_m2": 1.8352292191288798e-14,
+      "columns": 24,
+      "rows": 192,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.0024668502249553894,
+      "wall_flux_error_W_m2": 0.005662765426953405,
+      "mean_cut_error_W_m2": 1.436530164374336e-13,
+      "recovered_mean_residual_W_m2": 2.7755575615628914e-17,
+      "orders": [
+        0.8055217115039597,
+        0.7730401683740818
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "e2bd737b34a462e294c5bf97425cf1aacfe12963",
+      "file": "sph_thin_contact_wall_flux.py",
+      "source_sha256": "d54f4956c2ca80fb4601641a75d888a73a1b540d55568fa86528bc1a498df072"
+    },
+    {
+      "commit": "c49eb1e54f926c1471b547db34a72513e231aa5e",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "0a441afd575b858e202a894fc4b418098a109260ab0af8a5caab623e76f6bee5"
+    }
+  ]
+}
