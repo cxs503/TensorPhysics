@@ -51,11 +51,11 @@ def exact(times,n):
 def dg(times,n):
     reservoirs = [[lambda x,t=t: reservoir(t,x) for t in (a,b)] for a,b in zip(times,times[1:])]
     film_history = [[air(a),air(b)] for a,b in zip(times,times[1:])]
-    _,u,q,bulk,wall = heat_1d.solve_heat_1d_bulk_history(times,reservoirs,ncells=n,degree=2,
+    _,u,q,bulk,wall,means = heat_1d.solve_heat_1d_bulk_history(times,reservoirs,ncells=n,degree=2,
         initial_temperature=lambda x: background(0.,x)+torch.cos(WAVE*(x-PEAK)),conductivity=K,capacity=C,
         heat_loss_coefficient=H,steps_per_interval=1,film_coefficients=FILM,wall_areal_heat_capacity=CW,
-        wall_ambient_intervals=film_history,return_wall_history=True)
-    return tuple(v.numpy() for v in (u[:,:,0],wall["temperature"],q,bulk,wall["external_heat"]))
+        wall_ambient_intervals=film_history,return_wall_history=True,return_interval_modes=True)
+    return tuple(v.numpy() for v in (u[:,:,0],wall["temperature"],q,bulk,wall["external_heat"],means[:,:,0],wall["mean_temperature"]))
 
 
 def fvm(times,n):
@@ -65,19 +65,25 @@ def fvm(times,n):
         end_types=("robin","robin"),end_film_coefficient=FILM,end_areal_heat_capacity=CW,
         initial_end_temperature=background(0.,ENDS)+np.cos(WAVE*(ENDS-PEAK)),flux_order=2,method="sdirk2",
         heat_loss_coefficient=H,bulk_ambient_temperature=lambda t: reservoir(t,mid),return_step_heat=True)
-    return cell,wall[:,[0,-1]],np.column_stack((heat["left"][:,0],heat["right"])),heat["bulk_exchange"],heat["end_input"]
+    # Recover the FVM interval means from the integrated linear exchange laws.
+    tm = .5*(times[1:]+times[:-1])[:,None]
+    dt = np.diff(times)[:,None]
+    cell_mean = reservoir(tm,mid)-n*heat["bulk_exchange"]/(H*dt)
+    wall_mean = air(tm)-heat["end_input"]/(FILM*dt)
+    return cell,wall[:,[0,-1]],np.column_stack((heat["left"][:,0],heat["right"])),heat["bulk_exchange"],heat["end_input"],cell_mean,wall_mean
 
 
 def particles(times,n,method="sdirk2"):
     mid = (np.arange(n)+.5)/n
     films = tuple((FILM[i],lambda t,i=i: air(t)[i]) for i in range(2))
-    states,heat,wall,bulk,external = sph.solve_transient_layered_slab(
+    states,heat,wall,bulk,external,means,wall_mean = sph.solve_transient_layered_slab(
         background(0.,mid)+np.cos(WAVE*(mid-PEAK)),times,1/n,(None,None),conductivity=np.full(n,K),
         volumetric_heat_capacity=C,heat_loss_coefficient=H,bulk_ambient_temperature=lambda t: reservoir(t,mid),
         method=method,x_wall_films=films,wall_areal_heat_capacity=CW,
         initial_wall_temperatures=background(0.,ENDS)+np.cos(WAVE*(ENDS-PEAK)),
-        return_wall_temperatures=True,return_bulk_exchange=True,return_external_heat=True,return_x_heat=True)
-    return tuple(v.numpy() for v in (states,wall,heat,bulk,external))
+        return_wall_temperatures=True,return_bulk_exchange=True,return_external_heat=True,return_x_heat=True,
+        return_interval_temperature=True,return_interval_wall_temperatures=True)
+    return tuple(v.numpy() for v in (states,wall,heat,bulk,external,means,wall_mean))
 
 
 def fem(times,n):
@@ -103,7 +109,8 @@ def fem(times,n):
     heat = torch.cat((local[:,:1,0],-local[:,:,1]),dim=1)
     bulk = load_heat.sum(2)-H/n*dt*result.interval_temperature[:,conn].mean(2)
     external = dt*torch.from_numpy(FILM)*((fluid[:-1]+fluid[1:])/2-result.interval_temperature[:,[0,-1]])
-    return tuple(v.numpy() for v in (result.temperature[:,conn].mean(2),result.temperature[:,[0,-1]],heat,bulk,external))
+    return tuple(v.numpy() for v in (result.temperature[:,conn].mean(2),result.temperature[:,[0,-1]],heat,bulk,external,
+                                      result.interval_temperature[:,conn].mean(2),result.interval_temperature[:,[0,-1]]))
 
 
 if __name__ == "__main__":
@@ -112,17 +119,19 @@ if __name__ == "__main__":
     methods = [("DG_P2",dg),("FEM_LINE2",fem),("FVM",fvm),("SPH",particles)]
     if parser.parse_args().exponential:
         methods.append(("SPH_exponential",lambda t,n: particles(t,n,method="exponential")))
-    rows,previous = [],{}
+    rows,previous,coarsest = [],{},{}
     for n in (12,24,48,96):
         for name,solve in methods:
             steps = 4 if name=="SPH_exponential" else n
             times = np.linspace(0.,.3,steps+1)
             target = exact(times,n)
-            u,wall,heat,bulk,external = solve(times,n)
+            u,wall,heat,bulk,external,means,wall_means = solve(times,n)
             partition = {}
             if name=="SPH_exponential":
-                uc,wc,qc,bc,ec = solve(times[[0,-1]],n)
+                uc,wc,qc,bc,ec,mc,mwc = solve(times[[0,-1]],n)
                 for key,difference in (("particle_K",uc[-1]-u[-1]),("wall_K",wc[-1]-wall[-1]),
+                        ("mean_field_K",mc[0]-np.average(means,axis=0,weights=np.diff(times))),
+                        ("mean_wall_K",mwc[0]-np.average(wall_means,axis=0,weights=np.diff(times))),
                         ("section_J_m2",qc[0]-heat.sum(0)),("bulk_J_m2",bc[0]-bulk.sum(0)),
                         ("external_J_m2",ec[0]-external.sum(0))):
                     partition[key] = float(abs(difference).max())
@@ -136,14 +145,31 @@ if __name__ == "__main__":
             errors = dict(wall_temperature_K=float(abs(wall-target[1]).max()),
                           section_heat_J_m2=cumulative_error(heat,target[2]),bulk_heat_J_m3=n*cumulative_error(bulk,target[3]),
                           external_heat_J_m2=cumulative_error(external,target[4]))
+            dt = np.diff(times)[:,None]
+            tm = .5*(times[1:]+times[:-1])[:,None]
+            modal_mean = np.exp(-RATE*times[:-1,None])*(-np.expm1(-RATE*dt))/(RATE*dt)
+            mid = (np.arange(n)+.5)/n
+            projection = 1. if name.startswith("SPH") else np.sinc(WAVE/(2*np.pi*n))
+            mean_target = background(tm,mid)+modal_mean*np.cos(WAVE*(mid-PEAK))*projection
+            wall_target = background(tm,ENDS)+modal_mean*np.cos(WAVE*(ENDS-PEAK))
+            errors["interval_field_K"] = float(abs(means-mean_target).max())
+            errors["interval_wall_K"] = float(abs(wall_means-wall_target).max())
             errors[sample_key] = float(abs(u-ref_temperature).max())
             balance = float(abs(C/n*np.diff(u,axis=0)+np.diff(heat)-bulk).max())
             surface_balance = float(abs(CW*np.diff(wall,axis=0)+heat[:,[0,-1]]*SIGN-external).max())
             orders = {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()} if name in previous else {}
-            rows.append(dict(solver=name,temperature_sampling="center" if name.startswith("SPH") else "cell_mean",cells=n,steps=steps,errors=errors,orders=orders,cell_balance_J_m2=balance,
+            # Keep the established per-level gates. For the new interval fields
+            # check monotone refinement and the order across the entire ladder.
+            interval_keys = ("interval_field_K","interval_wall_K")
+            coarsest.setdefault(name, errors)
+            overall = {k:float(np.log2(coarsest[name][k]/errors[k])/np.log2(n/12))
+                       for k in interval_keys} if n==96 else {}
+            rows.append(dict(solver=name,interval_overall_orders=overall,interval_means_source="exchange laws" if name=="FVM" else "solver output",
+                             temperature_sampling="center" if name.startswith("SPH") else "cell_mean",cells=n,steps=steps,errors=errors,orders=orders,cell_balance_J_m2=balance,
                              wall_balance_J_m2=surface_balance,**({"partition_error":partition} if partition else {}),
                              passed=max(balance,surface_balance,*partition.values())<1e-11
-                             and all(v>1.7 for v in orders.values())))
+                             and all(v>(0. if k in interval_keys else 1.7) for k,v in orders.items())
+                             and all(v>1.7 for v in overall.values())))
             previous[name] = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(p) for p in (__file__,heat_1d.__file__,thermal.__file__,rod.__file__,sph.__file__)]),
                      indent=2,allow_nan=False))
