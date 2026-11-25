@@ -1,0 +1,36 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "c7dca58021d2f6c437fdcee5e3f33ab9e4f16b06",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal*.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Two unit-thickness layers, unit cross section, insulated sides, k=(2,4), C=(3,1.5), omega=2.3. Set contact transfer Q=0.8-0.4i W, right trace=0.7+0.2i K and left trace=right+Q/2.5. At displacement d from contact, exact layer temperature is trace*cosh(b*d)-Q*sinh(b*d)/(k*b), b\u00b2=i*omega*C/k. Prescribe both exterior temperatures and compare all nodal complex temperatures, the contact power and the two integrated boundary reaction powers. CPU dense and sparse Q4, 8,16,32 elements per layer.",
+  "suite": {
+    "tests": 176,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_harmonic_contact_slab_against_layer_transfer_solution[False]": {
+      "max_error_8_temperature_K": 0.004169965190708433,
+      "max_error_8_contact_power_W": 0.005753023455629336,
+      "max_error_8_wall_power_W": 0.021350747741490612,
+      "max_error_16_temperature_K": 0.0010421850777232588,
+      "max_error_16_contact_power_W": 0.0014349175418056843,
+      "max_error_16_wall_power_W": 0.005326633551986262,
+      "max_error_32_temperature_K": 0.0002606104426944751,
+      "max_error_32_contact_power_W": 0.00035852050186316716,
+      "max_error_32_wall_power_W": 0.0013309693603513644
+    },
+    "test_harmonic_contact_slab_against_layer_transfer_solution[True]": {
+      "max_error_8_temperature_K": 0.004169965190709639,
+      "max_error_8_contact_power_W": 0.005753023455630177,
+      "max_error_8_wall_power_W": 0.02135074774149466,
+      "max_error_16_temperature_K": 0.0010421850777282274,
+      "max_error_16_contact_power_W": 0.0014349175418111996,
+      "max_error_16_wall_power_W": 0.005326633552006766,
+      "max_error_32_temperature_K": 0.0002606104426974416,
+      "max_error_32_contact_power_W": 0.0003585205018613337,
+      "max_error_32_wall_power_W": 0.0013309693603680906
+    }
+  }
+}
