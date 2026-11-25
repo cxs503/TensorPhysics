@@ -24,11 +24,12 @@ def measure(n, method, width_fraction, mode_y):
         return heat.solve_transient_slab_2d(
             initial, grid, 1/n, (base, base), temperature_reference=base,
             wall_jump_times=[start, stop], method=method, return_x_heat=True, return_wall_heat_by_row=True,
+            return_interval_temperatures=True,
             heat_source=lambda t: amplitude*rate*mode if start <= t < stop else 0.,
         )
 
-    field, cuts, walls = solve(times)
-    detail, subcuts, subwalls = solve(times[:2] + [start, stop] + times[2:])
+    field, cuts, walls, means = solve(times)
+    detail, subcuts, subwalls, submeans = solve(times[:2] + [start, stop] + times[2:])
     t = torch.tensor(times, dtype=x.dtype)
     on_duration = (t-start).clamp(0, stop-start)
     # Exact modal response to a rectangular pulse; its integral follows
@@ -37,6 +38,10 @@ def measure(n, method, width_fraction, mode_y):
     peak = -math.expm1(-rate*(stop-start))
     field_error = abs(field/amplitude - factor[:, None, None]*mode)
     integral = on_duration.diff() - factor.diff()/rate
+    expected_means = (integral/t.diff())[:, None, None]*mode
+    mean_error = abs(means/amplitude-expected_means)/peak
+    widths = t.new_tensor([start-times[1], stop-start, times[2]-stop])
+    split_mean = (submeans[1:4]*widths[:, None, None]).sum(0)/dt
     expected_wall = -torch.pi*amplitude*integral[:, None, None]*lateral
     heat_scale = torch.pi*amplitude*dt*peak
     heat_error = abs(walls-expected_wall)/heat_scale
@@ -44,6 +49,9 @@ def measure(n, method, width_fraction, mode_y):
                        - cuts[:, 0] + cuts[:, -1])
     return dict(columns=n, method=method, transverse_mode=mode_y, width_over_interval=width_fraction,
                 start_s=start, stop_s=stop, crossing_interval_s=times[1:3],
+                crossing_mean_error_over_peak=float(mean_error[1].max()),
+                decay_mean_error_over_peak=float(mean_error[2:].max()),
+                split_mean_difference_over_peak=float(abs(means[1]-split_mean).max()/(amplitude*peak)),
                 crossing_field_error_over_peak=float(field_error[2].max()/peak),
                 decay_field_error_over_peak=float(field_error[3:].max()/peak),
                 crossing_wall_heat_error_over_scale=float(heat_error[1].max()),
