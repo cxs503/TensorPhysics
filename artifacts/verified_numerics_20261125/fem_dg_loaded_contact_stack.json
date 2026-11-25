@@ -1,0 +1,209 @@
+{
+  "runs": [
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 4,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 5.3820109216498716e-08,
+      "end_flux_error_W_m2": 9.1288096054662e-08,
+      "interface_flux_error_W_m2": 9.304044737691112e-08,
+      "contact_drop_residual_K": 7.850462293418876e-17,
+      "wall_balance_residual_W_m2": 2.3714374201337736e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 4,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 0.0001237478921975594,
+      "end_flux_error_W_m2": 0.00022191864370302167,
+      "interface_flux_error_W_m2": 0.00016752647158052464,
+      "contact_drop_residual_K": 1.942890293094024e-16,
+      "wall_balance_residual_W_m2": 3.342213888644167e-16,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 8,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 3.3777610669926696e-09,
+      "end_flux_error_W_m2": 5.7236526906274305e-09,
+      "interface_flux_error_W_m2": 5.8384944162929785e-09,
+      "contact_drop_residual_K": 5.721958498152797e-17,
+      "wall_balance_residual_W_m2": 4.710277376051326e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 8,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 3.089374691112278e-05,
+      "end_flux_error_W_m2": 5.553583925335207e-05,
+      "interface_flux_error_W_m2": 4.1809106727190635e-05,
+      "contact_drop_residual_K": 2.618455766672135e-16,
+      "wall_balance_residual_W_m2": 3.3472809927562375e-15,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 2.1162118350226126e-10,
+      "end_flux_error_W_m2": 3.5821823516400766e-10,
+      "interface_flux_error_W_m2": 3.655510141694637e-10,
+      "contact_drop_residual_K": 1.3668035872266426e-16,
+      "wall_balance_residual_W_m2": 1.1857187100668868e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 7.720733921138466e-06,
+      "end_flux_error_W_m2": 1.3887467836781879e-05,
+      "interface_flux_error_W_m2": 1.0447743130553418e-05,
+      "contact_drop_residual_K": 2.237726045655905e-16,
+      "wall_balance_residual_W_m2": 5.7742271515097e-15,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 1.3358832019789883e-11,
+      "end_flux_error_W_m2": 2.2151710397905428e-11,
+      "interface_flux_error_W_m2": 2.2948100946093423e-11,
+      "contact_drop_residual_K": 1.1857187100668868e-16,
+      "wall_balance_residual_W_m2": 4.47545209131181e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 1.930014512917561e-06,
+      "end_flux_error_W_m2": 3.472086168871681e-06,
+      "interface_flux_error_W_m2": 2.611652490019284e-06,
+      "contact_drop_residual_K": 1.7626429548508935e-15,
+      "wall_balance_residual_W_m2": 1.596068683096305e-14,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 4,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 2.365479347224283e-06,
+      "end_flux_error_W_m2": 4.852876449566435e-06,
+      "interface_flux_error_W_m2": 5.829244646523524e-06,
+      "contact_drop_residual_K": 1.415262216750919e-16,
+      "wall_balance_residual_W_m2": 2.482534153247273e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 4,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.0019052318278642984,
+      "end_flux_error_W_m2": 0.005445231225943054,
+      "interface_flux_error_W_m2": 0.004120107107872416,
+      "contact_drop_residual_K": 5.551115123125783e-17,
+      "wall_balance_residual_W_m2": 2.373385746427198e-15,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 8,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 1.4857023417285503e-07,
+      "end_flux_error_W_m2": 3.038592039590634e-07,
+      "interface_flux_error_W_m2": 3.6624041468026306e-07,
+      "contact_drop_residual_K": 1.1102230246251565e-16,
+      "wall_balance_residual_W_m2": 5.978733960281817e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 8,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.0004759620838893313,
+      "end_flux_error_W_m2": 0.0013603192869515801,
+      "interface_flux_error_W_m2": 0.0010267130475144627,
+      "contact_drop_residual_K": 8.777083671441753e-17,
+      "wall_balance_residual_W_m2": 4.249413978253322e-15,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 16,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 9.305937184706862e-09,
+      "end_flux_error_W_m2": 1.901752859020279e-08,
+      "interface_flux_error_W_m2": 2.2942189375338565e-08,
+      "contact_drop_residual_K": 2.7755575615628914e-17,
+      "wall_balance_residual_W_m2": 7.021666937153402e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 16,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.00011896841435809194,
+      "end_flux_error_W_m2": 0.0003400166401205345,
+      "interface_flux_error_W_m2": 0.000256470170498818,
+      "contact_drop_residual_K": 5.551115123125783e-17,
+      "wall_balance_residual_W_m2": 6.45458879844291e-15,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 32,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 5.821858788202044e-10,
+      "end_flux_error_W_m2": 1.1895751176000427e-09,
+      "interface_flux_error_W_m2": 1.43541442555115e-09,
+      "contact_drop_residual_K": 1.1102230246251565e-16,
+      "wall_balance_residual_W_m2": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 32,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 2.9740714338093987e-05,
+      "end_flux_error_W_m2": 8.500018949717253e-05,
+      "interface_flux_error_W_m2": 6.410452190111665e-05,
+      "contact_drop_residual_K": 5.551115123125783e-17,
+      "wall_balance_residual_W_m2": 2.1923180254186333e-14,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "c53b9dba72bcd46dbef726cc7bf274353c4f6bc4",
+      "file": "harmonic_loaded_contact_stack.py",
+      "source_sha256": "c0e06f24b810007a4d9ae806fe4fede64c29ae08e651c9f50cc055b8b88113bf"
+    },
+    {
+      "commit": "c53b9dba72bcd46dbef726cc7bf274353c4f6bc4",
+      "file": "periodic_contact_heat.py",
+      "source_sha256": "88fe63d70b57856b5dc44923309748d13b1eac44ef2f7fe0611bfec266503261"
+    },
+    {
+      "commit": "c53b9dba72bcd46dbef726cc7bf274353c4f6bc4",
+      "file": "two_layer_conduction.py",
+      "source_sha256": "c9f048d11a0c93dd9416fba8c5cb5fa40a46cbb22ce77eea08b0210df3741b0e"
+    },
+    {
+      "commit": "1dca5b490939d1a3dd9bce8c6f7039ee56171af9",
+      "file": "heat_1d.py",
+      "source_sha256": "79fa9fb6a358162736716279d00f63d013d46a90932ed6e01c77985c5f9245ca"
+    },
+    {
+      "commit": "ecfe4041e0388cf63988998424437743b242916d",
+      "file": "thermal.py",
+      "source_sha256": "372e4860203b812033e7fa500cd002389c586b4e251dcf5be4bbf7574cee0172"
+    }
+  ],
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG:../TensorFEM/src:../TensorDEM/src:../TensorFVM/src:../TensorSPH/src python examples/harmonic_loaded_contact_stack.py",
+  "reference": "Two 0.5 m layers of unit cross section with (k,C)=(1,1) and (4,2), separated by areal resistance 0.32. Add a spatially uniform temperature phasor to a homogeneous transfer solution and prescribe the corresponding layer generation, film ambients and wall storage. Compare four temperature traces, contact flux positive to the right and both inward wall fluxes. Check each end-wall energy balance and the contact drop."
+}
