@@ -7,6 +7,7 @@ import torch
 from conduction_provenance import provenance
 from tensorfem import thermal
 from tensorfvm.cht import rod
+from tensorsph import heat_conduction_2d as sph
 
 
 K, C, H = .8, 1.6, 4.
@@ -16,11 +17,12 @@ DRIVES = np.array([[[1.,.8],[1.6,.2]], [[-.7,.9],[-.4,-.6]], [[.5,-.2],[.5,-.2]]
 INITIAL = np.array([.2,-.3])
 
 
-def reference(n):
+def reference(n, particle_centers=False):
     faces = np.linspace(0.,1.,n+1)
     cosine = np.diff(np.sin(np.pi*faces))*n/np.pi
+    temperature_cosine = np.cos(np.pi*(faces[:-1]+faces[1:])/2) if particle_centers else cosine
     modes = INITIAL.copy()
-    temperatures = [modes[0]+modes[1]*cosine]
+    temperatures = [modes[0]+modes[1]*temperature_cosine]
     sections,exchange = [],[]
     rate = (H+K*np.array([0.,np.pi**2]))/C
     for dt,(begin,end) in zip(np.diff(TIMES),DRIVES):
@@ -30,16 +32,18 @@ def reference(n):
         heat_input = .5*dt*(begin+end)
         integral = (H*heat_input/C-change)/rate
         modes += change
-        temperatures.append(modes[0]+modes[1]*cosine)
+        temperatures.append(modes[0]+modes[1]*temperature_cosine)
         sections.append(K*np.pi*np.sin(np.pi*faces)*integral[1])
         reservoir_heat = H*(heat_input-integral)/n
         exchange.append(reservoir_heat[0]+reservoir_heat[1]*cosine)
     return np.array(temperatures),np.array(sections),np.array(exchange)
 
 
-def fvm(n):
+def cell_solver(n,particles):
     faces = np.linspace(0.,1.,n+1)
     cosine = np.diff(np.sin(np.pi*faces))*n/np.pi
+    if particles:
+        cosine = np.cos(np.pi*(faces[:-1]+faces[1:])/2)
     count = n
     times = np.r_[0.,np.concatenate([np.linspace(a,b,count+1)[1:] for a,b in zip(TIMES,TIMES[1:])])]
     def ambient(t):
@@ -47,12 +51,20 @@ def fvm(n):
         begin,end = DRIVES[i]
         amplitudes = begin+(end-begin)*(t-TIMES[i])/(TIMES[i+1]-TIMES[i])
         return amplitudes[0]+amplitudes[1]*cosine
-    u,_,_,_,heat = rod.solve_transient_stepped_rod(np.diff(faces),1.,K,C,[0.,0.],times,
-        INITIAL[0]+INITIAL[1]*cosine,end_types=("power","power"),method="sdirk2",flux_order=2,
-        heat_loss_coefficient=H,bulk_ambient_temperature=ambient,load_jump_times=TIMES[1:-1],return_step_heat=True)
+    initial = INITIAL[0]+INITIAL[1]*cosine
+    if particles:
+        u,sections,exchange = sph.solve_transient_layered_slab(initial,times,1/n,(None,None),
+            conductivity=np.full(n,K),volumetric_heat_capacity=C,method="sdirk2",heat_loss_coefficient=H,
+            bulk_ambient_temperature=ambient,load_jump_times=TIMES[1:-1],return_x_heat=True,return_bulk_exchange=True)
+    else:
+        u,_,_,_,heat = rod.solve_transient_stepped_rod(np.diff(faces),1.,K,C,[0.,0.],times,
+            initial,end_types=("power","power"),method="sdirk2",flux_order=2,
+            heat_loss_coefficient=H,bulk_ambient_temperature=ambient,load_jump_times=TIMES[1:-1],return_step_heat=True)
+        sections = np.column_stack((heat["left"][:,0],heat["right"]))
+        exchange = heat["bulk_exchange"]
     def total(v):
-        return v.reshape(len(DRIVES),count,-1).sum(axis=1)
-    return u[::count],total(np.column_stack((heat["left"][:,0],heat["right"]))),total(heat["bulk_exchange"])
+        return np.asarray(v).reshape(len(DRIVES),count,-1).sum(axis=1)
+    return np.asarray(u)[::count],total(sections),total(exchange)
 
 
 def fem(n):
@@ -86,8 +98,9 @@ def fem(n):
 if __name__ == "__main__":
     rows,previous = [],{}
     for n in (8,16,32,64):
-        exact = reference(n)
-        for name,solve in (("FEM",fem),("FVM",fvm)):
+        for name,solve in (("FEM",fem),("FVM",lambda n: cell_solver(n,False)),
+                           ("SPH",lambda n: cell_solver(n,True))):
+            exact = reference(n,particle_centers=name=="SPH")
             u,cut,exchange = solve(n)
             # Report exchanged heat per unit cell volume so mesh refinement alone
             # does not improve the metric by shrinking the integration region.
@@ -96,10 +109,10 @@ if __name__ == "__main__":
                           reservoir_heat_J_m3=float(n*abs(exchange-exact[2]).max()))
             residual = float(abs((C/n)*np.diff(u,axis=0)+np.diff(cut)-exchange).max())
             orders = {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()} if name in previous else {}
-            rows.append(dict(solver=name,cells=n,errors=errors,orders=orders,max_cell_balance_J_m2=residual,
+            rows.append(dict(solver=name,cells=n,temperature_sampling="center" if name=="SPH" else "cell_mean",errors=errors,orders=orders,max_cell_balance_J_m2=residual,
                              passed=residual<1e-11 and all(p>1.8 for p in orders.values())))
             previous[name] = errors
     print(json.dumps(dict(times=TIMES.tolist(),ambient_modes=DRIVES.tolist(),runs=rows,
-                          sources=[provenance(p) for p in (__file__,thermal.__file__,rod.__file__)]),
+                          sources=[provenance(p) for p in (__file__,thermal.__file__,rod.__file__,sph.__file__)]),
                      indent=2,allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
