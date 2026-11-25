@@ -1,0 +1,874 @@
+{
+  "reference": "I_m(lambda*r) exp(i*m*theta)/I_m(lambda), lambda^2=i*omega*C/k; Dirichlet data evaluated on the unit circle at matching polar angles",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_disk_thermal_modes.py --circle-data",
+  "fixed_arcs_rad": [
+    [
+      0.19,
+      1.41
+    ],
+    [
+      5.83,
+      6.753185307179586
+    ]
+  ],
+  "order_metrics": [
+    "interior_temperature_error_K",
+    "interior_flux_x_error_W_m2",
+    "interior_flux_y_error_W_m2",
+    "inward_flux_error_W_m2",
+    "modal_inward_power_error_W_m",
+    "panel_arc_mean_flux_error_W_m2",
+    "max_fixed_arc_power_error_W_m"
+  ],
+  "runs": [
+    {
+      "boundary_data_shift_K": 0.006398419569524229,
+      "panel_arc_mean_flux_error_W_m2": 0.012801305000529985,
+      "fixed_arc_power_errors_W_m": [
+        0.015903167030610132,
+        0.010790746020550945
+      ],
+      "max_fixed_arc_power_error_W_m": 0.015903167030610132,
+      "modal_inward_power_error_W_m": 0.08043297149204802,
+      "panels": 16,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.005380271375243447,
+      "interior_flux_x_error_W_m2": 0.00223724121429191,
+      "interior_flux_y_error_W_m2": 0.002237603798733589,
+      "inward_flux_error_W_m2": 0.009330408742337221,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.001615176396492972,
+      "panel_arc_mean_flux_error_W_m2": 0.003224215703519097,
+      "fixed_arc_power_errors_W_m": [
+        0.0038469702434347766,
+        0.0028840461264238696
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0038469702434347766,
+      "modal_inward_power_error_W_m": 0.020258344735508773,
+      "panels": 32,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.0013469105544614435,
+      "interior_flux_x_error_W_m2": 0.0005563675042217069,
+      "interior_flux_y_error_W_m2": 0.0005563432049563431,
+      "inward_flux_error_W_m2": 0.0023446325271853064,
+      "orders": [
+        1.9980248950479564,
+        2.007610748993552,
+        2.007907555114252,
+        1.9925784556438144,
+        1.9892707199902289,
+        1.9892707199889141,
+        2.0475195236677464
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.00040477209778087196,
+      "panel_arc_mean_flux_error_W_m2": 0.0008083743390889018,
+      "fixed_arc_power_errors_W_m": [
+        0.0009760227120368375,
+        0.0007595295108727158
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0009760227120368375,
+      "modal_inward_power_error_W_m": 0.005079165770013303,
+      "panels": 64,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.00033651249859087667,
+      "interior_flux_x_error_W_m2": 0.00013901610951888422,
+      "interior_flux_y_error_W_m2": 0.0001390090934199024,
+      "inward_flux_error_W_m2": 0.0005876599150769699,
+      "orders": [
+        2.000922052741161,
+        2.0007860832116258,
+        2.0007958865499895,
+        1.9963084287562303,
+        1.995852834099944,
+        1.9958528340868635,
+        1.978736045549885
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.00010125422426296728,
+      "panel_arc_mean_flux_error_W_m2": 0.00020234001321153304,
+      "fixed_arc_power_errors_W_m": [
+        0.0002469215353345672,
+        0.00018615116724266033
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0002469215353345672,
+      "modal_inward_power_error_W_m": 0.0012713397977969422,
+      "panels": 128,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 8.405805437740709e-05,
+      "interior_flux_x_error_W_m2": 3.4725080620689036e-05,
+      "interior_flux_y_error_W_m2": 3.472332803333917e-05,
+      "inward_flux_error_W_m2": 0.00014710101061062643,
+      "orders": [
+        2.001202120625224,
+        2.0012021267780615,
+        2.001202127756032,
+        1.9981743356788597,
+        1.998241881611894,
+        1.998241881321961,
+        1.9828620526334622
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.03814679961466472,
+      "panel_arc_mean_flux_error_W_m2": 0.2923858017916573,
+      "fixed_arc_power_errors_W_m": [
+        0.02330111933350461,
+        0.0978066698298615
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0978066698298615,
+      "modal_inward_power_error_W_m": 1.2910892541015868,
+      "panels": 16,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.009684394384575213,
+      "interior_flux_x_error_W_m2": 0.075075667177782,
+      "interior_flux_y_error_W_m2": 0.07666550054780778,
+      "inward_flux_error_W_m2": 0.22880083662009706,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.009629964214449092,
+      "panel_arc_mean_flux_error_W_m2": 0.0750871975975928,
+      "fixed_arc_power_errors_W_m": [
+        0.048014931949615536,
+        0.011122493185177268
+      ],
+      "max_fixed_arc_power_error_W_m": 0.048014931949615536,
+      "modal_inward_power_error_W_m": 0.3344698446118284,
+      "panels": 32,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.0023756189670770516,
+      "interior_flux_x_error_W_m2": 0.01146928369868101,
+      "interior_flux_y_error_W_m2": 0.011476810248335512,
+      "inward_flux_error_W_m2": 0.05879837432965207,
+      "orders": [
+        2.027358376099143,
+        2.710570098434361,
+        2.739855782156624,
+        1.9602441546255873,
+        1.9486406885924132,
+        1.9612344023094554,
+        1.0264497187948542
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.002413349400244965,
+      "panel_arc_mean_flux_error_W_m2": 0.019007522658765895,
+      "fixed_arc_power_errors_W_m": [
+        0.008956097639929323,
+        0.004918539339702854
+      ],
+      "max_fixed_arc_power_error_W_m": 0.008956097639929323,
+      "modal_inward_power_error_W_m": 0.08504759687700898,
+      "panels": 64,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.0006101308916109879,
+      "interior_flux_x_error_W_m2": 0.0029238747967104384,
+      "interior_flux_y_error_W_m2": 0.0029236159506445918,
+      "inward_flux_error_W_m2": 0.014910152391242259,
+      "orders": [
+        1.961112773439826,
+        1.9718218521996704,
+        1.9728960143985652,
+        1.979481264706401,
+        1.9755337686473347,
+        1.9819964376238455,
+        2.422540971170554
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0006037039564970741,
+      "panel_arc_mean_flux_error_W_m2": 0.0047816516000205546,
+      "fixed_arc_power_errors_W_m": [
+        0.002095771959159109,
+        0.0010848415672373793
+      ],
+      "max_fixed_arc_power_error_W_m": 0.002095771959159109,
+      "modal_inward_power_error_W_m": 0.02144573291597908,
+      "panels": 128,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.00015470940330465497,
+      "interior_flux_x_error_W_m2": 0.0007413995688913879,
+      "interior_flux_y_error_W_m2": 0.0007413351083269521,
+      "inward_flux_error_W_m2": 0.003755713213894462,
+      "orders": [
+        1.9795578907095284,
+        1.9795583535730865,
+        1.979556068136423,
+        1.9891361947811943,
+        1.987579849905577,
+        1.9909895893395608,
+        2.0953885107858663
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.04508708159650688,
+      "panel_arc_mean_flux_error_W_m2": 0.07103338272970149,
+      "fixed_arc_power_errors_W_m": [
+        0.08687920019737372,
+        0.06532641382643412
+      ],
+      "max_fixed_arc_power_error_W_m": 0.08687920019737372,
+      "modal_inward_power_error_W_m": 0.44631590668651167,
+      "panels": 16,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.028768440684125728,
+      "interior_flux_x_error_W_m2": 0.10414943810158786,
+      "interior_flux_y_error_W_m2": 0.10414691497956242,
+      "inward_flux_error_W_m2": 0.07340006263566401,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.01141366069595447,
+      "panel_arc_mean_flux_error_W_m2": 0.0184646230446003,
+      "fixed_arc_power_errors_W_m": [
+        0.022458806534095196,
+        0.01697744756224792
+      ],
+      "max_fixed_arc_power_error_W_m": 0.022458806534095196,
+      "modal_inward_power_error_W_m": 0.11601664821639769,
+      "panels": 32,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.007129294834288617,
+      "interior_flux_x_error_W_m2": 0.025807505618782513,
+      "interior_flux_y_error_W_m2": 0.025806379649181706,
+      "inward_flux_error_W_m2": 0.018816208495687593,
+      "orders": [
+        2.012655735372535,
+        2.0127924438801603,
+        2.0128204382523327,
+        1.9638053428232494,
+        1.9437333803173091,
+        1.9437333803167973,
+        1.9517295572293658
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0028623698476068216,
+      "panel_arc_mean_flux_error_W_m2": 0.004698115965203861,
+      "fixed_arc_power_errors_W_m": [
+        0.005721858102161074,
+        0.004351676353613531
+      ],
+      "max_fixed_arc_power_error_W_m": 0.005721858102161074,
+      "modal_inward_power_error_W_m": 0.02951913320383505,
+      "panels": 64,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.0017780446280917064,
+      "interior_flux_x_error_W_m2": 0.006437001460131087,
+      "interior_flux_y_error_W_m2": 0.00643667658670455,
+      "inward_flux_error_W_m2": 0.004752750006359375,
+      "orders": [
+        2.0034678497152045,
+        2.003330005685453,
+        2.003339874390795,
+        1.9851415280681428,
+        1.9746095807851862,
+        1.974609580777935,
+        1.972725639194651
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.000716153493649239,
+      "panel_arc_mean_flux_error_W_m2": 0.001184121682949254,
+      "fixed_arc_power_errors_W_m": [
+        0.001444700421279697,
+        0.0010924773244544654
+      ],
+      "max_fixed_arc_power_error_W_m": 0.001444700421279697,
+      "modal_inward_power_error_W_m": 0.007440055959449157,
+      "panels": 128,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.00044409920111795594,
+      "interior_flux_x_error_W_m2": 0.00160775896665142,
+      "interior_flux_y_error_W_m2": 0.0016076778224701558,
+      "inward_flux_error_W_m2": 0.001193506412410424,
+      "orders": [
+        2.0013376544135437,
+        2.0013376605294364,
+        2.001337661512096,
+        1.993556200504405,
+        1.9882649813652558,
+        1.9882649812236806,
+        1.985713359474612
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.045588412772031864,
+      "panel_arc_mean_flux_error_W_m2": 0.32097455134905645,
+      "fixed_arc_power_errors_W_m": [
+        0.05884055970493689,
+        0.09770986117179756
+      ],
+      "max_fixed_arc_power_error_W_m": 0.09770986117179756,
+      "modal_inward_power_error_W_m": 1.3817170843939683,
+      "panels": 16,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.0130410054308618,
+      "interior_flux_x_error_W_m2": 0.09274263206344159,
+      "interior_flux_y_error_W_m2": 0.10242148720873512,
+      "inward_flux_error_W_m2": 0.24662241037516364,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.011569164093998477,
+      "panel_arc_mean_flux_error_W_m2": 0.08298000827908694,
+      "fixed_arc_power_errors_W_m": [
+        0.05018688677647898,
+        0.009811948708933952
+      ],
+      "max_fixed_arc_power_error_W_m": 0.05018688677647898,
+      "modal_inward_power_error_W_m": 0.35900021590615383,
+      "panels": 32,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.003296480942433271,
+      "interior_flux_x_error_W_m2": 0.018188592182294565,
+      "interior_flux_y_error_W_m2": 0.018214286789583676,
+      "inward_flux_error_W_m2": 0.06367359421183083,
+      "orders": [
+        1.984056456243752,
+        2.3501987903321795,
+        2.491376002772666,
+        1.9535367941220327,
+        1.9444056279116604,
+        1.9516232107172715,
+        0.9611937159095146
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0029031820884510267,
+      "panel_arc_mean_flux_error_W_m2": 0.021053635530743107,
+      "fixed_arc_power_errors_W_m": [
+        0.008697336642851793,
+        0.0055393571901070585
+      ],
+      "max_fixed_arc_power_error_W_m": 0.008697336642851793,
+      "modal_inward_power_error_W_m": 0.09141188761607477,
+      "panels": 64,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.0008513589260872236,
+      "interior_flux_x_error_W_m2": 0.004687353286247187,
+      "interior_flux_y_error_W_m2": 0.004686547046109673,
+      "inward_flux_error_W_m2": 0.016175861135097825,
+      "orders": [
+        1.9530873469795467,
+        1.9561884409899153,
+        1.9584732346216909,
+        1.9768526856682889,
+        1.9735310145026639,
+        1.978694422523679,
+        2.5286648728473713
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0007264783821055638,
+      "panel_arc_mean_flux_error_W_m2": 0.005301646978755328,
+      "fixed_arc_power_errors_W_m": [
+        0.002060321479045654,
+        0.0008600306896747348
+      ],
+      "max_fixed_arc_power_error_W_m": 0.002060321479045654,
+      "modal_inward_power_error_W_m": 0.023067754336059617,
+      "panels": 128,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": false,
+      "interior_temperature_error_K": 0.00021632700916275017,
+      "interior_flux_x_error_W_m2": 0.0011910380292543402,
+      "interior_flux_y_error_W_m2": 0.0011908345889630378,
+      "inward_flux_error_W_m2": 0.004078109968614492,
+      "orders": [
+        1.9765536868770706,
+        1.9765540564969217,
+        1.9765523335554533,
+        1.9878699331986283,
+        1.9865042287185226,
+        1.989556864975121,
+        2.077704213134691
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.006398419569524229,
+      "panel_arc_mean_flux_error_W_m2": 0.014428425940305153,
+      "fixed_arc_power_errors_W_m": [
+        0.01587065570649799,
+        0.019646296176801782
+      ],
+      "max_fixed_arc_power_error_W_m": 0.019646296176801782,
+      "modal_inward_power_error_W_m": 0.09065647387384543,
+      "panels": 16,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.0044570261323940335,
+      "interior_flux_x_error_W_m2": 0.0019250353013027784,
+      "interior_flux_y_error_W_m2": 0.0019270846176986996,
+      "inward_flux_error_W_m2": 0.051421585239935924,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.001615176396492972,
+      "panel_arc_mean_flux_error_W_m2": 0.0036288434441294555,
+      "fixed_arc_power_errors_W_m": [
+        0.005600766882933716,
+        0.0046014726753206125
+      ],
+      "max_fixed_arc_power_error_W_m": 0.005600766882933716,
+      "modal_inward_power_error_W_m": 0.022800695810189578,
+      "panels": 32,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.0010966430993691303,
+      "interior_flux_x_error_W_m2": 0.00045293900927063956,
+      "interior_flux_y_error_W_m2": 0.000452922826813032,
+      "inward_flux_error_W_m2": 0.023521179269857983,
+      "orders": [
+        2.0229873402907286,
+        2.087496200557302,
+        2.089082764745823,
+        1.1284136930062587,
+        1.9913321961414199,
+        1.9913321961403194,
+        1.8105610673603385
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.00040477209778087196,
+      "panel_arc_mean_flux_error_W_m2": 0.000908750048311935,
+      "fixed_arc_power_errors_W_m": [
+        0.0013975880886680028,
+        0.000465148895667262
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0013975880886680028,
+      "modal_inward_power_error_W_m": 0.0057098449513296986,
+      "panels": 64,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.0002719270484265767,
+      "interior_flux_x_error_W_m2": 0.00011233532397596319,
+      "interior_flux_y_error_W_m2": 0.00011232965454541331,
+      "inward_flux_error_W_m2": 0.012467619905182047,
+      "orders": [
+        2.0118025118246914,
+        2.011505140277868,
+        2.0115264081626854,
+        0.9157743157427966,
+        1.9975543764752095,
+        1.9975543764454737,
+        2.002685163529172
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.00010125422426296728,
+      "panel_arc_mean_flux_error_W_m2": 0.00022730539132075897,
+      "fixed_arc_power_errors_W_m": [
+        0.0002734580779030062,
+        0.0002472702939139113
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0002734580779030062,
+      "modal_inward_power_error_W_m": 0.0014282018944238358,
+      "panels": 128,
+      "mode": 0,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 6.767307606885159e-05,
+      "interior_flux_x_error_W_m2": 2.7956309953264465e-05,
+      "interior_flux_y_error_W_m2": 2.795489898864562e-05,
+      "inward_flux_error_W_m2": 0.006433122318926407,
+      "orders": [
+        2.006565789920448,
+        2.006565803993264,
+        2.0065658062029637,
+        0.9545950525822157,
+        1.9992516332873294,
+        1.9992516327471026,
+        2.353547632855873
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.03814679961466472,
+      "panel_arc_mean_flux_error_W_m2": 0.08521074236855455,
+      "fixed_arc_power_errors_W_m": [
+        0.03793061246090133,
+        0.01074297229014164
+      ],
+      "max_fixed_arc_power_error_W_m": 0.03793061246090133,
+      "modal_inward_power_error_W_m": 0.035114319290495216,
+      "panels": 16,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.014255089263837275,
+      "interior_flux_x_error_W_m2": 0.07132866455160813,
+      "interior_flux_y_error_W_m2": 0.07035060195924017,
+      "inward_flux_error_W_m2": 0.5235599378935173,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.009629964214449092,
+      "panel_arc_mean_flux_error_W_m2": 0.02179124967209976,
+      "fixed_arc_power_errors_W_m": [
+        0.008242129784976345,
+        0.011176927578062318
+      ],
+      "max_fixed_arc_power_error_W_m": 0.011176927578062318,
+      "modal_inward_power_error_W_m": 0.007961766461753192,
+      "panels": 32,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.003427123594221898,
+      "interior_flux_x_error_W_m2": 0.01642043160778624,
+      "interior_flux_y_error_W_m2": 0.016429786735964555,
+      "inward_flux_error_W_m2": 0.27760593482605783,
+      "orders": [
+        2.0564069467017454,
+        2.1189899144405033,
+        2.0982490142698125,
+        0.9153162973656331,
+        2.140899008682981,
+        1.967286386270477,
+        1.7628390061233323
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.002413349400244965,
+      "panel_arc_mean_flux_error_W_m2": 0.005479633265931584,
+      "fixed_arc_power_errors_W_m": [
+        0.0005232265488897088,
+        0.0006415073184122408
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0006415073184122408,
+      "modal_inward_power_error_W_m": 0.0019235803914116984,
+      "panels": 64,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.0008459004774599013,
+      "interior_flux_x_error_W_m2": 0.0040537306071974965,
+      "interior_flux_y_error_W_m2": 0.004053378112239167,
+      "inward_flux_error_W_m2": 0.1429061254020128,
+      "orders": [
+        2.0184383801266845,
+        2.018169926522704,
+        2.0191170877123374,
+        0.9579706548793356,
+        2.0492944293855326,
+        1.9915976870417282,
+        4.122914126598296
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0006037039564970741,
+      "panel_arc_mean_flux_error_W_m2": 0.001371939108350028,
+      "fixed_arc_power_errors_W_m": [
+        0.0006860117465656566,
+        0.0006749351571209325
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0006860117465656566,
+      "modal_inward_power_error_W_m": 0.00047704448618513223,
+      "panels": 128,
+      "mode": 2,
+      "omega_rad_s": 0.5,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.00021027348906265135,
+      "interior_flux_x_error_W_m2": 0.0010076741995685564,
+      "interior_flux_y_error_W_m2": 0.0010075865879063683,
+      "inward_flux_error_W_m2": 0.07249314949355541,
+      "orders": [
+        2.008220967346196,
+        2.008220953732221,
+        2.008220937484956,
+        0.9791511822515807,
+        2.011598410527529,
+        1.9978628906444578,
+        -0.09676755595697004
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.04508708159650688,
+      "panel_arc_mean_flux_error_W_m2": 0.06286004799518168,
+      "fixed_arc_power_errors_W_m": [
+        0.06559316376308934,
+        0.10041415444100142
+      ],
+      "max_fixed_arc_power_error_W_m": 0.10041415444100142,
+      "modal_inward_power_error_W_m": 0.39496132997189237,
+      "panels": 16,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.023890750884855008,
+      "interior_flux_x_error_W_m2": 0.08764509132600763,
+      "interior_flux_y_error_W_m2": 0.08766295057400225,
+      "inward_flux_error_W_m2": 0.32377008425944204,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.01141366069595447,
+      "panel_arc_mean_flux_error_W_m2": 0.015772967955178085,
+      "fixed_arc_power_errors_W_m": [
+        0.027013717443120266,
+        0.022898947305086802
+      ],
+      "max_fixed_arc_power_error_W_m": 0.027013717443120266,
+      "modal_inward_power_error_W_m": 0.09910448050647772,
+      "panels": 32,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.005815544157567718,
+      "interior_flux_x_error_W_m2": 0.021049432177032822,
+      "interior_flux_y_error_W_m2": 0.021048683153912822,
+      "inward_flux_error_W_m2": 0.17433925453927795,
+      "orders": [
+        2.038466102941811,
+        2.057891977168503,
+        2.058237259807286,
+        0.893072243675042,
+        1.9946892201163202,
+        1.9946892201148287,
+        1.8941985543538644
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0028623698476068216,
+      "panel_arc_mean_flux_error_W_m2": 0.003955049199407192,
+      "fixed_arc_power_errors_W_m": [
+        0.0067420673183060924,
+        0.0016170910659156316
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0067420673183060924,
+      "modal_inward_power_error_W_m": 0.024850307018282485,
+      "panels": 64,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.001438445010364637,
+      "interior_flux_x_error_W_m2": 0.005207559211695342,
+      "interior_flux_y_error_W_m2": 0.005207296392343484,
+      "inward_flux_error_W_m2": 0.09043028902316692,
+      "orders": [
+        2.015404120246654,
+        2.0151020727232485,
+        2.015123547890042,
+        0.9470194660485253,
+        1.9956866070524693,
+        1.9956866070189616,
+        2.0024292497852194
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.000716153493649239,
+      "panel_arc_mean_flux_error_W_m2": 0.0009904609052710804,
+      "fixed_arc_power_errors_W_m": [
+        0.0011834373402092,
+        0.0011616144494815295
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0011834373402092,
+      "modal_inward_power_error_W_m": 0.006223249404786887,
+      "panels": 128,
+      "mode": 0,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.00035775774353270947,
+      "interior_flux_x_error_W_m2": 0.0012951795873656303,
+      "interior_flux_y_error_W_m2": 0.0012951142191809247,
+      "inward_flux_error_W_m2": 0.04605057427499189,
+      "orders": [
+        2.007455171025856,
+        2.0074551849002393,
+        2.0074551871319093,
+        0.973586927083768,
+        1.9975237056029738,
+        1.9975237050473846,
+        2.5102077111262653
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.045588412772031864,
+      "panel_arc_mean_flux_error_W_m2": 0.08423669296762679,
+      "fixed_arc_power_errors_W_m": [
+        0.06057925277765377,
+        0.04157971112933297
+      ],
+      "max_fixed_arc_power_error_W_m": 0.06057925277765377,
+      "modal_inward_power_error_W_m": 0.26247417591219807,
+      "panels": 16,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.016627407651029213,
+      "interior_flux_x_error_W_m2": 0.09516294374912498,
+      "interior_flux_y_error_W_m2": 0.09335732787303212,
+      "inward_flux_error_W_m2": 0.6429131694463436,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.011569164093998477,
+      "panel_arc_mean_flux_error_W_m2": 0.021544871240644272,
+      "fixed_arc_power_errors_W_m": [
+        0.013887447758815267,
+        0.016566888466841283
+      ],
+      "max_fixed_arc_power_error_W_m": 0.016566888466841283,
+      "modal_inward_power_error_W_m": 0.06849170240039654,
+      "panels": 32,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.004007858663817602,
+      "interior_flux_x_error_W_m2": 0.022058787560109157,
+      "interior_flux_y_error_W_m2": 0.0220721017846064,
+      "inward_flux_error_W_m2": 0.3380038508193958,
+      "orders": [
+        2.052659719944739,
+        2.10904640368464,
+        2.0805392532424305,
+        0.9275842202565455,
+        1.9381743622467116,
+        1.9671043225380251,
+        1.870521116911599
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0029031820884510267,
+      "panel_arc_mean_flux_error_W_m2": 0.005430851560358697,
+      "fixed_arc_power_errors_W_m": [
+        0.0021185305851489596,
+        0.0016754753095703564
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0021185305851489596,
+      "modal_inward_power_error_W_m": 0.017561439089700644,
+      "panels": 64,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.0009899223943353938,
+      "interior_flux_x_error_W_m2": 0.005450245214809469,
+      "interior_flux_y_error_W_m2": 0.005449314031722237,
+      "inward_flux_error_W_m2": 0.17315836170483215,
+      "orders": [
+        2.0174442994904807,
+        2.0169604512696675,
+        2.0180774770531147,
+        0.9649476269522251,
+        1.9635181469325858,
+        1.988094140231282,
+        2.9671668041289885
+      ],
+      "passed": true
+    },
+    {
+      "boundary_data_shift_K": 0.0007264783821055638,
+      "panel_arc_mean_flux_error_W_m2": 0.0013623505971554646,
+      "fixed_arc_power_errors_W_m": [
+        0.0004311883469256311,
+        0.0008002594202835533
+      ],
+      "max_fixed_arc_power_error_W_m": 0.0008002594202835533,
+      "modal_inward_power_error_W_m": 0.004450220887050155,
+      "panels": 128,
+      "mode": 2,
+      "omega_rad_s": 5.0,
+      "quadratic": true,
+      "interior_temperature_error_K": 0.00024611741892963644,
+      "interior_flux_x_error_W_m2": 0.0013550559717059017,
+      "interior_flux_y_error_W_m2": 0.0013548245156362962,
+      "inward_flux_error_W_m2": 0.08761378039464839,
+      "orders": [
+        2.007968660558458,
+        2.0079686958707392,
+        2.00796863474338,
+        0.9828623479404052,
+        1.980462221560087,
+        1.9950804063951213,
+        1.4045242972661292
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "f8313c2a1ffe3135313cb81519a93c7419bfc6a0",
+      "file": "bem_disk_thermal_modes.py",
+      "source_sha256": "07a8547dc486dbae0f58797487ef67f7afdd3b45d83e056aa1e5344ccbef4055"
+    },
+    {
+      "commit": "2cb3612dd7f37d78e0238459e93f0b785c7a431f",
+      "file": "harmonic_conduction.py",
+      "source_sha256": "a81276d563891dd9513827e3698f57f20a5669f797ad7920f3b3d657106b7e24"
+    },
+    {
+      "commit": "2cb3612dd7f37d78e0238459e93f0b785c7a431f",
+      "file": "geometry.py",
+      "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+    }
+  ]
+}
