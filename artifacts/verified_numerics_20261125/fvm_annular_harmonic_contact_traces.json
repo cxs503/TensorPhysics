@@ -1,0 +1,28 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "1dcd11b673946358a43073009a6ae8538d3aea49",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_annular_conduction.py tests/test_robin_conduction.py tests/test_harmonic_conduction.py tests/test_transient_conduction.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Harmonic two-material annulus, m=2, omega=3.2, r=0.5/0.8/1.2 m. On each side independently solve for I_m and K_m coefficients from the specified material-side temperature and radial flux at the sheet. Sheet phasor 0.65+0.2i K, area capacity 0.4, total contact resistance 0.25 split 30/70. Apply analytic end temperatures and sheet generation. Check both material traces, sheet and cell temperatures, all face rate amplitudes and interfacial power balance. CPU double precision with 12,24,48 shells per material.",
+  "suite": {
+    "tests": 121,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_harmonic_two_material_sheet_traces_against_bessel_modes": {
+      "max_error_12_field_K": 0.0002321601479399067,
+      "max_error_12_radial_rate_W_per_m": 0.01908090280234094,
+      "max_error_12_trace_K": 0.00024347280996415957,
+      "max_error_12_sheet_K": 0.00016746727426409245,
+      "max_error_24_field_K": 5.9485158829286803e-05,
+      "max_error_24_radial_rate_W_per_m": 0.004773567395718128,
+      "max_error_24_trace_K": 6.091604052207278e-05,
+      "max_error_24_sheet_K": 4.190027696473421e-05,
+      "max_error_48_field_K": 1.5052020497964204e-05,
+      "max_error_48_radial_rate_W_per_m": 0.001193600869717346,
+      "max_error_48_trace_K": 1.5232003408911741e-05,
+      "max_error_48_sheet_K": 1.047716280969564e-05
+    }
+  }
+}
