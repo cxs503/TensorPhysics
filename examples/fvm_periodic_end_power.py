@@ -9,7 +9,7 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def measure(steps, method, alternating=False, compare_fem=False, compare_sph=False, massless=False, single_store=None, bulk_exchange=False):
+def measure(steps, method, alternating=False, compare_fem=False, compare_sph=False, massless=False, single_store=None, bulk_exchange=False, exchange_half=None):
     # T-base = 0.3*x + (0.7-1.4*x)*sin(omega*t), so the two wall
     # temperatures oscillate in opposite phases and the axial flux is uniform.
     n, area, k, cv = 12, 1.5, 2., 1.2
@@ -33,13 +33,17 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
     def amplitude(x):
         return .7-1.4*x
 
-    loss = 3. if bulk_exchange else 0.
+    bulk_exchange = bulk_exchange or exchange_half is not None
+    active = np.full(n, bulk_exchange)
+    if exchange_half is not None:
+        active = centers < .5 if exchange_half == "west" else centers > .5
+    loss = 3.*active
     def reservoir(t, x):
         # cv*T_t = H*(Tb-T) for the affine temperature profile (T_xx=0).
-        return .3*x + amplitude(x)*(math.sin(omega*t) + cv*omega/loss*math.cos(omega*t))
+        return .3*x + amplitude(x)*(math.sin(omega*t) + cv*omega/3.*math.cos(omega*t))
 
     def volume_source(t):
-        return 0. if bulk_exchange else cv*omega*amplitude(centers)*math.cos(omega*t)
+        return (~active)*cv*omega*amplitude(centers)*math.cos(omega*t)
 
     def applied(t):
         wave = math.sin(omega*t)
@@ -83,11 +87,15 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
 
     storage = {"fvm": storage_errors(heats["end_input"], conduction)}
     exact_bulk = area*cv/n*amplitude(centers)*np.diff(wave, axis=0)
-    def bulk_power_error(cell_heat):
-        return float((abs(cell_heat-exact_bulk)/dt[:, None]).max())
     bulk_errors = {}
+    def record_bulk_power(solver, cell_heat):
+        error = abs(cell_heat-exact_bulk*active)/dt[:, None]
+        bulk_errors[solver+"_bulk_power_error_W"] = float(error.max())
+        if exchange_half is not None:
+            bulk_errors[solver+"_inactive_exchange_W"] = float(abs(cell_heat[:, ~active]/dt[:, None]).max())
+
     if bulk_exchange:
-        bulk_errors["fvm_bulk_power_error_W"] = bulk_power_error(heats["bulk_exchange"])
+        record_bulk_power("fvm", heats["bulk_exchange"])
     fem_errors = {}
     if compare_fem:
         import torch
@@ -109,7 +117,8 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         if bulk_exchange:
             mass = area/(6*n)*x.new_tensor([[2.,1.],[1.,2.]])
             def reservoir_load(t):
-                return loss*reservoir(t, x)[elements] @ mass
+                forcing = torch.from_numpy(loss)[:, None]*reservoir(t, x)[elements]
+                return forcing @ mass + torch.from_numpy(~active)[:, None]*projection*math.cos(omega*t)
 
         def nodal_power(t):
             load = volume_power*math.cos(omega*t)
@@ -132,8 +141,8 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
                                       for a, b in zip(first, times[1:])])
             distributed = torch.from_numpy(dt)[:, None, None]*stage_load
             fem_means = result.interval_temperature[:, elements].mean(2).numpy()
-            bulk_errors["fem_bulk_power_error_W"] = bulk_power_error(
-                distributed.sum(2).numpy() - dt[:, None]*loss*area/n*fem_means)
+            record_bulk_power("fem",
+                (distributed.sum(2).numpy() - (dt*cosine)[:, None]*projection.sum(1).numpy()*(~active)) - dt[:, None]*loss*area/n*fem_means)
         local = thermal.thermal_element_nodal_heat_steps(model, result, element_nodal_step_heat=distributed)
         face_heat = torch.stack((local[:,0,0], local[:,-1,1]), dim=1).numpy()
         wall_t = result.temperature[:, [0,-1]].numpy()
@@ -164,7 +173,7 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
             method=method, return_x_heat=True, return_external_heat=True,
             return_wall_temperatures=True, return_interval_wall_temperatures=True, return_wall_heat_components=True)
         if bulk_exchange:
-            bulk_errors["sph_bulk_power_error_W"] = bulk_power_error(area*bulk.numpy())
+            record_bulk_power("sph", area*bulk.numpy())
         external = area*external.numpy()
         film_sph = area*components["film"].numpy()
         heater_sph = area*components["applied"].numpy()
@@ -201,6 +210,7 @@ if __name__ == "__main__":
     storage_group.add_argument("--single-store", choices=("west", "east"), help="retain surface heat capacity only at the selected end")
     storage_group.add_argument("--massless", action="store_true", help="apply heaters and convection at walls without surface storage")
     parser.add_argument("--bulk-exchange", action="store_true", help="drive the interior with a space- and time-dependent reservoir")
+    parser.add_argument("--exchange-half", choices=("west", "east"), help="drive only this half by reservoir exchange and heat the other half volumetrically")
     args = parser.parse_args()
     files = [__file__, rod.__file__]
     path = "../TensorFVM/src"
@@ -218,12 +228,12 @@ if __name__ == "__main__":
         path += ":../TensorSPH/src"
         sph_metrics = ("sph_particle_error_K", "sph_wall_error_K", "sph_cumulative_end_error_J",
                        "sph_interval_film_error_W", "sph_interval_heater_error_W")
-    bulk_metrics = [name+"_bulk_power_error_W" for name, active in (("fvm", True), ("fem", args.compare_fem), ("sph", args.compare_sph)) if args.bulk_exchange and active]
+    bulk_metrics = [name+"_bulk_power_error_W" for name, active in (("fvm", True), ("fem", args.compare_fem), ("sph", args.compare_sph)) if (args.bulk_exchange or args.exchange_half) and active]
     runs = []
     for method in ("theta", "sdirk2"):
         previous = None
         for steps in (32, 64, 128):
-            row = measure(steps, method, args.alternating, args.compare_fem, args.compare_sph, args.massless, args.single_store, args.bulk_exchange)
+            row = measure(steps, method, args.alternating, args.compare_fem, args.compare_sph, args.massless, args.single_store, args.bulk_exchange, args.exchange_half)
             row["passed"] = max(row["max_wall_energy_residual_J"], row["max_input_split_residual_J"]) < 1e-11
             for key in ("max_cell_error_K", "max_wall_error_K", "max_section_error_W",
                         "west_cumulative_error_J", "east_cumulative_error_J",
@@ -256,6 +266,8 @@ if __name__ == "__main__":
                     row["passed"] &= row[key+"_order"] > 1.8
                 if steps == 128:
                     row["passed"] &= row[key] < .001
+            if args.exchange_half:
+                row["passed"] &= all(v < 1e-12 for k, v in row.items() if k.endswith("_inactive_exchange_W"))
             runs.append(row)
             previous = row
     passed = all(r["passed"] for r in runs)
@@ -263,6 +275,7 @@ if __name__ == "__main__":
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_periodic_end_power.py"
                           + (" --alternating" if args.alternating else "") + (" --compare-fem" if args.compare_fem else "")
                           + (" --compare-sph" if args.compare_sph else "") + (" --massless" if args.massless else "")
-                          + (f" --single-store {args.single_store}" if args.single_store else "") + (" --bulk-exchange" if args.bulk_exchange else "")),
+                          + (f" --single-store {args.single_store}" if args.single_store else "") + (" --bulk-exchange" if args.bulk_exchange else "")
+                          + (f" --exchange-half {args.exchange_half}" if args.exchange_half else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
