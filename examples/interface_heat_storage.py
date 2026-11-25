@@ -25,7 +25,7 @@ def reference(omega, resistance, sheet_capacity):
     return np.array([sheet, incoming, outgoing])/wall
 
 
-def measure(n, omega, resistance, sheet_capacity):
+def models(n, resistance, sheet_capacity):
     mid = n//2
     dx = np.full(n, 1/n)
     k = np.repeat([1., 4.], mid)
@@ -34,10 +34,6 @@ def measure(n, omega, resistance, sheet_capacity):
     contacts[mid-1], sheet[mid-1] = resistance, sheet_capacity
     r, c = contact_chain.cell_centered_slab_network(dx, k, cv, contact_resistance=contacts,
                                                     interface_heat_capacity=sheet)
-    t = contact_chain.harmonic_contact_temperatures(r, c, omega, t_left=1., t_right=0.)
-    q = -np.diff(t)/r
-    dem = np.array([t[mid+1], q[mid], q[mid+1]])
-
     # Two independent LINE2 meshes, plus one global sheet node between the traces.
     x = np.linspace(0., 1., n+1)
     nodes = torch.from_numpy(np.r_[x[:mid+1], x[mid:], .5][:, None])
@@ -51,6 +47,16 @@ def measure(n, omega, resistance, sheet_capacity):
                     1., torch.from_numpy(cv), ends, nodes.new_tensor([1., 0.]), nodal_heat_capacity=lump,
                     contact_pairs=torch.tensor([[mid, sheet_id], [sheet_id, mid+1]]),
                     contact_conductance=2/resistance)
+    return r, c, model
+
+
+def measure(n, omega, resistance, sheet_capacity):
+    r, c, model = models(n, resistance, sheet_capacity)
+    mid, sheet_id = n//2, n+2
+    t = contact_chain.harmonic_contact_temperatures(r, c, omega, t_left=1., t_right=0.)
+    q = -np.diff(t)/r
+    dem = np.array([t[mid+1], q[mid], q[mid+1]])
+
     sol = thermal.solve_harmonic_thermal(model, omega, sparse=True)
     power = thermal.thermal_element_nodal_power(model, sol.temperature, omega).numpy()
     fem = np.array([sol.temperature[sheet_id].item(), -power[mid-1, 1], power[mid, 0]])
