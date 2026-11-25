@@ -8,7 +8,50 @@ from conduction_provenance import provenance
 from tensorbem import geometry, harmonic_conduction
 
 
-def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False, curved_source=False, interior_flux=False):
+def subregion_heat(result, center, directions, amplitudes, polynomial, gradient, hessian, storage):
+    """Check a rotated rectangle using boundary flux and independent area integrals."""
+    angle = .37
+    axes = np.array([[np.cos(angle), np.sin(angle)], [-np.sin(angle), np.cos(angle)]])
+    half = np.array([.27, .19])
+    origin = center+np.array([.19, -.12])
+    area = 4*np.prod(half)
+    nodes, weights = np.polynomial.legendre.leggauss(10)
+    z = result.wave*(directions @ axes.T)*half
+    # The mean exponential on [-a,a] is sinh(lambda*a)/(lambda*a).
+    centered_modes = amplitudes*np.exp(result.wave*((origin-center) @ directions.T-1))
+    mean_modes = centered_modes*np.prod(np.sinh(z)/z, axis=1)
+    second = np.diag(axes @ hessian @ axes.T)
+    mean_polynomial = polynomial(origin)+np.dot(half**2, second)/6
+    generated = area*(storage*mean_polynomial-result.conductivity*np.trace(hessian))
+    exact_storage = area*storage*(mean_polynomial+mean_modes.sum())
+
+    uv = np.stack(np.meshgrid(nodes, nodes, indexing="ij"), axis=-1)
+    interior = origin+(uv*half) @ axes
+    temperature = result.temperature(interior.reshape(-1, 2)).reshape(len(nodes), len(nodes))
+    stored = area*storage*(weights @ temperature @ weights)/4
+    edge_points, inward_normals, edge_weights, exact_heats = [], [], [], []
+    for axis in (0, 1):
+        tangent = 1-axis
+        for side in (-1, 1):
+            midpoint = origin+side*half[axis]*axes[axis]
+            edge_points.append(midpoint+nodes[:, None]*half[tangent]*axes[tangent])
+            inward_normals.append(-side*axes[axis])
+            edge_weights.append(half[tangent]*weights)
+            edge_modes = centered_modes*np.exp(side*z[:, axis])*np.sinh(z[:, tangent])/z[:, tangent]
+            mean_gradient = gradient+midpoint @ hessian+result.wave*edge_modes @ directions
+            exact_heats.append(2*half[tangent]*result.conductivity*side*(mean_gradient @ axes[axis]))
+    flux = result.heat_flux(np.concatenate(edge_points)).reshape(4, len(nodes), 2)
+    face_heat = np.einsum("eqd,ed,eq->e", flux, inward_normals, edge_weights)
+    inward = face_heat.sum()
+    return dict(subregion_face_error_W_m=float(abs(face_heat-exact_heats).max()),
+                subregion_inward_error_W_m=float(abs(inward-(exact_storage-generated))),
+                subregion_storage_error_W_m=float(abs(stored-exact_storage)),
+                subregion_balance_W_m=float(abs(inward+generated-stored)),
+                inward_W_m=[inward.real, inward.imag], generated_W_m=[generated.real, generated.imag],
+                stored_W_m=[stored.real, stored.imag])
+
+
+def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False, curved_source=False, interior_flux=False, subregion=False):
     if graded:
         local = np.arange(n//4)/(n//4)
         angle = (np.arange(4)[:, None]+(1-np.cos(np.pi*local))/2).ravel()*np.pi/2
@@ -57,6 +100,8 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
     angles = np.arange(21)*2*np.pi/21+.137
     probes = center+np.concatenate([r*np.column_stack((np.cos(angles), np.sin(angles))) for r in (.15, .55, .83)])
     extra = {}
+    if subregion:
+        extra.update(subregion_heat(result, center, directions, amplitudes, polynomial, gradient, hessian, storage))
     if interior_flux:
         analytic = -k*(gradient+probes @ hessian+wave*modes(probes) @ directions)
         error = abs(result.heat_flux(probes)-analytic)
@@ -92,6 +137,7 @@ if __name__ == "__main__":
     source_group.add_argument("--curved-source", action="store_true", help="verify quadratic volumetric heating with a cross term")
     source_group.add_argument("--heated", action="store_true", help="add uniform volumetric generation and check total heat balance")
     parser.add_argument("--interior-flux", action="store_true", help="verify both Cartesian interior heat-flux components")
+    parser.add_argument("--subregion", action="store_true", help="compare integrated flux and storage inside a rotated rectangle")
     args = parser.parse_args()
     rows = []
     for omega in (1., 6.):
@@ -99,7 +145,7 @@ if __name__ == "__main__":
         refinements = (16, 32, 64, 128, 256) if args.boundary == "mixed" else (16, 32, 64, 128)
         for n in refinements:
             row = measure(n, omega, args.boundary, quadratic=args.quadratic, graded=args.graded, heated=args.heated, affine=args.affine,
-                          curved_source=args.curved_source, interior_flux=args.interior_flux)
+                          curved_source=args.curved_source, interior_flux=args.interior_flux, subregion=args.subregion)
             metrics = ["interior_error_K"]
             if args.boundary != "flux":
                 metrics.append("boundary_flux_error_W_m2")
@@ -107,10 +153,13 @@ if __name__ == "__main__":
                 metrics.append("wall_temperature_error_K")
             if args.interior_flux:
                 metrics.extend(["interior_x_flux_error_W_m2", "interior_y_flux_error_W_m2"])
+            if args.subregion:
+                metrics.extend(["subregion_face_error_W_m", "subregion_inward_error_W_m", "subregion_storage_error_W_m"])
             errors = np.array([row[key] for key in metrics])
             row["order_metrics"] = metrics
             orders = np.log2(previous/errors).tolist() if previous is not None else []
             row.update(orders=orders, passed=bool(np.isfinite(errors).all() and all(p > 0 for p in orders)
+                       and row.get("subregion_balance_W_m", 0.) < 1e-9
                        and (n < 128 or (min(orders) > 1.8 and row.get("energy_residual_W_m", 0.) < .005))))
             rows.append(row)
             previous = errors
