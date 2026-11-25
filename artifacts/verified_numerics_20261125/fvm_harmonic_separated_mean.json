@@ -1,0 +1,306 @@
+{
+  "reference": "Uniform temperature pole plus piecewise linear temperature with constant axial power and a resistive jump",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_harmonic_separated_mean.py",
+  "runs": [
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.6182490083298002e-17,
+      "section_power_error_W": 3.3448903436165747e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 5.302695275805847e-15,
+      "section_power_error_W": 5.077671486197446e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.7306841437824718e-17,
+      "section_power_error_W": 3.562135098445471e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.8246124657352273e-15,
+      "section_power_error_W": 6.924430387498372e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.7306841450261246e-17,
+      "section_power_error_W": 3.562135100853279e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.4889547028814397e-15,
+      "section_power_error_W": 5.703202818176003e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.7306841450261246e-17,
+      "section_power_error_W": 3.562135100853279e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.4908129177810575e-15,
+      "section_power_error_W": 5.790174975655429e-14,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.6182346506774673e-17,
+      "section_power_error_W": 3.344869276378698e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.3273761260369802e-14,
+      "section_power_error_W": 1.0547482471789425e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.7306841437821837e-17,
+      "section_power_error_W": 3.56213509844479e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.1099844745189566e-14,
+      "section_power_error_W": 1.1358167907402657e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.7306841450262038e-17,
+      "section_power_error_W": 3.5621351008531634e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 1.4876367123515202e-14,
+      "section_power_error_W": 1.0732587263945361e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.7306841450262038e-17,
+      "section_power_error_W": 3.5621351008531634e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 9.268242949964114e-15,
+      "section_power_error_W": 1.0786319858369399e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.0601661073174952e-17,
+      "section_power_error_W": 2.3586023108791573e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1.0,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 1.2412670766236366e-16,
+      "relative_temperature_error_K": 2.068018171444753e-13,
+      "section_power_error_W": 5.014417758174981e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 1.1210034131891046e-17,
+      "section_power_error_W": 2.2697237011136166e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 0.0001,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 2.639346701170354e-13,
+      "section_power_error_W": 5.906633057888977e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.121002087597576e-17,
+      "section_power_error_W": 2.2696991515538457e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-08,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 2.5897080840767984e-13,
+      "section_power_error_W": 5.409807195575134e-13,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 1.1210020874649227e-17,
+      "section_power_error_W": 2.2696991490987183e-17,
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 1e-12,
+      "through_power_W": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 1.1102230246251565e-16,
+      "relative_temperature_error_K": 2.319623142462886e-13,
+      "section_power_error_W": 5.367329608361039e-13,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "e47fc4bb8e1907a4a8089ad28b206bfd10acd528",
+      "file": "fvm_harmonic_separated_mean.py",
+      "source_sha256": "21d85742ecc4122e44d66dd77918e808fd6c4e78dfd49a34800b50b206a66e57"
+    },
+    {
+      "commit": "1a1b13178160acc0d9ab578431323a5d83f59d96",
+      "file": "rod.py",
+      "source_sha256": "f8c57d2ca06cd4ef5dfb2dd9a4c744b26c37ebddb43ca1fc7f24024a368b946b"
+    }
+  ]
+}
