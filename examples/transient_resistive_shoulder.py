@@ -64,7 +64,7 @@ def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", 
     load[shoulder] = ambient*h*exposed/2
     fixed = torch.from_numpy(nodes[[0,0,-1,-1]])
     result = thermal.solve_transient_thermal(model,torch.from_numpy(times),torch.from_numpy(np.tile(nodes,2)),
-                 method=fem_method,sparse=True,nodal_heat_history=lambda t:load*torch.exp(-decay*t),
+                 theta=.5,method=fem_method,sparse=True,nodal_heat_history=lambda t:load*torch.exp(-decay*t),
                  fixed_temperature_history=lambda t:fixed*torch.exp(-decay*t))
     t = result.temperature.numpy().reshape(len(times),2,n+2).mean(axis=1)
     cells = np.column_stack([.5*(s[:,1:]+s[:,:-1]) for s in (t[:,:m+1],t[:,m+1:])])
