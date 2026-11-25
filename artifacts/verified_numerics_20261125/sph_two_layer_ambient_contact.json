@@ -1,0 +1,315 @@
+{
+  "reference": "T=.7+[(.4-.2i)+(.65+.3i) exp(i beta y)] r, r=integrated bulk and upstream contact resistance",
+  "layers": 2,
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_thin_contact_wall_flux.py --layers 2 --exchange",
+  "order_metrics": [
+    "temperature_error_K",
+    "wall_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "interface_flux_error_W_m2": 1.2412670766236366e-16,
+      "interface_mean_trace_error_K": 1.1857187100668868e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 2.482534153247273e-16,
+      "columns": 2,
+      "rows": 16,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.005588699337865234,
+      "wall_flux_error_W_m2": 0.00776208241370192,
+      "mean_cut_error_W_m2": 4.47545209131181e-16,
+      "recovered_mean_residual_W_m2": 5.551115123125783e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 6.162737906427329e-16,
+      "interface_mean_trace_error_K": 2.2247786310271853e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 5.34321864568505e-15,
+      "columns": 4,
+      "rows": 32,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.0034921442948655655,
+      "wall_flux_error_W_m2": 0.04534834083042014,
+      "mean_cut_error_W_m2": 1.2202987474385978e-15,
+      "recovered_mean_residual_W_m2": 2.7755575615628914e-17,
+      "orders": [
+        0.6783993905118153,
+        -2.5465341114298408
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 3.1788314255730753e-15,
+      "interface_mean_trace_error_K": 1.1116099371267112e-15,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 1.0750834784635206e-14,
+      "columns": 8,
+      "rows": 64,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.0022115690615212486,
+      "wall_flux_error_W_m2": 0.012559326205673444,
+      "mean_cut_error_W_m2": 6.689266473681198e-15,
+      "recovered_mean_residual_W_m2": 1.1443916996305594e-16,
+      "orders": [
+        0.6590428776010802,
+        1.8522907002528142
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 2.2402807590292054e-14,
+      "interface_mean_trace_error_K": 4.8413394244973836e-15,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 3.307868466774517e-14,
+      "columns": 16,
+      "rows": 128,
+      "omega_rad_s": 0.0,
+      "backend": "torch",
+      "temperature_error_K": 0.0013264554399573672,
+      "wall_flux_error_W_m2": 0.006625145997978618,
+      "mean_cut_error_W_m2": 8.634553925151537e-14,
+      "recovered_mean_residual_W_m2": 2.7755575615628914e-17,
+      "orders": [
+        0.7374940830714048,
+        0.9227349146527047
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 1.2412670766236366e-16,
+      "interface_mean_trace_error_K": 1.1857187100668868e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 2.482534153247273e-16,
+      "columns": 2,
+      "rows": 16,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.005588699337865234,
+      "wall_flux_error_W_m2": 0.00776208241370192,
+      "mean_cut_error_W_m2": 4.47545209131181e-16,
+      "recovered_mean_residual_W_m2": 5.551115123125783e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 6.162737906427329e-16,
+      "interface_mean_trace_error_K": 1.1188630228279524e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 5.34321864568505e-15,
+      "columns": 4,
+      "rows": 32,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.0034921442948656024,
+      "wall_flux_error_W_m2": 0.04534834083042117,
+      "mean_cut_error_W_m2": 1.114724181185034e-15,
+      "recovered_mean_residual_W_m2": 5.551115123125783e-17,
+      "orders": [
+        0.6783993905118001,
+        -2.546534111429873
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 3.1788314255730753e-15,
+      "interface_mean_trace_error_K": 1.1116099371267112e-15,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 1.0750834784635206e-14,
+      "columns": 8,
+      "rows": 64,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.0022115690615212486,
+      "wall_flux_error_W_m2": 0.012559326205673444,
+      "mean_cut_error_W_m2": 6.689266473681198e-15,
+      "recovered_mean_residual_W_m2": 1.1443916996305594e-16,
+      "orders": [
+        0.6590428776010954,
+        1.852290700252847
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 2.2234208420291462e-14,
+      "interface_mean_trace_error_K": 4.622532590148771e-15,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 3.307868466774517e-14,
+      "columns": 16,
+      "rows": 128,
+      "omega_rad_s": 0.0,
+      "backend": "banded",
+      "temperature_error_K": 0.0013264554399571812,
+      "wall_flux_error_W_m2": 0.006625145997972836,
+      "mean_cut_error_W_m2": 8.542394700575513e-14,
+      "recovered_mean_residual_W_m2": 1.1443916996305594e-16,
+      "orders": [
+        0.7374940830716072,
+        0.9227349146539637
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 1.3877787807814457e-16,
+      "interface_mean_trace_error_K": 1.1443916996305594e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 2.482534153247273e-16,
+      "columns": 2,
+      "rows": 16,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.005579681740399052,
+      "wall_flux_error_W_m2": 0.007749557972776918,
+      "mean_cut_error_W_m2": 4.47545209131181e-16,
+      "recovered_mean_residual_W_m2": 5.551115123125783e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 1.1866928732135989e-15,
+      "interface_mean_trace_error_K": 3.510833468576701e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 5.34321864568505e-15,
+      "columns": 4,
+      "rows": 32,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.0034863366163580644,
+      "wall_flux_error_W_m2": 0.04530086168505183,
+      "mean_cut_error_W_m2": 5.299570849890601e-15,
+      "recovered_mean_residual_W_m2": 2.7755575615628914e-17,
+      "orders": [
+        0.6784709617201877,
+        -2.5473525646585458
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 3.089358903139191e-15,
+      "interface_mean_trace_error_K": 6.753223014464259e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 1.0750834784635206e-14,
+      "columns": 8,
+      "rows": 64,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.002207681209390749,
+      "wall_flux_error_W_m2": 0.012536564604237474,
+      "mean_cut_error_W_m2": 6.3661997594881705e-15,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [
+        0.6591800117147191,
+        1.853396432122957
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 1.9802158964442824e-14,
+      "interface_mean_trace_error_K": 5.318145016762464e-15,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 3.307868466774517e-14,
+      "columns": 16,
+      "rows": 128,
+      "omega_rad_s": 1.3,
+      "backend": "torch",
+      "temperature_error_K": 0.0013240600760268016,
+      "wall_flux_error_W_m2": 0.006612835202649294,
+      "mean_cut_error_W_m2": 7.070342692211333e-14,
+      "recovered_mean_residual_W_m2": 6.206335383118183e-17,
+      "orders": [
+        0.7375632786173264,
+        0.922801206489551
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 1.1443916996305594e-16,
+      "interface_mean_trace_error_K": 1.1443916996305594e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 2.482534153247273e-16,
+      "columns": 2,
+      "rows": 16,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.005579681740399052,
+      "wall_flux_error_W_m2": 0.007749557972776918,
+      "mean_cut_error_W_m2": 4.47545209131181e-16,
+      "recovered_mean_residual_W_m2": 5.551115123125783e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 1.5194751782544586e-15,
+      "interface_mean_trace_error_K": 4.577566798522237e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 5.34321864568505e-15,
+      "columns": 4,
+      "rows": 32,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.003486336616358296,
+      "wall_flux_error_W_m2": 0.04530086168505657,
+      "mean_cut_error_W_m2": 9.61000482274888e-15,
+      "recovered_mean_residual_W_m2": 7.850462293418876e-17,
+      "orders": [
+        0.6784709617200918,
+        -2.5473525646586967
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 4.435684875175422e-15,
+      "interface_mean_trace_error_K": 5.613217783960923e-16,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 1.0750834784635206e-14,
+      "columns": 8,
+      "rows": 64,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.0022076812093903436,
+      "wall_flux_error_W_m2": 0.012536564604236654,
+      "mean_cut_error_W_m2": 6.249936890246326e-15,
+      "recovered_mean_residual_W_m2": 5.551115123125783e-17,
+      "orders": [
+        0.6591800117150799,
+        1.8533964321232024
+      ],
+      "passed": true
+    },
+    {
+      "interface_flux_error_W_m2": 2.3066202607205205e-14,
+      "interface_mean_trace_error_K": 4.100410761679928e-15,
+      "sequence_flux_difference_W_m2": 0.0,
+      "sampled_wall_flux_error_W_m2": 3.307868466774517e-14,
+      "columns": 16,
+      "rows": 128,
+      "omega_rad_s": 1.3,
+      "backend": "banded",
+      "temperature_error_K": 0.0013240600760252921,
+      "wall_flux_error_W_m2": 0.006612835202639987,
+      "mean_cut_error_W_m2": 6.138401416717608e-14,
+      "recovered_mean_residual_W_m2": 7.850462293418876e-17,
+      "orders": [
+        0.7375632786187063,
+        0.9228012064914872
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "6db71f39e735a5b03fa9c5282fe6a4e107c04e74",
+      "file": "sph_thin_contact_wall_flux.py",
+      "source_sha256": "8518da04b43d96fb59ce1167e10d86bf91f66d74e632e8e0a71208e3b7074c06"
+    },
+    {
+      "commit": "4d1bd5933ee17b4c5bcb32ae6e9765acd827d463",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "3126a6f83b0d3757b39315a6ca1816fe2ca3429b8246a6fb3b657eae01d2bcdc"
+    }
+  ]
+}
