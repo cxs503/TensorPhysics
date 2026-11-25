@@ -1,0 +1,1282 @@
+{
+  "reference": "Common heating rate, capacity-weighted relative temperature, and two aligned capacity regions with optional cubic terms in sheared coordinates with off-diagonal conductivity",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_q4_harmonic_separated_mean.py --boundary-recovery --steady-drift",
+  "curved_case_note": "Acceptance uses RMS at four Gauss points per cell. Pointwise maxima and their refinement orders are reported separately; the 4-to-8 refinement does not meet 1.7/0.85 temperature/flux maximum-error order targets.",
+  "order_metrics": [
+    "rms_temperature_error_K",
+    "rms_x_flux_error_W_m2",
+    "rms_y_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "rms_temperature_error_K": 7.770197934789338e-17,
+      "rms_x_flux_error_W_m2": 5.243007998947754e-16,
+      "rms_y_flux_error_W_m2": 2.964868744560016e-16,
+      "curved": false,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 2.2247786310271853e-16,
+      "x_flux_error_W_m2": 1.3608726004012153e-15,
+      "y_flux_error_W_m2": 7.270954337185017e-16,
+      "inward_nodal_power_error_W": 1.2566871346510768e-16,
+      "outward_edge_power_error_W": 1.2509268882771003e-16,
+      "max_cell_energy_residual_W": 1.3347228920484557e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 3.28720547351296e-16,
+          "max_W_m2": 6.728967680073323e-16
+        },
+        "center": {
+          "rms_W_m2": 6.307007610343921e-16,
+          "max_W_m2": 1.269174759567597e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 6.23832609244816e-16,
+          "max_W_m2": 1.284221518072079e-15
+        },
+        "cubic": {
+          "rms_W_m2": 1.0916141981319382e-15,
+          "max_W_m2": 2.199101951945178e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.0422617456503138e-15,
+          "max_W_m2": 2.1352621286720776e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 1.5359504023900338e-16,
+      "rms_x_flux_error_W_m2": 8.3706155229578e-16,
+      "rms_y_flux_error_W_m2": 8.049627114227806e-16,
+      "curved": false,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 2.9893669801409083e-16,
+      "relative_temperature_error_K": 3.885935469125957e-16,
+      "x_flux_error_W_m2": 1.9991722838696e-15,
+      "y_flux_error_W_m2": 2.3880911816520774e-15,
+      "inward_nodal_power_error_W": 1.7361107000897221e-16,
+      "outward_edge_power_error_W": 1.949852530001062e-16,
+      "max_cell_energy_residual_W": 1.4721661049430737e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 7.131005943540443e-16,
+          "max_W_m2": 1.5427638297746366e-15
+        },
+        "center": {
+          "rms_W_m2": 1.0439122397576115e-15,
+          "max_W_m2": 2.725254986352849e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 8.209485317117102e-16,
+          "max_W_m2": 2.8822629751768365e-15
+        },
+        "cubic": {
+          "rms_W_m2": 9.948886748660387e-16,
+          "max_W_m2": 2.332331339148745e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 9.739079524511183e-16,
+          "max_W_m2": 1.7607822589792368e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 5.584570652708825e-16,
+      "rms_x_flux_error_W_m2": 2.2319448761795467e-15,
+      "rms_y_flux_error_W_m2": 1.8803263818921237e-15,
+      "curved": false,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 1.8244937149463952e-15,
+      "x_flux_error_W_m2": 7.200419022730857e-15,
+      "y_flux_error_W_m2": 6.531058569352348e-15,
+      "inward_nodal_power_error_W": 2.1747095713418623e-16,
+      "outward_edge_power_error_W": 3.058640210371179e-16,
+      "max_cell_energy_residual_W": 2.4036172863312114e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 1.6164462343005864e-15,
+          "max_W_m2": 5.049373039127491e-15
+        },
+        "center": {
+          "rms_W_m2": 2.1493799668482485e-15,
+          "max_W_m2": 5.7366395336922936e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 1.4665449063595835e-15,
+          "max_W_m2": 3.7208217572145346e-15
+        },
+        "cubic": {
+          "rms_W_m2": 2.4873169458808126e-15,
+          "max_W_m2": 6.1431908470868465e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.559181147710009e-15,
+          "max_W_m2": 5.5397747330933465e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 1.0559939923847845e-16,
+      "rms_x_flux_error_W_m2": 5.31494616068105e-16,
+      "rms_y_flux_error_W_m2": 2.8425141146784337e-16,
+      "curved": false,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 1.6939998869943826e-16,
+      "x_flux_error_W_m2": 1.3877787807814457e-15,
+      "y_flux_error_W_m2": 6.206335383118183e-16,
+      "inward_nodal_power_error_W": 1.1295700899707568e-16,
+      "outward_edge_power_error_W": 1.1328952961336746e-16,
+      "max_cell_energy_residual_W": 1.6491053630450637e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 2.650911075463408e-16,
+          "max_W_m2": 5.345581328813301e-16
+        },
+        "center": {
+          "rms_W_m2": 4.2996713498642744e-16,
+          "max_W_m2": 6.473113075817328e-16
+        },
+        "quadratic": {
+          "rms_W_m2": 4.0420558533068366e-16,
+          "max_W_m2": 8.926419045482585e-16
+        },
+        "cubic": {
+          "rms_W_m2": 6.88915392305691e-16,
+          "max_W_m2": 1.2320956177767255e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 7.07081856261662e-16,
+          "max_W_m2": 1.5051285776940082e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 1.818733773976705e-16,
+      "rms_x_flux_error_W_m2": 1.0270238582376015e-15,
+      "rms_y_flux_error_W_m2": 9.099452330353766e-16,
+      "curved": false,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 2.355138688025663e-16,
+      "relative_temperature_error_K": 5.661048867003677e-16,
+      "x_flux_error_W_m2": 4.298531363902227e-15,
+      "y_flux_error_W_m2": 2.8397629941842394e-15,
+      "inward_nodal_power_error_W": 2.0920506204726484e-16,
+      "outward_edge_power_error_W": 2.487756165162758e-16,
+      "max_cell_energy_residual_W": 1.6804741957207359e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 8.089282844062631e-16,
+          "max_W_m2": 2.230065192535188e-15
+        },
+        "center": {
+          "rms_W_m2": 1.2597690559233758e-15,
+          "max_W_m2": 3.191894967228993e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 6.886343019792358e-16,
+          "max_W_m2": 1.8899484034940402e-15
+        },
+        "cubic": {
+          "rms_W_m2": 1.2752929098929324e-15,
+          "max_W_m2": 3.768658531691586e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 7.490262312714265e-16,
+          "max_W_m2": 2.4407338837171392e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 4.760576791658068e-16,
+      "rms_x_flux_error_W_m2": 2.136461284649227e-15,
+      "rms_y_flux_error_W_m2": 2.2224264040721966e-15,
+      "curved": false,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 1.0532500405730103e-15,
+      "x_flux_error_W_m2": 8.046305736955046e-15,
+      "y_flux_error_W_m2": 5.6241864662025524e-15,
+      "inward_nodal_power_error_W": 1.971564935671737e-16,
+      "outward_edge_power_error_W": 2.4029520832750666e-16,
+      "max_cell_energy_residual_W": 2.189806383771436e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 1.4525024339857945e-15,
+          "max_W_m2": 5.0019215756169866e-15
+        },
+        "center": {
+          "rms_W_m2": 2.351309110927072e-15,
+          "max_W_m2": 6.832432668819413e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 1.3102785886872054e-15,
+          "max_W_m2": 2.7151806168729463e-15
+        },
+        "cubic": {
+          "rms_W_m2": 2.239124505975502e-15,
+          "max_W_m2": 5.8469860879724625e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.1979854992010098e-15,
+          "max_W_m2": 3.9920159562695656e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 5.4759508802975015e-17,
+      "rms_x_flux_error_W_m2": 3.6849835622012374e-16,
+      "rms_y_flux_error_W_m2": 2.8523817909263026e-16,
+      "curved": false,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 1.3877787807814457e-16,
+      "x_flux_error_W_m2": 7.021666937153402e-16,
+      "y_flux_error_W_m2": 5.705526346009214e-16,
+      "inward_nodal_power_error_W": 1.3877787807814457e-16,
+      "outward_edge_power_error_W": 1.2566871346510768e-16,
+      "max_cell_energy_residual_W": 1.6094644373830793e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 2.8628300869264896e-16,
+          "max_W_m2": 5.015476383681002e-16
+        },
+        "center": {
+          "rms_W_m2": 5.329202953325624e-16,
+          "max_W_m2": 1.329337799698461e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 5.652537829925819e-16,
+          "max_W_m2": 1.2694457067738119e-15
+        },
+        "cubic": {
+          "rms_W_m2": 1.0719946312371298e-15,
+          "max_W_m2": 2.0755226629908412e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.0422617456503138e-15,
+          "max_W_m2": 2.1352621286720776e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 1.451526931869795e-16,
+      "rms_x_flux_error_W_m2": 1.1019321476221413e-15,
+      "rms_y_flux_error_W_m2": 7.741698458655476e-16,
+      "curved": false,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 2.9893669801409083e-16,
+      "relative_temperature_error_K": 4.577566798522237e-16,
+      "x_flux_error_W_m2": 3.2652638748082427e-15,
+      "y_flux_error_W_m2": 2.0956838132649334e-15,
+      "inward_nodal_power_error_W": 1.8094421531119201e-16,
+      "outward_edge_power_error_W": 3.0176211687860856e-16,
+      "max_cell_energy_residual_W": 1.2268800357655793e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 8.771981632743396e-16,
+          "max_W_m2": 1.7814486110379694e-15
+        },
+        "center": {
+          "rms_W_m2": 1.1795584105572824e-15,
+          "max_W_m2": 2.8942384347703967e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 1.1741722278085991e-15,
+          "max_W_m2": 3.972212966922594e-15
+        },
+        "cubic": {
+          "rms_W_m2": 1.4372955750544891e-15,
+          "max_W_m2": 3.4928751233478134e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 9.739079524511183e-16,
+          "max_W_m2": 1.7607822589792368e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 4.734022383977628e-16,
+      "rms_x_flux_error_W_m2": 2.789355474877026e-15,
+      "rms_y_flux_error_W_m2": 1.8478757695298692e-15,
+      "curved": false,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.4988372228806716e-15,
+      "x_flux_error_W_m2": 9.553725552076526e-15,
+      "y_flux_error_W_m2": 8.772913566062459e-15,
+      "inward_nodal_power_error_W": 3.3205344346380335e-16,
+      "outward_edge_power_error_W": 3.9589719156198083e-16,
+      "max_cell_energy_residual_W": 1.5866438484174738e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 1.2993435872284467e-15,
+          "max_W_m2": 4.093071247193774e-15
+        },
+        "center": {
+          "rms_W_m2": 2.0177820359493663e-15,
+          "max_W_m2": 5.718522917838173e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 1.2472615357922863e-15,
+          "max_W_m2": 3.492875123347813e-15
+        },
+        "cubic": {
+          "rms_W_m2": 2.2627435894360586e-15,
+          "max_W_m2": 6.384151798505658e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.559181147710009e-15,
+          "max_W_m2": 5.5397747330933465e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 1.4402510807983068e-16,
+      "rms_x_flux_error_W_m2": 5.264285563929993e-16,
+      "rms_y_flux_error_W_m2": 3.921205272525506e-16,
+      "curved": false,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 3.433175098891678e-16,
+      "x_flux_error_W_m2": 1.3394761424494087e-15,
+      "y_flux_error_W_m2": 9.155133597044475e-16,
+      "inward_nodal_power_error_W": 1.2509268882771003e-16,
+      "outward_edge_power_error_W": 1.9706489227979128e-16,
+      "max_cell_energy_residual_W": 1.5911537728473123e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 3.276747357178615e-16,
+          "max_W_m2": 7.427451909742993e-16
+        },
+        "center": {
+          "rms_W_m2": 4.958192856361846e-16,
+          "max_W_m2": 8.429880454586219e-16
+        },
+        "quadratic": {
+          "rms_W_m2": 4.65644286663918e-16,
+          "max_W_m2": 9.0487044564621e-16
+        },
+        "cubic": {
+          "rms_W_m2": 7.245755456528587e-16,
+          "max_W_m2": 1.1001482901257484e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 7.07081856261662e-16,
+          "max_W_m2": 1.5051285776940082e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 2.1367418724321968e-16,
+      "rms_x_flux_error_W_m2": 8.463766956420353e-16,
+      "rms_y_flux_error_W_m2": 9.52200234121219e-16,
+      "curved": false,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 2.355138688025663e-16,
+      "relative_temperature_error_K": 3.925231146709438e-16,
+      "x_flux_error_W_m2": 1.961830370053296e-15,
+      "y_flux_error_W_m2": 2.2867629927476573e-15,
+      "inward_nodal_power_error_W": 1.517461693011718e-16,
+      "outward_edge_power_error_W": 2.1174998587429784e-16,
+      "max_cell_energy_residual_W": 1.201391898424762e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 5.994310790895008e-16,
+          "max_W_m2": 1.2915460347954318e-15
+        },
+        "center": {
+          "rms_W_m2": 8.326441671351289e-16,
+          "max_W_m2": 1.927733118506679e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 6.204293248721292e-16,
+          "max_W_m2": 1.099550975972589e-15
+        },
+        "cubic": {
+          "rms_W_m2": 9.680020925303007e-16,
+          "max_W_m2": 1.848143426665088e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 7.490262312714265e-16,
+          "max_W_m2": 2.4407338837171392e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 7.804692426436607e-16,
+      "rms_x_flux_error_W_m2": 2.9657183840302043e-15,
+      "rms_y_flux_error_W_m2": 2.421255798402363e-15,
+      "curved": false,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 2.288783399261119e-15,
+      "x_flux_error_W_m2": 9.126183519468305e-15,
+      "y_flux_error_W_m2": 9.155133597044475e-15,
+      "inward_nodal_power_error_W": 3.3307142486596306e-16,
+      "outward_edge_power_error_W": 4.2697109452976136e-16,
+      "max_cell_energy_residual_W": 1.9648535197080616e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 1.254602277304577e-15,
+          "max_W_m2": 4.537551128778807e-15
+        },
+        "center": {
+          "rms_W_m2": 2.222944204825492e-15,
+          "max_W_m2": 6.821785411989624e-15
+        },
+        "quadratic": {
+          "rms_W_m2": 1.1159380583338322e-15,
+          "max_W_m2": 2.685098284362163e-15
+        },
+        "cubic": {
+          "rms_W_m2": 2.6084300630058847e-15,
+          "max_W_m2": 6.905583096203018e-15
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.1979854992010098e-15,
+          "max_W_m2": 3.9920159562695656e-15
+        }
+      },
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.006035946385498099,
+      "rms_x_flux_error_W_m2": 0.11900234976429631,
+      "rms_y_flux_error_W_m2": 0.06937750645443179,
+      "curved": true,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 1.6653345369377348e-16,
+      "relative_temperature_error_K": 0.008333326829037493,
+      "x_flux_error_W_m2": 0.19125545241635847,
+      "y_flux_error_W_m2": 0.11855110056173973,
+      "inward_nodal_power_error_W": 0.0049404498690185554,
+      "outward_edge_power_error_W": 0.053920821962354384,
+      "max_cell_energy_residual_W": 2.360244132317689e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.237805164480369,
+          "max_W_m2": 0.30811898264202525
+        },
+        "center": {
+          "rms_W_m2": 0.09711397266327097,
+          "max_W_m2": 0.1416569566088398
+        },
+        "quadratic": {
+          "rms_W_m2": 0.23638982378021048,
+          "max_W_m2": 0.31000512505655387
+        },
+        "cubic": {
+          "rms_W_m2": 0.01180480556823257,
+          "max_W_m2": 0.019655581208783458
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.453558198035457e-15,
+          "max_W_m2": 3.0092858302086012e-15
+        }
+      },
+      "max_error_orders": [],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.0015527956621917676,
+      "rms_x_flux_error_W_m2": 0.06150218489265212,
+      "rms_y_flux_error_W_m2": 0.03610902215781522,
+      "curved": true,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 1.2412670766236366e-16,
+      "relative_temperature_error_K": 0.0028501921253273263,
+      "x_flux_error_W_m2": 0.11037014468151504,
+      "y_flux_error_W_m2": 0.06797857707785322,
+      "inward_nodal_power_error_W": 0.0015594368082702734,
+      "outward_edge_power_error_W": 0.014895428312332227,
+      "max_cell_energy_residual_W": 1.9749200145671628e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.13151290045224834,
+          "max_W_m2": 0.1702334664266541
+        },
+        "center": {
+          "rms_W_m2": 0.02461417734862639,
+          "max_W_m2": 0.04191776827087285
+        },
+        "quadratic": {
+          "rms_W_m2": 0.06043590628987687,
+          "max_W_m2": 0.07973145662379168
+        },
+        "cubic": {
+          "rms_W_m2": 0.004530757229908661,
+          "max_W_m2": 0.01074031175155165
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.213183780781799e-15,
+          "max_W_m2": 2.067933889270766e-15
+        }
+      },
+      "max_error_orders": [
+        1.5478333914791154,
+        0.7931509042013276,
+        0.8023569871205313
+      ],
+      "orders": [
+        1.9587119982001502,
+        0.9522804917284791,
+        0.9421086364031429
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.0003911402691480335,
+      "rms_x_flux_error_W_m2": 0.03103140340141386,
+      "rms_y_flux_error_W_m2": 0.018262371788940687,
+      "curved": true,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 0.0009030530633739948,
+      "x_flux_error_W_m2": 0.05879145722172879,
+      "y_flux_error_W_m2": 0.03609385278521008,
+      "inward_nodal_power_error_W": 0.000430502929267984,
+      "outward_edge_power_error_W": 0.0038994557659010947,
+      "max_cell_energy_residual_W": 2.8577701877234135e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.06892115712292987,
+          "max_W_m2": 0.08913041750631069
+        },
+        "center": {
+          "rms_W_m2": 0.00631944090269062,
+          "max_W_m2": 0.013884785373787721
+        },
+        "quadratic": {
+          "rms_W_m2": 0.015293954574928756,
+          "max_W_m2": 0.021052092167818982
+        },
+        "cubic": {
+          "rms_W_m2": 0.0016921526272478155,
+          "max_W_m2": 0.005784031768664272
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.5774625197629416e-15,
+          "max_W_m2": 6.788517227409806e-15
+        }
+      },
+      "max_error_orders": [
+        1.6581765034964349,
+        0.9086715308391192,
+        0.9133270140038763
+      ],
+      "orders": [
+        1.9891100140110474,
+        0.9869087192361841,
+        0.9834852076220778
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 9.797907257762637e-05,
+      "rms_x_flux_error_W_m2": 0.01555493338495954,
+      "rms_y_flux_error_W_m2": 0.009161256060087171,
+      "curved": true,
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 2.2887833992611187e-16,
+      "relative_temperature_error_K": 0.00027330373827834397,
+      "x_flux_error_W_m2": 0.030283499604219766,
+      "y_flux_error_W_m2": 0.01856021283368182,
+      "inward_nodal_power_error_W": 0.00011270810990957635,
+      "outward_edge_power_error_W": 0.0009967565757114522,
+      "max_cell_energy_residual_W": 2.743457430496747e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.03525265476422606,
+          "max_W_m2": 0.045566014889666384
+        },
+        "center": {
+          "rms_W_m2": 0.001659743509642715,
+          "max_W_m2": 0.005228629368977096
+        },
+        "quadratic": {
+          "rms_W_m2": 0.003857115272666354,
+          "max_W_m2": 0.006154597583054882
+        },
+        "cubic": {
+          "rms_W_m2": 0.0006136153934191264,
+          "max_W_m2": 0.0029999049359955283
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 4.3895903890391796e-15,
+          "max_W_m2": 1.334177995968573e-14
+        }
+      },
+      "max_error_orders": [
+        1.7243055695828828,
+        0.9570746025424285,
+        0.9595398955807438
+      ],
+      "orders": [
+        1.9971405328626346,
+        0.9963567280655853,
+        0.9952568259613894
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.005793402074373092,
+      "rms_x_flux_error_W_m2": 0.1074053704205804,
+      "rms_y_flux_error_W_m2": 0.06253883157384643,
+      "curved": true,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 7.850462293418876e-17,
+      "relative_temperature_error_K": 0.0033062409840303388,
+      "x_flux_error_W_m2": 0.16569382162286395,
+      "y_flux_error_W_m2": 0.09242554644178884,
+      "inward_nodal_power_error_W": 0.001474377866880866,
+      "outward_edge_power_error_W": 0.045541710573129085,
+      "max_cell_energy_residual_W": 9.71445146547012e-17,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.2047829540692202,
+          "max_W_m2": 0.24326653300381648
+        },
+        "center": {
+          "rms_W_m2": 0.0820740238097844,
+          "max_W_m2": 0.1016609531081746
+        },
+        "quadratic": {
+          "rms_W_m2": 0.19971150363773899,
+          "max_W_m2": 0.2375475990655003
+        },
+        "cubic": {
+          "rms_W_m2": 0.0032210031800425695,
+          "max_W_m2": 0.004925745578053536
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.0590303825856517e-15,
+          "max_W_m2": 2.5507571973700105e-15
+        }
+      },
+      "max_error_orders": [],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.0014778050557604009,
+      "rms_x_flux_error_W_m2": 0.05520092668725315,
+      "rms_y_flux_error_W_m2": 0.032085985326773335,
+      "curved": true,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 1.1102230246251565e-16,
+      "relative_temperature_error_K": 0.0009920876805223414,
+      "x_flux_error_W_m2": 0.09640946855973015,
+      "y_flux_error_W_m2": 0.05353861353898263,
+      "inward_nodal_power_error_W": 0.0004580210335082673,
+      "outward_edge_power_error_W": 0.01253711205602289,
+      "max_cell_energy_residual_W": 1.564716728932836e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.11268151915199776,
+          "max_W_m2": 0.13393698854818786
+        },
+        "center": {
+          "rms_W_m2": 0.02054904933867923,
+          "max_W_m2": 0.027133915435191083
+        },
+        "quadratic": {
+          "rms_W_m2": 0.05031032977865658,
+          "max_W_m2": 0.059936110605325985
+        },
+        "cubic": {
+          "rms_W_m2": 0.0012258998098577147,
+          "max_W_m2": 0.0027613625113832286
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.1177653076695632e-15,
+          "max_W_m2": 3.075273208551798e-15
+        }
+      },
+      "max_error_orders": [
+        1.7366523465923507,
+        0.7812730600854305,
+        0.7877118892377661
+      ],
+      "orders": [
+        1.970954825251852,
+        0.9603017403146897,
+        0.9628089777919275
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.00037128935096361035,
+      "rms_x_flux_error_W_m2": 0.027794451378504156,
+      "rms_y_flux_error_W_m2": 0.016145916184212537,
+      "curved": true,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 2.0014830212433607e-16,
+      "relative_temperature_error_K": 0.0002893493453114219,
+      "x_flux_error_W_m2": 0.05158135527765095,
+      "y_flux_error_W_m2": 0.028581822129075705,
+      "inward_nodal_power_error_W": 0.00012573077016761803,
+      "outward_edge_power_error_W": 0.003277803393531462,
+      "max_cell_energy_residual_W": 2.105713848759822e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.0589137365977838,
+          "max_W_m2": 0.07003512668959971
+        },
+        "center": {
+          "rms_W_m2": 0.005152628426916272,
+          "max_W_m2": 0.007667986046442566
+        },
+        "quadratic": {
+          "rms_W_m2": 0.012626820561900879,
+          "max_W_m2": 0.015260375809444506
+        },
+        "cubic": {
+          "rms_W_m2": 0.0004565572507541936,
+          "max_W_m2": 0.0014882583399741958
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.424940561937063e-15,
+          "max_W_m2": 4.813877894572729e-15
+        }
+      },
+      "max_error_orders": [
+        1.777655251526485,
+        0.9023251634650176,
+        0.905481885667572
+      ],
+      "orders": [
+        1.9928401266976157,
+        0.9898955807999944,
+        0.9907739799548816
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 9.293806320037593e-05,
+      "rms_x_flux_error_W_m2": 0.013922586548374954,
+      "rms_y_flux_error_W_m2": 0.008086075042059236,
+      "curved": true,
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.0,
+      "sparse": false,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 2.9893669801409083e-16,
+      "relative_temperature_error_K": 8.269833047169791e-05,
+      "x_flux_error_W_m2": 0.026632672677719075,
+      "y_flux_error_W_m2": 0.014773182445417823,
+      "inward_nodal_power_error_W": 3.283646855703968e-05,
+      "outward_edge_power_error_W": 0.0008373632186780608,
+      "max_cell_energy_residual_W": 2.402900289980255e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.030100128638697952,
+          "max_W_m2": 0.03578301201411927
+        },
+        "center": {
+          "rms_W_m2": 0.0012958094535899822,
+          "max_W_m2": 0.002373231824772176
+        },
+        "quadratic": {
+          "rms_W_m2": 0.0031637607446085058,
+          "max_W_m2": 0.004034384939387859
+        },
+        "cubic": {
+          "rms_W_m2": 0.00016534683131797675,
+          "max_W_m2": 0.0007719763459924973
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 4.317271870928631e-15,
+          "max_W_m2": 1.0683964259407197e-14
+        }
+      },
+      "max_error_orders": [
+        1.806882270412047,
+        0.9536524647262492,
+        0.952117247509769
+      ],
+      "orders": [
+        1.9982024525438167,
+        0.9973696446610033,
+        0.9976578100127586
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.006035946385498161,
+      "rms_x_flux_error_W_m2": 0.11900234976429634,
+      "rms_y_flux_error_W_m2": 0.06937750645443179,
+      "curved": true,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 1.6653345369377348e-16,
+      "relative_temperature_error_K": 0.00833332682903738,
+      "x_flux_error_W_m2": 0.19125545241635905,
+      "y_flux_error_W_m2": 0.11855110056174002,
+      "inward_nodal_power_error_W": 0.004940449869018524,
+      "outward_edge_power_error_W": 0.0539208219623544,
+      "max_cell_energy_residual_W": 2.360244132317689e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.2378051644803688,
+          "max_W_m2": 0.3081189826420253
+        },
+        "center": {
+          "rms_W_m2": 0.09711397266327075,
+          "max_W_m2": 0.14165695660884017
+        },
+        "quadratic": {
+          "rms_W_m2": 0.23638982378021034,
+          "max_W_m2": 0.3100051250565536
+        },
+        "cubic": {
+          "rms_W_m2": 0.011804805568232515,
+          "max_W_m2": 0.01965558120878272
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.453558198035457e-15,
+          "max_W_m2": 3.0092858302086012e-15
+        }
+      },
+      "max_error_orders": [],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.001552795662191925,
+      "rms_x_flux_error_W_m2": 0.06150218489265211,
+      "rms_y_flux_error_W_m2": 0.03610902215781523,
+      "curved": true,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 1.2412670766236366e-16,
+      "relative_temperature_error_K": 0.0028501921253269386,
+      "x_flux_error_W_m2": 0.11037014468151483,
+      "y_flux_error_W_m2": 0.06797857707785371,
+      "inward_nodal_power_error_W": 0.0015594368082702743,
+      "outward_edge_power_error_W": 0.014895428312332008,
+      "max_cell_energy_residual_W": 1.2917576169232576e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.13151290045224853,
+          "max_W_m2": 0.17023346642665158
+        },
+        "center": {
+          "rms_W_m2": 0.024614177348626677,
+          "max_W_m2": 0.04191776827087166
+        },
+        "quadratic": {
+          "rms_W_m2": 0.060435906289877,
+          "max_W_m2": 0.07973145662379039
+        },
+        "cubic": {
+          "rms_W_m2": 0.004530757229908476,
+          "max_W_m2": 0.010740311751552108
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.213183780781799e-15,
+          "max_W_m2": 2.067933889270766e-15
+        }
+      },
+      "max_error_orders": [
+        1.5478333914792919,
+        0.7931509042013346,
+        0.8023569871205245
+      ],
+      "orders": [
+        1.9587119982000185,
+        0.9522804917284795,
+        0.9421086364031422
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.00039114026914797084,
+      "rms_x_flux_error_W_m2": 0.031031403401413818,
+      "rms_y_flux_error_W_m2": 0.01826237178894064,
+      "curved": true,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 1.1102230246251565e-16,
+      "relative_temperature_error_K": 0.0009030530633740078,
+      "x_flux_error_W_m2": 0.058791457221728696,
+      "y_flux_error_W_m2": 0.036093852785209386,
+      "inward_nodal_power_error_W": 0.000430502929267956,
+      "outward_edge_power_error_W": 0.003899455765901082,
+      "max_cell_energy_residual_W": 2.309920653960105e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.06892115712293022,
+          "max_W_m2": 0.0891304175063104
+        },
+        "center": {
+          "rms_W_m2": 0.006319440902691469,
+          "max_W_m2": 0.013884785373788596
+        },
+        "quadratic": {
+          "rms_W_m2": 0.015293954574928784,
+          "max_W_m2": 0.021052092167816814
+        },
+        "cubic": {
+          "rms_W_m2": 0.001692152627248727,
+          "max_W_m2": 0.005784031768667807
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.5774625197629416e-15,
+          "max_W_m2": 6.788517227409806e-15
+        }
+      },
+      "max_error_orders": [
+        1.658176503496218,
+        0.9086715308391189,
+        0.9133270140039144
+      ],
+      "orders": [
+        1.9891100140114246,
+        0.9869087192361858,
+        0.983485207622082
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 9.797907257831568e-05,
+      "rms_x_flux_error_W_m2": 0.015554933384959531,
+      "rms_y_flux_error_W_m2": 0.009161256060087152,
+      "curved": true,
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.0,
+      "mean_rate_error_K_s": 2.2887833992611187e-16,
+      "relative_temperature_error_K": 0.0002733037382770567,
+      "x_flux_error_W_m2": 0.030283499604220897,
+      "y_flux_error_W_m2": 0.01856021283367937,
+      "inward_nodal_power_error_W": 0.00011270810990954233,
+      "outward_edge_power_error_W": 0.0009967565757114185,
+      "max_cell_energy_residual_W": 3.6279834830022213e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.03525265476422609,
+          "max_W_m2": 0.04556601488966485
+        },
+        "center": {
+          "rms_W_m2": 0.001659743509641851,
+          "max_W_m2": 0.005228629368967788
+        },
+        "quadratic": {
+          "rms_W_m2": 0.0038571152726664033,
+          "max_W_m2": 0.006154597583053929
+        },
+        "cubic": {
+          "rms_W_m2": 0.0006136153934185054,
+          "max_W_m2": 0.002999904935975372
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 4.3895903890391796e-15,
+          "max_W_m2": 1.334177995968573e-14
+        }
+      },
+      "max_error_orders": [
+        1.7243055695896987,
+        0.9570746025423722,
+        0.9595398955809066
+      ],
+      "orders": [
+        1.9971405328522538,
+        0.9963567280655842,
+        0.9952568259613888
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.005793402074373155,
+      "rms_x_flux_error_W_m2": 0.10740537042058043,
+      "rms_y_flux_error_W_m2": 0.06253883157384645,
+      "curved": true,
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 1.1102230246251565e-16,
+      "relative_temperature_error_K": 0.0033062409840303878,
+      "x_flux_error_W_m2": 0.16569382162286528,
+      "y_flux_error_W_m2": 0.09242554644178867,
+      "inward_nodal_power_error_W": 0.001474377866880866,
+      "outward_edge_power_error_W": 0.045541710573128995,
+      "max_cell_energy_residual_W": 1.7085044840333032e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.20478295406921995,
+          "max_W_m2": 0.24326653300381598
+        },
+        "center": {
+          "rms_W_m2": 0.08207402380978417,
+          "max_W_m2": 0.10166095310817437
+        },
+        "quadratic": {
+          "rms_W_m2": 0.1997115036377388,
+          "max_W_m2": 0.2375475990654999
+        },
+        "cubic": {
+          "rms_W_m2": 0.0032210031800426107,
+          "max_W_m2": 0.004925745578053103
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.0590303825856517e-15,
+          "max_W_m2": 2.5507571973700105e-15
+        }
+      },
+      "max_error_orders": [],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.0014778050557602955,
+      "rms_x_flux_error_W_m2": 0.05520092668725313,
+      "rms_y_flux_error_W_m2": 0.03208598532677331,
+      "curved": true,
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 1.1102230246251565e-16,
+      "relative_temperature_error_K": 0.0009920876805222863,
+      "x_flux_error_W_m2": 0.09640946855973119,
+      "y_flux_error_W_m2": 0.053538613538982226,
+      "inward_nodal_power_error_W": 0.00045802103350824574,
+      "outward_edge_power_error_W": 0.012537112056022903,
+      "max_cell_energy_residual_W": 1.562118249317058e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.1126815191519976,
+          "max_W_m2": 0.13393698854818797
+        },
+        "center": {
+          "rms_W_m2": 0.020549049338678873,
+          "max_W_m2": 0.02713391543519112
+        },
+        "quadratic": {
+          "rms_W_m2": 0.050310329778656356,
+          "max_W_m2": 0.05993611060532615
+        },
+        "cubic": {
+          "rms_W_m2": 0.0012258998098578788,
+          "max_W_m2": 0.0027613625113814487
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 1.1177653076695632e-15,
+          "max_W_m2": 3.075273208551798e-15
+        }
+      },
+      "max_error_orders": [
+        1.7366523465924522,
+        0.7812730600854266,
+        0.7877118892377744
+      ],
+      "orders": [
+        1.9709548252519704,
+        0.9603017403146907,
+        0.9628089777919292
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 0.0003712893509641995,
+      "rms_x_flux_error_W_m2": 0.02779445137850418,
+      "rms_y_flux_error_W_m2": 0.01614591618421257,
+      "curved": true,
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 2.0014830212433607e-16,
+      "relative_temperature_error_K": 0.00028934934531120487,
+      "x_flux_error_W_m2": 0.051581355277652,
+      "y_flux_error_W_m2": 0.02858182212907595,
+      "inward_nodal_power_error_W": 0.00012573077016765,
+      "outward_edge_power_error_W": 0.003277803393531438,
+      "max_cell_energy_residual_W": 2.169948783056604e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.05891373659778331,
+          "max_W_m2": 0.07003512668959921
+        },
+        "center": {
+          "rms_W_m2": 0.005152628426916392,
+          "max_W_m2": 0.0076679860464427445
+        },
+        "quadratic": {
+          "rms_W_m2": 0.012626820561901033,
+          "max_W_m2": 0.01526037580944461
+        },
+        "cubic": {
+          "rms_W_m2": 0.000456557250754697,
+          "max_W_m2": 0.0014882583399762662
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 2.424940561937063e-15,
+          "max_W_m2": 4.813877894572729e-15
+        }
+      },
+      "max_error_orders": [
+        1.777655251527487,
+        0.9023251634650037,
+        0.9054818856675487
+      ],
+      "orders": [
+        1.9928401266952234,
+        0.9898955807999926,
+        0.9907739799548775
+      ],
+      "passed": true
+    },
+    {
+      "rms_temperature_error_K": 9.293806319984265e-05,
+      "rms_x_flux_error_W_m2": 0.013922586548374909,
+      "rms_y_flux_error_W_m2": 0.008086075042059226,
+      "curved": true,
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.0,
+      "sparse": true,
+      "shear": 0.38,
+      "mean_rate_error_K_s": 2.9893669801409083e-16,
+      "relative_temperature_error_K": 8.269833047180727e-05,
+      "x_flux_error_W_m2": 0.026632672677718676,
+      "y_flux_error_W_m2": 0.014773182445413936,
+      "inward_nodal_power_error_W": 3.283646855701378e-05,
+      "outward_edge_power_error_W": 0.0008373632186780895,
+      "max_cell_energy_residual_W": 2.2262938324694e-16,
+      "boundary_flux": {
+        "raw": {
+          "rms_W_m2": 0.030100128638697893,
+          "max_W_m2": 0.03578301201412055
+        },
+        "center": {
+          "rms_W_m2": 0.0012958094535901912,
+          "max_W_m2": 0.0023732318247792813
+        },
+        "quadratic": {
+          "rms_W_m2": 0.003163760744608225,
+          "max_W_m2": 0.004034384939379034
+        },
+        "cubic": {
+          "rms_W_m2": 0.00016534683131845632,
+          "max_W_m2": 0.0007719763459876544
+        },
+        "cubic_exact_nodes": {
+          "rms_W_m2": 4.317271870928631e-15,
+          "max_W_m2": 1.0683964259407197e-14
+        }
+      },
+      "max_error_orders": [
+        1.806882270409057,
+        0.9536524647263002,
+        0.952117247510161
+      ],
+      "orders": [
+        1.998202452554384,
+        0.9973696446610092,
+        0.9976578100127632
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "51febec405895621eb0806f80549083b7133b94c",
+      "file": "fem_q4_harmonic_separated_mean.py",
+      "source_sha256": "a057ec28676b67f001d31d9d350b4662c80956bb0f993b488413027667e480b0"
+    },
+    {
+      "commit": "dbca70422bffc7bfc72231208bec9f81b6c9c0cc",
+      "file": "thermal.py",
+      "source_sha256": "2d23e1ba92d484f36d7addd7ab44b949d2c600e276f378eb411e26dba01f5458"
+    },
+    {
+      "commit": "dbca70422bffc7bfc72231208bec9f81b6c9c0cc",
+      "file": "thermal_analytic.py",
+      "source_sha256": "f0729ba4a97aff1cd4eb6cccc8da1980eeb80944c04afcbc61f84aa2181d5669"
+    },
+    {
+      "commit": "51febec405895621eb0806f80549083b7133b94c",
+      "file": "q4_boundary_patches.py",
+      "source_sha256": "930d2c835b69a7a26d06baf3eee54997956574ef6cf1a2729560dab508d9d7c2"
+    }
+  ]
+}
