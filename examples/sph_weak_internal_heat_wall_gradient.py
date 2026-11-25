@@ -9,7 +9,7 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def measure(n, amplitude, mixed=False):
+def measure(n, amplitude, mixed=False, exchange=False):
     k, base = 1.7, 305.
     x = (torch.arange(n, dtype=torch.float64)+0.5)/n
     lateral = torch.cos(2*torch.pi*x + 0.37)
@@ -29,6 +29,10 @@ def measure(n, amplitude, mixed=False):
         east = east + 2*(.4 + lateral2)
     exact = scale*torch.stack((west, east))
     options = dict(conductivity=k, return_x_flux=True)
+    if exchange:
+        loss = 5*k*torch.pi**2
+        options.update(heat_loss_coefficient=loss, ambient_temperature=base)
+        source += loss*amplitude*mode
     absolute, cuts = heat.solve_steady_slab_2d(source, 1/n, (base, base), **options)
     excess, relative_cuts = heat.solve_steady_slab_2d(source, 1/n, (base, base), temperature_reference=base, **options)
     means = torch.stack((cuts[0], -cuts[-1]))
@@ -43,12 +47,13 @@ def measure(n, amplitude, mixed=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mixed", action="store_true", help="add mean and oscillatory even-normal source components")
+    parser.add_argument("--exchange", action="store_true", help="include volumetric exchange with a 305 K ambient")
     args = parser.parse_args()
     runs = []
     for amplitude in (2**-22, 2**-40, 2**-44):
         previous = None
         for n in (16, 32, 64, 128):
-            row = measure(n, amplitude, args.mixed)
+            row = measure(n, amplitude, args.mixed, args.exchange)
             row["passed"] = row["section_flux_change_W_m2"] == 0 and (n < 128 or
                              max(row["relative_fit_error_over_scale"], row["field_error_over_amplitude"],
                                  row["wall_mean_error_over_scale"]) < (0.005 if args.mixed else 0.001))
@@ -62,6 +67,6 @@ if __name__ == "__main__":
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(__file__), provenance(heat.__file__)],
                           reproduction="OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_weak_internal_heat_wall_gradient.py"
-                          + (" --mixed" if args.mixed else "")),
+                          + (" --mixed" if args.mixed else "") + (" --exchange" if args.exchange else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
