@@ -1,0 +1,30 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "95b47042c4f166ff021aee46c60bb723e338529d",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit slab, 16 cell centers. Augmented matrix exponential of the calibrated real-space SPH stencil integrates particle temperatures and each inward wall heat under a 1 K pulse ending at 0.02 s. Compare at 0.08 s on 14/42/126 time-step grids. Shutoff is halfway through a step each time. Tests temporal accuracy for this fixed event position.",
+  "suite": {
+    "tests": 144,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_fixed_wall_pulse_time_order_on_one_lattice[theta]": {
+      "max_field_error_14_K": 0.0004590592589094472,
+      "max_wall_heat_error_14_J_per_m2": 0.00011721950301635947,
+      "max_field_error_42_K": 5.1056686794004325e-05,
+      "max_wall_heat_error_42_J_per_m2": 1.3033009497974424e-05,
+      "max_field_error_126_K": 5.680013750522517e-06,
+      "max_wall_heat_error_126_J_per_m2": 1.4482507707178072e-06
+    },
+    "test_fixed_wall_pulse_time_order_on_one_lattice[sdirk2]": {
+      "max_field_error_14_K": 0.00010030001412320716,
+      "max_wall_heat_error_14_J_per_m2": 1.4178209192854119e-05,
+      "max_field_error_42_K": 1.1057500367228634e-05,
+      "max_wall_heat_error_42_J_per_m2": 1.5488098093555114e-06,
+      "max_field_error_126_K": 1.2242344560042806e-06,
+      "max_wall_heat_error_126_J_per_m2": 1.710291228571026e-07
+    }
+  }
+}
