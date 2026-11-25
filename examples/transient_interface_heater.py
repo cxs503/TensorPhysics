@@ -20,14 +20,14 @@ POWER, DECAY = 3.,4.
 SAMPLES = np.array([.0125,.025,.05,.1,.2,.4,.8])
 
 
-def reference(area, fraction, degree, storage_fraction, initial):
+def reference(area, fraction, degree, storage_fraction, initial, times=SAMPLES, input_power=POWER):
     # Fixed Talbot contour. Each transform is from the continuum rod solution
     # T(x,s)=T(0,s)*sinh(w*(L-x))/sinh(w*L) measured from the sheet.
     theta = np.arange(1,degree)*np.pi/degree
     cot = 1/np.tan(theta)
     delta = .4*degree*np.r_[1.,theta*(cot+1j)]
     weights = np.exp(delta)*np.r_[.5,1+1j*(theta*(1+cot**2)-cot)]
-    s = delta[None,:,None]/SAMPLES[:,None,None]
+    s = delta[None,:,None]/times[:,None,None]
     wave = np.sqrt(s*CAPACITY/K)
     admittance = area*K*wave/np.tanh(.5*wave)
     # Each trace has its own storage admittance. The contact couples them.
@@ -40,14 +40,14 @@ def reference(area, fraction, degree, storage_fraction, initial):
     # T_initial(x)/s is a particular solution of the transformed heat equation.
     base = np.asarray(initial)/s
     conductance = area*K/.5
-    load = (POWER/(s+DECAY))*np.array([fraction,1-fraction])+(admittance-conductance)*base
+    load = (input_power/(s+DECAY))*np.array([fraction,1-fraction])+(admittance-conductance)*base
     total = load.sum(axis=-1)
     trace = np.stack((g*total+right*load[...,0],g*total+left*load[...,1]),axis=-1)/determinant[...,None]
     sheet = trace[...,owner:owner+1]
     wall_heat = (area*K*wave*(trace-base)/np.sinh(.5*wave)+conductance*base)/s
     jump = trace[...,:1]-trace[...,1:]
     transforms = np.concatenate((sheet,jump,wall_heat,trace,g*jump/s),axis=-1)
-    return (.4/SAMPLES[:,None])*(weights[None,:,None]*transforms).sum(axis=1).real
+    return (.4/times[:,None])*(weights[None,:,None]*transforms).sum(axis=1).real
 
 
 def fvm(n,area,times,fraction,storage_fraction,initial):
@@ -103,7 +103,7 @@ def fem(n,area,times,fraction,storage_fraction,initial):
     return np.column_stack((trace[:,n+np.argmax(area)],trace[:,n]-trace[:,n+1],wall,trace[:,n:n+2],np.r_[0.,contact]))
 
 
-def dg_samples(n,area,times,fraction,storage_fraction,initial,idx):
+def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.):
     from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
 
     face = np.zeros((2*n-1,2))
@@ -115,11 +115,14 @@ def dg_samples(n,area,times,fraction,storage_fraction,initial,idx):
                    contact_resistance={"x":face*RESISTANCE/min(area)})
     def initial_field(x,y):
         return torch.where(x<.5,2*x*initial[0],2*(1-x)*initial[1])
-    _,_,state,means,amplitude = solve_transient_diffusion_2d(initial_field,times,
+    def heaters(t):
+        right = np.exp(-DECAY*(t-right_delay)) if t>=right_delay else 0.
+        return {"x":(power[0]*np.exp(-DECAY*t)*face,power[1]*right*face)}
+    _,_,state,means,applied = solve_transient_diffusion_2d(initial_field,times,
                ncells=(2*n,2),degree=1,capacity=np.tile(branch_capacity.repeat(n)[:,None],(1,2)),
                trace_heat_capacity={"x":(surface[0]*face,surface[1]*face)},
-               trace_power={"x":(power[0]*face,power[1]*face)},load_amplitude=lambda t:np.exp(-DECAY*t),
-               rannacher=True,return_interval_means=True,return_load_means=True,**options)
+               trace_power_history=heaters,load_jump_times=(right_delay,) if right_delay else (),
+               rannacher=True,return_interval_means=True,return_history_heat=True,**options)
     modes = state[:,:,:,:,0].mean(2).numpy()
     traces = np.column_stack((modes[:,n-1].sum(1),modes[:,n,0]-modes[:,n,1]))
     stored = .5*branch_capacity*modes[:,:,0].reshape(len(times),2,n).mean(2)+surface*traces
@@ -134,7 +137,7 @@ def dg_samples(n,area,times,fraction,storage_fraction,initial,idx):
         fx,_ = poisson_face_powers_2d(integral,**options)
         west,contact,east = fx[[0,n,-1]].sum(1).numpy()
         heat += [-west,east,contact]
-        input_heat = power*(dt[start:stop] @ amplitude[start:stop].numpy())
+        input_heat = applied[start:stop].sum((0,2)).reshape(2,n).sum(1).numpy()
         balance = stored[stop]-stored[start]-input_heat+np.array([contact-west,east-contact])
         residual = max(residual,float(abs(balance).max()))
         left,right = traces[stop]
