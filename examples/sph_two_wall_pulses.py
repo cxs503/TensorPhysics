@@ -1,4 +1,4 @@
-"""Verify SPH, FVM, FEM, DG or DEM interval heat at every cut under independent Dirichlet wall pulses."""
+"""Verify SPH, FVM, FEM, DG, LBM or DEM interval heat at every cut under independent Dirichlet wall pulses."""
 import argparse
 import json
 
@@ -220,10 +220,53 @@ def measure_dg(n):
                 column_energy_residual_J_m2=float(abs(balance).max()))
 
 
+def measure_lbm(n):
+    import torch
+    from tensorlbm import scalar
+
+    # A single periodic transverse row represents a transversely uniform slab.
+    # Fix dt/dx² so that physical diffusivity is one at the same lattice tau.
+    dx = 1/n
+    dt = .064*dx**2
+    tau = scalar.tau_from_diffusivity(dt/dx**2)
+    ticks = np.rint(TIMES/dt).astype(int)
+    events = np.array([t for t, _, _ in EVENTS])
+    if not (np.allclose(ticks*dt, TIMES, rtol=0, atol=1e-14)
+            and np.allclose(np.rint(events/dt)*dt, events, rtol=0, atol=1e-14)):
+        raise ValueError("pulse edges and output times must lie on lattice steps")
+    zero = torch.zeros((1, n), dtype=torch.float64)
+    populations = scalar.scalar_equilibrium(zero, zero, zero)
+    cells = [zero[0]]
+    intervals = []
+    balance = 0.
+    for begin, end in zip(ticks[:-1], ticks[1:]):
+        integrated = zero.new_zeros(n+1)
+        for step in range(begin, end):
+            midpoint = (step+.5)*dt
+            before = populations.sum(0)
+            post = scalar.scalar_collide_bgk(populations, before, zero, zero, tau)
+            populations, sides = scalar.scalar_stream_slab(post, wall(midpoint, 0), wall(midpoint, 1))
+            heat = dx*torch.cat((sides[0], scalar.scalar_link_transfer(post, "x")[0], -sides[1]))
+            residual = dx*(populations.sum(0)[0]-before[0])+heat.diff()
+            balance = max(balance, float(abs(residual).max()))
+            integrated += heat
+        cells.append(populations.sum(0)[0])
+        intervals.append(integrated)
+    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx)
+    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
+    error = abs(torch.stack(intervals).numpy()-np.diff(cumulative, axis=0))
+    return dict(columns=n, time_steps=int(ticks[-1]), lattice_tau=tau, dt_s=dt,
+                temperature_error_K=float(abs(torch.stack(cells).numpy()-means).max()),
+                wall_heat_error_J_m2=float(error[:, [0, -1]].max()),
+                interior_cut_heat_error_J_m2=float(error[:, 1:-1].max()),
+                column_energy_residual_J_m2=balance)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--fem", action="store_true", help="run the consistent-capacity LINE2 slab")
+    group.add_argument("--lbm", action="store_true", help="run the D2Q5 halfway-wall slab")
     group.add_argument("--dg", action="store_true", help="run the SIPG linear-element slab")
     group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
     group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
@@ -233,6 +276,9 @@ if __name__ == "__main__":
     if args.fem:
         from tensorfem import thermal as solver
         run = measure_fem
+    elif args.lbm:
+        from tensorlbm import scalar as solver
+        run = measure_lbm
     elif args.dg:
         from tensordg import heat_1d as solver
         run = measure_dg
@@ -253,7 +299,7 @@ if __name__ == "__main__":
             errors = np.append(errors, row["interval_temperature_error_K"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
-                   row["column_energy_residual_J_m2"] < 1e-12 and (args.dg or row["wall_trace_error_K"] < 1e-14)
+                   row["column_energy_residual_J_m2"] < 1e-12 and (args.dg or args.lbm or row["wall_trace_error_K"] < 1e-14)
                    and row.get("interface_heat_mismatch_J_m2", 0.) < 1e-12
                    and all(order > 0 for order in orders) and (n < 64 or min(orders) > 1.8)))
         rows.append(row)
