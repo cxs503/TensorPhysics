@@ -1,5 +1,6 @@
 """Decay through a resistive overlap and an exposed storing shoulder."""
 from dataclasses import replace
+import argparse
 import json
 
 import numpy as np
@@ -11,7 +12,7 @@ from tensorfem import thermal
 from tensorfvm.cht import rod
 
 
-def measure(n, expanding):
+def measure(n, expanding, steps_per_cell=2):
     m, dx, decay = n//2, 1/n, 1.7
     k, c = np.array([2.,5.]), np.array([3.,1.5])
     area = np.array([.7,2.4]) if expanding else np.array([2.4,.7])
@@ -34,7 +35,7 @@ def measure(n, expanding):
     nodes = np.r_[profile(x[:m+1],0),profile(x[m:],1)]
     xc = (np.arange(n)+.5)*dx
     means = np.r_[profile(xc[:m],0),profile(xc[m:],1)]*np.sinc(wave.repeat(m)*dx/(2*np.pi))
-    times = np.linspace(0.,1.,2*n+1)
+    times = np.linspace(0.,1.,steps_per_cell*n+1)
     dt = np.diff(times)
     signal = np.exp(-decay*times)
     exact_mean = -np.diff(signal)/(dt*decay)
@@ -78,7 +79,7 @@ def measure(n, expanding):
         layer_residual = np.diff(stored,axis=0)-end_heat+heat*[1.,-1.]
         link_heat = integrated((jump*min(area)/resistance)[:,None])[:,0]
         link_residual = link_heat-heat[:,0 if expanding else 1]
-        yield dict(solver=name,n=n,expanding=expanding,temperature_error_K=float(abs(cell-signal[:,None]*means).max()),
+        yield dict(solver=name,n=n,steps=len(dt),expanding=expanding,temperature_error_K=float(abs(cell-signal[:,None]*means).max()),
                    contact_jump_error_K=float(abs(jump-signal*(left_trace-right_trace)).max()),
                    shoulder_temperature_error_K=float(abs(wall-signal*surface).max()),
                    step_power_error_W=float(abs(heat/dt[:,None]-exact_mean[:,None]*q).max()),
@@ -86,11 +87,16 @@ def measure(n, expanding):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--steps-per-cell",type=int,default=2,help="number of time steps per axial cell")
+    args = parser.parse_args()
+    if args.steps_per_cell < 1:
+        parser.error("steps per cell must be positive")
     rows = []
     for expanding in (True,False):
         previous = {}
         for n in (16,32,64,128,256,512):
-            for row in measure(n,expanding):
+            for row in measure(n,expanding,args.steps_per_cell):
                 name = row["solver"]
                 errors = {k:v for k,v in row.items() if "_error_" in k}
                 rates = {} if name not in previous else {k:np.log2(previous[name][k]/v) for k,v in errors.items()}
