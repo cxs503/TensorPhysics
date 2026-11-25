@@ -5,6 +5,7 @@ import numpy as np
 import torch
 
 from conduction_provenance import provenance
+from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
 from tensorlbm import scalar, scalar_harmonic
@@ -123,7 +124,15 @@ def measure(n):
         lbm_left_generation += (duration*amp*h*avg[:cut].sum()).real
         lbm_cut += (duration*slab.x_transfer.numpy()[0, cut]*capacity*h/lattice_dt).real
     reports = []
-    results = (("FEM", fem_cells, fem_heat, generation, fem_cut, left_generation),
+    # Fixed contact chain with one store per cell and two zero-capacity reservoirs.
+    links, stores = contact_chain.cell_centered_slab_network(np.full(n, h), k, capacity)
+    chain = contact_chain.transient_contact_temperatures(links, stores, time, np.pad(exact[0], 1),
+                        t_left=0., t_right=0., nodal_power=np.pad(h*source, ((0, 0), (1, 1))))
+    link_power = -np.diff(chain, axis=1)/links
+    link_heat = .5*dt[:, None]*(link_power[:-1]+link_power[1:])
+    dem_ends = link_heat[:, [0, -1]]*np.array([1, -1])
+    results = (("DEM", chain[:, 1:-1], dem_ends, generation, link_heat[:, cut], left_generation),
+               ("FEM", fem_cells, fem_heat, generation, fem_cut, left_generation),
                ("FVM", history[:,0], fvm_heat, generation, fvm_cut, left_generation),
                ("LBM", lbm_cells, lbm_heat, lbm_generation, lbm_cut, lbm_left_generation),
                ("SPH", *sph_response(modes, time, h, k, capacity, cut)))
@@ -157,7 +166,7 @@ def main():
             runs.append(report)
             previous[name] = errors
     print(json.dumps(dict(runs=runs, sources=[provenance(f) for f in
-                     (__file__, energy.__file__, thermal.__file__, scalar.__file__, scalar_harmonic.__file__, sph.__file__)]), indent=2, allow_nan=False))
+                     (__file__, contact_chain.__file__, energy.__file__, thermal.__file__, scalar.__file__, scalar_harmonic.__file__, sph.__file__)]), indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in runs) else 1
 
 
