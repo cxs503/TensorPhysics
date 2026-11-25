@@ -95,8 +95,12 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
     faces[0,m-1] = resistance
     bc = {side: {"type": "robin", "values": 0., "film_coefficient": h}
           for side, h in zip(("west", "east"), films)}
-    fvm_history = energy.solve_transient_conduction(np.full(n, 1/n), [1.], k, capacity, bc, time,
-                                              initial, contact_resistance_x=faces)[:,0]
+    power_options = dict(return_wall_power=True,return_interior_power=True) if implicit_sph else {}
+    fvm_result = energy.solve_transient_conduction(np.full(n,1/n),[1.],k,capacity,bc,time,
+                                                   initial,contact_resistance_x=faces,**power_options)
+    if implicit_sph:
+        fvm_result,fvm_walls,fvm_interior = fvm_result
+    fvm_history = fvm_result[:,0]
     final = fvm_history[-1]
     # Recover each wall trace from the half-cell drop and the film law.
     walls = final[[0,-1]] / (1 + np.asarray(films)/(2*n*k[[0,-1]]))
@@ -164,9 +168,9 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
         fem_stored = np.column_stack(((nodal[:,:m]+nodal[:,1:m+1]).sum(axis=1)*dx/2,
                                       cap*(nodal[:,m+1:-1]+nodal[:,m+2:]).sum(axis=1)*dx/2))
         check_sections("FEM",integrate(fem_power),fem_stored,nodal[:,m:m+2])
-        fvm_power = np.column_stack((-fvm_history[:,0]/(1/films[0]+dx/(2*k[0])),
-                            (fvm_history[:,m-1]-fvm_history[:,m])/(resistance+dx/(2*k[m-1])+dx/(2*k[m])),
-                            fvm_history[:,-1]/(1/films[1]+dx/(2*k[-1]))))
+        # Wall powers point inward; interior x powers point eastward.
+        fvm_power = np.column_stack((fvm_walls["west"][:,0],fvm_interior["x"][:,0,m-1],
+                                     -fvm_walls["east"][:,0]))
         def cell_stores(fields):
             return (dx*capacity*fields).reshape(len(time),2,m).sum(axis=2)
         check_sections("FVM",integrate(fvm_power),cell_stores(fvm_history),half_cell_traces(fvm_history,fvm_power[:,1]))
