@@ -1,0 +1,572 @@
+{
+  "reference": "Q4 unit square with biquadratic manufactured temperature, continuous normal flux at all four corners, and exact segment and perimeter integrals",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_closed_wall_flux.py",
+  "order_metrics": [
+    "segment_max_flux_error_W_m2",
+    "segment_rms_flux_error_W_m2",
+    "total_outward_power_error_W"
+  ],
+  "runs": [
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 3.469446951953614e-17,
+      "segment_max_flux_error_W_m2": 0.01686852370582236,
+      "segment_rms_flux_error_W_m2": 0.01686852370582224,
+      "total_outward_power_error_W": 0.04385816163513795,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.2887833992611187e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 5.594315114139762e-17,
+      "segment_max_flux_error_W_m2": 0.004217130926455849,
+      "segment_rms_flux_error_W_m2": 0.004217130926455422,
+      "total_outward_power_error_W": 0.010964540408784041,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.482534153247273e-16,
+      "orders": [
+        1.9999999999999112,
+        2.000000000000047,
+        2.0000000000000586
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 1.6053457592784087e-16,
+      "segment_max_flux_error_W_m2": 0.001054282731614435,
+      "segment_rms_flux_error_W_m2": 0.0010542827316131066,
+      "total_outward_power_error_W": 0.002741135102194034,
+      "projected_power_residual_W": 2.482534153247273e-16,
+      "seam_rotation_error_W_m2": 2.2887833992611187e-16,
+      "orders": [
+        1.999999999999353,
+        2.000000000001025,
+        2.00000000000104
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 4.723037537524465e-16,
+      "segment_max_flux_error_W_m2": 0.0002635706829082085,
+      "segment_rms_flux_error_W_m2": 0.00026357068290191397,
+      "total_outward_power_error_W": 0.000685283775545057,
+      "projected_power_residual_W": 1.1102230246251565e-16,
+      "seam_rotation_error_W_m2": 3.3306690738754696e-16,
+      "orders": [
+        1.9999999999748224,
+        2.000000000007459,
+        2.000000000007266
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 5.003707553108402e-17,
+      "segment_max_flux_error_W_m2": 0.016868523705822456,
+      "segment_rms_flux_error_W_m2": 0.016868523705822296,
+      "total_outward_power_error_W": 0.04385816163513814,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.482534153247273e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 5.003707553108402e-17,
+      "segment_max_flux_error_W_m2": 0.004217130926455948,
+      "segment_rms_flux_error_W_m2": 0.0042171309264555645,
+      "total_outward_power_error_W": 0.010964540408784437,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.7755575615628914e-16,
+      "orders": [
+        1.9999999999998859,
+        2.000000000000003,
+        2.0000000000000133
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 2.500951503118635e-16,
+      "segment_max_flux_error_W_m2": 0.001054282731613841,
+      "segment_rms_flux_error_W_m2": 0.0010542827316130095,
+      "total_outward_power_error_W": 0.002741135102193836,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.7238012298709097e-16,
+      "orders": [
+        2.0000000000001994,
+        2.0000000000012066,
+        2.0000000000011964
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.5,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 5.288631065211246e-16,
+      "segment_max_flux_error_W_m2": 0.00026357068290562286,
+      "segment_rms_flux_error_W_m2": 0.0002635706829013322,
+      "total_outward_power_error_W": 0.000685283775543571,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.433175098891678e-16,
+      "orders": [
+        1.9999999999881628,
+        2.0000000000105103,
+        2.0000000000102904
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 3.469446951953614e-17,
+      "segment_max_flux_error_W_m2": 0.025223186717271348,
+      "segment_rms_flux_error_W_m2": 0.01955994577997151,
+      "total_outward_power_error_W": 0.04830014498004752,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.510833468576701e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 4.654751537338637e-17,
+      "segment_max_flux_error_W_m2": 0.007293596175879467,
+      "segment_rms_flux_error_W_m2": 0.005007311438810011,
+      "total_outward_power_error_W": 0.012265567208591384,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.2887833992611187e-16,
+      "orders": [
+        1.7900483290243259,
+        1.9657942767977807,
+        1.9774135681381324
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 9.03816318854794e-17,
+      "segment_max_flux_error_W_m2": 0.0018961040859585493,
+      "segment_rms_flux_error_W_m2": 0.0012592668412310546,
+      "total_outward_power_error_W": 0.0030792609509879623,
+      "projected_power_residual_W": 2.220446049250313e-16,
+      "seam_rotation_error_W_m2": 3.433175098891678e-16,
+      "orders": [
+        1.9435921616313048,
+        1.9914521637497848,
+        1.993957912984914
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 3.326510369248819e-16,
+      "segment_max_flux_error_W_m2": 0.0004787615469918582,
+      "segment_rms_flux_error_W_m2": 0.0003152897469561966,
+      "total_outward_power_error_W": 0.0007706352399735026,
+      "projected_power_residual_W": 1.1102230246251565e-16,
+      "seam_rotation_error_W_m2": 3.3422138886441676e-16,
+      "orders": [
+        1.9856589744860622,
+        1.9978338652232743,
+        1.9984640684338053
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 3.753031242781357e-17,
+      "segment_max_flux_error_W_m2": 0.025223186717271348,
+      "segment_rms_flux_error_W_m2": 0.019559945779971503,
+      "total_outward_power_error_W": 0.04830014498004752,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.3766115072321297e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 6.546139416680338e-17,
+      "segment_max_flux_error_W_m2": 0.00729359617587922,
+      "segment_rms_flux_error_W_m2": 0.005007311438809924,
+      "total_outward_power_error_W": 0.012265567208591186,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.2887833992611187e-16,
+      "orders": [
+        1.7900483290243745,
+        1.9657942767978052,
+        1.9774135681381557
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 1.783984089923424e-16,
+      "segment_max_flux_error_W_m2": 0.0018961040859585489,
+      "segment_rms_flux_error_W_m2": 0.0012592668412308241,
+      "total_outward_power_error_W": 0.003079260950987368,
+      "projected_power_residual_W": 2.482534153247273e-16,
+      "seam_rotation_error_W_m2": 3.510833468576701e-16,
+      "orders": [
+        1.9435921616312566,
+        1.9914521637500235,
+        1.9939579129851692
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 0.5,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 2.3714374201337736e-16,
+      "segment_max_flux_error_W_m2": 0.00047876154699317056,
+      "segment_rms_flux_error_W_m2": 0.00031528974695637946,
+      "total_outward_power_error_W": 0.0007706352399741914,
+      "projected_power_residual_W": 2.220446049250313e-16,
+      "seam_rotation_error_W_m2": 3.3422138886441676e-16,
+      "orders": [
+        1.9856589744821074,
+        1.9978338652221737,
+        1.9984640684322375
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 2.082119873069895e-17,
+      "segment_max_flux_error_W_m2": 0.016868523705822407,
+      "segment_rms_flux_error_W_m2": 0.016868523705822216,
+      "total_outward_power_error_W": 0.043858161635137845,
+      "projected_power_residual_W": 1.1102230246251565e-16,
+      "seam_rotation_error_W_m2": 2.482534153247273e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 4.5102810375396984e-17,
+      "segment_max_flux_error_W_m2": 0.00421713092645605,
+      "segment_rms_flux_error_W_m2": 0.004217130926455403,
+      "total_outward_power_error_W": 0.010964540408784043,
+      "projected_power_residual_W": 2.220446049250313e-16,
+      "seam_rotation_error_W_m2": 3.3306690738754696e-16,
+      "orders": [
+        1.9999999999998466,
+        2.0000000000000515,
+        2.000000000000055
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 2.220717083251841e-16,
+      "segment_max_flux_error_W_m2": 0.001054282731614259,
+      "segment_rms_flux_error_W_m2": 0.001054282731613286,
+      "total_outward_power_error_W": 0.0027411351021946286,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.482534153247273e-16,
+      "orders": [
+        1.999999999999663,
+        2.000000000000773,
+        2.0000000000007274
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": false,
+      "nodal_temperature_error_K": 5.437970744817336e-16,
+      "segment_max_flux_error_W_m2": 0.0002635706829048207,
+      "segment_rms_flux_error_W_m2": 0.0002635706829016587,
+      "total_outward_power_error_W": 0.0006852837755443704,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.3766115072321297e-16,
+      "orders": [
+        1.999999999993125,
+        2.0000000000091016,
+        2.000000000009025
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 1.4416220074117224e-17,
+      "segment_max_flux_error_W_m2": 0.016868523705822407,
+      "segment_rms_flux_error_W_m2": 0.016868523705822223,
+      "total_outward_power_error_W": 0.04385816163513775,
+      "projected_power_residual_W": 1.1102230246251565e-16,
+      "seam_rotation_error_W_m2": 3.554447978966673e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 4.177767360805209e-17,
+      "segment_max_flux_error_W_m2": 0.0042171309264559,
+      "segment_rms_flux_error_W_m2": 0.004217130926455515,
+      "total_outward_power_error_W": 0.010964540408784439,
+      "projected_power_residual_W": 2.220446049250313e-16,
+      "seam_rotation_error_W_m2": 3.7238012298709097e-16,
+      "orders": [
+        1.999999999999898,
+        2.000000000000014,
+        1.9999999999999998
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 1.5744601629798925e-16,
+      "segment_max_flux_error_W_m2": 0.0010542827316142578,
+      "segment_rms_flux_error_W_m2": 0.0010542827316133195,
+      "total_outward_power_error_W": 0.0027411351021945293,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.510833468576701e-16,
+      "orders": [
+        1.999999999999613,
+        2.000000000000765,
+        2.000000000000832
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 4.0,
+      "grading": 0.0,
+      "sparse": true,
+      "nodal_temperature_error_K": 3.589201142604568e-16,
+      "segment_max_flux_error_W_m2": 0.00026357068290596786,
+      "segment_rms_flux_error_W_m2": 0.00026357068290245727,
+      "total_outward_power_error_W": 0.0006852837755463354,
+      "projected_power_residual_W": 2.220446049250313e-16,
+      "seam_rotation_error_W_m2": 4.47545209131181e-16,
+      "orders": [
+        1.9999999999868447,
+        2.000000000004776,
+        2.0000000000048357
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 4.3885418357208765e-17,
+      "segment_max_flux_error_W_m2": 0.025223186717271404,
+      "segment_rms_flux_error_W_m2": 0.019559945779971503,
+      "total_outward_power_error_W": 0.04830014498004752,
+      "projected_power_residual_W": 3.1401849173675503e-16,
+      "seam_rotation_error_W_m2": 2.482534153247273e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 7.473417450352271e-17,
+      "segment_max_flux_error_W_m2": 0.007293596175879517,
+      "segment_rms_flux_error_W_m2": 0.005007311438809879,
+      "total_outward_power_error_W": 0.012265567208590988,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.3422138886441676e-16,
+      "orders": [
+        1.7900483290243192,
+        1.9657942767978183,
+        1.9774135681381788
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 7.473417450352271e-17,
+      "segment_max_flux_error_W_m2": 0.0018961040859588971,
+      "segment_rms_flux_error_W_m2": 0.0012592668412310028,
+      "total_outward_power_error_W": 0.0030792609509879623,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 2.7755575615628914e-16,
+      "orders": [
+        1.9435921616310503,
+        1.991452163749806,
+        1.9939579129848675
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": false,
+      "nodal_temperature_error_K": 1.567406898450102e-16,
+      "segment_max_flux_error_W_m2": 0.00047876154699356445,
+      "segment_rms_flux_error_W_m2": 0.00031528974695636423,
+      "total_outward_power_error_W": 0.0007706352399741961,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.433175098891678e-16,
+      "orders": [
+        1.9856589744811852,
+        1.997833865222448,
+        1.998464068432507
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 4.3885418357208765e-17,
+      "segment_max_flux_error_W_m2": 0.025223186717271348,
+      "segment_rms_flux_error_W_m2": 0.019559945779971503,
+      "total_outward_power_error_W": 0.04830014498004752,
+      "projected_power_residual_W": 2.220446049250313e-16,
+      "seam_rotation_error_W_m2": 2.482534153247273e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 7.70342238303416e-17,
+      "segment_max_flux_error_W_m2": 0.007293596175879368,
+      "segment_rms_flux_error_W_m2": 0.005007311438809842,
+      "total_outward_power_error_W": 0.012265567208590887,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 3.3422138886441676e-16,
+      "orders": [
+        1.7900483290243454,
+        1.965794276797829,
+        1.9774135681381908
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 1.0784623917771097e-16,
+      "segment_max_flux_error_W_m2": 0.0018961040859588967,
+      "segment_rms_flux_error_W_m2": 0.001259266841230677,
+      "total_outward_power_error_W": 0.0030792609509871748,
+      "projected_power_residual_W": 2.220446049250313e-16,
+      "seam_rotation_error_W_m2": 3.3306690738754696e-16,
+      "orders": [
+        1.943592161631021,
+        1.9914521637501688,
+        1.9939579129852247
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 32,
+      "omega_rad_s": 4.0,
+      "grading": 0.35,
+      "sparse": true,
+      "nodal_temperature_error_K": 2.336924281732948e-16,
+      "segment_max_flux_error_W_m2": 0.00047876154699166417,
+      "segment_rms_flux_error_W_m2": 0.00031528974695672283,
+      "total_outward_power_error_W": 0.0007706352399751891,
+      "projected_power_residual_W": 0.0,
+      "seam_rotation_error_W_m2": 4.449557262054371e-16,
+      "orders": [
+        1.9856589744869113,
+        1.9978338652204337,
+        1.998464068430279
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "f0c3688d5e7276b2b168413306c1955e66b5c1d0",
+      "file": "fem_closed_wall_flux.py",
+      "source_sha256": "d7160c8753e0c8a2a62146457fd0de96a483246562b436ea54f9d9a141ad47d0"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal_analytic.py",
+      "source_sha256": "f0729ba4a97aff1cd4eb6cccc8da1980eeb80944c04afcbc61f84aa2181d5669"
+    }
+  ]
+}
