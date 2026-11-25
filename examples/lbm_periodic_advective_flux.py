@@ -9,7 +9,7 @@ from conduction_provenance import provenance
 from tensorlbm import thermal_common as lbm
 
 
-def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_step_only=False):
+def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_step_only=False, periodic_gradient=False):
     dx, alpha, capacity = 1/n, .08, 1.7
     velocity = sign*np.array([.62, -.38, .2])
     wave = 2*np.pi*np.array([1., -1., 1.])
@@ -29,7 +29,11 @@ def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_st
     background = .7
     field = background+cell_mode.real
     speeds = tuple(torch.full_like(field, u*dt/dx) for u in velocity)
-    if gradient_start:
+    if periodic_gradient:
+        if flux_walls:
+            raise ValueError("automatic centered gradients require three periodic axes")
+        g = lbm.thermal_gradient_initialization_3d(field, *speeds, tau_T=tau, spacing=dx)
+    elif gradient_start:
         grad = torch.stack([(1j*k*cell_mode).real for k in wave])
         g = lbm.thermal_gradient_initialization_3d(field, *speeds, grad, tau_T=tau, spacing=dx)
     else:
@@ -66,7 +70,7 @@ def measure(n, sign, flux_walls=False, *, tau=1., gradient_start=False, first_st
         target = background+(np.exp(decay*(step+1)*dt)*cell_mode).real
         peak_t = max(peak_t, abs(updated-target).max().item())
         field = updated
-    diagnostics = dict(first_step_flux_errors_xyz_W_m2=first_flux.tolist()) if tau != 1. or gradient_start else {}
+    diagnostics = dict(first_step_flux_errors_xyz_W_m2=first_flux.tolist()) if tau != 1. or gradient_start or periodic_gradient else {}
     return dict(**diagnostics, n=n, steps=steps, velocity_m_s=velocity.tolist(), temperature_error_K=peak_t,
                 total_flux_errors_xyz_W_m2=peak_flux.tolist(), wrap_flux_errors_xyz_W_m2=([None, *peak_wrap[1:]] if flux_walls else peak_wrap.tolist()),
                 max_cell_energy_residual_J=peak_balance)
