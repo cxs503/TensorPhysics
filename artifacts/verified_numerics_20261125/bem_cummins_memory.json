@@ -1,0 +1,779 @@
+{
+  "repository": "TensorBEM",
+  "integrator_commit": "15f1912d2bf43541f46c107f2c871f4e1e7c5a4c",
+  "campaign_commit": "6703935427003d6e31008c26f7127638e1e43c19",
+  "environment": {
+    "OPENBLAS_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1
+  },
+  "tests": [
+    {
+      "command": "python -m pytest -q -o junit_family=legacy tests/test_time_domain.py --junitxml=measured.xml",
+      "counts": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "measurements": {
+        "test_exponential_memory_free_decay_converges_to_augmented_ode": {
+          "dt_0.05_max_displacement_error": 0.000776265328140735,
+          "dt_0.05_max_velocity_error": 0.0019041441004583881,
+          "dt_0.025_max_displacement_error": 0.0001952519968376476,
+          "dt_0.025_max_velocity_error": 0.00048178756488539975,
+          "dt_0.0125_max_displacement_error": 4.898873667777415e-05,
+          "dt_0.0125_max_velocity_error": 0.00012123633510777165
+        }
+      }
+    },
+    {
+      "command": "python -m pytest -q -o junit_family=legacy tests/test_memory_kernel_matrix.py --junitxml=measured.xml",
+      "counts": {
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "measurements": {
+        "test_coupled_exponential_kernel_matches_matrix_exponential": {
+          "dt_0.05_max_displacement_error": 0.0006570153260111455,
+          "dt_0.05_max_velocity_error": 0.0014983406576644098,
+          "dt_0.025_max_displacement_error": 0.00016516817379025328,
+          "dt_0.025_max_velocity_error": 0.00038001386790126324,
+          "dt_0.0125_max_displacement_error": 4.142828858483272e-05,
+          "dt_0.0125_max_velocity_error": 9.576556859153262e-05
+        }
+      }
+    },
+    {
+      "command": "python -m pytest -q -o junit_family=legacy tests/test_cummins_wigley_hull.py -k \"single_pole_reference or negative_control_period\" --junitxml=measured.xml",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "measurements": {
+        "test_heave_decay_against_single_pole_reference": {
+          "zeta_free_decay_reference": 0.0025653242358759138,
+          "zeta_free_decay_relative_error": 0.00011932484544596722,
+          "period_measured_reference": 0.8674572347104471,
+          "period_measured_relative_error": 5.400746081463126e-07
+        }
+      }
+    }
+  ],
+  "offset_diagnostic_commit": "3db343b8b9c4a3e2586fa63d35356bed7f90b7c4",
+  "wigley_regression": {
+    "commit": "6703935427003d6e31008c26f7127638e1e43c19",
+    "command": "python -m pytest -q tests/test_cummins_wigley_hull.py tests/test_cummins_wigley_causal_decay.py",
+    "counts": {
+      "tests": 25,
+      "failures": 6,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failures": [
+      "tests.test_cummins_wigley_hull::test_round_trip_wigley_heave",
+      "tests.test_cummins_wigley_hull::test_causality_wigley_heave",
+      "tests.test_cummins_wigley_hull::test_free_decay_wigley_heave",
+      "tests.test_cummins_wigley_hull::test_negative_control_wigley_heave",
+      "tests.test_cummins_wigley_causal_decay::test_legacy_c5_is_reproduced",
+      "tests.test_cummins_wigley_causal_decay::test_legacy_route_is_the_biased_one"
+    ]
+  },
+  "offset_diagnostic_regression": {
+    "command": "python -m pytest -q tests/test_cummins_wigley_hull.py -k \"feasible_asymptote or single_pole_reference or negative_control_period\"",
+    "passed": 3
+  },
+  "campaigns": [
+    {
+      "case": {
+        "title": "Cummins radiation memory kernel closure on a Wigley hull",
+        "body": "Wigley hull (mathematical parabolic hullform)",
+        "geometry": {
+          "shape": "wigley_hull",
+          "length": 3.0,
+          "beam": 0.3,
+          "draft": 0.1875,
+          "displacement": 0.075,
+          "wetted_surface": 1.3391156794462007,
+          "block_coefficient": 0.4444444444444445,
+          "displaced_mass": 76.875,
+          "density": 1025.0,
+          "L_B_ratio": 10.0,
+          "B_T_ratio": 1.5999999999999999
+        },
+        "dof_tested": "heave",
+        "dof_index": 2,
+        "sweep": {
+          "body": "Wigley hull",
+          "L": 3.0,
+          "B": 0.3,
+          "T": 0.1875,
+          "Cb": 0.4444444444444445,
+          "n_frequencies": 20,
+          "omega_range": [
+            0.5,
+            6.0
+          ],
+          "dof_labels": [
+            "surge",
+            "sway",
+            "heave",
+            "roll",
+            "pitch",
+            "yaw"
+          ]
+        }
+      },
+      "gates": [
+        {
+          "id": "W1",
+          "title": "geometry precondition (Wigley hull Cb, L, B, T, nabla, S)",
+          "threshold": "Cb in [0.3, 1.0], |nabla - L*B*T*Cb|/nabla <= 5%",
+          "passed": true,
+          "values": {
+            "gate": {
+              "passed": true,
+              "checks": {
+                "block_coefficient_range": {
+                  "passed": true,
+                  "value": 0.4444444444444445,
+                  "threshold": "[0.3, 1.0]"
+                },
+                "displacement_consistency": {
+                  "passed": true,
+                  "relative_error": 0.0,
+                  "threshold": 0.05
+                },
+                "wetted_surface_positive": {
+                  "passed": true,
+                  "value": 1.3391156794462007
+                },
+                "dimensions_positive": {
+                  "passed": true,
+                  "L": 3.0,
+                  "B": 0.3,
+                  "T": 0.1875
+                }
+              },
+              "block_coefficient": 0.4444444444444445,
+              "displacement_consistency_pct": 0.0,
+              "wetted_surface": 1.3391156794462007
+            }
+          }
+        },
+        {
+          "id": "W2",
+          "title": "round-trip closure (heave)",
+          "threshold": "pointwise relative error <= 2%",
+          "passed": false,
+          "values": {
+            "dof": 2,
+            "dof_label": "heave",
+            "damping_relative_error_max": 0.2796278944295438,
+            "added_mass_relative_error_max": 0.40332826364819413,
+            "added_mass_inf_offset_lower": 30.232024133887947,
+            "added_mass_inf_offset_upper": 29.53903981719969,
+            "added_mass_gate_reachable_by_constant_offset": false,
+            "kernel_tau_max": 20.0,
+            "kernel_dt": 0.02,
+            "round_trip": {
+              "damping_errors": [
+                0.2796278944295438,
+                0.13972204906327726,
+                0.06501328608988653,
+                0.14211553209621494,
+                0.09180664687425885,
+                0.025097026728754412,
+                0.08539509837789717,
+                0.06096687703002,
+                0.002236418127335505,
+                0.05612165625566275,
+                0.04476864561411796,
+                0.0003023331402803413,
+                0.03128392195845178,
+                0.03513000224988307,
+                0.009137247825908329,
+                0.022679708752577275,
+                0.031085719519922592,
+                0.006660805559916901,
+                0.017252025982385157,
+                0.02154276857195165,
+                0.006410740925457601,
+                0.009101716655440436,
+                0.016189816586985536,
+                0.008773673081539786,
+                0.004273558124792296,
+                0.014208940986968932,
+                0.010276704035632018,
+                0.002662143954098279,
+                0.011990143222159511,
+                0.01029647729777257,
+                0.001085170706327095,
+                0.010596380572262067,
+                0.00961697739600955,
+                0.00018000575872855813,
+                0.008679003281064076,
+                0.00920240560972237,
+                0.0013810364965282317,
+                0.007194889304740132,
+                0.008797203220440595,
+                0.002348930245512668,
+                0.005944973172452043,
+                0.008353851892413165,
+                0.0027611654254343873,
+                0.004308128620998166,
+                0.007777476772641285,
+                0.004161373939782167,
+                0.0032650215059251,
+                0.007709096032906775,
+                0.005028894182112237,
+                0.0028010414122686318,
+                0.007290524256541656,
+                0.0046535167037442225,
+                0.0016271033409748776,
+                0.006350601670946911,
+                0.0053772592001378105,
+                0.00032451736038472675,
+                0.005561819990384382,
+                0.005933797676609811,
+                0.0022747856893596883,
+                0.005932259500092686
+              ],
+              "added_mass_errors": [
+                0.20930489286696172,
+                0.19597658753644315,
+                0.19396052901043245,
+                0.20242770941348448,
+                0.21220461932030835,
+                0.21388615253981794,
+                0.20659963437897966,
+                0.1971162404352479,
+                0.19343908249743366,
+                0.19834029321201765,
+                0.2060687947545058,
+                0.2097793885582567,
+                0.20674611579847796,
+                0.1996792665044593,
+                0.1956058071594048,
+                0.1985266808989216,
+                0.2057208118898786,
+                0.2104213151903952,
+                0.20994574667216137,
+                0.20568960765286634,
+                0.20239727625278772,
+                0.20339418498091086,
+                0.20952064697597184,
+                0.216159566741479,
+                0.21889872398225074,
+                0.21599001262279413,
+                0.21249150011462645,
+                0.2134316054248321,
+                0.21973793460988597,
+                0.22792093812214423,
+                0.23206433592815942,
+                0.23109763416899595,
+                0.22865741630192526,
+                0.22948317766717197,
+                0.23579160114158576,
+                0.24522988425692238,
+                0.2516267897596922,
+                0.2530889941838698,
+                0.2516627688542082,
+                0.25211907522411,
+                0.258010858847814,
+                0.2684148510261878,
+                0.27855324284582483,
+                0.2833012368538432,
+                0.2837400690163379,
+                0.28409683929173324,
+                0.28902177711883903,
+                0.2994013017150437,
+                0.31159324911392483,
+                0.32078968628560345,
+                0.3252343513003728,
+                0.3279976019400464,
+                0.3339777128470852,
+                0.345026933109988,
+                0.35825666268319745,
+                0.36875300467263167,
+                0.3744488613542781,
+                0.3785281631567643,
+                0.386822222049853,
+                0.40332826364819413
+              ],
+              "omega": [
+                0.6283185307179586,
+                0.6786860132481627,
+                0.7290534957783668,
+                0.7794209783085708,
+                0.829788460838775,
+                0.8801559433689791,
+                0.9305234258991831,
+                0.9808909084293873,
+                1.0312583909595914,
+                1.0816258734897954,
+                1.1319933560199995,
+                1.1823608385502036,
+                1.2327283210804076,
+                1.2830958036106117,
+                1.333463286140816,
+                1.3838307686710198,
+                1.4341982512012241,
+                1.484565733731428,
+                1.5349332162616323,
+                1.5853006987918363,
+                1.6356681813220404,
+                1.6860356638522445,
+                1.7364031463824485,
+                1.7867706289126526,
+                1.8371381114428567,
+                1.8875055939730607,
+                1.9378730765032648,
+                1.988240559033469,
+                2.0386080415636734,
+                2.088975524093877,
+                2.139343006624081,
+                2.1897104891542853,
+                2.2400779716844896,
+                2.2904454542146935,
+                2.3408129367448973,
+                2.3911804192751016,
+                2.441547901805306,
+                2.4919153843355097,
+                2.542282866865714,
+                2.5926503493959183,
+                2.643017831926122,
+                2.693385314456326,
+                2.7437527969865303,
+                2.7941202795167346,
+                2.8444877620469384,
+                2.8948552445771427,
+                2.9452227271073466,
+                2.995590209637551,
+                3.0459576921677547,
+                3.096325174697959,
+                3.146692657228163,
+                3.197060139758367,
+                3.247427622288571,
+                3.2977951048187752,
+                3.3481625873489795,
+                3.3985300698791834,
+                3.4488975524093877,
+                3.4992650349395915,
+                3.549632517469796,
+                3.5999999999999996
+              ]
+            }
+          }
+        },
+        {
+          "id": "W3",
+          "title": "causality & Kramers-Kronig (heave)",
+          "threshold": "K(t<0)==0, even parity, KK residual <= 3%",
+          "passed": false,
+          "values": {
+            "dof": 2,
+            "dof_label": "heave",
+            "causal": true,
+            "even_parity_relative_error": 0.0,
+            "kkr_relative_residual": 0.5416027447672168,
+            "kkr_absolute_residual_max": 76.61015650879585,
+            "kk_closure_relative_residual": 0.12161367882268144,
+            "kk_closure_added_mass_inf": 64.47489658795406,
+            "added_mass_inf_fit": 5.067095603077279,
+            "kernel_diagnostics": {
+              "K0": 722.0251179127863,
+              "slope_at_zero": -0.003587326608657708,
+              "decay_ratio": 0.02487079791523828
+            }
+          }
+        },
+        {
+          "id": "W4",
+          "title": "free decay (heave)",
+          "threshold": "in-band resonance",
+          "passed": false,
+          "values": {
+            "reference_error": "no resonance inside the tabulated band: Re kappa does not change sign"
+          }
+        },
+        {
+          "id": "W5",
+          "title": "negative control (heave)",
+          "threshold": "in-band damping reference",
+          "passed": false,
+          "values": {
+            "reference_error": "no resonance inside the tabulated band: Re kappa does not change sign",
+            "period_exact": 0.8476950163158273,
+            "period_measured": 0.8476986213761768,
+            "zeta_zero_damping": 5.416992234558223e-07,
+            "kernel_norm_zero": 0.0
+          }
+        }
+      ],
+      "all_passed": false,
+      "runtime_seconds": 23.04254674911499,
+      "tolerances": {
+        "round_trip": 0.02,
+        "kramers_kronig": 0.03,
+        "free_decay": 0.05,
+        "negative_control": 0.005,
+        "geometry": 0.05
+      },
+      "command": "python -c \"from tensorbem.benchmarks.cummins_wigley_hull import run_campaign_wigley; import json; print(json.dumps(run_campaign_wigley(n_omega=20,omega_max=6.,n_sections=20,n_levels=6,duration=50.,dt=.02,tau_max=20.)))\""
+    },
+    {
+      "case": {
+        "title": "Cummins radiation memory kernel closure on a Wigley hull",
+        "body": "Wigley hull (mathematical parabolic hullform)",
+        "geometry": {
+          "shape": "wigley_hull",
+          "length": 3.0,
+          "beam": 0.3,
+          "draft": 0.1875,
+          "displacement": 0.075,
+          "wetted_surface": 1.3391156794462007,
+          "block_coefficient": 0.4444444444444445,
+          "displaced_mass": 76.875,
+          "density": 1025.0,
+          "L_B_ratio": 10.0,
+          "B_T_ratio": 1.5999999999999999
+        },
+        "dof_tested": "heave",
+        "dof_index": 2,
+        "sweep": {
+          "body": "Wigley hull",
+          "L": 3.0,
+          "B": 0.3,
+          "T": 0.1875,
+          "Cb": 0.4444444444444445,
+          "n_frequencies": 41,
+          "omega_range": [
+            0.5,
+            12.000000000000002
+          ],
+          "dof_labels": [
+            "surge",
+            "sway",
+            "heave",
+            "roll",
+            "pitch",
+            "yaw"
+          ]
+        }
+      },
+      "gates": [
+        {
+          "id": "W1",
+          "title": "geometry precondition (Wigley hull Cb, L, B, T, nabla, S)",
+          "threshold": "Cb in [0.3, 1.0], |nabla - L*B*T*Cb|/nabla <= 5%",
+          "passed": true,
+          "values": {
+            "gate": {
+              "passed": true,
+              "checks": {
+                "block_coefficient_range": {
+                  "passed": true,
+                  "value": 0.4444444444444445,
+                  "threshold": "[0.3, 1.0]"
+                },
+                "displacement_consistency": {
+                  "passed": true,
+                  "relative_error": 0.0,
+                  "threshold": 0.05
+                },
+                "wetted_surface_positive": {
+                  "passed": true,
+                  "value": 1.3391156794462007
+                },
+                "dimensions_positive": {
+                  "passed": true,
+                  "L": 3.0,
+                  "B": 0.3,
+                  "T": 0.1875
+                }
+              },
+              "block_coefficient": 0.4444444444444445,
+              "displacement_consistency_pct": 0.0,
+              "wetted_surface": 1.3391156794462007
+            }
+          }
+        },
+        {
+          "id": "W2",
+          "title": "round-trip closure (heave)",
+          "threshold": "pointwise relative error <= 2%",
+          "passed": false,
+          "values": {
+            "dof": 2,
+            "dof_label": "heave",
+            "damping_relative_error_max": 0.030021068524783794,
+            "added_mass_relative_error_max": 0.5439157672987793,
+            "added_mass_inf_offset_lower": 15.291005550367016,
+            "added_mass_inf_offset_upper": 16.144633468468527,
+            "added_mass_gate_reachable_by_constant_offset": true,
+            "kernel_tau_max": 20.0,
+            "kernel_dt": 0.02,
+            "round_trip": {
+              "damping_errors": [
+                0.030021068524783794,
+                0.01013751160121141,
+                0.004491638518327426,
+                0.008759170682747532,
+                0.004037676059684417,
+                0.0007091208580011213,
+                0.0009346519838766727,
+                0.004549489037822938,
+                0.000647659579971584,
+                0.00046243968409223,
+                0.001468736897543511,
+                0.0016946351461892026,
+                0.00015638092450825095,
+                0.0014130724406997731,
+                0.0012952631432506573,
+                0.00037665517103364156,
+                0.00048323423736073564,
+                0.0007937389690899634,
+                0.0003305979044029753,
+                0.0004390876094035408,
+                0.0012239204890282089,
+                0.0011913753630934663,
+                0.0006852660492973516,
+                2.3233606148562722e-05,
+                0.0008767748354756636,
+                0.0006496439334619476,
+                0.0006135051093032558,
+                0.0008938687255325349,
+                5.133901739682423e-05,
+                0.000389149390717432,
+                0.0002980067460375646,
+                3.351249260091564e-05,
+                0.00011746874241741283,
+                0.00021105891388477227,
+                0.00017542596845959021,
+                2.1167218705836562e-05,
+                4.241137306449099e-05,
+                0.00023535359278362464,
+                1.5330720671592536e-05,
+                0.00033077309807271615,
+                0.0003723661352168404,
+                0.0002549538395150066,
+                0.00012669248215808313,
+                0.000492402126754484,
+                0.0004913866824495229,
+                0.00014192868590811016,
+                0.00032902502385171036,
+                0.0005051165947982862,
+                0.00033239559419078645,
+                0.0001980816755939991,
+                0.0006437759723798758,
+                0.0006179425795461347,
+                0.00020603462058401737,
+                0.0005057681607808057,
+                0.000840332422650643,
+                0.0005343681606135372,
+                0.00017697199526020427,
+                0.0008082383704329559,
+                0.0008028102821727753,
+                0.00012144600978670293
+              ],
+              "added_mass_errors": [
+                0.1128083096287586,
+                0.10961231298170702,
+                0.11076725462078121,
+                0.10865168022937148,
+                0.10775804739964458,
+                0.10889036609010129,
+                0.10772062853482388,
+                0.10827684559256458,
+                0.10966780156449067,
+                0.10930737628806919,
+                0.1109623710271683,
+                0.11270387239902394,
+                0.11381169292735555,
+                0.11711667971605456,
+                0.11925259367599526,
+                0.12179186937671078,
+                0.12614054975647007,
+                0.12940392582713342,
+                0.13367318397535785,
+                0.1391222565229799,
+                0.14396954718670796,
+                0.1496473651503709,
+                0.15714234197953117,
+                0.1631448577312859,
+                0.17149051321012865,
+                0.1808670578013064,
+                0.1888186446017805,
+                0.19968736393542427,
+                0.21205954519304415,
+                0.2216348588094406,
+                0.23575742101524652,
+                0.25125646119059325,
+                0.26163244647424616,
+                0.27816667274339485,
+                0.2966860356253277,
+                0.3075222611624397,
+                0.32216919441037406,
+                0.3425695989724522,
+                0.3549601364026721,
+                0.36729052043132016,
+                0.3826789021879872,
+                0.3967411788106452,
+                0.40942810052421214,
+                0.417518083180983,
+                0.43075653028697025,
+                0.4432573587928568,
+                0.4515047425360375,
+                0.4607350586563999,
+                0.4722570262428821,
+                0.4798769955822218,
+                0.4889720018070201,
+                0.496432627896067,
+                0.5037798571683701,
+                0.5136812058481847,
+                0.5191444796969775,
+                0.523313050664721,
+                0.5294035916204679,
+                0.5338506203913918,
+                0.5385674349909805,
+                0.5439157672987793
+              ],
+              "omega": [
+                0.6283185307179586,
+                0.7397029624007051,
+                0.8510873940834516,
+                0.962471825766198,
+                1.0738562574489445,
+                1.1852406891316911,
+                1.2966251208144375,
+                1.4080095524971838,
+                1.5193939841799304,
+                1.630778415862677,
+                1.7421628475454234,
+                1.8535472792281698,
+                1.9649317109109163,
+                2.076316142593663,
+                2.187700574276409,
+                2.2990850059591557,
+                2.4104694376419022,
+                2.521853869324649,
+                2.6332383010073954,
+                2.7446227326901416,
+                2.856007164372888,
+                2.9673915960556347,
+                3.078776027738381,
+                3.1901604594211275,
+                3.301544891103874,
+                3.4129293227866206,
+                3.5243137544693672,
+                3.6356981861521134,
+                3.74708261783486,
+                3.8584670495176066,
+                3.9698514812003527,
+                4.081235912883099,
+                4.192620344565846,
+                4.3040047762485925,
+                4.415389207931339,
+                4.526773639614085,
+                4.638158071296832,
+                4.749542502979578,
+                4.8609269346623245,
+                4.972311366345071,
+                5.083695798027818,
+                5.195080229710564,
+                5.306464661393311,
+                5.417849093076057,
+                5.529233524758803,
+                5.64061795644155,
+                5.752002388124296,
+                5.863386819807043,
+                5.9747712514897895,
+                6.086155683172536,
+                6.197540114855283,
+                6.308924546538029,
+                6.420308978220776,
+                6.5316934099035215,
+                6.643077841586268,
+                6.754462273269015,
+                6.865846704951761,
+                6.977231136634508,
+                7.0886155683172545,
+                7.200000000000001
+              ]
+            }
+          }
+        },
+        {
+          "id": "W3",
+          "title": "causality & Kramers-Kronig (heave)",
+          "threshold": "K(t<0)==0, even parity, KK residual <= 3%",
+          "passed": false,
+          "values": {
+            "dof": 2,
+            "dof_label": "heave",
+            "causal": true,
+            "even_parity_relative_error": 0.0,
+            "kkr_relative_residual": 0.15415400581628522,
+            "kkr_absolute_residual_max": 21.801908944653235,
+            "kk_closure_relative_residual": 0.011797783481117098,
+            "kk_closure_added_mass_inf": 51.75448465102502,
+            "added_mass_inf_fit": 31.621129175625036,
+            "kernel_diagnostics": {
+              "K0": 1331.8355386114597,
+              "slope_at_zero": -0.008246534428757769,
+              "decay_ratio": 0.0042318234289933174
+            }
+          }
+        },
+        {
+          "id": "W4",
+          "title": "free decay damping ratio (heave)",
+          "threshold": "|zeta_decay - zeta_fd| / zeta_fd <= 5%",
+          "passed": false,
+          "values": {
+            "dof": 2,
+            "dof_label": "heave",
+            "mass": 76.875,
+            "stiffness": 6031.08975,
+            "omega_n": 7.552496663075631,
+            "zeta_frequency_domain": 0.13947342814681438,
+            "zeta_free_decay": 0.09007248172442997,
+            "relative_error": 0.35419611519395167,
+            "decay_rate_extrapolated": 0.9954434580770718,
+            "period_measured": 0.5708530326622605
+          }
+        },
+        {
+          "id": "W5",
+          "title": "negative control (heave)",
+          "threshold": "zeta_decay(B=0) / zeta_reference <= 0.5%",
+          "passed": true,
+          "values": {
+            "dof": 2,
+            "dof_label": "heave",
+            "zeta_zero_damping": 3.4659413137289226e-07,
+            "period_measured": 0.8591618772716731,
+            "period_exact": 0.8591588624840033,
+            "zeta_reference": 0.13947342814681438,
+            "relative_error": 2.485019089141881e-06,
+            "kernel_norm_zero": 0.0
+          }
+        }
+      ],
+      "all_passed": false,
+      "runtime_seconds": 48.91053485870361,
+      "tolerances": {
+        "round_trip": 0.02,
+        "kramers_kronig": 0.03,
+        "free_decay": 0.05,
+        "negative_control": 0.005,
+        "geometry": 0.05
+      },
+      "command": "python -c \"from tensorbem.benchmarks.cummins_wigley_hull import run_campaign_wigley; import json; print(json.dumps(run_campaign_wigley(n_omega=41,omega_max=12.,n_sections=20,n_levels=6,duration=50.,dt=.02,tau_max=20.)))\""
+    }
+  ]
+}
