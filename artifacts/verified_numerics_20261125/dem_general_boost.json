@@ -1,0 +1,17 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "9826e5edee93b2bce0aa32f6b434345e2ac57f07",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_dem3d_contact_impact.py tests/test_dem3d_contact_impact_convention.py tests/test_contact_impact_dashpot_convention.py tests/test_dem3d_restitution_verification.py tests/test_ice_thermal_stress_integration.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Free equal spheres in head-on impact along (2,-1,2), relative speed 1 m/s and target restitution 0.5. Compare stationary center with lab velocities (1,2,0) and (-1.1,0.4,2.2) m/s. Track six scalar contact observables, final center velocity, and ballistic center position at separation.",
+  "suite": {
+    "tests": 55,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "max_relative_contact_discrepancy": 4.2299497238218464e-14,
+    "max_center_velocity_error_m_s": 1.7763568394002505e-15,
+    "max_center_trajectory_error_m": 7.353672668792639e-17
+  }
+}
