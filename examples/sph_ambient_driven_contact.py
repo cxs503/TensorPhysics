@@ -10,7 +10,36 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def measure(n, omega, resistance, walls, backend, compare_fvm=False):
+def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls):
+    from tensorfem import thermal
+
+    n = len(conductivity)
+    mid = n//2
+    x = torch.linspace(0., 1., n+1, dtype=torch.float64)
+    start = torch.arange(n)
+    contact = {}
+    if resistance:
+        x = torch.cat((x[:mid+1], x[mid:]))
+        start[mid:] += 1
+        contact = dict(contact_pairs=torch.tensor([[mid, mid+1]]), contact_conductance=1/resistance)
+    fixed = [node for node, wall in zip((0, len(x)-1), walls) if wall is not None]
+    prescribed = [wall for wall in walls if wall is not None]
+    model = thermal.ThermalModel(
+        x[:, None], torch.stack((start, start+1), dim=1), conductivity, 1., capacity,
+        torch.tensor(fixed, dtype=torch.long), torch.tensor(prescribed, dtype=torch.complex128),
+        heat_source=loss*ambient, heat_loss_coefficient=loss, **contact)
+    if omega == 0:
+        state = thermal.solve_low_frequency_thermal(model).steady
+    else:
+        state = thermal.solve_harmonic_thermal(model, omega)
+    field = state.temperature
+    inward = thermal.thermal_element_nodal_power(model, field, omega)
+    left_flux = -complex(inward[mid-1, 1])
+    right_flux = complex(inward[mid, 0])
+    return complex(field[start[mid-1]+1]), complex(field[start[mid]]), left_flux, right_flux
+
+
+def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False):
     k = (1., 2.5)
     capacity = (1.3, .7)
     loss = (2., 4.)
@@ -65,6 +94,16 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False):
                           fvm_interface_imbalance_W_m2=float(abs(q-entering[i+1])),
                           solver_flux_difference_W_m2=float(abs(q-flux)),
                           solver_trace_difference_K=float(max(abs(tl-complex(left[i])), abs(tr-complex(right[i])))))
+    if compare_fem:
+        fl, fr, ql, qr = fem_contact(conductivity, layers(capacity), layers(loss),
+                                     layers(ambient, torch.complex128), omega, resistance, walls)
+        comparison.update(fem_flux_relative_error=abs(ql/exact_flux-1),
+                          fem_max_trace_error_K=max(abs(fl-exact_left), abs(fr-exact_right)),
+                          fem_interface_imbalance_W_m2=abs(ql-qr),
+                          fem_jump_error_K=abs(fl-fr-resistance*exact_flux),
+                          fem_sph_flux_difference_W_m2=abs(ql-flux))
+        if compare_fvm:
+            comparison["fem_fvm_flux_difference_W_m2"] = float(abs(ql-q))
     return dict(**comparison, columns=n, omega_rad_s=omega, contact_resistance_m2_K_W=resistance, backend=backend,
                 wall_conditions=["insulated" if w is None else "zero_temperature_phasor" for w in walls],
                 exact_flux_W_m2=[exact_flux.real, exact_flux.imag], flux_relative_error=abs(flux/exact_flux-1),
@@ -76,6 +115,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compare-fvm", action="store_true", help="also verify the unit-area finite-volume rod")
+    parser.add_argument("--compare-fem", action="store_true", help="also verify the unit-area linear finite elements")
     args = parser.parse_args()
     files = [__file__, heat.__file__]
     path = "../TensorSPH/src"
@@ -85,6 +125,11 @@ if __name__ == "__main__":
         files.append(rod.__file__)
         path += ":../TensorFVM/src"
         metrics.extend(["fvm_flux_relative_error", "fvm_max_trace_error_K"])
+    if args.compare_fem:
+        from tensorfem import thermal
+        files.append(thermal.__file__)
+        path += ":../TensorFEM/src"
+        metrics.extend(["fem_flux_relative_error", "fem_max_trace_error_K"])
     runs = []
     for backend in ("torch", "banded"):
         for walls in ((0., 0.), (None, 0.), (None, None)):
@@ -92,7 +137,7 @@ if __name__ == "__main__":
                 for resistance in (0., .25):
                     previous = None
                     for n in (16, 32, 64):
-                        row = measure(n, omega, resistance, walls, backend, args.compare_fvm)
+                        row = measure(n, omega, resistance, walls, backend, args.compare_fvm, args.compare_fem)
                         row["passed"] = True
                         for metric in metrics:
                             if previous:
@@ -106,11 +151,16 @@ if __name__ == "__main__":
                             row["passed"] &= row["fvm_interface_imbalance_W_m2"] < 1e-10
                             if n == 64:
                                 row["passed"] &= row["fvm_flux_relative_error"] < .005 and row["fvm_max_trace_error_K"] < .001
+                        if args.compare_fem:
+                            row["passed"] &= row["fem_interface_imbalance_W_m2"] < 1e-10
+                            if n == 64:
+                                row["passed"] &= (row["fem_flux_relative_error"] < .005 and row["fem_max_trace_error_K"] < .001
+                                                  and row["fem_jump_error_K"] < .001)
                         runs.append(row)
                         previous = row
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(f) for f in files],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/sph_ambient_driven_contact.py"
-                          + (" --compare-fvm" if args.compare_fvm else "")),
+                          + (" --compare-fvm" if args.compare_fvm else "") + (" --compare-fem" if args.compare_fem else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
