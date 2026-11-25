@@ -19,6 +19,7 @@ SHEETS = np.array([.2j, -.3+.4j])
 
 
 INWARD_FLUX = .45-.25j  # positive into the annulus on either physical wall
+DOUBLE_FLUX = (INWARD_FLUX, -.17+.31j)
 RESERVOIRS = np.array([-.5+.3j, .4+.8j])
 
 
@@ -44,7 +45,9 @@ def continuum(mode, omega, films=(None, None), fractions=FRACTIONS, sheet_h=(0.,
     equations = [bore if films[0] is None else bore+q_bore/films[0],
                  exterior if films[1] is None else exterior-q_ext/films[1]]
     loads = list(WALLS)
-    if flux_wall == "bore":
+    if flux_wall == "both":
+        equations, loads = [q_bore, -q_ext], list(DOUBLE_FLUX)
+    elif flux_wall == "bore":
         equations[0], loads[0] = q_bore, INWARD_FLUX
     elif flux_wall == "exterior":
         equations[1], loads[1] = -q_ext, INWARD_FLUX
@@ -81,7 +84,9 @@ def continuum(mode, omega, films=(None, None), fractions=FRACTIONS, sheet_h=(0.,
 def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flux_wall=None):
     wall_data = list(WALLS)
     fluxes = [None, None]
-    if flux_wall is not None:
+    if flux_wall == "both":
+        wall_data, fluxes = [None, None], list(DOUBLE_FLUX)
+    elif flux_wall is not None:
         side = ("bore", "exterior").index(flux_wall)
         wall_data[side] = None
         fluxes[side] = INWARD_FLUX
@@ -101,7 +106,7 @@ def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flu
                                                 return_angular_rate=True)
             sol = bem.solve(omega, wall_data, CAPACITY, sheet_generation=SHEETS, volume_generation=VOLUME,
                             sheet_film_coefficients=sheet_h, sheet_ambient_temperatures=RESERVOIRS,
-                            wall_inward_flux=INWARD_FLUX if flux_wall else None)
+                            wall_inward_flux=DOUBLE_FLUX if flux_wall == "both" else INWARD_FLUX if flux_wall else None)
             boundary = np.r_[sol.sheet_temperature, sol.incoming_flux, sol.outgoing_flux, sol.wall_heat_rates, sol.wall_surface_temperatures, sol.contact_temperatures.ravel()]
             fv = storing_rings.solve_storing_rings(mesh, np.repeat(K,n), [n, 2*n], wall_data, omega, wall_fluxes=fluxes,
                 contact_resistances=CONTACT, sheet_capacities=CAPACITY, sheet_generation=SHEETS,
@@ -147,12 +152,12 @@ if __name__ == "__main__":
     parser.add_argument("--film-walls", choices=("none", "bore", "exterior", "both"), default="none")
     parser.add_argument("--inner-fractions", type=float, nargs=2, default=FRACTIONS, metavar=("RING1", "RING2"))
     parser.add_argument("--sheet-films", nargs=2, type=float, default=(0., 0.), metavar=("RING1", "RING2"))
-    parser.add_argument("--flux-wall", choices=("bore", "exterior"), help="prescribe a fixed inward flux phasor at this wall")
+    parser.add_argument("--flux-wall", choices=("bore", "exterior", "both"), help="prescribe a fixed inward flux phasor at this wall")
     args = parser.parse_args()
     case = args.film_walls
     fractions = args.inner_fractions
     films = (7. if case in ("bore", "both") else None, 3. if case in ("exterior", "both") else None)
-    if args.flux_wall and case in (args.flux_wall, "both"):
+    if args.flux_wall and case != "none" and (args.flux_wall == "both" or case in (args.flux_wall, "both")):
         parser.error("the flux wall cannot also have a film")
     runs = [row for mode in (0, 1, 2) for row in measure(mode, films, fractions, args.sheet_films, args.flux_wall)]
     passed = all(row["passed"] for row in runs)
@@ -160,8 +165,9 @@ if __name__ == "__main__":
         sheet_film_coefficients_W_m2_K=args.sheet_films,
         sheet_ambient_K=[[z.real,z.imag] for z in RESERVOIRS],
         inner_resistance_fractions=list(fractions), flux_wall=args.flux_wall,
-        inward_flux_W_m2=[INWARD_FLUX.real, INWARD_FLUX.imag] if args.flux_wall else None,
-        fixed_boundary_data_K=[None if args.flux_wall == side else [z.real, z.imag]
+        inward_flux_W_m2=([[q.real, q.imag] for q in DOUBLE_FLUX] if args.flux_wall == "both" else
+                          [INWARD_FLUX.real, INWARD_FLUX.imag] if args.flux_wall else None),
+        fixed_boundary_data_K=[None if args.flux_wall in (side, "both") else [z.real, z.imag]
                                for side, z in zip(("bore", "exterior"), WALLS)],
         phasor_encoding="[real, imaginary], exp(i omega t)",
         columns=["sheet T1 (K)", "sheet T2 (K)", "incoming q1 (W/m²)", "incoming q2 (W/m²)",
