@@ -1,4 +1,5 @@
 """Bulk and film exchange in a unit slab with two storing walls and moving reservoirs."""
+import argparse
 import json
 
 import numpy as np
@@ -67,13 +68,13 @@ def fvm(times,n):
     return cell,wall[:,[0,-1]],np.column_stack((heat["left"][:,0],heat["right"])),heat["bulk_exchange"],heat["end_input"]
 
 
-def particles(times,n):
+def particles(times,n,method="sdirk2"):
     mid = (np.arange(n)+.5)/n
     films = tuple((FILM[i],lambda t,i=i: air(t)[i]) for i in range(2))
     states,heat,wall,bulk,external = sph.solve_transient_layered_slab(
         background(0.,mid)+np.cos(WAVE*(mid-PEAK)),times,1/n,(None,None),conductivity=np.full(n,K),
         volumetric_heat_capacity=C,heat_loss_coefficient=H,bulk_ambient_temperature=lambda t: reservoir(t,mid),
-        method="sdirk2",x_wall_films=films,wall_areal_heat_capacity=CW,
+        method=method,x_wall_films=films,wall_areal_heat_capacity=CW,
         initial_wall_temperatures=background(0.,ENDS)+np.cos(WAVE*(ENDS-PEAK)),
         return_wall_temperatures=True,return_bulk_exchange=True,return_external_heat=True,return_x_heat=True)
     return tuple(v.numpy() for v in (states,wall,heat,bulk,external))
@@ -106,19 +107,32 @@ def fem(times,n):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--exponential",action="store_true",help="also test SPH exponential integration on four fixed time intervals")
+    methods = [("DG_P2",dg),("FEM_LINE2",fem),("FVM",fvm),("SPH",particles)]
+    if parser.parse_args().exponential:
+        methods.append(("SPH_exponential",lambda t,n: particles(t,n,method="exponential")))
     rows,previous = [],{}
     for n in (12,24,48,96):
-        times = np.linspace(0.,.3,n+1)
-        target = exact(times,n)
-        for name,solve in (("DG_P2",dg),("FEM_LINE2",fem),("FVM",fvm),("SPH",particles)):
+        for name,solve in methods:
+            steps = 4 if name=="SPH_exponential" else n
+            times = np.linspace(0.,.3,steps+1)
+            target = exact(times,n)
             u,wall,heat,bulk,external = solve(times,n)
+            partition = {}
+            if name=="SPH_exponential":
+                uc,wc,qc,bc,ec = solve(times[[0,-1]],n)
+                for key,difference in (("particle_K",uc[-1]-u[-1]),("wall_K",wc[-1]-wall[-1]),
+                        ("section_J_m2",qc[0]-heat.sum(0)),("bulk_J_m2",bc[0]-bulk.sum(0)),
+                        ("external_J_m2",ec[0]-external.sum(0))):
+                    partition[key] = float(abs(difference).max())
             def cumulative_error(v,ref):
                 return float(abs(np.cumsum(v-ref,axis=0)).max())
             ref_temperature = target[0]
-            if name=="SPH":
+            if name.startswith("SPH"):
                 mid = (np.arange(n)+.5)/n
                 ref_temperature = background(times[:,None],mid)+np.exp(-RATE*times[:,None])*np.cos(WAVE*(mid-PEAK))
-            sample_key = "particle_temperature_K" if name=="SPH" else "cell_mean_K"
+            sample_key = "particle_temperature_K" if name.startswith("SPH") else "cell_mean_K"
             errors = dict(wall_temperature_K=float(abs(wall-target[1]).max()),
                           section_heat_J_m2=cumulative_error(heat,target[2]),bulk_heat_J_m3=n*cumulative_error(bulk,target[3]),
                           external_heat_J_m2=cumulative_error(external,target[4]))
@@ -126,8 +140,9 @@ if __name__ == "__main__":
             balance = float(abs(C/n*np.diff(u,axis=0)+np.diff(heat)-bulk).max())
             surface_balance = float(abs(CW*np.diff(wall,axis=0)+heat[:,[0,-1]]*SIGN-external).max())
             orders = {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()} if name in previous else {}
-            rows.append(dict(solver=name,temperature_sampling="center" if name=="SPH" else "cell_mean",cells=n,steps=n,errors=errors,orders=orders,cell_balance_J_m2=balance,
-                             wall_balance_J_m2=surface_balance,passed=max(balance,surface_balance)<1e-11
+            rows.append(dict(solver=name,temperature_sampling="center" if name.startswith("SPH") else "cell_mean",cells=n,steps=steps,errors=errors,orders=orders,cell_balance_J_m2=balance,
+                             wall_balance_J_m2=surface_balance,**({"partition_error":partition} if partition else {}),
+                             passed=max(balance,surface_balance,*partition.values())<1e-11
                              and all(v>1.7 for v in orders.values())))
             previous[name] = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(p) for p in (__file__,heat_1d.__file__,thermal.__file__,rod.__file__,sph.__file__)]),
