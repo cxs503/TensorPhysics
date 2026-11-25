@@ -1,0 +1,177 @@
+{
+  "solver": "fvm",
+  "passed": true,
+  "runs": [
+    {
+      "max_cell_balance_error_J_m2": 3.8163916471489756e-16,
+      "columns": 8,
+      "steps": 64,
+      "method": "theta",
+      "final_mean_K": 0.49901071283248033,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.0009488290058858317,
+      "max_mean_error_K": 0.0008670017843812605,
+      "max_mean_rise_error_K": 0.0008726348225017722,
+      "max_interior_flux_error_W_m2": 0.0051540189709124995,
+      "max_energy_residual_J_m2": 3.885780586188048e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "max_cell_balance_error_J_m2": 3.152859917587847e-16,
+      "columns": 16,
+      "steps": 128,
+      "method": "theta",
+      "final_mean_K": 0.49900905101575177,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.0002377208865878,
+      "max_mean_error_K": 0.0002169479739493052,
+      "max_mean_rise_error_K": 0.0002183437690635448,
+      "max_interior_flux_error_W_m2": 0.0015340945867441391,
+      "max_energy_residual_J_m2": 6.730727086790012e-16,
+      "orders": [
+        1.9968794473744564,
+        1.9986858496045987,
+        1.9987766845052295,
+        1.7483104105183964
+      ],
+      "passed": true
+    },
+    {
+      "max_cell_balance_error_J_m2": 4.0874421902703517e-16,
+      "columns": 32,
+      "steps": 256,
+      "method": "theta",
+      "final_mean_K": 0.49900863700444403,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 5.947701865122168e-05,
+      "max_mean_error_K": 5.424935169000278e-05,
+      "max_mean_rise_error_K": 5.459762870263507e-05,
+      "max_interior_flux_error_W_m2": 0.0004159573852633436,
+      "max_energy_residual_J_m2": 1.2698175844150228e-15,
+      "orders": [
+        1.9988644289564266,
+        1.9996713113016458,
+        1.9996911629788605,
+        1.8828797996798474
+      ],
+      "passed": true
+    },
+    {
+      "max_cell_balance_error_J_m2": 4.2365199889871086e-16,
+      "columns": 64,
+      "steps": 512,
+      "method": "theta",
+      "final_mean_K": 0.4990085335920818,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 1.4870739384942322e-05,
+      "max_mean_error_K": 1.356311050895731e-05,
+      "max_mean_rise_error_K": 1.3650132067499765e-05,
+      "max_interior_flux_error_W_m2": 0.00010838528941281567,
+      "max_energy_residual_J_m2": 1.3010426069826053e-15,
+      "orders": [
+        1.9998559514664094,
+        1.9999178183798336,
+        1.999923383478738,
+        1.9402667718910855
+      ],
+      "passed": true
+    },
+    {
+      "max_cell_balance_error_J_m2": 3.3480163086352377e-16,
+      "columns": 8,
+      "steps": 64,
+      "method": "sdirk2",
+      "final_mean_K": 0.49900848641406337,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.0009431832239936155,
+      "max_mean_error_K": 0.0008670017843812605,
+      "max_mean_rise_error_K": 0.0008669890691111459,
+      "max_interior_flux_error_W_m2": 0.001690904286393069,
+      "max_energy_residual_J_m2": 5.134781488891349e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "max_cell_balance_error_J_m2": 4.198030811863873e-16,
+      "columns": 16,
+      "steps": 128,
+      "method": "sdirk2",
+      "final_mean_K": 0.49900849247990464,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.000236318438327221,
+      "max_mean_error_K": 0.0002169479739493052,
+      "max_mean_rise_error_K": 0.00021694132452049208,
+      "max_interior_flux_error_W_m2": 0.0004456092640188203,
+      "max_energy_residual_J_m2": 9.228728892196614e-16,
+      "orders": [
+        1.996805860504938,
+        1.9986858496045987,
+        1.9987089102841105,
+        1.9239438672401403
+      ],
+      "passed": true
+    },
+    {
+      "max_cell_balance_error_J_m2": 3.4445103019864476e-16,
+      "columns": 32,
+      "steps": 256,
+      "method": "sdirk2",
+      "final_mean_K": 0.49900849710920775,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 5.9126720248547926e-05,
+      "max_mean_error_K": 5.424935169000278e-05,
+      "max_mean_rise_error_K": 5.4247331564283297e-05,
+      "max_interior_flux_error_W_m2": 0.00011467094076911266,
+      "max_energy_residual_J_m2": 1.6063539387545234e-15,
+      "orders": [
+        1.9988500390972508,
+        1.9996713113016458,
+        1.9996808159664936,
+        1.958279387545007
+      ],
+      "passed": true
+    },
+    {
+      "max_cell_balance_error_J_m2": 3.970348355641917e-16,
+      "columns": 64,
+      "steps": 512,
+      "method": "sdirk2",
+      "final_mean_K": 0.49900849858439844,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 1.4783172522958576e-05,
+      "max_mean_error_K": 1.356311050895731e-05,
+      "max_mean_rise_error_K": 1.3562565573888019e-05,
+      "max_interior_flux_error_W_m2": 2.929488984571016e-05,
+      "max_energy_residual_J_m2": 2.707903345999796e-15,
+      "orders": [
+        1.9998543428673174,
+        1.9999178183798336,
+        1.9999220599956504,
+        1.968778908170003
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "9d99c76730daa237a7fb3b8db298525b2c813330",
+      "file": "sph_flux_wall_bulk_loss.py",
+      "source_sha256": "8269048d3d3c93f200e93483d43a138f8613bde097d5a88ada97f7dbe410d53f"
+    },
+    {
+      "commit": "4647d87121b148d7212da19f9c3e2409e287cbca",
+      "file": "rod.py",
+      "source_sha256": "2d911ffd6a32943d52ebc789fe7864f1db37433ba361577df96c6ec807e92492"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/sph_flux_wall_bulk_loss.py --solver fvm"
+}
