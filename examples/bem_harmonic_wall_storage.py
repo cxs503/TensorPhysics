@@ -110,6 +110,23 @@ def two_walls(n, omega, bulk_exchange=False, reservoir_gradient=0j):
                 surface_storage_error_W_m2=trace_error(storage, exact_surface),
                 bulk_storage_error_W_m=float(abs(bulk_rate-1j*omega*c*exact_mean)),
                 energy_residual_W_m=float(abs((external-storage).sum(axis=0) @ weights+heater+distributed_heat-bulk_rate)))
+    # Both physical windows cut through each end wall's first and last
+    # intersected panels. The slab solution is uniform along each wall.
+    panels = np.arange(mesh.panel_count)
+    window_errors = dict(bulk=[], storage=[], external=[])
+    defects = []
+    for side_id, side in enumerate((left, right)):
+        for lo, hi in ((.13, .77), (.34, .91)):
+            begin = np.clip(n*lo-np.arange(n), 0., 1.)
+            end = np.clip(n*hi-np.arange(n), 0., 1.)
+            loads = {}
+            for component, exact in (("bulk", exact_flux), ("storage", exact_surface), ("external", exact_external)):
+                loads[component] = result.panel_inward_power(panels[side], begin, end, component=component).sum()
+                window_errors[component].append(abs(loads[component]-(hi-lo)*exact[side_id]))
+            defects.append(abs(loads["external"]-loads["bulk"]-loads["storage"]))
+    for component, errors in window_errors.items():
+        row[f"window_{component}_power_error_W_m"] = float(max(errors))
+    row["window_balance_defect_W_m"] = float(max(defects))
     if bulk_exchange:
         row["distributed_heat_error_W_m"] = float(abs(distributed_heat-loss*(reservoir+reservoir_gradient/2-exact_mean)))
         row["distributed_heat_W_m"] = [distributed_heat.real, distributed_heat.imag]
@@ -126,6 +143,7 @@ def verify_two_walls(bulk_exchange=False, reservoir_gradient=0j):
     for omega in (.5, 4.):
         series = [two_walls(n, omega, bulk_exchange, reservoir_gradient) for n in (8, 16, 32)]
         rows.extend(series)
+        passed &= all(row["window_balance_defect_W_m"] < 1e-12 for row in series)
         for metric in series[-1]:
             if "_error_" in metric or metric == "energy_residual_W_m":
                 errors = [row[metric] for row in series]
