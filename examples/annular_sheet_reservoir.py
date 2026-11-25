@@ -134,7 +134,7 @@ def transient_decay(n,mode,power_walls):
     return dict(cells_per_layer=n,steps=len(dt),mode=mode,power_walls=power_walls,errors=errors,sheet_balance_J_m=float(abs(balance).max()))
 
 
-def periodic_cycle(steps,cs):
+def periodic_cycle(steps,cs,method="theta"):
     """Isolate time error using harmonic response on the identical radial grid."""
     n,omega,mode = 12,6.,2
     radii = np.r_[np.linspace(A,B,n+1),np.linspace(B,C,n+1)[1:]]
@@ -149,15 +149,17 @@ def periodic_cycle(steps,cs):
     phase = np.exp(1j*(.37+omega*t))
     integrated = phase[0]*np.expm1(1j*omega*t[1:])/(1j*omega)
     drive = (phase*source).real
-    u,s,hi,ho,ext = annulus.solve_transient_annular_sheet(radii,k,cv,(None,None),t,(phase[0]*exact).real,n,
+    u,s,hi,ho,ext,traces = annulus.solve_transient_annular_sheet(radii,k,cv,(None,None),t,(phase[0]*exact).real,n,
                   initial_sheet_temperature=(phase[0]*sheet).real,wall_fluxes=(phase*fluxes[:,None]).real,
-                  sheet_source_intervals=np.column_stack((drive[:-1],drive[1:])),ambient=(phase*ambient).real,**common)
+                  sheet_source_intervals=np.column_stack((drive[:-1],drive[1:])),ambient=(phase*ambient).real,return_contact_temperatures=True,method=method,**common)
     errors = dict(field_K=float(abs(u-(phase[:,None]*exact).real).max()),
                   sheet_K=float(abs(s-(phase*sheet).real).max()),
                   radial_heat_J_m=float(max(abs(h.cumsum(0)-(integrated[:,None]*q).real).max()
                                             for h,q in ((hi,qi),(ho,qo)))),
                   external_heat_J_m=float(abs(ext.cumsum()-(integrated*(2*np.pi*B*H*(sheet-ambient))).real).max()))
-    return dict(steps=steps,sheet_capacity_J_m2_K=cs,omega_rad_s=omega,errors=errors)
+    contact = np.array([sheet+FRAC*R*qi[-1]/(2*np.pi*B),sheet-(1-FRAC)*R*qo[0]/(2*np.pi*B)])
+    errors["contact_trace_K"] = float(abs(traces-(phase[:,None]*contact).real).max())
+    return dict(steps=steps,method=method,sheet_capacity_J_m2_K=cs,omega_rad_s=omega,errors=errors)
 
 
 if __name__=="__main__":
@@ -165,6 +167,7 @@ if __name__=="__main__":
     parser.add_argument("--harmonic",action="store_true",help="also verify FVM storage and phase against modified Bessel functions")
     parser.add_argument("--transient",action="store_true",help="also verify cumulative heat for two decaying Bessel modes")
     parser.add_argument("--cycle",action="store_true",help="verify temporal order over a forced harmonic cycle at fixed spatial resolution")
+    parser.add_argument("--sdirk2",action="store_true",help="also check L-stable time integration against the periodic sheet phasors")
     args = parser.parse_args()
     rows = []
     for omega in ((0.,.6,6.) if args.harmonic else (0.,)):
@@ -189,11 +192,13 @@ if __name__=="__main__":
                 row.update(orders=orders,passed=row["sheet_balance_J_m"]<1e-11 and all(v>1.8 for v in orders.values()))
                 rows.append(row)
                 previous = errors
-    if args.cycle:
+    for method,enabled in (("theta",args.cycle),("sdirk2",args.sdirk2)):
+        if not enabled:
+            continue
         for cs in (0.,.43):
             previous = {}
             for steps in (16,32,64,128):
-                row = periodic_cycle(steps,cs)
+                row = periodic_cycle(steps,cs,method)
                 errors = row["errors"]
                 orders = {k:float(np.log2(previous[k]/e)) for k,e in errors.items()} if previous else {}
                 row.update(orders=orders,passed=all(v>1.85 for v in orders.values()))
