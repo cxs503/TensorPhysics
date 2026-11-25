@@ -1,0 +1,43 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "18f4eff8a97cab96d7a074d1fb6e496b37a1ffb0",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_1d.py tests/test_advection_2d.py tests/test_advection_3d.py -o junit_family=legacy --junitxml=results.xml",
+  "references": [
+    "Oblique cosine wave on (2,0.75,3), analytic displacement and exact mass 4.5, three rectangular mesh resolutions.",
+    "Individual periodic coordinate profiles on (2,0.5,4), exact cell shifts after 2^40+1/4 time units."
+  ],
+  "counts": {
+    "tests": 35,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "results": {
+    "test_physical_cuboid_transport_against_characteristics": {
+      "absolute_l2_n4": 0.025803479502994442,
+      "absolute_l2_n8": 0.004488834279295681,
+      "absolute_l2_n16": 0.0007096539112646954
+    },
+    "test_physical_axis_profile_wraps_after_many_box_crossings[0]": {
+      "absolute_l2": 3.6464191964337324e-16
+    },
+    "test_physical_axis_profile_wraps_after_many_box_crossings[1]": {
+      "absolute_l2": 9.77647852991539e-17
+    },
+    "test_physical_axis_profile_wraps_after_many_box_crossings[2]": {
+      "absolute_l2": 1.1173425327851928e-15
+    }
+  },
+  "fractional_turn_verification": {
+    "commit": "8fa2f45ebac7b47e6ca18f198c7d7c72799c487a",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_1d.py tests/test_advection_2d.py tests/test_advection_3d.py -o junit_family=legacy --junitxml=results.xml",
+    "counts": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "three_axis_half_turn_absolute_l2": 8.993031859002907e-16,
+    "overflow_control": "2^1023 times 2^1023 modulo 3 equals 1. A point at 0.25 has periodic departure coordinate 2.25, recovered exactly."
+  }
+}
