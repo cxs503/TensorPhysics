@@ -1,0 +1,50 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "8e9060360297879c2c3c653b0621f89ebb34a34e",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal.py tests/test_thermal_poisson_2d.py tests/test_thermal_2d_analytic.py tests/test_thermal_2d_reference.py tests/test_thermal_transient_reference.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "CPU float64. Two insulated unit Q4 slabs, k=2,5, volumetric capacity=3,4, interface conductance 1.5 W/K, initial temperature 10 and 2. Independent four-DOF 1-D matrix exponential at t=0.2 for the same spatial discretization. Compare integrated contact heat and each layer storage change on every nonuniform interval for dense and sparse backward Euler, Crank-Nicolson and SDIRK2.",
+  "suite": {
+    "tests": 165,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_transient_contact_heat_against_two_layer_relaxation[theta-1.0-1-False]": {
+      "cumulative_heat_error_8_J": 0.021516783577899545,
+      "cumulative_heat_error_16_J": 0.010866931379823086,
+      "cumulative_heat_error_32_J": 0.005458755949494076,
+      "max_layer_step_balance_error_J": 9.506284648352903e-15
+    },
+    "test_transient_contact_heat_against_two_layer_relaxation[theta-1.0-1-True]": {
+      "cumulative_heat_error_8_J": 0.021516783577899767,
+      "cumulative_heat_error_16_J": 0.010866931379823308,
+      "cumulative_heat_error_32_J": 0.005458755949491856,
+      "max_layer_step_balance_error_J": 1.1504686092678185e-14
+    },
+    "test_transient_contact_heat_against_two_layer_relaxation[theta-0.5-2-False]": {
+      "cumulative_heat_error_8_J": 0.00043212206215659243,
+      "cumulative_heat_error_16_J": 0.00010793975947764878,
+      "cumulative_heat_error_32_J": 2.6984451955591737e-05,
+      "max_layer_step_balance_error_J": 1.2587153541687712e-14
+    },
+    "test_transient_contact_heat_against_two_layer_relaxation[theta-0.5-2-True]": {
+      "cumulative_heat_error_8_J": 0.0004321220621559263,
+      "cumulative_heat_error_16_J": 0.00010793975947764878,
+      "cumulative_heat_error_32_J": 2.6984451952483113e-05,
+      "max_layer_step_balance_error_J": 8.243405957841787e-15
+    },
+    "test_transient_contact_heat_against_two_layer_relaxation[sdirk2-0.5-2-False]": {
+      "cumulative_heat_error_8_J": 0.00021518430927258692,
+      "cumulative_heat_error_16_J": 5.3082721370056873e-05,
+      "cumulative_heat_error_32_J": 1.318383344317553e-05,
+      "max_layer_step_balance_error_J": 8.132383655379272e-15
+    },
+    "test_transient_contact_heat_against_two_layer_relaxation[sdirk2-0.5-2-True]": {
+      "cumulative_heat_error_8_J": 0.0002151843092734751,
+      "cumulative_heat_error_16_J": 5.3082721368724606e-05,
+      "cumulative_heat_error_32_J": 1.3183833442065307e-05,
+      "max_layer_step_balance_error_J": 7.341349750333848e-15
+    }
+  }
+}
