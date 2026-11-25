@@ -23,7 +23,29 @@ def measure(n, method, solver="sph"):
     dt = np.diff(times)
     initial = steady-.4+perturbation
     bulk_metrics = {}
-    if solver == "fem":
+    if solver == "dg":
+        import torch
+        from tensordg import poisson_face_powers_2d, solve_transient_diffusion_2d
+
+        def initial_field(x, y):
+            profile = (west*torch.cosh(mu*(1-x))+east*torch.cosh(mu*x))/(k*mu*np.sinh(mu))
+            return profile-.4+.15*torch.cos(torch.pi*x)
+
+        options = dict(bc=dict.fromkeys(("left", "right", "top", "bottom"), "neumann"),
+                       neumann_flux={"left": west, "right": east}, conductivity=k)
+        _, _, states, averages = solve_transient_diffusion_2d(
+            initial_field, times, ncells=(n, 2), degree=1, capacity=capacity, reaction=loss,
+            method=method, return_interval_means=True, **options)
+        # For degree one the constant mode is both the cell mean and center value.
+        history = states[..., 0, 0].numpy().transpose(0, 2, 1)
+        cuts = np.stack([poisson_face_powers_2d(avg, **options)[0].sum(1).numpy()
+                         for avg in averages])*dt[:, None]
+        column_mean = history.mean(axis=1)
+        sink = loss*dt[:, None]*averages[..., 0, 0].mean(dim=2).numpy()/n
+        residual = capacity*np.diff(column_mean, axis=0)/n + sink + np.diff(cuts, axis=1)
+        bulk_metrics["max_column_balance_error_J_m2"] = float(abs(residual).max())
+        bulk_metrics["max_wall_heat_error_J_m2"] = float(abs(cuts[:, [0, -1]]-dt[:, None]*[west, -east]).max())
+    elif solver == "fem":
         import torch
         from tensorfem import thermal
 
@@ -89,9 +111,13 @@ def measure(n, method, solver="sph"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("sph", "fvm", "fem"), default="sph")
+    parser.add_argument("--solver", choices=("sph", "fvm", "fem", "dg"), default="sph")
     solver = parser.parse_args().solver
-    if solver == "fem":
+    if solver == "dg":
+        from tensordg import transient_diffusion_2d as implementation
+        from tensordg import poisson_2d_bc
+        repo = "TensorDG"
+    elif solver == "fem":
         from tensorfem import thermal as implementation
         repo = "TensorFEM"
     elif solver == "fvm":
@@ -100,6 +126,10 @@ if __name__ == "__main__":
     else:
         from tensorsph import heat_conduction_2d as implementation
         repo = "TensorSPH"
+    source_files = [__file__, implementation.__file__]
+    if solver == "dg":
+        source_files.append(poisson_2d_bc.__file__)
+    module_path = f"../{repo}" if solver == "dg" else f"../{repo}/src"
     runs = []
     for method in ("theta", "sdirk2"):
         previous = None
@@ -109,6 +139,7 @@ if __name__ == "__main__":
                                                    "max_mean_rise_error_K", "max_interior_flux_error_W_m2")])
             orders = [] if previous is None else np.log2(previous/errors).tolist()
             row.update(orders=orders, passed=bool(row["max_energy_residual_J_m2"] < 1e-11
+                       and row.get("max_column_balance_error_J_m2", 0.) < 1e-11
                        and row.get("max_cell_balance_error_J_m2", 0.) < 1e-11
                        and row.get("max_wall_heat_error_J_m2", 0.) < 1e-11
                        and row.get("max_internal_face_mismatch_J_m2", 0.) < 1e-11
@@ -116,7 +147,7 @@ if __name__ == "__main__":
             runs.append(row)
             previous = errors
     passed = all(row["passed"] for row in runs)
-    print(json.dumps(dict(solver=solver, passed=passed, runs=runs, sources=[provenance(__file__), provenance(implementation.__file__)],
-                          reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../{repo}/src python examples/sph_flux_wall_bulk_loss.py --solver {solver}"),
+    print(json.dumps(dict(solver=solver, passed=passed, runs=runs, sources=[provenance(path) for path in source_files],
+                          reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={module_path} python examples/sph_flux_wall_bulk_loss.py --solver {solver}"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
