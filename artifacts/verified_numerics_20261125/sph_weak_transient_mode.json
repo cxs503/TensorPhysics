@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "wall_K": 0.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "theta",
+      "max_history_error_over_amplitude": 0.009038054859037692,
+      "final_error_over_amplitude": 0.008452097586009427,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "wall_K": 0.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "theta",
+      "max_history_error_over_amplitude": 0.00230684188354896,
+      "final_error_over_amplitude": 0.0021234462528486597,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "wall_K": 0.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "theta",
+      "max_history_error_over_amplitude": 0.000594226653206964,
+      "final_error_over_amplitude": 0.0005092349794795781,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "wall_K": 305.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "theta",
+      "max_history_error_over_amplitude": 0.009038054859037692,
+      "final_error_over_amplitude": 0.008452097586009427,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "wall_K": 305.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "theta",
+      "max_history_error_over_amplitude": 0.00230684188354896,
+      "final_error_over_amplitude": 0.0021234462528486597,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "wall_K": 305.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "theta",
+      "max_history_error_over_amplitude": 0.000594226653206964,
+      "final_error_over_amplitude": 0.0005092349794795781,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "wall_K": 0.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "sdirk2",
+      "max_history_error_over_amplitude": 0.009035622752547712,
+      "final_error_over_amplitude": 0.008466393342778017,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "wall_K": 0.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "sdirk2",
+      "max_history_error_over_amplitude": 0.002305349872978979,
+      "final_error_over_amplitude": 0.002139171539762119,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "wall_K": 0.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "sdirk2",
+      "max_history_error_over_amplitude": 0.000581925492010138,
+      "final_error_over_amplitude": 0.0005253309868234468,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "wall_K": 305.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "sdirk2",
+      "max_history_error_over_amplitude": 0.009035622752547712,
+      "final_error_over_amplitude": 0.008466393342778017,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "wall_K": 305.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "sdirk2",
+      "max_history_error_over_amplitude": 0.002305349872978979,
+      "final_error_over_amplitude": 0.002139171539762119,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "wall_K": 305.0,
+      "amplitude_K": 5.684341886080802e-14,
+      "method": "sdirk2",
+      "max_history_error_over_amplitude": 0.000581925492010138,
+      "final_error_over_amplitude": 0.0005253309868234468,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "da50fd01a08f12bce9d710156f2bc819e609d247",
+      "file": "sph_weak_transient_mode.py",
+      "source_sha256": "4baa688caede396338155146ef867b738edf0d1d80e90fd371d273fe5d47a988"
+    },
+    {
+      "commit": "31e57774aa70d249c5ee9741992cb70c931c49a3",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "bae8ef30454c2d2f9ee18069b5e30576c5d686b64cc86b07e42b1d2d2e62a58b"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_weak_transient_mode.py"
+}
