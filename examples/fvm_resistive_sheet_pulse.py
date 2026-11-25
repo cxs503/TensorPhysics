@@ -10,8 +10,7 @@ import dem_resistive_pulse as analytic
 import dg_reversing_wall_pulse as pulse
 
 
-def fvm_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop):
-    from tensorfvm.cht import rod
+def sheet_cell_profiles(n, resistance, capacity, h, k, sheet_shape):
 
     dx = 1/n
     sheet = n//2
@@ -27,11 +26,33 @@ def fvm_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, star
     cv = np.ones(n+1)
     cv[sheet] = capacity/dx
     generation = np.insert(mode, sheet, capacity*sheet_shape/dx)
+    return widths, conductivity, cv, generation
+
+
+def fvm_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop):
+    from tensorfvm.cht import rod
+
+    sheet = n//2
+    widths, conductivity, cv, generation = sheet_cell_profiles(n, resistance, capacity, h, k, sheet_shape)
     states, _, _, _, ledger = rod.solve_transient_stepped_rod(
         widths, 1., conductivity, cv, (0., 0.), grid, np.zeros(n+1), method=method,
         source=lambda t: generation if start <= t < stop else 0.,
         load_jump_times=(start, stop), flux_order=1, return_step_heat=True)
     return states[:, sheet], ledger["left"][:, sheet], ledger["right"][:, sheet], -ledger["end_input"][:, 1]
+
+
+def sph_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop):
+    from tensorsph import heat_conduction_2d as heat
+
+    widths, conductivity, cv, generation = sheet_cell_profiles(n, resistance, capacity, h, k, sheet_shape)
+    # Compact support gives adjacent-column exchange across each half sheet.
+    # Cuts n/2 and n/2+1 are its left and right faces in the returned ledger.
+    states, cuts = heat.solve_transient_layered_slab(
+        np.zeros(n+1), grid, widths[0], (0., 0.), conductivity=conductivity,
+        volumetric_heat_capacity=cv, h_factor=.9, method=method, return_x_heat=True,
+        heat_source=lambda t: generation if start <= t < stop else 0., load_jump_times=(start, stop))
+    sheet = n//2
+    return states[:, sheet].numpy(), cuts[:, sheet].numpy(), cuts[:, sheet+1].numpy(), cuts[:, -1].numpy()
 
 
 def fem_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop):
@@ -82,7 +103,7 @@ def measure(n, resistance, capacity, width, method, solver="fvm", time_refinemen
     refinement = (n//4)*time_refinement
     grid = np.r_[np.concatenate([np.linspace(a, b, refinement, endpoint=False)
                                  for a, b in zip(knots, knots[1:])]), knots[-1]]
-    integrate = fem_step_heat if solver == "fem" else fvm_step_heat
+    integrate = {"fem": fem_step_heat, "fvm": fvm_step_heat, "sph": sph_step_heat}[solver]
     sheet_temperature, left_steps, right_steps, wall_heat = integrate(
         n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop)
     steps = refinement*np.arange(knots.size)
@@ -116,18 +137,22 @@ def measure(n, resistance, capacity, width, method, solver="fvm", time_refinemen
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("fem", "fvm"), default="fvm")
+    parser.add_argument("--solver", choices=("fem", "fvm", "sph"), default="fvm")
     parser.add_argument("--time-refinement", type=int, choices=(1, 2, 4, 8),
-                        help="multiplier on n/4 substeps per smooth interval (FEM defaults to 4, FVM to 1)")
+                        help="multiplier on n/4 substeps per smooth interval (FEM defaults to 4, FVM and SPH to 1)")
     args = parser.parse_args()
     solver = args.solver
     factor = args.time_refinement or (4 if solver == "fem" else 1)
     if solver == "fem":
         from tensorfem import thermal as implementation
         path = "../TensorFEM/src"
+    elif solver == "sph":
+        from tensorsph import heat_conduction_2d as implementation
+        path = "../TensorSPH/src"
     else:
         from tensorfvm.cht import rod as implementation
         path = "../TensorFVM/src"
+    settings = {"kernel_length_over_spacing": .9, "sheet_columns": 1} if solver == "sph" else {}
     runs = []
     for method in ("theta", "sdirk2"):
         for resistance in (.2, 1.):
@@ -143,7 +168,7 @@ if __name__ == "__main__":
                         previous = row
                         runs.append(row)
     passed = all(r["passed"] for r in runs)
-    print(json.dumps(dict(passed=passed, solver=solver, time_refinement=factor, runs=runs, sources=[provenance(f) for f in
+    print(json.dumps(dict(passed=passed, solver=solver, **settings, time_refinement=factor, runs=runs, sources=[provenance(f) for f in
                           (__file__, analytic.__file__, pulse.__file__, implementation.__file__)],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_resistive_sheet_pulse.py --solver {solver} --time-refinement {factor}"),
                      indent=2, allow_nan=False))
