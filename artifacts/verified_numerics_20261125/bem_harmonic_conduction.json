@@ -1,0 +1,115 @@
+{
+  "runs": [
+    {
+      "panels": 16,
+      "omega_rad_s": 1.0,
+      "interior_error_K": 0.005795828132549392,
+      "boundary_flux_error_W_m2": 0.04408116738345132,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 32,
+      "omega_rad_s": 1.0,
+      "interior_error_K": 0.0011970522782668274,
+      "boundary_flux_error_W_m2": 0.01171465248872003,
+      "orders": [
+        2.2755286545995066,
+        1.911848272949207
+      ],
+      "passed": true
+    },
+    {
+      "panels": 64,
+      "omega_rad_s": 1.0,
+      "interior_error_K": 0.00029180751499219406,
+      "boundary_flux_error_W_m2": 0.003027973319454575,
+      "orders": [
+        2.036397216823441,
+        1.9518897593707345
+      ],
+      "passed": true
+    },
+    {
+      "panels": 128,
+      "omega_rad_s": 1.0,
+      "interior_error_K": 7.239427955611698e-05,
+      "boundary_flux_error_W_m2": 0.0007653243131612923,
+      "orders": [
+        2.011069429628253,
+        1.9842093556062597
+      ],
+      "passed": true
+    },
+    {
+      "panels": 16,
+      "omega_rad_s": 6.0,
+      "interior_error_K": 0.011783415915565412,
+      "boundary_flux_error_W_m2": 0.13327292946158942,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 32,
+      "omega_rad_s": 6.0,
+      "interior_error_K": 0.002373371559298562,
+      "boundary_flux_error_W_m2": 0.03672781304703433,
+      "orders": [
+        2.311747943166233,
+        1.8594388697948825
+      ],
+      "passed": true
+    },
+    {
+      "panels": 64,
+      "omega_rad_s": 6.0,
+      "interior_error_K": 0.0005732176651327062,
+      "boundary_flux_error_W_m2": 0.009776381903784933,
+      "orders": [
+        2.049783001327751,
+        1.9095004448425679
+      ],
+      "passed": true
+    },
+    {
+      "panels": 128,
+      "omega_rad_s": 6.0,
+      "interior_error_K": 0.0001408914603217394,
+      "boundary_flux_error_W_m2": 0.002500317229898983,
+      "orders": [
+        2.024498900509405,
+        1.9671894939044416
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "719616278f16ed579322a1e76507670f10af6954",
+      "file": "bem_harmonic_conduction.py",
+      "source_sha256": "9c826c401592f029c44f1a649f0e24e32922bc600898eaeeed699123d0a24cda"
+    },
+    {
+      "commit": "9f8ca59f3214232de831caf041a3d0fac8c64689",
+      "file": "harmonic_conduction.py",
+      "source_sha256": "843f9c44be2729fc11b299ea70dea240160d1612edc36d55165e6561ec54a933"
+    },
+    {
+      "commit": "9f8ca59f3214232de831caf041a3d0fac8c64689",
+      "file": "geometry.py",
+      "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+    }
+  ],
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_conduction.py",
+  "reference": "Two oblique complex exponential solutions of k Laplacian(T)=i omega C T on each polygon. Evaluate the prescribed traces and analytic inward conductive flux at the actual chord midpoints and compare temperatures at 63 independent interior points. Unit circumradius, k=1.7 W/(m K), C=2.3 J/(m3 K). Flux phasors use exp(+i omega t).",
+  "orders": [
+    "interior temperature",
+    "inward wall flux"
+  ],
+  "regression": {
+    "repository": "TensorBEM",
+    "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_harmonic_conduction.py tests/test_geometry.py tests/test_kernels.py tests/test_kernels_batch.py",
+    "passed": 56,
+    "additional_reference": "Uniform-wall circular diffusion checked against modified Bessel functions."
+  }
+}
