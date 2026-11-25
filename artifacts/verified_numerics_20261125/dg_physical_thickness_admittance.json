@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "5fb7aece4a7ffa044531cd02b3e4842f0aad1318",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q tests/test_heat_1d.py tests/test_advection_diffusion_1d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Thickness 0.25 m and 2.5 m, uniform k=1.6, C=2.2, angular frequency 1.7, bulk losses H=0.3 and 3.4 in the left and right halves. Multiply independent analytic transfer matrices of state [T,-k*dT/dx], then eliminate boundary flux to obtain the two-port inward admittance. Compare all four entries on 8,16,32 cells and compare loss profiles supplied as cell arrays or callbacks of physical position. CPU complex128, SIPG degree 2.",
+  "suite": {
+    "tests": 119,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_physical_thickness_admittance_against_two_layer_transfer_matrix": {
+      "max_admittance_error_L0.25_8_W_per_m2_K": 5.3274233227965586e-08,
+      "max_admittance_error_L0.25_16_W_per_m2_K": 3.3349004469090972e-09,
+      "max_admittance_error_L0.25_32_W_per_m2_K": 2.0885209845004523e-10,
+      "max_admittance_error_L2.5_8_W_per_m2_K": 0.0001826292450305642,
+      "max_admittance_error_L2.5_16_W_per_m2_K": 1.1641998852224442e-05,
+      "max_admittance_error_L2.5_32_W_per_m2_K": 7.324874192161952e-07
+    }
+  }
+}
