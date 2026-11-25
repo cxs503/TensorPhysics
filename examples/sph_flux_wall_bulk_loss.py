@@ -91,7 +91,13 @@ def measure(n, method, solver="sph"):
     exact_mean = equilibrium-.4*np.exp(-loss*times/capacity)
     exact_field = steady-.4*np.exp(-loss*times[:, None]/capacity)+np.exp(-rate*times[:, None])*perturbation
     decay_average = np.exp(-rate*times[:-1])*(-np.expm1(-rate*dt))/(rate*dt)
-    exact_flux = steady_flux + decay_average[:, None]*(.15*k*np.pi*np.sin(np.pi*faces))
+    mode_flux = .15*k*np.pi*np.sin(np.pi*faces)
+    exact_flux = steady_flux + decay_average[:, None]*mode_flux
+    # Integrate the continuum mode directly from zero to each output time.
+    elapsed = times[1:, None]
+    exact_heat = elapsed*steady_flux - np.expm1(-rate*elapsed)*mode_flux/rate
+    transported = np.cumsum(cuts, axis=0)
+    heat_error = abs(transported[:, 1:-1]-exact_heat[:, 1:-1])
     flux = cuts/dt[:, None]
     if method == "theta":
         stage_mean = (mean[:-1]+mean[1:])/2
@@ -106,6 +112,9 @@ def measure(n, method, solver="sph"):
                 max_mean_error_K=float(abs(mean-exact_mean).max()),
                 max_mean_rise_error_K=float(abs((mean-mean[0])-(exact_mean-exact_mean[0])).max()),
                 max_interior_flux_error_W_m2=float(abs(flux[:, 1:-1]-exact_flux[:, 1:-1]).max()),
+                max_cumulative_interior_heat_error_J_m2=float(heat_error.max()),
+                final_midplane_heat_J_m2=float(transported[-1, n//2]),
+                exact_final_midplane_heat_J_m2=float(exact_heat[-1, n//2]),
                 max_energy_residual_J_m2=float(abs(residual).max()))
 
 
@@ -133,7 +142,8 @@ def study(solver):
         for n in (8, 16, 32, 64):
             row = measure(n, method, solver)
             errors = np.array([row[key] for key in ("max_temperature_error_K", "max_mean_error_K",
-                                                   "max_mean_rise_error_K", "max_interior_flux_error_W_m2")])
+                                                   "max_mean_rise_error_K", "max_interior_flux_error_W_m2",
+                                                   "max_cumulative_interior_heat_error_J_m2")])
             orders = [] if previous is None else np.log2(previous/errors).tolist()
             row.update(orders=orders, passed=bool(row["max_energy_residual_J_m2"] < 1e-11
                        and row.get("max_column_balance_error_J_m2", 0.) < 1e-11
@@ -157,7 +167,12 @@ def combined_study(solvers):
         means = [row["final_mean_K"] for row in finest]
         exact = finest[0]["exact_final_mean_K"]
         max_error = max(abs(value-exact) for value in means)
-        comparisons.append(dict(method=method, columns=64, final_time_s=3., exact_final_mean_K=exact,
+        midplane = [row["final_midplane_heat_J_m2"] for row in finest]
+        exact_heat = finest[0]["exact_final_midplane_heat_J_m2"]
+        comparisons.append(dict(exact_final_midplane_heat_J_m2=exact_heat,
+                                final_midplane_heat_J_m2=dict(zip(solvers, midplane)),
+                                max_final_midplane_heat_error_J_m2=max(abs(value-exact_heat) for value in midplane),
+                                method=method, columns=64, final_time_s=3., exact_final_mean_K=exact,
                                 final_mean_K=dict(zip(solvers, means)), final_mean_spread_K=max(means)-min(means),
                                 max_final_mean_error_K=max_error, passed=max_error < 1e-6))
     passed = all(item["passed"] for item in studies+comparisons)
