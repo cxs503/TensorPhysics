@@ -425,3 +425,13 @@ obtain heat per unit wall area. On the 64-cell lattice the right wall's
 power and cumulative heat reversal times differ from the analytic values
 by 5.73e-6 and 9.27e-7 s respectively. All five solvers pass on the four
 resolutions and two end times (40 comparisons).
+
+The anisotropic harmonic square also runs TensorLBM's stationary D2Q5
+frequency response. Axis relaxation times 0.9 and 0.6 give the prescribed
+four-to-one conductivity ratio. Even continuation in y enforces insulated
+horizontal walls. Local midpoint face transfers balance the complex change
+between successive lattice states, with time derivative factor
+2i sin(ωdt/2)/dt. The fields and individual face powers are compared with
+the same continuum cell and face averages used for FVM. All 24 comparisons
+pass. The largest 128-cell LBM temperature, wall flux and interior flux
+errors over the two modes were 2.032e-5 K, 1.754e-4 W/m² and 2.396e-4 W/m².
