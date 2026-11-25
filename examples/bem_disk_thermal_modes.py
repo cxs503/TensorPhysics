@@ -22,6 +22,37 @@ def reference(points, mode, wave, conductivity):
     return t, -conductivity*np.column_stack((radial*cs-tangent*sn, radial*sn+tangent*cs))
 
 
+def arc_load_errors(mesh, traces, weights, mode, radial_flux):
+    """Integrate physical chord loads and compare with the same angular intervals on the unit circle."""
+    n = mesh.panel_count
+    step = 2*np.pi/n
+    mid = (np.arange(n)+.5)*step
+
+    def arc_mean(center, width):
+        return radial_flux*np.exp(1j*mode*center)*np.sinc(mode*width/(2*np.pi))
+
+    panel_load = mesh.lengths*(traces @ weights)
+    panel_error = abs(panel_load/step-arc_mean(mid, step))
+    # Use fixed arcs with off-node endpoints, including one crossing angle zero.
+    windows = []
+    nodes, _ = np.polynomial.legendre.leggauss(traces.shape[1])
+    coeff = np.polynomial.legendre.legfit(nodes, traces.T, len(nodes)-1)
+    primitive = np.polynomial.legendre.legint(coeff, axis=0)
+    for start, end in ((.19, 1.41), (5.83, 2*np.pi+.47)):
+        load = 0j
+        for j in range(int(np.floor(start/step)), int(np.ceil(end/step))):
+            center = (j+.5)*step
+            angles = np.array([max(start, j*step), min(end, (j+1)*step)])
+            # Radial projection intersects the chord at this reference coordinate.
+            xi = np.tan(angles-center)/np.tan(step/2)
+            values = np.polynomial.legendre.legval(xi, primitive[:, j%n])
+            load += mesh.lengths[j%n]*(values[1]-values[0])/2
+        exact = (end-start)*arc_mean((end+start)/2, end-start)
+        windows.append(float(abs(load-exact)))
+    return dict(panel_arc_mean_flux_error_W_m2=float(panel_error.max()),
+                fixed_arc_power_errors_W_m=windows, max_fixed_arc_power_error_W_m=max(windows))
+
+
 def measure(n, mode, omega, quadratic, circle_data=False):
     conductivity, capacity = 1.7, 2.3
     wave = np.sqrt(1j*omega*capacity/conductivity)
@@ -53,6 +84,7 @@ def measure(n, mode, omega, quadratic, circle_data=False):
         weights = np.array([5., 8., 5.])/18 if quadratic else np.ones(1)
         modal_power = mesh.lengths @ ((solution.inward_flux*phase).reshape(n, -1) @ weights)
         exact_power = 2*np.pi*conductivity*wave*ivp(mode, wave)/iv(mode, wave)
+        extra.update(arc_load_errors(mesh, solution.inward_flux.reshape(n, -1), weights, mode, exact_power/(2*np.pi)))
         extra["modal_inward_power_error_W_m"] = float(abs(modal_power-exact_power))
     return dict(**extra, panels=n, mode=mode, omega_rad_s=omega, quadratic=quadratic,
                 interior_temperature_error_K=float(abs(solution.temperature(probes)-exact_t).max()),
@@ -68,7 +100,7 @@ if __name__ == "__main__":
     metrics = ["interior_temperature_error_K", "interior_flux_x_error_W_m2",
                "interior_flux_y_error_W_m2", "inward_flux_error_W_m2"]
     if circle_data:
-        metrics.append("modal_inward_power_error_W_m")
+        metrics.extend(["modal_inward_power_error_W_m", "panel_arc_mean_flux_error_W_m2", "max_fixed_arc_power_error_W_m"])
     for quadratic in (False, True):
         for omega in (.5, 5.):
             for mode in (0, 2):
@@ -77,20 +109,26 @@ if __name__ == "__main__":
                     row = measure(n, mode, omega, quadratic, circle_data)
                     errors = np.array([row[key] for key in metrics])
                     orders = [] if previous is None else np.log2(previous/errors).tolist()
-                    passed = np.isfinite(errors).all() and all(p > 0 for p in orders)
+                    # Fixed arcs truncate panels at different fractions on each
+                    # grid; assess their absolute load error on the finest mesh.
+                    tested_orders = orders[:-1] if circle_data else orders
+                    passed = np.isfinite(errors).all() and all(p > 0 for p in tested_orders)
                     if n == 64 and not circle_data:
                         limits = (1e-8, 1e-7, 1e-7, 1e-4) if quadratic else (.001, .005, .005, .02)
                         passed = passed and min(orders) > (2.5 if quadratic else 1.8) and np.all(errors < limits)
                     if circle_data and n >= 64:
                         # Pointwise normals on a chord differ from radial normals
                         # by O(h) away from the midpoint of the panel.
-                        passed = passed and min(orders[:3]+orders[4:]) > 1.8
+                        passed = passed and min(tested_orders[:3]+tested_orders[4:]) > 1.8
                         passed = passed and orders[3] > (.85 if quadratic else 1.8)
+                    if circle_data and n == 128:
+                        passed = passed and row["max_fixed_arc_power_error_W_m"] < .003
                     row.update(orders=orders, passed=bool(passed))
                     previous = errors
                     rows.append(row)
     print(json.dumps(dict(reference="I_m(lambda*r) exp(i*m*theta)/I_m(lambda), lambda^2=i*omega*C/k; Dirichlet data evaluated "+("on the unit circle at matching polar angles" if circle_data else "on the actual polygon"),
                           reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_disk_thermal_modes.py"+(" --circle-data" if circle_data else ""),
+                          fixed_arcs_rad=[[.19, 1.41], [5.83, 2*np.pi+.47]] if circle_data else [],
                           order_metrics=metrics, runs=rows, sources=[provenance(__file__), provenance(harmonic_conduction.__file__), provenance(geometry.__file__)]),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
