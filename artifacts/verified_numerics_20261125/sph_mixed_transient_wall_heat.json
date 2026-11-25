@@ -1,0 +1,46 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "a4731a38016179c8f8cc70ec6bff80ca60ffd0df",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "T=(1+x) cos(2*pi*y) exp(-4*pi\u00b2*t) in a homogeneous unit square periodic in y, k=C=1. Prescribe the exact temperature on one end and exact time-dependent inward Fourier flux on the other. Swap ends and compare row heats on each wall against analytical time integrals after every step through 0.025 s. CPU float64 with nx=ny=steps=12,24,48. A separate test checks event-split pulse integration with two prescribed flux walls.",
+  "suite": {
+    "tests": 153,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_mixed_wall_row_heat_with_decaying_fourier_load[theta-0]": {
+      "fixed_wall_heat_error_12_J_per_m2": 0.004744902881112107,
+      "flux_wall_heat_error_12_J_per_m2": 8.650888139456747e-06,
+      "fixed_wall_heat_error_24_J_per_m2": 0.001296128667560027,
+      "flux_wall_heat_error_24_J_per_m2": 2.220047214115256e-06,
+      "fixed_wall_heat_error_48_J_per_m2": 0.00032265063029020095,
+      "flux_wall_heat_error_48_J_per_m2": 5.586142097432911e-07
+    },
+    "test_mixed_wall_row_heat_with_decaying_fourier_load[theta-1]": {
+      "fixed_wall_heat_error_12_J_per_m2": 0.0023800075694338767,
+      "flux_wall_heat_error_12_J_per_m2": 8.650888139456747e-06,
+      "fixed_wall_heat_error_24_J_per_m2": 0.0006500136379517275,
+      "flux_wall_heat_error_24_J_per_m2": 2.220047214115256e-06,
+      "fixed_wall_heat_error_48_J_per_m2": 0.00016181645825100177,
+      "flux_wall_heat_error_48_J_per_m2": 5.586142097432911e-07
+    },
+    "test_mixed_wall_row_heat_with_decaying_fourier_load[sdirk2-0]": {
+      "fixed_wall_heat_error_12_J_per_m2": 0.0048414814198958975,
+      "flux_wall_heat_error_12_J_per_m2": 1.0064020578137017e-06,
+      "fixed_wall_heat_error_24_J_per_m2": 0.0013213157643464264,
+      "flux_wall_heat_error_24_J_per_m2": 2.638009235951533e-07,
+      "fixed_wall_heat_error_48_J_per_m2": 0.00032886806011114475,
+      "flux_wall_heat_error_48_J_per_m2": 6.707464837371613e-08
+    },
+    "test_mixed_wall_row_heat_with_decaying_fourier_load[sdirk2-1]": {
+      "fixed_wall_heat_error_12_J_per_m2": 0.0024245088085177603,
+      "flux_wall_heat_error_12_J_per_m2": 1.0064020578137017e-06,
+      "fixed_wall_heat_error_24_J_per_m2": 0.0006616120952174231,
+      "flux_wall_heat_error_24_J_per_m2": 2.638009235951533e-07,
+      "fixed_wall_heat_error_48_J_per_m2": 0.0001646731131303876,
+      "flux_wall_heat_error_48_J_per_m2": 6.707464837371613e-08
+    }
+  }
+}
