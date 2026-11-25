@@ -1,6 +1,7 @@
 """Verify SPH, FVM, FEM, DG, LBM or DEM interval heat at every cut under independent Dirichlet wall pulses."""
 import argparse
 import json
+from functools import partial
 
 import numpy as np
 
@@ -9,6 +10,8 @@ from conduction_provenance import provenance
 
 # (time, side, temperature increment). Both walls have returned to zero at 0.09 s.
 EVENTS = ((.013, 0, 1.), (.028, 1, -.6), (.047, 0, -1.), (.09, 1, .6))
+RAMP_KNOTS = np.array([t+.001/3 for t, _, _ in EVENTS])
+RAMP_LEVELS = np.array([[0., 0.], [1., -.2], [.25, -.6], [0., 0.]])
 TIMES = np.array([0., .01, .04, .056, .09, .115, .15])
 
 
@@ -197,24 +200,32 @@ def measure_fem(n):
                 column_energy_residual_J_m2=balance, interface_heat_mismatch_J_m2=mismatch, wall_trace_error_K=wall_error)
 
 
-def measure_dg(n):
+def measure_dg(n, ramps=False, degree=1):
     from tensordg import heat_1d
 
-    schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+    dx = 1/n
+    centers = (np.arange(n)+.5)*dx
+    cuts = np.arange(n+1)*dx
+    if ramps:
+        schedule = np.union1d(TIMES, RAMP_KNOTS)
+        endpoints = np.column_stack([np.interp(schedule, RAMP_KNOTS, side) for side in RAMP_LEVELS.T])
+        means, _ = ramp_reference(centers, TIMES, RAMP_KNOTS, RAMP_LEVELS, cell_width=dx)
+        _, cumulative = ramp_reference(cuts, TIMES, RAMP_KNOTS, RAMP_LEVELS)
+    else:
+        schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+        plateaus = [[wall(t, 0), wall(t, 1)] for t in schedule[:-1]]
+        endpoints = np.repeat(np.asarray(plateaus)[:, None, :], 2, axis=1)
+        means, _ = reference(centers, TIMES, 64, cell_width=dx)
+        _, cumulative = reference(cuts, TIMES, 64)
     indices = np.searchsorted(schedule, TIMES)
-    plateaus = [[wall(t, 0), wall(t, 1)] for t in schedule[:-1]]
-    endpoints = np.repeat(np.asarray(plateaus)[:, None, :], 2, axis=1)
     _, history, meta = heat_1d.solve_heat_1d_wall_history(
-        schedule, endpoints, n, degree=1, backend="exact-time", initial_temperature=lambda x: 0*x,
+        schedule, endpoints, n, degree=degree, backend="exact-time", initial_temperature=lambda x: 0*x,
         integrate_face_fluxes=True)
     cells = history[:, :, 0].numpy()
     heat = np.asarray(meta["interval_face_heat"])
-    dx = 1/n
-    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx)
-    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
     error = abs(np.add.reduceat(heat, indices[:-1])-np.diff(cumulative, axis=0))
     balance = dx*np.diff(cells, axis=0)+np.diff(heat, axis=1)
-    return dict(columns=n, temperature_error_K=float(abs(cells[indices]-means).max()),
+    return dict(columns=n, degree=degree, temperature_error_K=float(abs(cells[indices]-means).max()),
                 wall_heat_error_J_m2=float(error[:, [0, -1]].max()),
                 interior_cut_heat_error_J_m2=float(error[:, 1:-1].max()),
                 column_energy_residual_J_m2=float(abs(balance).max()))
@@ -271,8 +282,7 @@ def measure_lbm(n, off_grid=False, ramps=False):
     centers = (np.arange(n)+.5)*dx
     cuts = np.arange(n+1)*dx
     if ramps:
-        knots = np.asarray(switches)
-        values = np.array([[0., 0.], [1., -.2], [.25, -.6], [0., 0.]])
+        knots, values = RAMP_KNOTS, RAMP_LEVELS
         prescribed = scalar.scalar_wall_step_means(edges, knots, values, interpolation="linear")
         means, _ = ramp_reference(centers, TIMES, knots, values, cell_width=dx)
         _, cumulative = ramp_reference(cuts, TIMES, knots, values)
@@ -312,10 +322,14 @@ if __name__ == "__main__":
     group.add_argument("--lbm", action="store_true", help="run the D2Q5 halfway-wall slab")
     group.add_argument("--lbm-ramps", action="store_true", help="drive independent off-grid wall ramps")
     group.add_argument("--lbm-off-grid", action="store_true", help="shift both wall pulses between lattice times")
+    group.add_argument("--dg-ramps", action="store_true", help="run SIPG under independent wall ramps")
     group.add_argument("--dg", action="store_true", help="run the SIPG linear-element slab")
     group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
     group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
+    parser.add_argument("--dg-degree", type=int, choices=(1, 2), help="polynomial degree for the DG slab (default 1)")
     args = parser.parse_args()
+    if args.dg_degree is not None and not (args.dg or args.dg_ramps):
+        parser.error("--dg-degree requires --dg or --dg-ramps")
     rows = []
     previous = None
     if args.fem:
@@ -323,11 +337,10 @@ if __name__ == "__main__":
         run = measure_fem
     elif args.lbm or args.lbm_off_grid or args.lbm_ramps:
         from tensorlbm import scalar as solver
-        from functools import partial
         run = partial(measure_lbm, off_grid=args.lbm_off_grid, ramps=args.lbm_ramps)
-    elif args.dg:
+    elif args.dg or args.dg_ramps:
         from tensordg import heat_1d as solver
-        run = measure_dg
+        run = partial(measure_dg, ramps=args.dg_ramps, degree=args.dg_degree or 1)
     elif args.dem:
         from tensordem.thermal import contact_chain as solver
         run = measure_dem
@@ -337,6 +350,7 @@ if __name__ == "__main__":
     else:
         from tensorsph import heat_conduction_2d as solver
         run = measure
+    minimum_order = 2.8 if args.dg_degree == 2 else 1.8
     for n in (8, 16, 32, 64):
         row = run(n)
         errors = np.array([row[k] for k in ("temperature_error_K", "wall_heat_error_J_m2",
@@ -345,9 +359,9 @@ if __name__ == "__main__":
             errors = np.append(errors, row["interval_temperature_error_K"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
-                   row["column_energy_residual_J_m2"] < 1e-12 and (args.dg or args.lbm or args.lbm_off_grid or args.lbm_ramps or row["wall_trace_error_K"] < 1e-14)
+                   row["column_energy_residual_J_m2"] < 1e-12 and row.get("wall_trace_error_K", 0.) < 1e-14
                    and row.get("interface_heat_mismatch_J_m2", 0.) < 1e-12
-                   and all(order > 0 for order in orders) and (n < 64 or min(orders) > 1.8)))
+                   and all(order > 0 for order in orders) and (n < 64 or min(orders) > minimum_order)))
         rows.append(row)
         previous = errors
     print(json.dumps(dict(runs=rows, sources=[provenance(__file__), provenance(solver.__file__)]),
