@@ -10,11 +10,14 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega):
+def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega, trace_capacity=(0., 0.)):
     # Propagate (T, rightward power, 1) exactly within each constant-source
     # segment. The final component makes the volumetric source an affine load.
     transfer = np.eye(3)
     jump = np.array([[1., -resistance, 0.], [0., 1., 0.], [0., 0., 1.]])
+    # Each trace withdraws i*omega*C*T before or after the resistive drop.
+    left_store, right_store = (np.eye(3, dtype=complex) for _ in trace_capacity)
+    left_store[1, 0], right_store[1, 0] = -1j*omega*np.asarray(trace_capacity)
     edges = (0., start, 0.5, end, 1.)
     for left, right in zip(edges[:-1], edges[1:]):
         layer = int(left >= 0.5)
@@ -24,15 +27,15 @@ def harmonic_reference(start, end, conductivities, capacities, generation, resis
         transfer = expm((right-left)*np.array(generator)) @ transfer
         if right == 0.5:
             at_contact = transfer.copy()
-            transfer = jump @ transfer
+            transfer = right_store @ jump @ left_store @ transfer
     # Both ends have zero temperature phasor. Solve for the left-end power.
     left_power = -transfer[0, 2]/transfer[0, 1]
     initial = np.array([0., left_power, 1.])
     return np.array([-left_power, (transfer @ initial)[1],
-                     resistance*(at_contact @ initial)[1]])
+                     resistance*(left_store @ at_contact @ initial)[1]])
 
 
-def measure(cells, mirrored, omega=0.):
+def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.)):
     interface, resistance, generation = 0.5, 0.35, 12.
     start, end = (3/8, 5/6) if mirrored else (1/6, 5/8)
     k_left, k_right = (4., 1.) if mirrored else (1., 4.)
@@ -52,14 +55,22 @@ def measure(cells, mirrored, omega=0.):
     if omega:
         capacities = (2.5, 1.25) if mirrored else (1.25, 2.5)
         capacity = np.repeat(capacities, mid)
+        sheet = np.zeros(cells-1)
+        sheet[mid-1] = sum(trace_capacity)
+        fraction = trace_capacity[0]/sum(trace_capacity) if sum(trace_capacity) else 0.5
         field, _, west, east, (upstream, downstream) = rod.solve_harmonic_stepped_rod(
             widths, np.ones(cells), np.repeat([k_left, k_right], mid), capacity,
             (0., 0.), omega, source=source, flux_order=2, contact_resistance=contacts, return_traces=True,
+            interface_heat_capacity=sheet, interface_capacity_left_fraction=fraction,
         )
         actual = np.array([-west[0], east[-1], upstream[mid-1]-downstream[mid-1]])
-        exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega)
+        exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega, trace_capacity)
+        trace_t = np.array([upstream[mid-1], downstream[mid-1]])
+        crossing = actual[2]/resistance
+        trace_net = np.array([east[mid-1]-crossing, crossing-west[mid]])
         return {
             "cells": cells, "strip_bounds_m": [start, end], "omega_rad_s": omega,
+            "max_trace_balance_error_W": max(abs(trace_net - 1j*omega*trace_t*trace_capacity)),
             "wall_outward_amplitude_W": abs(actual[:2]).tolist(),
             "reference_wall_amplitude_W": abs(exact[:2]).tolist(),
             "contact_jump_amplitude_K": abs(actual[2]), "reference_jump_amplitude_K": abs(exact[2]),
