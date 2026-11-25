@@ -2,6 +2,13 @@
   "passed": true,
   "runs": [
     {
+      "reversal_time": 0.03149933421637235,
+      "exact_reversal_time": 0.0311677735183681,
+      "bracketing_midpoints": [
+        0.030079726393819027,
+        0.03324601338264208
+      ],
+      "timing_error_over_output_interval": 0.05235796678801549,
       "cells": 16,
       "width_over_interval": 0.05,
       "left_error": 0.008271150998021773,
@@ -52,6 +59,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.03124676050114456,
+      "exact_reversal_time": 0.0311677735183681,
+      "bracketing_midpoints": [
+        0.03087129814102479,
+        0.032454441635436315
+      ],
+      "timing_error_over_output_interval": 0.01247312436542864,
       "cells": 32,
       "width_over_interval": 0.05,
       "left_error": 0.0020781357411314406,
@@ -105,6 +119,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.031186199041901376,
+      "exact_reversal_time": 0.0311677735183681,
+      "bracketing_midpoints": [
+        0.030475512267421907,
+        0.031267084014627675
+      ],
+      "timing_error_over_output_interval": 0.002909642050502145,
       "cells": 64,
       "width_over_interval": 0.05,
       "left_error": 0.0005201781626935325,
@@ -158,6 +179,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.032918783543341906,
+      "exact_reversal_time": 0.03261300752159034,
+      "bracketing_midpoints": [
+        0.030079726393819027,
+        0.03324601338264208
+      ],
+      "timing_error_over_output_interval": 0.04828621392042969,
       "cells": 16,
       "width_over_interval": 0.5,
       "left_error": 0.007139677132071895,
@@ -208,6 +236,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.03269143062233327,
+      "exact_reversal_time": 0.03261300752159034,
+      "bracketing_midpoints": [
+        0.032454441635436315,
+        0.03403758512984785
+      ],
+      "timing_error_over_output_interval": 0.012384079683831773,
       "cells": 32,
       "width_over_interval": 0.5,
       "left_error": 0.0018004335785528026,
@@ -261,6 +296,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.03263377249325859,
+      "exact_reversal_time": 0.03261300752159034,
+      "bracketing_midpoints": [
+        0.032058655761833435,
+        0.0328502275090392
+      ],
+      "timing_error_over_output_interval": 0.003279072892247661,
       "cells": 64,
       "width_over_interval": 0.5,
       "left_error": 0.0004510857158287615,
@@ -320,9 +362,9 @@
   "normalization": "maximum absolute analytic interval heat across both walls",
   "sources": [
     {
-      "commit": "bae3fdb6593d0ec15268209045aa7c408c7489a8",
+      "commit": "e53929f780b522a6dba2dad5ba85539313bfc29d",
       "file": "dg_reversing_wall_pulse.py",
-      "source_sha256": "9f92fb04968f8169240d2817bc95bafb41f784d59eb2607cfae2d51f71150735"
+      "source_sha256": "97546aaf91c7f2be4d7810eca4555bf2dbc99e74ad1021ed71993de19db93d92"
     },
     {
       "commit": "8092762ed1a27ca10aff10d0d2b27a64c39c86d9",

@@ -2,6 +2,13 @@
   "passed": true,
   "runs": [
     {
+      "reversal_time": 0.031195081234637042,
+      "exact_reversal_time": 0.0311677735183681,
+      "bracketing_midpoints": [
+        0.030079726393819027,
+        0.03324601338264208
+      ],
+      "timing_error_over_output_interval": 0.004312261706746187,
       "max_step_cell_balance_error": 2.723216042192614e-15,
       "max_step_shared_face_mismatch": 2.654563536927254e-15,
       "cells": 16,
@@ -54,6 +61,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.03117018899260507,
+      "exact_reversal_time": 0.0311677735183681,
+      "bracketing_midpoints": [
+        0.03087129814102479,
+        0.032454441635436315
+      ],
+      "timing_error_over_output_interval": 0.00038143640255832687,
       "max_step_cell_balance_error": 4.3136657475067875e-15,
       "max_step_shared_face_mismatch": 2.6660056211381473e-15,
       "cells": 32,
@@ -109,6 +123,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.03116776539502489,
+      "exact_reversal_time": 0.0311677735183681,
+      "bracketing_midpoints": [
+        0.030475512267421907,
+        0.031267084014627675
+      ],
+      "timing_error_over_output_interval": 1.2827869423364003e-06,
       "max_step_cell_balance_error": 4.370876168561255e-15,
       "max_step_shared_face_mismatch": 3.561348710640551e-15,
       "cells": 64,
@@ -164,6 +185,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.03263009485700242,
+      "exact_reversal_time": 0.03261300752159034,
+      "bracketing_midpoints": [
+        0.030079726393819027,
+        0.03324601338264208
+      ],
+      "timing_error_over_output_interval": 0.002698323852575122,
       "max_step_cell_balance_error": 3.93801367110184e-15,
       "max_step_shared_face_mismatch": 3.621566143959728e-15,
       "cells": 16,
@@ -216,6 +244,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.0326129862233379,
+      "exact_reversal_time": 0.03261300752159034,
+      "bracketing_midpoints": [
+        0.032454441635436315,
+        0.03403758512984785
+      ],
+      "timing_error_over_output_interval": 3.363285216192287e-06,
       "max_step_cell_balance_error": 3.5776150985233234e-15,
       "max_step_shared_face_mismatch": 3.199636107770245e-15,
       "cells": 32,
@@ -271,6 +306,13 @@
       "passed": true
     },
     {
+      "reversal_time": 0.03261489305666832,
+      "exact_reversal_time": 0.03261300752159034,
+      "bracketing_midpoints": [
+        0.032058655761833435,
+        0.0328502275090392
+      ],
+      "timing_error_over_output_interval": 0.00029775176486495275,
       "max_step_cell_balance_error": 4.357746155019503e-15,
       "max_step_shared_face_mismatch": 3.1919446748188743e-15,
       "cells": 64,
@@ -332,9 +374,9 @@
   "normalization": "maximum absolute analytic interval heat across both walls",
   "sources": [
     {
-      "commit": "0a2b416aff1f67950f8d7e45114cd480e25d7771",
+      "commit": "e53929f780b522a6dba2dad5ba85539313bfc29d",
       "file": "dg_reversing_wall_pulse.py",
-      "source_sha256": "cf2db8f38c5a79caad8d2fe5ccbd5d8b888c5ca2e8d72a75654b311f9afbd9ca"
+      "source_sha256": "97546aaf91c7f2be4d7810eca4555bf2dbc99e74ad1021ed71993de19db93d92"
     },
     {
       "commit": "ad21cf32fd2e55e9f140b54f544e81e37bbd7384",
