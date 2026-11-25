@@ -1,4 +1,5 @@
-"""Compare Q4 FEM and bilinear SIPG on the same two-material square and physical quadrature."""
+"""Compare Q4 FEM and SIPG on the same two-material square and physical quadrature."""
+import argparse
 import json
 import math
 
@@ -11,7 +12,7 @@ from tensordg import poisson_2d_bc as dg
 from tensordg import transient_diffusion_2d as transient_dg
 
 
-def measure(n,transient):
+def measure(n,transient,degree=1,time_refinement=1,rannacher=False):
     det,beta = 3.,1.5
     alpha = 2. if transient else math.sqrt(det)*beta
     rate = alpha**2+det*beta**2 if transient else 0.
@@ -40,14 +41,15 @@ def measure(n,transient):
     # FEM connectivity advances x first. DG arrays have leading (x,y) axes.
     material = torch.stack((k,ky,cross),dim=-1).reshape(n,n,3).transpose(0,1)
     walls = dict.fromkeys(("left","right","bottom","top"),exact)
-    opts = dict(ncells=n,degree=1,conductivity=material,dirichlet_values=walls)
+    penalty = 20.
+    opts = dict(ncells=n,degree=degree,penalty=penalty,conductivity=material,dirichlet_values=walls)
     if transient:
-        time = torch.linspace(0.,end,n+1,dtype=nodes.dtype)
+        time = torch.linspace(0.,end,time_refinement*n+1,dtype=nodes.dtype)
         fem = thermal.solve_transient_thermal(model,time,start,theta=.5,sparse=True,
                           fixed_temperature_history=torch.exp(-rate*time[:,None])*start[fixed])
         fem_field = fem.temperature[-1]
-        _,_,states = transient_dg.solve_transient_diffusion_2d(exact,time,capacity=1/material[...,0],
-                                                               load_amplitude=amplitude,**opts)
+        _,_,states,means = transient_dg.solve_transient_diffusion_2d(exact,time,capacity=1/material[...,0],
+                                                               load_amplitude=amplitude,rannacher=rannacher,return_interval_means=True,**opts)
         coeff = states[-1]
     else:
         fem_field = thermal.solve_steady_thermal(model,sparse=True)
@@ -59,7 +61,7 @@ def measure(n,transient):
     xi,eta = torch.meshgrid(z,z,indexing="ij")
     shape = torch.stack(((1-xi)*(1-eta),(1+xi)*(1-eta),(1+xi)*(1+eta),(1-xi)*(1+eta)),dim=-1)/4
     f = torch.einsum("xyi,qri->xyqr",fem_field[conn].reshape(n,n,4).transpose(0,1),shape)
-    phi = torch.stack((torch.ones_like(z),z),dim=-1)
+    phi = torch.from_numpy(np.polynomial.legendre.legvander(z.numpy(),degree))
     d = torch.einsum("xyij,qi,rj->xyqr",coeff,phi,phi)
     points = ((torch.arange(n,dtype=z.dtype)+.5)[:,None]+z/2)/n
     ref = amplitude(end)*exact(points[:,None,:,None],points[None,:,None,:])
@@ -69,11 +71,40 @@ def measure(n,transient):
     # Compare rightward power per face area. FEM has traces on both sides.
     edge = thermal.thermal_element_edge_power(model,fem_field).reshape(n,n,4)
     fleft,fright = n*edge[:,n//2-1,1],-n*edge[:,n//2,3]
-    qx,_ = dg.poisson_face_powers_2d(coeff,conductivity=material,
+    qx,_ = dg.poisson_face_powers_2d(coeff,conductivity=material,penalty=penalty,
                        dirichlet_values=dict.fromkeys(walls,lambda x,y:amplitude(end)*exact(x,y)))
     slope = math.cos(alpha*.5+.3) if transient else math.sinh(alpha*.5+.3)
     true_flux = -amplitude(end)*alpha*slope*(torch.cos(beta*(points+.35)+.4) @ w)/2
-    row = dict(n=n,transient=transient,fem_l2=norm(f-ref),dg_l2=norm(d-ref),difference_l2=norm(f-d),
+    # Integrating over a whole vertical face selects only the constant y mode.
+    # The numerical flux includes the SIPG penalty times the temperature jump.
+    order = torch.arange(degree+1,dtype=coeff.dtype)
+    left,right = coeff[n//2-1],coeff[n//2]
+    signs = (-1.)**order
+    jump = left[:,:,0].sum(dim=1)-right[:,:,0] @ signs
+    kn_l,kn_r = material[n//2-1,:,0],material[n//2,:,0]
+    harmonic = 2/(1/kn_l+1/kn_r)
+    penalty_flux = penalty*(degree+1)**2*n*harmonic*jump
+    # Evaluate average physical conormal derivatives independently from DG's
+    # face-power routine, using Legendre derivatives at the two endpoints.
+    derivative = n*order*(order+1)
+    dx_l = left[:,:,0] @ derivative
+    dx_r = right[:,:,0] @ (-signs*derivative)
+    dy_l = n*(left.sum(dim=1) @ (1-signs))
+    dy_r = n*((right @ (1-signs)) @ signs)
+    gradient_flux = -.5*harmonic*(dx_l+dx_r+
+                     material[n//2-1,:,2]/kn_l*dy_l+material[n//2,:,2]/kn_r*dy_r)
+    dg_flux = n*qx[n//2]
+    dg_error = abs(dg_flux-true_flux)
+    fem_error = torch.maximum(abs(fleft-true_flux),abs(fright-true_flux))
+    row = dict(n=n,transient=transient,degree=degree,dg_rannacher=rannacher and transient,steps=time_refinement*n if transient else 0,
+               dg_endpoint_error=float(dg_error[[0,-1]].max()),
+               dg_middle_half_error=float(dg_error[n//4:3*n//4].max()),
+               fem_endpoint_error=float(fem_error[[0,-1]].max()),
+               fem_middle_half_error=float(fem_error[n//4:3*n//4].max()),
+               dg_peak_face_index=int(dg_error.argmax()),
+               dg_penalty_at_peak=float(penalty_flux[dg_error.argmax()]),
+               dg_gradient_error_at_peak=float((gradient_flux-true_flux)[dg_error.argmax()]),
+               dg_flux_decomposition_residual=float(abs(dg_flux-gradient_flux-penalty_flux).max()),fem_l2=norm(f-ref),dg_l2=norm(d-ref),difference_l2=norm(f-d),
                 fem_flux_error=float(torch.maximum(abs(fleft-true_flux),abs(fright-true_flux)).max()),
                 dg_flux_error=float(abs(n*qx[n//2]-true_flux).max()))
 
@@ -91,7 +122,9 @@ def measure(n,transient):
         dg_steps = []
         for i,dt in enumerate(time.diff()):
             amp = (amplitude(float(time[i]))+amplitude(float(time[i+1])))/2
-            px,py = dg.poisson_face_powers_2d((states[i]+states[i+1])/2,conductivity=material,
+            if rannacher and i==0:
+                amp = (amplitude(float(time[i]+dt/2))+amplitude(float(time[i+1])))/2
+            px,py = dg.poisson_face_powers_2d(means[i],conductivity=material,penalty=penalty,
                              dirichlet_values=dict.fromkeys(walls,lambda x,y:amp*exact(x,y)))
             dg_steps.append(dt*(px[0].sum()-px[-1].sum()+py[:,0].sum()-py[:,-1].sum()))
         dg_steps = torch.stack(dg_steps)
@@ -104,16 +137,23 @@ def measure(n,transient):
 
 
 if __name__=="__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--degree",type=int,choices=(1,2),default=1)
+    parser.add_argument("--time-refinement",type=int,default=1)
+    parser.add_argument("--dg-rannacher",action="store_true",help="damp the first DG step; FEM retains Crank–Nicolson")
+    args = parser.parse_args()
+    if args.time_refinement<1:
+        parser.error("time refinement must be positive")
     rows = []
     for transient in (False,True):
         previous = {}
         for n in (4,8,16,32):
-            row = measure(n,transient)
+            row = measure(n,transient,args.degree,args.time_refinement,args.dg_rannacher)
             errors = {key:row[key] for key in ("fem_l2","dg_l2","difference_l2","fem_flux_error","dg_flux_error")}
             if transient:
                 errors.update({k:row[k] for k in ("fem_heat_error","dg_heat_error")})
             rates = {key:math.log2(previous[key]/v) for key,v in errors.items()} if previous else {}
-            row.update(orders=rates,passed=all(v>0 for v in rates.values()) and
+            row.update(orders=rates,passed=row["dg_flux_decomposition_residual"]<1e-9 and all(v>0 for v in rates.values()) and
                        (n<32 or (min(rates["fem_l2"],rates["dg_l2"])>1.8 and
                                  min(rates["dg_flux_error"],rates["fem_flux_error"])>.8)))
             if transient:
