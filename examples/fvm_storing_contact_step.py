@@ -23,7 +23,7 @@ def main():
     # Check it exactly and compute refinement orders only for nontrivial channels.
     active = np.array([True]*5 + [capacity > 0. for capacity in capacities])
     studies = []
-    grids = (40, 80, 160, 320, 640) if args.perfect_contact else (40, 80, 160, 320)
+    grids = (40, 80, 160, 320, 640, 1280) if args.perfect_contact else (40, 80, 160, 320)
     for resistance in ((0.,) if args.perfect_contact else (.05, .3)):
         reference = model.interval_reference(times, resistance, "dehoog", include_traces=True,
                                              surface_capacities=capacities, return_trace_changes=True)
