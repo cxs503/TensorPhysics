@@ -47,11 +47,8 @@ def measure(n, wall_flux_order):
         if wall_flux_order=="DEM":
             from tensordem.thermal import affine_contact_interval, cell_centered_slab_network
 
-            # Interior chain endpoints are the physical wall surfaces. Attach
-            # film links from the surfaces to the prescribed ambient reservoirs.
-            r,c = cell_centered_slab_network(np.full(n,dx),k,capacity,contact_resistance=contacts)
-            r = np.r_[1/film[0],r,1/film[1]]
-            c = np.r_[0.,wall_capacity[0],c[1:-1],wall_capacity[1],0.]
+            r,c = cell_centered_slab_network(np.full(n,dx),k,capacity,contact_resistance=contacts,
+                                          films=film,wall_areal_heat_capacity=wall_capacity)
             state = np.r_[air[0],walls[0],means,walls[1],air[1]]
             states,heats,averages = [state],[],[]
             for i,dt in enumerate(np.diff(times)):
