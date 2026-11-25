@@ -25,9 +25,10 @@ def reference(omega, resistance, sheet_capacity):
     return np.array([sheet, incoming, outgoing])/wall
 
 
-def models(n, resistance, sheet_capacity, fraction=.5):
+def models(n, resistance, sheet_capacity, fraction=.5, *, edges=None):
     mid = n//2
-    dx = np.full(n, 1/n)
+    x = np.linspace(0., 1., n+1) if edges is None else edges
+    dx = np.diff(x)
     k = np.repeat([1., 4.], mid)
     cv = np.repeat([1., 2.], mid)
     contacts, sheet = np.zeros(n-1), np.zeros(n-1)
@@ -35,7 +36,6 @@ def models(n, resistance, sheet_capacity, fraction=.5):
     r, c = contact_chain.cell_centered_slab_network(dx, k, cv, contact_resistance=contacts,
                                                     interface_heat_capacity=sheet, left_resistance_fraction=fraction)
     # Two independent LINE2 meshes, plus one global sheet node between the traces.
-    x = np.linspace(0., 1., n+1)
     nodes = torch.from_numpy(np.r_[x[:mid+1], x[mid:], .5][:, None])
     left = torch.arange(n)
     left[mid:] += 1

@@ -25,16 +25,27 @@ def sheet_reference(fraction):
     return omega, capacity, resistance, drive, wave, sheet, flux, material_z*flux
 
 
-def projected_profiles(n, wave, surface):
-    x = np.arange(n//2+1)/n
-    center = .5*(x[1:]+x[:-1])
+def slab_edges(n, mesh):
+    u = np.linspace(-1., 1., n+1)
+    if mesh == "graded":
+        # Quadratic grading in distance from the sheet, with n/2 cells per layer.
+        u = u*abs(u)
+    return .5*(1+u)
+
+
+def projected_profiles(n, wave, surface, edges=None):
+    edges = slab_edges(n, "uniform") if edges is None else edges
+    mid = n//2
+    left, right = edges[:mid+1], 1-edges[mid:]
     def profile(side, distance):
         return surface[side]*np.sinh(wave[side]*distance)/np.sinh(wave[side]*.5)
-    avg = np.sinh(wave/(2*n))/(wave/(2*n))
-    return avg[0]*profile(0, center), avg[1]*profile(1, center[::-1]), profile(0,x), profile(1,x[::-1])
+    def cell_means(side, distance):
+        z = .5*wave[side]*np.diff(distance)
+        return profile(side, .5*(distance[1:]+distance[:-1]))*np.sinh(z)/z
+    return cell_means(0,left), cell_means(1,right), profile(0,left), profile(1,right)
 
 
-def measure(n, fraction, initialization, steps=None):
+def measure(n, fraction, initialization, steps=None, mesh="uniform"):
     omega, capacity, resistance, drive, wave, sheet, flux, surface = sheet_reference(fraction)
     steps = 8*n if steps is None else steps
     time = np.arange(steps+1)/steps
@@ -42,7 +53,8 @@ def measure(n, fraction, initialization, steps=None):
     phase = np.exp(1j*omega*time)
     exact_heat = (np.diff(phase)[:,None]*flux/(1j*omega)).real
     supplied = .5*dt*((drive*phase[:-1]).real+(drive*phase[1:]).real)
-    r, c, model = slab.models(n, resistance, capacity, fraction)
+    edges = slab_edges(n, mesh)
+    r, c, model = slab.models(n, resistance, capacity, fraction, edges=edges)
     mid = n//2
     # Initialize on each spatial discretization's periodic orbit. Projecting
     # the continuum profile excites extra decaying modes at the low-resistance
@@ -52,7 +64,7 @@ def measure(n, fraction, initialization, steps=None):
     initial = contact_chain.harmonic_contact_temperatures(r, c, omega, t_left=0., t_right=0.,
                                                          nodal_power=generation).real
     if initialization == "continuum":
-        left, right, left_nodes, right_nodes = projected_profiles(n, wave, surface)
+        left, right, left_nodes, right_nodes = projected_profiles(n, wave, surface, edges)
         initial = np.r_[0., left, sheet, right, 0.].real
     powers = np.zeros((len(time), len(c)))
     powers[:,mid+1] = (drive*phase).real
@@ -86,12 +98,14 @@ def measure(n, fraction, initialization, steps=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--initialization", choices=("periodic", "continuum"), default="periodic")
-    initialization = parser.parse_args().initialization
+    parser.add_argument("--mesh", choices=("uniform", "graded"), default="uniform")
+    args = parser.parse_args()
+    initialization = args.initialization
     rows = []
     for fraction in (.15, .85):
         previous = {}
         for n in (8, 16, 32, 64, 128):
-            for name, errors, balance, peak in measure(n, fraction, initialization):
+            for name, errors, balance, peak in measure(n, fraction, initialization, mesh=args.mesh):
                 orders = np.log2(previous[name]/errors) if name in previous else None
                 passed = np.isfinite(errors).all() and balance < 1e-12
                 if orders is not None:
@@ -101,7 +115,7 @@ def main():
                                  right_mean_flux_error_W_m2=errors[2], max_step_balance_J_m2=balance,
                                  orders=orders.tolist() if orders is not None else None, passed=bool(passed)))
                 previous[name] = errors
-    print(json.dumps(dict(initialization=initialization, runs=rows, sources=[provenance(f) for f in
+    print(json.dumps(dict(initialization=initialization, mesh=args.mesh, runs=rows, sources=[provenance(f) for f in
                     (__file__, slab.__file__, thermal.__file__, contact_chain.__file__)]), indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in rows) else 1
 
