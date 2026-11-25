@@ -1,0 +1,271 @@
+{
+  "reference": "Exact space and time integrals of a moving Fourier mode; equal physical diffusivity and end time across grids and relaxation times",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_gradient_startup.py --wall-gradient",
+  "runs": [
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.010800707411831284,
+        0.09512646003096431,
+        0.09910890205678835
+      ],
+      "first_step_near_wall_x_flux_error_W_m2": 0.008811563890308294,
+      "n": 8,
+      "steps": 8,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.010744904406912559,
+      "total_flux_errors_xyz_W_m2": [
+        0.02502930765581876,
+        0.09512646003096431,
+        0.09910890205678835
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.09512646003096359,
+        0.09910890205678813
+      ],
+      "max_cell_energy_residual_J": 1.2739375526704677e-18,
+      "tau": 0.75,
+      "gradient_source": "mixed-boundary cell samples",
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.219584006909821,
+        0.7651863091862514,
+        0.7722459776159447
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true,
+      "equilibrium_first_step_near_wall_x_flux_error_W_m2": 0.21873129770027813
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.0028614089815018895,
+        0.026483005577685237,
+        0.027613293863422594
+      ],
+      "first_step_near_wall_x_flux_error_W_m2": 0.0023230670141610177,
+      "n": 16,
+      "steps": 32,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.00221167607151318,
+      "total_flux_errors_xyz_W_m2": [
+        0.005825343322223259,
+        0.026483005577685237,
+        0.027613293863422594
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.026483005577681906,
+        0.027613293863422594
+      ],
+      "max_cell_energy_residual_J": 2.0837010502455788e-19,
+      "tau": 0.75,
+      "gradient_source": "mixed-boundary cell samples",
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.22330236260190203,
+        0.8318461397997317,
+        0.8335234815041388
+      ],
+      "temperature_and_total_flux_orders": [
+        2.280440642884936,
+        2.1032034006926352,
+        1.844779827663507,
+        1.8436516568080314
+      ],
+      "passed": true,
+      "equilibrium_first_step_near_wall_x_flux_error_W_m2": 0.22330236260190203
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.000725492622247359,
+        0.006797470451772258,
+        0.007087311566690513
+      ],
+      "first_step_near_wall_x_flux_error_W_m2": 0.0005944990077858259,
+      "n": 32,
+      "steps": 128,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0005349833513925706,
+      "total_flux_errors_xyz_W_m2": [
+        0.0014208932238207184,
+        0.006797470451772258,
+        0.007087311566690513
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.006797470451771925,
+        0.007087311566686627
+      ],
+      "max_cell_energy_residual_J": 2.874618064744282e-20,
+      "tau": 0.75,
+      "gradient_source": "mixed-boundary cell samples",
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.22413795656653876,
+        0.8488009942780039,
+        0.849225481582703
+      ],
+      "temperature_and_total_flux_orders": [
+        2.0475741988922893,
+        2.0355449347665737,
+        1.9619969840010925,
+        1.9620526125357636
+      ],
+      "passed": true,
+      "equilibrium_first_step_near_wall_x_flux_error_W_m2": 0.2240436091853826
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.03415408453218635,
+        0.09276774180198392,
+        0.07573034120517269
+      ],
+      "first_step_near_wall_x_flux_error_W_m2": 0.03415408453218635,
+      "n": 8,
+      "steps": 2,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.07274079525713639,
+      "total_flux_errors_xyz_W_m2": [
+        0.06573878968084297,
+        0.09276774180198392,
+        0.0834846843592485
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.09276774180198281,
+        0.0834846843592485
+      ],
+      "max_cell_energy_residual_J": 1.1926223897340549e-18,
+      "tau": 1.5,
+      "gradient_source": "mixed-boundary cell samples",
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.07693223408342222,
+        0.36863348740838275,
+        0.3451493258814738
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true,
+      "equilibrium_first_step_near_wall_x_flux_error_W_m2": 0.07693223408342222
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.009643090231424178,
+        0.02758272974938203,
+        0.02251761602021829
+      ],
+      "first_step_near_wall_x_flux_error_W_m2": 0.009643090231424178,
+      "n": 16,
+      "steps": 8,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.02295745834524965,
+      "total_flux_errors_xyz_W_m2": [
+        0.025689634810994483,
+        0.03118189519206005,
+        0.035138910573208504
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.03118189519205916,
+        0.035138910573208504
+      ],
+      "max_cell_energy_residual_J": 1.8634724839594607e-19,
+      "tau": 1.5,
+      "gradient_source": "mixed-boundary cell samples",
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.10229476552295773,
+        0.4109201370263388,
+        0.40426780161983
+      ],
+      "temperature_and_total_flux_orders": [
+        1.6638017705918842,
+        1.3555585132884986,
+        1.5729146074112856,
+        1.248442089425047
+      ],
+      "passed": true,
+      "equilibrium_first_step_near_wall_x_flux_error_W_m2": 0.10212798259778949
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.002492823190695437,
+        0.007199198554714181,
+        0.0058768352785798506
+      ],
+      "first_step_near_wall_x_flux_error_W_m2": 0.002492823190695437,
+      "n": 32,
+      "steps": 32,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.00639264203047174,
+      "total_flux_errors_xyz_W_m2": [
+        0.0077215406156576905,
+        0.009013474974436164,
+        0.010398735941380827
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.009013474974436109,
+        0.010398735941380355
+      ],
+      "max_cell_energy_residual_J": 2.747563122656137e-20,
+      "tau": 1.5,
+      "gradient_source": "mixed-boundary cell samples",
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.10965152559418684,
+        0.42301995988841773,
+        0.42132390286977617
+      ],
+      "temperature_and_total_flux_orders": [
+        1.844478713463966,
+        1.7342257514326662,
+        1.7905532935668034,
+        1.7566612969017716
+      ],
+      "passed": true,
+      "equilibrium_first_step_near_wall_x_flux_error_W_m2": 0.1096367862885009
+    }
+  ],
+  "sources": [
+    {
+      "commit": "ebd0a4d85fdc5c43978c12ded919285be19e9f93",
+      "file": "lbm_gradient_startup.py",
+      "source_sha256": "0304d6f62a5a386f2d0b1a100bd3cdca607a7a62015195859d5b15d23ca92b74"
+    },
+    {
+      "commit": "ebd0a4d85fdc5c43978c12ded919285be19e9f93",
+      "file": "lbm_periodic_advective_flux.py",
+      "source_sha256": "54044bd1bb862f6d33397dbfbc73dbd8c965dba13f4031b06926cd0a9c0d8944"
+    },
+    {
+      "commit": "5436c6e39c9d01999d60d49f38815e19826e50a9",
+      "file": "thermal_common.py",
+      "source_sha256": "ffa071dcf997eef42171717fd5d7b5a948d93571889e74b08666dba3e0e54feb"
+    }
+  ]
+}
