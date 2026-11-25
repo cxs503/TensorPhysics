@@ -9,7 +9,7 @@ from tensorfem import thermal
 from tensorfvm.cht import rod
 
 
-def measure(n):
+def measure(n, resolve_source=False):
     limits = [-.7, .2, 1.1]
     areas, conductivities, coefficients = [.8, 1.3], [1.7, 3.1], [4., -2.2]
     conductance = 2.5
@@ -37,9 +37,11 @@ def measure(n):
     fixed_t = np.array([temperatures[0][0],temperatures[1][-1]])
     contacts = np.zeros(2*n-1)
     contacts[n-1] = min(areas)/conductance
+    midpoints = np.concatenate([(x[:-1]+x[1:])/2 for x in edges])
+    derivatives = dict(source_gradient=2*beta*midpoints, source_curvature=2*beta) if resolve_source else {}
     cell, _, left, right, (hot,cold) = rod.solve_steady_stepped_rod(
         dx,cell_area,cell_k,1.,fixed_t,source=np.concatenate(sources),
-        contact_resistance=contacts,flux_order=2,return_traces=True)
+        contact_resistance=contacts,flux_order=2,return_traces=True,**derivatives)
     starts = np.r_[np.arange(n), n+1+np.arange(n)]
     fixed = torch.tensor([0,2*n+1])
     model = thermal.ThermalModel(torch.from_numpy(np.concatenate(edges)[:,None]),
@@ -62,16 +64,22 @@ def measure(n):
 
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--resolve-source", action="store_true", help="include within-cell source derivatives in FVM face powers")
+    resolve = parser.parse_args().resolve_source
     rows = []
     previous = None
     for n in (4,8,16,32,64):
-        fem,fvm = measure(n)
-        orders = {} if previous is None else {k:float(np.log2(previous[k]/v)) for k,v in fvm.items()}
+        fem,fvm = measure(n, resolve)
+        orders = {} if previous is None or resolve else {k:float(np.log2(previous[k]/v)) for k,v in fvm.items()}
         passed = max(fem.values()) < 1e-10 and all(np.isfinite(list(fvm.values())))
-        if previous is not None:
+        if resolve:
+            passed &= max(fvm.values()) < 1e-10
+        elif previous is not None:
             passed &= min(orders.values()) > 1.8
         rows.append(dict(cells_per_material=n,FEM=fem,FVM=fvm,FVM_orders=orders,passed=bool(passed)))
         previous = fvm
-    print(json.dumps(dict(sources=[provenance(p) for p in (__file__,thermal.__file__,rod.__file__)],
+    print(json.dumps(dict(resolved_source=resolve,sources=[provenance(p) for p in (__file__,thermal.__file__,rod.__file__)],
                           runs=rows),indent=2,allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
