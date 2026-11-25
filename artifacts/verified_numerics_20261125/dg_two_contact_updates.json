@@ -1,0 +1,2438 @@
+{
+  "baseline_resistance_K_W": [
+    0.32,
+    0.18
+  ],
+  "power_change_layout": "contact x end drive x [real, imaginary], relative to baseline",
+  "reference": "Three continuum layer propagators and two contact temperature jumps, with storing end walls",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/harmonic_two_contact_updates.py --dg",
+  "sources": [
+    {
+      "commit": "6be898b8e22b4890b32f51113f0ab5e6d9033dac",
+      "file": "harmonic_two_contact_updates.py",
+      "source_sha256": "2130cc3f6a1d8aea4cfa9d7624865a83bfbce294d146a52fdf3cf2a1961285cf"
+    },
+    {
+      "commit": "82c413095d598a234b16332310a00195355e59cb",
+      "file": "heat_1d.py",
+      "source_sha256": "8b006ec3f954c1d2851755be705284c957c180797f53bfef4342ccec8969f6d1"
+    }
+  ],
+  "runs": [
+    {
+      "element_power_discontinuity_W": 3.554447978966673e-15,
+      "element_contact_law_residual_W": 5.2531414044510614e-15,
+      "cells_per_material": 2,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 1.1670999153731961e-07,
+      "contact_power_error_W": 2.228803886617043e-08,
+      "direct_impedance_difference_K_W": 4.176637770298237e-15,
+      "direct_power_difference_W": 4.105439253424542e-15,
+      "power_change_W": [
+        [
+          [
+            0.012370340445661654,
+            0.043580578777319134
+          ],
+          [
+            -0.005063103243294592,
+            -0.014764916323021106
+          ]
+        ],
+        [
+          [
+            0.010922657928488122,
+            0.03186503752379086
+          ],
+          [
+            -0.004348067272530731,
+            -0.01076096631767283
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.1106063782808442e-15,
+      "element_contact_law_residual_W": 2.6121226247967573e-15,
+      "cells_per_material": 2,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 9.643376183171624e-08,
+      "contact_power_error_W": 1.774862409274038e-08,
+      "direct_impedance_difference_K_W": 8.326672684688674e-16,
+      "direct_power_difference_W": 8.968100940422724e-16,
+      "power_change_W": [
+        [
+          [
+            -0.09035849932820861,
+            -0.08097004762743312
+          ],
+          [
+            0.06826286271655438,
+            0.07041281384608537
+          ]
+        ],
+        [
+          [
+            -0.1472975282152459,
+            -0.15197361098662102
+          ],
+          [
+            0.11014486697683462,
+            0.13089363081977895
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.2330182483522125e-15,
+      "element_contact_law_residual_W": 7.750965016384439e-15,
+      "cells_per_material": 2,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 9.936833874494436e-08,
+      "contact_power_error_W": 1.8300664098658333e-08,
+      "direct_impedance_difference_K_W": 6.908406818208611e-15,
+      "direct_power_difference_W": 6.868257252450813e-15,
+      "power_change_W": [
+        [
+          [
+            -0.06997131422666947,
+            -0.04936900017134019
+          ],
+          [
+            0.05873554085646715,
+            0.0624919073568468
+          ]
+        ],
+        [
+          [
+            -0.12673898425896463,
+            -0.1348772502684387
+          ],
+          [
+            0.10199530030418091,
+            0.12754888303227746
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.5596458096434965e-15,
+      "element_contact_law_residual_W": 6.165737292347812e-15,
+      "cells_per_material": 2,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 7.763268312083413e-08,
+      "contact_power_error_W": 1.4548185138416789e-08,
+      "direct_impedance_difference_K_W": 2.094764613337708e-15,
+      "direct_power_difference_W": 6.467049118441537e-15,
+      "power_change_W": [
+        [
+          [
+            -0.2587728550939295,
+            -0.23728143402131785
+          ],
+          [
+            0.08981974659033251,
+            0.07298444169845424
+          ]
+        ],
+        [
+          [
+            -0.1938181008753514,
+            -0.15752901069064593
+          ],
+          [
+            0.06620229974253089,
+            0.041218360307003946
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.5596458096434965e-15,
+      "element_contact_law_residual_W": 3.636404130203732e-15,
+      "cells_per_material": 2,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 9.82507826393501e-08,
+      "contact_power_error_W": 1.8580908299449642e-08,
+      "direct_impedance_difference_K_W": 3.3893637946200148e-15,
+      "direct_power_difference_W": 1.8987735135852577e-15,
+      "power_change_W": [
+        [
+          [
+            -0.1054423103990193,
+            -0.14577743593294318
+          ],
+          [
+            0.050437358968438956,
+            0.06451129027328618
+          ]
+        ],
+        [
+          [
+            -0.10883040456434945,
+            -0.1392330437763016
+          ],
+          [
+            0.05458216051651665,
+            0.07803253645552106
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.554447978966673e-15,
+      "element_contact_law_residual_W": 5.527820953834149e-15,
+      "cells_per_material": 4,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 7.355025263148314e-09,
+      "contact_power_error_W": 1.4018007815930992e-09,
+      "direct_impedance_difference_K_W": 9.694605782913356e-16,
+      "direct_power_difference_W": 1.929274568010313e-15,
+      "power_change_W": [
+        [
+          [
+            0.012370338446264673,
+            0.0435805796723477
+          ],
+          [
+            -0.005063102511473683,
+            -0.014764916695281745
+          ]
+        ],
+        [
+          [
+            0.01092265630490985,
+            0.031865038342401286
+          ],
+          [
+            -0.004348066685263163,
+            -0.010760966652064982
+          ]
+        ]
+      ],
+      "orders": [
+        3.9880539682884066,
+        3.99091643995343
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.021398830883446e-15,
+      "element_contact_law_residual_W": 3.664156496154647e-15,
+      "cells_per_material": 4,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 6.074605714370574e-09,
+      "contact_power_error_W": 1.1155490558112747e-09,
+      "direct_impedance_difference_K_W": 3.0531133177191805e-15,
+      "direct_power_difference_W": 8.617648093045562e-16,
+      "power_change_W": [
+        [
+          [
+            -0.09035849615811575,
+            -0.0809700536373453
+          ],
+          [
+            0.06826286051314784,
+            0.07041281772694095
+          ]
+        ],
+        [
+          [
+            -0.14729752324931383,
+            -0.151973619567043
+          ],
+          [
+            0.11014486378919841,
+            0.13089363617540956
+          ]
+        ]
+      ],
+      "orders": [
+        3.9886756524092273,
+        3.99188132646422
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.722145839155691e-15,
+      "element_contact_law_residual_W": 6.44790158853841e-15,
+      "cells_per_material": 4,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 6.260548501178034e-09,
+      "contact_power_error_W": 1.1502912891880874e-09,
+      "direct_impedance_difference_K_W": 2.8004261699864225e-15,
+      "direct_power_difference_W": 4.250524228292578e-15,
+      "power_change_W": [
+        [
+          [
+            -0.06997131204313889,
+            -0.049369004913903086
+          ],
+          [
+            0.058735538851581115,
+            0.062491910693108776
+          ]
+        ],
+        [
+          [
+            -0.12673897974516524,
+            -0.13487725764494682
+          ],
+          [
+            0.10199529713859434,
+            0.1275488879288406
+          ]
+        ]
+      ],
+      "orders": [
+        3.988425280366832,
+        3.9918248549324264
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.6852712547870858e-15,
+      "element_contact_law_residual_W": 7.199349044417092e-15,
+      "cells_per_material": 4,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 4.881831916945927e-09,
+      "contact_power_error_W": 9.142071220250355e-10,
+      "direct_impedance_difference_K_W": 6.1854469444995704e-15,
+      "direct_power_difference_W": 4.685351628010802e-15,
+      "power_change_W": [
+        [
+          [
+            -0.258772849309645,
+            -0.2372814477698314
+          ],
+          [
+            0.08981974464452816,
+            0.07298444680952486
+          ]
+        ],
+        [
+          [
+            -0.19381809645769965,
+            -0.15752902199067567
+          ],
+          [
+            0.0662022984321674,
+            0.04121836444396189
+          ]
+        ]
+      ],
+      "orders": [
+        3.9911696218447097,
+        3.992174322222687
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.6852712547870858e-15,
+      "element_contact_law_residual_W": 2.1762920114812466e-15,
+      "cells_per_material": 4,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 6.1866925945370724e-09,
+      "contact_power_error_W": 1.1682961531772752e-09,
+      "direct_impedance_difference_K_W": 4.389594959401769e-15,
+      "direct_power_difference_W": 6.497413668604471e-16,
+      "power_change_W": [
+        [
+          [
+            -0.10544230499867147,
+            -0.1457774427838026
+          ],
+          [
+            0.05043735660561788,
+            0.06451129346489438
+          ]
+        ],
+        [
+          [
+            -0.10883039927193994,
+            -0.13923305081570844
+          ],
+          [
+            0.05458215795690652,
+            0.07803253978424948
+          ]
+        ]
+      ],
+      "orders": [
+        3.9892286435765554,
+        3.991343090736402
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.554447978966673e-15,
+      "element_contact_law_residual_W": 5.5965179799211526e-15,
+      "cells_per_material": 8,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 4.6044383907766374e-10,
+      "contact_power_error_W": 8.779731376661757e-11,
+      "direct_impedance_difference_K_W": 3.1816171654835078e-15,
+      "direct_power_difference_W": 3.280827619090314e-15,
+      "power_change_W": [
+        [
+          [
+            0.012370338319912633,
+            0.04358057972893524
+          ],
+          [
+            -0.005063102465131364,
+            -0.014764916718847991
+          ]
+        ],
+        [
+          [
+            0.010922656202328573,
+            0.03186503839414834
+          ],
+          [
+            -0.004348066648088733,
+            -0.010760966673229386
+          ]
+        ]
+      ],
+      "orders": [
+        3.9976331920730357,
+        3.996960723597129
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.808666774861361e-15,
+      "element_contact_law_residual_W": 2.563148888826738e-15,
+      "cells_per_material": 8,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 3.7991186921249236e-10,
+      "contact_power_error_W": 6.98916280116014e-11,
+      "direct_impedance_difference_K_W": 7.216449660063518e-16,
+      "direct_power_difference_W": 6.261943282059022e-16,
+      "power_change_W": [
+        [
+          [
+            -0.0903584959582473,
+            -0.08097005401717153
+          ],
+          [
+            0.06826286037389981,
+            0.07041281797257821
+          ]
+        ],
+        [
+          [
+            -0.14729752293656684,
+            -0.15197362010909393
+          ],
+          [
+            0.1101448635879353,
+            0.13089363651430602
+          ]
+        ]
+      ],
+      "orders": [
+        3.999054079945699,
+        3.9964904943559936
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.636427468134552e-15,
+      "element_contact_law_residual_W": 4.2486887604004e-15,
+      "cells_per_material": 8,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 3.91625735280564e-10,
+      "contact_power_error_W": 7.208259515487097e-11,
+      "direct_impedance_difference_K_W": 5.950836838078908e-15,
+      "direct_power_difference_W": 2.663848509223971e-15,
+      "power_change_W": [
+        [
+          [
+            -0.06997131190552497,
+            -0.049369005213605544
+          ],
+          [
+            0.058735538724884157,
+            0.06249191090426218
+          ]
+        ],
+        [
+          [
+            -0.12673897946088053,
+            -0.13487725811091233
+          ],
+          [
+            0.10199529693870085,
+            0.12754888823868255
+          ]
+        ]
+      ],
+      "orders": [
+        3.9987415821712555,
+        3.9962044792949714
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.7763568394002505e-15,
+      "element_contact_law_residual_W": 6.4251609741647165e-15,
+      "cells_per_material": 8,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 3.0602294458366033e-10,
+      "contact_power_error_W": 5.7280228287697886e-11,
+      "direct_impedance_difference_K_W": 3.794299872214038e-15,
+      "direct_power_difference_W": 5.3891579640384935e-15,
+      "power_change_W": [
+        [
+          [
+            -0.2587728489457437,
+            -0.23728144863900527
+          ],
+          [
+            0.08981974452162397,
+            0.0729844471331887
+          ]
+        ],
+        [
+          [
+            -0.1938180961797853,
+            -0.15752902270487568
+          ],
+          [
+            0.06620229834945857,
+            0.0412183647058432
+          ]
+        ]
+      ],
+      "orders": [
+        3.995710892949827,
+        3.996411910614322
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.221139830254355e-15,
+      "element_contact_law_residual_W": 2.2509412470550935e-15,
+      "cells_per_material": 8,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 3.8724405261068174e-10,
+      "contact_power_error_W": 7.316796886460573e-11,
+      "direct_impedance_difference_K_W": 2.220446049250313e-15,
+      "direct_power_difference_W": 8.326672684688674e-16,
+      "power_change_W": [
+        [
+          [
+            -0.10544230465786819,
+            -0.1457774432170311
+          ],
+          [
+            0.05043735645615202,
+            0.06451129366699725
+          ]
+        ],
+        [
+          [
+            -0.10883039893815838,
+            -0.13923305126069324
+          ],
+          [
+            0.05458215779510167,
+            0.07803253999495986
+          ]
+        ]
+      ],
+      "orders": [
+        3.9978533638164215,
+        3.9970500109803484
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.790180836524724e-15,
+      "element_contact_law_residual_W": 8.061358356722016e-15,
+      "cells_per_material": 16,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 2.844909755432364e-11,
+      "contact_power_error_W": 4.913134450054808e-12,
+      "direct_impedance_difference_K_W": 1.0605390551611693e-15,
+      "direct_power_difference_W": 7.159381795111257e-15,
+      "power_change_W": [
+        [
+          [
+            0.01237033831204315,
+            0.043580579732457186
+          ],
+          [
+            -0.00506310246228725,
+            -0.014764916720299899
+          ]
+        ],
+        [
+          [
+            0.010922656195872071,
+            0.031865038397384915
+          ],
+          [
+            -0.004348066645781246,
+            -0.01076096667454067
+          ]
+        ]
+      ],
+      "orders": [
+        4.016570405653096,
+        4.159461175238605
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.7012892057857034e-15,
+      "element_contact_law_residual_W": 2.448161348223004e-15,
+      "cells_per_material": 16,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 2.319717850303147e-11,
+      "contact_power_error_W": 3.840873378689621e-12,
+      "direct_impedance_difference_K_W": 3.219646771412954e-15,
+      "direct_power_difference_W": 5.302695275805846e-16,
+      "power_change_W": [
+        [
+          [
+            -0.09035849594537693,
+            -0.08097005404113991
+          ],
+          [
+            0.06826286036533663,
+            0.07041281798770993
+          ]
+        ],
+        [
+          [
+            -0.14729752291655246,
+            -0.1519736201431886
+          ],
+          [
+            0.11014486357581116,
+            0.13089363653502306
+          ]
+        ]
+      ],
+      "orders": [
+        4.033643540771095,
+        4.185613343592779
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 6.2212127565616885e-15,
+      "element_contact_law_residual_W": 1.435067942883752e-14,
+      "cells_per_material": 16,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 2.4114395864311153e-11,
+      "contact_power_error_W": 3.953477142746352e-12,
+      "direct_impedance_difference_K_W": 2.987304636342383e-15,
+      "direct_power_difference_W": 8.890800182968585e-15,
+      "power_change_W": [
+        [
+          [
+            -0.06997131189650552,
+            -0.04936900523255944
+          ],
+          [
+            0.058735538717079316,
+            0.062491910917272214
+          ]
+        ],
+        [
+          [
+            -0.1267389794426761,
+            -0.1348772581402265
+          ],
+          [
+            0.10199529692666764,
+            0.12754888825759703
+          ]
+        ]
+      ],
+      "orders": [
+        4.021509001308585,
+        4.18845696397634
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.886579864025407e-15,
+      "element_contact_law_residual_W": 5.08919501415691e-15,
+      "cells_per_material": 16,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 1.7486683192646814e-11,
+      "contact_power_error_W": 3.2053098220757434e-12,
+      "direct_impedance_difference_K_W": 4.6682204860878675e-15,
+      "direct_power_difference_W": 5.253434695803221e-15,
+      "power_change_W": [
+        [
+          [
+            -0.2587728489227807,
+            -0.23728144869304496
+          ],
+          [
+            0.08981974451406988,
+            0.07298444715306793
+          ]
+        ],
+        [
+          [
+            -0.19381809616188395,
+            -0.15752902274967845
+          ],
+          [
+            0.06620229834419394,
+            0.041218364722089035
+          ]
+        ]
+      ],
+      "orders": [
+        4.129311250024508,
+        4.159501524236203
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.6668472207145996e-15,
+      "element_contact_law_residual_W": 1.9991722838696e-15,
+      "cells_per_material": 16,
+      "omega_rad_s": 0.5,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 2.3142528963410444e-11,
+      "contact_power_error_W": 4.054217391540452e-12,
+      "direct_impedance_difference_K_W": 2.731351722605201e-15,
+      "direct_power_difference_W": 1.2123818431320796e-15,
+      "power_change_W": [
+        [
+          [
+            -0.10544230463645554,
+            -0.14577744324408087
+          ],
+          [
+            0.05043735644698208,
+            0.06451129367943374
+          ]
+        ],
+        [
+          [
+            -0.10883039891696661,
+            -0.1392330512885912
+          ],
+          [
+            0.054582157785209806,
+            0.07803254000794949
+          ]
+        ]
+      ],
+      "orders": [
+        4.064624649284537,
+        4.173716855476334
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.460365043975677e-16,
+      "element_contact_law_residual_W": 8.608703982599287e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 4.13315592934036e-06,
+      "contact_power_error_W": 5.965857908614808e-06,
+      "direct_impedance_difference_K_W": 1.1102230246251565e-16,
+      "direct_power_difference_W": 4.791355229691893e-16,
+      "power_change_W": [
+        [
+          [
+            0.16066211112675632,
+            0.00428219185708828
+          ],
+          [
+            -0.04724515551895353,
+            0.018768295606015617
+          ]
+        ],
+        [
+          [
+            0.10204306633901736,
+            -0.04042921291405849
+          ],
+          [
+            -0.024632351185059242,
+            0.02446587631226202
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 5.551115123125783e-16,
+      "element_contact_law_residual_W": 4.577566798522237e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 2.6533600991586544e-06,
+      "contact_power_error_W": 2.8279097179959147e-06,
+      "direct_impedance_difference_K_W": 5.721958498152797e-17,
+      "direct_power_difference_W": 1.5700924586837752e-16,
+      "power_change_W": [
+        [
+          [
+            0.008059211964345503,
+            0.11247858029681979
+          ],
+          [
+            0.04438278196481413,
+            -0.09462849271327645
+          ]
+        ],
+        [
+          [
+            -0.09601238048105873,
+            0.20422313476562248
+          ],
+          [
+            0.17008249408870652,
+            -0.12174140146343324
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 7.216449660063518e-16,
+      "element_contact_law_residual_W": 1.764171984283214e-15,
+      "cells_per_material": 2,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 3.213121058537101e-06,
+      "contact_power_error_W": 3.541209601076622e-06,
+      "direct_impedance_difference_K_W": 1.3877787807814457e-16,
+      "direct_power_difference_W": 1.3506446028928517e-15,
+      "power_change_W": [
+        [
+          [
+            0.09829343325284451,
+            0.14939033551138098
+          ],
+          [
+            0.035831362691309925,
+            -0.08546733738844182
+          ]
+        ],
+        [
+          [
+            -0.07753113328685347,
+            0.1844603038400949
+          ],
+          [
+            0.17161477421808355,
+            -0.11861896436208322
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.510833468576701e-16,
+      "element_contact_law_residual_W": 8.777083671441752e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 1.1774501821605452e-06,
+      "contact_power_error_W": 1.537494686000037e-06,
+      "direct_impedance_difference_K_W": 8.582937747229195e-17,
+      "direct_power_difference_W": 1.1164505631721538e-15,
+      "power_change_W": [
+        [
+          [
+            -0.2430380090200111,
+            0.24549884869458177
+          ],
+          [
+            0.03375207141297101,
+            -0.09744115606198996
+          ]
+        ],
+        [
+          [
+            -0.07306535859256341,
+            0.21031683938512347
+          ],
+          [
+            -0.040294995382241516,
+            -0.10099484681097609
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.510833468576701e-16,
+      "element_contact_law_residual_W": 3.521958623843989e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 1.505615694715982e-06,
+      "contact_power_error_W": 1.2497224409057964e-06,
+      "direct_impedance_difference_K_W": 1.1443916996305594e-16,
+      "direct_power_difference_W": 9.813077866773594e-17,
+      "power_change_W": [
+        [
+          [
+            -0.18091160754652785,
+            0.1517224516203057
+          ],
+          [
+            0.05288501987378452,
+            -0.09302288260716737
+          ]
+        ],
+        [
+          [
+            -0.11436623559177805,
+            0.2007397475627488
+          ],
+          [
+            0.11044624093311169,
+            -0.06711109938926119
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.440892098500626e-16,
+      "element_contact_law_residual_W": 5.960990477592167e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 2.5982670395654247e-07,
+      "contact_power_error_W": 3.7505946016871353e-07,
+      "direct_impedance_difference_K_W": 1.8440363494407354e-16,
+      "direct_power_difference_W": 6.938893903907228e-16,
+      "power_change_W": [
+        [
+          [
+            0.16066379214465368,
+            0.004284018130105649
+          ],
+          [
+            -0.04724596308366774,
+            0.018767927171542076
+          ]
+        ],
+        [
+          [
+            0.10204484138038505,
+            -0.04042834482763413
+          ],
+          [
+            -0.02463304532952726,
+            0.024465840117673554
+          ]
+        ]
+      ],
+      "orders": [
+        3.9916221745313205,
+        3.991538379836377
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.710277376051326e-16,
+      "element_contact_law_residual_W": 6.77599954797753e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 1.675000601756451e-07,
+      "contact_power_error_W": 1.7676302530444174e-07,
+      "direct_impedance_difference_K_W": 4.3786908457812756e-16,
+      "direct_power_difference_W": 7.850462293418876e-17,
+      "power_change_W": [
+        [
+          [
+            0.008057982706770633,
+            0.11247986794623616
+          ],
+          [
+            0.04438387179772392,
+            -0.09462891634801407
+          ]
+        ],
+        [
+          [
+            -0.09601488252409637,
+            0.20422398613975395
+          ],
+          [
+            0.1700839924782594,
+            -0.12174132708362272
+          ]
+        ]
+      ],
+      "orders": [
+        3.985586964355388,
+        3.999847629040058
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.440892098500626e-16,
+      "element_contact_law_residual_W": 1.1298258127427696e-15,
+      "cells_per_material": 4,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 2.0288797432220222e-07,
+      "contact_power_error_W": 2.2148035383735557e-07,
+      "direct_impedance_difference_K_W": 4.615309969165303e-16,
+      "direct_power_difference_W": 1.1430445635548515e-15,
+      "power_change_W": [
+        [
+          [
+            0.09829232260455725,
+            0.14939276361937978
+          ],
+          [
+            0.03583230570473389,
+            -0.085467785847464
+          ]
+        ],
+        [
+          [
+            -0.07753330373106515,
+            0.1844612215378108
+          ],
+          [
+            0.17161625243938727,
+            -0.1186188507505239
+          ]
+        ]
+      ],
+      "orders": [
+        3.9852200766581833,
+        3.9989916011573237
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 5.661048867003677e-16,
+      "element_contact_law_residual_W": 1.5745021512894956e-15,
+      "cells_per_material": 4,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 7.654464863303326e-08,
+      "contact_power_error_W": 9.599923996830775e-08,
+      "direct_impedance_difference_K_W": 4.813912344012863e-16,
+      "direct_power_difference_W": 1.440685496930584e-15,
+      "power_change_W": [
+        [
+          [
+            -0.24304124961977727,
+            0.2454989955245497
+          ],
+          [
+            0.033753142321768945,
+            -0.09744170967187991
+          ]
+        ],
+        [
+          [
+            -0.07306782357228178,
+            0.21031798791182854
+          ],
+          [
+            -0.04029418415116934,
+            -0.10099595618145656
+          ]
+        ]
+      ],
+      "orders": [
+        3.943220690593014,
+        4.001414629912057
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 6.804363002006077e-16,
+      "element_contact_law_residual_W": 5.855045090355222e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 9.585166427193604e-08,
+      "contact_power_error_W": 7.773786778925423e-08,
+      "direct_impedance_difference_K_W": 3.0184686961637816e-16,
+      "direct_power_difference_W": 1.0408340855860843e-16,
+      "power_change_W": [
+        [
+          [
+            -0.1809141908749985,
+            0.15172252895158475
+          ],
+          [
+            0.052886201601098665,
+            -0.09302327792325922
+          ]
+        ],
+        [
+          [
+            -0.1143689341422465,
+            0.2007405244729875
+          ],
+          [
+            0.11044735359558533,
+            -0.06711112153015975
+          ]
+        ]
+      ],
+      "orders": [
+        3.9734062802386405,
+        4.006846364913948
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 5.185169430563076e-16,
+      "element_contact_law_residual_W": 1.3368855554576669e-15,
+      "cells_per_material": 8,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 1.6292122303838143e-08,
+      "contact_power_error_W": 2.351818219200173e-08,
+      "direct_impedance_difference_K_W": 2.5018537765542007e-16,
+      "direct_power_difference_W": 1.186692873213599e-15,
+      "power_change_W": [
+        [
+          [
+            0.16066389864645444,
+            0.0042841333506235535
+          ],
+          [
+            -0.04724601421215428,
+            0.018767903793061064
+          ]
+        ],
+        [
+          [
+            0.10204495365743119,
+            -0.040428290058410477
+          ],
+          [
+            -0.024633089289312515,
+            0.024465837764125337
+          ]
+        ]
+      ],
+      "orders": [
+        3.995303258052045,
+        3.995270873532596
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 6.662783593823664e-16,
+      "element_contact_law_residual_W": 6.9444428003588885e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 1.0514654727269686e-08,
+      "contact_power_error_W": 1.1067582684205841e-08,
+      "direct_impedance_difference_K_W": 5.117875266520904e-16,
+      "direct_power_difference_W": 1.1102230246251565e-16,
+      "power_change_W": [
+        [
+          [
+            0.00805790524263586,
+            0.11247994945812734
+          ],
+          [
+            0.044383940610140366,
+            -0.09462894331496009
+          ]
+        ],
+        [
+          [
+            -0.09601503994623177,
+            0.20422404066561076
+          ],
+          [
+            0.17008408701418257,
+            -0.12174132320090969
+          ]
+        ]
+      ],
+      "orders": [
+        3.9936882320997875,
+        3.997404471446289
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.885780586188048e-16,
+      "element_contact_law_residual_W": 5.4672143489065705e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 1.2736827465935165e-08,
+      "contact_power_error_W": 1.3869494853075499e-08,
+      "direct_impedance_difference_K_W": 6.206335383118183e-16,
+      "direct_power_difference_W": 4.0029660424867215e-16,
+      "power_change_W": [
+        [
+          [
+            0.09829225278664047,
+            0.1493929169085077
+          ],
+          [
+            0.035832365239057126,
+            -0.08546781437763568
+          ]
+        ],
+        [
+          [
+            -0.07753344025165816,
+            0.18446128018776062
+          ],
+          [
+            0.17161634570178128,
+            -0.11861884438718848
+          ]
+        ]
+      ],
+      "orders": [
+        3.993605479617735,
+        3.9971915831292586
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.885780586188048e-16,
+      "element_contact_law_residual_W": 1.0824674490095276e-15,
+      "cells_per_material": 8,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 4.841667134701075e-09,
+      "contact_power_error_W": 6.009248567429652e-09,
+      "direct_impedance_difference_K_W": 4.412348530767138e-16,
+      "direct_power_difference_W": 7.738033469234879e-16,
+      "power_change_W": [
+        [
+          [
+            -0.24304145379146397,
+            0.24549900650172
+          ],
+          [
+            0.03375320996726641,
+            -0.0974417448445659
+          ]
+        ],
+        [
+          [
+            -0.07306797869424364,
+            0.21031806113453638
+          ],
+          [
+            -0.04029413299004839,
+            -0.10099602622445293
+          ]
+        ]
+      ],
+      "orders": [
+        3.9827257176079893,
+        3.9977664799108994
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 3.885780586188048e-16,
+      "element_contact_law_residual_W": 3.9739936517281115e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 6.030706976802001e-09,
+      "contact_power_error_W": 4.861232079122331e-09,
+      "direct_impedance_difference_K_W": 2.9893669801409083e-16,
+      "direct_power_difference_W": 1.3329179921125024e-16,
+      "power_change_W": [
+        [
+          [
+            -0.18091435401535982,
+            0.15172253492685328
+          ],
+          [
+            0.05288627628061247,
+            -0.09302330312004163
+          ]
+        ],
+        [
+          [
+            -0.11436910412436901,
+            0.20074057438654927
+          ],
+          [
+            0.11044742396086306,
+            -0.06711112343139619
+          ]
+        ]
+      ],
+      "orders": [
+        3.9904044380376296,
+        3.9992236213710313
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.449557262054371e-16,
+      "element_contact_law_residual_W": 6.087272963323595e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 1.0201394027790865e-09,
+      "contact_power_error_W": 1.4725732398270011e-09,
+      "direct_impedance_difference_K_W": 1.9872996986386012e-16,
+      "direct_power_difference_W": 3.855927796350635e-16,
+      "power_change_W": [
+        [
+          [
+            0.16066390533786365,
+            0.004284140583262708
+          ],
+          [
+            -0.047246017424138365,
+            0.01876790232315262
+          ]
+        ],
+        [
+          [
+            0.10204496070915081,
+            -0.040428286620241505
+          ],
+          [
+            -0.024633092051236927,
+            0.024465837615045588
+          ]
+        ]
+      ],
+      "orders": [
+        3.997336333616813,
+        3.9973652584450208
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 9.155133597044475e-16,
+      "element_contact_law_residual_W": 1.0370338861126152e-15,
+      "cells_per_material": 16,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 6.584314669852519e-10,
+      "contact_power_error_W": 6.927462122742293e-10,
+      "direct_impedance_difference_K_W": 5.4672143489065705e-16,
+      "direct_power_difference_W": 1.2509268882771003e-16,
+      "power_change_W": [
+        [
+          [
+            0.008057900381866573,
+            0.11247995457863552
+          ],
+          [
+            0.04438394493038105,
+            -0.09462894501118664
+          ]
+        ],
+        [
+          [
+            -0.09601504982010484,
+            0.20422404410094003
+          ],
+          [
+            0.1700840929481386,
+            -0.1217413229696609
+          ]
+        ]
+      ],
+      "orders": [
+        3.9972243814334947,
+        3.997869423893049
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 8.400361489980554e-16,
+      "element_contact_law_residual_W": 1.3611556143588143e-15,
+      "cells_per_material": 16,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 7.975707504252783e-10,
+      "contact_power_error_W": 8.681558010509098e-10,
+      "direct_impedance_difference_K_W": 6.684427777288334e-16,
+      "direct_power_difference_W": 1.056171682913856e-15,
+      "power_change_W": [
+        [
+          [
+            0.09829224840802167,
+            0.14939292653162964
+          ],
+          [
+            0.03583236897668483,
+            -0.08546781617199323
+          ]
+        ],
+        [
+          [
+            -0.07753344881393708,
+            0.18446128388103863
+          ],
+          [
+            0.1716163515557763,
+            -0.1186188440001546
+          ]
+        ]
+      ],
+      "orders": [
+        3.9972496582528327,
+        3.997817458401428
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.440892098500626e-16,
+      "element_contact_law_residual_W": 5.578801654593729e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 3.0348297522673815e-10,
+      "contact_power_error_W": 3.7587195375464773e-10,
+      "direct_impedance_difference_K_W": 4.442391093829022e-16,
+      "direct_power_difference_W": 6.961062950497061e-16,
+      "power_change_W": [
+        [
+          [
+            -0.24304146660221576,
+            0.2454990072178817
+          ],
+          [
+            0.03375321421473564,
+            -0.09744174705594108
+          ]
+        ],
+        [
+          [
+            -0.07306798842440604,
+            0.21031806574255346
+          ],
+          [
+            -0.0402941297787551,
+            -0.10099603062168186
+          ]
+        ]
+      ],
+      "orders": [
+        3.99581640563153,
+        3.9988714232815443
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 4.965068306494546e-16,
+      "element_contact_law_residual_W": 5.578801654593729e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 4.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 3.777845804211269e-10,
+      "contact_power_error_W": 3.0423921173412245e-10,
+      "direct_impedance_difference_K_W": 3.608224830031759e-16,
+      "direct_power_difference_W": 2.709724693207105e-16,
+      "power_change_W": [
+        [
+          [
+            -0.1809143642577329,
+            0.15172253531905372
+          ],
+          [
+            0.052886280970271496,
+            -0.0930233047053865
+          ]
+        ],
+        [
+          [
+            -0.11436911478931479,
+            0.2007405775337254
+          ],
+          [
+            0.11044742838026277,
+            -0.06711112355838258
+          ]
+        ]
+      ],
+      "orders": [
+        3.9966914151747486,
+        3.998043999929413
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.4946834900704541e-16,
+      "element_contact_law_residual_W": 2.3714374201337736e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 1.4517627933111117e-05,
+      "contact_power_error_W": 5.074499482470616e-05,
+      "direct_impedance_difference_K_W": 8.326672684688674e-17,
+      "direct_power_difference_W": 1.6711069443220836e-16,
+      "power_change_W": [
+        [
+          [
+            0.09069946750977557,
+            -0.08380109967728241
+          ],
+          [
+            0.0018138376253011776,
+            0.02615792708118213
+          ]
+        ],
+        [
+          [
+            -0.0038470838412581337,
+            -0.05667278897207204
+          ],
+          [
+            0.009893835087982522,
+            0.006898467014352205
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.4946834900704541e-16,
+      "element_contact_law_residual_W": 2.3714374201337736e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 1.094367335618739e-05,
+      "contact_power_error_W": 2.9452376263950734e-05,
+      "direct_impedance_difference_K_W": 3.925231146709438e-17,
+      "direct_power_difference_W": 1.3877787807814457e-17,
+      "power_change_W": [
+        [
+          [
+            0.021227810604060104,
+            -0.004127397810295724
+          ],
+          [
+            -0.02289396772419361,
+            -0.02482827478430047
+          ]
+        ],
+        [
+          [
+            0.04951809167011528,
+            0.05385863862718391
+          ],
+          [
+            0.03097284043748154,
+            -0.10998070083274274
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.6523122079476597e-16,
+      "element_contact_law_residual_W": 3.650675994272796e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 1.6423454423896585e-05,
+      "contact_power_error_W": 5.368801139439561e-05,
+      "direct_impedance_difference_K_W": 3.925231146709438e-17,
+      "direct_power_difference_W": 2.7755575615628914e-16,
+      "power_change_W": [
+        [
+          [
+            0.13262244819390295,
+            -0.06215762832535579
+          ],
+          [
+            -0.020632252511003868,
+            -0.019544908752634187
+          ]
+        ],
+        [
+          [
+            0.04463506298194162,
+            0.0424059306065932
+          ],
+          [
+            0.031512281656882885,
+            -0.1101638128208535
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.4946834900704541e-16,
+      "element_contact_law_residual_W": 6.335327934766281e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 9.115349780708947e-06,
+      "contact_power_error_W": 2.6923944339401933e-05,
+      "direct_impedance_difference_K_W": 3.1031676915590914e-17,
+      "direct_power_difference_W": 5.23691153334427e-16,
+      "power_change_W": [
+        [
+          [
+            -0.01871599520862044,
+            0.1602551926432692
+          ],
+          [
+            -0.023243010503514315,
+            -0.02033954739494273
+          ]
+        ],
+        [
+          [
+            0.050288363620577134,
+            0.044135607138806945
+          ],
+          [
+            -0.0856101670146704,
+            0.019619779453191016
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.4946834900704541e-16,
+      "element_contact_law_residual_W": 2.3714374201337736e-16,
+      "cells_per_material": 2,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 8.916959145971963e-06,
+      "contact_power_error_W": 9.889537943584568e-06,
+      "direct_impedance_difference_K_W": 5.928593550334434e-17,
+      "direct_power_difference_W": 2.6020852139652106e-17,
+      "power_change_W": [
+        [
+          [
+            -0.024190764457988706,
+            0.1128430146598408
+          ],
+          [
+            -0.02340969999576887,
+            -0.026557865247190462
+          ]
+        ],
+        [
+          [
+            0.05062990279042798,
+            0.05760715029483325
+          ],
+          [
+            0.0315838334852991,
+            -0.07231824552459395
+          ]
+        ]
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.3877787807814457e-16,
+      "element_contact_law_residual_W": 3.433175098891678e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 9.091122868534091e-07,
+      "contact_power_error_W": 3.185051455651013e-06,
+      "direct_impedance_difference_K_W": 6.206335383118183e-17,
+      "direct_power_difference_W": 5.721958498152797e-17,
+      "power_change_W": [
+        [
+          [
+            0.09072384470896419,
+            -0.08380370638571616
+          ],
+          [
+            0.0018112862230015153,
+            0.026163298224552805
+          ]
+        ],
+        [
+          [
+            -0.003840495029931043,
+            -0.05668463936189469
+          ],
+          [
+            0.00989534966538127,
+            0.006901326292113513
+          ]
+        ]
+      ],
+      "orders": [
+        3.9972034407853836,
+        3.9938769456785557
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.3877787807814457e-16,
+      "element_contact_law_residual_W": 3.433175098891678e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 6.924636186288665e-07,
+      "contact_power_error_W": 1.840596512943808e-06,
+      "direct_impedance_difference_K_W": 5.003707553108402e-17,
+      "direct_power_difference_W": 7.376145397762941e-17,
+      "power_change_W": [
+        [
+          [
+            0.021232210812744567,
+            -0.004125696776925425
+          ],
+          [
+            -0.022894612692845255,
+            -0.024833361112923193
+          ]
+        ],
+        [
+          [
+            0.04951860240376248,
+            0.05387072466132074
+          ],
+          [
+            0.030983515163172125,
+            -0.10998544352505721
+          ]
+        ]
+      ],
+      "orders": [
+        3.9822149892351444,
+        4.000138732127686
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.8619006149354548e-16,
+      "element_contact_law_residual_W": 7.065416064076989e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 1.0321579003887451e-06,
+      "contact_power_error_W": 3.3618410523411916e-06,
+      "direct_impedance_difference_K_W": 3.925231146709438e-17,
+      "direct_power_difference_W": 5.900916318210353e-16,
+      "power_change_W": [
+        [
+          [
+            0.1326526553971456,
+            -0.062148153032590414
+          ],
+          [
+            -0.020633218901764817,
+            -0.019548860254506202
+          ]
+        ],
+        [
+          [
+            0.04463647376548496,
+            0.04241543781175213
+          ],
+          [
+            0.0315230703117111,
+            -0.1101685177589557
+          ]
+        ]
+      ],
+      "orders": [
+        3.9920220105316844,
+        3.9972765476615923
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.3877787807814457e-16,
+      "element_contact_law_residual_W": 3.433175098891678e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 5.975025568694127e-07,
+      "contact_power_error_W": 1.6835218573671715e-06,
+      "direct_impedance_difference_K_W": 2.8609792490763984e-17,
+      "direct_power_difference_W": 2.651347637902923e-16,
+      "power_change_W": [
+        [
+          [
+            -0.018732831387664788,
+            0.16026748912053973
+          ],
+          [
+            -0.02324430601435898,
+            -0.02034415519923738
+          ]
+        ],
+        [
+          [
+            0.05029046818862545,
+            0.044146646998935085
+          ],
+          [
+            -0.08562260597148524,
+            0.019611757564734794
+          ]
+        ]
+      ],
+      "orders": [
+        3.9312812255626857,
+        3.999335422183157
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.3877787807814457e-16,
+      "element_contact_law_residual_W": 3.433175098891678e-16,
+      "cells_per_material": 4,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 5.806596333567721e-07,
+      "contact_power_error_W": 6.109521770692538e-07,
+      "direct_impedance_difference_K_W": 2.8609792490763984e-17,
+      "direct_power_difference_W": 2.2215299868541707e-17,
+      "power_change_W": [
+        [
+          [
+            -0.02420339481764331,
+            0.11285210987926005
+          ],
+          [
+            -0.023410425094790896,
+            -0.026563263310276294
+          ]
+        ],
+        [
+          [
+            0.05063051932364371,
+            0.0576199425993065
+          ],
+          [
+            0.031591558536076134,
+            -0.0723211332999022
+          ]
+        ]
+      ],
+      "orders": [
+        3.940787158842489,
+        4.016771756247984
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.5823112613210482e-16,
+      "element_contact_law_residual_W": 1.8875832159447664e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 5.694596666244354e-08,
+      "contact_power_error_W": 1.9963420049330472e-07,
+      "direct_impedance_difference_K_W": 1.6184142622847341e-16,
+      "direct_power_difference_W": 9.934984129320279e-17,
+      "power_change_W": [
+        [
+          [
+            0.0907253860388734,
+            -0.08380388054486615
+          ],
+          [
+            0.0018111232616187037,
+            0.026163638670997896
+          ]
+        ],
+        [
+          [
+            -0.003840079359373638,
+            -0.056685390771281166
+          ],
+          [
+            0.009895444842146597,
+            0.0069015082346947365
+          ]
+        ]
+      ],
+      "orders": [
+        3.996792928234774,
+        3.995885876506634
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.5823112613210482e-16,
+      "element_contact_law_residual_W": 1.8875832159447664e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 4.349705519030725e-08,
+      "contact_power_error_W": 1.1523940853765436e-07,
+      "direct_impedance_difference_K_W": 5.003707553108402e-17,
+      "direct_power_difference_W": 1.5515838457795457e-17,
+      "power_change_W": [
+        [
+          [
+            0.021232490047593606,
+            -0.004125590402757312
+          ],
+          [
+            -0.02289465549122979,
+            -0.024833682939909042
+          ]
+        ],
+        [
+          [
+            0.049518643838158766,
+            0.05387148604251627
+          ],
+          [
+            0.03098417914091049,
+            -0.10998575188776483
+          ]
+        ]
+      ],
+      "orders": [
+        3.9927486383788313,
+        3.9974673342530793
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.2727525813773323e-16,
+      "element_contact_law_residual_W": 6.667118051786499e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 6.47131348649053e-08,
+      "contact_power_error_W": 2.105817659368711e-07,
+      "direct_impedance_difference_K_W": 2.1677797545656835e-16,
+      "direct_power_difference_W": 5.613217783960923e-16,
+      "power_change_W": [
+        [
+          [
+            0.13265456445899348,
+            -0.06214756254725751
+          ],
+          [
+            -0.020633282131868734,
+            -0.0195491102403946
+          ]
+        ],
+        [
+          [
+            0.04463657139264285,
+            0.042416036205819255
+          ],
+          [
+            0.03152374150363242,
+            -0.1101688237213356
+          ]
+        ]
+      ],
+      "orders": [
+        3.9954613154855356,
+        3.9967990902717965
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.5823112613210482e-16,
+      "element_contact_law_residual_W": 4.847302891456678e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 3.78663189511335e-08,
+      "contact_power_error_W": 1.0541478771823008e-07,
+      "direct_impedance_difference_K_W": 2.237726045655905e-16,
+      "direct_power_difference_W": 5.224024053540252e-16,
+      "power_change_W": [
+        [
+          [
+            -0.018733872351017457,
+            0.16026828119933764
+          ],
+          [
+            -0.023244389740708086,
+            -0.020344446935448457
+          ]
+        ],
+        [
+          [
+            0.05029060919966545,
+            0.04414734242373615
+          ],
+          [
+            -0.08562339134892505,
+            0.0196112546798394
+          ]
+        ]
+      ],
+      "orders": [
+        3.9799578004472855,
+        3.997333282622114
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 1.5823112613210482e-16,
+      "element_contact_law_residual_W": 1.8875832159447664e-16,
+      "cells_per_material": 8,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 3.674118561733157e-08,
+      "contact_power_error_W": 3.8137198640522546e-08,
+      "direct_impedance_difference_K_W": 1.4833660915169988e-16,
+      "direct_power_difference_W": 2.501853776554201e-17,
+      "power_change_W": [
+        [
+          [
+            -0.024204179652339813,
+            0.11285269735424319
+          ],
+          [
+            -0.02341047302454269,
+            -0.02656360517237388
+          ]
+        ],
+        [
+          [
+            0.05063056789340115,
+            0.05762074929459815
+          ],
+          [
+            0.031592040946601355,
+            -0.07232132270810646
+          ]
+        ]
+      ],
+      "orders": [
+        3.9822226561228895,
+        4.001788676165903
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.482534153247273e-16,
+      "element_contact_law_residual_W": 2.482534153247273e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        0.18
+      ],
+      "impedance_error_K_W": 3.5643466983534968e-09,
+      "contact_power_error_W": 1.2497132003949602e-08,
+      "direct_impedance_difference_K_W": 2.0014830212433607e-16,
+      "direct_power_difference_W": 9.639819490876587e-17,
+      "power_change_W": [
+        [
+          [
+            0.0907254828361394,
+            -0.08380389160848958
+          ],
+          [
+            0.0018111129957682631,
+            0.02616366006111509
+          ]
+        ],
+        [
+          [
+            -0.0038400532589495384,
+            -0.056685437986397205
+          ],
+          [
+            0.009895450806459686,
+            0.006901519680428292
+          ]
+        ]
+      ],
+      "orders": [
+        3.997884085684772,
+        3.9976899477812142
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.482534153247273e-16,
+      "element_contact_law_residual_W": 2.482534153247273e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.32,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 2.724800614521766e-09,
+      "contact_power_error_W": 7.2117139221069e-09,
+      "direct_impedance_difference_K_W": 7.632783294297951e-17,
+      "direct_power_difference_W": 8.099505462106326e-17,
+      "power_change_W": [
+        [
+          [
+            0.0212325075980993,
+            -0.004125583737229904
+          ],
+          [
+            -0.022894658206697706,
+            -0.024833703155048584
+          ]
+        ],
+        [
+          [
+            0.04951864657737315,
+            0.05387153381314809
+          ],
+          [
+            0.030984220666382435,
+            -0.10998577138302361
+          ]
+        ]
+      ],
+      "orders": [
+        3.996695161243018,
+        3.9981481824676854
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.482534153247273e-16,
+      "element_contact_law_residual_W": 2.482534153247273e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        0.032,
+        1.7999999999999998
+      ],
+      "impedance_error_K_W": 4.051552312885012e-09,
+      "contact_power_error_W": 1.3180085252172818e-08,
+      "direct_impedance_difference_K_W": 2.172217384091364e-16,
+      "direct_power_difference_W": 1.6883057536160646e-16,
+      "power_change_W": [
+        [
+          [
+            0.13265468432256802,
+            -0.06214752557588496
+          ],
+          [
+            -0.0206332861333234,
+            -0.019549125942946253
+          ]
+        ],
+        [
+          [
+            0.044636577651578975,
+            0.042416073743015044
+          ],
+          [
+            0.03152378348227509,
+            -0.11016884306552929
+          ]
+        ]
+      ],
+      "orders": [
+        3.9975118930324336,
+        3.9979489130500037
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.482534153247273e-16,
+      "element_contact_law_residual_W": 5.338891568193823e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        3.2,
+        0.018
+      ],
+      "impedance_error_K_W": 2.3779975651394722e-09,
+      "contact_power_error_W": 6.597066061824277e-09,
+      "direct_impedance_difference_K_W": 2.423651445728339e-16,
+      "direct_power_difference_W": 5.224024053540252e-16,
+      "power_change_W": [
+        [
+          [
+            -0.018733937355361024,
+            0.16026833116589398
+          ],
+          [
+            -0.023244395023445094,
+            -0.0203444652641905
+          ]
+        ],
+        [
+          [
+            0.05029061817352676,
+            0.044147386056798396
+          ],
+          [
+            -0.08562344064513762,
+            0.019611223158127133
+          ]
+        ]
+      ],
+      "orders": [
+        3.993096038211328,
+        3.9981089021375915
+      ],
+      "passed": true
+    },
+    {
+      "element_power_discontinuity_W": 2.482534153247273e-16,
+      "element_contact_law_residual_W": 2.482534153247273e-16,
+      "cells_per_material": 16,
+      "omega_rad_s": 12.0,
+      "resistance_K_W": [
+        1.28,
+        0.72
+      ],
+      "impedance_error_K_W": 2.3063574698703043e-09,
+      "contact_power_error_W": 2.3845780357136675e-09,
+      "direct_impedance_difference_K_W": 1.4833660915169988e-16,
+      "direct_power_difference_W": 3.469446951953614e-17,
+      "power_change_W": [
+        [
+          [
+            -0.02420422872749708,
+            0.11285273443832262
+          ],
+          [
+            -0.023410476062906534,
+            -0.02656362665107151
+          ]
+        ],
+        [
+          [
+            0.0506305710870608,
+            0.05762079992178624
+          ],
+          [
+            0.03159207114787137,
+            -0.07232133470768391
+          ]
+        ]
+      ],
+      "orders": [
+        3.9937101387103375,
+        3.999392973644846
+      ],
+      "passed": true
+    }
+  ]
+}
