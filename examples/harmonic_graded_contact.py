@@ -1,4 +1,5 @@
 """Complex section power in a two-material rod with graded harmonic generation."""
+import argparse
 import json
 
 import numpy as np
@@ -10,7 +11,7 @@ from tensorfem import thermal
 from tensorfvm.cht import rod
 
 
-def measure(n, omega, oscillatory):
+def measure(n, omega, oscillatory, estimate_source=False):
     area = np.repeat([.8,1.4],n)
     k = np.repeat([1.7,3.1],n)
     c = np.repeat([1.5,.9],n)
@@ -63,16 +64,20 @@ def measure(n, omega, oscillatory):
     target_p,target_t = np.vstack(powers),np.vstack(fields)
     slope,curve = np.concatenate(slopes),np.concatenate(curves)
     source = np.concatenate(sources)
-    cell,_,west,east,(hot,cold) = rod.solve_harmonic_stepped_rod(widths,area,k,c,
-        exact_nodes[[0,-1]],omega,source=source,flux_order=2,return_traces=True,
-        contact_resistance=contact,net_source_gradient=slope,net_source_curvature=curve)
-    field,power = rod.reconstruct_steady_rod_field(widths,area,k,cell,west,east,fractions,
-        source_gradient=slope,source_curvature=curve)
     jump = exact_nodes[n]-exact_nodes[n+1]
-    defect = east-west+area*widths*(1j*omega*c*cell-source)
-    yield dict(solver="FVM",section_power_W=float(abs(power-target_p).max()),
-               temperature_K=float(abs(field-target_t).max()),jump_K=float(abs(hot[n-1]-cold[n-1]-jump)),
-               cell_balance_W=float(abs(defect).max()))
+    variants = [("FVM",dict(net_source_gradient=slope,net_source_curvature=curve))]
+    if estimate_source:
+        variants.append(("FVM_estimated",dict(source_derivative_breaks=[n])))
+    for name,options in variants:
+        cell,_,west,east,(hot,cold),(grad,bend) = rod.solve_harmonic_stepped_rod(widths,area,k,c,
+            exact_nodes[[0,-1]],omega,source=source,flux_order=2,return_traces=True,
+            contact_resistance=contact,return_source_derivatives=True,**options)
+        field,power = rod.reconstruct_steady_rod_field(widths,area,k,cell,west,east,fractions,
+            source_gradient=grad,source_curvature=bend)
+        defect = east-west+area*widths*(1j*omega*c*cell-source)
+        yield dict(solver=name,section_power_W=float(abs(power-target_p).max()),
+                   temperature_K=float(abs(field-target_t).max()),jump_K=float(abs(hot[n-1]-cold[n-1]-jump)),
+                   cell_balance_W=float(abs(defect).max()))
 
     starts = np.r_[np.arange(n),n+1+np.arange(n)]
     conn = np.column_stack((starts,starts+1))
@@ -96,15 +101,18 @@ def measure(n, omega, oscillatory):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--estimate-source",action="store_true",help="also estimate net source derivatives from FVM cell means within each material")
+    args = parser.parse_args()
     rows = []
     for oscillatory in (False,True):
         for omega in (.7,4.5):
             previous = {}
             for n in (4,8,16,32,64):
-                for row in measure(n,omega,oscillatory):
+                for row in measure(n,omega,oscillatory,args.estimate_source):
                     solver = row["solver"]
                     errors = {k:row[k] for k in ("temperature_K","section_power_W","jump_K")}
-                    refine = solver=="FEM" or oscillatory
+                    refine = solver!="FVM" or oscillatory
                     rates = ({k:float(np.log2(previous[solver][k]/v)) for k,v in errors.items()}
                              if solver in previous and refine else {})
                     passed = row["cell_balance_W"]<1e-10
