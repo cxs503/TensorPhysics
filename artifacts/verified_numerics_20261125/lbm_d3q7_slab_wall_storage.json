@@ -1,0 +1,23 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "9a37cbc9f0a8d65efedb387f541e3b7af906110c",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit length and unit area; k=C=1; zero flow; transient D3Q7 BGK with tau=1. The odd periodic extension of sin(pi*x)+0.2*sin(2*pi*x) enforces two zero-temperature symmetry planes; transverse directions are uniform. Exact field comprises the two Fourier modes with exponential decay. Compare both integrated wall heats and final storage at 1/64 s; report energy balance from independently integrated numerical storage and reconstructed wall rates. 8/16/32 axial intervals, dt=dx\u00b2/8.",
+  "suite": {
+    "tests": 62,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "max_cumulative_wall_heat_error_8_J": 0.00470434918207089,
+    "final_storage_error_8_J": 0.006758390531849567,
+    "heat_balance_residual_8_J": 0.005898699306924243,
+    "max_cumulative_wall_heat_error_16_J": 0.0013072747991430336,
+    "final_storage_error_16_J": 0.0016864653657685524,
+    "heat_balance_residual_16_J": 0.001519389143878419,
+    "max_cumulative_wall_heat_error_32_J": 0.0003354786722046879,
+    "final_storage_error_32_J": 0.00042142180441329113,
+    "heat_balance_residual_32_J": 0.00038268698283148994
+  }
+}
