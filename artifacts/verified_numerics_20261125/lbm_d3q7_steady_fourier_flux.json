@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "440595c616d2333a4dd89a37b3b409b255d67722",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Three-dimensional steady Fourier conduction T=2-dot(q,x)/k, q=(1.25,-0.5,0.75) W/m\u00b2, k=2, C=3. Initialize the linear steady kinetic solution on an 8 by 6 by 4 cell domain of spacing 0.125 m. Impose opposite signed fluxes on all three face pairs. Compare the full field and every adjacent-cell Fourier flux for 64 steps at each relaxation time.",
+  "suite": {
+    "tests": 77,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_opposed_fluxes_preserve_steady_fourier_field[0.75]": {
+      "max_temperature_error_K": 0.0,
+      "max_fourier_flux_error_W_m2": 0.0
+    },
+    "test_opposed_fluxes_preserve_steady_fourier_field[1.5]": {
+      "max_temperature_error_K": 0.0,
+      "max_fourier_flux_error_W_m2": 0.0
+    }
+  }
+}
