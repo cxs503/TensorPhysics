@@ -1,0 +1,234 @@
+{
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_steady_wall_admittance.py",
+  "reference": "Steady Laplace equation, row-centre Dirichlet data, admittance k beta tanh(beta L/2) or k beta coth(beta L/2)",
+  "order_metrics": [
+    "temperature_error_K",
+    "flux_relative_error"
+  ],
+  "runs": [
+    {
+      "nx": 16,
+      "ny": 32,
+      "mode": 1,
+      "parity": 1,
+      "exact_admittance_W_m2K": 4.89824236792355,
+      "temperature_error_K": 0.006519993675648927,
+      "flux_relative_error": 0.028051371833216845,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "nx": 32,
+      "ny": 64,
+      "mode": 1,
+      "parity": 1,
+      "exact_admittance_W_m2K": 4.89824236792355,
+      "temperature_error_K": 0.0017141971874953255,
+      "flux_relative_error": 0.004729076882126558,
+      "orders": [
+        1.9273374899900115,
+        2.5684408251196915
+      ],
+      "passed": true
+    },
+    {
+      "nx": 64,
+      "ny": 128,
+      "mode": 1,
+      "parity": 1,
+      "exact_admittance_W_m2K": 4.89824236792355,
+      "temperature_error_K": 0.0004388475857365348,
+      "flux_relative_error": 0.0007378381620020257,
+      "orders": [
+        1.965741199395629,
+        2.6801822821025283
+      ],
+      "passed": true
+    },
+    {
+      "nx": 128,
+      "ny": 256,
+      "mode": 1,
+      "parity": 1,
+      "exact_admittance_W_m2K": 4.89824236792355,
+      "temperature_error_K": 0.00011098210367110894,
+      "flux_relative_error": 9.145967851309615e-05,
+      "orders": [
+        1.9833929158393346,
+        3.012096656032713
+      ],
+      "passed": true
+    },
+    {
+      "nx": 16,
+      "ny": 32,
+      "mode": 1,
+      "parity": -1,
+      "exact_admittance_W_m2K": 5.823141154862802,
+      "temperature_error_K": 0.006409128800498598,
+      "flux_relative_error": 0.02248673738970992,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "nx": 32,
+      "ny": 64,
+      "mode": 1,
+      "parity": -1,
+      "exact_admittance_W_m2K": 5.823141154862802,
+      "temperature_error_K": 0.0017002654959914487,
+      "flux_relative_error": 0.004107190794371682,
+      "orders": [
+        1.9143682227547796,
+        2.452850482496494
+      ],
+      "passed": true
+    },
+    {
+      "nx": 64,
+      "ny": 128,
+      "mode": 1,
+      "parity": -1,
+      "exact_admittance_W_m2K": 5.823141154862802,
+      "temperature_error_K": 0.0004371038187920284,
+      "flux_relative_error": 0.0006776627492689652,
+      "orders": [
+        1.9597121528782506,
+        2.599512592824543
+      ],
+      "passed": true
+    },
+    {
+      "nx": 128,
+      "ny": 256,
+      "mode": 1,
+      "parity": -1,
+      "exact_admittance_W_m2K": 5.823141154862802,
+      "temperature_error_K": 0.00011076406070653633,
+      "flux_relative_error": 9.272039439334308e-05,
+      "orders": [
+        1.9804861321592617,
+        2.8696088614316193
+      ],
+      "passed": true
+    },
+    {
+      "nx": 16,
+      "ny": 32,
+      "mode": 2,
+      "parity": 1,
+      "exact_admittance_W_m2K": 10.641595521147979,
+      "temperature_error_K": 0.022915974845227338,
+      "flux_relative_error": 0.12249869367254043,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "nx": 32,
+      "ny": 64,
+      "mode": 2,
+      "parity": 1,
+      "exact_admittance_W_m2K": 10.641595521147979,
+      "temperature_error_K": 0.006468979960156385,
+      "flux_relative_error": 0.025272813174571387,
+      "orders": [
+        1.824743510605206,
+        2.2771081963788915
+      ],
+      "passed": true
+    },
+    {
+      "nx": 64,
+      "ny": 128,
+      "mode": 2,
+      "parity": 1,
+      "exact_admittance_W_m2K": 10.641595521147979,
+      "temperature_error_K": 0.0017077865218302346,
+      "flux_relative_error": 0.004419069544633816,
+      "orders": [
+        1.9214105982773477,
+        2.5157717222571097
+      ],
+      "passed": true
+    },
+    {
+      "nx": 128,
+      "ny": 256,
+      "mode": 2,
+      "parity": 1,
+      "exact_admittance_W_m2K": 10.641595521147979,
+      "temperature_error_K": 0.00043804518873458154,
+      "flux_relative_error": 0.0007079847001336238,
+      "orders": [
+        1.9629760342346758,
+        2.6419525470603418
+      ],
+      "passed": true
+    },
+    {
+      "nx": 16,
+      "ny": 32,
+      "mode": 2,
+      "parity": -1,
+      "exact_admittance_W_m2K": 10.72138352278635,
+      "temperature_error_K": 0.022881345115131402,
+      "flux_relative_error": 0.12000394666920551,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "nx": 32,
+      "ny": 64,
+      "mode": 2,
+      "parity": -1,
+      "exact_admittance_W_m2K": 10.72138352278635,
+      "temperature_error_K": 0.006464561238073818,
+      "flux_relative_error": 0.025029033179726913,
+      "orders": [
+        1.8235475056144346,
+        2.2614073848594605
+      ],
+      "passed": true
+    },
+    {
+      "nx": 64,
+      "ny": 128,
+      "mode": 2,
+      "parity": -1,
+      "exact_admittance_W_m2K": 10.72138352278635,
+      "temperature_error_K": 0.0017072313417437757,
+      "flux_relative_error": 0.004391309796072496,
+      "orders": [
+        1.9208938880893893,
+        2.5108793420055724
+      ],
+      "passed": true
+    },
+    {
+      "nx": 128,
+      "ny": 256,
+      "mode": 2,
+      "parity": -1,
+      "exact_admittance_W_m2K": 10.72138352278635,
+      "temperature_error_K": 0.00043797570226433713,
+      "flux_relative_error": 0.0007051548873461189,
+      "orders": [
+        1.9627358265967896,
+        2.638639231079831
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "85f3942ff387de504b5122fa5d52e7679e56e1ee",
+      "file": "sph_steady_wall_admittance.py",
+      "source_sha256": "7f343ad8bcad7545a4a6dca46690cd92b3bfd2da549777a8e870218c46c5bdc8"
+    },
+    {
+      "commit": "e472e45271028c19c7fc18d76241e3bcad4b1595",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "bca0cf92b23a827525068bd9aec26d123efe0d7e2eacc24880d60b98159f68f6"
+    }
+  ]
+}
