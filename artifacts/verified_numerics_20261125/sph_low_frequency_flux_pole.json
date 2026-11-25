@@ -1,0 +1,208 @@
+{
+  "reference": "Piecewise polynomial integration of all three coefficient equations, capacity-weighted mean zero at every order",
+  "units": "Tm: K s^m, qm: W s^m/m\u00b2, coefficients of (i omega)^m",
+  "order_metrics": [
+    "T0_error",
+    "T1_error",
+    "T2_error"
+  ],
+  "runs": [
+    {
+      "residue_K_s": [
+        0.30989010989010984,
+        -0.25054945054945055
+      ],
+      "residue_error_K_s": 0.0,
+      "T0_error": 0.0002506949465736413,
+      "q0_error": 1.9430885370915904e-14,
+      "T1_error": 0.00017718456080618092,
+      "q1_error": 5.66812500819616e-15,
+      "T2_error": 7.265865876623009e-05,
+      "q2_error": 1.4174793357999429e-15,
+      "columns_per_layer": 8,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "residue_K_s": [
+        0.3098901098901098,
+        -0.2505494505494505
+      ],
+      "residue_error_K_s": 7.850462293418876e-17,
+      "T0_error": 6.454458264364061e-05,
+      "q0_error": 2.1894477001441776e-13,
+      "T1_error": 4.450805216760054e-05,
+      "q1_error": 3.215080130555813e-14,
+      "T2_error": 1.805148314067869e-05,
+      "q2_error": 7.033653411098961e-15,
+      "columns_per_layer": 16,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [
+        1.9575649976561624,
+        1.993114628607522,
+        2.0090173584734177
+      ],
+      "passed": true
+    },
+    {
+      "residue_K_s": [
+        0.3098901098901099,
+        -0.25054945054945055
+      ],
+      "residue_error_K_s": 5.551115123125783e-17,
+      "T0_error": 1.641338306501748e-05,
+      "q0_error": 1.1592901097375878e-12,
+      "T1_error": 1.1150975100688786e-05,
+      "q1_error": 1.8204696559826807e-13,
+      "T2_error": 4.497642502586799e-06,
+      "q2_error": 4.0362864094791735e-14,
+      "columns_per_layer": 32,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [
+        1.9754233799259227,
+        1.9968964920446173,
+        2.004876478837409
+      ],
+      "passed": true
+    },
+    {
+      "residue_K_s": [
+        0.30989010989010984,
+        -0.2505494505494506
+      ],
+      "residue_error_K_s": 5.551115123125783e-17,
+      "T0_error": 4.141282791684266e-06,
+      "q0_error": 5.046798838033904e-12,
+      "T1_error": 2.7905552874171567e-06,
+      "q1_error": 8.250964733588777e-13,
+      "T2_error": 1.1224267775163073e-06,
+      "q2_error": 1.847855258080106e-13,
+      "columns_per_layer": 64,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [
+        1.986723005323305,
+        1.998545737662629,
+        2.002547659745498
+      ],
+      "passed": true
+    },
+    {
+      "residue_K_s": [
+        0.19368131868131863,
+        -0.1565934065934066
+      ],
+      "residue_error_K_s": 2.7755575615628914e-17,
+      "T0_error": 0.00032007992131476864,
+      "q0_error": 2.119523051528103e-14,
+      "T1_error": 0.00020396813249167565,
+      "q1_error": 5.3848694964134576e-05,
+      "T2_error": 0.00012067976725565596,
+      "q2_error": 2.889244339696185e-05,
+      "columns_per_layer": 8,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "residue_K_s": [
+        0.19368131868131863,
+        -0.1565934065934066
+      ],
+      "residue_error_K_s": 2.7755575615628914e-17,
+      "T0_error": 8.269466285698607e-05,
+      "q0_error": 2.0818328477405391e-13,
+      "T1_error": 5.10759014553439e-05,
+      "q1_error": 1.3304788670941517e-05,
+      "T2_error": 3.0095864480456125e-05,
+      "q2_error": 7.126684240612072e-06,
+      "columns_per_layer": 16,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [
+        1.9525660536768727,
+        1.9976290995794432,
+        2.0035466564546707
+      ],
+      "passed": true
+    },
+    {
+      "residue_K_s": [
+        0.1936813186813187,
+        -0.1565934065934066
+      ],
+      "residue_error_K_s": 2.7755575615628914e-17,
+      "T0_error": 2.1065186505956813e-05,
+      "q0_error": 1.1153257985065493e-12,
+      "T1_error": 1.277691798986698e-05,
+      "q1_error": 3.302837607329893e-06,
+      "T2_error": 7.513075978248827e-06,
+      "q2_error": 1.7685672766818433e-06,
+      "columns_per_layer": 32,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [
+        1.9729335311268714,
+        1.9991028861353843,
+        2.0020896604940717
+      ],
+      "passed": true
+    },
+    {
+      "residue_K_s": [
+        0.19368131868131866,
+        -0.15659340659340662
+      ],
+      "residue_error_K_s": 2.7755575615628914e-17,
+      "T0_error": 5.3195334549565535e-06,
+      "q0_error": 4.894056619950232e-12,
+      "T1_error": 3.1950403932732768e-06,
+      "q1_error": 8.225139894937272e-07,
+      "T2_error": 1.8767849081170192e-06,
+      "q2_error": 4.404237395190037e-07,
+      "columns_per_layer": 64,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [
+        1.9854890631454127,
+        1.9996337999849598,
+        2.001140374717218
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "ae09cd5aa1292e50638d8694e71acbf6406d79e6",
+      "file": "sph_low_frequency_flux_contact.py",
+      "source_sha256": "a15ea619a2f980c138811a60ad856f0823b523969ab4d8175684a4e4825b12af"
+    },
+    {
+      "commit": "b24fe6a0cfe2a54324cccf7de01075df53df80eb",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "ece51f7d7e3f17d73cdaceba3986c2112bc71fb6fce42f9cce490551fc99d67e"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_low_frequency_flux_contact.py --unbalanced"
+}
