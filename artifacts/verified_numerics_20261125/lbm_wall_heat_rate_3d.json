@@ -1,0 +1,28 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "a552dac87c5cdfe0c5a18401ccd9e9e1ed466c2a",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "CPU, float64 diagnostic tests on prescribed temperature fields. Non-cubic box with anisotropic spacing: integrate a quadratic plus xyz temperature gradient on every face; verify the volume integral of -k times the Laplacian. For T=x*y\u00b2 on a unit face the outward x+ rate is -1/3 and composite trapezoidal absolute error is 1/(6*n\u00b2).",
+  "suite": {
+    "tests": 61,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_wall_heat_rate_on_six_rectangular_faces": {
+      "absolute_heat_rate_error_x-_W": 8.881784197001252e-16,
+      "absolute_heat_rate_error_x+_W": 8.881784197001252e-15,
+      "absolute_heat_rate_error_y-_W": 2.220446049250313e-16,
+      "absolute_heat_rate_error_y+_W": 8.881784197001252e-16,
+      "absolute_heat_rate_error_z-_W": 1.7763568394002505e-15,
+      "absolute_heat_rate_error_z+_W": 3.552713678800501e-15,
+      "divergence_balance_error_W": 1.0658141036401503e-14
+    },
+    "test_wall_heat_rate_weights_face_edges_by_area": {
+      "wall_quadrature_error_4_W": 0.010416666666666685,
+      "wall_quadrature_error_8_W": 0.002604166666666685,
+      "wall_quadrature_error_16_W": 0.0006510416666666852
+    }
+  }
+}
