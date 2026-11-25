@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "steps": 32,
+      "theta": 0.5,
+      "temperature_error_K": 0.0010703886503051763,
+      "cumulative_heat_error_J": 0.0023807058458434893,
+      "junction_residual_J": 1.2954914918594795e-14,
+      "grain_residual_J": 8.771455783929127e-14,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "theta": 0.5,
+      "temperature_error_K": 0.0002674171727221619,
+      "cumulative_heat_error_J": 0.0005948814783719447,
+      "junction_residual_J": 5.179884299266746e-15,
+      "grain_residual_J": 1.241159952591886e-13,
+      "temperature_error_K_order": 2.0009707047554843,
+      "cumulative_heat_error_J_order": 2.0007152099641763,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "theta": 0.5,
+      "temperature_error_K": 6.684304662485374e-05,
+      "cumulative_heat_error_J": 0.00014870610078998592,
+      "junction_residual_J": 2.7755575615628914e-15,
+      "grain_residual_J": 9.045195148438268e-14,
+      "temperature_error_K_order": 2.000242717621431,
+      "cumulative_heat_error_J_order": 2.0001384243394154,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "theta": 1.0,
+      "temperature_error_K": 0.025756035082338258,
+      "cumulative_heat_error_J": 0.08286307012445288,
+      "junction_residual_J": 1.1844691893969639e-14,
+      "grain_residual_J": 1.1208395322981346e-13,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "theta": 1.0,
+      "temperature_error_K": 0.012976595329575957,
+      "cumulative_heat_error_J": 0.041474821155820685,
+      "junction_residual_J": 6.293576770843856e-15,
+      "grain_residual_J": 9.503162146096145e-14,
+      "temperature_error_K_order": 0.9889986072238344,
+      "cumulative_heat_error_J_order": 0.9984935138609139,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "theta": 1.0,
+      "temperature_error_K": 0.006515133613447688,
+      "cumulative_heat_error_J": 0.02075819731371631,
+      "junction_residual_J": 3.146788385421928e-15,
+      "grain_residual_J": 1.1758996554256385e-13,
+      "temperature_error_K_order": 0.9940452417233743,
+      "cumulative_heat_error_J_order": 0.9985545977178922,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "088d8435b4e302a4cbe8dcc0c76f4c0901c99541",
+      "file": "dem_oscillating_reservoirs.py",
+      "source_sha256": "0e2dca524f078435c361a76a9aba3d3cc58eca244b046a3908c23e2e0bd6038a"
+    },
+    {
+      "commit": "f90ac8a4273b5e9a346d516441163219fa3083c3",
+      "file": "contact_chain.py",
+      "source_sha256": "f3e8324075c3960e4e11299120f173919c55543f08d96e4dbbf7ce33ec3738d1"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_oscillating_reservoirs.py"
+}
