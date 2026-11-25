@@ -65,9 +65,27 @@ def steady_drift(n, balanced):
     q = np.cumsum(p-capacity*rate)[:-1]
     exact = np.r_[0., -np.cumsum(r*q)]
     exact -= capacity@exact/capacity.sum()
-    t, drift = contact_chain.harmonic_contact_temperatures(r, capacity, 0., nodal_power=p,
-                                                         allow_massless=True, separate_mean=True)
-    return dict(nodes=n, balanced_power=balanced, relative_temperature_error_K=float(abs(t-exact).max()),
+    t, slope, drift = contact_chain.low_frequency_contact_temperatures(r, capacity, nodal_power=p,
+                                                                    allow_massless=True)
+    slope_current = -np.cumsum(capacity*exact)[:-1]
+    slope_exact = np.r_[0., -np.cumsum(r*slope_current)]
+    slope_exact -= capacity@slope_exact/capacity.sum()
+    slope_q = -np.diff(slope)/r
+    expansion = []
+    previous = None
+    for scaled_frequency in (.2, .1, .05, .025):
+        omega = scaled_frequency/(capacity.sum()*r.sum())
+        field, _ = contact_chain.harmonic_contact_temperatures(r, capacity, omega, nodal_power=p,
+                                                              allow_massless=True, separate_mean=True)
+        error = t+1j*omega*slope-field
+        remainder = np.array([abs(error).max(), abs(np.diff(error)/r).max()])
+        orders = np.log2(previous/remainder).tolist() if previous is not None else []
+        expansion.append(dict(omega_rad_s=omega, temperature_remainder_K=float(remainder[0]),
+                              link_power_remainder_W=float(remainder[1]), temperature_and_power_orders=orders))
+        previous = remainder
+    return dict(nodes=n, balanced_power=balanced, expansion=expansion,
+                temperature_slope_relative_error=float(abs(slope-slope_exact).max()/abs(slope_exact).max()),
+                power_slope_relative_error=float(abs(slope_q-slope_current).max()/abs(slope_current).max()), relative_temperature_error_K=float(abs(t-exact).max()),
                 contact_power_error_W=float(abs(-np.diff(t)/r-q).max()),
                 mean_heating_rate_error_K_s=float(abs(drift-rate)),
                 centered_mean_error_K=float(abs(capacity@t)/capacity.sum()))
@@ -79,7 +97,9 @@ if __name__ == "__main__":
     rows.extend(measure(0., dt, 0.) for dt in (.023, .73))
     static = [steady_drift(n, balanced) for n in (3, 9, 33) for balanced in (False, True)]
     for row in static:
-        row["passed"] = all(value < 1e-12 for key, value in row.items() if "_error_" in key)
+        row["passed"] = all(value < 1e-12 for key, value in row.items() if "_error_" in key or key.endswith("_relative_error"))
+        row["passed"] &= all(1.95 < order < 2.05 for sample in row["expansion"]
+                             for order in sample["temperature_and_power_orders"])
     for row in rows:
         row["passed"] = max(row[k] for k in ("endpoint_error_K", "mean_error_K", "link_heat_error_J",
                                              "node_energy_residual_J")) < 1e-12
