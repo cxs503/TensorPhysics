@@ -125,6 +125,11 @@ def measure(n, resistance):
     jump = traces[m] - traces[m+1]
     wall_powers = harmonic_sol.reaction_power[ends].sum(dim=1).numpy()
     row = errors("FEM_harmonic", cells, jump, jump/resistance, wall_powers)
+    local_power = thermal.thermal_element_nodal_power(model, harmonic_sol.temperature, omega).numpy()
+    hot_out = -local_power[m-1, [1, 2]].sum()
+    cold_in = local_power[m, [0, 3]].sum()
+    row["contact_element_flux_error_W_m2"] = float(max(abs(hot_out-q), abs(cold_in-q)))
+    row["contact_power_mismatch_W_m2"] = float(max(abs(hot_out-jump/resistance), abs(cold_in-jump/resistance)))
     # Recover each material's Fourier flux from its own two nearest centers.
     # These diagnostics do not use the conductance of the contact link.
     axial = thermal.thermal_element_flux(model, harmonic_sol.temperature)[:,0].numpy()
@@ -160,10 +165,12 @@ def main():
                                   "interface_flux_error_W_m2", "wall_flux_error_W_m2")])
                 if name == "FEM_harmonic":
                     errors = np.append(errors, [row["left_fourier_flux_error_W_m2"],
-                                                row["right_fourier_flux_error_W_m2"]])
+                                                row["right_fourier_flux_error_W_m2"], row["contact_element_flux_error_W_m2"]])
                 balance = (row["left_layer_harmonic_balance_W_m2"] if "left_layer_harmonic_balance_W_m2" in row
                            else row["left_layer_balance_J_m2"])
                 passed = np.isfinite(errors).all() and balance < 1e-10
+                if name == "FEM_harmonic":
+                    passed &= row["contact_power_mismatch_W_m2"] < 1e-11
                 if name == "FEM":
                     errors = np.append(errors, row["max_contact_mean_power_error_W_m2"])
                     passed &= max(row["max_contact_step_mismatch_J_m2"], row["max_left_step_balance_J_m2"]) < 1e-12
