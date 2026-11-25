@@ -1,0 +1,17 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "84ac7de6a5bc65e946abe92cb390c7043b570a84",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Harmonic T=1+x\u00b2-y\u00b2+xyz with inward heat flux k grad(T) dot outward_normal evaluated at all six wall planes. Cell-centered grid (nz,ny,nx)=(5,7,9), dx=0.1 m, k=2.5, C=1.8, tau=1, dt=dx\u00b2*C/(8*k). Compare at every cell for 64 time steps initialized at equilibrium. CPU float64.",
+  "suite": {
+    "tests": 80,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_face_flux_maps_preserve_harmonic_polynomial": {
+      "max_temperature_error_K": 6.661338147750939e-16
+    }
+  }
+}
