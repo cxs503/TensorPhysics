@@ -10,8 +10,8 @@ from conduction_provenance import provenance
 def measure(n, method, solver="sph"):
     k, capacity, loss = 1.5, 2., 4.
     west, east = 1.2, .8
-    x = (np.arange(n)+.5)/n
     faces = np.arange(n+1)/n
+    x = faces if solver == "fem" else (np.arange(n)+.5)/n
     mu = np.sqrt(loss/k)
     steady = (west*np.cosh(mu*(1-x))+east*np.cosh(mu*x))/(k*mu*np.sinh(mu))
     steady_flux = (west*np.sinh(mu*(1-faces))-east*np.sinh(mu*faces))/np.sinh(mu)
@@ -23,7 +23,25 @@ def measure(n, method, solver="sph"):
     dt = np.diff(times)
     initial = steady-.4+perturbation
     bulk_metrics = {}
-    if solver == "fvm":
+    if solver == "fem":
+        import torch
+        from tensorfem import thermal
+
+        nodes = torch.from_numpy(x)
+        elements = torch.stack((torch.arange(n), torch.arange(1, n+1)), dim=1)
+        loads = torch.zeros_like(nodes)
+        loads[0], loads[-1] = west, east
+        model = thermal.ThermalModel(nodes[:, None], elements, k, 1., capacity,
+                                     elements[:0, 0], nodes[:0], nodal_heat=loads,
+                                     heat_loss_coefficient=loss)
+        result = thermal.solve_transient_thermal(model, torch.from_numpy(times), torch.from_numpy(initial),
+                                                 theta=.5, sparse=True, method=method)
+        history = result.temperature.numpy()[:, None, :]
+        heat = thermal.thermal_element_nodal_heat_steps(model, result).numpy()
+        cuts = np.column_stack((heat[:, 0, 0], -heat[:, :, 1]))
+        bulk_metrics["max_wall_heat_error_J_m2"] = float(abs(cuts[:, [0, -1]]-dt[:, None]*[west, -east]).max())
+        bulk_metrics["max_internal_face_mismatch_J_m2"] = float(abs(heat[:, :-1, 1]+heat[:, 1:, 0]).max())
+    elif solver == "fvm":
         from tensorfvm.cht import rod
 
         cells, _, _, _, heat = rod.solve_transient_stepped_rod(
@@ -42,7 +60,11 @@ def measure(n, method, solver="sph"):
             heat_loss_coefficient=loss, conductivity=k, volumetric_heat_capacity=capacity,
             method=method, return_x_heat=True)
         history, cuts = history.numpy(), cuts.numpy()
-    mean = history.mean(axis=(1, 2))
+    if solver == "fem":
+        # Integrate the LINE2 interpolant exactly on each element.
+        mean = ((history[:, 0, :-1]+history[:, 0, 1:])/2).mean(axis=1)
+    else:
+        mean = history.mean(axis=(1, 2))
     equilibrium = (west+east)/loss
     exact_mean = equilibrium-.4*np.exp(-loss*times/capacity)
     exact_field = steady-.4*np.exp(-loss*times[:, None]/capacity)+np.exp(-rate*times[:, None])*perturbation
@@ -67,9 +89,12 @@ def measure(n, method, solver="sph"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("sph", "fvm"), default="sph")
+    parser.add_argument("--solver", choices=("sph", "fvm", "fem"), default="sph")
     solver = parser.parse_args().solver
-    if solver == "fvm":
+    if solver == "fem":
+        from tensorfem import thermal as implementation
+        repo = "TensorFEM"
+    elif solver == "fvm":
         from tensorfvm.cht import rod as implementation
         repo = "TensorFVM"
     else:
@@ -85,6 +110,8 @@ if __name__ == "__main__":
             orders = [] if previous is None else np.log2(previous/errors).tolist()
             row.update(orders=orders, passed=bool(row["max_energy_residual_J_m2"] < 1e-11
                        and row.get("max_cell_balance_error_J_m2", 0.) < 1e-11
+                       and row.get("max_wall_heat_error_J_m2", 0.) < 1e-11
+                       and row.get("max_internal_face_mismatch_J_m2", 0.) < 1e-11
                        and (not orders or min(orders) > 0.) and (n < 64 or min(orders) > 1.85)))
             runs.append(row)
             previous = errors
