@@ -4,7 +4,10 @@
   "order_metrics": [
     "temperature_error_K",
     "x_face_heat_error_J_m2",
-    "y_face_heat_error_J_m2"
+    "y_face_heat_error_J_m2",
+    "trace_history_temperature_error_K",
+    "trace_history_normal_gradient_error_K_m",
+    "trace_history_flux_error_W_m2"
   ],
   "runs": [
     {
@@ -12,6 +15,9 @@
       "degree": 1,
       "method": "theta",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.028922432912097396,
+      "trace_history_normal_gradient_error_K_m": 0.01622603082105284,
+      "trace_history_flux_error_W_m2": 0.5521134224323573,
       "temperature_error_K": 0.015356157583751529,
       "x_face_heat_error_J_m2": 0.007638212088949464,
       "y_face_heat_error_J_m2": 0.0021493074645247273,
@@ -27,6 +33,9 @@
       "degree": 1,
       "method": "theta",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.0072369989434408755,
+      "trace_history_normal_gradient_error_K_m": 0.00036843707382619033,
+      "trace_history_flux_error_W_m2": 0.2700740696596288,
       "temperature_error_K": 0.005239824124653153,
       "x_face_heat_error_J_m2": 0.0023372385469603435,
       "y_face_heat_error_J_m2": 0.0005728522398756111,
@@ -37,7 +46,10 @@
       "orders": [
         1.5512269767531115,
         1.7084299913141179,
-        1.9076369123418961
+        1.9076369123418961,
+        1.9987254486620283,
+        5.46074808434751,
+        1.0316095444033877
       ],
       "passed": true
     },
@@ -46,6 +58,9 @@
       "degree": 1,
       "method": "theta",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.0018052619643535994,
+      "trace_history_normal_gradient_error_K_m": 2.5697352828599238e-05,
+      "trace_history_flux_error_W_m2": 0.1352736959614325,
       "temperature_error_K": 0.0017273917748139578,
       "x_face_heat_error_J_m2": 0.0008698822390052624,
       "y_face_heat_error_J_m2": 0.00018866137405301481,
@@ -56,7 +71,10 @@
       "orders": [
         1.600923063153767,
         1.4259129749601274,
-        1.602363981444399
+        1.602363981444399,
+        2.0031833569722273,
+        3.8417265840369366,
+        0.997473796713911
       ],
       "passed": true
     },
@@ -65,6 +83,9 @@
       "degree": 1,
       "method": "sdirk2",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.027554023727591304,
+      "trace_history_normal_gradient_error_K_m": 0.01626027062218237,
+      "trace_history_flux_error_W_m2": 0.5301995702942789,
       "temperature_error_K": 0.01633138150106772,
       "x_face_heat_error_J_m2": 0.008373486826291549,
       "y_face_heat_error_J_m2": 0.002144215883650248,
@@ -80,6 +101,9 @@
       "degree": 1,
       "method": "sdirk2",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.007171800544665041,
+      "trace_history_normal_gradient_error_K_m": 0.00034278036228802206,
+      "trace_history_flux_error_W_m2": 0.26795797853926406,
       "temperature_error_K": 0.005301308056156584,
       "x_face_heat_error_J_m2": 0.0023682201422090543,
       "y_face_heat_error_J_m2": 0.000572048534952227,
@@ -90,7 +114,10 @@
       "orders": [
         1.6232265538505941,
         1.8220253088938319,
-        1.9062407048385317
+        1.9062407048385317,
+        1.941855740637988,
+        5.5679229978273135,
+        0.984528727537951
       ],
       "passed": true
     },
@@ -99,6 +126,9 @@
       "degree": 1,
       "method": "sdirk2",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.001803671032348575,
+      "trace_history_normal_gradient_error_K_m": 1.0169929203784543e-05,
+      "trace_history_flux_error_W_m2": 0.1352736959614325,
       "temperature_error_K": 0.0017302519103088443,
       "x_face_heat_error_J_m2": 0.0008715450601504138,
       "y_face_heat_error_J_m2": 0.000188703404142343,
@@ -109,7 +139,10 @@
       "orders": [
         1.6153662797079613,
         1.442156034711856,
-        1.6000171075030287
+        1.6000171075030287,
+        1.9913991333302352,
+        5.074902919286136,
+        0.9861254396148613
       ],
       "passed": true
     },
@@ -118,6 +151,9 @@
       "degree": 2,
       "method": "theta",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.005436649292203832,
+      "trace_history_normal_gradient_error_K_m": 0.0009155136822683759,
+      "trace_history_flux_error_W_m2": 0.05567679069947773,
       "temperature_error_K": 0.00011413803656824817,
       "x_face_heat_error_J_m2": 5.633644572405894e-05,
       "y_face_heat_error_J_m2": 3.0815668874299706e-05,
@@ -133,6 +169,9 @@
       "degree": 2,
       "method": "theta",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.0007535666740291491,
+      "trace_history_normal_gradient_error_K_m": 2.1732273919565634e-05,
+      "trace_history_flux_error_W_m2": 0.01441157153286765,
       "temperature_error_K": 1.682452239690213e-05,
       "x_face_heat_error_J_m2": 9.144348485035092e-06,
       "y_face_heat_error_J_m2": 2.8211940014052916e-06,
@@ -143,7 +182,10 @@
       "orders": [
         2.7621421944466866,
         2.623116256847923,
-        3.4492863236937996
+        3.4492863236937996,
+        2.8509106963810456,
+        5.396670405654634,
+        1.9498483892219733
       ],
       "passed": true
     },
@@ -152,6 +194,9 @@
       "degree": 2,
       "method": "theta",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 9.667020861614528e-05,
+      "trace_history_normal_gradient_error_K_m": 5.596670819012049e-06,
+      "trace_history_flux_error_W_m2": 0.0036485459297002087,
       "temperature_error_K": 2.273423756110615e-06,
       "x_face_heat_error_J_m2": 1.4071146515748367e-06,
       "y_face_heat_error_J_m2": 3.8198520035948036e-07,
@@ -162,7 +207,10 @@
       "orders": [
         2.887627024877339,
         2.700140500722462,
-        2.884717228624389
+        2.884717228624389,
+        2.9625919040269775,
+        1.95719833642727,
+        1.9818341447337258
       ],
       "passed": true
     },
@@ -171,6 +219,9 @@
       "degree": 2,
       "method": "sdirk2",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.003485942517749807,
+      "trace_history_normal_gradient_error_K_m": 0.0008239320107869216,
+      "trace_history_flux_error_W_m2": 0.054770180018159254,
       "temperature_error_K": 0.0003062383197607321,
       "x_face_heat_error_J_m2": 0.0001843132868292463,
       "y_face_heat_error_J_m2": 2.9048295466148344e-05,
@@ -186,6 +237,9 @@
       "degree": 2,
       "method": "sdirk2",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 0.00045918135961364737,
+      "trace_history_normal_gradient_error_K_m": 4.124697458753207e-06,
+      "trace_history_flux_error_W_m2": 0.01441157153286765,
       "temperature_error_K": 2.4972985215893084e-05,
       "x_face_heat_error_J_m2": 1.092850296655068e-05,
       "y_face_heat_error_J_m2": 2.2362531890626758e-06,
@@ -196,7 +250,10 @@
       "orders": [
         3.6162146260276056,
         4.075992383061701,
-        3.6992980649868064
+        3.6992980649868064,
+        2.9244127976442744,
+        7.642093180384616,
+        1.9261629571328427
       ],
       "passed": true
     },
@@ -205,6 +262,9 @@
       "degree": 2,
       "method": "sdirk2",
       "cross_conductivity_W_mK": -0.55,
+      "trace_history_temperature_error_K": 5.7860982818347395e-05,
+      "trace_history_normal_gradient_error_K_m": 7.930326784778364e-07,
+      "trace_history_flux_error_W_m2": 0.0036485459297002087,
       "temperature_error_K": 1.7579325981564864e-06,
       "x_face_heat_error_J_m2": 6.23934367546819e-07,
       "y_face_heat_error_J_m2": 2.1161002988073774e-07,
@@ -215,7 +275,10 @@
       "orders": [
         3.8284166266718542,
         4.130557699598525,
-        3.401603624702023
+        3.401603624702023,
+        2.988401343252307,
+        2.378836082050386,
+        1.9818341447337258
       ],
       "passed": true
     },
@@ -224,6 +287,9 @@
       "degree": 1,
       "method": "theta",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.028922432912097396,
+      "trace_history_normal_gradient_error_K_m": 0.01622603082105407,
+      "trace_history_flux_error_W_m2": 0.5521134224323565,
       "temperature_error_K": 0.01535615758375175,
       "x_face_heat_error_J_m2": 0.007638212088947244,
       "y_face_heat_error_J_m2": 0.002149307464525449,
@@ -239,6 +305,9 @@
       "degree": 1,
       "method": "theta",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.007236998943442652,
+      "trace_history_normal_gradient_error_K_m": 0.0003684370737989133,
+      "trace_history_flux_error_W_m2": 0.2700740696596269,
       "temperature_error_K": 0.005239824124653014,
       "x_face_heat_error_J_m2": 0.0023372385469704743,
       "y_face_heat_error_J_m2": 0.0005728522398740291,
@@ -249,7 +318,10 @@
       "orders": [
         1.5512269767531706,
         1.7084299913074452,
-        1.9076369123463648
+        1.9076369123463648,
+        1.9987254486616741,
+        5.460748084454428,
+        1.0316095444033961
       ],
       "passed": true
     },
@@ -258,6 +330,9 @@
       "degree": 1,
       "method": "theta",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.0018052619643640355,
+      "trace_history_normal_gradient_error_K_m": 2.5697352865288084e-05,
+      "trace_history_flux_error_W_m2": 0.1352736959614306,
       "temperature_error_K": 0.0017273917748226175,
       "x_face_heat_error_J_m2": 0.0008698822390061783,
       "y_face_heat_error_J_m2": 0.00018866137405322125,
@@ -268,7 +343,10 @@
       "orders": [
         1.6009230631464964,
         1.4259129749648616,
-        1.6023639814388362
+        1.6023639814388362,
+        2.003183356964241,
+        3.8417265818703505,
+        0.9974737967139208
       ],
       "passed": true
     },
@@ -277,6 +355,9 @@
       "degree": 1,
       "method": "sdirk2",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.027554023727586863,
+      "trace_history_normal_gradient_error_K_m": 0.016260270622178413,
+      "trace_history_flux_error_W_m2": 0.5301995702942823,
       "temperature_error_K": 0.0163313815010655,
       "x_face_heat_error_J_m2": 0.008373486826291465,
       "y_face_heat_error_J_m2": 0.0021442158836495265,
@@ -292,6 +373,9 @@
       "degree": 1,
       "method": "sdirk2",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.007171800544677254,
+      "trace_history_normal_gradient_error_K_m": 0.0003427803622793735,
+      "trace_history_flux_error_W_m2": 0.26795797853926495,
       "temperature_error_K": 0.0053013080561545856,
       "x_face_heat_error_J_m2": 0.0023682201422184357,
       "y_face_heat_error_J_m2": 0.0005720485349518453,
@@ -302,7 +386,10 @@
       "orders": [
         1.6232265538509418,
         1.8220253088881024,
-        1.9062407048390086
+        1.9062407048390086,
+        1.9418557406352988,
+        5.567922997863363,
+        0.9845287275379556
       ],
       "passed": true
     },
@@ -311,6 +398,9 @@
       "degree": 1,
       "method": "sdirk2",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.0018036710323257044,
+      "trace_history_normal_gradient_error_K_m": 1.0169929162521147e-05,
+      "trace_history_flux_error_W_m2": 0.1352736959614306,
       "temperature_error_K": 0.001730251910322389,
       "x_face_heat_error_J_m2": 0.0008715450601440439,
       "y_face_heat_error_J_m2": 0.00018870340414136808,
@@ -321,7 +411,10 @@
       "orders": [
         1.6153662796961237,
         1.4421560347281153,
-        1.60001710750952
+        1.60001710750952,
+        1.9913991333509853,
+        5.074902925103316,
+        0.9861254396148862
       ],
       "passed": true
     },
@@ -330,6 +423,9 @@
       "degree": 2,
       "method": "theta",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.005436649292204332,
+      "trace_history_normal_gradient_error_K_m": 0.0009155136822644897,
+      "trace_history_flux_error_W_m2": 0.055676790699435985,
       "temperature_error_K": 0.00011413803656901145,
       "x_face_heat_error_J_m2": 5.633644572274055e-05,
       "y_face_heat_error_J_m2": 3.081566887654097e-05,
@@ -345,6 +441,9 @@
       "degree": 2,
       "method": "theta",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.0007535666740317026,
+      "trace_history_normal_gradient_error_K_m": 2.17322743632164e-05,
+      "trace_history_flux_error_W_m2": 0.014411571532867429,
       "temperature_error_K": 1.682452239679111e-05,
       "x_face_heat_error_J_m2": 9.14434849025314e-06,
       "y_face_heat_error_J_m2": 2.821193998032989e-06,
@@ -355,7 +454,10 @@
       "orders": [
         2.7621421944658544,
         2.6231162559909147,
-        3.449286325523248
+        3.449286325523248,
+        2.8509106963762894,
+        5.396670376196794,
+        1.949848389220914
       ],
       "passed": true
     },
@@ -364,6 +466,9 @@
       "degree": 2,
       "method": "theta",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 9.667020862480502e-05,
+      "trace_history_normal_gradient_error_K_m": 5.596671011966803e-06,
+      "trace_history_flux_error_W_m2": 0.003648545929702207,
       "temperature_error_K": 2.2734237571930827e-06,
       "x_face_heat_error_J_m2": 1.4071146596794648e-06,
       "y_face_heat_error_J_m2": 3.8198519797250086e-07,
@@ -374,7 +479,10 @@
       "orders": [
         2.887627024180895,
         2.7001404932361464,
-        2.884717235915097
+        2.884717235915097,
+        2.962591903902629,
+        1.9571983161396191,
+        1.9818341447329133
       ],
       "passed": true
     },
@@ -383,6 +491,9 @@
       "degree": 2,
       "method": "sdirk2",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.003485942517748697,
+      "trace_history_normal_gradient_error_K_m": 0.0008239320107269271,
+      "trace_history_flux_error_W_m2": 0.05477018001815814,
       "temperature_error_K": 0.00030623831976783755,
       "x_face_heat_error_J_m2": 0.00018431328682746995,
       "y_face_heat_error_J_m2": 2.9048295465718132e-05,
@@ -398,6 +509,9 @@
       "degree": 2,
       "method": "sdirk2",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 0.00045918135961664497,
+      "trace_history_normal_gradient_error_K_m": 4.124697552771578e-06,
+      "trace_history_flux_error_W_m2": 0.014411571532867429,
       "temperature_error_K": 2.4972985233961964e-05,
       "x_face_heat_error_J_m2": 1.092850295913994e-05,
       "y_face_heat_error_J_m2": 2.236253180736003e-06,
@@ -408,7 +522,10 @@
       "orders": [
         3.616214625017236,
         4.075992384026104,
-        3.699298070337304
+        3.699298070337304,
+        2.9244127976343965,
+        7.642093147394769,
+        1.9261629571328356
       ],
       "passed": true
     },
@@ -417,6 +534,9 @@
       "degree": 2,
       "method": "sdirk2",
       "cross_conductivity_W_mK": 0.55,
+      "trace_history_temperature_error_K": 5.786098281712615e-05,
+      "trace_history_normal_gradient_error_K_m": 7.930330475142697e-07,
+      "trace_history_flux_error_W_m2": 0.003648545929702207,
       "temperature_error_K": 1.7579326851979715e-06,
       "x_face_heat_error_J_m2": 6.239343640912498e-07,
       "y_face_heat_error_J_m2": 2.1161004579162146e-07,
@@ -427,24 +547,27 @@
       "orders": [
         3.828416556282745,
         4.130557706610373,
-        3.40160351085443
+        3.40160351085443,
+        2.9884013432921757,
+        2.378835443579609,
+        1.9818341447329133
       ],
       "passed": true
     }
   ],
   "sources": [
     {
-      "commit": "de76282e3ca32dc8af98c1cbfe11dd4ab2f929f8",
+      "commit": "96e4dfd8297f36750c037b628cebdf36e1362a43",
       "file": "dg_transverse_heat_transfer.py",
-      "source_sha256": "415ce3406e29c99abe5fa1a2d6e87506fa8508dd9c443f43aeafe6d923802290"
+      "source_sha256": "8fcc8bc29df9d5229a8ed054910d064b5389cfd81ac09364e34d5834c907d95c"
     },
     {
-      "commit": "c83e060d3727b53c43ebe5a50f1134d93b0939cf",
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
       "file": "poisson_2d_bc.py",
-      "source_sha256": "bb0c24da9d901913fe14d2919407130f498abfadf108b98e1c52bf5320127996"
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
     },
     {
-      "commit": "c83e060d3727b53c43ebe5a50f1134d93b0939cf",
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
       "file": "transient_diffusion_2d.py",
       "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
     }
