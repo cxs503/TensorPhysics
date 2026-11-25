@@ -125,10 +125,17 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
         # Rightward power is -h_W*T_W on the west and +h_E*T_E on the east.
         flux0 = np.array([-films[0]*math.sin(phi), -a*math.cos(a/2+phi), -films[1]*amp*math.sin(psi)])
         reference = (-np.expm1(-a*a*time[1:])/a**2)[:,None]*flux0
-        def check_sections(name, interval_heat, stored):
+        amplitude = np.exp(-a*a*time[:,None])
+        contact_reference = amplitude*np.array([math.sin(a/2+phi),-amp*math.sin(b/2+psi)])
+        stored_reference = amplitude*layer_heat
+        def check_sections(name, interval_heat, stored, contact_traces):
             cumulative = np.cumsum(interval_heat,axis=0)
             residual = np.diff(stored,axis=0)+np.diff(interval_heat,axis=1)
             section_metrics[name] = dict(
+                max_contact_trace_errors_K=dict(zip(("left","right"),
+                    np.max(abs(contact_traces-contact_reference),axis=0).tolist())),
+                max_stored_heat_errors_J_m2=dict(zip(("left","right"),
+                    np.max(abs(stored-stored_reference),axis=0).tolist())),
                 max_cumulative_heat_errors_J_m2=dict(zip(("west","contact","east"),
                     np.max(abs(cumulative-reference),axis=0).tolist())),
                 max_layer_balance_J_m2=float(abs(residual).max()))
@@ -140,25 +147,29 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
                      (dem_temperatures[:,m]-dem_temperatures[:,m+1])/resistance,
                      films[1]*dem_temperatures[:,-1]))
         dem_stores = (dem_temperatures*nodal_capacity).reshape(len(time),2,m+1).sum(axis=2)
-        check_sections("DEM",integrate(dem_power),dem_stores)
+        check_sections("DEM",integrate(dem_power),dem_stores,dem_temperatures[:,m:m+2])
 
         cells = history[:,1:-1]
         cell_power = np.column_stack((-cells[:,0]/links[0],(cells[:,m-1]-cells[:,m])/links[m],
                                       cells[:,-1]/links[-1]))
-        check_sections("DEM_cell",integrate(cell_power),(cells*mass).reshape(len(time),2,m).sum(axis=2))
+        def half_cell_traces(fields, power):
+            return np.column_stack((fields[:,m-1]-.5*dx*power/k[m-1],
+                                    fields[:,m]+.5*dx*power/k[m]))
+        check_sections("DEM_cell",integrate(cell_power),(cells*mass).reshape(len(time),2,m).sum(axis=2),
+                       half_cell_traces(cells,cell_power[:,1]))
 
         nodal = fem_history.reshape(len(time),2,-1).mean(dim=1).numpy()
         fem_power = np.column_stack((-films[0]*nodal[:,0],(nodal[:,m]-nodal[:,m+1])/resistance,
                                      films[1]*nodal[:,-1]))
         fem_stored = np.column_stack(((nodal[:,:m]+nodal[:,1:m+1]).sum(axis=1)*dx/2,
                                       cap*(nodal[:,m+1:-1]+nodal[:,m+2:]).sum(axis=1)*dx/2))
-        check_sections("FEM",integrate(fem_power),fem_stored)
+        check_sections("FEM",integrate(fem_power),fem_stored,nodal[:,m:m+2])
         fvm_power = np.column_stack((-fvm_history[:,0]/(1/films[0]+dx/(2*k[0])),
                             (fvm_history[:,m-1]-fvm_history[:,m])/(resistance+dx/(2*k[m-1])+dx/(2*k[m])),
                             fvm_history[:,-1]/(1/films[1]+dx/(2*k[-1]))))
         def cell_stores(fields):
             return (dx*capacity*fields).reshape(len(time),2,m).sum(axis=2)
-        check_sections("FVM",integrate(fvm_power),cell_stores(fvm_history))
+        check_sections("FVM",integrate(fvm_power),cell_stores(fvm_history),half_cell_traces(fvm_history,fvm_power[:,1]))
 
         states,interval_heat,traces = sph.solve_transient_layered_slab(initial,time,dx,(None,None),
                 conductivity=k,volumetric_heat_capacity=capacity,contact_resistance_x=faces[0],
@@ -167,7 +178,10 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
         trace_jump = 1.5*(final[m-1]-final[m])-.5*(final[m-2]-final[m+1])
         stored = np.mean(capacity*(final-initial))
         values.append(("SPH_implicit",initial,final,traces[-1].numpy(),trace_jump,stored))
-        check_sections("SPH_implicit",interval_heat[:,[0,m,-1]].numpy(),cell_stores(states.numpy()))
+        particles = states.numpy()
+        # Extrapolate from each material independently across its own half cell.
+        contact_traces = 1.5*particles[:,[m-1,m]]-.5*particles[:,[m-2,m+1]]
+        check_sections("SPH_implicit",interval_heat[:,[0,m,-1]].numpy(),cell_stores(particles),contact_traces)
     else:
         field = torch.from_numpy(initial[None, :])
         rhs = sph.prepare_slab_film_rhs(
@@ -231,13 +245,18 @@ def main(sampled_dem=False, implicit_sph=False):
                 row["passed"] &= row["discrete_heat_balance_residual_J_m2"] < 1e-12
             if "max_layer_balance_J_m2" in row:
                 section_errors = row["max_cumulative_heat_errors_J_m2"]
+                histories = {**section_errors,
+                             **{f"trace_{k}":v for k,v in row["max_contact_trace_errors_K"].items()},
+                             **{f"stored_{k}":v for k,v in row["max_stored_heat_errors_J_m2"].items()}}
                 prior = previous_sections.get(row["solver"])
                 row["passed"] &= row["max_layer_balance_J_m2"]<1e-12
                 if n==128:
-                    row["passed"] &= max(section_errors.values())<1e-5
+                    row["passed"] &= (max(section_errors.values())<1e-5
+                                      and max(row["max_contact_trace_errors_K"].values())<5e-4
+                                      and max(row["max_stored_heat_errors_J_m2"].values())<5e-5)
                 if prior:
-                    row["passed"] &= all(v<prior[k]/3 for k,v in section_errors.items())
-                previous_sections[row["solver"]] = section_errors
+                    row["passed"] &= all(v<prior[k]/3 for k,v in histories.items())
+                previous_sections[row["solver"]] = histories
             previous[row["solver"]] = errors
             runs.append(row)
     print(json.dumps({"sources": [provenance(f) for f in
