@@ -105,8 +105,20 @@ def measure(n, resistance):
                             (traces[:,:m+1], traces[:,m+1:])], axis=1)
     jump = traces[:,m] - traces[:,m+1]
     heat = sol.nodal_reaction_heat_steps()[:,ends].sum(dim=2).numpy()
-    rows.append(record("FEM", cells, jump, jump/resistance, 2/period*(mid_phase @ heat),
-                       heat[:,0].sum()))
+    row = record("FEM", cells, jump, jump/resistance, 2/period*(mid_phase @ heat),
+                 heat[:,0].sum())
+    # Upper and lower edges are insulated. The two Q4 end nodes on each
+    # material side carry the complete contact exchange for the unit area.
+    local = thermal.thermal_element_nodal_heat_steps(model, sol).numpy()
+    hot_out = -local[:, m-1, [1, 2]].sum(axis=1)
+    cold_in = local[:, m, [0, 3]].sum(axis=1)
+    link = .5*dt*(jump[:-1]+jump[1:])/resistance
+    exact_heat = (q*np.diff(phase.conj())/(1j*omega)).real
+    row["max_contact_mean_power_error_W_m2"] = float(abs((hot_out-exact_heat)/dt).max())
+    row["max_contact_step_mismatch_J_m2"] = float(max(abs(hot_out-link).max(), abs(cold_in-link).max()))
+    stored = dx*np.diff(cells[:,:m] @ capacity[:m])
+    row["max_left_step_balance_J_m2"] = float(abs(stored-heat[:,0]+hot_out).max())
+    rows.append(row)
     harmonic_sol = thermal.solve_harmonic_thermal(model, omega)
     traces = harmonic_sol.temperature.numpy().reshape(2, n+2).mean(axis=0)
     cells = np.concatenate([.5*(part[1:]+part[:-1]) for part in (traces[:m+1], traces[m+1:])])
@@ -152,11 +164,14 @@ def main():
                 balance = (row["left_layer_harmonic_balance_W_m2"] if "left_layer_harmonic_balance_W_m2" in row
                            else row["left_layer_balance_J_m2"])
                 passed = np.isfinite(errors).all() and balance < 1e-10
+                if name == "FEM":
+                    errors = np.append(errors, row["max_contact_mean_power_error_W_m2"])
+                    passed &= max(row["max_contact_step_mismatch_J_m2"], row["max_left_step_balance_J_m2"]) < 1e-12
                 if name in previous:
                     passed &= (errors < previous[name]/3).all()
                 if n == 128:
                     passed &= (errors[:4] < [.001, .001, .002, .003]).all()
-                    if name == "FEM_harmonic":
+                    if name in ("FEM", "FEM_harmonic"):
                         passed &= (errors[4:] < .002).all()
                     passed &= row["interface_phase_error_deg"] < .1
                 row["passed"] = bool(passed)
