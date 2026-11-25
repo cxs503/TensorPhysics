@@ -1,0 +1,282 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "elements": 16,
+      "method": "theta",
+      "sparse": false,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.002912902195353582,
+      "decay_node_error_over_peak": 0.0025371851940215956,
+      "interval_mean_error_over_peak": 0.0030261306522478926,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 16,
+      "method": "theta",
+      "sparse": true,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.0029129021953537212,
+      "decay_node_error_over_peak": 0.0025371851940224296,
+      "interval_mean_error_over_peak": 0.0030261306522484485,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 16,
+      "method": "theta",
+      "sparse": false,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0031273500361938345,
+      "decay_node_error_over_peak": 0.0027329299779214936,
+      "interval_mean_error_over_peak": 0.003239815241834623,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 16,
+      "method": "theta",
+      "sparse": true,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0031273500361937217,
+      "decay_node_error_over_peak": 0.002732929977921719,
+      "interval_mean_error_over_peak": 0.003239815241834623,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 16,
+      "method": "sdirk2",
+      "sparse": false,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.0029167536017428706,
+      "decay_node_error_over_peak": 0.002550264131226822,
+      "interval_mean_error_over_peak": 0.002878963577187252,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 16,
+      "method": "sdirk2",
+      "sparse": true,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.0029167536017428706,
+      "decay_node_error_over_peak": 0.002550264131226822,
+      "interval_mean_error_over_peak": 0.002878963577187252,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 16,
+      "method": "sdirk2",
+      "sparse": false,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.003086875961727833,
+      "decay_node_error_over_peak": 0.0027046489526171614,
+      "interval_mean_error_over_peak": 0.0030453520189998627,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 16,
+      "method": "sdirk2",
+      "sparse": true,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0030868759617279458,
+      "decay_node_error_over_peak": 0.002704648952617274,
+      "interval_mean_error_over_peak": 0.0030453520190000887,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "theta",
+      "sparse": false,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.0007220507327097995,
+      "decay_node_error_over_peak": 0.0006149534103428386,
+      "interval_mean_error_over_peak": 0.0009695890290866227,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "theta",
+      "sparse": true,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.0007220507327096605,
+      "decay_node_error_over_peak": 0.0006149534103425606,
+      "interval_mean_error_over_peak": 0.0009695890290863447,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "theta",
+      "sparse": false,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0008397454489421979,
+      "decay_node_error_over_peak": 0.0007237038981953006,
+      "interval_mean_error_over_peak": 0.0010913999083457084,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "theta",
+      "sparse": true,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0008397454489417468,
+      "decay_node_error_over_peak": 0.0007237038981946241,
+      "interval_mean_error_over_peak": 0.0010913999083451444,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "sdirk2",
+      "sparse": false,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.0007258647252220424,
+      "decay_node_error_over_peak": 0.0006279096242874989,
+      "interval_mean_error_over_peak": 0.0008234309166441832,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "sdirk2",
+      "sparse": true,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.0007258647252220424,
+      "decay_node_error_over_peak": 0.0006279096242872209,
+      "interval_mean_error_over_peak": 0.0008234309166441832,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "sdirk2",
+      "sparse": false,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0007995570249054272,
+      "decay_node_error_over_peak": 0.000695594479985959,
+      "interval_mean_error_over_peak": 0.0008982909681452767,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 32,
+      "method": "sdirk2",
+      "sparse": true,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0007995570249056527,
+      "decay_node_error_over_peak": 0.0006955944799855079,
+      "interval_mean_error_over_peak": 0.0008982909681452767,
+      "source_integral_relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "theta",
+      "sparse": false,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.00017491124420891395,
+      "decay_node_error_over_peak": 0.0001347995872654648,
+      "interval_mean_error_over_peak": 0.00045594237329756255,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "theta",
+      "sparse": true,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.00017491124420821897,
+      "decay_node_error_over_peak": 0.00013479958725976603,
+      "interval_mean_error_over_peak": 0.00045594237329422667,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "theta",
+      "sparse": false,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.00026846902444309975,
+      "decay_node_error_over_peak": 0.0002218443755410457,
+      "interval_mean_error_over_peak": 0.0011419380885979867,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "theta",
+      "sparse": true,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.000268469024446821,
+      "decay_node_error_over_peak": 0.00022184437553957975,
+      "interval_mean_error_over_peak": 0.001141938088596859,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "sdirk2",
+      "sparse": false,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.00017871593674197132,
+      "decay_node_error_over_peak": 0.00014772528966949168,
+      "interval_mean_error_over_peak": 0.0003100355153557649,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "sdirk2",
+      "sparse": true,
+      "width_over_interval": 0.05,
+      "crossing_node_error_over_peak": 0.00017871593674197132,
+      "decay_node_error_over_peak": 0.00014772528967046464,
+      "interval_mean_error_over_peak": 0.0003100355153563209,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "sdirk2",
+      "sparse": false,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.0002283517215188387,
+      "decay_node_error_over_peak": 0.00019377772487425845,
+      "interval_mean_error_over_peak": 0.0005001901135627075,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "elements": 64,
+      "method": "sdirk2",
+      "sparse": true,
+      "width_over_interval": 0.5,
+      "crossing_node_error_over_peak": 0.00022835172151838764,
+      "decay_node_error_over_peak": 0.0001937777248741457,
+      "interval_mean_error_over_peak": 0.0005001901135628204,
+      "source_integral_relative_error": 2.220446049250313e-16,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "db85c80281a010412e83c2de6b84b9a92b74cdd3",
+      "file": "fem_subinterval_heat_pulse.py",
+      "source_sha256": "adee9f0ff184b3b2c0b1d2cb62eecd12c3e8ab3ba42dca24de388982e987f9ee"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_subinterval_heat_pulse.py"
+}
