@@ -1,0 +1,82 @@
+{
+  "runs": [
+    {
+      "columns": 8,
+      "steps": 16,
+      "max_temperature_error_K": 0.08838913204880394,
+      "max_west_east_row_flux_errors_W_m2": [
+        4.353699795615781,
+        1.8625541485742203
+      ],
+      "max_energy_residual_J_m2": 3.95516952522712e-16,
+      "max_wall_cut_difference_J_m2": 1.3877787807814457e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "steps": 32,
+      "max_temperature_error_K": 0.02740853077694133,
+      "max_west_east_row_flux_errors_W_m2": [
+        1.313916126958814,
+        0.5538596404570728
+      ],
+      "max_energy_residual_J_m2": 2.7755575615628914e-16,
+      "max_wall_cut_difference_J_m2": 1.3877787807814457e-17,
+      "orders": [
+        1.6892439977239433,
+        1.7283687465368869,
+        1.7496900497235681
+      ],
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "steps": 64,
+      "max_temperature_error_K": 0.007475278055786516,
+      "max_west_east_row_flux_errors_W_m2": [
+        0.3199351873576939,
+        0.1355250553427494
+      ],
+      "max_energy_residual_J_m2": 4.0939474033052647e-16,
+      "max_wall_cut_difference_J_m2": 6.938893903907228e-18,
+      "orders": [
+        1.874425846222448,
+        2.0380216071468786,
+        2.0309608176284093
+      ],
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "steps": 128,
+      "max_temperature_error_K": 0.001903679117762569,
+      "max_west_east_row_flux_errors_W_m2": [
+        0.07560097672692478,
+        0.03284789446451253
+      ],
+      "max_energy_residual_J_m2": 7.147060721024445e-16,
+      "max_wall_cut_difference_J_m2": 5.204170427930421e-18,
+      "orders": [
+        1.9733369239114202,
+        2.0813028941947187,
+        2.044686793549169
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "sources": [
+    {
+      "commit": "accaf43463b5f3cdd90a9a0ecad4b4dede802809",
+      "file": "sph_traveling_wall_temperature.py",
+      "source_sha256": "235501320af44c3a89b3362d797792b9a23db4c2a73ef6896fe361449f5128f1"
+    },
+    {
+      "commit": "fff373c9e630b1f24a41ad5d3d14f552a3d3bff7",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "1dfa8901bb43a884096cb302ad2055badda9718d9953683f6925d6bff9d8ef41"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_traveling_wall_temperature.py"
+}
