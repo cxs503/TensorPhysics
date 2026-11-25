@@ -403,3 +403,16 @@ implicitly. At 64 linear cells per layer the two-flux mode-two jump error
 falls to 7.5681e-6 K and the rate error to 1.9021e-4 W/m. Temperature
 error increases from 7.818e-5 to 1.954e-4 K, within the same 3e-4 K
 limit. All 83 rows pass. Use `--lumped-source` for the previous closure.
+
+### Two prescribed fluxes in a steady annulus
+
+Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python examples/steady_annular_flux.py`.
+The analytic field combines log(r/b) and a phase-shifted angular harmonic
+of order two in a two-material annulus. Both walls prescribe inward flux;
+their circumferential integrals sum to zero. FVM fixes the volume-weighted
+mean temperature of its constant angular mode, using the analytic continuum
+mean. Circular BEM fixes the corresponding mean bore temperature. Both
+compare directly with the common analytic field. On 64 radial cells per
+layer the FVM probe temperature and interface modal flux errors are
+1.29e-5 K and 5.26e-6 W/m². The 128-panel circular Fourier map resolves
+these angular modes to roundoff.
