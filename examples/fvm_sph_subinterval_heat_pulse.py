@@ -2,6 +2,7 @@
 import argparse
 import json
 import math
+from itertools import combinations
 
 import numpy as np
 from tensorfvm.cht import rod
@@ -124,20 +125,23 @@ if __name__ == "__main__":
                 passed = passed and max(fv["cell_balance_error_over_heat_scale"],
                                         particles["cell_balance_error_over_heat_scale"]) < 1e-10
                 extra = {}
+                center_profiles = {"fvm": centers[:, None, :], "sph": particle_means}
                 if args.fem:
-                    fe, fe_cuts = fem.measure(n, method, width, sparse=True, return_section_heat=True)
+                    fe, fe_center, fe_cuts = fem.measure(n, method, width, sparse=True, return_profiles=True)
+                    center_profiles["fem"] = fe_center[:, None, :]
                     fe_fv = abs(fe_cuts-fv_cuts).max(axis=1)
                     fe_sph = abs(fe_cuts-sph_cuts).max(axis=1)
                     extra.update(fem=fe, fem_fvm_section_difference_over_scale=fe_fv.tolist(),
                                  fem_sph_section_difference_over_scale=fe_sph.tolist())
                     passed = (passed and max(fe_fv.max(), fe_sph.max(), fe["max_section_heat_error_over_scale"]) < tolerance
-                              and fe["energy_imbalance_over_peak"] < 1e-10)
+                              and fe["energy_imbalance_over_peak"] < 1e-10 and fe["center_interval_mean_error_over_peak"] < tolerance)
                 if args.dg:
-                    dg_metrics, dg_cuts = dg.measure(n, 2, width, return_section_heat=True)
+                    dg_metrics, dg_center, dg_cuts = dg.measure(n, 2, width, return_profiles=True)
+                    center_profiles["dg"] = dg_center[:, None, :]
                     extra["dg"] = dg_metrics
                     passed = (passed and dg_metrics["max_cell_balance_error_over_scale"] < 1e-8
                               and max(dg_metrics["max_section_heat_error_over_scale"],
-                                      dg_metrics["max_cell_mean_error_over_peak"]) < tolerance)
+                                      dg_metrics["max_cell_mean_error_over_peak"], dg_metrics["center_interval_mean_error_over_peak"]) < tolerance)
                     other_cuts = {"fvm": fv_cuts, "sph": sph_cuts}
                     if args.fem:
                         other_cuts["fem"] = fe_cuts
@@ -145,6 +149,12 @@ if __name__ == "__main__":
                         difference = abs(dg_cuts-sections).max(axis=1)
                         extra[f"dg_{name}_section_difference_over_scale"] = difference.tolist()
                         passed = passed and difference.max() < tolerance
+                for first, second in combinations(center_profiles, 2):
+                    if (first, second) == ("fvm", "sph"):
+                        continue  # Already recorded in center_mean_difference_over_peak.
+                    delta = abs(center_profiles[first]-center_profiles[second]).max(axis=(1, 2))
+                    extra[f"{first}_{second}_center_mean_difference_over_peak"] = delta.tolist()
+                    passed = passed and delta.max() < tolerance
                 runs.append(dict(**extra, section_heat_difference_over_scale=cut_differences.tolist(),
                                  max_section_heat_difference_over_scale=float(cut_differences.max()),
                                  center_mean_difference_over_peak=differences.tolist(),

@@ -9,7 +9,7 @@ from tensorfem import thermal
 from conduction_provenance import provenance
 
 
-def measure(n, method, width, sparse, *, return_section_heat=False):
+def measure(n, method, width, sparse, *, return_section_heat=False, return_profiles=False):
     # Solve in excess above fixed 305 K ends. Unit k, capacity and area.
     rate, amplitude = math.pi**2, 2**-44
     dt = 1/(16*rate)
@@ -72,6 +72,11 @@ def measure(n, method, width, sparse, *, return_section_heat=False):
                 decay_node_error_over_peak=float(error[indices[3:]].max()),
                 interval_mean_error_over_peak=float(abs(means/amplitude-exact_means).max()/peak),
                 source_integral_relative_error=float(abs(load.sum()*math.pi/2-1)))
+    if return_profiles:
+        center_mean = 0.5*(means[:, :-1] + means[:, 1:])
+        exact_center = (integral/np.diff(outputs))[:, None]*np.sin(math.pi*(x.numpy()[:-1]+0.5/n))
+        metrics["center_interval_mean_error_over_peak"] = float(abs(center_mean/amplitude-exact_center).max()/peak)
+        return metrics, center_mean/(amplitude*peak), sections/scale
     if return_section_heat:
         return metrics, sections/scale
     return metrics

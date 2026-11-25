@@ -9,7 +9,7 @@ from tensordg import heat_1d
 from conduction_provenance import provenance
 
 
-def measure(n, degree, width, *, return_section_heat=False):
+def measure(n, degree, width, *, return_section_heat=False, return_profiles=False):
     amplitude, rate = 2**-44, math.pi**2
     dt = 1/(16*rate)
     output = np.arange(19)*dt
@@ -34,7 +34,8 @@ def measure(n, degree, width, *, return_section_heat=False):
     cell_mode = np.sin(math.pi*centers.numpy())*np.sinc(0.5/n)
     exact_cell = amplitude*factor[:, None]*cell_mode
     exact_sections = -math.pi*amplitude*integral[:, None]*np.cos(math.pi*np.arange(n+1)/n)
-    means = np.asarray(info["interval_temperature_modes"])[:, :, 0]
+    modes = np.asarray(info["interval_temperature_modes"])
+    means = modes[:, :, 0]
     averaged = np.add.reduceat(means*np.diff(knots)[:, None], ids[:-1], axis=0)/np.diff(output)[:, None]
     exact_mean = amplitude*(integral/np.diff(output))[:, None]*cell_mode
     deposited = amplitude*rate*np.diff(duration)[:, None]*cell_mode/n
@@ -46,6 +47,15 @@ def measure(n, degree, width, *, return_section_heat=False):
                 max_section_heat_error_over_scale=float(abs(sections-exact_sections).max()/scale),
                 crossing_section_error_over_scale=float(abs(sections[1]-exact_sections[1]).max()/scale),
                 max_cell_balance_error_over_scale=float(abs(residual).max()/scale))
+    if return_profiles:
+        # Evaluate the Legendre expansion at local coordinate zero. For P2
+        # the center differs from the zeroth (cell-average) coefficient.
+        basis = np.polynomial.legendre.legvander([0.], degree)[0]
+        center_integrals = (modes @ basis)*np.diff(knots)[:, None]
+        center_mean = np.add.reduceat(center_integrals, ids[:-1], axis=0)/np.diff(output)[:, None]
+        exact_center = (integral/np.diff(output))[:, None]*np.sin(math.pi*centers.numpy())
+        metrics["center_interval_mean_error_over_peak"] = float(abs(center_mean/amplitude-exact_center).max()/peak)
+        return metrics, center_mean/(amplitude*peak), sections/scale
     if return_section_heat:
         return metrics, sections/scale
     return metrics
