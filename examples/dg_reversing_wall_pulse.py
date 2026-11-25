@@ -38,6 +38,57 @@ def reversal_time(grid, right_heat, start, stop, rate):
                 timing_error_over_output_interval=float(abs(estimate-exact)*16*rate))
 
 
+def contact_chain_pulse(cells, knots, indices, start, stop, rate, amplitude):
+    from scipy.optimize import brentq
+    from tensordem.thermal import contact_chain
+
+    widths = np.full(cells, 1/cells)
+    links, capacity = contact_chain.cell_centered_slab_network(widths, 1., 1.)
+    x = (np.arange(cells)+.5)/cells
+    modes = np.arange(1, 3)
+    cell_factors = np.sinc(modes/(2*cells))
+    source_profile = np.sin(math.pi*x[:, None]*modes) @ cell_factors
+    source = np.r_[0., amplitude*rate*widths*source_profile, 0.]
+    states = [np.zeros(cells+2)]
+    sections = []
+    residuals = []
+    for a, b in zip(knots[:-1], knots[1:]):
+        power = source if start <= a < stop else np.zeros_like(source)
+        dt = (b-a)/rate
+        end, heat = contact_chain.constant_contact_interval(
+            links, capacity, dt, states[-1], t_left=0., t_right=0., nodal_power=power)
+        residuals.append((capacity*(end-states[-1])-dt*power)[1:-1] + np.diff(heat))
+        states.append(end)
+        sections.append(heat)
+    states = np.array(states)
+    storage = states[indices] @ capacity
+    walls = np.add.reduceat(np.array(sections)[:, [0, -1]], indices[:-1], axis=0)*[-1, 1]
+    balance_error = float(np.abs(residuals).max())
+    first = np.searchsorted(knots, stop)
+    left = first + reversal_bracket_index(states[first:, -2]/links[-1])
+    bracket = knots[left:left+2]/rate
+
+    def right_current(t):
+        if t == bracket[0]:
+            return states[left, -2]/links[-1]
+        end, _ = contact_chain.constant_contact_interval(
+            links, capacity, t-bracket[0], states[left], t_left=0., t_right=0.)
+        return end[-2]/links[-1]
+
+    estimate = brentq(right_current, *bracket, xtol=1e-14)
+    exact = exact_reversal_time(start, stop, rate)
+    # Half-cell wall links give the sine modes discrete rates 4 n^2 sin^2(k pi/2n).
+    face_factors = 2*cells*np.sin(math.pi*modes/(2*cells))
+    rates = face_factors**2
+    wall_amplitudes = face_factors*cell_factors*(-np.expm1(-rates*(stop-start)/rate))/rates
+    network_root = stop/rate + math.log(wall_amplitudes[1]/wall_amplitudes[0])/float(rates[1]-rates[0])
+    timing = dict(reversal_time=estimate, exact_reversal_time=exact,
+                  discrete_reversal_time=network_root, bracketing_state_times=bracket.tolist(),
+                  discrete_timing_error_over_output_interval=abs(estimate-network_root)*16*rate,
+                  timing_error_over_output_interval=abs(estimate-exact)*16*rate)
+    return walls, storage, timing, balance_error
+
+
 def measure(cells, width, solver="dg"):
     # Time is scaled by the decay rate of the first sine mode.
     rate = math.pi**2
@@ -49,7 +100,7 @@ def measure(cells, width, solver="dg"):
     indices = np.searchsorted(knots, output)
     local_errors = {}
     timing = {}
-    if solver != "dg":
+    if solver not in ("dg", "dem"):
         subdivisions = cells//8
         grid = np.r_[np.concatenate([np.linspace(a, b, subdivisions, endpoint=False)
                                      for a, b in zip(knots, knots[1:])]), knots[-1]]/rate
@@ -87,6 +138,10 @@ def measure(cells, width, solver="dg"):
         # Outward heat has opposite orientation to the solver's +x flux at the left wall.
         walls = sections[:, [0, -1]] * [-1, 1]
         storage = states[indices, :, 0].numpy().mean(axis=1)
+        source_mean = 2/math.pi
+    elif solver == "dem":
+        walls, storage, timing, local_errors["max_step_cell_balance_error"] = contact_chain_pulse(
+            cells, knots, indices, start, stop, rate, amplitude)
         source_mean = 2/math.pi
     elif solver.startswith("fem-"):
         from tensorfem import thermal
@@ -149,7 +204,7 @@ def measure(cells, width, solver="dg"):
         walls = np.add.reduceat(cuts.numpy()[:, [0, -1]], steps[:-1], axis=0)*[-1, 1]
         storage = field[steps].numpy().mean(axis=(1, 2))
         source_mean = float(profile.mean())
-    if solver != "dg":
+    if solver not in ("dg", "dem"):
         timing = reversal_time(grid, right_heat, start, stop, rate)
     # Independently integrate -dT/dx at both walls by Gauss quadrature.
     points, weights = np.polynomial.legendre.leggauss(12)
@@ -178,14 +233,19 @@ def measure(cells, width, solver="dg"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("dg", "theta", "sdirk2", "fvm-theta", "fvm-sdirk2", "fem-theta", "fem-sdirk2"), default="dg",
-                        help="exact-time DG, SPH (theta/sdirk2), finite volume (fvm-*), or sparse LINE2 (fem-*)")
+    parser.add_argument("--solver", choices=("dg", "dem", "theta", "sdirk2", "fvm-theta", "fvm-sdirk2", "fem-theta", "fem-sdirk2"), default="dg",
+                        help="exact-time DG or DEM contact chain, SPH (theta/sdirk2), finite volume (fvm-*), or sparse LINE2 (fem-*)")
     solver = parser.parse_args().solver
     if solver == "dg":
         from tensordg import heat_1d as implementation
         path = "../TensorDG"
         settings = dict(degree=2, wall_penalty=40, interior_penalty=20)
         required_order, tolerance = 3.5, 1e-5
+    elif solver == "dem":
+        from tensordem.thermal import contact_chain as implementation
+        path = "../TensorDEM/src"
+        settings = dict(network="cell-centered unit slab, zero contact resistance", integration="exact interval")
+        required_order, tolerance = 1.8, .003
     else:
         if solver.startswith("fvm-"):
             from tensorfvm.cht import rod as implementation
@@ -207,7 +267,7 @@ if __name__ == "__main__":
             row = measure(cells, width, solver)
             orders = {} if previous is None else {
                 key: math.log2(previous[key]/row[key]) for key in ("left_error", "right_error")}
-            if solver == "dg" and previous is not None:
+            if solver in ("dg", "dem") and previous is not None:
                 key = "timing_error_over_output_interval"
                 orders[key] = math.log2(previous[key]/row[key])
             row["orders"] = orders
@@ -217,6 +277,9 @@ if __name__ == "__main__":
             if solver.startswith("fvm-"):
                 row["passed"] &= max(row["max_step_cell_balance_error"],
                                      row["max_step_shared_face_mismatch"]) < 1e-10
+            if solver == "dem":
+                row["passed"] &= (row["max_step_cell_balance_error"] < 1e-10 and
+                                  row["discrete_timing_error_over_output_interval"] < 1e-9)
             if solver.startswith("fem-"):
                 row["passed"] &= row["max_step_free_node_residual"] < 1e-10
             if solver == "dg":
