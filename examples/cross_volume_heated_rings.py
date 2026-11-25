@@ -18,7 +18,7 @@ VOLUME = np.array([1.+.2j, -.4+.7j, .3-.5j])
 SHEETS = np.array([.2j, -.3+.4j])
 
 
-def continuum(mode, omega, films=(None, None)):
+def continuum(mode, omega, films=(None, None), fractions=FRACTIONS):
     # Six integration constants, two per layer. Last column is the particular
     # solution of the Poisson equation with source V_i*(r/R)^m.
     def traces(layer, r):
@@ -40,22 +40,24 @@ def continuum(mode, omega, films=(None, None)):
                  exterior if films[1] is None else exterior-q_ext/films[1]]
     loads = list(WALLS)
     samples = []
+    material_traces = []
     for i, r in enumerate(EDGES[1:-1]):
         left, qi = traces(i, r)
         right, qo = traces(i+1, r)
-        sheet = left - CONTACT[i]*FRACTIONS[i]*qi
-        equations.extend((sheet-right-CONTACT[i]*(1-FRACTIONS[i])*qo,
+        sheet = left - CONTACT[i]*fractions[i]*qi
+        equations.extend((sheet-right-CONTACT[i]*(1-fractions[i])*qo,
                           qo-qi+1j*omega*CAPACITY[i]*sheet))
         loads.extend((0., SHEETS[i]))
         samples.append((sheet, qi, qo))
+        material_traces.extend((left, right))
     matrix = np.asarray(equations)
     coeff = np.r_[np.linalg.solve(matrix[:, :-1], loads-matrix[:, -1]), 1.]
     t, qi, qo = (np.array(samples) @ coeff).T
     rates = 2*np.pi*EDGES[[0,-1]]*([q_bore, q_ext] @ coeff)
-    return np.r_[t, qi, qo, rates, bore @ coeff, exterior @ coeff]
+    return np.r_[t, qi, qo, rates, bore @ coeff, exterior @ coeff, np.array(material_traces) @ coeff]
 
 
-def measure(mode, films=(None, None)):
+def measure(mode, films=(None, None), fractions=FRACTIONS):
     rows = []
     previous = {}
     for n in (4, 8, 16, 32):
@@ -65,23 +67,26 @@ def measure(mode, films=(None, None)):
         source = (np.repeat(VOLUME, n)*2*(hi**(mode+2)-lo**(mode+2))
                   / ((mode+2)*EDGES[-1]**mode*(hi**2-lo**2)))
         bem = harmonic_rings.assemble_ring_response(EDGES, K, CONTACT, 4*n, mode=mode,
-            inner_resistance_fractions=FRACTIONS, include_volume_sources=True, formulation="polygonal", film_coefficients=films)
+            inner_resistance_fractions=fractions, include_volume_sources=True, formulation="polygonal", film_coefficients=films)
         for omega in (1., 8., 24.):
-            reference = continuum(mode, omega, films)
+            reference = continuum(mode, omega, films, fractions)
             sol = bem.solve(omega, WALLS, CAPACITY, sheet_generation=SHEETS, volume_generation=VOLUME)
-            boundary = np.r_[sol.sheet_temperature, sol.incoming_flux, sol.outgoing_flux, sol.wall_heat_rates, sol.wall_surface_temperatures]
+            boundary = np.r_[sol.sheet_temperature, sol.incoming_flux, sol.outgoing_flux, sol.wall_heat_rates, sol.wall_surface_temperatures, sol.contact_temperatures.ravel()]
             fv = storing_rings.solve_storing_rings(mesh, np.repeat(K,n), [n, 2*n], WALLS, omega,
                 contact_resistances=CONTACT, sheet_capacities=CAPACITY, sheet_generation=SHEETS,
-                inner_resistance_fractions=FRACTIONS, azimuthal_mode=mode, source=source, return_wall_rates=True,
-                film_coefficients=films, return_wall_temperatures=True)
-            volume = np.concatenate(fv)
+                inner_resistance_fractions=fractions, azimuthal_mode=mode, source=source, return_wall_rates=True,
+                film_coefficients=films, return_wall_temperatures=True, return_contact_temperatures=True)
+            volume = np.concatenate([part.ravel() for part in fv])
             errors = np.array([max(abs((x-reference)/reference)) for x in (boundary, volume)])
             difference = abs((boundary-volume)/reference)
             orders = np.log2(previous[omega]/errors) if omega in previous else None
             # Axisymmetric conduction with constant layer source uses exact half-shell drops.
             fv_pass = errors[1] < 1e-10 if not mode else n < 32 or (errors[1] < .001 and orders[1] > 1.8)
             passed = fv_pass and (n < 32 or (errors[0] < .01 and orders[0] > 1.7 and max(difference) < .01))
-            rows.append(dict(mode=mode, omega_rad_s=omega, bem_panels=4*n, fvm_cells_per_layer=n,
+            reference_jump = reference[-4::2]-reference[-3::2]
+            jump_errors = [max(abs((x[-4::2]-x[-3::2])/reference_jump-1)) for x in (boundary, volume)]
+            passed &= n < 32 or (jump_errors[0] < .01 and jump_errors[1] < .001)
+            rows.append(dict(bem_jump_relative_error=jump_errors[0], fvm_jump_relative_error=jump_errors[1], mode=mode, omega_rad_s=omega, bem_panels=4*n, fvm_cells_per_layer=n,
                 bem_relative_error=errors[0], fvm_relative_error=errors[1],
                 bem_order=None if orders is None else orders[0],
                 fvm_order=None if orders is None or not mode else orders[1],
@@ -96,18 +101,23 @@ def measure(mode, films=(None, None)):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--film-walls", choices=("none", "bore", "exterior", "both"), default="none")
-    case = parser.parse_args().film_walls
+    parser.add_argument("--inner-fractions", type=float, nargs=2, default=FRACTIONS, metavar=("RING1", "RING2"))
+    args = parser.parse_args()
+    case = args.film_walls
+    fractions = args.inner_fractions
     films = (7. if case in ("bore", "both") else None, 3. if case in ("exterior", "both") else None)
-    runs = [row for mode in (0, 1, 2) for row in measure(mode, films)]
+    runs = [row for mode in (0, 1, 2) for row in measure(mode, films, fractions)]
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs, film_coefficients_W_m2_K=films,
-        fixed_boundary_data_K=[[z.real, z.imag] for z in WALLS],
+        inner_resistance_fractions=list(fractions), fixed_boundary_data_K=[[z.real, z.imag] for z in WALLS],
         phasor_encoding="[real, imaginary], exp(i omega t)",
         columns=["sheet T1 (K)", "sheet T2 (K)", "incoming q1 (W/m²)", "incoming q2 (W/m²)",
                  "outgoing q1 (W/m²)", "outgoing q2 (W/m²)", "bore rate (W/m)", "exterior rate (W/m)",
-                 "bore surface temperature (K)", "exterior surface temperature (K)"],
+                 "bore surface temperature (K)", "exterior surface temperature (K)",
+                 "ring 1 inner material (K)", "ring 1 outer material (K)",
+                 "ring 2 inner material (K)", "ring 2 outer material (K)"],
         sources=[provenance(p) for p in (__file__, harmonic_rings.__file__, layered_annulus.__file__,
                                          storing_rings.__file__, annulus.__file__)],
-        reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src:../TensorFVM/src python examples/cross_volume_heated_rings.py" + f" --film-walls {case}"),
+        reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src:../TensorFVM/src python examples/cross_volume_heated_rings.py" + f" --film-walls {case} --inner-fractions {fractions[0]} {fractions[1]}"),
         indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
