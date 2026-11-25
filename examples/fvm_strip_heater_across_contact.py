@@ -11,10 +11,10 @@ from conduction_provenance import provenance
 
 
 def contact_admittance_reference(conductivities, capacities, resistance, omega, trace_capacity, trace_power,
-                                 strip_widths=(0., 0.), generation=0., strip_gaps=(0., 0.)):
+                                 strip_widths=(0., 0.), generation=0., strip_gaps=(0., 0.), transverse_wavenumber=0.):
     """Outward wall powers and trace jump for heated segments at given distances from the contact."""
     k = np.asarray(conductivities)
-    z = np.sqrt(1j*omega*np.asarray(capacities)/k)
+    z = np.sqrt(transverse_wavenumber**2 + 1j*omega*np.asarray(capacities)/k)
     attenuation = np.exp(-z/2)
     denominator = -np.expm1(-z)
     diagonal = k*z*(1+attenuation**2)/denominator + 1j*omega*np.asarray(trace_capacity)
