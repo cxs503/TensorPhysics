@@ -347,3 +347,28 @@ over the two contact resistances were 1.62e-4 W/m² on the left and 8.35e-5
 W/m² on the right. The largest disagreement between those independent
 reconstructions was 7.90e-5 W/m². Both one-sided errors are checked against
 the continuum transfer solution at every refinement.
+
+### Harmonic cylindrical contact
+
+Run `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python examples/harmonic_annular_contact.py`.
+The bore, contact and exterior radii are 0.25, 0.6 and 1 m. The material
+pairs (k,C) are (2,1) and (1.3,2.5); the contact resistance is 0.15 m² K/W
+and the frequency is 1 Hz. Independent modified Bessel functions I_m and K_m
+satisfy the continuum equation in each layer. Four complex coefficients are
+fixed by the two wall temperatures, continuous radial flux and the resistive
+temperature jump. The Robin run derives the driving ambient from these
+analytic temperatures and fluxes.
+
+FVM uses exact annular volumes and logarithmic half-cell resistances. FEM
+uses two polygonal Q4 rings with paired contact nodes. For azimuthal mode 2
+the reported heat rate is the radial flux amplitude times 2πr; its integral
+around the circumference is zero. The benchmark reports angular amplitudes
+as well as a layer storage audit. For FEM the full-circumference audit tests
+nonzero net storage in mode zero.
+
+On the linear mesh the mode-two film FVM temperature error fell from
+8.248e-4 K to 2.471e-4 K at 16→32 cells per layer, a 3.34-fold reduction
+against the 3.5-fold rate gate. At 64 cells the reduction reached 3.67.
+The command retains this failed row and returns exit status 1. It extends
+both mode-two FVM runs to 128 cells on that mesh. Absolute targets from
+64 cells are 3e-4 K for temperature, 0.008 W/m for rate and 2e-5 K for jump.
