@@ -1,0 +1,184 @@
+{
+  "reference": "Equal wavenumber magnitude 6*pi; D3Q7 gain=(1+sum cos(k_i dx))/4; continuum exp(-alpha |k|^2 t)",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_directional_diffusion.py",
+  "order_metrics": [
+    "relative_diffusivity_error",
+    "max_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "n": 16,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.07729592842076391,
+      "relative_diffusivity_error": 0.033800894740451115,
+      "max_flux_error_W_m2": 0.07306288967087404,
+      "discrete_temperature_error_K": 3.3306690738754696e-16,
+      "max_cell_balance_J": 9.486769009248164e-20,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.07939802254007246,
+      "relative_diffusivity_error": 0.0075247182490942865,
+      "max_flux_error_W_m2": 0.018474164293685202,
+      "discrete_temperature_error_K": 8.604228440844963e-16,
+      "max_cell_balance_J": 1.4399560103323106e-20,
+      "orders": [
+        2.1673519678502364,
+        1.9836297106900735
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.07985395832178298,
+      "relative_diffusivity_error": 0.0018255209777128245,
+      "max_flux_error_W_m2": 0.0046293719052385995,
+      "discrete_temperature_error_K": 9.992007221626409e-16,
+      "max_cell_balance_J": 2.686682629572234e-21,
+      "orders": [
+        2.0433293161095363,
+        1.9966207306379842
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.08341485674180046,
+      "relative_diffusivity_error": 0.0426857092725057,
+      "max_flux_error_W_m2": 0.05611652365387576,
+      "discrete_temperature_error_K": 1.3322676295501878e-15,
+      "max_cell_balance_J": 1.4907779871675686e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.0808068040205512,
+      "relative_diffusivity_error": 0.010085050256889883,
+      "max_flux_error_W_m2": 0.015325761204394106,
+      "discrete_temperature_error_K": 1.942890293094024e-15,
+      "max_cell_balance_J": 2.1811098391798234e-20,
+      "orders": [
+        2.0815348781606744,
+        1.8724669067372244
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.08019900140015263,
+      "relative_diffusivity_error": 0.0024875175019078988,
+      "max_flux_error_W_m2": 0.003917348362418194,
+      "discrete_temperature_error_K": 2.9698465908722937e-15,
+      "max_cell_balance_J": 2.9116757561866574e-21,
+      "orders": [
+        2.0194396919063102,
+        1.9680093966339531
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.08341485674180046,
+      "relative_diffusivity_error": 0.0426857092725057,
+      "max_flux_error_W_m2": 0.056116523653876205,
+      "discrete_temperature_error_K": 1.6653345369377348e-15,
+      "max_cell_balance_J": 1.4907779871675686e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.0808068040205512,
+      "relative_diffusivity_error": 0.010085050256889883,
+      "max_flux_error_W_m2": 0.015325761204401434,
+      "discrete_temperature_error_K": 2.3314683517128287e-15,
+      "max_cell_balance_J": 2.541098841762901e-20,
+      "orders": [
+        2.0815348781606744,
+        1.8724669067365458
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "diffusivity_m2_s": 0.08019900140015307,
+      "relative_diffusivity_error": 0.00248751750191345,
+      "max_flux_error_W_m2": 0.003917348362433737,
+      "discrete_temperature_error_K": 3.3029134982598407e-15,
+      "max_cell_balance_J": 2.8918234214853848e-21,
+      "orders": [
+        2.0194396919030906,
+        1.9680093966289185
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "a028df230fa2fd490cc09784d15d32d183915064",
+      "file": "lbm_directional_diffusion.py",
+      "source_sha256": "2aab43b2b2f0a031b00fa702042d8f471bc4b905f09f0d2ed86c21d691999a14"
+    },
+    {
+      "commit": "e4e3faadedb863ed09316f440aecec291c8cb820",
+      "file": "thermal_common.py",
+      "source_sha256": "96572fcb497010178b6096c22cc2c06597cdf0bce915eb523610e3d33706ea91"
+    }
+  ]
+}
