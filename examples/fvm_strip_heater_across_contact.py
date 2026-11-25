@@ -10,7 +10,7 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega, trace_capacity=(0., 0.)):
+def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega, trace_capacity=(0., 0.), trace_power=(0., 0.)):
     # Propagate (T, rightward power, 1) exactly within each constant-source
     # segment. The final component makes the volumetric source an affine load.
     transfer = np.eye(3)
@@ -18,6 +18,7 @@ def harmonic_reference(start, end, conductivities, capacities, generation, resis
     # Each trace withdraws i*omega*C*T before or after the resistive drop.
     left_store, right_store = (np.eye(3, dtype=complex) for _ in trace_capacity)
     left_store[1, 0], right_store[1, 0] = -1j*omega*np.asarray(trace_capacity)
+    left_store[1, 2], right_store[1, 2] = trace_power
     edges = (0., start, 0.5, end, 1.)
     for left, right in zip(edges[:-1], edges[1:]):
         layer = int(left >= 0.5)
@@ -35,7 +36,7 @@ def harmonic_reference(start, end, conductivities, capacities, generation, resis
                      resistance*(left_store @ at_contact @ initial)[1]])
 
 
-def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.)):
+def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0., 0.)):
     interface, resistance, generation = 0.5, 0.35, 12.
     start, end = (3/8, 5/6) if mirrored else (1/6, 5/8)
     k_left, k_right = (4., 1.) if mirrored else (1., 4.)
@@ -58,19 +59,21 @@ def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.)):
         sheet = np.zeros(cells-1)
         sheet[mid-1] = sum(trace_capacity)
         fraction = trace_capacity[0]/sum(trace_capacity) if sum(trace_capacity) else 0.5
+        applied = np.zeros((2, cells-1), dtype=complex)
+        applied[:, mid-1] = trace_power
         field, _, west, east, (upstream, downstream) = rod.solve_harmonic_stepped_rod(
             widths, np.ones(cells), np.repeat([k_left, k_right], mid), capacity,
             (0., 0.), omega, source=source, flux_order=2, contact_resistance=contacts, return_traces=True,
-            interface_heat_capacity=sheet, interface_capacity_left_fraction=fraction,
+            interface_heat_capacity=sheet, interface_capacity_left_fraction=fraction, trace_power=applied,
         )
         actual = np.array([-west[0], east[-1], upstream[mid-1]-downstream[mid-1]])
-        exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega, trace_capacity)
+        exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega, trace_capacity, trace_power)
         trace_t = np.array([upstream[mid-1], downstream[mid-1]])
         crossing = actual[2]/resistance
         trace_net = np.array([east[mid-1]-crossing, crossing-west[mid]])
         return {
             "cells": cells, "strip_bounds_m": [start, end], "omega_rad_s": omega,
-            "max_trace_balance_error_W": max(abs(trace_net - 1j*omega*trace_t*trace_capacity)),
+            "max_trace_balance_error_W": max(abs(trace_net + trace_power - 1j*omega*trace_t*trace_capacity)),
             "wall_outward_amplitude_W": abs(actual[:2]).tolist(),
             "reference_wall_amplitude_W": abs(exact[:2]).tolist(),
             "contact_jump_amplitude_K": abs(actual[2]), "reference_jump_amplitude_K": abs(exact[2]),
