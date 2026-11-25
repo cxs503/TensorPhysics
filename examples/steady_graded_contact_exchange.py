@@ -75,11 +75,11 @@ def measure(n, bulk):
         fixed,torch.tensor(tnodes,dtype=xy.dtype)[fixed],thickness=torch.from_numpy(area),nodal_heat=torch.from_numpy(rhs),
         contact_pairs=torch.tensor([[n,n+1]]),contact_conductance=1/resistance,heat_loss_coefficient=torch.from_numpy(h))
     u = thermal.solve_steady_thermal(model,sparse=True)
-    local = thermal.thermal_element_nodal_power(model,u,element_nodal_heat=torch.from_numpy(local_load))
+    local,net = thermal.thermal_element_nodal_power(model,u,element_nodal_heat=torch.from_numpy(local_load),
+                                               return_net_input=True)
     element = u.numpy()[conn]
-    sink = (widths*area*h)[:,None]/6*(element @ np.array([[2.,1.],[1.,2.]]))
     section = thermal.thermal_element_section_power(model,local,f,
-        net_element_nodal_input=torch.from_numpy(local_load-sink)).real.numpy()
+        net_element_nodal_input=net).real.numpy()
     linear = thermal.thermal_element_section_power(model,local,f).real.numpy()
     field = element[:,:1]+np.diff(element,axis=1)*f
     res = section[:,-1]-section[:,0]+widths*area*h*element.mean(1)-local_load.sum(1)

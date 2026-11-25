@@ -11,7 +11,7 @@ from tensorfem import thermal
 from tensorfvm.cht import rod
 
 
-def measure(n, omega, oscillatory, estimate_source=False):
+def measure(n, omega, oscillatory, estimate_source=False, load_moments=False):
     area = np.repeat([.8,1.4],n)
     k = np.repeat([1.7,3.1],n)
     c = np.repeat([1.5,.9],n)
@@ -89,35 +89,45 @@ def measure(n, omega, oscillatory, estimate_source=False):
         torch.from_numpy(exact_nodes[[0,-1]]),thickness=torch.from_numpy(area),nodal_heat=torch.from_numpy(rhs),
         contact_pairs=torch.tensor([[n,n+1]]),contact_conductance=1/resistance)
     state = thermal.solve_harmonic_thermal(model,omega,sparse=True).temperature
-    nodal_power = thermal.thermal_element_nodal_power(model,state,omega,element_nodal_heat=torch.from_numpy(local))
-    power = thermal.thermal_element_section_power(model,nodal_power,fractions,
-        net_line_source_gradient=area*slope,net_line_source_curvature=area*curve).numpy()
+    nodal_power,net = thermal.thermal_element_nodal_power(model,state,omega,
+        element_nodal_heat=torch.from_numpy(local),return_net_input=True)
+    variants = [("FEM",dict(net_line_source_gradient=area*slope,net_line_source_curvature=area*curve))]
+    if load_moments:
+        variants.append(("FEM_load_moment",dict(net_element_nodal_input=net)))
     element = state.numpy()[conn]
     field = element[:,:1]+(element[:,1:]-element[:,:1])*fractions
-    defect = power[:,-1]-power[:,0]+1j*omega*area*c*widths*element.mean(1)-local.sum(1)
-    yield dict(solver="FEM",section_power_W=float(abs(power-target_p).max()),
-               temperature_K=float(abs(field-target_t).max()),jump_K=float(abs(state[n]-state[n+1]-jump)),
-               cell_balance_W=float(abs(defect).max()))
+    for name,options in variants:
+        power = thermal.thermal_element_section_power(model,nodal_power,fractions,**options).numpy()
+        defect = power[:,-1]-power[:,0]+1j*omega*area*c*widths*element.mean(1)-local.sum(1)
+        yield dict(solver=name,section_power_W=float(abs(power-target_p).max()),
+                   amplitude_error_W=float(abs(abs(power)-abs(target_p)).max()),
+                   phase_error_rad=float(abs(np.angle(power*target_p.conj())).max()),
+                   temperature_K=float(abs(field-target_t).max()),jump_K=float(abs(state[n]-state[n+1]-jump)),
+                   cell_balance_W=float(abs(defect).max()))
+
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--estimate-source",action="store_true",help="also estimate net source derivatives from FVM cell means within each material")
+    parser.add_argument("--load-moments",action="store_true",help="recover FEM section phasors using net distributed inputs")
     args = parser.parse_args()
     rows = []
     for oscillatory in (False,True):
         for omega in (.7,4.5):
             previous = {}
             for n in (4,8,16,32,64):
-                for row in measure(n,omega,oscillatory,args.estimate_source):
+                for row in measure(n,omega,oscillatory,args.estimate_source,args.load_moments):
                     solver = row["solver"]
                     errors = {k:row[k] for k in ("temperature_K","section_power_W","jump_K")}
+                    if solver=="FEM_load_moment":
+                        errors.update({k:row[k] for k in ("amplitude_error_W","phase_error_rad")})
                     refine = solver!="FVM" or oscillatory
                     rates = ({k:float(np.log2(previous[solver][k]/v)) for k,v in errors.items()}
                              if solver in previous and refine else {})
                     passed = row["cell_balance_W"]<1e-10
                     if refine:
-                        passed &= all(v>(1.8 if solver=="FEM" else 3.5) for v in rates.values())
+                        passed &= all(v>(1.8 if solver.startswith("FEM") else 3.5) for v in rates.values())
                     else:
                         passed &= max(errors.values())<1e-10
                     previous[solver] = errors
