@@ -63,8 +63,15 @@ def dg_case(n,degree,k,s,storing_walls=False):
         for side, numerical, exact in (("right", coeff[-1,:,:,0].sum(1).numpy(), ex[-1]*ay),
                                        ("top", coeff[:,-1,0,:].sum(1).numpy(), ax*ey[-1])):
             wall_errors[f"{side}_storage_error_W_m2"] = float(OMEGA*storage[side]*abs(numerical-exact).max())
-        wall_errors["right_bulk_flux_error_W_m2"] = float(errors_x[-1].max())
-        wall_errors["top_bulk_flux_error_W_m2"] = float(errors_y[:,-1].max())
+        for side, error in (("right", errors_x[-1]), ("top", errors_y[:, -1])):
+            # All face segments on a wall have equal length. Use their centers
+            # to define the same middle half of the physical wall on each grid.
+            position = (np.arange(len(error))+.5)/len(error)
+            middle = (.25 <= position) & (position < .75)
+            wall_errors[f"{side}_bulk_flux_error_W_m2"] = float(error.max())
+            wall_errors[f"{side}_rms_flux_error_W_m2"] = float(np.sqrt(np.mean(error**2)))
+            wall_errors[f"{side}_middle_half_flux_error_W_m2"] = float(error[middle].max())
+            wall_errors[f"{side}_peak_position_m"] = float(position[np.argmax(error)])
     return dict(**wall_errors,solver=f"DG-P{degree}",temperature_error_K=float(abs(means-np.outer(ax,ay)).max()),
                 side_wall_error_W_m2=float(errors_x[[0,-1]].max()),
                 end_wall_error_W_m2=float(errors_y[:,[0,-1]].max()),
@@ -189,19 +196,24 @@ def verify_storing_walls():
         k, s = material(angle)
         for degree in (1, 2):
             previous = None
-            for n in (4, 8, 16, 32):
+            for n in ((4, 8, 16, 32, 64, 128) if degree == 1 else (4, 8, 16, 32)):
                 row = dg_case(n, degree, k, s, storing_walls=True)
                 errors = {key: value for key, value in row.items() if "_error_" in key}
                 orders = {} if previous is None else {
                     key: float(np.log2(previous[key]/value)) for key, value in errors.items()}
                 row.update(nx=n, ny=3*n//2, angle_deg=angle, orders=orders,
                            passed=bool(row["max_balance_residual_W"] < 1e-10))
-                if n == 32:
-                    wall_metrics = [key for key in errors if key.startswith(("right_", "top_"))]
+                if n >= 32:
+                    wall_metrics = [key for key in errors if "_storage_error_" in key or "_bulk_flux_error_" in key]
                     row["wall_order_above_1p8"] = all(orders[key] > 1.8 for key in wall_metrics)
                     row["passed"] &= (errors["temperature_error_K"] < .001 and
                                       max(errors[key] for key in wall_metrics) < .01 and
                                       errors["interior_flux_error_W_m2"] < .04)
+                    if n > 32:
+                        row["passed"] &= all(orders[key] > 0 for key in errors if "flux_error_" in key)
+                        for side in ("right", "top"):
+                            row["passed"] &= orders[f"{side}_rms_flux_error_W_m2"] > 1.9
+                            row["passed"] &= orders[f"{side}_middle_half_flux_error_W_m2"] > 1.9
                     if degree == 2:
                         row["passed"] &= row["wall_order_above_1p8"]
                 previous = errors
