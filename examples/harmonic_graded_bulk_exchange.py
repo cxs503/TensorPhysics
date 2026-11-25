@@ -124,9 +124,29 @@ def fvm_films(ambient,wall_c):
             for side,a,h,cw in zip(("west","east"),ambient,FILMS,wall_c)}
 
 
-def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=False):
+def dg_response(n,omega,wall_c,ambient):
+    from tensordg import solve_harmonic_diffusion_2d, poisson_face_powers_2d
+
+    films = dict(zip(("left","right"),zip(FILMS,ambient)))
+    options = dict(conductivity=K,bc=dict(left="robin",right="robin",top="neumann",bottom="neumann"),
+                   robin_films=films,wall_areal_heat_capacity=dict(zip(("left","right"),wall_c)))
+    x,_,u = solve_harmonic_diffusion_2d(omega,ncells=(n,2),degree=1,capacity=C,
+                                        reaction=lambda x,y:H0+SLOPE*x,**options)
+    fx,_ = poisson_face_powers_2d(u,temperature_rate=1j*omega*u,**options)
+    # Mean in y selects Legendre mode zero; both strips have equal width.
+    modes = u[:,:,:,0].mean(1).numpy()
+    face_power = fx.sum(1).numpy()
+    walls = np.array([modes[0,0]-modes[0,1],modes[-1].sum()])
+    # Integral of the linear loss times linear temperature uses <xi²>=1/3.
+    volume = ((H0+SLOPE*x.numpy()+1j*omega*C)*modes[:,0]+SLOPE*modes[:,1]/(6*n))/n
+    return modes[:,0],walls,face_power[[0,-1]]*[1,-1],face_power[n//2],volume
+
+
+def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=False,include_dg=False):
     if return_response and not quasistatic:
         raise ValueError("low-frequency responses require quasistatic=True")
+    if include_dg and contact:
+        raise ValueError("DG graded slab verification requires continuous contact")
     ambient = AMBIENT.real.copy() if quasistatic else AMBIENT
     dx,edges,x,m,resistance,materials,k,c,h,slope,loss,contacts = slab_grid(n,contact)
     analytic = reference(omega,wall_c,materials,resistance,ambient)
@@ -164,6 +184,9 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=Fal
     factor = sph.lattice_diffusion_factor_2d(1.3,dx,mode="moment")
     cut = sph.stencil_x_face_power_2d(field[None,:],offsets,dx,m,wall,conductivity=k,layered_x=True,contact_resistance_x=contacts)/(dx*factor)
     rows.append(("SPH",field.numpy(),analytic(x)[0],wall.numpy(),inward.numpy(),cut.item(),dx*(loss+1j*omega*c)*field.numpy()))
+    if include_dg:
+        field,wall,inward,cut,volume = dg_response(n,omega,wall_c,ambient)
+        rows.append(("DG",field,mean,wall,inward,cut,volume))
     if quasistatic:
         steady,tangent = static_and_lag(materials,resistance,wall_c,ambient)
         # Compare both reference constructions, including the two contact traces.
@@ -188,7 +211,7 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=Fal
                 if name=="FEM":
                     return (np.r_[solution(edges[:m+1],0)[0],solution(edges[m:],1)[0]]
                             if contact else solution(edges)[0])
-                if name=="FVM":
+                if name in ("FVM","DG"):
                     return .5*(solution(x[:,None]+.5*dx*z)[0] @ w)
                 return solution(x)[0]
             errors.update(steady_temperature_K=float(abs(u.real-samples(steady).real).max()),
@@ -211,14 +234,17 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contact",action="store_true",help="use two different graded materials and a resistive contact")
     parser.add_argument("--quasistatic",action="store_true",help="halve frequency and mesh width together and compare with the DC Airy response and lag")
+    parser.add_argument("--dg",action="store_true",help="include P1 SIPG for the continuous graded plate")
     args = parser.parse_args()
+    if args.dg and args.contact:
+        parser.error("the DG case requires continuous contact")
     contact = args.contact
     rows = []
     for omega,wall_c in ((w,cw) for w in ((.8,) if args.quasistatic else (1.,5.)) for cw in (np.zeros(2),np.array([.4,.9]))):
         previous = {}
         for n in (16,32,64,128):
             frequency = omega*16/n if args.quasistatic else omega
-            for row in measure(n,frequency,wall_c,contact,args.quasistatic):
+            for row in measure(n,frequency,wall_c,contact,args.quasistatic,include_dg=args.dg):
                 name,errors = row["solver"],row["errors"]
                 orders = {k:math.log2(previous[name][k]/v) for k,v in errors.items()} if name in previous else {}
                 passed = max(row["wall_balance_W_m2"],row["max_layer_balance_W_m2"])<1e-10
@@ -232,5 +258,8 @@ if __name__=="__main__":
                 rows.append(row)
                 previous[name] = errors
     sources = [provenance(f) for f in (__file__,inspect.getfile(slab_fem_model),thermal.__file__,energy.__file__,sph.__file__)]
+    if args.dg:
+        from tensordg import solve_harmonic_diffusion_2d, poisson_face_powers_2d
+        sources.extend(provenance(inspect.getfile(f)) for f in (solve_harmonic_diffusion_2d,poisson_face_powers_2d))
     print(json.dumps(dict(quasistatic=args.quasistatic,contact_resistance_m2K_W=.18 if contact else 0.,sources=sources,runs=rows),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
