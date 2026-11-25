@@ -80,6 +80,20 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     exact_left = free[0]-impedance[0]*exact_flux
     exact_right = free[1]+impedance[1]*exact_flux
 
+    # Propagate the interface state to each wall in its outward coordinate.
+    # The reported boundary flux is positive inward at both ends.
+    exact_walls = []
+    if films is not None:
+        for side, trace in enumerate((exact_left, exact_right)):
+            shift = loss[side] + 1j*omega*capacity[side]
+            particular = loss[side]*ambient[side]/shift
+            wave = cmath.sqrt(shift/k[side])
+            co, si = cmath.cosh(lengths[side]*wave), cmath.sinh(lengths[side]*wave)
+            outward = -exact_flux if side == 0 else exact_flux
+            wall_t = particular + co*(trace-particular) - si*outward/(k[side]*wave)
+            inward = k[side]*wave*si*(trace-particular) - co*outward
+            exact_walls.append((wall_t, inward))
+
     def layers(values, dtype=torch.float64):
         return torch.tensor(values, dtype=dtype).repeat_interleave(torch.tensor([interface, n-interface]))
 
@@ -106,6 +120,19 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         return max(abs(h*((ta or 0.)-complex(t)) - 1j*omega*c*complex(t) - complex(q))
                    for h, ta, t, c, q in zip(films, walls, temperatures, wall_capacity, inward))
 
+    def wall_errors(temperatures, inward):
+        rows = []
+        for side, (t, q, (ref_t, ref_q)) in enumerate(zip(temperatures, inward, exact_walls)):
+            # A wall with no film or active storage has exactly zero flux.
+            has_flux = films[side] != 0 or omega*wall_capacity[side] != 0
+            rows.append(dict(temperature_error_K=abs(complex(t)-ref_t),
+                             temperature_phase_error_rad=abs(cmath.phase(complex(t)/ref_t)),
+                             inward_flux_error_W_m2=abs(complex(q)-ref_q),
+                             inward_flux_phase_error_rad=abs(cmath.phase(complex(q)/ref_q)) if has_flux else None))
+        return rows
+
+    if films is not None:
+        comparison["sph_wall_errors"] = wall_errors(sph_wall_t, (cuts[0], -cuts[-1]))
     if any(wall_capacity):
         comparison["sph_wall_balance_W_m2"] = wall_balance(sph_wall_t, (cuts[0], -cuts[-1]))
     if compare_fvm:
@@ -126,6 +153,8 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
                           fvm_interface_imbalance_W_m2=float(abs(q-entering[i+1])),
                           solver_flux_difference_W_m2=float(abs(q-flux)),
                           solver_trace_difference_K=float(max(abs(tl-complex(left[i])), abs(tr-complex(right[i])))))
+        if films is not None:
+            comparison["fvm_wall_errors"] = wall_errors(faces[[0,-1]], (entering[0], -leaving[-1]))
         if any(wall_capacity):
             comparison["fvm_wall_balance_W_m2"] = wall_balance(faces[[0,-1]], (entering[0], -leaving[-1]))
     if compare_fem:
@@ -136,6 +165,8 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
                           fem_interface_imbalance_W_m2=abs(ql-qr),
                           fem_jump_error_K=abs(fl-fr-resistance*exact_flux),
                           fem_sph_flux_difference_W_m2=abs(ql-flux))
+        if films is not None:
+            comparison["fem_wall_errors"] = wall_errors(*fem_wall_state)
         if any(wall_capacity):
             comparison["fem_wall_balance_W_m2"] = wall_balance(*fem_wall_state)
         if compare_fvm:
@@ -143,6 +174,8 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     if any(wall_capacity):
         comparison["wall_areal_heat_capacity_J_m2_K"] = wall_capacity
     if films is not None:
+        comparison["exact_wall_temperature_K"] = [[t.real, t.imag] for t, q in exact_walls]
+        comparison["exact_inward_wall_flux_W_m2"] = [[q.real, q.imag] for t, q in exact_walls]
         comparison.update(wall_film_W_m2_K=films, wall_reservoir_phasors_K=[
             [complex(w or 0.).real, complex(w or 0.).imag] for w in walls])
     return dict(**comparison, columns=n, left_thickness_m=left_thickness, omega_rad_s=omega, contact_resistance_m2_K_W=resistance, backend=backend,
@@ -206,6 +239,14 @@ if __name__ == "__main__":
                             if n == 64:
                                 row["passed"] &= (row["fem_flux_relative_error"] < .005 and row["fem_max_trace_error_K"] < .001
                                                   and row["fem_jump_error_K"] < .001)
+                        if films is not None and n == 64:
+                            for key, wall_rows in row.items():
+                                if key.endswith("_wall_errors"):
+                                    for wall in wall_rows:
+                                        row["passed"] &= (wall["temperature_error_K"] < .001 and wall["inward_flux_error_W_m2"] < .005
+                                                          and wall["temperature_phase_error_rad"] < .005
+                                                          and (wall["inward_flux_phase_error_rad"] is None
+                                                               or wall["inward_flux_phase_error_rad"] < .005))
                         if args.wall_storage:
                             row["passed"] &= all(value < 1e-10 for key, value in row.items() if key.endswith("_wall_balance_W_m2"))
                         runs.append(row)
