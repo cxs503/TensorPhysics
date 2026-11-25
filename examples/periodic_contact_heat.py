@@ -153,10 +153,10 @@ def measure(n, resistance):
     rows.append(row)
     # Resolve the two interface traces as separate, massless nodes. The
     # adjacent cell halves and the areal contact resistance now form three links.
-    resolved_r = np.r_[links[:m], dx/(2*k[m-1]), resistance, dx/(2*k[m]), links[m+1:]]
-    resolved_c = np.insert(stores, m+1, [0., 0.])
-    hot, cold = m+1, m+2
+    resolved_r, resolved_c = contact_chain.cell_centered_slab_network(np.full(n, dx), k, capacity,
+                                                     contact_resistance=faces[0], resolve_contacts=True)
     cell_ids = np.flatnonzero(resolved_c)
+    hot, cold = cell_ids[m-1]+1, cell_ids[m]-1
     phasor = contact_chain.harmonic_contact_temperatures(resolved_r, resolved_c, omega,
                                        t_left=1., t_right=0., allow_massless=True)
     flux = -np.diff(phasor)/resolved_r
