@@ -8,7 +8,7 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def measure(n, method):
+def layered_materials(n):
     dx = 1/n
     x = (np.arange(n)+.5)*dx
     k = np.where(x < .5, 1., 2.5)
@@ -23,6 +23,12 @@ def measure(n, method):
     for face, r, c in zip(sheets, resistance, capacity):
         material = heat.two_column_sheet_materials(**material, dx=dx, face=face,
                                                    resistance=r, areal_heat_capacity=c, sheet_conductivity=1/dx)
+    return material, sheets, k, cv, faces, contacts, resistance, capacity
+
+
+def measure(n, method):
+    dx = 1/n
+    material, sheets, k, cv, faces, contacts, resistance, capacity = layered_materials(n)
     # Independent unit-area series solution on the original physical mesh.
     q = 1./(sum(dx/k)+sum(contacts)+sum(resistance))
     upstream = np.cumsum(dx/k)-dx/(2*k)+np.r_[0., np.cumsum(contacts)]
