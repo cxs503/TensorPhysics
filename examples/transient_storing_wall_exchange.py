@@ -7,6 +7,7 @@ from conduction_provenance import provenance
 from tensordg import heat_1d
 from tensorfem import thermal
 from tensorfvm.cht import rod
+from tensorsph import heat_conduction_2d as sph
 
 
 K,C,H = 1.4,2.,3.
@@ -66,6 +67,18 @@ def fvm(times,n):
     return cell,wall[:,[0,-1]],np.column_stack((heat["left"][:,0],heat["right"])),heat["bulk_exchange"],heat["end_input"]
 
 
+def particles(times,n):
+    mid = (np.arange(n)+.5)/n
+    films = tuple((FILM[i],lambda t,i=i: air(t)[i]) for i in range(2))
+    states,heat,wall,bulk,external = sph.solve_transient_layered_slab(
+        background(0.,mid)+np.cos(WAVE*(mid-PEAK)),times,1/n,(None,None),conductivity=np.full(n,K),
+        volumetric_heat_capacity=C,heat_loss_coefficient=H,bulk_ambient_temperature=lambda t: reservoir(t,mid),
+        method="sdirk2",x_wall_films=films,wall_areal_heat_capacity=CW,
+        initial_wall_temperatures=background(0.,ENDS)+np.cos(WAVE*(ENDS-PEAK)),
+        return_wall_temperatures=True,return_bulk_exchange=True,return_external_heat=True,return_x_heat=True)
+    return tuple(v.numpy() for v in (states,wall,heat,bulk,external))
+
+
 def fem(times,n):
     x = torch.linspace(0.,1.,n+1,dtype=torch.float64)
     conn = torch.stack((torch.arange(n),torch.arange(1,n+1)),dim=1)
@@ -97,20 +110,24 @@ if __name__ == "__main__":
     for n in (12,24,48,96):
         times = np.linspace(0.,.3,n+1)
         target = exact(times,n)
-        for name,solve in (("DG_P2",dg),("FEM_LINE2",fem),("FVM",fvm)):
+        for name,solve in (("DG_P2",dg),("FEM_LINE2",fem),("FVM",fvm),("SPH",particles)):
             u,wall,heat,bulk,external = solve(times,n)
             def cumulative_error(v,ref):
                 return float(abs(np.cumsum(v-ref,axis=0)).max())
-            errors = dict(cell_mean_K=float(abs(u-target[0]).max()),wall_temperature_K=float(abs(wall-target[1]).max()),
+            ref_temperature = target[0]
+            if name=="SPH":
+                mid = (np.arange(n)+.5)/n
+                ref_temperature = background(times[:,None],mid)+np.exp(-RATE*times[:,None])*np.cos(WAVE*(mid-PEAK))
+            errors = dict(temperature_K=float(abs(u-ref_temperature).max()),wall_temperature_K=float(abs(wall-target[1]).max()),
                           section_heat_J_m2=cumulative_error(heat,target[2]),bulk_heat_J_m3=n*cumulative_error(bulk,target[3]),
                           external_heat_J_m2=cumulative_error(external,target[4]))
             balance = float(abs(C/n*np.diff(u,axis=0)+np.diff(heat)-bulk).max())
             surface_balance = float(abs(CW*np.diff(wall,axis=0)+heat[:,[0,-1]]*SIGN-external).max())
             orders = {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()} if name in previous else {}
-            rows.append(dict(solver=name,cells=n,steps=n,errors=errors,orders=orders,cell_balance_J_m2=balance,
+            rows.append(dict(solver=name,temperature_sampling="center" if name=="SPH" else "cell_mean",cells=n,steps=n,errors=errors,orders=orders,cell_balance_J_m2=balance,
                              wall_balance_J_m2=surface_balance,passed=max(balance,surface_balance)<1e-11
                              and all(v>1.7 for v in orders.values())))
             previous[name] = errors
-    print(json.dumps(dict(runs=rows,sources=[provenance(p) for p in (__file__,heat_1d.__file__,thermal.__file__,rod.__file__)]),
+    print(json.dumps(dict(runs=rows,sources=[provenance(p) for p in (__file__,heat_1d.__file__,thermal.__file__,rod.__file__,sph.__file__)]),
                      indent=2,allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
