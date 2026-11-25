@@ -1,0 +1,128 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "intervals": 15,
+      "contact_resistance_m2_K_W": 0.0,
+      "field_error_K": 0.0030421490218373037,
+      "interface_flux_error_W_m2": 0.0011455480361810544,
+      "left_trace_error_K": 0.002991697715799546,
+      "right_trace_error_K": 0.002991697715799546,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "intervals": 31,
+      "contact_resistance_m2_K_W": 0.0,
+      "field_error_K": 0.0007182561541867472,
+      "interface_flux_error_W_m2": 0.0002708569146440132,
+      "left_trace_error_K": 0.0007060698455916281,
+      "right_trace_error_K": 0.0007060698455916281,
+      "orders": {
+        "field_error_K": 1.988455178444835,
+        "interface_flux_error_W_m2": 1.9864640289424886,
+        "left_trace_error_K": 1.9889909625950604,
+        "right_trace_error_K": 1.9889909625950604
+      },
+      "passed": true
+    },
+    {
+      "intervals": 63,
+      "contact_resistance_m2_K_W": 0.0,
+      "field_error_K": 0.00017420355698050116,
+      "interface_flux_error_W_m2": 6.573102850293555e-05,
+      "left_trace_error_K": 0.0001712745237227864,
+      "right_trace_error_K": 0.0001712745237227864,
+      "orders": {
+        "field_error_K": 1.9976122586810319,
+        "interface_flux_error_W_m2": 1.9967912992922734,
+        "left_trace_error_K": 1.9973932773743728,
+        "right_trace_error_K": 1.9973932773743728
+      },
+      "passed": true
+    },
+    {
+      "intervals": 127,
+      "contact_resistance_m2_K_W": 0.0,
+      "field_error_K": 4.2880474268258695e-05,
+      "interface_flux_error_W_m2": 1.6183859141039036e-05,
+      "left_trace_error_K": 4.216573938720103e-05,
+      "right_trace_error_K": 4.216573938720103e-05,
+      "orders": {
+        "field_error_K": 1.9995766164464204,
+        "interface_flux_error_W_m2": 1.9992182797516387,
+        "left_trace_error_K": 1.9993651294974149,
+        "right_trace_error_K": 1.9993651294974149
+      },
+      "passed": true
+    },
+    {
+      "intervals": 15,
+      "contact_resistance_m2_K_W": 0.35,
+      "field_error_K": 0.0029278511297547993,
+      "interface_flux_error_W_m2": 0.0015912482453457333,
+      "left_trace_error_K": 0.002828028780584191,
+      "right_trace_error_K": 0.0022710918946700076,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "intervals": 31,
+      "contact_resistance_m2_K_W": 0.35,
+      "field_error_K": 0.0006893192251027358,
+      "interface_flux_error_W_m2": 0.00037611720420027694,
+      "left_trace_error_K": 0.0006676011669242143,
+      "right_trace_error_K": 0.0005359601454415497,
+      "orders": {
+        "field_error_K": 1.9923485689808853,
+        "interface_flux_error_W_m2": 1.9869124074735893,
+        "left_trace_error_K": 1.9886632827941901,
+        "right_trace_error_K": 1.9890929876544083
+      },
+      "passed": true
+    },
+    {
+      "intervals": 63,
+      "contact_resistance_m2_K_W": 0.35,
+      "field_error_K": 0.00016714318684307727,
+      "interface_flux_error_W_m2": 9.126847975482466e-05,
+      "left_trace_error_K": 0.00016195197684965024,
+      "right_trace_error_K": 0.00013000800896634246,
+      "orders": {
+        "field_error_K": 1.9979673977517616,
+        "interface_flux_error_W_m2": 1.9968980706432253,
+        "left_trace_error_K": 1.9973151479565143,
+        "right_trace_error_K": 1.9974176078168062
+      },
+      "passed": true
+    },
+    {
+      "intervals": 127,
+      "contact_resistance_m2_K_W": 0.35,
+      "field_error_K": 4.114164153179445e-05,
+      "interface_flux_error_W_m2": 2.247111094366705e-05,
+      "left_trace_error_K": 3.987117258930084e-05,
+      "right_trace_error_K": 3.200628378863257e-05,
+      "orders": {
+        "field_error_K": 1.9996082270145301,
+        "interface_flux_error_W_m2": 1.9992443410573577,
+        "left_trace_error_K": 1.9993460697785814,
+        "right_trace_error_K": 1.999371065437261
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "5db5321f060787ae7140eeceba3173ad0319dce2",
+      "file": "dem_lattice_contact_mode.py",
+      "source_sha256": "5443c7d8c749802a3351fac14d94baf224094ecd870552ef63f314fc92da7573"
+    },
+    {
+      "commit": "750e9bd913a702d96e2625acfddda213e627a747",
+      "file": "contact_chain.py",
+      "source_sha256": "8a94c19b0f2f706f3ea5da68f0a0f5780de00b77b92ed97509c4b095be625047"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_lattice_contact_mode.py"
+}
