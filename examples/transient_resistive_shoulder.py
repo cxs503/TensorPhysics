@@ -125,14 +125,11 @@ def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", 
                        interior_temperature_error_K=float(abs(field-exact_mean[:,None,None]*ref_temperature).max()),
                        interior_power_error_W=float(error.max()),midpoint_power_error_W=float(error[:,:,2].max()))
             if solver=="FEM":
-                # Integrate the two edge nodal loads, both positive rightward.
-                # A linear interpolation gives constant divergence in the element
-                # and preserves its integrated heat balance.
-                west_power = (local[:,:,0]+local[:,:,3])/dt[:,None]
-                east_power = -(local[:,:,1]+local[:,:,2])/dt[:,None]
-                recovered = west_power[:,:,None]+(east_power-west_power)[:,:,None]*fractions
-                row["equilibrated_power_error_W"] = float(abs(recovered-exact_mean[:,None,None]*ref_power).max())
-                residual = (dt[:,None]*(east_power-west_power)
+                samples = np.r_[0.,fractions,1.]
+                sections = thermal.thermal_element_section_power(
+                    model,torch.from_numpy(local/dt[:,None,None]),samples).numpy()
+                row["equilibrated_power_error_W"] = float(abs(sections[:,:,1:-1]-exact_mean[:,None,None]*ref_power).max())
+                residual = (dt[:,None]*(sections[:,:,-1]-sections[:,:,0])
                             +np.diff(cells,axis=0)*dx*(area*c).repeat(m))
                 row["cell_balance_J"] = float(abs(residual).max())
             yield row

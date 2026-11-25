@@ -45,17 +45,22 @@ def measure(n):
     line = replace(q4,nodes=q4.nodes[:n+2,:1],elements=q4.elements[:,:2],element_type="line2",
                    convection_edges=torch.tensor([[0,0],[n+1,n+1]]),
                    contact_pairs=torch.tensor([[m,m+1]]),contact_conductance=1/contact)
+    fractions = np.array([0.,.17,.5,.83,1.])
+    points = local[:-1,None]+dx*fractions
+    ref_power = np.vstack((propagate(points,t0,p0,waves[0],ks[0]*areas[0])[1],
+                           propagate(points,cold,cut,waves[1],ks[1]*areas[1])[1]))
     for name,model in (("FEM-Q4",q4),("FEM-LINE2",line)):
         sol = thermal.solve_harmonic_thermal(model,omega,sparse=True)
         t = sol.temperature.numpy().reshape(-1,n+2).mean(axis=0)
-        local_p = thermal.thermal_element_nodal_power(model,sol.temperature,omega).numpy()
-        wall = local_p[[0,-1],[0,1]].copy()
-        if name == "FEM-Q4":
-            wall += local_p[[0,-1],[3,2]]
+        local_p = thermal.thermal_element_nodal_power(model,sol.temperature,omega)
+        sections = thermal.thermal_element_section_power(model,local_p,fractions).numpy()
+        wall = sections[[0,-1],[0,-1]]*[1.,-1.]
         interior = (t[m]-t[m+1])/contact
         cells = np.r_[(t[:m]+t[1:m+1])/2,(t[m+1:-1]+t[m+2:])/2]
-        yield metrics(name,n,t-nodal,wall,wall_p,interior,cut,t[[0,-1]],ambient,areas,films,cw,
+        row = metrics(name,n,t-nodal,wall,wall_p,interior,cut,t[[0,-1]],ambient,areas,films,cw,
                       omega, c*area*dx*cells)
+        row["section_power_error_W"] = float(abs(sections-ref_power).max())
+        yield row
     # Unit-width FVM uses k*A and c*A so that its face powers correspond to watts.
     bc = {s:dict(type="robin",values=a,film_coefficient=h*A,wall_areal_heat_capacity=w*A)
           for s,a,h,w,A in zip(("west","east"),ambient,films,cw,areas)}
@@ -65,8 +70,12 @@ def measure(n):
                                         return_interior_power=True,contact_resistance_x=r)
     wall = np.array([p["west"][0],p["east"][0]])
     surface = t[0,[0,-1]]+wall*dx/(2*ks*areas)
-    yield metrics("FVM",n,t[0]-avg,wall,wall_p,q["x"][0,m-1],cut,surface,ambient,areas,films,cw,
+    row = metrics("FVM",n,t[0]-avg,wall,wall_p,q["x"][0,m-1],cut,surface,ambient,areas,films,cw,
                   omega,c*area*dx*t[0])
+    face_power = np.r_[wall[0],q["x"][0],-wall[1]]
+    sections = face_power[:-1,None]+fractions*np.diff(face_power)[:,None]
+    row["section_power_error_W"] = float(abs(sections-ref_power).max())
+    yield row
 
 
 def metrics(name,n,delta,wall,wall_ref,cut,cut_ref,t,ambient,area,h,cw,omega,stored):
