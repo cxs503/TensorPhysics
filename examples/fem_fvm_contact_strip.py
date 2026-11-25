@@ -57,18 +57,15 @@ def measure(n, mirrored, omega, storing=False, heated=False, balanced=False):
     outward = -state.reaction_power.numpy()[[0, -1]]
     jump = t[mid]-t[mid+1]
     actual = np.r_[outward, jump]
-    exact = strip.harmonic_reference(start, end, conductivity, capacity, generation, resistance, omega, trace_capacity, trace_power)
     if balanced:
-        # Each source-free half rod presents admittance k*z*coth(z*L)
-        # to its interface trace, with the outer wall held at zero phasor.
-        k = np.asarray(conductivity)
-        z = np.sqrt(1j*omega*np.asarray(capacity)/k)
-        diagonal = k*z/np.tanh(z/2) + 1j*omega*trace_capacity
-        contact_matrix = np.array([[1., -1.], [-1., 1.]])/resistance
-        traces = np.linalg.solve(np.diag(diagonal) + contact_matrix, trace_power)
-        reference = np.r_[k*z*traces/np.sinh(z/2), traces[0]-traces[1]]
-        np.testing.assert_allclose(exact, reference, rtol=1e-11, atol=1e-13)
-        exact = reference
+        exact = strip.contact_admittance_reference(conductivity, capacity, resistance, omega, trace_capacity, trace_power)
+    if not balanced or omega <= 20.:
+        transfer = strip.harmonic_reference(start, end, conductivity, capacity, generation, resistance,
+                                            omega, trace_capacity, trace_power)
+        if balanced:
+            np.testing.assert_allclose(exact, transfer, rtol=1e-11, atol=1e-13)
+        else:
+            exact = transfer
     element_load = np.column_stack((power*(1-right_fraction), power*right_fraction))
     local = thermal.thermal_element_nodal_power(
         model, state.temperature, omega, element_nodal_heat=torch.from_numpy(element_load)).numpy()
@@ -83,6 +80,7 @@ def measure(n, mirrored, omega, storing=False, heated=False, balanced=False):
         "fem_max_trace_balance_error_W": max(abs(trace_net+trace_power-trace_storage)),
         "fem_wall_amplitude_W": abs(outward).tolist(), "fem_contact_jump_amplitude_K": abs(jump),
         "fem_wall_and_jump_phase_rad": np.angle(actual).tolist(),
+        "fem_max_wall_relative_error": max(abs(outward/exact[:2]-1)),
         "fem_wall_power_error_W": max(abs(outward-exact[:2])),
         "fem_contact_jump_error_K": abs(jump-exact[2]),
         "fem_max_phase_error_rad": max(abs(np.angle(actual/exact))),
@@ -97,12 +95,17 @@ def main():
     heating = parser.add_mutually_exclusive_group()
     heating.add_argument("--balanced", action="store_true", help="drive only the two contact traces with opposite powers")
     heating.add_argument("--heated", action="store_true", help="apply independent phased heat loads at the two contact traces")
+    parser.add_argument("--high-frequency", action="store_true", help="resolve attenuated wall powers under balanced contact heating")
     args = parser.parse_args()
+    if args.high_frequency and not args.balanced:
+        parser.error("--high-frequency requires --balanced")
+    frequencies = (200., 800.) if args.high_frequency else (2., 20.)
+    grids = (128, 256, 512, 1024) if args.high_frequency else (16, 32, 64, 128, 256)
     runs = []
-    for omega in (2., 20.):
+    for omega in frequencies:
         for mirrored in (False, True):
             previous = None
-            for n in (16, 32, 64, 128, 256):
+            for n in grids:
                 row = measure(n, mirrored, omega, args.storing, args.heated, args.balanced)
                 fvm = row["fvm"]
                 passed = max(row["fem_energy_residual_W"], fvm["max_cell_balance_error_W"]) < 1e-9
@@ -115,10 +118,12 @@ def main():
                         if old:
                             data[metric+"_order"] = math.log2(old[metric]/data[metric])
                             passed &= data[metric+"_order"] > 1.85
-                        if n == 256:
+                        if n == grids[-1]:
                             passed &= data[metric] < 2e-4
-                if n == 256:
+                if n == grids[-1]:
                     passed &= max(row["fem_max_phase_error_rad"], fvm["max_phase_error_rad"]) < 5e-4
+                    if args.high_frequency:
+                        passed &= max(row["fem_max_wall_relative_error"], fvm["max_wall_relative_error"]) < 1e-3
                 row["passed"] = bool(passed)
                 runs.append(row)
                 previous = row
@@ -128,7 +133,7 @@ def main():
         "sources": [provenance(path) for path in (__file__, strip.__file__, thermal.__file__, rod.__file__)],
         "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/fem_fvm_contact_strip.py"
                         + (" --storing" if args.storing else "") + (" --heated" if args.heated else "")
-                        + (" --balanced" if args.balanced else ""),
+                        + (" --balanced" if args.balanced else "") + (" --high-frequency" if args.high_frequency else ""),
     }, indent=2, allow_nan=False))
     return 0 if passed else 1
 

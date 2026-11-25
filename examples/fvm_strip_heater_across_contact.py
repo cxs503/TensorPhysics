@@ -10,6 +10,18 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
+def contact_admittance_reference(conductivities, capacities, resistance, omega, trace_capacity, trace_power):
+    """Outward wall powers and trace jump for two source-free half rods."""
+    k = np.asarray(conductivities)
+    z = np.sqrt(1j*omega*np.asarray(capacities)/k)
+    attenuation = np.exp(-z/2)
+    denominator = -np.expm1(-z)
+    diagonal = k*z*(1+attenuation**2)/denominator + 1j*omega*np.asarray(trace_capacity)
+    contact_matrix = np.array([[1., -1.], [-1., 1.]])/resistance
+    traces = np.linalg.solve(np.diag(diagonal) + contact_matrix, trace_power)
+    return np.r_[2*k*z*traces*attenuation/denominator, traces[0]-traces[1]]
+
+
 def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega, trace_capacity=(0., 0.), trace_power=(0., 0.)):
     # Propagate (T, rightward power, 1) exactly within each constant-source
     # segment. The final component makes the volumetric source an affine load.
@@ -67,7 +79,10 @@ def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0.,
             interface_heat_capacity=sheet, interface_capacity_left_fraction=fraction, trace_power=applied,
         )
         actual = np.array([-west[0], east[-1], upstream[mid-1]-downstream[mid-1]])
-        exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega, trace_capacity, trace_power)
+        if generation == 0:
+            exact = contact_admittance_reference((k_left, k_right), capacities, resistance, omega, trace_capacity, trace_power)
+        else:
+            exact = harmonic_reference(start, end, (k_left, k_right), capacities, generation, resistance, omega, trace_capacity, trace_power)
         trace_t = np.array([upstream[mid-1], downstream[mid-1]])
         crossing = actual[2]/resistance
         trace_net = np.array([east[mid-1]-crossing, crossing-west[mid]])
@@ -79,6 +94,7 @@ def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0.,
             "contact_jump_amplitude_K": abs(actual[2]), "reference_jump_amplitude_K": abs(exact[2]),
             "wall_and_jump_phase_rad": np.angle(actual).tolist(),
             "reference_wall_and_jump_phase_rad": np.angle(exact).tolist(),
+            "max_wall_relative_error": max(abs(actual[:2]/exact[:2]-1)),
             "max_wall_power_error_W": max(abs(actual[:2]-exact[:2])),
             "contact_jump_error_K": abs(actual[2]-exact[2]),
             "max_phase_error_rad": max(abs(np.angle(actual/exact))),
