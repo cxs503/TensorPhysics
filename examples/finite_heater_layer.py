@@ -11,7 +11,7 @@ from tensorfvm.cht import energy
 from tensorfem import thermal
 
 
-def reference(thickness, fraction, heater_k):
+def reference(thickness, fraction, heater_k, mean_source=1., source_slope=0.):
     omega, capacity, resistance, drive, wave, sheet, lumped_flux, _ = sheet_reference(fraction)
     # Each outer slab and its contact present a thermal admittance to the heater.
     admittance = 1/(np.tanh(.5*wave)/(wave*[1.,4.])+resistance*np.array([fraction, 1-fraction]))
@@ -19,22 +19,26 @@ def reference(thickness, fraction, heater_k):
     lam = np.sqrt(1j*omega*capacity/(thickness*heater_k))
     z = lam*thickness/2
     c, s, g = np.cosh(z), np.sinh(z), heater_k*lam
-    particular = drive/(1j*omega*capacity)
+    particular = drive*mean_source/(1j*omega*capacity)
+    tilt = drive*source_slope/(1j*omega*capacity)
+    traces = particular + np.array([-1., 1.])*tilt
     # T = particular + a*cosh(lambda*x) + b*sinh(lambda*x), centered at x=0.
     # Both outward fluxes equal their own admittance times the heater-side trace.
     matrix = [[-g*s-left*c, g*c+left*s], [-g*s-right*c, -g*c-right*s]]
-    a, b = np.linalg.solve(matrix, particular*admittance)
-    power = admittance*(particular+a*c+np.array([-1, 1])*b*s)
-    return np.r_[particular+a*s/z, power], np.r_[sheet, lumped_flux]
+    a, b = np.linalg.solve(matrix, traces*admittance + np.array([-1., 1.])*2*heater_k*tilt/thickness)
+    power = admittance*(traces+a*c+np.array([-1, 1])*b*s)
+    return np.r_[particular+a*s/z, power], mean_source*np.r_[sheet, lumped_flux]
 
 
-def numerical(n, thickness, fraction, heater_k):
+def numerical(n, thickness, fraction, heater_k, mean_source=1., source_slope=0., heater_cells=None):
     omega, capacity, resistance, drive, *_ = sheet_reference(fraction)
-    counts = [n, n//4, n]
+    counts = [n, n//4 if heater_cells is None else heater_cells, n]
     dx = np.repeat([.5/n, thickness/counts[1], .5/n], counts)
     k = np.repeat([1., heater_k, 4.], counts)
     cv = np.repeat([1., capacity/thickness, 2.], counts)
-    source = np.repeat([0., drive/thickness, 0.], counts)
+    source = np.zeros(len(dx), dtype=complex)
+    coordinate = 2*(np.arange(counts[1])+.5)/counts[1]-1
+    source[n:n+counts[1]] = drive/thickness*(mean_source+source_slope*coordinate)
     faces = np.array([n-1, n+counts[1]-1])
     contact = np.zeros(len(dx)-1)
     contact[faces] = resistance*np.array([fraction, 1-fraction])
@@ -43,12 +47,12 @@ def numerical(n, thickness, fraction, heater_k):
                 source=source, contact_resistance_x=contact[None, :], return_interior_power=True)
     mean = t[0,n:n+counts[1]].mean()
     outward = power["x"][0,faces]*[-1,1]
-    return np.r_[mean, outward], abs(1j*omega*capacity*mean+outward.sum()-drive)
+    return np.r_[mean, outward], abs(1j*omega*capacity*mean+outward.sum()-mean_source*drive)
 
 
-def fem_model(n, thickness, fraction, heater_k):
+def fem_model(n, thickness, fraction, heater_k, mean_source=1., source_slope=0., heater_cells=None):
     omega, capacity, resistance, drive, *_ = sheet_reference(fraction)
-    counts = np.array([n, n//4, n])
+    counts = np.array([n, n//4 if heater_cells is None else heater_cells, n])
     bounds = [0., .5, .5+thickness, 1.+thickness]
     # Distinct coincident nodes retain both temperature traces at each contact.
     grids = [np.linspace(a, b, int(m)+1) for a, b, m in zip(bounds[:-1], bounds[1:], counts)]
@@ -57,17 +61,20 @@ def fem_model(n, thickness, fraction, heater_k):
     left = torch.from_numpy(np.concatenate([start+np.arange(m) for start, m in zip(starts, counts)]))
     conn = torch.stack((left, left+1), dim=1)
     pairs = torch.from_numpy(np.column_stack((starts[1:]-1, starts[1:])))
+    source = np.zeros((sum(counts), 2), dtype=complex)
+    samples = drive/thickness*(mean_source+source_slope*np.linspace(-1., 1., counts[1]+1))
+    source[n:n+counts[1]] = np.column_stack((samples[:-1], samples[1:]))
     model = thermal.ThermalModel(nodes, conn, torch.from_numpy(np.repeat([1., heater_k, 4.], counts)),
                 1., torch.from_numpy(np.repeat([1., capacity/thickness, 2.], counts)),
                 torch.tensor([0, len(nodes)-1]), nodes.new_zeros(2),
-                heat_source=torch.from_numpy(np.repeat([0., drive/thickness, 0.], counts)),
+                heat_source=torch.from_numpy(source),
                 contact_pairs=pairs, contact_conductance=1/(resistance*nodes.new_tensor([fraction,1-fraction])))
     return model, slice(n, n+counts[1])
 
 
-def fem_response(n, thickness, fraction, heater_k):
+def fem_response(n, thickness, fraction, heater_k, mean_source=1., source_slope=0., heater_cells=None):
     omega, capacity, _, drive, *_ = sheet_reference(fraction)
-    model, heater = fem_model(n, thickness, fraction, heater_k)
+    model, heater = fem_model(n, thickness, fraction, heater_k, mean_source, source_slope, heater_cells)
     solution = thermal.solve_harmonic_thermal(model, omega, sparse=True)
     t = solution.temperature
     mean = t[model.elements[heater]].mean().item()
@@ -77,7 +84,7 @@ def fem_response(n, thickness, fraction, heater_k):
     pairs = model.contact_pairs
     link = ((t[pairs[:,0]]-t[pairs[:,1]])*model.contact_conductance).numpy()*[-1,1]
     np.testing.assert_allclose(outward, link, atol=1e-12, rtol=0)
-    return np.r_[mean, outward], abs(1j*omega*capacity*mean+outward.sum()-drive)
+    return np.r_[mean, outward], abs(1j*omega*capacity*mean+outward.sum()-mean_source*drive)
 
 
 def main():
