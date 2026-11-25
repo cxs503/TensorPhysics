@@ -66,7 +66,7 @@ def fvm(n,area,times,fraction,storage_fraction,initial):
                             np.r_[0.,np.cumsum(heat["contact"][:,n-1])]))
 
 
-def fem(n,area,times,fraction,storage_fraction,initial):
+def fem_contact_model(n,area,storage_fraction):
     model,ends = two_layer_conduction.slab_fem_model(K.repeat(n),0.,0.,RESISTANCE/min(area),None,
                                 torch.from_numpy(CAPACITY.repeat(n)))
     stride = len(model.nodes)//2
@@ -75,11 +75,17 @@ def fem(n,area,times,fraction,storage_fraction,initial):
     storage[left_nodes] = STORAGE*storage_fraction/2
     storage[left_nodes+1] = STORAGE*(1-storage_fraction)/2
     model = replace(model,thickness=torch.from_numpy(area.repeat(n)),nodal_heat_capacity=storage)
+    return model,ends,left_nodes
+
+
+def fem(n,area,times,fraction,storage_fraction,initial):
+    model,ends,left_nodes = fem_contact_model(n,area,storage_fraction)
+    stride = len(model.nodes)//2
     # Dampen the start-up at the massless loaded trace with two backward
     # Euler half-steps. Evaluate its prescribed power at the actual stage times.
     def advance(grid, initial, theta):
         t = torch.from_numpy(grid)
-        load = storage.new_zeros((len(t),len(storage)))
+        load = model.nodes.new_zeros((len(t),len(model.nodes)))
         power = POWER/2*torch.exp(-DECAY*t[:,None])
         load[:,left_nodes] = fraction*power
         load[:,left_nodes+1] = (1-fraction)*power

@@ -4,6 +4,7 @@ import inspect
 import json
 
 import numpy as np
+import torch
 from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
 
 from conduction_provenance import provenance
@@ -56,6 +57,42 @@ def fvm(n,area,times,idx,stop):
                             np.r_[0.,transfer.cumsum()]))[idx],float(abs(balance).max()),deposited.cumsum(0)[idx-1]
 
 
+def fem(n,area,times,idx,stop):
+    model,ends,left_nodes = slab.fem_contact_model(n,area,STORAGE_LEFT)
+    # Align the state update with the switching instant. The FEM load
+    # accepts integrated joules, including an exact partial-interval pulse.
+    grid = np.union1d(times,stop) if stop is not None else times
+    step = np.diff(grid)
+    right_start = np.maximum(grid[:-1],DELAY)
+    right_end = grid[1:] if stop is None else np.minimum(grid[1:],stop)
+    duration = np.maximum(right_end-right_start,0.)
+    left_heat = np.exp(-slab.DECAY*grid[:-1])*(-np.expm1(-slab.DECAY*step))
+    right_heat = np.exp(-slab.DECAY*(right_start-DELAY))*(-np.expm1(-slab.DECAY*duration))
+    inputs = slab.POWER/slab.DECAY*np.column_stack((FRACTION*left_heat,(1-FRACTION)*right_heat))
+    nodal = model.nodes.new_zeros((len(step),len(model.nodes)))
+    for side in (0,1):
+        nodal[:,left_nodes+side] = torch.from_numpy(.5*inputs[:,side,None])
+    x = np.arange(n+1)/n
+    initial = np.tile(np.r_[INITIAL[0]*x,INITIAL[1]*x[::-1]],2)
+    result = slab.thermal.solve_transient_thermal(model,torch.from_numpy(grid),torch.from_numpy(initial),
+                                                 theta=.5,sparse=True,nodal_step_heat=nodal)
+    strip = result.temperature.numpy().reshape(len(grid),2,-1).mean(1)
+    traces = strip[:,n:n+2]
+    bulk = .5*(area*slab.CAPACITY)*np.stack(
+        [(.5*(u[:,1:]+u[:,:-1])).mean(1) for u in np.split(strip,2,axis=1)],axis=1)
+    stored = bulk+slab.STORAGE*np.array([STORAGE_LEFT,1-STORAGE_LEFT])*traces
+    jump = traces[:,0]-traces[:,1]
+    transfer = step*.5*(jump[:-1]+jump[1:])*min(area)/slab.RESISTANCE
+    wall = -result.nodal_reaction_heat_steps()[:,ends].sum(-1).numpy()
+    applied = result.additional_stage_power.numpy()*step[:,None]
+    deposited = np.column_stack([applied[:,left_nodes+i].sum(1) for i in (0,1)])
+    balance = np.diff(stored,axis=0)-deposited+wall+np.column_stack((transfer,-transfer))
+    observations = np.searchsorted(grid,times[idx])
+    cumulative = np.vstack((np.zeros(3),np.column_stack((wall,transfer)).cumsum(0)))
+    samples = np.column_stack((traces[:,np.argmax(area)],jump,cumulative[:,:2],traces,cumulative[:,2]))
+    return samples[observations],float(abs(balance).max()),deposited.cumsum(0)[observations-1]
+
+
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pulse",action="store_true",help="switch off the right heater at 0.1437 s")
@@ -64,13 +101,15 @@ if __name__=="__main__":
     for area in (np.array([1.,2.]),np.array([2.,1.])):
         exact = reference(area,32,stop)
         ref_change = float(abs(exact-reference(area,24,stop)).max())
-        for solver in ("FVM","DG"):
+        for solver in ("FVM","FEM","DG"):
             previous = None
             for n in (8,16,32,64):
                 times = np.union1d(np.linspace(0.,.8,32*n+1),OBSERVE)
                 idx = np.searchsorted(times,OBSERVE)
                 if solver=="FVM":
                     sample,balance,deposited = fvm(n,area,times,idx,stop)
+                elif solver=="FEM":
+                    sample,balance,deposited = fem(n,area,times,idx,stop)
                 else:
                     sample,balance,deposited = slab.dg_samples(n,area,times,FRACTION,STORAGE_LEFT,INITIAL,idx,DELAY,stop,return_deposited=True)
                 active_time = np.maximum(OBSERVE-DELAY,0.)
@@ -85,7 +124,7 @@ if __name__=="__main__":
                     orders=orders.tolist(),balance_J=balance,deposited_heat_error_J=deposited_error,inversion_change=ref_change,
                     passed=bool(balance<1e-10 and ref_change<1e-10 and (n<64 or (min(orders)>1.8 and deposited_error<2e-6)))))
                 previous = errors
-    sources = [__file__,slab.__file__,slab.rod.__file__,inspect.getfile(solve_transient_diffusion_2d),
+    sources = [__file__,slab.__file__,slab.rod.__file__,slab.thermal.__file__,slab.two_layer_conduction.__file__,inspect.getfile(solve_transient_diffusion_2d),
                inspect.getfile(poisson_face_powers_2d)]
     print(json.dumps(dict(delay_s=DELAY,right_stop_s=stop,observations_s=OBSERVE.tolist(),metrics=["sheet_K","jump_K","west_end_J",
              "east_end_J","west_trace_K","east_trace_K","contact_heat_J"],runs=rows,
