@@ -65,7 +65,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", type=int, choices=(0, 1, 2, 3), default=0)
     parser.add_argument("--sheet-driven", action="store_true", help="drive the two sheets in quadrature with isothermal walls")
+    parser.add_argument("--inner-fractions", nargs=2, type=float, default=(.5, .5),
+                        metavar=("RING1", "RING2"), help="fraction of each contact resistance on its inner side")
     args = parser.parse_args()
+    fractions = args.inner_fractions
     mode = args.mode
     walls = np.zeros(2) if args.sheet_driven else WALLS
     generation = np.array([1., 0.6j]) if args.sheet_driven else np.zeros(2)
@@ -75,13 +78,14 @@ if __name__ == "__main__":
         for n in ((16, 32, 64, 128) if mode else (16, 32, 64)):
             response = harmonic_rings.assemble_ring_response(
                 (RADII[0], RADII[1], RADII[3], RADII[4]), K, CONTACT, n, mode=mode,
-                formulation=formulation, join_radius=RADII[2])
+                formulation=formulation, join_radius=RADII[2], inner_resistance_fractions=fractions)
             leakage = response.mode_leakage
             for omega in (1., 8., 24.):
                 solution = response.solve(omega, walls, CAPACITY, sheet_generation=generation)
                 fields = np.column_stack((solution.sheet_temperature, solution.incoming_flux, solution.outgoing_flux))
                 imbalance = solution.join_power_residual
-                expected = angular_reference(omega, mode, walls, generation) if mode else continuum(omega, walls, generation)
+                expected = (angular_reference(omega, mode, walls, generation, fractions) if mode
+                            else continuum(omega, walls, generation, fractions))
                 ratio = fields/expected
                 error = float(abs(ratio-1).max())
                 order = None if omega not in previous or formulation == "circular" else math.log2(previous[omega]/error)
@@ -94,11 +98,12 @@ if __name__ == "__main__":
                                  unit_response_mode_leakage=leakage, join_power_residual_W_m=imbalance, sheet_balance_residual_W_m2=sheet_balance, passed=passed))
                 previous[omega] = error
     passed = all(r["passed"] for r in runs)
-    print(json.dumps(dict(passed=passed, angular_cosine_mode=mode,
+    print(json.dumps(dict(passed=passed, angular_cosine_mode=mode, inner_resistance_fractions=fractions,
                           wall_temperatures_K=[[z.real, z.imag] for z in walls],
                           sheet_generation_W_m2=[[z.real, z.imag] for z in generation], model="zero bulk capacity, positive areal storage at each ring",
                           columns=["sheet temperature", "incoming radial flux", "outgoing radial flux"], runs=runs,
                           sources=[provenance(p) for p in (__file__, harmonic_rings.__file__, layered_annulus.__file__)],
-                          reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_storing_rings.py --mode {mode}" + (" --sheet-driven" if args.sheet_driven else "")),
+                          reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_storing_rings.py --mode {mode}" + (" --sheet-driven" if args.sheet_driven else "")
+                          + f" --inner-fractions {fractions[0]} {fractions[1]}"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
