@@ -46,6 +46,9 @@ def measure(steps, theta, method="theta"):
     weight = 1-1/np.sqrt(2) if method == "sdirk2" else theta
     first_time = times[:-1, None] + (weight*dt if method == "sdirk2" else 0.)
     mean_load = (1-weight)*source(first_time)+weight*source(times[1:, None])
+    if method == "exponential_quadratic":
+        # Simpson's rule exactly integrates the interpolated quadratic source.
+        mean_load = (mean_load+2*source(times[:-1, None]+dt/2))/3
     worst_interval, worst_cut = np.unravel_index(q_error.argmax(), q_error.shape)
     balance = (dx*capacity*np.diff(history, axis=0)+np.diff(heat, axis=1)
                - dx*dt*mean_load)
@@ -58,17 +61,20 @@ def measure(steps, theta, method="theta"):
 
 if __name__ == "__main__":
     rows = []
-    for method, theta, minimum_order in (("theta", .5, 1.9), ("theta", 1., .9), ("sdirk2", .5, 1.9)):
+    # Linear interpolation has O(dt²) load error. A midpoint quadratic has
+    # O(dt³) load error; endpoint temperatures can converge faster.
+    schemes = (("theta", .5, 1.9, 256), ("theta", 1., .9, 256),
+               ("sdirk2", .5, 1.9, 8192), ("exponential", .5, 1.9, 8192),
+               ("exponential_quadratic", .5, 2.9, 2048))
+    for method, theta, minimum_order, finest in schemes:
         previous = None
-        refinements = [32, 64, 128, 256]
-        if method == "sdirk2":
-            refinements.extend([512, 1024, 2048, 4096, 8192])
+        refinements = [2**level for level in range(5, finest.bit_length())]
         for steps in refinements:
             row = measure(steps, theta, method)
             errors = np.array([row[k] for k in ("temperature_error_K", "contact_flux_error_W_m2",
                                                 "all_cut_flux_error_W_m2")])
             orders = np.log2(previous/errors).tolist() if previous is not None else []
-            # Retain the whole SDIRK2 refinement sequence. Require decreasing
+            # Retain the whole refinement sequence. Require decreasing
             # errors throughout and the design order on both finest refinements.
             require_order = previous is not None and (method == "theta" or steps in refinements[-2:])
             row.update(temperature_contact_all_cut_orders=orders, order_required=require_order,
