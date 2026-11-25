@@ -124,12 +124,16 @@ def fvm_films(ambient,wall_c):
             for side,a,h,cw in zip(("west","east"),ambient,FILMS,wall_c)}
 
 
+def dg_options(wall_c,ambient):
+    films = dict(zip(("left","right"),zip(FILMS,ambient)))
+    return dict(conductivity=K,bc=dict(left="robin",right="robin",top="neumann",bottom="neumann"),
+                robin_films=films,wall_areal_heat_capacity=dict(zip(("left","right"),wall_c)))
+
+
 def dg_response(n,omega,wall_c,ambient):
     from tensordg import solve_harmonic_diffusion_2d, poisson_face_powers_2d
 
-    films = dict(zip(("left","right"),zip(FILMS,ambient)))
-    options = dict(conductivity=K,bc=dict(left="robin",right="robin",top="neumann",bottom="neumann"),
-                   robin_films=films,wall_areal_heat_capacity=dict(zip(("left","right"),wall_c)))
+    options = dg_options(wall_c,ambient)
     x,_,u = solve_harmonic_diffusion_2d(omega,ncells=(n,2),degree=1,capacity=C,
                                         reaction=lambda x,y:H0+SLOPE*x,**options)
     fx,_ = poisson_face_powers_2d(u,temperature_rate=1j*omega*u,**options)
