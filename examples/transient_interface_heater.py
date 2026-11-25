@@ -1,5 +1,6 @@
 """Heat partition from a storing, resistive heater between rods of unequal diffusivity."""
 import argparse
+import inspect
 from dataclasses import replace
 import json
 
@@ -102,12 +103,53 @@ def fem(n,area,times,fraction,storage_fraction,initial):
     return np.column_stack((trace[:,n+np.argmax(area)],trace[:,n]-trace[:,n+1],wall,trace[:,n:n+2],np.r_[0.,contact]))
 
 
+def dg_samples(n,area,times,fraction,storage_fraction,initial,idx):
+    from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
+
+    face = np.zeros((2*n-1,2))
+    face[n-1] = 1.
+    branch_capacity = area*CAPACITY
+    surface = STORAGE*np.array([storage_fraction,1-storage_fraction])
+    power = POWER*np.array([fraction,1-fraction])
+    options = dict(bc=dict(top="neumann",bottom="neumann"),conductivity=np.tile((area*K).repeat(n)[:,None],(1,2)),
+                   contact_resistance={"x":face*RESISTANCE/min(area)})
+    def initial_field(x,y):
+        return torch.where(x<.5,2*x*initial[0],2*(1-x)*initial[1])
+    _,_,state,means,amplitude = solve_transient_diffusion_2d(initial_field,times,
+               ncells=(2*n,2),degree=1,capacity=np.tile(branch_capacity.repeat(n)[:,None],(1,2)),
+               trace_heat_capacity={"x":(surface[0]*face,surface[1]*face)},
+               trace_power={"x":(power[0]*face,power[1]*face)},load_amplitude=lambda t:np.exp(-DECAY*t),
+               rannacher=True,return_interval_means=True,return_load_means=True,**options)
+    modes = state[:,:,:,:,0].mean(2).numpy()
+    traces = np.column_stack((modes[:,n-1].sum(1),modes[:,n,0]-modes[:,n,1]))
+    stored = .5*branch_capacity*modes[:,:,0].reshape(len(times),2,n).mean(2)+surface*traces
+    dt = np.diff(times)
+    heat = np.zeros(3)
+    start = 0
+    residual = 0.
+    rows = []
+    for stop in idx:
+        # Flux is linear in the modal field for these homogeneous end data.
+        integral = torch.einsum("t,txyij->xyij",torch.from_numpy(dt[start:stop]),means[start:stop])
+        fx,_ = poisson_face_powers_2d(integral,**options)
+        west,contact,east = fx[[0,n,-1]].sum(1).numpy()
+        heat += [-west,east,contact]
+        input_heat = power*(dt[start:stop] @ amplitude[start:stop].numpy())
+        balance = stored[stop]-stored[start]-input_heat+np.array([contact-west,east-contact])
+        residual = max(residual,float(abs(balance).max()))
+        left,right = traces[stop]
+        rows.append([traces[stop,np.argmax(area)],left-right,*heat[:2],left,right,heat[2]])
+        start = stop
+    return np.array(rows),residual
+
+
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--left-fraction",type=float,help="fraction of input power deposited on the left trace")
     parser.add_argument("--storage-left-fraction",type=float,help="fraction of interface heat capacity on the left trace")
     parser.add_argument("--initial-traces",type=float,nargs=2,default=(0.,0.),metavar=("LEFT","RIGHT"),
                         help="initial interface temperatures in K above the cold wall temperature")
+    parser.add_argument("--dg",action="store_true",help="verify transient DG contact storage and heat partition")
     args = parser.parse_args()
     if not np.isfinite(args.initial_traces).all():
         parser.error("--initial-traces requires finite temperatures")
@@ -121,20 +163,31 @@ if __name__=="__main__":
         storage_fraction = float(area[0]>area[1]) if args.storage_left_fraction is None else args.storage_left_fraction
         exact = reference(area,fraction,32,storage_fraction,args.initial_traces)
         inversion_change = float(abs(exact-reference(area,fraction,24,storage_fraction,args.initial_traces)).max())
-        for solve in (fem,fvm):
+        for solve in ((fem,fvm,dg_samples) if args.dg else (fem,fvm)):
             previous = {}
             for n in (8,16,32,64):
                 times = np.linspace(0.,.8,32*n+1)
                 idx = np.searchsorted(times,SAMPLES)
                 assert np.allclose(times[idx],SAMPLES,rtol=0.,atol=1e-14)
-                diff = np.max(abs(solve(n,area,times,fraction,storage_fraction,args.initial_traces)[idx]-exact),axis=0)
+                params = (n,area,times,fraction,storage_fraction,args.initial_traces)
+                if solve is dg_samples:
+                    samples,balance = solve(*params,idx)
+                else:
+                    samples = solve(*params)[idx]
+                diff = np.max(abs(samples-exact),axis=0)
                 errors = dict(zip(("sheet_K","signed_jump_K","west_end_J","east_end_J","west_trace_K","east_trace_K","contact_heat_J"),diff))
                 orders = {k:np.log2(previous[k]/v) for k,v in errors.items()} if previous else {}
                 passed = inversion_change<1e-10 and all(v>0 for v in orders.values())
-                rows.append(dict(area_m2=area.tolist(),left_fraction=fraction,storage_left_fraction=storage_fraction,solver=solve.__name__,cells_per_branch=n,
+                rows.append(dict(area_m2=area.tolist(),left_fraction=fraction,storage_left_fraction=storage_fraction,solver="dg" if solve is dg_samples else solve.__name__,cells_per_branch=n,
                                  errors=errors,orders=orders,inversion_change=inversion_change,
                                  passed=bool(passed and (n<64 or min(orders.values())>1.8))))
+                if solve is dg_samples:
+                    rows[-1]["branch_balance_J"] = balance
+                    rows[-1]["passed"] &= balance<1e-10
                 previous = errors
-    print(json.dumps(dict(observation_times_s=SAMPLES.tolist(),initial_traces_K=args.initial_traces,runs=rows,sources=[provenance(f) for f in
-                     (__file__,rod.__file__,thermal.__file__,two_layer_conduction.__file__)]),indent=2,allow_nan=False))
+    sources = [__file__,rod.__file__,thermal.__file__,two_layer_conduction.__file__]
+    if args.dg:
+        from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
+        sources.extend(inspect.getfile(f) for f in (solve_transient_diffusion_2d,poisson_face_powers_2d))
+    print(json.dumps(dict(observation_times_s=SAMPLES.tolist(),initial_traces_K=args.initial_traces,runs=rows,sources=[provenance(f) for f in sources]),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
