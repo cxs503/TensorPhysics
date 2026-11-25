@@ -40,7 +40,23 @@ def measure(n, beta, resistive):
                                                  contact_resistance_x=contacts)
         return np.abs(flux.numpy()-q[1:-1])
     corrected = error(field, source-loss*field.numpy())
+    face = np.arange(1, n)
+    worst = int(face[corrected.argmax()])
+    # Use the same physical regions on every grid. A fixed count of cells
+    # would shrink the excluded neighbourhood as the mesh is refined.
+    # At low resolution the thin layer may contain no eligible face.
+    region_errors = {}
+    for name, lo, hi in (("left", 0, first), ("layer", first, last), ("right", last, n)):
+        inside = (face-lo >= n/128) & (hi-face >= n/128)
+        if inside.any():
+            region_errors[name] = float(corrected[inside].max())
+    rms = float(np.sqrt(np.mean(corrected**2)))
     return {
+        "worst_face_x_m": worst*dx,
+        "worst_face_distance_to_contact_cells": min(abs(first-worst), abs(last-worst)),
+        "interior_rms_error_W_m2": rms,
+        "region_inset_m": 1/128,
+        "region_max_error_W_m2": region_errors,
         "columns": n, "beta_rad_m": beta, "resistive": resistive,
         "exact_input_uncorrected_error_W_m2": float(error(target, 0.).max()),
         "exact_input_corrected_error_W_m2": float(error(target, gradient).max()),
@@ -61,12 +77,22 @@ def main():
                 error = row["solved_input_corrected_error_W_m2"]
                 passed = row["exact_input_corrected_error_W_m2"] < 1e-10
                 if previous:
-                    row["solved_flux_order"] = math.log2(previous/error)
+                    row["solved_flux_order"] = math.log2(previous["solved_input_corrected_error_W_m2"]/error)
+                    row["interior_rms_order"] = math.log2(previous["interior_rms_error_W_m2"]/row["interior_rms_error_W_m2"])
+                    row["region_orders"] = {
+                        name: math.log2(previous["region_max_error_W_m2"][name]/value)
+                        for name, value in row["region_max_error_W_m2"].items()
+                        if name in previous["region_max_error_W_m2"]
+                    }
                 if n == 8192:
                     passed &= error < 2e-4 and row["solved_flux_order"] > 0.9
+                    passed &= row["worst_face_distance_to_contact_cells"] <= 1
+                    passed &= max(row["region_max_error_W_m2"].values()) < 1e-5
+                    if beta:
+                        passed &= min(row["region_orders"].values()) > 1.9
                 row["passed"] = bool(passed)
                 rows.append(row)
-                previous = error
+                previous = row
     passed = all(row["passed"] for row in rows)
     print(json.dumps({
         "passed": passed, "runs": rows, "sources": [provenance(path) for path in (__file__, sph.__file__)],
