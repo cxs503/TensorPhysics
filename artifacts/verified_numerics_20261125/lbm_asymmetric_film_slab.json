@@ -1,0 +1,816 @@
+{
+  "reference": "Series-resistance steady slab plus cos(beta*(x-peak))*exp(-alpha*beta^2*t); h=k*beta*tan(beta/2)",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_film_slab.py --asymmetric",
+  "order_metrics": [
+    "temperature_error_K",
+    "wall_temperature_error_K",
+    "inward_flux_error_W_m2",
+    "decay_rate_error_per_s"
+  ],
+  "runs": [
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.08004553098430608,
+      "decay_rate_error_per_s": 4.5530984306083044e-05,
+      "n": 8,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 7.520120128834407e-06,
+      "wall_temperature_error_K": 0.0004678297387703534,
+      "inward_flux_error_W_m2": 4.20080563248576e-05,
+      "balance_J_m2": 6.776263578034403e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.08001232058874087,
+      "decay_rate_error_per_s": 1.2320588740871719e-05,
+      "n": 16,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.572199543637854e-06,
+      "wall_temperature_error_K": 0.00011593903985795961,
+      "inward_flux_error_W_m2": 1.0288036352279484e-05,
+      "balance_J_m2": 1.194790794079026e-16,
+      "orders": [
+        1.547753141140458,
+        2.012617129948779,
+        2.0296983896805054,
+        1.885777451379959
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.08000313852618693,
+      "decay_rate_error_per_s": 3.1385261869271153e-06,
+      "n": 32,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 7.761861884336696e-07,
+      "wall_temperature_error_K": 2.8833926637883422e-05,
+      "inward_flux_error_W_m2": 2.542733029645139e-06,
+      "balance_J_m2": 1.1648397090641138e-16,
+      "orders": [
+        1.7285279000786478,
+        2.0075272199603114,
+        2.0165157439420462,
+        1.9729120455414155
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.0800007882765287,
+      "decay_rate_error_per_s": 7.882765287042792e-07,
+      "n": 64,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.1411524087078249e-07,
+      "wall_temperature_error_K": 7.188154574899741e-06,
+      "inward_flux_error_W_m2": 6.318647822745049e-07,
+      "balance_J_m2": 8.588914085158605e-17,
+      "orders": [
+        1.8580152704248154,
+        2.00407397993762,
+        2.008692233565561,
+        1.9933135230073376
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.08004553098430608,
+      "decay_rate_error_per_s": 4.5530984306083044e-05,
+      "n": 8,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 7.520120128612362e-06,
+      "wall_temperature_error_K": 0.00046782973877013134,
+      "inward_flux_error_W_m2": 4.200805632494781e-05,
+      "balance_J_m2": 8.847089727481716e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.08001232058873743,
+      "decay_rate_error_per_s": 1.2320588737430027e-05,
+      "n": 16,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.572199544359499e-06,
+      "wall_temperature_error_K": 0.00011593903985818166,
+      "inward_flux_error_W_m2": 1.0288036352851943e-05,
+      "balance_J_m2": 1.8580514730970332e-16,
+      "orders": [
+        1.5477531406931038,
+        2.0126171299453306,
+        2.0296983896033276,
+        1.8857774517829682
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.08000313852618347,
+      "decay_rate_error_per_s": 3.138526183471546e-06,
+      "n": 32,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 7.761861894328703e-07,
+      "wall_temperature_error_K": 2.8833926637439333e-05,
+      "inward_flux_error_W_m2": 2.5427330287743077e-06,
+      "balance_J_m2": 1.1942486929927831e-16,
+      "orders": [
+        1.7285278986261925,
+        2.007527219985294,
+        2.0165157445164144,
+        1.9729120467268375
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.08000078827654131,
+      "decay_rate_error_per_s": 7.882765413053106e-07,
+      "n": 64,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.1411523531966736e-07,
+      "wall_temperature_error_K": 7.188154574899741e-06,
+      "inward_flux_error_W_m2": 6.318647833430946e-07,
+      "balance_J_m2": 1.0026667809828055e-16,
+      "orders": [
+        1.8580153096850924,
+        2.0040739799154,
+        2.0086922306316293,
+        1.9933134983566376
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.32101091478612426,
+      "decay_rate_error_per_s": 0.0010109147861242507,
+      "n": 8,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 8.370582100114543e-05,
+      "wall_temperature_error_K": 0.0016278752117706574,
+      "inward_flux_error_W_m2": 0.0006995785502801055,
+      "balance_J_m2": 9.020562075079397e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.3202620595037072,
+      "decay_rate_error_per_s": 0.00026205950370716824,
+      "n": 16,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.4108775380032865e-05,
+      "wall_temperature_error_K": 0.0003923029630135133,
+      "inward_flux_error_W_m2": 0.00015472231858315588,
+      "balance_J_m2": 1.0158974356189177e-16,
+      "orders": [
+        1.7957695827464586,
+        2.052949973934742,
+        2.176804736064789,
+        1.9476950570509999
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.3200660867592729,
+      "decay_rate_error_per_s": 6.608675927288754e-05,
+      "n": 32,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 7.2097971471341005e-06,
+      "wall_temperature_error_K": 9.585244703247398e-05,
+      "inward_flux_error_W_m2": 3.55730039632296e-05,
+      "balance_J_m2": 9.435269406055102e-17,
+      "orders": [
+        1.7415277963464122,
+        2.0330810636761174,
+        2.120826606443707,
+        1.9874612734165298
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.32001655726198874,
+      "decay_rate_error_per_s": 1.6557261988736638e-05,
+      "n": 64,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 1.97254630479593e-06,
+      "wall_temperature_error_K": 2.3660442636241896e-05,
+      "inward_flux_error_W_m2": 8.461683083521576e-06,
+      "balance_J_m2": 1.0101376115775884e-16,
+      "orders": [
+        1.869899501397519,
+        2.0183381994897367,
+        2.0717662495832663,
+        1.996897131802889
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.32101091478612426,
+      "decay_rate_error_per_s": 0.0010109147861242507,
+      "n": 8,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 8.370582100125645e-05,
+      "wall_temperature_error_K": 0.0016278752117708795,
+      "inward_flux_error_W_m2": 0.0006995785502799667,
+      "balance_J_m2": 7.936359902593892e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.3202620595037013,
+      "decay_rate_error_per_s": 0.00026205950370128406,
+      "n": 16,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.4108775380976555e-05,
+      "wall_temperature_error_K": 0.0003923029630135133,
+      "inward_flux_error_W_m2": 0.00015472231858269792,
+      "balance_J_m2": 1.3725999503666486e-16,
+      "orders": [
+        1.7957695826919007,
+        2.052949973934939,
+        2.176804736068773,
+        1.9476950570833935
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.3200660867592788,
+      "decay_rate_error_per_s": 6.608675927877172e-05,
+      "n": 32,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 7.209797148466368e-06,
+      "wall_temperature_error_K": 9.585244703202989e-05,
+      "inward_flux_error_W_m2": 3.557300396257734e-05,
+      "balance_J_m2": 1.3343818237865346e-16,
+      "orders": [
+        1.7415277961362943,
+        2.0330810636828014,
+        2.1208266064658896,
+        1.9874612732556824
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.3200165572620005,
+      "decay_rate_error_per_s": 1.6557262000505002e-05,
+      "n": 64,
+      "tau": 0.75,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 1.972546303297129e-06,
+      "wall_temperature_error_K": 2.3660442636241896e-05,
+      "inward_flux_error_W_m2": 8.46168308431261e-06,
+      "balance_J_m2": 8.700722434196173e-17,
+      "orders": [
+        1.8698995027603122,
+        2.0183381994830527,
+        2.071766249421944,
+        1.9968971309059218
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.07953683835676179,
+      "decay_rate_error_per_s": 0.0004631616432382163,
+      "n": 8,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 9.588262224191624e-05,
+      "wall_temperature_error_K": 0.004574982485634704,
+      "inward_flux_error_W_m2": 0.0003861143812738249,
+      "balance_J_m2": 3.5128150388530344e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.07982476919571076,
+      "decay_rate_error_per_s": 0.00017523080428924476,
+      "n": 16,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 3.136010078136353e-05,
+      "wall_temperature_error_K": 0.001430462273334765,
+      "inward_flux_error_W_m2": 0.00012334360666720057,
+      "balance_J_m2": 6.938893903907228e-17,
+      "orders": [
+        1.6123391691896745,
+        1.6772847714769321,
+        1.646345352495483,
+        1.4022593689572105
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.07995171290951793,
+      "decay_rate_error_per_s": 4.8287090482074246e-05,
+      "n": 32,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 9.064249576806738e-06,
+      "wall_temperature_error_K": 0.0003628050008537276,
+      "inward_flux_error_W_m2": 3.1514624416972836e-05,
+      "balance_J_m2": 9.288902112769559e-17,
+      "orders": [
+        1.7906707055592141,
+        1.9792152018494193,
+        1.9685895633335135,
+        1.859546970161575
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.04964387529693774,
+        0.10338779828217999
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.07998764777412705,
+      "decay_rate_error_per_s": 1.2352225872952483e-05,
+      "n": 64,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.4345361974154045e-06,
+      "wall_temperature_error_K": 9.12550693827896e-05,
+      "inward_flux_error_W_m2": 7.958886498488082e-06,
+      "balance_J_m2": 6.855545861897405e-17,
+      "orders": [
+        1.8965406339608275,
+        1.9912177313953812,
+        1.9853829618698469,
+        1.9668664980596136
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.07953683835676179,
+      "decay_rate_error_per_s": 0.0004631616432382163,
+      "n": 8,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 9.588262224191624e-05,
+      "wall_temperature_error_K": 0.004574982485634704,
+      "inward_flux_error_W_m2": 0.00038611438127384226,
+      "balance_J_m2": 5.984795992119984e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.07982476919571076,
+      "decay_rate_error_per_s": 0.00017523080428924476,
+      "n": 16,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 3.1360100781197e-05,
+      "wall_temperature_error_K": 0.001430462273335209,
+      "inward_flux_error_W_m2": 0.00012334360666722485,
+      "balance_J_m2": 8.239936510889834e-17,
+      "orders": [
+        1.6123391691973354,
+        1.6772847714764842,
+        1.6463453524952638,
+        1.4022593689572105
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.07995171290952137,
+      "decay_rate_error_per_s": 4.8287090478632555e-05,
+      "n": 32,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 9.064249576362648e-06,
+      "wall_temperature_error_K": 0.00036280500085350553,
+      "inward_flux_error_W_m2": 3.151462441712549e-05,
+      "balance_J_m2": 9.733425003488616e-17,
+      "orders": [
+        1.7906707056222357,
+        1.9792152018507503,
+        1.9685895633268093,
+        1.8595469702644039
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.10338779828217999,
+        0.04964387529693774
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.08,
+      "measured_rate_per_s": 0.0799876477741282,
+      "decay_rate_error_per_s": 1.2352225871800626e-05,
+      "n": 64,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.434536197304382e-06,
+      "wall_temperature_error_K": 9.125506938323369e-05,
+      "inward_flux_error_W_m2": 7.958886498408285e-06,
+      "balance_J_m2": 7.445758419544202e-17,
+      "orders": [
+        1.896540633955936,
+        1.9912177313874773,
+        1.9853829618913,
+        1.9668664980913173
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.31519526961546196,
+      "decay_rate_error_per_s": 0.004804730384538047,
+      "n": 8,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 0.0007588287809854322,
+      "wall_temperature_error_K": 0.013069324015956951,
+      "inward_flux_error_W_m2": 0.003269227413799175,
+      "balance_J_m2": 2.6020852139652106e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.317743069602269,
+      "decay_rate_error_per_s": 0.002256930397731005,
+      "n": 16,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 0.0002751742674462765,
+      "wall_temperature_error_K": 0.004341988723692847,
+      "inward_flux_error_W_m2": 0.0012936538253319196,
+      "balance_J_m2": 9.71445146547012e-17,
+      "orders": [
+        1.4634288339171464,
+        1.5897566382764754,
+        1.3374981255660923,
+        1.0900935495968789
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.3193494297285288,
+      "decay_rate_error_per_s": 0.0006505702714711958,
+      "n": 32,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 8.086913236404758e-05,
+      "wall_temperature_error_K": 0.0011425225213592682,
+      "inward_flux_error_W_m2": 0.00035784084538226235,
+      "balance_J_m2": 1.2663481374630692e-16,
+      "orders": [
+        1.76668452651404,
+        1.9261333753130558,
+        1.85406163482335,
+        1.7945851239860555
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.35,
+      "films_W_m2K": [
+        0.22910243948595763,
+        0.9797718658472903
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.31983192870665744,
+      "decay_rate_error_per_s": 0.00016807129334256432,
+      "n": 64,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.1654301198048564e-05,
+      "wall_temperature_error_K": 0.00029234159690494366,
+      "inward_flux_error_W_m2": 9.507629338681434e-05,
+      "balance_J_m2": 6.784395094328044e-17,
+      "orders": [
+        1.900935516811379,
+        1.9664955758516898,
+        1.9121605067050298,
+        1.952631565727011
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.3151952696154643,
+      "decay_rate_error_per_s": 0.004804730384535716,
+      "n": 8,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 0.0007588287809853211,
+      "wall_temperature_error_K": 0.013069324015956951,
+      "inward_flux_error_W_m2": 0.0032692274137992583,
+      "balance_J_m2": 1.2663481374630692e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.31774306960227017,
+      "decay_rate_error_per_s": 0.0022569303977298394,
+      "n": 16,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 0.000275174267446221,
+      "wall_temperature_error_K": 0.004341988723692736,
+      "inward_flux_error_W_m2": 0.0012936538253319335,
+      "balance_J_m2": 1.0928757898653885e-16,
+      "orders": [
+        1.4634288339172263,
+        1.5897566382765123,
+        1.3374981255661136,
+        1.0900935495969237
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.31934942972853114,
+      "decay_rate_error_per_s": 0.0006505702714688644,
+      "n": 32,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 8.086913236438065e-05,
+      "wall_temperature_error_K": 0.0011425225213591572,
+      "inward_flux_error_W_m2": 0.000357840845382304,
+      "balance_J_m2": 1.2544219135657286e-16,
+      "orders": [
+        1.766684526507807,
+        1.9261333753131593,
+        1.8540616348231975,
+        1.7945851239904804
+      ],
+      "passed": true
+    },
+    {
+      "peak_x_m": 0.65,
+      "films_W_m2K": [
+        0.9797718658472903,
+        0.22910243948595763
+      ],
+      "elapsed_s": 0.09765625,
+      "exact_rate_per_s": 0.32,
+      "measured_rate_per_s": 0.31983192870665744,
+      "decay_rate_error_per_s": 0.00016807129334256432,
+      "n": 64,
+      "tau": 1.5,
+      "beta": 2.0,
+      "amplitude_K": 0.6,
+      "temperature_error_K": 2.1654301198714698e-05,
+      "wall_temperature_error_K": 0.00029234159690449957,
+      "inward_flux_error_W_m2": 9.507629338720291e-05,
+      "balance_J_m2": 6.339872203608987e-17,
+      "orders": [
+        1.9009355167729405,
+        1.9664955758537412,
+        1.9121605066993013,
+        1.9526315657218407
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "c9f0b9a97ba845477f2a3cff5ca5afc849544c46",
+      "file": "lbm_film_slab.py",
+      "source_sha256": "e29094c71430c986ad00a7f205a67c2f147ec82c5f8ee30944da42f015e48cd8"
+    },
+    {
+      "commit": "984b6e007145b11f7785af117f854d1e496d72af",
+      "file": "thermal_common.py",
+      "source_sha256": "b2a70b39dd89e361288894043dee1e21281fe4b1e60a4b6d541f1cf844e52b32"
+    }
+  ]
+}
