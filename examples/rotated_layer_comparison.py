@@ -73,9 +73,34 @@ def measure(n,transient):
                        dirichlet_values=dict.fromkeys(walls,lambda x,y:amplitude(end)*exact(x,y)))
     slope = math.cos(alpha*.5+.3) if transient else math.sinh(alpha*.5+.3)
     true_flux = -amplitude(end)*alpha*slope*(torch.cos(beta*(points+.35)+.4) @ w)/2
-    return dict(n=n,transient=transient,fem_l2=norm(f-ref),dg_l2=norm(d-ref),difference_l2=norm(f-d),
+    row = dict(n=n,transient=transient,fem_l2=norm(f-ref),dg_l2=norm(d-ref),difference_l2=norm(f-d),
                 fem_flux_error=float(torch.maximum(abs(fleft-true_flux),abs(fright-true_flux)).max()),
                 dg_flux_error=float(abs(n*qx[n//2]-true_flux).max()))
+
+    if transient:
+        # Unit depth, no volume source. Integral(C*T) equals stored heat;
+        # the total inward boundary reaction over a step must equal its change.
+        # The independent Gauss rule integrates smooth data inside each layer.
+        capacity = 1/material[...,0]
+        initial_exact = exact(points[:,None,:,None],points[None,:,None,:])
+        exact_store = float((capacity[...,None,None]*initial_exact*w[:,None]*w).sum()/(4*n*n))
+        exact_heat = (amplitude(end)-1)*exact_store
+        fem_steps = fem.nodal_reaction_heat_steps()[:,fixed].sum(dim=1)
+        fem_storage = (fem.temperature[:,conn].mean(dim=2)/k).sum(dim=1)/(n*n)
+        dg_storage = (states[...,0,0]*capacity).sum(dim=(1,2))/(n*n)
+        dg_steps = []
+        for i,dt in enumerate(time.diff()):
+            amp = (amplitude(float(time[i]))+amplitude(float(time[i+1])))/2
+            px,py = dg.poisson_face_powers_2d((states[i]+states[i+1])/2,conductivity=material,
+                             dirichlet_values=dict.fromkeys(walls,lambda x,y:amp*exact(x,y)))
+            dg_steps.append(dt*(px[0].sum()-px[-1].sum()+py[:,0].sum()-py[:,-1].sum()))
+        dg_steps = torch.stack(dg_steps)
+        row.update(exact_inward_heat_J=exact_heat,fem_inward_heat_J=float(fem_steps.sum()),
+                   dg_inward_heat_J=float(dg_steps.sum()),fem_heat_error=abs(float(fem_steps.sum())-exact_heat),
+                   dg_heat_error=abs(float(dg_steps.sum())-exact_heat),
+                   fem_balance_J=float((fem_steps-fem_storage.diff()).abs().max()),
+                   dg_balance_J=float((dg_steps-dg_storage.diff()).abs().max()))
+    return row
 
 
 if __name__=="__main__":
@@ -85,10 +110,15 @@ if __name__=="__main__":
         for n in (4,8,16,32):
             row = measure(n,transient)
             errors = {key:row[key] for key in ("fem_l2","dg_l2","difference_l2","fem_flux_error","dg_flux_error")}
+            if transient:
+                errors.update({k:row[k] for k in ("fem_heat_error","dg_heat_error")})
             rates = {key:math.log2(previous[key]/v) for key,v in errors.items()} if previous else {}
             row.update(orders=rates,passed=all(v>0 for v in rates.values()) and
                        (n<32 or (min(rates["fem_l2"],rates["dg_l2"])>1.8 and
                                  min(rates["dg_flux_error"],rates["fem_flux_error"])>.8)))
+            if transient:
+                row["passed"] &= max(row["fem_balance_J"],row["dg_balance_J"])<1e-10 and (
+                    n<32 or min(rates["fem_heat_error"],rates["dg_heat_error"])>1.8)
             rows.append(row)
             previous = errors
     sources = [provenance(p) for p in (__file__,thermal.__file__,thermal_analytic.__file__,
