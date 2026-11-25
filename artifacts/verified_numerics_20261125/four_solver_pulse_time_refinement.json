@@ -1,0 +1,566 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.00027006210617941395,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.00030883126939662553,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.00017715496595149816,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 7.371259253147189e-05,
+      "time_refinement_change_over_peak": 0.00021362401161317823,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.00012852608474278604,
+      "time_refinement_change_over_peak": 0.00021341239533767542,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.00011037886803078045,
+      "time_refinement_change_over_peak": 0.0002136025549659415,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 7.387743962639082e-05,
+      "time_refinement_change_over_peak": 5.337728468635117e-05,
+      "time_order": 2.0007759946542483,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.00012251915269467784,
+      "time_refinement_change_over_peak": 5.3324439287183445e-05,
+      "time_order": 2.0007751770127706,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.00011671477075159142,
+      "time_refinement_change_over_peak": 5.337192341481334e-05,
+      "time_order": 2.0007759944980132,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 7.391884978746877e-05,
+      "time_refinement_change_over_peak": 1.3342527519832892e-05,
+      "time_order": 2.000193930165805,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.00012210459189154754,
+      "time_refinement_change_over_peak": 1.3329319816124396e-05,
+      "time_order": 2.0001937277338993,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.00012037841312506625,
+      "time_refinement_change_over_peak": 1.3341187366955332e-05,
+      "time_order": 2.000193931804038,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.0001242284761255874,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.00016314169522646527,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.00010986868502088631,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 7.382511149478521e-05,
+      "time_refinement_change_over_peak": 0.00010432503130142212,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.00012348915892546053,
+      "time_refinement_change_over_peak": 0.00010422135215593098,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.00011354487824422055,
+      "time_refinement_change_over_peak": 0.0001043145527780398,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 7.390579082139359e-05,
+      "time_refinement_change_over_peak": 2.5987225373280687e-05,
+      "time_order": 2.005210841239795,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.00012223505468622609,
+      "time_refinement_change_over_peak": 2.5961453081202457e-05,
+      "time_order": 2.0052078379756733,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.00011910234065215519,
+      "time_refinement_change_over_peak": 2.5984615190877136e-05,
+      "time_order": 2.0052108410334304,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 7.39259551482685e-05,
+      "time_refinement_change_over_peak": 6.485538267320123e-06,
+      "time_order": 2.002504386062056,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.00012208889503151354,
+      "time_refinement_change_over_peak": 6.4791126398455745e-06,
+      "time_order": 2.0025029897812634,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.0001211714564449684,
+      "time_refinement_change_over_peak": 6.484886850066651e-06,
+      "time_order": 2.0025043868249495,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.0012514530242269117,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.0012455109340279158,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.001306403412882573,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.0003143317353085928,
+      "time_refinement_change_over_peak": 0.0009371212889183189,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.0003088601337890573,
+      "time_refinement_change_over_peak": 0.0009366508002389695,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.00036937624950195147,
+      "time_refinement_change_over_peak": 0.0009370271633806215,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 8.008334070619405e-05,
+      "time_refinement_change_over_peak": 0.0002342483946025098,
+      "time_order": 2.0001966232918393,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.00012631796043760524,
+      "time_refinement_change_over_peak": 0.00023413082228318505,
+      "time_order": 2.000196414889511,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.0001351513830756268,
+      "time_refinement_change_over_peak": 0.00023422486642632467,
+      "time_order": 2.000196623283267,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 7.446139106442873e-05,
+      "time_refinement_change_over_peak": 5.856010351645846e-05,
+      "time_order": 2.0000491515719228,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.00012434056366067425,
+      "time_refinement_change_over_peak": 5.8530713549775903e-05,
+      "time_order": 2.00004909952006,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.00012130725173498114,
+      "time_refinement_change_over_peak": 5.855422167178048e-05,
+      "time_order": 2.000049151597184,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.0006100271304141369,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.0006044061681672597,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 1,
+      "max_difference_from_dg_over_peak": 0.000665041944619027,
+      "time_refinement_change_over_peak": null,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.00015378413295030757,
+      "time_refinement_change_over_peak": 0.0004562429974641624,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.0001483929981844767,
+      "time_refinement_change_over_peak": 0.00045601316998278296,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 2,
+      "max_difference_from_dg_over_peak": 0.00020884477272820057,
+      "time_refinement_change_over_peak": 0.00045619717189093745,
+      "time_order": null,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 7.396876740095593e-05,
+      "time_refinement_change_over_peak": 0.0001138631440386062,
+      "time_order": 2.0025015744783277,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.00012491300815037354,
+      "time_refinement_change_over_peak": 0.00011380589625642479,
+      "time_order": 2.0025001857766997,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 4,
+      "max_difference_from_dg_over_peak": 0.00011933211138115407,
+      "time_refinement_change_over_peak": 0.00011385170749478313,
+      "time_order": 2.0025015744558226,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 7.473027686305533e-05,
+      "time_refinement_change_over_peak": 2.8441618729502238e-05,
+      "time_order": 2.001225359598774,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.0001240713156439588,
+      "time_refinement_change_over_peak": 2.842733208152648e-05,
+      "time_order": 2.0012246923941186,
+      "passed": true
+    },
+    {
+      "solver": "fem",
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "cells": 64,
+      "subdivisions": 8,
+      "max_difference_from_dg_over_peak": 0.00012247725157621403,
+      "time_refinement_change_over_peak": 2.8438762018856423e-05,
+      "time_order": 2.0012253597042506,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "7ef252078baa2ef14c88ab9e05e34c8e6003c3c4",
+      "file": "slab_pulse_time_refinement.py",
+      "source_sha256": "edeb38c7e6ab13f9677891e6a7f5f1d3c83f20cdd7dc2056d32fa0aa41b0d54d"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "ad21cf32fd2e55e9f140b54f544e81e37bbd7384",
+      "file": "rod.py",
+      "source_sha256": "c969a10aa786a71c7a1fc906cd0ad4ed88b81e7cd1006351ae2f699e08f4dfe1"
+    },
+    {
+      "commit": "8092762ed1a27ca10aff10d0d2b27a64c39c86d9",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "68844aa4b181a5107ce6149e2643e489faf53c173fce80b8b8648a251daf188f"
+    },
+    {
+      "commit": "7ef252078baa2ef14c88ab9e05e34c8e6003c3c4",
+      "file": "dg_subinterval_heat_pulse.py",
+      "source_sha256": "636a5171173ad6b5ff3164f0c34ff8a9704807c2a401b74128e4d3669420b763"
+    },
+    {
+      "commit": "72cba9c7ac0cd78ecbae0dc9f84d89bcd146c17a",
+      "file": "heat_1d.py",
+      "source_sha256": "2534514fcf103dc741782609bdff6818955bf6da67d436a55fbb8b4ad3483499"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src:../TensorSPH/src:../TensorDG python examples/slab_pulse_time_refinement.py"
+}
