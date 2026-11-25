@@ -82,13 +82,37 @@ def measure(n,two_walls=False):
     runs.append(("SPH", harmonic(particle_temp), 2/steps*(mid_phase @ mid_power),
                  (particle_temp[-1]-particle_temp[0]).mean()-dt*mid_power.sum(),heat_error(dt*mid_power),
                  step_balance(particle_temp,dt*mid_power)))
-    return [dict(solver=name, cells=n, steps=steps,
+    reports = [dict(solver=name, cells=n, steps=steps,
                  complex_temperature_error_K=float(np.max(abs(u-avg))),
                  complex_wall_flux_error_W_m2=float(np.max(abs(q-flux))),
                  driven_wall_phase_error_deg=float(abs(np.angle(q[0]/flux[0], deg=True))),
                  heat_balance_J_m2=float(abs(balance)),max_cumulative_wall_heat_error_J_m2=heat,
                  max_step_balance_J_m2=residual)
                  for name,u,q,balance,heat,residual in runs]
+
+    implicit_steps = 8*n
+    grid = np.linspace(0.,period,implicit_steps+1)
+    states,sections = sph.solve_transient_layered_slab(avg.real.copy(),grid,dx,
+                    (lambda t:wall_values(t)[0],lambda t:wall_values(t)[1]),conductivity=np.ones(n),
+                    volumetric_heat_capacity=1.,method="sdirk2",return_x_heat=True)
+    temp,sections = states.numpy(),sections.numpy()
+    boundary = sections[:,[0,-1]]*np.array([1.,-1.])
+    phase = np.exp(-1j*omega*grid)
+    u = (phase[:-1] @ temp[:-1]+phase[1:] @ temp[1:])/implicit_steps
+    q = 2/period*(np.exp(-1j*omega*.5*(grid[1:]+grid[:-1])) @ boundary)
+    qx = wave*(np.cosh(wave*(1-faces))-east*np.cosh(wave*faces))/np.sinh(wave)
+    exact = (np.expm1(1j*omega*grid[1:,None])*qx/(1j*omega)).real
+    section_error = abs(sections.cumsum(0)-exact)
+    reports.append(dict(solver="SPH_SDIRK2",cells=n,steps=implicit_steps,
+                   complex_temperature_error_K=float(abs(u-avg).max()),
+                   complex_wall_flux_error_W_m2=float(abs(q-flux).max()),
+                   driven_wall_phase_error_deg=float(abs(np.angle(q[0]/flux[0],deg=True))),
+                   heat_balance_J_m2=float(abs((temp[-1]-temp[0]).mean()-boundary.sum())),
+                   max_step_balance_J_m2=step_balance(temp,boundary),
+                   max_cumulative_wall_heat_error_J_m2=float(section_error[:,[0,-1]].max()),
+                   max_cumulative_section_heat_error_J_m2=float(section_error.max()),
+                   max_column_balance_J_m2=float(abs(dx*np.diff(temp,axis=0)+np.diff(sections,axis=1)).max())))
+    return reports
 
 
 def main(two_walls=False):
@@ -100,6 +124,10 @@ def main(two_walls=False):
             errors = np.array([row["complex_temperature_error_K"], row["complex_wall_flux_error_W_m2"],
                                row["driven_wall_phase_error_deg"],row["max_cumulative_wall_heat_error_J_m2"]])
             passed = np.isfinite(errors).all() and max(row["heat_balance_J_m2"],row["max_step_balance_J_m2"]) < 1e-11
+            if name=="SPH_SDIRK2":
+                passed &= row["max_column_balance_J_m2"]<1e-11
+                if n==128:
+                    passed &= row["max_cumulative_section_heat_error_J_m2"]<.002
             if name in previous:
                 passed &= (errors < previous[name]/3).all()
             row["meets_absolute_targets"] = bool((errors < [.003, .08, .5, .002]).all())
