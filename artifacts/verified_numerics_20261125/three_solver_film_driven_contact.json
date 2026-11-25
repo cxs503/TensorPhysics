@@ -1,0 +1,3556 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "fvm_flux_relative_error": 0.0007756558366774694,
+      "fvm_max_trace_error_K": 9.160230205254236e-05,
+      "fvm_interface_imbalance_W_m2": 1.9860273225978185e-15,
+      "solver_flux_difference_W_m2": 0.00018428188943503184,
+      "solver_trace_difference_K": 0.001230327631225058,
+      "fem_flux_relative_error": 0.00027951026931272323,
+      "fem_max_trace_error_K": 4.844789473155386e-05,
+      "fem_interface_imbalance_W_m2": 1.2511770486412205e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0012326574357090913,
+      "fem_fvm_flux_difference_W_m2": 0.0010529739534124666,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.0071867713910008,
+        -0.01839208990782503
+      ],
+      "flux_relative_error": 0.0009508425623176045,
+      "flux_phase_error_rad": 0.0003800793005624273,
+      "max_trace_error_K": 0.0011519155415501414,
+      "jump_error_K": 0.0015557527095120395,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00019412342981079618,
+      "fvm_max_trace_error_K": 2.2922205519670094e-05,
+      "fvm_interface_imbalance_W_m2": 1.831026719408895e-15,
+      "solver_flux_difference_W_m2": 4.5977708069349766e-05,
+      "solver_trace_difference_K": 0.0003121158864448862,
+      "fem_flux_relative_error": 6.987032470639278e-05,
+      "fem_max_trace_error_K": 1.2109513426940208e-05,
+      "fem_interface_imbalance_W_m2": 1.7867382328921142e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0003083462929575088,
+      "fem_fvm_flux_difference_W_m2": 0.00026345232650040756,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.0071867713910008,
+        -0.01839208990782503
+      ],
+      "flux_relative_error": 0.00023791354811769134,
+      "flux_phase_error_rad": 9.473074562166522e-05,
+      "max_trace_error_K": 0.0002924023897760307,
+      "jump_error_K": 0.00039509017666588826,
+      "passed": true,
+      "flux_relative_error_order": 1.9987690545436252,
+      "max_trace_error_K_order": 1.978007934798396,
+      "fvm_flux_relative_error_order": 1.9984424063580573,
+      "fvm_max_trace_error_K_order": 1.9986379916375174,
+      "fem_flux_relative_error_order": 2.0001495392079818,
+      "fem_max_trace_error_K_order": 2.0002930785423687
+    },
+    {
+      "fvm_flux_relative_error": 4.8543968786732666e-05,
+      "fvm_max_trace_error_K": 5.731905177525983e-06,
+      "fvm_interface_imbalance_W_m2": 1.0805156823142815e-14,
+      "solver_flux_difference_W_m2": 1.1477509022626027e-05,
+      "solver_trace_difference_K": 7.859052601066805e-05,
+      "fem_flux_relative_error": 1.7467129597101524e-05,
+      "fem_max_trace_error_K": 3.027224783112371e-06,
+      "fem_interface_imbalance_W_m2": 1.0770880041763767e-14,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 7.709105588079963e-05,
+      "fem_fvm_flux_difference_W_m2": 6.587615443160183e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.0071867713910008,
+        -0.01839208990782503
+      ],
+      "flux_relative_error": 5.948550167536316e-05,
+      "flux_phase_error_rad": 2.3641683209908592e-05,
+      "max_trace_error_K": 7.36499099645016e-05,
+      "jump_error_K": 9.953662292730768e-05,
+      "passed": true,
+      "flux_relative_error_order": 1.9998274389894315,
+      "max_trace_error_K_order": 1.989199435633635,
+      "fvm_flux_relative_error_order": 1.9996102870860029,
+      "fvm_max_trace_error_K_order": 1.99965921491691,
+      "fem_flux_relative_error_order": 2.000037297661038,
+      "fem_max_trace_error_K_order": 2.0000731872589443
+    },
+    {
+      "fvm_flux_relative_error": 0.0006417717755354418,
+      "fvm_max_trace_error_K": 0.00016595082162300503,
+      "fvm_interface_imbalance_W_m2": 1.4217791915866692e-15,
+      "solver_flux_difference_W_m2": 0.0001477047137190726,
+      "solver_trace_difference_K": 0.0013415289048324664,
+      "fem_flux_relative_error": 0.0002517221554429012,
+      "fem_max_trace_error_K": 7.339758935897407e-05,
+      "fem_interface_imbalance_W_m2": 8.89926669182284e-16,
+      "fem_jump_error_K": 4.897028353942148e-05,
+      "fem_sph_flux_difference_W_m2": 0.0008327281188140725,
+      "fem_fvm_flux_difference_W_m2": 0.0006880058414464675,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7780343483810933,
+        -0.014207571121132167
+      ],
+      "flux_relative_error": 0.0008244802456836907,
+      "flux_phase_error_rad": 0.0003937354143625802,
+      "max_trace_error_K": 0.001184898125573059,
+      "jump_error_K": 0.0015239325560502388,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00016060140787433195,
+      "fvm_max_trace_error_K": 4.152693261153193e-05,
+      "fvm_interface_imbalance_W_m2": 3.580361673049448e-15,
+      "solver_flux_difference_W_m2": 3.492352304447899e-05,
+      "solver_trace_difference_K": 0.00035373740365398385,
+      "fem_flux_relative_error": 6.292055021511582e-05,
+      "fem_max_trace_error_K": 1.834668526039586e-05,
+      "fem_interface_imbalance_W_m2": 1.2212502552694219e-15,
+      "fem_jump_error_K": 1.2240627683873224e-05,
+      "fem_sph_flux_difference_W_m2": 0.00020632527372405453,
+      "fem_fvm_flux_difference_W_m2": 0.00017212054955496382,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7780343483810933,
+        -0.014207571121132167
+      ],
+      "flux_relative_error": 0.00020377046872574705,
+      "flux_phase_error_rad": 9.67515618847769e-05,
+      "max_trace_error_K": 0.00031440183194342015,
+      "jump_error_K": 0.0004006212995512737,
+      "passed": true,
+      "flux_relative_error_order": 2.0165399422934707,
+      "max_trace_error_K_order": 1.9140814963586155,
+      "fvm_flux_relative_error_order": 1.9985758028102563,
+      "fvm_max_trace_error_K_order": 1.998636556134881,
+      "fem_flux_relative_error_order": 2.000229009850007,
+      "fem_max_trace_error_K_order": 2.000213249107548
+    },
+    {
+      "fvm_flux_relative_error": 4.0160269662534613e-05,
+      "fvm_max_trace_error_K": 1.0384188217365227e-05,
+      "fvm_interface_imbalance_W_m2": 5.0242958677880805e-15,
+      "solver_flux_difference_W_m2": 8.391490421498272e-06,
+      "solver_trace_difference_K": 9.126948797777248e-05,
+      "fem_flux_relative_error": 1.572951435378036e-05,
+      "fem_max_trace_error_K": 4.586502098340205e-06,
+      "fem_interface_imbalance_W_m2": 9.99202227997857e-16,
+      "fem_jump_error_K": 3.0600356830220392e-06,
+      "fem_sph_flux_difference_W_m2": 5.12504982720206e-05,
+      "fem_fvm_flux_difference_W_m2": 4.303759183094919e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7780343483810933,
+        -0.014207571121132167
+      ],
+      "flux_relative_error": 5.052162032019209e-05,
+      "flux_phase_error_rad": 2.391902124056669e-05,
+      "max_trace_error_K": 8.14155923595853e-05,
+      "jump_error_K": 0.00010313382708576999,
+      "passed": true,
+      "flux_relative_error_order": 2.011972170380997,
+      "max_trace_error_K_order": 1.9492325991211759,
+      "fvm_flux_relative_error_order": 1.9996436783164369,
+      "fvm_max_trace_error_K_order": 1.9996588728901599,
+      "fem_flux_relative_error_order": 2.0000571581370457,
+      "fem_max_trace_error_K_order": 2.000053226548267
+    },
+    {
+      "fvm_flux_relative_error": 0.004856876142537548,
+      "fvm_max_trace_error_K": 0.0010578233409120135,
+      "fvm_interface_imbalance_W_m2": 3.1165445441279525e-15,
+      "solver_flux_difference_W_m2": 0.001926332391307378,
+      "solver_trace_difference_K": 0.0020077017917935398,
+      "fem_flux_relative_error": 0.00230347468594003,
+      "fem_max_trace_error_K": 0.0005151227796331948,
+      "fem_interface_imbalance_W_m2": 4.440892098500626e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.01084004786468596,
+      "fem_fvm_flux_difference_W_m2": 0.008997712214767866,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.040219201212939,
+        -0.7499400466678594
+      ],
+      "flux_relative_error": 0.006236777655570865,
+      "flux_phase_error_rad": 0.003521490640120027,
+      "max_trace_error_K": 0.0015342515472137064,
+      "jump_error_K": 0.002550911257183212,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.001216455279222336,
+      "fvm_max_trace_error_K": 0.0002650810799110078,
+      "fvm_interface_imbalance_W_m2": 3.1165445441279525e-15,
+      "solver_flux_difference_W_m2": 0.0004810138894018704,
+      "solver_trace_difference_K": 0.0005163764796343851,
+      "fem_flux_relative_error": 0.00057376699337937,
+      "fem_max_trace_error_K": 0.00012824431324350065,
+      "fem_interface_imbalance_W_m2": 8.005932084973442e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.002710405429212125,
+      "fem_fvm_flux_difference_W_m2": 0.002248568047400727,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.040219201212939,
+        -0.7499400466678594
+      ],
+      "flux_relative_error": 0.0015627115136761782,
+      "flux_phase_error_rad": 0.0008894567949886477,
+      "max_trace_error_K": 0.00038781509398772636,
+      "jump_error_K": 0.0006477886252925672,
+      "passed": true,
+      "flux_relative_error_order": 1.9967493546056032,
+      "max_trace_error_K_order": 1.9840941781844799,
+      "fvm_flux_relative_error_order": 1.9973454128139856,
+      "fvm_max_trace_error_K_order": 1.9965931069320593,
+      "fem_flux_relative_error_order": 2.005274860638032,
+      "fem_max_trace_error_K_order": 2.006021486366398
+    },
+    {
+      "fvm_flux_relative_error": 0.0003042521384610031,
+      "fvm_max_trace_error_K": 6.630903781920959e-05,
+      "fvm_interface_imbalance_W_m2": 5.617333549722722e-15,
+      "solver_flux_difference_W_m2": 0.00012000539694792496,
+      "solver_trace_difference_K": 0.00013129172357498968,
+      "fem_flux_relative_error": 0.00014331045390900403,
+      "fem_max_trace_error_K": 3.2027588978805516e-05,
+      "fem_interface_imbalance_W_m2": 4.076197102228689e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.000677512166049522,
+      "fem_fvm_flux_difference_W_m2": 0.0005620861621319805,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.040219201212939,
+        -0.7499400466678594
+      ],
+      "flux_relative_error": 0.00039083987415197474,
+      "flux_phase_error_rad": 0.00022317706853062887,
+      "max_trace_error_K": 9.743051998089677e-05,
+      "jump_error_K": 0.00016357871983538913,
+      "passed": true,
+      "flux_relative_error_order": 1.9994019062442998,
+      "max_trace_error_K_order": 1.9929232845414655,
+      "fvm_flux_relative_error_order": 1.999343974990834,
+      "fvm_max_trace_error_K_order": 1.9991562759658292,
+      "fem_flux_relative_error_order": 2.0013211256494516,
+      "fem_max_trace_error_K_order": 2.0015077516740587
+    },
+    {
+      "fvm_flux_relative_error": 0.004171510629256981,
+      "fvm_max_trace_error_K": 0.001349353262926539,
+      "fvm_interface_imbalance_W_m2": 1.1102230246251565e-16,
+      "solver_flux_difference_W_m2": 0.0014304706988632118,
+      "solver_trace_difference_K": 0.0018157271286914332,
+      "fem_flux_relative_error": 0.002302629525273603,
+      "fem_max_trace_error_K": 0.0007390701683059526,
+      "fem_interface_imbalance_W_m2": 1.2262814116578437e-15,
+      "fem_jump_error_K": 0.0005016632191436083,
+      "fem_sph_flux_difference_W_m2": 0.006990375002940078,
+      "fem_fvm_flux_difference_W_m2": 0.0055729458381420975,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.5842323423212076,
+        -0.6466201650527572
+      ],
+      "flux_relative_error": 0.0057709477334262835,
+      "flux_phase_error_rad": 0.0013123250677219023,
+      "max_trace_error_K": 0.0010739021229531885,
+      "jump_error_K": 0.0019024975881199828,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0010454660622729556,
+      "fvm_max_trace_error_K": 0.00033831522443751637,
+      "fvm_interface_imbalance_W_m2": 2.4650951625709315e-15,
+      "solver_flux_difference_W_m2": 0.0003432895215483051,
+      "solver_trace_difference_K": 0.0004793026009325455,
+      "fem_flux_relative_error": 0.0005738815087192217,
+      "fem_max_trace_error_K": 0.00018410860294524543,
+      "fem_interface_imbalance_W_m2": 5.661048867003676e-16,
+      "fem_jump_error_K": 0.00012502890365620898,
+      "fem_sph_flux_difference_W_m2": 0.0017329748880946642,
+      "fem_fvm_flux_difference_W_m2": 0.0013935303225037228,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.5842323423212076,
+        -0.6466201650527572
+      ],
+      "flux_relative_error": 0.0014278671592157907,
+      "flux_phase_error_rad": 0.00032509542774121757,
+      "max_trace_error_K": 0.00026905903135271555,
+      "jump_error_K": 0.00047177488343992034,
+      "passed": true,
+      "flux_relative_error_order": 2.0149464994815984,
+      "max_trace_error_K_order": 1.996867871081072,
+      "fvm_flux_relative_error_order": 1.996423691296623,
+      "fvm_max_trace_error_K_order": 1.995828091636578,
+      "fem_flux_relative_error_order": 2.00445751710093,
+      "fem_max_trace_error_K_order": 2.005154300384572
+    },
+    {
+      "fvm_flux_relative_error": 0.00026152789471323796,
+      "fvm_max_trace_error_K": 8.463975447564445e-05,
+      "fvm_interface_imbalance_W_m2": 1.2236652343360226e-14,
+      "solver_flux_difference_W_m2": 8.367549436481006e-05,
+      "solver_trace_difference_K": 0.00012430522099823337,
+      "fem_flux_relative_error": 0.00014335934600611416,
+      "fem_max_trace_error_K": 4.598596163505699e-05,
+      "fem_interface_imbalance_W_m2": 1.2412670766236366e-15,
+      "fem_jump_error_K": 3.123303606698812e-05,
+      "fem_sph_flux_difference_W_m2": 0.00043091333994714254,
+      "fem_fvm_flux_difference_W_m2": 0.000348400373786423,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.5842323423212076,
+        -0.6466201650527572
+      ],
+      "flux_relative_error": 0.00035433082469968824,
+      "flux_phase_error_rad": 7.967310099425112e-05,
+      "max_trace_error_K": 6.734663719750073e-05,
+      "jump_error_K": 0.00011830348516372336,
+      "passed": true,
+      "flux_relative_error_order": 2.010692883303137,
+      "max_trace_error_K_order": 1.9982449188617069,
+      "fvm_flux_relative_error_order": 1.9991094917252612,
+      "fvm_max_trace_error_K_order": 1.9989607533681932,
+      "fem_flux_relative_error_order": 2.0011169283984254,
+      "fem_max_trace_error_K_order": 2.0012916271291354
+    },
+    {
+      "fvm_flux_relative_error": 0.0010461855246689017,
+      "fvm_max_trace_error_K": 5.336192337786086e-05,
+      "fvm_interface_imbalance_W_m2": 6.2803698347351005e-15,
+      "solver_flux_difference_W_m2": 0.0002056045779315814,
+      "solver_trace_difference_K": 0.0011011452665817788,
+      "fem_flux_relative_error": 0.00045762405261948414,
+      "fem_max_trace_error_K": 3.2074355554643357e-05,
+      "fem_interface_imbalance_W_m2": 1.1801832636420706e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0012111980316284964,
+      "fem_fvm_flux_difference_W_m2": 0.0010057045175837155,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.6237850616353156,
+        -0.2418531840241107
+      ],
+      "flux_relative_error": 0.0013531508856145897,
+      "flux_phase_error_rad": 0.00018424182156507533,
+      "max_trace_error_K": 0.0010678265866972522,
+      "jump_error_K": 0.0015562940187794118,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00026182357836400133,
+      "fvm_max_trace_error_K": 1.3353895496270023e-05,
+      "fvm_interface_imbalance_W_m2": 7.588599744428075e-15,
+      "solver_flux_difference_W_m2": 5.0652416742497555e-05,
+      "solver_trace_difference_K": 0.00027805907887538364,
+      "fem_flux_relative_error": 0.00011438223222165403,
+      "fem_max_trace_error_K": 8.016108917785046e-06,
+      "fem_interface_imbalance_W_m2": 1.7798229048217483e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.00030221653862529563,
+      "fem_fvm_flux_difference_W_m2": 0.00025159604987013594,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.6237850616353156,
+        -0.2418531840241107
+      ],
+      "flux_relative_error": 0.0003374376170963332,
+      "flux_phase_error_rad": 4.60719575424915e-05,
+      "max_trace_error_K": 0.000269743870047314,
+      "jump_error_K": 0.0003938336218760427,
+      "passed": true,
+      "flux_relative_error_order": 2.0036300012610493,
+      "max_trace_error_K_order": 1.9850152948876723,
+      "fvm_flux_relative_error_order": 1.998471784437574,
+      "fvm_max_trace_error_K_order": 1.9985500127055875,
+      "fem_flux_relative_error_order": 2.000299916059822,
+      "fem_max_trace_error_K_order": 2.00044626244358
+    },
+    {
+      "fvm_flux_relative_error": 6.547324464572887e-05,
+      "fvm_max_trace_error_K": 3.339313860459046e-06,
+      "fvm_interface_imbalance_W_m2": 2.5433559371059917e-14,
+      "solver_flux_difference_W_m2": 1.2562121411623547e-05,
+      "solver_trace_difference_K": 6.98538059296225e-05,
+      "fem_flux_relative_error": 2.8594073135965055e-05,
+      "fem_max_trace_error_K": 2.003872371257089e-06,
+      "fem_interface_imbalance_W_m2": 1.5063480468199823e-14,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 7.546322376129849e-05,
+      "fem_fvm_flux_difference_W_m2": 6.290965027650922e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.6237850616353156,
+        -0.2418531840241107
+      ],
+      "flux_relative_error": 8.422471368095713e-05,
+      "flux_phase_error_rad": 1.1518196595432332e-05,
+      "max_trace_error_K": 6.777773861417251e-05,
+      "jump_error_K": 9.904496772107363e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.0023052882378303,
+      "max_trace_error_K_order": 1.9927067671071086,
+      "fvm_flux_relative_error_order": 1.9996176429753,
+      "fvm_max_trace_error_K_order": 1.999637052192715,
+      "fem_flux_relative_error_order": 2.000074918682994,
+      "fem_max_trace_error_K_order": 2.0001114863963316
+    },
+    {
+      "fvm_flux_relative_error": 0.000900220997253659,
+      "fvm_max_trace_error_K": 0.00011063903859591109,
+      "fvm_interface_imbalance_W_m2": 4.490574227168739e-15,
+      "solver_flux_difference_W_m2": 0.00016631383510950083,
+      "solver_trace_difference_K": 0.0012509990987409777,
+      "fem_flux_relative_error": 0.0004027319369559051,
+      "fem_max_trace_error_K": 4.993652636042627e-05,
+      "fem_interface_imbalance_W_m2": 5.3854400208818836e-15,
+      "fem_jump_error_K": 5.540365923125608e-05,
+      "fem_sph_flux_difference_W_m2": 0.0008828513363030393,
+      "fem_fvm_flux_difference_W_m2": 0.000716656859468824,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.513064456988385,
+        -0.1989247261018685
+      ],
+      "flux_relative_error": 0.001202017257073653,
+      "flux_phase_error_rad": 0.00019168820899801006,
+      "max_trace_error_K": 0.0011436452550015693,
+      "jump_error_K": 0.0015454315104219444,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0002252724972160244,
+      "fvm_max_trace_error_K": 2.7692370795121168e-05,
+      "fvm_interface_imbalance_W_m2": 1.2505665694398903e-14,
+      "solver_flux_difference_W_m2": 3.926794569861441e-05,
+      "solver_trace_difference_K": 0.00032843192712418863,
+      "fem_flux_relative_error": 0.0001006632602018099,
+      "fem_max_trace_error_K": 1.2480701530503462e-05,
+      "fem_interface_imbalance_W_m2": 1.7798229048217483e-15,
+      "fem_jump_error_K": 1.3848201380531781e-05,
+      "fem_sph_flux_difference_W_m2": 0.00021851012260886956,
+      "fem_fvm_flux_difference_W_m2": 0.00017927322719550658,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.513064456988385,
+        -0.1989247261018685
+      ],
+      "flux_relative_error": 0.00029652120766277153,
+      "flux_phase_error_rad": 4.718830725444768e-05,
+      "max_trace_error_K": 0.0003015694034506815,
+      "jump_error_K": 0.0004049071093948159,
+      "passed": true,
+      "flux_relative_error_order": 2.0192504112340632,
+      "max_trace_error_K_order": 1.9230776462939818,
+      "fvm_flux_relative_error_order": 1.9986080249397542,
+      "fvm_max_trace_error_K_order": 1.9983000493789538,
+      "fem_flux_relative_error_order": 2.0002826550927364,
+      "fem_max_trace_error_K_order": 2.000396440063235
+    },
+    {
+      "fvm_flux_relative_error": 5.633172076267084e-05,
+      "fvm_max_trace_error_K": 6.925133963412101e-06,
+      "fvm_interface_imbalance_W_m2": 5.329070518200751e-15,
+      "solver_flux_difference_W_m2": 9.451351230103092e-06,
+      "solver_trace_difference_K": 8.455007548440252e-05,
+      "fem_flux_relative_error": 2.51645835821658e-05,
+      "fem_max_trace_error_K": 3.119961285878804e-06,
+      "fem_interface_imbalance_W_m2": 3.3306690738754696e-16,
+      "fem_jump_error_K": 3.461880932437302e-06,
+      "fem_sph_flux_difference_W_m2": 5.4268688764465515e-05,
+      "fem_fvm_flux_difference_W_m2": 4.482513091218182e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.513064456988385,
+        -0.1989247261018685
+      ],
+      "flux_relative_error": 7.347958768402288e-05,
+      "flux_phase_error_rad": 1.1672620068080412e-05,
+      "max_trace_error_K": 7.783312454331075e-05,
+      "jump_error_K": 0.00010402884690258144,
+      "passed": true,
+      "flux_relative_error_order": 2.012719856087406,
+      "max_trace_error_K_order": 1.954033884316793,
+      "fvm_flux_relative_error_order": 1.999651743088099,
+      "fvm_max_trace_error_K_order": 1.9995746859934318,
+      "fem_flux_relative_error_order": 2.000070598812599,
+      "fem_max_trace_error_K_order": 2.0000989966508063
+    },
+    {
+      "fvm_flux_relative_error": 0.0064688513765695345,
+      "fvm_max_trace_error_K": 0.0008309768708421097,
+      "fvm_interface_imbalance_W_m2": 1.7798229048217483e-15,
+      "solver_flux_difference_W_m2": 0.0017343759176017411,
+      "solver_trace_difference_K": 0.0014585539060662834,
+      "fem_flux_relative_error": 0.003528705934455388,
+      "fem_max_trace_error_K": 0.0004978349411746964,
+      "fem_interface_imbalance_W_m2": 1.27675647831893e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.00919700671952263,
+      "fem_fvm_flux_difference_W_m2": 0.007485465897890892,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.46135885160208523,
+        -0.5967679198410637
+      ],
+      "flux_relative_error": 0.008706483882873624,
+      "flux_phase_error_rad": 0.0056406147829608805,
+      "max_trace_error_K": 0.0016393033843532861,
+      "jump_error_K": 0.002268439852015687,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.001620481990972233,
+      "fvm_max_trace_error_K": 0.00020796999588738955,
+      "fvm_interface_imbalance_W_m2": 9.155133597044475e-16,
+      "solver_flux_difference_W_m2": 0.00043343264837152203,
+      "solver_trace_difference_K": 0.0003618712219346711,
+      "fem_flux_relative_error": 0.0008797637886816849,
+      "fem_max_trace_error_K": 0.00012410432386951879,
+      "fem_interface_imbalance_W_m2": 1.9460597736562618e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.002299478472192966,
+      "fem_fvm_flux_difference_W_m2": 0.0018713757262026661,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.46135885160208523,
+        -0.5967679198410637
+      ],
+      "flux_relative_error": 0.002180156224566088,
+      "flux_phase_error_rad": 0.0014154657922694177,
+      "max_trace_error_K": 0.00041263043625980165,
+      "jump_error_K": 0.0005678811072086317,
+      "passed": true,
+      "flux_relative_error_order": 1.9976586848098394,
+      "max_trace_error_K_order": 1.9901607316952568,
+      "fvm_flux_relative_error_order": 1.997086579333524,
+      "fvm_max_trace_error_K_order": 1.9984329182045169,
+      "fem_flux_relative_error_order": 2.00395108193409,
+      "fem_max_trace_error_K_order": 2.004114110538268
+    },
+    {
+      "fvm_flux_relative_error": 0.000405323110696349,
+      "fvm_max_trace_error_K": 5.200631883661304e-05,
+      "fvm_interface_imbalance_W_m2": 1.1102230246251565e-16,
+      "solver_flux_difference_W_m2": 0.00010819345829082522,
+      "solver_trace_difference_K": 9.034986961653556e-05,
+      "fem_flux_relative_error": 0.00021979012004816478,
+      "fem_max_trace_error_K": 3.1003898882743705e-05,
+      "fem_interface_imbalance_W_m2": 1.4054300946555646e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.000574737541661662,
+      "fem_fvm_flux_difference_W_m2": 0.00046784266647573164,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.46135885160208523,
+        -0.5967679198410637
+      ],
+      "flux_relative_error": 0.0005450739711894604,
+      "flux_phase_error_rad": 0.00035417248425666427,
+      "max_trace_error_K": 0.0001034400286519857,
+      "jump_error_K": 0.00014221504641431,
+      "passed": true,
+      "flux_relative_error_order": 1.999907584323336,
+      "max_trace_error_K_order": 1.9960556606942275,
+      "fvm_flux_relative_error_order": 1.9992786451617894,
+      "fvm_max_trace_error_K_order": 1.9996165754399777,
+      "fem_flux_relative_error_order": 2.000989684678049,
+      "fem_max_trace_error_K_order": 2.0010318231584914
+    },
+    {
+      "fvm_flux_relative_error": 0.005998820479420502,
+      "fvm_max_trace_error_K": 0.001177783463875448,
+      "fvm_interface_imbalance_W_m2": 1.6653345369377348e-15,
+      "solver_flux_difference_W_m2": 0.0013580963175801367,
+      "solver_trace_difference_K": 0.00178831325528138,
+      "fem_flux_relative_error": 0.0034367260789532105,
+      "fem_max_trace_error_K": 0.0007087100248107951,
+      "fem_interface_imbalance_W_m2": 1.0448048107080504e-15,
+      "fem_jump_error_K": 0.00046846014981628695,
+      "fem_sph_flux_difference_W_m2": 0.006483916365480936,
+      "fem_fvm_flux_difference_W_m2": 0.005127934898259794,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.20757243342140705,
+        -0.5041828689293244
+      ],
+      "flux_relative_error": 0.008476177010469042,
+      "flux_phase_error_rad": 0.003679288338442926,
+      "max_trace_error_K": 0.0011884778327986639,
+      "jump_error_K": 0.0019822877052517746,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0015039557879759139,
+      "fvm_max_trace_error_K": 0.0002951724143760767,
+      "fvm_interface_imbalance_W_m2": 9.930136612989092e-16,
+      "solver_flux_difference_W_m2": 0.00032523741064931547,
+      "solver_trace_difference_K": 0.00046589640871930665,
+      "fem_flux_relative_error": 0.0008570463088383691,
+      "fem_max_trace_error_K": 0.0001767395507686778,
+      "fem_interface_imbalance_W_m2": 4.847302891456678e-16,
+      "fem_jump_error_K": 0.00011682398684520903,
+      "fem_sph_flux_difference_W_m2": 0.0016074303705569425,
+      "fem_fvm_flux_difference_W_m2": 0.0012829028746946594,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.20757243342140705,
+        -0.5041828689293244
+      ],
+      "flux_relative_error": 0.002096486051383919,
+      "flux_phase_error_rad": 0.0009073118241166505,
+      "max_trace_error_K": 0.0002963297776964514,
+      "jump_error_K": 0.0005051179704225259,
+      "passed": true,
+      "flux_relative_error_order": 2.0154404847564025,
+      "max_trace_error_K_order": 2.003839481962006,
+      "fvm_flux_relative_error_order": 1.9959167015849828,
+      "fvm_max_trace_error_K_order": 1.9964445189387081,
+      "fem_flux_relative_error_order": 2.003589802839306,
+      "fem_max_trace_error_K_order": 2.0035705340720638
+    },
+    {
+      "fvm_flux_relative_error": 0.00037625402060757583,
+      "fvm_max_trace_error_K": 7.38383361552387e-05,
+      "fvm_interface_imbalance_W_m2": 8.042797661766892e-15,
+      "solver_flux_difference_W_m2": 7.890406719943942e-05,
+      "solver_trace_difference_K": 0.00011976515274330501,
+      "fem_flux_relative_error": 0.0002141280043642543,
+      "fem_max_trace_error_K": 4.415746879411029e-05,
+      "fem_interface_imbalance_W_m2": 2.2713830885661996e-15,
+      "fem_jump_error_K": 2.918778939548904e-05,
+      "fem_sph_flux_difference_W_m2": 0.0003994415225085791,
+      "fem_fvm_flux_difference_W_m2": 0.00032078251020657537,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.20757243342140705,
+        -0.5041828689293244
+      ],
+      "flux_relative_error": 0.0005197806875813144,
+      "flux_phase_error_rad": 0.0002236031608355429,
+      "max_trace_error_K": 7.377379559519529e-05,
+      "jump_error_K": 0.00012813203298633243,
+      "passed": true,
+      "flux_relative_error_order": 2.0119982948130626,
+      "max_trace_error_K_order": 2.006023239622432,
+      "fvm_flux_relative_error_order": 1.9989832529645173,
+      "fvm_max_trace_error_K_order": 1.9991159499099798,
+      "fem_flux_relative_error_order": 2.000899671215642,
+      "fem_max_trace_error_K_order": 2.000895541189982
+    },
+    {
+      "fvm_flux_relative_error": 0.0010802326797587705,
+      "fvm_max_trace_error_K": 0.00014955260776078217,
+      "fvm_interface_imbalance_W_m2": 4.021398830883446e-15,
+      "solver_flux_difference_W_m2": 0.00026425955076960725,
+      "solver_trace_difference_K": 0.001240787688002661,
+      "fem_flux_relative_error": 0.0004806045781054501,
+      "fem_max_trace_error_K": 9.463683268095554e-05,
+      "fem_interface_imbalance_W_m2": 3.3306690738754696e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0015818545289148882,
+      "fem_fvm_flux_difference_W_m2": 0.0013176908312753973,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7992582604984363,
+        -0.2720698815605274
+      ],
+      "flux_relative_error": 0.0013930474096974022,
+      "flux_phase_error_rad": 0.00010380425199792894,
+      "max_trace_error_K": 0.0011133112306200442,
+      "jump_error_K": 0.0015585908083461672,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00027034448558819986,
+      "fvm_max_trace_error_K": 3.7417139552853713e-05,
+      "fvm_interface_imbalance_W_m2": 1.7763568394002505e-15,
+      "solver_flux_difference_W_m2": 6.608992574552396e-05,
+      "solver_trace_difference_K": 0.00031434551484864885,
+      "fem_flux_relative_error": 0.00012012819780942882,
+      "fem_max_trace_error_K": 2.3652357711128445e-05,
+      "fem_interface_imbalance_W_m2": 9.485749680535094e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.000395718133467673,
+      "fem_fvm_flux_difference_W_m2": 0.00032964521528543135,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7992582604984363,
+        -0.2720698815605274
+      ],
+      "flux_relative_error": 0.0003485880637678964,
+      "flux_phase_error_rad": 2.5590373703351298e-05,
+      "max_trace_error_K": 0.00028242025283919454,
+      "jump_error_K": 0.0003955733557247694,
+      "passed": true,
+      "flux_relative_error_order": 1.9986492829774187,
+      "max_trace_error_K_order": 1.9789415046898895,
+      "fvm_flux_relative_error_order": 1.9984712650811194,
+      "fvm_max_trace_error_K_order": 1.998881889601986,
+      "fem_flux_relative_error_order": 2.000275555230872,
+      "fem_max_trace_error_K_order": 2.0004177888967063
+    },
+    {
+      "fvm_flux_relative_error": 6.760404230597946e-05,
+      "fvm_max_trace_error_K": 9.356098934682288e-06,
+      "fvm_interface_imbalance_W_m2": 7.944109290391274e-15,
+      "solver_flux_difference_W_m2": 1.6518277130831758e-05,
+      "solver_trace_difference_K": 7.910013333665737e-05,
+      "fem_flux_relative_error": 3.0030616694601495e-05,
+      "fem_max_trace_error_K": 5.912661627106125e-06,
+      "fem_interface_imbalance_W_m2": 2.288783399261119e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 9.894004270070766e-05,
+      "fem_fvm_flux_difference_W_m2": 8.242523382091606e-05,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7992582604984363,
+        -0.2720698815605274
+      ],
+      "flux_relative_error": 8.716114966500522e-05,
+      "flux_phase_error_rad": 6.350216379277852e-06,
+      "max_trace_error_K": 7.111337456520266e-05,
+      "jump_error_K": 9.96265147846376e-05,
+      "passed": true,
+      "flux_relative_error_order": 1.9997660390481424,
+      "max_trace_error_K_order": 1.9896507267793115,
+      "fvm_flux_relative_error_order": 1.9996175105365055,
+      "fvm_max_trace_error_K_order": 1.9997202499021358,
+      "fem_flux_relative_error_order": 2.00006882919597,
+      "fem_max_trace_error_K_order": 2.000104379994326
+    },
+    {
+      "fvm_flux_relative_error": 0.0009176610048343498,
+      "fvm_max_trace_error_K": 0.00025542644723007204,
+      "fvm_interface_imbalance_W_m2": 2.673771110915334e-15,
+      "solver_flux_difference_W_m2": 0.0002156821254239416,
+      "solver_trace_difference_K": 0.0013035537831668736,
+      "fem_flux_relative_error": 0.0004082618183172408,
+      "fem_max_trace_error_K": 0.00013688383639625087,
+      "fem_interface_imbalance_W_m2": 1.6011864169946884e-15,
+      "fem_jump_error_K": 7.324745021026395e-05,
+      "fem_sph_flux_difference_W_m2": 0.0011670448176375095,
+      "fem_fvm_flux_difference_W_m2": 0.0009514326948008316,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.6793696212670484,
+        -0.23125943331343005
+      ],
+      "flux_relative_error": 0.0012180299445517587,
+      "flux_phase_error_rad": 0.0001060868227410338,
+      "max_trace_error_K": 0.0010587027116919767,
+      "jump_error_K": 0.0014403715538839007,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00022963039530095932,
+      "fvm_max_trace_error_K": 6.390868039629022e-05,
+      "fvm_interface_imbalance_W_m2": 8.906729185356879e-15,
+      "solver_flux_difference_W_m2": 5.1451646341117765e-05,
+      "solver_trace_difference_K": 0.00034479317401636477,
+      "fem_flux_relative_error": 0.00010205146464693386,
+      "fem_max_trace_error_K": 3.421427724328703e-05,
+      "fem_interface_imbalance_W_m2": 1.1102230246251565e-16,
+      "fem_jump_error_K": 1.830935257787637e-05,
+      "fem_sph_flux_difference_W_m2": 0.0002894409192282607,
+      "fem_fvm_flux_difference_W_m2": 0.00023800267874905844,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.6793696212670484,
+        -0.23125943331343005
+      ],
+      "flux_relative_error": 0.00030129012974549284,
+      "flux_phase_error_rad": 2.590514284326652e-05,
+      "max_trace_error_K": 0.0002834216671927223,
+      "jump_error_K": 0.00038023022597226766,
+      "passed": true,
+      "flux_relative_error_order": 2.0153242853134175,
+      "max_trace_error_K_order": 1.9012755715647338,
+      "fvm_flux_relative_error_order": 1.9986476842108059,
+      "fvm_max_trace_error_K_order": 1.9988241078986209,
+      "fem_flux_relative_error_order": 2.0001977612259663,
+      "fem_max_trace_error_K_order": 2.000281722712958
+    },
+    {
+      "fvm_flux_relative_error": 5.7421063174023126e-05,
+      "fvm_max_trace_error_K": 1.5980428513156785e-05,
+      "fvm_interface_imbalance_W_m2": 5.333694441429199e-15,
+      "solver_flux_difference_W_m2": 1.2443689790091699e-05,
+      "solver_trace_difference_K": 8.911900350582665e-05,
+      "fem_flux_relative_error": 2.5511992818334103e-05,
+      "fem_max_trace_error_K": 8.553152096135087e-06,
+      "fem_interface_imbalance_W_m2": 7.458352349529044e-15,
+      "fem_jump_error_K": 4.5771814552826474e-06,
+      "fem_sph_flux_difference_W_m2": 7.19504203577622e-05,
+      "fem_fvm_flux_difference_W_m2": 5.950971478137936e-05,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.6793696212670484,
+        -0.23125943331343005
+      ],
+      "flux_relative_error": 7.475257074698231e-05,
+      "flux_phase_error_rad": 6.391473214450382e-06,
+      "max_trace_error_K": 7.375774809414314e-05,
+      "jump_error_K": 9.809767911210483e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.0109583113893414,
+      "max_trace_error_K_order": 1.9420835400311087,
+      "fvm_flux_relative_error_order": 1.999661670719326,
+      "fvm_max_trace_error_K_order": 1.9997058040615747,
+      "fem_flux_relative_error_order": 2.0000493864448257,
+      "fem_max_trace_error_K_order": 2.000070371586144
+    },
+    {
+      "fvm_flux_relative_error": 0.004445261544631765,
+      "fvm_max_trace_error_K": 0.0008421654308680977,
+      "fvm_interface_imbalance_W_m2": 2.220446049250313e-16,
+      "solver_flux_difference_W_m2": 0.001101352495674942,
+      "solver_trace_difference_K": 0.0022269018634405446,
+      "fem_flux_relative_error": 0.0015526628056465772,
+      "fem_max_trace_error_K": 0.0002914592154452562,
+      "fem_interface_imbalance_W_m2": 7.447602459741819e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.007436030500275101,
+      "fem_fvm_flux_difference_W_m2": 0.006389587092737458,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7660345668010187,
+        -0.7621592465649166
+      ],
+      "flux_relative_error": 0.005384276390647159,
+      "flux_phase_error_rad": 0.004351873860467549,
+      "max_trace_error_K": 0.0014686884433650395,
+      "jump_error_K": 0.0024368325857458024,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0011120322841020056,
+      "fvm_max_trace_error_K": 0.00021094190112324923,
+      "fvm_interface_imbalance_W_m2": 7.106294666405892e-15,
+      "solver_flux_difference_W_m2": 0.00027392109382555767,
+      "solver_trace_difference_K": 0.0005845454361358942,
+      "fem_flux_relative_error": 0.00038724698532679265,
+      "fem_max_trace_error_K": 7.28215396327972e-05,
+      "fem_interface_imbalance_W_m2": 2.6668472207145996e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0018590029928295044,
+      "fem_fvm_flux_difference_W_m2": 0.0015968011414521962,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7660345668010187,
+        -0.7621592465649166
+      ],
+      "flux_relative_error": 0.00134772254063315,
+      "flux_phase_error_rad": 0.0010949204810626158,
+      "max_trace_error_K": 0.0003889889338779991,
+      "jump_error_K": 0.0006346349751994281,
+      "passed": true,
+      "flux_relative_error_order": 1.9982289541322875,
+      "max_trace_error_K_order": 1.9167273672542597,
+      "fvm_flux_relative_error_order": 1.9990696325559847,
+      "fvm_max_trace_error_K_order": 1.9972579591352302,
+      "fem_flux_relative_error_order": 2.0034186383134265,
+      "fem_max_trace_error_K_order": 2.0008568694671993
+    },
+    {
+      "fvm_flux_relative_error": 0.00027805067001774843,
+      "fvm_max_trace_error_K": 5.2760115692303336e-05,
+      "fvm_interface_imbalance_W_m2": 7.108895957933346e-15,
+      "solver_flux_difference_W_m2": 6.828360336401791e-05,
+      "solver_trace_difference_K": 0.00014971786571984708,
+      "fem_flux_relative_error": 9.675449990467473e-05,
+      "fem_max_trace_error_K": 1.820271506440574e-05,
+      "fem_interface_imbalance_W_m2": 5.329070518200751e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.00046476225153637806,
+      "fem_fvm_flux_difference_W_m2": 0.0003991607495466176,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7660345668010187,
+        -0.7621592465649166
+      ],
+      "flux_relative_error": 0.0003370770384382528,
+      "flux_phase_error_rad": 0.00027445981042501394,
+      "max_trace_error_K": 0.00010019408936303035,
+      "jump_error_K": 0.000162018578249112,
+      "passed": true,
+      "flux_relative_error_order": 1.999373255535295,
+      "max_trace_error_K_order": 1.9569317096343988,
+      "fvm_flux_relative_error_order": 1.9997789537311594,
+      "fvm_max_trace_error_K_order": 1.9993260647239928,
+      "fem_flux_relative_error_order": 2.0008533423609647,
+      "fem_max_trace_error_K_order": 2.0002115886525647
+    },
+    {
+      "fvm_flux_relative_error": 0.0031551036899600004,
+      "fvm_max_trace_error_K": 0.0008504380277683492,
+      "fvm_interface_imbalance_W_m2": 4.440892098500626e-16,
+      "solver_flux_difference_W_m2": 0.0006508091434883802,
+      "solver_trace_difference_K": 0.0018321120237311803,
+      "fem_flux_relative_error": 0.0012209240092884704,
+      "fem_max_trace_error_K": 0.00028563907537094367,
+      "fem_interface_imbalance_W_m2": 4.47545209131181e-16,
+      "fem_jump_error_K": 0.00022029147218399902,
+      "fem_sph_flux_difference_W_m2": 0.003752468113906035,
+      "fem_fvm_flux_difference_W_m2": 0.0031082008611463758,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.3895667401622968,
+        -0.6075510166127255
+      ],
+      "flux_relative_error": 0.004032085830742413,
+      "flux_phase_error_rad": 0.002450784255370222,
+      "max_trace_error_K": 0.0010768912540885332,
+      "jump_error_K": 0.0014783735270473743,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0007892971771268549,
+      "fvm_max_trace_error_K": 0.0002129607468485471,
+      "fvm_interface_imbalance_W_m2": 3.580361673049448e-15,
+      "solver_flux_difference_W_m2": 0.00015294480751579833,
+      "solver_trace_difference_K": 0.0005064419450073034,
+      "fem_flux_relative_error": 0.00030449841199832857,
+      "fem_max_trace_error_K": 7.136086969176712e-05,
+      "fem_interface_imbalance_W_m2": 3.360603099725814e-15,
+      "fem_jump_error_K": 5.494068668195973e-05,
+      "fem_sph_flux_difference_W_m2": 0.0009274620754958966,
+      "fem_fvm_flux_difference_W_m2": 0.0007767792741629645,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.3895667401622968,
+        -0.6075510166127255
+      ],
+      "flux_relative_error": 0.0009937847995937896,
+      "flux_phase_error_rad": 0.0006026675833601937,
+      "max_trace_error_K": 0.00030876319904898,
+      "jump_error_K": 0.0003957048597277222,
+      "passed": true,
+      "flux_relative_error_order": 2.0205209692481074,
+      "max_trace_error_K_order": 1.8022998563313621,
+      "fvm_flux_relative_error_order": 1.999046924369774,
+      "fvm_max_trace_error_K_order": 1.9976185732825176,
+      "fem_flux_relative_error_order": 2.003466799898102,
+      "fem_max_trace_error_K_order": 2.0009882503305865
+    },
+    {
+      "fvm_flux_relative_error": 0.00019735577247132014,
+      "fvm_max_trace_error_K": 5.3261850971674044e-05,
+      "fvm_interface_imbalance_W_m2": 2.581835519377164e-14,
+      "solver_flux_difference_W_m2": 3.695179743568614e-05,
+      "solver_trace_difference_K": 0.0001338879065377022,
+      "fem_flux_relative_error": 7.6078896750841e-05,
+      "fem_max_trace_error_K": 1.7837186847400798e-05,
+      "fem_interface_imbalance_W_m2": 9.43689570931383e-16,
+      "fem_jump_error_K": 1.3726924886300778e-05,
+      "fem_sph_flux_difference_W_m2": 0.0002303289248946875,
+      "fem_fvm_flux_difference_W_m2": 0.00019417713219048278,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "torch",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.3895667401622968,
+        -0.6075510166127255
+      ],
+      "flux_relative_error": 0.00024624625750299716,
+      "flux_phase_error_rad": 0.0001482337728686679,
+      "max_trace_error_K": 8.355164927236614e-05,
+      "jump_error_K": 0.00010333319168008087,
+      "passed": true,
+      "flux_relative_error_order": 2.012831676972497,
+      "max_trace_error_K_order": 1.8857605986907584,
+      "fvm_flux_relative_error_order": 1.9997698721979489,
+      "fvm_max_trace_error_K_order": 1.9994130643711656,
+      "fem_flux_relative_error_order": 2.0008664739048276,
+      "fem_max_trace_error_K_order": 2.0002450960995595
+    },
+    {
+      "fvm_flux_relative_error": 0.0007756558366774694,
+      "fvm_max_trace_error_K": 9.160230205254236e-05,
+      "fvm_interface_imbalance_W_m2": 1.9860273225978185e-15,
+      "solver_flux_difference_W_m2": 0.00018428188943425867,
+      "solver_trace_difference_K": 0.0012303276312250454,
+      "fem_flux_relative_error": 0.00027951026931272323,
+      "fem_max_trace_error_K": 4.844789473155386e-05,
+      "fem_interface_imbalance_W_m2": 1.2511770486412205e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0012326574357084544,
+      "fem_fvm_flux_difference_W_m2": 0.0010529739534124666,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.0071867713910008,
+        -0.01839208990782503
+      ],
+      "flux_relative_error": 0.0009508425623170283,
+      "flux_phase_error_rad": 0.00038007930056149325,
+      "max_trace_error_K": 0.001151915541550129,
+      "jump_error_K": 0.0015557527095120512,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00019412342981079618,
+      "fvm_max_trace_error_K": 2.2922205519670094e-05,
+      "fvm_interface_imbalance_W_m2": 1.831026719408895e-15,
+      "solver_flux_difference_W_m2": 4.5977708071940786e-05,
+      "solver_trace_difference_K": 0.00031211588644538966,
+      "fem_flux_relative_error": 6.987032470639278e-05,
+      "fem_max_trace_error_K": 1.2109513426940208e-05,
+      "fem_interface_imbalance_W_m2": 1.7867382328921142e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.00030834629295990523,
+      "fem_fvm_flux_difference_W_m2": 0.00026345232650040756,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.0071867713910008,
+        -0.01839208990782503
+      ],
+      "flux_relative_error": 0.00023791354811997258,
+      "flux_phase_error_rad": 9.473074562381461e-05,
+      "max_trace_error_K": 0.0002924023897765413,
+      "jump_error_K": 0.0003950901766658766,
+      "passed": true,
+      "flux_relative_error_order": 1.9987690545289174,
+      "max_trace_error_K_order": 1.9780079347958615,
+      "fvm_flux_relative_error_order": 1.9984424063580573,
+      "fvm_max_trace_error_K_order": 1.9986379916375174,
+      "fem_flux_relative_error_order": 2.0001495392079818,
+      "fem_max_trace_error_K_order": 2.0002930785423687
+    },
+    {
+      "fvm_flux_relative_error": 4.8543968786732666e-05,
+      "fvm_max_trace_error_K": 5.731905177525983e-06,
+      "fvm_interface_imbalance_W_m2": 1.0805156823142815e-14,
+      "solver_flux_difference_W_m2": 1.147750902509262e-05,
+      "solver_trace_difference_K": 7.859052601073561e-05,
+      "fem_flux_relative_error": 1.7467129597101524e-05,
+      "fem_max_trace_error_K": 3.027224783112371e-06,
+      "fem_interface_imbalance_W_m2": 1.0770880041763767e-14,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 7.709105588359038e-05,
+      "fem_fvm_flux_difference_W_m2": 6.587615443160183e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.0071867713910008,
+        -0.01839208990782503
+      ],
+      "flux_relative_error": 5.948550167812483e-05,
+      "flux_phase_error_rad": 2.3641683209936216e-05,
+      "max_trace_error_K": 7.364990996457725e-05,
+      "jump_error_K": 9.953662292728436e-05,
+      "passed": true,
+      "flux_relative_error_order": 1.9998274389362865,
+      "max_trace_error_K_order": 1.9891994356346725,
+      "fvm_flux_relative_error_order": 1.9996102870860029,
+      "fvm_max_trace_error_K_order": 1.99965921491691,
+      "fem_flux_relative_error_order": 2.000037297661038,
+      "fem_max_trace_error_K_order": 2.0000731872589443
+    },
+    {
+      "fvm_flux_relative_error": 0.0006417717755354418,
+      "fvm_max_trace_error_K": 0.00016595082162300503,
+      "fvm_interface_imbalance_W_m2": 1.4217791915866692e-15,
+      "solver_flux_difference_W_m2": 0.00014770471371941,
+      "solver_trace_difference_K": 0.0013415289048327084,
+      "fem_flux_relative_error": 0.0002517221554429012,
+      "fem_max_trace_error_K": 7.339758935897407e-05,
+      "fem_interface_imbalance_W_m2": 8.89926669182284e-16,
+      "fem_jump_error_K": 4.897028353942148e-05,
+      "fem_sph_flux_difference_W_m2": 0.0008327281188144275,
+      "fem_fvm_flux_difference_W_m2": 0.0006880058414464675,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7780343483810933,
+        -0.014207571121132167
+      ],
+      "flux_relative_error": 0.0008244802456841628,
+      "flux_phase_error_rad": 0.00039373541436275216,
+      "max_trace_error_K": 0.0011848981255733007,
+      "jump_error_K": 0.0015239325560500612,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00016060140787433195,
+      "fvm_max_trace_error_K": 4.152693261153193e-05,
+      "fvm_interface_imbalance_W_m2": 3.580361673049448e-15,
+      "solver_flux_difference_W_m2": 3.4923523044508534e-05,
+      "solver_trace_difference_K": 0.0003537374036540681,
+      "fem_flux_relative_error": 6.292055021511582e-05,
+      "fem_max_trace_error_K": 1.834668526039586e-05,
+      "fem_interface_imbalance_W_m2": 1.2212502552694219e-15,
+      "fem_jump_error_K": 1.2240627683873224e-05,
+      "fem_sph_flux_difference_W_m2": 0.00020632527372401827,
+      "fem_fvm_flux_difference_W_m2": 0.00017212054955496382,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7780343483810933,
+        -0.014207571121132167
+      ],
+      "flux_relative_error": 0.00020377046872572304,
+      "flux_phase_error_rad": 9.675156188513802e-05,
+      "max_trace_error_K": 0.0003144018319435,
+      "jump_error_K": 0.0004006212995513262,
+      "passed": true,
+      "flux_relative_error_order": 2.0165399422944668,
+      "max_trace_error_K_order": 1.914081496358543,
+      "fvm_flux_relative_error_order": 1.9985758028102563,
+      "fvm_max_trace_error_K_order": 1.998636556134881,
+      "fem_flux_relative_error_order": 2.000229009850007,
+      "fem_max_trace_error_K_order": 2.000213249107548
+    },
+    {
+      "fvm_flux_relative_error": 4.0160269662534613e-05,
+      "fvm_max_trace_error_K": 1.0384188217365227e-05,
+      "fvm_interface_imbalance_W_m2": 5.0242958677880805e-15,
+      "solver_flux_difference_W_m2": 8.391490421674277e-06,
+      "solver_trace_difference_K": 9.126948797783224e-05,
+      "fem_flux_relative_error": 1.572951435378036e-05,
+      "fem_max_trace_error_K": 4.586502098340205e-06,
+      "fem_interface_imbalance_W_m2": 9.99202227997857e-16,
+      "fem_jump_error_K": 3.0600356830220392e-06,
+      "fem_sph_flux_difference_W_m2": 5.1250498271886295e-05,
+      "fem_fvm_flux_difference_W_m2": 4.303759183094919e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7780343483810933,
+        -0.014207571121132167
+      ],
+      "flux_relative_error": 5.0521620319920437e-05,
+      "flux_phase_error_rad": 2.3919021242265145e-05,
+      "max_trace_error_K": 8.14155923596176e-05,
+      "jump_error_K": 0.00010313382708577429,
+      "passed": true,
+      "flux_relative_error_order": 2.0119721703885842,
+      "max_trace_error_K_order": 1.94923259912097,
+      "fvm_flux_relative_error_order": 1.9996436783164369,
+      "fvm_max_trace_error_K_order": 1.9996588728901599,
+      "fem_flux_relative_error_order": 2.0000571581370457,
+      "fem_max_trace_error_K_order": 2.000053226548267
+    },
+    {
+      "fvm_flux_relative_error": 0.004856876142537548,
+      "fvm_max_trace_error_K": 0.0010578233409120135,
+      "fvm_interface_imbalance_W_m2": 3.1165445441279525e-15,
+      "solver_flux_difference_W_m2": 0.001926332391308247,
+      "solver_trace_difference_K": 0.002007701791793822,
+      "fem_flux_relative_error": 0.00230347468594003,
+      "fem_max_trace_error_K": 0.0005151227796331948,
+      "fem_interface_imbalance_W_m2": 4.440892098500626e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.010840047864686541,
+      "fem_fvm_flux_difference_W_m2": 0.008997712214767866,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.040219201212939,
+        -0.7499400466678594
+      ],
+      "flux_relative_error": 0.0062367776555712845,
+      "flux_phase_error_rad": 0.0035214906401194648,
+      "max_trace_error_K": 0.0015342515472133635,
+      "jump_error_K": 0.002550911257183212,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.001216455279222336,
+      "fvm_max_trace_error_K": 0.0002650810799110078,
+      "fvm_interface_imbalance_W_m2": 3.1165445441279525e-15,
+      "solver_flux_difference_W_m2": 0.00048101388940111604,
+      "solver_trace_difference_K": 0.0005163764796345198,
+      "fem_flux_relative_error": 0.00057376699337937,
+      "fem_max_trace_error_K": 0.00012824431324350065,
+      "fem_interface_imbalance_W_m2": 8.005932084973442e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.002710405429211897,
+      "fem_fvm_flux_difference_W_m2": 0.002248568047400727,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.040219201212939,
+        -0.7499400466678594
+      ],
+      "flux_relative_error": 0.001562711513676206,
+      "flux_phase_error_rad": 0.000889456794989983,
+      "max_trace_error_K": 0.00038781509398761507,
+      "jump_error_K": 0.0006477886252925767,
+      "passed": true,
+      "flux_relative_error_order": 1.9967493546056745,
+      "max_trace_error_K_order": 1.9840941781845716,
+      "fvm_flux_relative_error_order": 1.9973454128139856,
+      "fvm_max_trace_error_K_order": 1.9965931069320593,
+      "fem_flux_relative_error_order": 2.005274860638032,
+      "fem_max_trace_error_K_order": 2.006021486366398
+    },
+    {
+      "fvm_flux_relative_error": 0.0003042521384610031,
+      "fvm_max_trace_error_K": 6.630903781920959e-05,
+      "fvm_interface_imbalance_W_m2": 5.617333549722722e-15,
+      "solver_flux_difference_W_m2": 0.00012000539695088407,
+      "solver_trace_difference_K": 0.0001312917235746259,
+      "fem_flux_relative_error": 0.00014331045390900403,
+      "fem_max_trace_error_K": 3.2027588978805516e-05,
+      "fem_interface_imbalance_W_m2": 4.076197102228689e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0006775121660513642,
+      "fem_fvm_flux_difference_W_m2": 0.0005620861621319805,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        1.040219201212939,
+        -0.7499400466678594
+      ],
+      "flux_relative_error": 0.000390839874153124,
+      "flux_phase_error_rad": 0.0002231770685281708,
+      "max_trace_error_K": 9.743051998125667e-05,
+      "jump_error_K": 0.00016357871983539626,
+      "passed": true,
+      "flux_relative_error_order": 1.9994019062400832,
+      "max_trace_error_K_order": 1.9929232845357223,
+      "fvm_flux_relative_error_order": 1.999343974990834,
+      "fvm_max_trace_error_K_order": 1.9991562759658292,
+      "fem_flux_relative_error_order": 2.0013211256494516,
+      "fem_max_trace_error_K_order": 2.0015077516740587
+    },
+    {
+      "fvm_flux_relative_error": 0.004171510629256981,
+      "fvm_max_trace_error_K": 0.001349353262926539,
+      "fvm_interface_imbalance_W_m2": 1.1102230246251565e-16,
+      "solver_flux_difference_W_m2": 0.0014304706988627338,
+      "solver_trace_difference_K": 0.0018157271286914963,
+      "fem_flux_relative_error": 0.002302629525273603,
+      "fem_max_trace_error_K": 0.0007390701683059526,
+      "fem_interface_imbalance_W_m2": 1.2262814116578437e-15,
+      "fem_jump_error_K": 0.0005016632191436083,
+      "fem_sph_flux_difference_W_m2": 0.006990375002939659,
+      "fem_fvm_flux_difference_W_m2": 0.0055729458381420975,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.5842323423212076,
+        -0.6466201650527572
+      ],
+      "flux_relative_error": 0.0057709477334258715,
+      "flux_phase_error_rad": 0.0013123250677224722,
+      "max_trace_error_K": 0.0010739021229532522,
+      "jump_error_K": 0.0019024975881200795,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0010454660622729556,
+      "fvm_max_trace_error_K": 0.00033831522443751637,
+      "fvm_interface_imbalance_W_m2": 2.4650951625709315e-15,
+      "solver_flux_difference_W_m2": 0.000343289521548619,
+      "solver_trace_difference_K": 0.00047930260093261587,
+      "fem_flux_relative_error": 0.0005738815087192217,
+      "fem_max_trace_error_K": 0.00018410860294524543,
+      "fem_interface_imbalance_W_m2": 5.661048867003676e-16,
+      "fem_jump_error_K": 0.00012502890365620898,
+      "fem_sph_flux_difference_W_m2": 0.0017329748880949764,
+      "fem_fvm_flux_difference_W_m2": 0.0013935303225037228,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.5842323423212076,
+        -0.6466201650527572
+      ],
+      "flux_relative_error": 0.001427867159216223,
+      "flux_phase_error_rad": 0.00032509542774121773,
+      "max_trace_error_K": 0.00026905903135249616,
+      "jump_error_K": 0.0004717748834398616,
+      "passed": true,
+      "flux_relative_error_order": 2.014946499481059,
+      "max_trace_error_K_order": 1.9968678710823342,
+      "fvm_flux_relative_error_order": 1.996423691296623,
+      "fvm_max_trace_error_K_order": 1.995828091636578,
+      "fem_flux_relative_error_order": 2.00445751710093,
+      "fem_max_trace_error_K_order": 2.005154300384572
+    },
+    {
+      "fvm_flux_relative_error": 0.00026152789471323796,
+      "fvm_max_trace_error_K": 8.463975447564445e-05,
+      "fvm_interface_imbalance_W_m2": 1.2236652343360226e-14,
+      "solver_flux_difference_W_m2": 8.367549435825674e-05,
+      "solver_trace_difference_K": 0.00012430522099734495,
+      "fem_flux_relative_error": 0.00014335934600611416,
+      "fem_max_trace_error_K": 4.598596163505699e-05,
+      "fem_interface_imbalance_W_m2": 1.2412670766236366e-15,
+      "fem_jump_error_K": 3.123303606698812e-05,
+      "fem_sph_flux_difference_W_m2": 0.0004309133399410167,
+      "fem_fvm_flux_difference_W_m2": 0.000348400373786423,
+      "wall_film_W_m2_K": [
+        3.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.5842323423212076,
+        -0.6466201650527572
+      ],
+      "flux_relative_error": 0.0003543308246931645,
+      "flux_phase_error_rad": 7.96731009969928e-05,
+      "max_trace_error_K": 6.734663720103895e-05,
+      "jump_error_K": 0.00011830348516546692,
+      "passed": true,
+      "flux_relative_error_order": 2.010692883330136,
+      "max_trace_error_K_order": 1.9982449187847349,
+      "fvm_flux_relative_error_order": 1.9991094917252612,
+      "fvm_max_trace_error_K_order": 1.9989607533681932,
+      "fem_flux_relative_error_order": 2.0011169283984254,
+      "fem_max_trace_error_K_order": 2.0012916271291354
+    },
+    {
+      "fvm_flux_relative_error": 0.0010461855246689017,
+      "fvm_max_trace_error_K": 5.336192337786086e-05,
+      "fvm_interface_imbalance_W_m2": 6.2803698347351005e-15,
+      "solver_flux_difference_W_m2": 0.00020560457793127382,
+      "solver_trace_difference_K": 0.001101145266581836,
+      "fem_flux_relative_error": 0.00045762405261948414,
+      "fem_max_trace_error_K": 3.2074355554643357e-05,
+      "fem_interface_imbalance_W_m2": 1.1801832636420706e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.001211198031628236,
+      "fem_fvm_flux_difference_W_m2": 0.0010057045175837155,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.6237850616353156,
+        -0.2418531840241107
+      ],
+      "flux_relative_error": 0.001353150885614049,
+      "flux_phase_error_rad": 0.00018424182156271258,
+      "max_trace_error_K": 0.0010678265866973032,
+      "jump_error_K": 0.0015562940187794192,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00026182357836400133,
+      "fvm_max_trace_error_K": 1.3353895496270023e-05,
+      "fvm_interface_imbalance_W_m2": 7.588599744428075e-15,
+      "solver_flux_difference_W_m2": 5.065241674448744e-05,
+      "solver_trace_difference_K": 0.000278059078876434,
+      "fem_flux_relative_error": 0.00011438223222165403,
+      "fem_max_trace_error_K": 8.016108917785046e-06,
+      "fem_interface_imbalance_W_m2": 1.7798229048217483e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.00030221653862706977,
+      "fem_fvm_flux_difference_W_m2": 0.00025159604987013594,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.6237850616353156,
+        -0.2418531840241107
+      ],
+      "flux_relative_error": 0.00033743761709883736,
+      "flux_phase_error_rad": 4.607195755278405e-05,
+      "max_trace_error_K": 0.00026974387004827965,
+      "jump_error_K": 0.00039383362187610384,
+      "passed": true,
+      "flux_relative_error_order": 2.003630001249766,
+      "max_trace_error_K_order": 1.9850152948825766,
+      "fvm_flux_relative_error_order": 1.998471784437574,
+      "fvm_max_trace_error_K_order": 1.9985500127055875,
+      "fem_flux_relative_error_order": 2.000299916059822,
+      "fem_max_trace_error_K_order": 2.00044626244358
+    },
+    {
+      "fvm_flux_relative_error": 6.547324464572887e-05,
+      "fvm_max_trace_error_K": 3.339313860459046e-06,
+      "fvm_interface_imbalance_W_m2": 2.5433559371059917e-14,
+      "solver_flux_difference_W_m2": 1.2562121413115546e-05,
+      "solver_trace_difference_K": 6.985380592972604e-05,
+      "fem_flux_relative_error": 2.8594073135965055e-05,
+      "fem_max_trace_error_K": 2.003872371257089e-06,
+      "fem_interface_imbalance_W_m2": 1.5063480468199823e-14,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 7.546322376275803e-05,
+      "fem_fvm_flux_difference_W_m2": 6.290965027650922e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.6237850616353156,
+        -0.2418531840241107
+      ],
+      "flux_relative_error": 8.422471368318007e-05,
+      "flux_phase_error_rad": 1.1518196597211818e-05,
+      "max_trace_error_K": 6.777773861425511e-05,
+      "jump_error_K": 9.904496772110415e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.0023052882104597,
+      "max_trace_error_K_order": 1.992706767110515,
+      "fvm_flux_relative_error_order": 1.9996176429753,
+      "fvm_max_trace_error_K_order": 1.999637052192715,
+      "fem_flux_relative_error_order": 2.000074918682994,
+      "fem_max_trace_error_K_order": 2.0001114863963316
+    },
+    {
+      "fvm_flux_relative_error": 0.000900220997253659,
+      "fvm_max_trace_error_K": 0.00011063903859591109,
+      "fvm_interface_imbalance_W_m2": 4.490574227168739e-15,
+      "solver_flux_difference_W_m2": 0.00016631383511055993,
+      "solver_trace_difference_K": 0.0012509990987416408,
+      "fem_flux_relative_error": 0.0004027319369559051,
+      "fem_max_trace_error_K": 4.993652636042627e-05,
+      "fem_interface_imbalance_W_m2": 5.3854400208818836e-15,
+      "fem_jump_error_K": 5.540365923125608e-05,
+      "fem_sph_flux_difference_W_m2": 0.0008828513363040422,
+      "fem_fvm_flux_difference_W_m2": 0.000716656859468824,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.513064456988385,
+        -0.1989247261018685
+      ],
+      "flux_relative_error": 0.0012020172570754927,
+      "flux_phase_error_rad": 0.00019168820900130617,
+      "max_trace_error_K": 0.0011436452550022125,
+      "jump_error_K": 0.0015454315104215628,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0002252724972160244,
+      "fvm_max_trace_error_K": 2.7692370795121168e-05,
+      "fvm_interface_imbalance_W_m2": 1.2505665694398903e-14,
+      "solver_flux_difference_W_m2": 3.926794569859538e-05,
+      "solver_trace_difference_K": 0.00032843192712422544,
+      "fem_flux_relative_error": 0.0001006632602018099,
+      "fem_max_trace_error_K": 1.2480701530503462e-05,
+      "fem_interface_imbalance_W_m2": 1.7798229048217483e-15,
+      "fem_jump_error_K": 1.3848201380531781e-05,
+      "fem_sph_flux_difference_W_m2": 0.00021851012260883695,
+      "fem_fvm_flux_difference_W_m2": 0.00017927322719550658,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.513064456988385,
+        -0.1989247261018685
+      ],
+      "flux_relative_error": 0.00029652120766276665,
+      "flux_phase_error_rad": 4.718830725510626e-05,
+      "max_trace_error_K": 0.00030156940345072206,
+      "jump_error_K": 0.0004049071093948182,
+      "passed": true,
+      "flux_relative_error_order": 2.019250411236295,
+      "max_trace_error_K_order": 1.923077646294599,
+      "fvm_flux_relative_error_order": 1.9986080249397542,
+      "fvm_max_trace_error_K_order": 1.9983000493789538,
+      "fem_flux_relative_error_order": 2.0002826550927364,
+      "fem_max_trace_error_K_order": 2.000396440063235
+    },
+    {
+      "fvm_flux_relative_error": 5.633172076267084e-05,
+      "fvm_max_trace_error_K": 6.925133963412101e-06,
+      "fvm_interface_imbalance_W_m2": 5.329070518200751e-15,
+      "solver_flux_difference_W_m2": 9.451351229857486e-06,
+      "solver_trace_difference_K": 8.455007548442497e-05,
+      "fem_flux_relative_error": 2.51645835821658e-05,
+      "fem_max_trace_error_K": 3.119961285878804e-06,
+      "fem_interface_imbalance_W_m2": 3.3306690738754696e-16,
+      "fem_jump_error_K": 3.461880932437302e-06,
+      "fem_sph_flux_difference_W_m2": 5.4268688764159086e-05,
+      "fem_fvm_flux_difference_W_m2": 4.482513091218182e-05,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.513064456988385,
+        -0.1989247261018685
+      ],
+      "flux_relative_error": 7.347958768326535e-05,
+      "flux_phase_error_rad": 1.167262007090229e-05,
+      "max_trace_error_K": 7.783312454335444e-05,
+      "jump_error_K": 0.00010402884690256616,
+      "passed": true,
+      "flux_relative_error_order": 2.0127198561022555,
+      "max_trace_error_K_order": 1.9540338843161773,
+      "fvm_flux_relative_error_order": 1.999651743088099,
+      "fvm_max_trace_error_K_order": 1.9995746859934318,
+      "fem_flux_relative_error_order": 2.000070598812599,
+      "fem_max_trace_error_K_order": 2.0000989966508063
+    },
+    {
+      "fvm_flux_relative_error": 0.0064688513765695345,
+      "fvm_max_trace_error_K": 0.0008309768708421097,
+      "fvm_interface_imbalance_W_m2": 1.7798229048217483e-15,
+      "solver_flux_difference_W_m2": 0.0017343759175996564,
+      "solver_trace_difference_K": 0.0014585539060660044,
+      "fem_flux_relative_error": 0.003528705934455388,
+      "fem_max_trace_error_K": 0.0004978349411746964,
+      "fem_interface_imbalance_W_m2": 1.27675647831893e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.009197006719520435,
+      "fem_fvm_flux_difference_W_m2": 0.007485465897890892,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.46135885160208523,
+        -0.5967679198410637
+      ],
+      "flux_relative_error": 0.008706483882870644,
+      "flux_phase_error_rad": 0.005640614782958467,
+      "max_trace_error_K": 0.0016393033843536025,
+      "jump_error_K": 0.0022684398520157133,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.001620481990972233,
+      "fvm_max_trace_error_K": 0.00020796999588738955,
+      "fvm_interface_imbalance_W_m2": 9.155133597044475e-16,
+      "solver_flux_difference_W_m2": 0.00043343264837287143,
+      "solver_trace_difference_K": 0.00036187122193488073,
+      "fem_flux_relative_error": 0.0008797637886816849,
+      "fem_max_trace_error_K": 0.00012410432386951879,
+      "fem_interface_imbalance_W_m2": 1.9460597736562618e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.002299478472194434,
+      "fem_fvm_flux_difference_W_m2": 0.0018713757262026661,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.46135885160208523,
+        -0.5967679198410637
+      ],
+      "flux_relative_error": 0.002180156224568094,
+      "flux_phase_error_rad": 0.0014154657922713439,
+      "max_trace_error_K": 0.00041263043625958286,
+      "jump_error_K": 0.0005678811072086233,
+      "passed": true,
+      "flux_relative_error_order": 1.997658684808018,
+      "max_trace_error_K_order": 1.9901607316963001,
+      "fvm_flux_relative_error_order": 1.997086579333524,
+      "fvm_max_trace_error_K_order": 1.9984329182045169,
+      "fem_flux_relative_error_order": 2.00395108193409,
+      "fem_max_trace_error_K_order": 2.004114110538268
+    },
+    {
+      "fvm_flux_relative_error": 0.000405323110696349,
+      "fvm_max_trace_error_K": 5.200631883661304e-05,
+      "fvm_interface_imbalance_W_m2": 1.1102230246251565e-16,
+      "solver_flux_difference_W_m2": 0.00010819345829188416,
+      "solver_trace_difference_K": 9.034986961552648e-05,
+      "fem_flux_relative_error": 0.00021979012004816478,
+      "fem_max_trace_error_K": 3.1003898882743705e-05,
+      "fem_interface_imbalance_W_m2": 1.4054300946555646e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0005747375416625211,
+      "fem_fvm_flux_difference_W_m2": 0.00046784266647573164,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.46135885160208523,
+        -0.5967679198410637
+      ],
+      "flux_relative_error": 0.0005450739711904971,
+      "flux_phase_error_rad": 0.0003541724842557913,
+      "max_trace_error_K": 0.00010344002865302068,
+      "jump_error_K": 0.00014221504641432316,
+      "passed": true,
+      "flux_relative_error_order": 1.9999075843219198,
+      "max_trace_error_K_order": 1.9960556606790276,
+      "fvm_flux_relative_error_order": 1.9992786451617894,
+      "fvm_max_trace_error_K_order": 1.9996165754399777,
+      "fem_flux_relative_error_order": 2.000989684678049,
+      "fem_max_trace_error_K_order": 2.0010318231584914
+    },
+    {
+      "fvm_flux_relative_error": 0.005998820479420502,
+      "fvm_max_trace_error_K": 0.001177783463875448,
+      "fvm_interface_imbalance_W_m2": 1.6653345369377348e-15,
+      "solver_flux_difference_W_m2": 0.0013580963175802835,
+      "solver_trace_difference_K": 0.0017883132552815352,
+      "fem_flux_relative_error": 0.0034367260789532105,
+      "fem_max_trace_error_K": 0.0007087100248107951,
+      "fem_interface_imbalance_W_m2": 1.0448048107080504e-15,
+      "fem_jump_error_K": 0.00046846014981628695,
+      "fem_sph_flux_difference_W_m2": 0.006483916365481123,
+      "fem_fvm_flux_difference_W_m2": 0.005127934898259794,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.20757243342140705,
+        -0.5041828689293244
+      ],
+      "flux_relative_error": 0.00847617701046939,
+      "flux_phase_error_rad": 0.0036792883384444432,
+      "max_trace_error_K": 0.0011884778327985476,
+      "jump_error_K": 0.00198228770525181,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0015039557879759139,
+      "fvm_max_trace_error_K": 0.0002951724143760767,
+      "fvm_interface_imbalance_W_m2": 9.930136612989092e-16,
+      "solver_flux_difference_W_m2": 0.000325237410649091,
+      "solver_trace_difference_K": 0.0004658964087192818,
+      "fem_flux_relative_error": 0.0008570463088383691,
+      "fem_max_trace_error_K": 0.0001767395507686778,
+      "fem_interface_imbalance_W_m2": 4.847302891456678e-16,
+      "fem_jump_error_K": 0.00011682398684520903,
+      "fem_sph_flux_difference_W_m2": 0.001607430370556704,
+      "fem_fvm_flux_difference_W_m2": 0.0012829028746946594,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.20757243342140705,
+        -0.5041828689293244
+      ],
+      "flux_relative_error": 0.0020964860513834746,
+      "flux_phase_error_rad": 0.0009073118241160845,
+      "max_trace_error_K": 0.00029632977769649234,
+      "jump_error_K": 0.0005051179704225394,
+      "passed": true,
+      "flux_relative_error_order": 2.0154404847567675,
+      "max_trace_error_K_order": 2.0038394819616654,
+      "fvm_flux_relative_error_order": 1.9959167015849828,
+      "fvm_max_trace_error_K_order": 1.9964445189387081,
+      "fem_flux_relative_error_order": 2.003589802839306,
+      "fem_max_trace_error_K_order": 2.0035705340720638
+    },
+    {
+      "fvm_flux_relative_error": 0.00037625402060757583,
+      "fvm_max_trace_error_K": 7.38383361552387e-05,
+      "fvm_interface_imbalance_W_m2": 8.042797661766892e-15,
+      "solver_flux_difference_W_m2": 7.890406720313347e-05,
+      "solver_trace_difference_K": 0.00011976515274433931,
+      "fem_flux_relative_error": 0.0002141280043642543,
+      "fem_max_trace_error_K": 4.415746879411029e-05,
+      "fem_interface_imbalance_W_m2": 2.2713830885661996e-15,
+      "fem_jump_error_K": 2.918778939548904e-05,
+      "fem_sph_flux_difference_W_m2": 0.0003994415225126402,
+      "fem_fvm_flux_difference_W_m2": 0.00032078251020657537,
+      "wall_film_W_m2_K": [
+        3.0,
+        0.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.35,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "film",
+        "insulated"
+      ],
+      "exact_flux_W_m2": [
+        0.20757243342140705,
+        -0.5041828689293244
+      ],
+      "flux_relative_error": 0.0005197806875890395,
+      "flux_phase_error_rad": 0.00022360316084698746,
+      "max_trace_error_K": 7.377379559444987e-05,
+      "jump_error_K": 0.00012813203298692337,
+      "passed": true,
+      "flux_relative_error_order": 2.011998294791315,
+      "max_trace_error_K_order": 2.006023239637208,
+      "fvm_flux_relative_error_order": 1.9989832529645173,
+      "fvm_max_trace_error_K_order": 1.9991159499099798,
+      "fem_flux_relative_error_order": 2.000899671215642,
+      "fem_max_trace_error_K_order": 2.000895541189982
+    },
+    {
+      "fvm_flux_relative_error": 0.0010802326797587705,
+      "fvm_max_trace_error_K": 0.00014955260776078217,
+      "fvm_interface_imbalance_W_m2": 4.021398830883446e-15,
+      "solver_flux_difference_W_m2": 0.0002642595507688784,
+      "solver_trace_difference_K": 0.0012407876880026806,
+      "fem_flux_relative_error": 0.0004806045781054501,
+      "fem_max_trace_error_K": 9.463683268095554e-05,
+      "fem_interface_imbalance_W_m2": 3.3306690738754696e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0015818545289141724,
+      "fem_fvm_flux_difference_W_m2": 0.0013176908312753973,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7992582604984363,
+        -0.2720698815605274
+      ],
+      "flux_relative_error": 0.0013930474096964655,
+      "flux_phase_error_rad": 0.00010380425199724325,
+      "max_trace_error_K": 0.0011133112306200672,
+      "jump_error_K": 0.0015585908083461904,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00027034448558819986,
+      "fvm_max_trace_error_K": 3.7417139552853713e-05,
+      "fvm_interface_imbalance_W_m2": 1.7763568394002505e-15,
+      "solver_flux_difference_W_m2": 6.608992574776719e-05,
+      "solver_trace_difference_K": 0.0003143455148492337,
+      "fem_flux_relative_error": 0.00012012819780942882,
+      "fem_max_trace_error_K": 2.3652357711128445e-05,
+      "fem_interface_imbalance_W_m2": 9.485749680535094e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0003957181334698914,
+      "fem_fvm_flux_difference_W_m2": 0.00032964521528543135,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7992582604984363,
+        -0.2720698815605274
+      ],
+      "flux_relative_error": 0.0003485880637706771,
+      "flux_phase_error_rad": 2.5590373705032466e-05,
+      "max_trace_error_K": 0.00028242025283978705,
+      "jump_error_K": 0.00039557335572473106,
+      "passed": true,
+      "flux_relative_error_order": 1.99864928296494,
+      "max_trace_error_K_order": 1.9789415046868926,
+      "fvm_flux_relative_error_order": 1.9984712650811194,
+      "fvm_max_trace_error_K_order": 1.998881889601986,
+      "fem_flux_relative_error_order": 2.000275555230872,
+      "fem_max_trace_error_K_order": 2.0004177888967063
+    },
+    {
+      "fvm_flux_relative_error": 6.760404230597946e-05,
+      "fvm_max_trace_error_K": 9.356098934682288e-06,
+      "fvm_interface_imbalance_W_m2": 7.944109290391274e-15,
+      "solver_flux_difference_W_m2": 1.6518277133579567e-05,
+      "solver_trace_difference_K": 7.91001333367549e-05,
+      "fem_flux_relative_error": 3.0030616694601495e-05,
+      "fem_max_trace_error_K": 5.912661627106125e-06,
+      "fem_interface_imbalance_W_m2": 2.288783399261119e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 9.89400427034623e-05,
+      "fem_fvm_flux_difference_W_m2": 8.242523382091606e-05,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7992582604984363,
+        -0.2720698815605274
+      ],
+      "flux_relative_error": 8.716114966820725e-05,
+      "flux_phase_error_rad": 6.35021637915338e-06,
+      "max_trace_error_K": 7.111337456531685e-05,
+      "jump_error_K": 9.9626514784629e-05,
+      "passed": true,
+      "flux_relative_error_order": 1.9997660390066507,
+      "max_trace_error_K_order": 1.9896507267800216,
+      "fvm_flux_relative_error_order": 1.9996175105365055,
+      "fvm_max_trace_error_K_order": 1.9997202499021358,
+      "fem_flux_relative_error_order": 2.00006882919597,
+      "fem_max_trace_error_K_order": 2.000104379994326
+    },
+    {
+      "fvm_flux_relative_error": 0.0009176610048343498,
+      "fvm_max_trace_error_K": 0.00025542644723007204,
+      "fvm_interface_imbalance_W_m2": 2.673771110915334e-15,
+      "solver_flux_difference_W_m2": 0.0002156821254240132,
+      "solver_trace_difference_K": 0.0013035537831672275,
+      "fem_flux_relative_error": 0.0004082618183172408,
+      "fem_max_trace_error_K": 0.00013688383639625087,
+      "fem_interface_imbalance_W_m2": 1.6011864169946884e-15,
+      "fem_jump_error_K": 7.324745021026395e-05,
+      "fem_sph_flux_difference_W_m2": 0.0011670448176375775,
+      "fem_fvm_flux_difference_W_m2": 0.0009514326948008316,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.6793696212670484,
+        -0.23125943331343005
+      ],
+      "flux_relative_error": 0.0012180299445517778,
+      "flux_phase_error_rad": 0.00010608682274125375,
+      "max_trace_error_K": 0.0010587027116923328,
+      "jump_error_K": 0.0014403715538838233,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.00022963039530095932,
+      "fvm_max_trace_error_K": 6.390868039629022e-05,
+      "fvm_interface_imbalance_W_m2": 8.906729185356879e-15,
+      "solver_flux_difference_W_m2": 5.1451646340787355e-05,
+      "solver_trace_difference_K": 0.0003447931740164338,
+      "fem_flux_relative_error": 0.00010205146464693386,
+      "fem_max_trace_error_K": 3.421427724328703e-05,
+      "fem_interface_imbalance_W_m2": 1.1102230246251565e-16,
+      "fem_jump_error_K": 1.830935257787637e-05,
+      "fem_sph_flux_difference_W_m2": 0.0002894409192279233,
+      "fem_fvm_flux_difference_W_m2": 0.00023800267874905844,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.6793696212670484,
+        -0.23125943331343005
+      ],
+      "flux_relative_error": 0.00030129012974497443,
+      "flux_phase_error_rad": 2.5905142843669364e-05,
+      "max_trace_error_K": 0.0002834216671927864,
+      "jump_error_K": 0.0003802302259723661,
+      "passed": true,
+      "flux_relative_error_order": 2.0153242853159226,
+      "max_trace_error_K_order": 1.9012755715648928,
+      "fvm_flux_relative_error_order": 1.9986476842108059,
+      "fvm_max_trace_error_K_order": 1.9988241078986209,
+      "fem_flux_relative_error_order": 2.0001977612259663,
+      "fem_max_trace_error_K_order": 2.000281722712958
+    },
+    {
+      "fvm_flux_relative_error": 5.7421063174023126e-05,
+      "fvm_max_trace_error_K": 1.5980428513156785e-05,
+      "fvm_interface_imbalance_W_m2": 5.333694441429199e-15,
+      "solver_flux_difference_W_m2": 1.2443689788969666e-05,
+      "solver_trace_difference_K": 8.911900350635712e-05,
+      "fem_flux_relative_error": 2.5511992818334103e-05,
+      "fem_max_trace_error_K": 8.553152096135087e-06,
+      "fem_interface_imbalance_W_m2": 7.458352349529044e-15,
+      "fem_jump_error_K": 4.5771814552826474e-06,
+      "fem_sph_flux_difference_W_m2": 7.19504203566048e-05,
+      "fem_fvm_flux_difference_W_m2": 5.950971478137936e-05,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 0.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.6793696212670484,
+        -0.23125943331343005
+      ],
+      "flux_relative_error": 7.475257074529905e-05,
+      "flux_phase_error_rad": 6.391473216757126e-06,
+      "max_trace_error_K": 7.375774809463034e-05,
+      "jump_error_K": 9.809767911232382e-05,
+      "passed": true,
+      "flux_relative_error_order": 2.0109583114193454,
+      "max_trace_error_K_order": 1.9420835400219054,
+      "fvm_flux_relative_error_order": 1.999661670719326,
+      "fvm_max_trace_error_K_order": 1.9997058040615747,
+      "fem_flux_relative_error_order": 2.0000493864448257,
+      "fem_max_trace_error_K_order": 2.000070371586144
+    },
+    {
+      "fvm_flux_relative_error": 0.004445261544631765,
+      "fvm_max_trace_error_K": 0.0008421654308680977,
+      "fvm_interface_imbalance_W_m2": 2.220446049250313e-16,
+      "solver_flux_difference_W_m2": 0.0011013524956766335,
+      "solver_trace_difference_K": 0.002226901863440573,
+      "fem_flux_relative_error": 0.0015526628056465772,
+      "fem_max_trace_error_K": 0.0002914592154452562,
+      "fem_interface_imbalance_W_m2": 7.447602459741819e-16,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.007436030500276265,
+      "fem_fvm_flux_difference_W_m2": 0.006389587092737458,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7660345668010187,
+        -0.7621592465649166
+      ],
+      "flux_relative_error": 0.005384276390648181,
+      "flux_phase_error_rad": 0.004351873860467194,
+      "max_trace_error_K": 0.0014686884433652038,
+      "jump_error_K": 0.0024368325857457734,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0011120322841020056,
+      "fvm_max_trace_error_K": 0.00021094190112324923,
+      "fvm_interface_imbalance_W_m2": 7.106294666405892e-15,
+      "solver_flux_difference_W_m2": 0.0002739210938243132,
+      "solver_trace_difference_K": 0.0005845454361359675,
+      "fem_flux_relative_error": 0.00038724698532679265,
+      "fem_max_trace_error_K": 7.28215396327972e-05,
+      "fem_interface_imbalance_W_m2": 2.6668472207145996e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0018590029928288205,
+      "fem_fvm_flux_difference_W_m2": 0.0015968011414521962,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7660345668010187,
+        -0.7621592465649166
+      ],
+      "flux_relative_error": 0.0013477225406326335,
+      "flux_phase_error_rad": 0.0010949204810634155,
+      "max_trace_error_K": 0.00038898893387803664,
+      "jump_error_K": 0.0006346349751994417,
+      "passed": true,
+      "flux_relative_error_order": 1.9982289541331142,
+      "max_trace_error_K_order": 1.9167273672542822,
+      "fvm_flux_relative_error_order": 1.9990696325559847,
+      "fvm_max_trace_error_K_order": 1.9972579591352302,
+      "fem_flux_relative_error_order": 2.0034186383134265,
+      "fem_max_trace_error_K_order": 2.0008568694671993
+    },
+    {
+      "fvm_flux_relative_error": 0.00027805067001774843,
+      "fvm_max_trace_error_K": 5.2760115692303336e-05,
+      "fvm_interface_imbalance_W_m2": 7.108895957933346e-15,
+      "solver_flux_difference_W_m2": 6.828360336349184e-05,
+      "solver_trace_difference_K": 0.00014971786572007237,
+      "fem_flux_relative_error": 9.675449990467473e-05,
+      "fem_max_trace_error_K": 1.820271506440574e-05,
+      "fem_interface_imbalance_W_m2": 5.329070518200751e-15,
+      "fem_jump_error_K": 0.0,
+      "fem_sph_flux_difference_W_m2": 0.0004647622515347485,
+      "fem_fvm_flux_difference_W_m2": 0.0003991607495466176,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.0,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.7660345668010187,
+        -0.7621592465649166
+      ],
+      "flux_relative_error": 0.0003370770384365081,
+      "flux_phase_error_rad": 0.00027445981042144497,
+      "max_trace_error_K": 0.00010019408936329382,
+      "jump_error_K": 0.00016201857824911113,
+      "passed": true,
+      "flux_relative_error_order": 1.9993732555422095,
+      "max_trace_error_K_order": 1.9569317096307441,
+      "fvm_flux_relative_error_order": 1.9997789537311594,
+      "fvm_max_trace_error_K_order": 1.9993260647239928,
+      "fem_flux_relative_error_order": 2.0008533423609647,
+      "fem_max_trace_error_K_order": 2.0002115886525647
+    },
+    {
+      "fvm_flux_relative_error": 0.0031551036899600004,
+      "fvm_max_trace_error_K": 0.0008504380277683492,
+      "fvm_interface_imbalance_W_m2": 4.440892098500626e-16,
+      "solver_flux_difference_W_m2": 0.0006508091434884041,
+      "solver_trace_difference_K": 0.001832112023731137,
+      "fem_flux_relative_error": 0.0012209240092884704,
+      "fem_max_trace_error_K": 0.00028563907537094367,
+      "fem_interface_imbalance_W_m2": 4.47545209131181e-16,
+      "fem_jump_error_K": 0.00022029147218399902,
+      "fem_sph_flux_difference_W_m2": 0.0037524681139060943,
+      "fem_fvm_flux_difference_W_m2": 0.0031082008611463758,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 16,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.3895667401622968,
+        -0.6075510166127255
+      ],
+      "flux_relative_error": 0.004032085830742559,
+      "flux_phase_error_rad": 0.0024507842553706115,
+      "max_trace_error_K": 0.001076891254088489,
+      "jump_error_K": 0.0014783735270474606,
+      "passed": true
+    },
+    {
+      "fvm_flux_relative_error": 0.0007892971771268549,
+      "fvm_max_trace_error_K": 0.0002129607468485471,
+      "fvm_interface_imbalance_W_m2": 3.580361673049448e-15,
+      "solver_flux_difference_W_m2": 0.0001529448075163988,
+      "solver_trace_difference_K": 0.0005064419450072531,
+      "fem_flux_relative_error": 0.00030449841199832857,
+      "fem_max_trace_error_K": 7.136086969176712e-05,
+      "fem_interface_imbalance_W_m2": 3.360603099725814e-15,
+      "fem_jump_error_K": 5.494068668195973e-05,
+      "fem_sph_flux_difference_W_m2": 0.0009274620754964895,
+      "fem_fvm_flux_difference_W_m2": 0.0007767792741629645,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 32,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.3895667401622968,
+        -0.6075510166127255
+      ],
+      "flux_relative_error": 0.000993784799594604,
+      "flux_phase_error_rad": 0.0006026675833605182,
+      "max_trace_error_K": 0.00030876319904896355,
+      "jump_error_K": 0.0003957048597276343,
+      "passed": true,
+      "flux_relative_error_order": 2.020520969246977,
+      "max_trace_error_K_order": 1.8022998563313797,
+      "fvm_flux_relative_error_order": 1.999046924369774,
+      "fvm_max_trace_error_K_order": 1.9976185732825176,
+      "fem_flux_relative_error_order": 2.003466799898102,
+      "fem_max_trace_error_K_order": 2.0009882503305865
+    },
+    {
+      "fvm_flux_relative_error": 0.00019735577247132014,
+      "fvm_max_trace_error_K": 5.3261850971674044e-05,
+      "fvm_interface_imbalance_W_m2": 2.581835519377164e-14,
+      "solver_flux_difference_W_m2": 3.695179742851399e-05,
+      "solver_trace_difference_K": 0.00013388790653802378,
+      "fem_flux_relative_error": 7.6078896750841e-05,
+      "fem_max_trace_error_K": 1.7837186847400798e-05,
+      "fem_interface_imbalance_W_m2": 9.43689570931383e-16,
+      "fem_jump_error_K": 1.3726924886300778e-05,
+      "fem_sph_flux_difference_W_m2": 0.00023032892488851055,
+      "fem_fvm_flux_difference_W_m2": 0.00019417713219048278,
+      "wall_film_W_m2_K": [
+        0.0,
+        7.0
+      ],
+      "wall_reservoir_phasors_K": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          -0.4,
+          0.15
+        ]
+      ],
+      "columns": 64,
+      "left_thickness_m": 0.5,
+      "omega_rad_s": 12.0,
+      "contact_resistance_m2_K_W": 0.25,
+      "backend": "banded",
+      "wall_conditions": [
+        "insulated",
+        "film"
+      ],
+      "exact_flux_W_m2": [
+        0.3895667401622968,
+        -0.6075510166127255
+      ],
+      "flux_relative_error": 0.0002462462574951898,
+      "flux_phase_error_rad": 0.00014823377287086805,
+      "max_trace_error_K": 8.355164927234064e-05,
+      "jump_error_K": 0.00010333319168211112,
+      "passed": true,
+      "flux_relative_error_order": 2.0128316770194203,
+      "max_trace_error_K_order": 1.8857605986911217,
+      "fvm_flux_relative_error_order": 1.9997698721979489,
+      "fvm_max_trace_error_K_order": 1.9994130643711656,
+      "fem_flux_relative_error_order": 2.0008664739048276,
+      "fem_max_trace_error_K_order": 2.0002450960995595
+    }
+  ],
+  "sources": [
+    {
+      "commit": "a3d1b4a224a18e8d90df0d3a44f0567a5725c680",
+      "file": "sph_ambient_driven_contact.py",
+      "source_sha256": "731a3f1d7ec068fb156d063ac83519a6e3f88a32a89b192d669b148b0ece8f2d"
+    },
+    {
+      "commit": "4d1bd5933ee17b4c5bcb32ae6e9765acd827d463",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "3126a6f83b0d3757b39315a6ca1816fe2ca3429b8246a6fb3b657eae01d2bcdc"
+    },
+    {
+      "commit": "b1cf09bbf4c86fca7237be79758f2989160e2db1",
+      "file": "rod.py",
+      "source_sha256": "52b03d7134d7117d4b73bcb7697c27295b2112835f81a82942a43e7bdb952403"
+    },
+    {
+      "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    }
+  ],
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src:../TensorFEM/src python examples/sph_ambient_driven_contact.py --compare-fvm --compare-fem --left-thickness 0.5 --films"
+}
