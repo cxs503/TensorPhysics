@@ -90,7 +90,9 @@ def static_and_lag(materials,resistance,wall_c,ambient):
     return component(0),component(2)
 
 
-def measure(n,omega,wall_c,contact=False,quasistatic=False):
+def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=False):
+    if return_response and not quasistatic:
+        raise ValueError("low-frequency responses require quasistatic=True")
     ambient = AMBIENT.real.copy() if quasistatic else AMBIENT
     dx = 1/n
     edges = np.linspace(0.,1.,n+1)
@@ -180,7 +182,10 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False):
                    wall_capacity=wall_c.tolist(),errors=errors,wall_balance_W_m2=balance)
         if quasistatic:
             row["reference_discrepancies"] = checks
-        yield row
+        if return_response:
+            yield row,(u,cut),(samples(steady),steady(.5)[1],samples(tangent),tangent(.5)[1])
+        else:
+            yield row
 
 
 if __name__=="__main__":
