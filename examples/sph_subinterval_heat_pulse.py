@@ -8,7 +8,7 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def measure(n, method, width_fraction, mode_y):
+def measure(n, method, width_fraction, mode_y, *, return_mean_profile=False):
     base, amplitude = 305., 2**-44
     x = (torch.arange(n, dtype=torch.float64)+0.5)/n
     lateral = torch.cos(2*torch.pi*mode_y*x)
@@ -47,7 +47,7 @@ def measure(n, method, width_fraction, mode_y):
     heat_error = abs(walls-expected_wall)/heat_scale
     energy_residual = (field.mean((1, 2)).diff() - amplitude*rate*mode.mean()*on_duration.diff()
                        - cuts[:, 0] + cuts[:, -1])
-    return dict(columns=n, method=method, transverse_mode=mode_y, width_over_interval=width_fraction,
+    metrics = dict(columns=n, method=method, transverse_mode=mode_y, width_over_interval=width_fraction,
                 start_s=start, stop_s=stop, crossing_interval_s=times[1:3],
                 crossing_mean_error_over_peak=float(mean_error[1].max()),
                 decay_mean_error_over_peak=float(mean_error[2:].max()),
@@ -60,6 +60,9 @@ def measure(n, method, width_fraction, mode_y):
                 split_field_difference_over_peak=float(abs(field[2]-detail[4]).max()/(amplitude*peak)),
                 split_section_heat_difference_over_scale=float(abs(cuts[1]-subcuts[1:4].sum(0)).max()/heat_scale),
                 split_wall_heat_difference_over_scale=float(abs(walls[1]-subwalls[1:4].sum(0)).max()/heat_scale))
+    if return_mean_profile:
+        return metrics, means.numpy()/(amplitude*peak)
+    return metrics
 
 
 if __name__ == "__main__":
