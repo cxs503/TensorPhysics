@@ -22,7 +22,8 @@ def measure(n, degree, width, *, return_section_heat=False):
     sources = [heating if start <= t < stop else None for t in knots[:-1]]
     centers, states, info = heat_1d.solve_heat_1d_wall_history(
         knots, np.zeros((len(knots), 2)), n, degree, backend="exact-time",
-        initial_temperature=torch.zeros_like, interval_sources=sources, integrate_face_fluxes=True)
+        initial_temperature=torch.zeros_like, interval_sources=sources, integrate_face_fluxes=True,
+        return_interval_temperatures=True)
     ids = np.searchsorted(knots, output)
     cell = states[ids, :, 0].numpy()
     sections = np.add.reduceat(np.asarray(info["interval_face_heat"]), ids[:-1], axis=0)
@@ -33,10 +34,14 @@ def measure(n, degree, width, *, return_section_heat=False):
     cell_mode = np.sin(math.pi*centers.numpy())*np.sinc(0.5/n)
     exact_cell = amplitude*factor[:, None]*cell_mode
     exact_sections = -math.pi*amplitude*integral[:, None]*np.cos(math.pi*np.arange(n+1)/n)
+    means = np.asarray(info["interval_temperature_modes"])[:, :, 0]
+    averaged = np.add.reduceat(means*np.diff(knots)[:, None], ids[:-1], axis=0)/np.diff(output)[:, None]
+    exact_mean = amplitude*(integral/np.diff(output))[:, None]*cell_mode
     deposited = amplitude*rate*np.diff(duration)[:, None]*cell_mode/n
     residual = np.diff(cell, axis=0)/n - deposited + np.diff(sections, axis=1)
     scale = math.pi*amplitude*dt*peak
     metrics = dict(cells=n, degree=degree, width_over_interval=width,
+                max_interval_mean_error_over_peak=float(abs(averaged-exact_mean).max()/(amplitude*peak)),
                 max_cell_mean_error_over_peak=float(abs(cell-exact_cell).max()/(amplitude*peak)),
                 max_section_heat_error_over_scale=float(abs(sections-exact_sections).max()/scale),
                 crossing_section_error_over_scale=float(abs(sections[1]-exact_sections[1]).max()/scale),
@@ -53,7 +58,7 @@ if __name__ == "__main__":
             previous = None
             for n in (8, 16, 32, 64):
                 row = measure(n, degree, width)
-                keys = ("max_cell_mean_error_over_peak", "max_section_heat_error_over_scale")
+                keys = ("max_interval_mean_error_over_peak", "max_cell_mean_error_over_peak", "max_section_heat_error_over_scale")
                 orders = {} if previous is None else {k: float(np.log2(previous[k]/row[k])) for k in keys}
                 row.update(orders=orders, passed=row["max_cell_balance_error_over_scale"] < 1e-8
                            and (n < 64 or (max(row[k] for k in keys) < 0.004 and min(orders.values()) > 1.7)))
