@@ -1,0 +1,39 @@
+# Tensor 数值开发归档 · 2026-11-25
+
+8 个仓库共用归档分支 `archive/verified-numerics-20261125`。下表锁定本轮复验使用的求解器版本。TensorPhysics 的四个算例均记录了实际源码版本和文件摘要。
+
+| 仓库 | 复验版本 | 通过的专项回归 |
+|---|---|---:|
+| TensorBEM | [26e70847](https://github.com/cxs503/TensorBEM/commit/26e708474f4a0517eebecf0b851b885b670e87d5) | 57 |
+| TensorDEM | [7012831b](https://github.com/cxs503/TensorDEM/commit/7012831bc2ff97e7a5ee0ff9a990eb3c80a68365) | 61 |
+| TensorDG | [60596369](https://github.com/cxs503/TensorDG/commit/60596369d6ba6e8ca765bec0ffb5e58417f23bfc) | 84 |
+| TensorFEM | [52612a25](https://github.com/cxs503/TensorFEM/commit/52612a25e54001e16055d179388b580e0d486efd) | 95 |
+| TensorFVM | [1234c249](https://github.com/cxs503/TensorFVM/commit/1234c24968f0196696b2615c3ceb080cf9871526) | 117 |
+| TensorLBM | [5cbcce4d](https://github.com/cxs503/TensorLBM/commit/5cbcce4d02f0e093f5bea644253ca13faaf52868) | 10 |
+| TensorSPH | [352185d2](https://github.com/cxs503/TensorSPH/commit/352185d2f090971bdbdf8b7461ca600023f57124) | 124 |
+
+
+专项回归共 548 项。每个仓库的测试命令和计数见 [solver_regressions.json](solver_regressions.json)。
+
+## 跨仓库解析验证
+
+| 算例 | 通过数 | 报告 |
+|---|---:|---|
+| 空间变接触导热系数，两材料侧独立重建界面热流 | 32/32 | [rotated_contact_wave.json](rotated_contact_wave.json) |
+| 环形导热薄层与热库交换 | 4/4 | [annular_sheet_reservoir.json](annular_sheet_reservoir.json) |
+| 双侧行波的壁面热流幅值和相位 | 32/32 | [traveling_wall_slab.json](traveling_wall_slab.json) |
+| 绝热杆温度与热流的低频展开 | 25/25 | [insulated_low_frequency_mode.json](insulated_low_frequency_mode.json) |
+
+在已安装上述版本的科学计算环境中，从 TensorPhysics 仓库根目录执行：
+
+```bash
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+python examples/rotated_contact_wave.py
+python examples/annular_sheet_reservoir.py
+python examples/traveling_wall_slab.py
+python examples/insulated_low_frequency_mode.py
+```
+
+## 待处理的 TensorBEM 收敛结果
+
+独立运行 `python -m tensorbem.benchmarks.conducting_sheet --reservoir`，22 行结果中有 20 行通过。多边形近似在 128 面元时，半径 0.87 m 处温度的收敛阶分别为 1.696 和 1.683，低于 1.8 门槛；加密到 256 面元后，两组的最低收敛阶分别为 1.854 和 1.856。该专项仍待验收。以上数值验证使用解析参考解。[完整报告](bem_reservoir.json)

@@ -1,0 +1,1289 @@
+{
+  "conductivity_W_mK": 2.0,
+  "capacity_J_m3K": 3.0,
+  "runs": [
+    {
+      "solver": "FVM",
+      "n": 16,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.018991202380009158,
+      "relative_wall_flux_L2": 0.024695694067355264,
+      "max_net_wall_phase_error_rad": 0.0002783375560515523,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.31596027844986097,
+            "phase_error_rad": 0.0003324427126407368
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.1087268856027288,
+            "phase_error_rad": 0.0006600776521220453
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0011594204347851952,
+            "phase_error_rad": 0.0004964817132720032
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.1384624978387503,
+            "phase_error_rad": 0.00022994218657598254
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 6.346808674036556e-15,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 16,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.029338294500599167,
+      "relative_wall_flux_L2": 0.060878291726083014,
+      "max_net_wall_phase_error_rad": 0.0003009695050349165,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.7789416221998522,
+            "phase_error_rad": 0.0009653274859100002
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.2674122069661129,
+            "phase_error_rad": 0.0019930603214771097
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0006109449440273237,
+            "phase_error_rad": 0.0001991488372146129
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.3415298093846708,
+            "phase_error_rad": 0.0010707835560988946
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 3.4976430645146916e-15,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 16,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.029338294500599167,
+      "relative_wall_flux_L2": 0.12312309733132977,
+      "max_net_wall_phase_error_rad": 0.0003009695050345835,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 1.5748888516828181,
+            "phase_error_rad": 0.0032925957407116974
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.5421091433827856,
+            "phase_error_rad": 0.0013737814335106565
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.004520482206988974,
+            "phase_error_rad": 0.007648046221429444
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.6903311452209486,
+            "phase_error_rad": 0.0028062084095437307
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 3.3720454314350868e-15,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 16,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.009878130011678872,
+      "relative_wall_flux_L2": 0.011603248263873621,
+      "max_net_wall_phase_error_rad": 0.00016720916938550134,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.14848926114014027,
+            "phase_error_rad": 0.00014586070816993894
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.05087339958521042,
+            "phase_error_rad": 0.00022339955320266973
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0003759826502381103,
+            "phase_error_rad": 0.00020580481929424253
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.06514919948335685,
+            "phase_error_rad": 0.00015386486239821084
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 1.389764769986904e-13,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 32,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.005659199086764207,
+      "relative_wall_flux_L2": 0.006341149738832242,
+      "max_net_wall_phase_error_rad": 6.958194472744426e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.08151844953155596,
+            "phase_error_rad": 8.537287136128187e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.02804960055875405,
+            "phase_error_rad": 0.00015887360781048025
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0002890185380439274,
+            "phase_error_rad": 0.00012901957375356706
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.035724467364043555,
+            "phase_error_rad": 6.0147394827224394e-05
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9545446816001808,
+        2.054756271252829
+      ],
+      "balance_W": 1.772136447804314e-14,
+      "orders": [
+        1.7466614525178041,
+        1.9614431660169116,
+        2.0000506783270624
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 32,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.008181896136075483,
+      "relative_wall_flux_L2": 0.039270248288992324,
+      "max_net_wall_phase_error_rad": 7.51921797941345e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.5049190953794902,
+            "phase_error_rad": 0.0004410613860674406
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.17329160117051767,
+            "phase_error_rad": 0.0009853604945373527
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.00015649684046613668,
+            "phase_error_rad": 5.104029348213553e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.22140516153393985,
+            "phase_error_rad": 0.0004969087178016679
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        0.6254629702615893,
+        1.0162618382715958
+      ],
+      "balance_W": 1.186147440419326e-14,
+      "orders": [
+        1.842277878055735,
+        0.6324911571209749,
+        2.000962786677857
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 32,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.008181896136075483,
+      "relative_wall_flux_L2": 0.025156791028043076,
+      "max_net_wall_phase_error_rad": 7.5192179794967e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.32337059207298857,
+            "phase_error_rad": 0.0006391836638693441
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.11106303260876516,
+            "phase_error_rad": 0.0002350900496095417
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0001573641233000682,
+            "phase_error_rad": 0.0004008393446508058
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.14180082808649352,
+            "phase_error_rad": 0.0005971419041411726
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        2.2839896250095078,
+        3.5807888006267117
+      ],
+      "balance_W": 1.0903526268829104e-14,
+      "orders": [
+        1.842277878055735,
+        2.291081619708851,
+        2.0009627866602875
+      ],
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 32,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0027478567266573492,
+      "relative_wall_flux_L2": 0.0029302136393552503,
+      "max_net_wall_phase_error_rad": 4.180209919634607e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.03767809303907299,
+            "phase_error_rad": 3.6902245766734844e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.01290866536301305,
+            "phase_error_rad": 5.6318450112620304e-05
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 9.541860190152157e-05,
+            "phase_error_rad": 5.367377102302309e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.016531134292484317,
+            "phase_error_rad": 3.8907313485508973e-05
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9785607436278003,
+        1.9879467638719288
+      ],
+      "balance_W": 6.229494861258902e-13,
+      "orders": [
+        1.845931173021285,
+        1.9854509769810877,
+        2.000006666075411
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 64,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0015335005666793887,
+      "relative_wall_flux_L2": 0.0015961420049406332,
+      "max_net_wall_phase_error_rad": 1.739533275680254e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.02054366753462311,
+            "phase_error_rad": 2.1492123228786906e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.007068712049239423,
+            "phase_error_rad": 3.932778405937189e-05
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 7.220178256783089e-05,
+            "phase_error_rad": 3.257149355354153e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.009003064510299197,
+            "phase_error_rad": 1.5210633923276541e-05
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9884328518037422,
+        2.0142586787085497
+      ],
+      "balance_W": 2.7120819279821342e-14,
+      "orders": [
+        1.8837691916122647,
+        1.9901554344001415,
+        2.000012724366821
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 64,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0021535093473174327,
+      "relative_wall_flux_L2": 0.021823015932841916,
+      "max_net_wall_phase_error_rad": 1.8792123450769215e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.2809329313102822,
+            "phase_error_rad": 0.00020975957546511112
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.09640845925345776,
+            "phase_error_rad": 0.0004906103509402443
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 3.936379409570645e-05,
+            "phase_error_rad": 1.2838597167612875e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.12319234436088511,
+            "phase_error_rad": 0.0002385751390679263
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        0.8458264903616772,
+        1.006073959386201
+      ],
+      "balance_W": 1.2743601300506402e-13,
+      "orders": [
+        1.9257456376358761,
+        0.8475862242088225,
+        2.0004545292502693
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 64,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0021535093473174327,
+      "relative_wall_flux_L2": 0.0043895435005068244,
+      "max_net_wall_phase_error_rad": 1.87921234511855e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.05649255697855082,
+            "phase_error_rad": 0.00011260374174641679
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.01938987677734083,
+            "phase_error_rad": 6.772024427267649e-05
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 1.450115235306082e-05,
+            "phase_error_rad": 1.140364268214026e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.024775662787737573,
+            "phase_error_rad": 0.00010793610683323458
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        2.5170557765449417,
+        2.504975768622152
+      ],
+      "balance_W": 1.27763771541402e-13,
+      "orders": [
+        1.9257456376358761,
+        2.51880508872442,
+        2.000454529234283
+      ],
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 64,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0007215576963772387,
+      "relative_wall_flux_L2": 0.0007344196832736377,
+      "max_net_wall_phase_error_rad": 1.0450512498244369e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.009454789918089901,
+            "phase_error_rad": 9.253224175031497e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0032392429337466666,
+            "phase_error_rad": 1.4108824848055704e-05
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 2.3944146637158714e-05,
+            "phase_error_rad": 1.3556341109251422e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.00414825592422563,
+            "phase_error_rad": 9.754699536270908e-06
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9946086417242166,
+        1.9970098034468344
+      ],
+      "balance_W": 1.1535383277266585e-12,
+      "orders": [
+        1.929120120364525,
+        1.9963292239038735,
+        2.0000016981323667
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 128,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0003983774943151446,
+      "relative_wall_flux_L2": 0.00039972047590207,
+      "max_net_wall_phase_error_rad": 4.348823917544062e-06,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.005146268556359246,
+            "phase_error_rad": 5.382460549379419e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.001770731209717269,
+            "phase_error_rad": 9.807424970493166e-06
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 1.8047133533774518e-05,
+            "phase_error_rad": 8.162830516749745e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.002255305932400198,
+            "phase_error_rad": 3.813641683670187e-06
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9970951093986502,
+        2.0036026008664187
+      ],
+      "balance_W": 8.779258802110047e-13,
+      "orders": [
+        1.9446206476043386,
+        1.9975256277871711,
+        2.000003075810599
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 128,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0005519533501813657,
+      "relative_wall_flux_L2": 0.011451305469282748,
+      "max_net_wall_phase_error_rad": 4.6973129233866564e-06,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.14746090893978625,
+            "phase_error_rad": 0.0001021734533708631
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.05060235522476386,
+            "phase_error_rad": 0.0002449307953401275
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 9.855994730131185e-06,
+            "phase_error_rad": 3.2145658841463563e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.06466428831047821,
+            "phase_error_rad": 0.0001168202708552697
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        0.9298931941062866,
+        1.002203495843261
+      ],
+      "balance_W": 6.448808589467234e-13,
+      "orders": [
+        1.9640713415924647,
+        0.9303384178582482,
+        2.0002204852747307
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 128,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0005519533501813657,
+      "relative_wall_flux_L2": 0.0007033381228588506,
+      "max_net_wall_phase_error_rad": 4.697312921471805e-06,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.009054487587954796,
+            "phase_error_rad": 1.8563294729745904e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0031064889154945874,
+            "phase_error_rad": 1.4013200312666778e-05
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 6.885994479132601e-06,
+            "phase_error_rad": 5.655922495161524e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0039713431681702716,
+            "phase_error_rad": 1.808952831001023e-05
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        2.6413558982079537,
+        2.6007300711474755
+      ],
+      "balance_W": 6.444573933797622e-13,
+      "orders": [
+        1.9640713415924647,
+        2.641780588987121,
+        2.0002204858948023
+      ],
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 128,
+      "omega_rad_s": 0.5,
+      "max_temperature_error_K": 0.0001846767184335556,
+      "relative_wall_flux_L2": 0.0001837220183345866,
+      "max_net_wall_phase_error_rad": 2.6126244141152253e-06,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.002365910071155497,
+            "phase_error_rad": 2.3150404887456903e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0008105684088306475,
+            "phase_error_rad": 3.529030974308933e-06
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 5.991639098184426e-06,
+            "phase_error_rad": 3.397688379620961e-06
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.001038034698318313,
+            "phase_error_rad": 2.4404216810345278e-06
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9986501648692923,
+        1.9992538301922176
+      ],
+      "balance_W": 9.871578922301165e-12,
+      "orders": [
+        1.9661127563501706,
+        1.9990801871923616,
+        2.0000020489122052
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 16,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.02828148533155771,
+      "relative_wall_flux_L2": 0.023666439836739342,
+      "max_net_wall_phase_error_rad": 0.012216147414687186,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.3197691191900187,
+            "phase_error_rad": 0.00780418793907928
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.10759579495459182,
+            "phase_error_rad": 0.00755800251567347
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0008552623324638228,
+            "phase_error_rad": 0.016360936859758948
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.13990106920226353,
+            "phase_error_rad": 0.00780514015149771
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 8.426000324584083e-15,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 16,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.042317515079465316,
+      "relative_wall_flux_L2": 0.05972892522810962,
+      "max_net_wall_phase_error_rad": 0.015536234471927066,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.7469283045871169,
+            "phase_error_rad": 0.029663346100260293
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.2542922404702699,
+            "phase_error_rad": 0.029426726642788024
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0008058900006218256,
+            "phase_error_rad": 0.0020677102619656787
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.32734353243735814,
+            "phase_error_rad": 0.029606066598281217
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 1.0986160316453369e-14,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 16,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.042317515079465316,
+      "relative_wall_flux_L2": 0.13936791218707895,
+      "max_net_wall_phase_error_rad": 0.015536234471927498,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 1.6655374629935178,
+            "phase_error_rad": 0.08666472515484516
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.568344723026657,
+            "phase_error_rad": 0.08268729093995349
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0023766196829034976,
+            "phase_error_rad": 0.24458809473318818
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.7291968371140554,
+            "phase_error_rad": 0.0863423224249201
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 1.0019109251294436e-14,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 16,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.010784083081172909,
+      "relative_wall_flux_L2": 0.0123841388145326,
+      "max_net_wall_phase_error_rad": 0.0034710714285246073,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.16682986241588615,
+            "phase_error_rad": 0.0042895725045477145
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.05791694332992847,
+            "phase_error_rad": 0.004314429303276422
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0002609476645262787,
+            "phase_error_rad": 0.006915478915988661
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.07324922491037089,
+            "phase_error_rad": 0.004291179277732798
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": null,
+      "balance_W": 1.0197916713111019e-13,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 32,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.00819878250649101,
+      "relative_wall_flux_L2": 0.006075720313127211,
+      "max_net_wall_phase_error_rad": 0.003057374808339182,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.08230437312509764,
+            "phase_error_rad": 0.0020283027924802733
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.027708322722229894,
+            "phase_error_rad": 0.0019678233188401475
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0002133380201590901,
+            "phase_error_rad": 0.0042268941989861445
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.036010884219805916,
+            "phase_error_rad": 0.0020285796077173304
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9579896279665556,
+        1.9525854555858644
+      ],
+      "balance_W": 1.3203721447146771e-14,
+      "orders": [
+        1.7863762968098607,
+        1.9617153323856347,
+        1.998424046230056
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 32,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.011694450754107653,
+      "relative_wall_flux_L2": 0.03614532859568539,
+      "max_net_wall_phase_error_rad": 0.003872770045731796,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.48663990307417926,
+            "phase_error_rad": 0.013215165281969725
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.16648898184109928,
+            "phase_error_rad": 0.013101159157304814
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 0.00020693123876126818,
+            "phase_error_rad": 0.0006043570454782015
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.21336496291096374,
+            "phase_error_rad": 0.013187693355407972
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        0.6181151477044808,
+        1.166486877743481
+      ],
+      "balance_W": 2.932334201094587e-14,
+      "orders": [
+        1.8554308085238955,
+        0.7246205558930474,
+        2.0041991332817264
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 32,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.011694450754107653,
+      "relative_wall_flux_L2": 0.02864309827859969,
+      "max_net_wall_phase_error_rad": 0.003872770045731615,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.3270593963599264,
+            "phase_error_rad": 0.018526519747314077
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.11232874830674433,
+            "phase_error_rad": 0.018221118356732968
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 2.297180370550503e-05,
+            "phase_error_rad": 0.012944790631622231
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.1433688262113293,
+            "phase_error_rad": 0.018503782552946713
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        2.348363236449031,
+        3.722690384651217
+      ],
+      "balance_W": 2.882135550590439e-14,
+      "orders": [
+        1.8554308085238955,
+        2.282638975779856,
+        2.0041991332818343
+      ],
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 32,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.003006589688016203,
+      "relative_wall_flux_L2": 0.0031303315167844955,
+      "max_net_wall_phase_error_rad": 0.0008677977986470176,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.04232555188799658,
+            "phase_error_rad": 0.0010859934223528115
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.014693104479851726,
+            "phase_error_rad": 0.0010927152716673201
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 6.59353802965855e-05,
+            "phase_error_rad": 0.001794786561277947
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.018583708552747602,
+            "phase_error_rad": 0.001086451500799937
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9787767683589081,
+        1.9460168786650882
+      ],
+      "balance_W": 4.265515582424021e-13,
+      "orders": [
+        1.842703615702304,
+        1.9841061894076146,
+        1.9999502220197587
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 64,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.002195846597198394,
+      "relative_wall_flux_L2": 0.0015292236289333662,
+      "max_net_wall_phase_error_rad": 0.0007645346043173523,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.020728239746830468,
+            "phase_error_rad": 0.0005121118701899096
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.006979212114420541,
+            "phase_error_rad": 0.0004970595589965359
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 5.330314083194093e-05,
+            "phase_error_rad": 0.0010655337527428759
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.009069426870278008,
+            "phase_error_rad": 0.0005121835915314688
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9893714810030092,
+        1.988021707666293
+      ],
+      "balance_W": 4.4938668397781776e-14,
+      "orders": [
+        1.9006324193850526,
+        1.9902560616317717,
+        1.9996397179494503
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 64,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.0030639417001939243,
+      "relative_wall_flux_L2": 0.019730254779392192,
+      "max_net_wall_phase_error_rad": 0.0009663987442267306,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.2711760298650727,
+            "phase_error_rad": 0.006188364412277637
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.09293576169161799,
+            "phase_error_rad": 0.0061325168615686
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 5.20801637693101e-05,
+            "phase_error_rad": 0.00015654858926600912
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.1189144022607147,
+            "phase_error_rad": 0.006174931004458018
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        0.8436249623921811,
+        1.0945644089357711
+      ],
+      "balance_W": 1.2239875271537101e-13,
+      "orders": [
+        1.9323633536852667,
+        0.8733996201395764,
+        2.0026753556204246
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 64,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.0030639417001939243,
+      "relative_wall_flux_L2": 0.0049978281586458536,
+      "max_net_wall_phase_error_rad": 0.0009663987442267306,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.05513296537715817,
+            "phase_error_rad": 0.0033720444074237213
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.01901283743841642,
+            "phase_error_rad": 0.0033374978990657455
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 3.582416224886045e-05,
+            "phase_error_rad": 0.00026186014605490996
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0241813019151369,
+            "phase_error_rad": 0.0033692800065889786
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        2.5685655581006896,
+        2.457896452191421
+      ],
+      "balance_W": 1.2058964270137022e-13,
+      "orders": [
+        1.9323633536852667,
+        2.5188143521721567,
+        2.002675355620357
+      ],
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 64,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.0007904495051033016,
+      "relative_wall_flux_L2": 0.0007847615223266738,
+      "max_net_wall_phase_error_rad": 0.00021695261499506086,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.010620627244055214,
+            "phase_error_rad": 0.0002723584746028892
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0036868508823122426,
+            "phase_error_rad": 0.00027407030920806595
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 1.652726577236127e-05,
+            "phase_error_rad": 0.0004527837970477889
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.004663156728043738,
+            "phase_error_rad": 0.00027247650255139195
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9946599068757,
+        1.9869180496847323
+      ],
+      "balance_W": 1.12563685440263e-12,
+      "orders": [
+        1.9273827859749675,
+        1.9959892418518914,
+        1.9999789509613524
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 128,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.0005673367385979406,
+      "relative_wall_flux_L2": 0.0003829548999579444,
+      "max_net_wall_phase_error_rad": 0.00019114530526883415,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.005191641603090602,
+            "phase_error_rad": 0.00012834611308270465
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.001748086060239018,
+            "phase_error_rad": 0.00012458727127469176
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 1.3323800750721787e-05,
+            "phase_error_rad": 0.00026693841601871447
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0022715576218486078,
+            "phase_error_rad": 0.00012836420224589373
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9973349095393254,
+        1.9969974451631545
+      ],
+      "balance_W": 2.673771110915334e-14,
+      "orders": [
+        1.952500074895485,
+        1.9975529942183718,
+        1.9999120357471027
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 128,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.0007836127144544646,
+      "relative_wall_flux_L2": 0.010283987515423199,
+      "max_net_wall_phase_error_rad": 0.00024135494389514476,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.14243714536344143,
+            "phase_error_rad": 0.0029882556842546724
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0488516278054032,
+            "phase_error_rad": 0.0029606422765837757
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 1.3041848464765554e-05,
+            "phase_error_rad": 3.947824887957069e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.062464830033784224,
+            "phase_error_rad": 0.0029816164806589305
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        0.9289042320758104,
+        1.0502545600308764
+      ],
+      "balance_W": 5.99528492640185e-13,
+      "orders": [
+        1.9671761350778645,
+        0.9400098220145194,
+        2.0014622008407184
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH recovered",
+      "n": 128,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.0007836127144544646,
+      "relative_wall_flux_L2": 0.0008074486288814656,
+      "max_net_wall_phase_error_rad": 0.00024135494389557145,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.008530238800537049,
+            "phase_error_rad": 0.0005725855302476294
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.002954989207722747,
+            "phase_error_rad": 0.0005682236403511155
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 1.0815928635429795e-05,
+            "phase_error_rad": 0.00011273699968171099
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0037432676414344,
+            "phase_error_rad": 0.0005721524996602198
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        2.692257165315339,
+        2.558060417964788
+      ],
+      "balance_W": 5.995403347429649e-13,
+      "orders": [
+        1.9671761350778645,
+        2.629858916426272,
+        2.001462200838168
+      ],
+      "passed": true
+    },
+    {
+      "solver": "LBM",
+      "n": 128,
+      "omega_rad_s": 15.0,
+      "max_temperature_error_K": 0.00020243318158083396,
+      "relative_wall_flux_L2": 0.000196327104328998,
+      "max_net_wall_phase_error_rad": 5.423837203530826e-05,
+      "wall_modes": {
+        "1": {
+          "west": {
+            "amplitude_error_W_m2": 0.0026576189431768427,
+            "phase_error_rad": 6.81435385636416e-05
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0009225644488157769,
+            "phase_error_rad": 6.85734523603936e-05
+          }
+        },
+        "-1": {
+          "west": {
+            "amplitude_error_W_m2": 4.134526632202512e-06,
+            "phase_error_rad": 0.00011345089236136256
+          },
+          "east": {
+            "amplitude_error_W_m2": 0.0011668702742948511,
+            "phase_error_rad": 6.817326456888178e-05
+          }
+        }
+      },
+      "wall_mode_amplitude_phase_orders": [
+        1.9986628059293907,
+        1.9967543752409975
+      ],
+      "balance_W": 2.8109321744749686e-12,
+      "orders": [
+        1.9652275174132794,
+        1.9989949457651983,
+        1.9999941937500143
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "8ef74dbe0094ec2fa42921145a1ef1f0ab2107d7",
+      "file": "traveling_wall_slab.py",
+      "source_sha256": "c3ee55c1a179d58fdeeb6e53b7faf4525bef09ffb5d40f4ccc24590afc990ce4"
+    },
+    {
+      "commit": "1234c24968f0196696b2615c3ceb080cf9871526",
+      "file": "energy.py",
+      "source_sha256": "c598382c7ef39582553da9a2a8991bf21baae47aaf686aef691d80591a4d9142"
+    },
+    {
+      "commit": "352185d2f090971bdbdf8b7461ca600023f57124",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "750d9aae0d82cdc334fa729d941ea7cae702d6f6536abaf741ccc1084b2259f8"
+    },
+    {
+      "commit": "5cbcce4d02f0e093f5bea644253ca13faaf52868",
+      "file": "scalar.py",
+      "source_sha256": "eb9e0f440d2f6960890829d7347540299281646547098b6445d7f362ca22ef08"
+    },
+    {
+      "commit": "5cbcce4d02f0e093f5bea644253ca13faaf52868",
+      "file": "scalar_harmonic.py",
+      "source_sha256": "2bae76db300fe9e0af6b1318014c94c83d360bb47b2b0e4aa227d77d2d26b8a7"
+    }
+  ]
+}

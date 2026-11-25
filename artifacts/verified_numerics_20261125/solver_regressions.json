@@ -1,0 +1,65 @@
+[
+  {
+    "repository": "TensorBEM",
+    "commit": "26e708474f4a0517eebecf0b851b885b670e87d5",
+    "command": "python -m pytest -q tests/test_layered_annulus.py",
+    "tests": 57,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "repository": "TensorDEM",
+    "commit": "7012831bc2ff97e7a5ee0ff9a990eb3c80a68365",
+    "command": "python -m pytest -q tests/test_thermal_contact_chain.py",
+    "tests": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "repository": "TensorDG",
+    "commit": "60596369d6ba6e8ca765bec0ffb5e58417f23bfc",
+    "command": "python -m pytest -q tests/test_transient_diffusion_2d.py tests/test_poisson_2d.py tests/test_poisson_2d_bc.py",
+    "tests": 84,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "repository": "TensorFEM",
+    "commit": "52612a25e54001e16055d179388b580e0d486efd",
+    "command": "python -m pytest -q tests/test_thermal.py",
+    "tests": 95,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "repository": "TensorFVM",
+    "commit": "1234c24968f0196696b2615c3ceb080cf9871526",
+    "command": "python -m pytest -q tests/test_transient_conduction.py tests/test_harmonic_conduction.py tests/test_robin_conduction.py tests/test_steady_directional_conduction.py tests/test_annular_conduction.py",
+    "tests": 117,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "repository": "TensorLBM",
+    "commit": "5cbcce4d02f0e093f5bea644253ca13faaf52868",
+    "command": "python -m pytest -q tests/test_scalar_harmonic.py",
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "repository": "TensorSPH",
+    "commit": "352185d2f090971bdbdf8b7461ca600023f57124",
+    "command": "python -m pytest -q tests/test_conduction_2d.py",
+    "tests": 124,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+]

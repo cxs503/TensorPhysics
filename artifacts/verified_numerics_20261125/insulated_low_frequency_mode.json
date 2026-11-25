@@ -1,0 +1,764 @@
+{
+  "runs": [
+    {
+      "solver": "FEM",
+      "n": 8,
+      "steady_temperature_error_K": 0.0006850723719476849,
+      "lag_temperature_error_K_s": 0.00020583579738812422,
+      "lag_flux_error_W_s_m2": 0.0006713176420851197,
+      "steady_stored_energy_J": 7.144028522217822e-17,
+      "lag_stored_energy_J_s": 6.679952511598719e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0002945808607485835,
+        7.380026967375704e-05,
+        1.845979664095341e-05
+      ],
+      "frequency_orders": [
+        1.9969657067278443,
+        1.9992394281715384
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "n": 8,
+      "steady_temperature_error_K": 0.0006886108136411575,
+      "lag_temperature_error_K_s": 0.00021066796527834138,
+      "lag_flux_error_W_s_m2": 0.0006747850397377316,
+      "steady_stored_energy_J": 2.1457344368072987e-17,
+      "lag_stored_energy_J_s": 9.69739903612216e-19,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003181883078300628,
+        7.972336845812596e-05,
+        1.9941906194223733e-05
+      ],
+      "frequency_orders": [
+        1.9968062501880433,
+        1.9991993482270107
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "n": 8,
+      "steady_temperature_error_K": 0.00114458758281967,
+      "lag_temperature_error_K_s": 0.0003516335351422837,
+      "lag_flux_error_W_s_m2": 0.0014579139746992507,
+      "steady_stored_energy_J": 1.0408340855860843e-17,
+      "lag_stored_energy_J_s": 1.454609855418324e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003282952566929533,
+        8.225874021780897e-05,
+        2.0576291843097036e-05
+      ],
+      "frequency_orders": [
+        1.9967530231482367,
+        1.9991859669786427
+      ],
+      "passed": true
+    },
+    {
+      "steady_field_L2_K": 0.0005409117711822622,
+      "lag_field_L2_K_s": 0.0001523962328042252,
+      "solver": "DG-P1",
+      "n": 8,
+      "steady_temperature_error_K": 0.000684410884268905,
+      "lag_temperature_error_K_s": 0.00020567174456953612,
+      "lag_flux_error_W_s_m2": 0.0006706694356103513,
+      "steady_stored_energy_J": 2.43016123303191e-17,
+      "lag_stored_energy_J_s": 2.8189256484623115e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00029458941410264193,
+        7.380241506508631e-05,
+        1.846033343020453e-05
+      ],
+      "frequency_orders": [
+        1.996965656866513,
+        1.9992394157777147
+      ],
+      "passed": true
+    },
+    {
+      "steady_field_L2_K": 1.3151603298480566e-05,
+      "lag_field_L2_K_s": 2.0251329908189186e-06,
+      "solver": "DG-P2",
+      "n": 8,
+      "steady_temperature_error_K": 1.7434203954566116e-15,
+      "lag_temperature_error_K_s": 2.575321845460092e-07,
+      "lag_flux_error_W_s_m2": 6.656856174461641e-15,
+      "steady_stored_energy_J": 1.9797899796144628e-17,
+      "lag_stored_energy_J_s": 1.999170025984728e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003061428530139949,
+        7.670102187575805e-05,
+        1.9185629168420908e-05
+      ],
+      "frequency_orders": [
+        1.996887299616975,
+        1.99921972158339
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FEM",
+      "n": 16,
+      "steady_temperature_error_K": 0.00017428613808179047,
+      "lag_temperature_error_K_s": 5.282356648596496e-05,
+      "lag_flux_error_W_s_m2": 0.0001675052383563482,
+      "steady_stored_energy_J": 8.468667010627396e-17,
+      "lag_stored_energy_J_s": 1.130121503276712e-17,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003091702411471582,
+        7.745844792811184e-05,
+        1.9375021749463013e-05
+      ],
+      "frequency_orders": [
+        1.9969069620687911,
+        1.9992246637993063
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9747985756331363,
+        "lag_temperature_error_K_s": 1.9622402902716298,
+        "lag_flux_error_W_s_m2": 2.0027893432545345
+      }
+    },
+    {
+      "solver": "FVM",
+      "n": 16,
+      "steady_temperature_error_K": 0.00017451038158785242,
+      "lag_temperature_error_K_s": 5.313016991591094e-05,
+      "lag_flux_error_W_s_m2": 0.00016772075728607077,
+      "steady_stored_energy_J": 2.343482367555115e-17,
+      "lag_stored_energy_J_s": 3.7636029184026e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003151787658978533,
+        7.8965984771872e-05,
+        1.9752245733419747e-05
+      ],
+      "frequency_orders": [
+        1.9968671015654609,
+        1.9992146447346797
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9803759719050842,
+        "lag_temperature_error_K_s": 1.9873677190304226,
+        "lag_flux_error_W_s_m2": 2.008366739526019
+      }
+    },
+    {
+      "solver": "SPH",
+      "n": 16,
+      "steady_temperature_error_K": 0.00028862251667414654,
+      "lag_temperature_error_K_s": 8.796388232371408e-05,
+      "lag_flux_error_W_s_m2": 0.00036118616610283553,
+      "steady_stored_energy_J": 3.422508744630747e-17,
+      "lag_stored_energy_J_s": 2.42434975903054e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003176649042249506,
+        7.958959095165146e-05,
+        1.9908277465853133e-05
+      ],
+      "frequency_orders": [
+        1.9968540424659575,
+        1.9992113622062104
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9875721007248455,
+        "lag_temperature_error_K_s": 1.9990894815858726,
+        "lag_flux_error_W_s_m2": 2.013091052975871
+      }
+    },
+    {
+      "steady_field_L2_K": 0.00013564572686344085,
+      "lag_field_L2_K_s": 3.848027071350582e-05,
+      "solver": "DG-P1",
+      "n": 16,
+      "steady_temperature_error_K": 0.00017424372534006287,
+      "lag_temperature_error_K_s": 5.281287951169756e-05,
+      "lag_flux_error_W_s_m2": 0.00016746447574457384,
+      "steady_stored_energy_J": 1.179739509965479e-17,
+      "lag_stored_energy_J_s": 2.135630605041629e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00030917080487911073,
+        7.74585893463718e-05,
+        1.9375057139054498e-05
+      ],
+      "frequency_orders": [
+        1.9969069586641262,
+        1.9992246626063543
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9737559989696731,
+        "lag_temperature_error_K_s": 1.9613818997109196,
+        "lag_flux_error_W_s_m2": 2.001746766683695,
+        "steady_field_L2_K": 1.9955496930979841,
+        "lag_field_L2_K_s": 1.9856363864248399
+      }
+    },
+    {
+      "steady_field_L2_K": 1.6460983769286452e-06,
+      "lag_field_L2_K_s": 2.5100729051778445e-07,
+      "solver": "DG-P2",
+      "n": 16,
+      "steady_temperature_error_K": 6.479968465664435e-15,
+      "lag_temperature_error_K_s": 1.6503566008307587e-08,
+      "lag_flux_error_W_s_m2": 1.7041364012872758e-14,
+      "steady_stored_energy_J": 6.2546344413855015e-18,
+      "lag_stored_energy_J_s": 3.223564806432317e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003121591397360333,
+        7.820835222861168e-05,
+        1.956266625053756e-05
+      ],
+      "frequency_orders": [
+        1.9968871143202476,
+        1.9992196751440858
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "lag_temperature_error_K_s": 3.9639030477348043,
+        "steady_field_L2_K": 2.9981162234714334,
+        "lag_field_L2_K_s": 3.0122154800924386
+      }
+    },
+    {
+      "solver": "FEM",
+      "n": 32,
+      "steady_temperature_error_K": 4.3761248542823695e-05,
+      "lag_temperature_error_K_s": 1.3292210781929279e-05,
+      "lag_flux_error_W_s_m2": 4.185611860377771e-05,
+      "steady_stored_energy_J": 1.7789851440347242e-16,
+      "lag_stored_energy_J_s": 1.9152845083230908e-16,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00031291723588047944,
+        7.839801579709425e-05,
+        1.9610090831013223e-05
+      ],
+      "frequency_orders": [
+        1.996892080010569,
+        1.9992209232336606
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9937320236412113,
+        "lag_temperature_error_K_s": 1.9906006352225565,
+        "lag_flux_error_W_s_m2": 2.000695774279326
+      }
+    },
+    {
+      "solver": "FVM",
+      "n": 32,
+      "steady_temperature_error_K": 4.3775312184653095e-05,
+      "lag_temperature_error_K_s": 1.3311445576787632e-05,
+      "lag_flux_error_W_s_m2": 4.1869569990080486e-05,
+      "steady_stored_energy_J": 3.531571188893758e-17,
+      "lag_stored_energy_J_s": 2.2013576404720974e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003144261304182302,
+        7.877659706855801e-05,
+        1.9704821483167372e-05
+      ],
+      "frequency_orders": [
+        1.9968821149401603,
+        1.999218418490531
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9951234922073509,
+        "lag_temperature_error_K_s": 1.9968640752784266,
+        "lag_flux_error_W_s_m2": 2.0020872428469842
+      }
+    },
+    {
+      "solver": "SPH",
+      "n": 32,
+      "steady_temperature_error_K": 7.230936517409028e-05,
+      "lag_temperature_error_K_s": 2.1993992990681486e-05,
+      "lag_flux_error_W_s_m2": 9.009198442216488e-05,
+      "steady_stored_energy_J": 1.0228342838563029e-17,
+      "lag_stored_energy_J_s": 2.45865404217503e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00031504513284283104,
+        7.893186025294477e-05,
+        1.9743669487446526e-05
+      ],
+      "frequency_orders": [
+        1.9968788655803091,
+        1.9992176019927692
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9969294394458317,
+        "lag_temperature_error_K_s": 1.9998017315366463,
+        "lag_flux_error_W_s_m2": 2.0032719780130983
+      }
+    },
+    {
+      "steady_field_L2_K": 3.3937634046467534e-05,
+      "lag_field_L2_K_s": 9.64403484549267e-06,
+      "solver": "DG-P1",
+      "n": 32,
+      "steady_temperature_error_K": 4.375858076486802e-05,
+      "lag_temperature_error_K_s": 1.3291535908728144e-05,
+      "lag_flux_error_W_s_m2": 4.1853566905879696e-05,
+      "steady_stored_energy_J": 1.926953957773107e-17,
+      "lag_stored_energy_J_s": 2.5403668998816603e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003129172716338686,
+        7.839802482559044e-05,
+        1.9610093131706997e-05
+      ],
+      "frequency_orders": [
+        1.9968920787063558,
+        1.999220920117975
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9934688517511463,
+        "lag_temperature_error_K_s": 1.9903819780334657,
+        "lag_flux_error_W_s_m2": 2.0004326043932963,
+        "steady_field_L2_K": 1.9988857039111316,
+        "lag_field_L2_K_s": 1.9964101799250347
+      }
+    },
+    {
+      "steady_field_L2_K": 2.0582925001159767e-07,
+      "lag_field_L2_K_s": 3.130830282050096e-08,
+      "solver": "DG-P2",
+      "n": 32,
+      "steady_temperature_error_K": 2.448704100183673e-14,
+      "lag_temperature_error_K_s": 1.0379080805324273e-09,
+      "lag_flux_error_W_s_m2": 8.683872250414657e-14,
+      "steady_stored_energy_J": 5.368716930716546e-18,
+      "lag_stored_energy_J_s": 2.0456685677126055e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00031367071886858597,
+        7.8587063893124e-05,
+        1.9657395448675584e-05
+      ],
+      "frequency_orders": [
+        1.996887102900499,
+        1.9992196708308696
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "lag_temperature_error_K_s": 3.9910272023530275,
+        "steady_field_L2_K": 2.999530638508679,
+        "lag_field_L2_K_s": 3.0031120587058
+      }
+    },
+    {
+      "solver": "FEM",
+      "n": 64,
+      "steady_temperature_error_K": 1.095218628360636e-05,
+      "lag_temperature_error_K_s": 3.3284638395993688e-06,
+      "lag_flux_error_W_s_m2": 1.0462768799321308e-05,
+      "steady_stored_energy_J": 8.57714469777393e-16,
+      "lag_stored_energy_J_s": 1.5700181739888939e-16,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003138603146637922,
+        7.863449740354693e-05,
+        1.96692559599821e-05
+      ],
+      "frequency_orders": [
+        1.996888347207107,
+        1.9992199849078593
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.998435009504856,
+        "lag_temperature_error_K_s": 1.9976526759080544,
+        "lag_flux_error_W_s_m2": 2.000173846409473
+      }
+    },
+    {
+      "solver": "FVM",
+      "n": 64,
+      "steady_temperature_error_K": 1.0953066019929607e-05,
+      "lag_temperature_error_K_s": 3.3296671422585484e-06,
+      "lag_flux_error_W_s_m2": 1.0463609224346465e-05,
+      "steady_stored_energy_J": 1.995992348133353e-17,
+      "lag_stored_energy_J_s": 1.3682012840530785e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003142379625396301,
+        7.872924917420541e-05,
+        1.9692965260655725e-05
+      ],
+      "frequency_orders": [
+        1.9968858559336815,
+        1.9992193587376719
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.998782696788774,
+        "lag_temperature_error_K_s": 1.99921738410185,
+        "lag_flux_error_W_s_m2": 2.000521533520271
+      }
+    },
+    {
+      "solver": "SPH",
+      "n": 64,
+      "steady_temperature_error_K": 1.8086934282093882e-05,
+      "lag_temperature_error_K_s": 5.498680261628463e-06,
+      "lag_flux_error_W_s_m2": 2.2510230120929527e-05,
+      "steady_stored_energy_J": 2.1624330111175838e-17,
+      "lag_stored_energy_J_s": 3.408884911792649e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00031439255495271587,
+        7.876802507582682e-05,
+        1.9702667249948557e-05
+      ],
+      "frequency_orders": [
+        1.9968850448391915,
+        1.9992191561239343
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9992346171937108,
+        "lag_temperature_error_K_s": 1.9999522439988562,
+        "lag_flux_error_W_s_m2": 2.0008179482008277
+      }
+    },
+    {
+      "steady_field_L2_K": 8.48604757559392e-06,
+      "lag_field_L2_K_s": 2.4125088748774342e-06,
+      "solver": "DG-P1",
+      "n": 64,
+      "steady_temperature_error_K": 1.0952019284780862e-05,
+      "lag_temperature_error_K_s": 3.3284215486197833e-06,
+      "lag_flux_error_W_s_m2": 1.0462609201010073e-05,
+      "steady_stored_energy_J": 4.735866574734686e-18,
+      "lag_stored_energy_J_s": 1.6911903181914441e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00031386031694491254,
+        7.863449804984652e-05,
+        1.9669256157284116e-05
+      ],
+      "frequency_orders": [
+        1.9968883458349802,
+        1.9992199822937657
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.998369055460275,
+        "lag_temperature_error_K_s": 1.9975977562099139,
+        "lag_flux_error_W_s_m2": 2.0001078988388405,
+        "steady_field_L2_K": 1.9997213192778591,
+        "lag_field_L2_K_s": 1.999102614024222
+      }
+    },
+    {
+      "steady_field_L2_K": 2.57307449130016e-08,
+      "lag_field_L2_K_s": 3.911416495177193e-09,
+      "solver": "DG-P2",
+      "n": 64,
+      "steady_temperature_error_K": 3.6255351996552103e-13,
+      "lag_temperature_error_K_s": 6.489221056512605e-11,
+      "lag_flux_error_W_s_m2": 5.408331299296058e-13,
+      "steady_stored_energy_J": 2.3491186070386547e-17,
+      "lag_stored_energy_J_s": 2.15621516284773e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00031404907865249364,
+        7.868185850321622e-05,
+        1.968110717972757e-05
+      ],
+      "frequency_orders": [
+        1.996887096530013,
+        1.9992196520018024
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "lag_temperature_error_K_s": 3.9994895582883134,
+        "steady_field_L2_K": 2.9998828862522116,
+        "lag_field_L2_K_s": 3.000782233791759
+      }
+    },
+    {
+      "solver": "FEM",
+      "n": 128,
+      "steady_temperature_error_K": 2.738788971527742e-06,
+      "lag_temperature_error_K_s": 8.324544099117215e-07,
+      "lag_flux_error_W_s_m2": 2.6156134139692897e-06,
+      "steady_stored_energy_J": 7.385790592900855e-17,
+      "lag_stored_energy_J_s": 4.905509392536423e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003140964815998465,
+        7.86937175633064e-05,
+        1.9684072207832107e-05
+      ],
+      "frequency_orders": [
+        1.9968874132275993,
+        1.999219750285688
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9996088771700502,
+        "lag_temperature_error_K_s": 1.9994133259016127,
+        "lag_flux_error_W_s_m2": 2.0000434552975532
+      }
+    },
+    {
+      "solver": "FVM",
+      "n": 128,
+      "steady_temperature_error_K": 2.738843965511454e-06,
+      "lag_temperature_error_K_s": 8.325296335103478e-07,
+      "lag_flux_error_W_s_m2": 2.61566593248011e-06,
+      "steady_stored_energy_J": 1.9074872644660637e-17,
+      "lag_stored_energy_J_s": 9.18877332224803e-19,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003141909201056313,
+        7.871741216307468e-05,
+        1.969000119747648e-05
+      ],
+      "frequency_orders": [
+        1.996886790439601,
+        1.9992195938415145
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.999695788701306,
+        "lag_temperature_error_K_s": 1.9998044319384272,
+        "lag_flux_error_W_s_m2": 2.000130368185823
+      }
+    },
+    {
+      "solver": "SPH",
+      "n": 128,
+      "steady_temperature_error_K": 4.522332777514442e-06,
+      "lag_temperature_error_K_s": 1.374681298048773e-06,
+      "lag_flux_error_W_s_m2": 5.626759723420702e-06,
+      "steady_stored_energy_J": 3.398035595643042e-17,
+      "lag_stored_energy_J_s": 3.9091465258659384e-19,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003142295582448587,
+        7.87271035678787e-05,
+        1.969242599366754e-05
+      ],
+      "frequency_orders": [
+        1.9968865888055862,
+        1.9992195473917767
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9998088309124817,
+        "lag_temperature_error_K_s": 1.9999882115639123,
+        "lag_flux_error_W_s_m2": 2.000204542293732
+      }
+    },
+    {
+      "steady_field_L2_K": 2.121614585613749e-06,
+      "lag_field_L2_K_s": 6.032210876848424e-07,
+      "solver": "DG-P1",
+      "n": 128,
+      "steady_temperature_error_K": 2.7387789676111427e-06,
+      "lag_temperature_error_K_s": 8.324518856267838e-07,
+      "lag_flux_error_W_s_m2": 2.615604031624551e-06,
+      "steady_stored_energy_J": 1.617788049191186e-17,
+      "lag_stored_energy_J_s": 7.939725219329377e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.0003140964814312574,
+        7.869371738874895e-05,
+        1.96840716818821e-05
+      ],
+      "frequency_orders": [
+        1.9968874156534113,
+        1.999219785633716
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "steady_temperature_error_K": 1.9995921485142791,
+        "lag_temperature_error_K_s": 1.9993993698596129,
+        "lag_flux_error_W_s_m2": 2.0000266233981985,
+        "steady_field_L2_K": 1.9999301680828494,
+        "lag_field_L2_K_s": 1.9997754806127694
+      }
+    },
+    {
+      "steady_field_L2_K": 3.2164071451771606e-09,
+      "lag_field_L2_K_s": 4.888599634477864e-10,
+      "solver": "DG-P2",
+      "n": 128,
+      "steady_temperature_error_K": 7.462606781942846e-13,
+      "lag_temperature_error_K_s": 3.992723041945411e-12,
+      "lag_flux_error_W_s_m2": 1.0223819508260849e-12,
+      "steady_stored_energy_J": 1.9265955334514884e-17,
+      "lag_stored_energy_J_s": 2.5983502945713383e-18,
+      "frequencies_rad_s": [
+        0.5,
+        0.25,
+        0.125
+      ],
+      "harmonic_remainders_K": [
+        0.00031414369767488327,
+        7.870556443704773e-05,
+        1.9687037205331243e-05
+      ],
+      "frequency_orders": [
+        1.9968870950038757,
+        1.9992196274036012
+      ],
+      "passed": true,
+      "mesh_orders": {
+        "lag_temperature_error_K_s": 4.022600405537376,
+        "steady_field_L2_K": 2.9999712790711883,
+        "lag_field_L2_K_s": 3.000198003446128
+      }
+    }
+  ],
+  "sources": [
+    {
+      "commit": "8ef74dbe0094ec2fa42921145a1ef1f0ab2107d7",
+      "file": "insulated_low_frequency_mode.py",
+      "source_sha256": "96e43ff3363e5527b19f34e44db321a6ad64907092206ae341234fd9b5145612"
+    },
+    {
+      "commit": "52612a25e54001e16055d179388b580e0d486efd",
+      "file": "thermal.py",
+      "source_sha256": "3f4082e05ac487d2df23bcefac8fa19e8046d3841aba8c34b069a927bf7edd4d"
+    },
+    {
+      "commit": "1234c24968f0196696b2615c3ceb080cf9871526",
+      "file": "energy.py",
+      "source_sha256": "c598382c7ef39582553da9a2a8991bf21baae47aaf686aef691d80591a4d9142"
+    },
+    {
+      "commit": "352185d2f090971bdbdf8b7461ca600023f57124",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "750d9aae0d82cdc334fa729d941ea7cae702d6f6536abaf741ccc1084b2259f8"
+    },
+    {
+      "commit": "60596369d6ba6e8ca765bec0ffb5e58417f23bfc",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    },
+    {
+      "commit": "60596369d6ba6e8ca765bec0ffb5e58417f23bfc",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "bb0c24da9d901913fe14d2919407130f498abfadf108b98e1c52bf5320127996"
+    }
+  ]
+}

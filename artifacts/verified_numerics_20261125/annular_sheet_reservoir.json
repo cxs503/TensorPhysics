@@ -1,0 +1,131 @@
+{
+  "runs": [
+    {
+      "cells_per_layer": 8,
+      "omega_rad_s": 0.0,
+      "fvm_errors": {
+        "temperature_K": 0.012924144393550014,
+        "sheet_K": 0.0008553992081272983,
+        "incoming_W_m2": 0.004213726194579943,
+        "outgoing_W_m2": 0.0005782443383690583,
+        "reservoir_W_m2": 0.0009409391289400282
+      },
+      "sheet_balance_W_m2": 2.1013738783212888e-15,
+      "panels_per_circle": 16,
+      "bem_errors": {
+        "temperature_K": 2.020605904817785e-14,
+        "sheet_K": 1.532107773982716e-14,
+        "incoming_W_m2": 4.440892098500626e-15,
+        "outgoing_W_m2": 1.454392162258955e-14,
+        "reservoir_W_m2": 1.687538997430238e-14
+      },
+      "bem_net_power_residual_W_m": 5.773159728050814e-14,
+      "fvm_orders": {},
+      "passed": true
+    },
+    {
+      "cells_per_layer": 16,
+      "omega_rad_s": 0.0,
+      "fvm_errors": {
+        "temperature_K": 0.003565184136199388,
+        "sheet_K": 0.00021653458238018384,
+        "incoming_W_m2": 0.001066280469226554,
+        "outgoing_W_m2": 0.0001453993034139142,
+        "reservoir_W_m2": 0.00023818804061820223
+      },
+      "sheet_balance_W_m2": 7.550332863779066e-16,
+      "panels_per_circle": 32,
+      "bem_errors": {
+        "temperature_K": 2.886579864025407e-14,
+        "sheet_K": 2.531308496145357e-14,
+        "incoming_W_m2": 1.2795320358804929e-14,
+        "outgoing_W_m2": 2.6201263381153694e-14,
+        "reservoir_W_m2": 2.7977620220553945e-14
+      },
+      "bem_net_power_residual_W_m": 9.769962616701378e-14,
+      "fvm_orders": {
+        "temperature_K": 1.8580202774995374,
+        "sheet_K": 1.9820004178688932,
+        "incoming_W_m2": 1.982509604237734,
+        "outgoing_W_m2": 1.9916588778619313,
+        "reservoir_W_m2": 1.982000417868893
+      },
+      "passed": true
+    },
+    {
+      "cells_per_layer": 32,
+      "omega_rad_s": 0.0,
+      "fvm_errors": {
+        "temperature_K": 0.0009377950359003429,
+        "sheet_K": 5.4304198790953825e-05,
+        "incoming_W_m2": 0.0002673888607659513,
+        "outgoing_W_m2": 3.640512681302863e-05,
+        "reservoir_W_m2": 5.973461867004921e-05
+      },
+      "sheet_balance_W_m2": 6.054788326390932e-15,
+      "panels_per_circle": 64,
+      "bem_errors": {
+        "temperature_K": 1.3811174426336947e-13,
+        "sheet_K": 1.412203687323199e-13,
+        "incoming_W_m2": 4.340972026284362e-14,
+        "outgoing_W_m2": 3.441691376337985e-14,
+        "reservoir_W_m2": 1.5520917884259688e-13
+      },
+      "bem_net_power_residual_W_m": 5.906386491005833e-13,
+      "fvm_orders": {
+        "temperature_K": 1.926632044074428,
+        "sheet_K": 1.9954617974152389,
+        "incoming_W_m2": 1.9955756973747352,
+        "outgoing_W_m2": 1.9978068177480703,
+        "reservoir_W_m2": 1.9954617974152387
+      },
+      "passed": true
+    },
+    {
+      "cells_per_layer": 64,
+      "omega_rad_s": 0.0,
+      "fvm_errors": {
+        "temperature_K": 0.0002406024489719379,
+        "sheet_K": 1.3586753619343483e-05,
+        "incoming_W_m2": 6.689864041340599e-05,
+        "outgoing_W_m2": 9.104785989909664e-06,
+        "reservoir_W_m2": 1.4945428981277833e-05
+      },
+      "sheet_balance_W_m2": 9.93897670605755e-15,
+      "panels_per_circle": 128,
+      "bem_errors": {
+        "temperature_K": 1.2079226507921703e-13,
+        "sheet_K": 1.247890679678676e-13,
+        "incoming_W_m2": 1.0103029524088925e-13,
+        "outgoing_W_m2": 1.3722356584366935e-13,
+        "reservoir_W_m2": 1.3722356584366935e-13
+      },
+      "bem_net_power_residual_W_m": 4.3076653355456074e-13,
+      "fvm_orders": {
+        "temperature_K": 1.9626213152951755,
+        "sheet_K": 1.9988629674752851,
+        "incoming_W_m2": 1.9988905687438534,
+        "outgoing_W_m2": 1.9994446228451896,
+        "reservoir_W_m2": 1.9988629674752851
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "8ef74dbe0094ec2fa42921145a1ef1f0ab2107d7",
+      "file": "annular_sheet_reservoir.py",
+      "source_sha256": "15a65828c816c324652c6c0e38914eb3a3e2f5d2c538e369da9c25618704b9ea"
+    },
+    {
+      "commit": "1234c24968f0196696b2615c3ceb080cf9871526",
+      "file": "annulus.py",
+      "source_sha256": "6a4c12f201feb0bd072940c16460f378114dd6f78c3cfaf44c5a96c38abb34ef"
+    },
+    {
+      "commit": "26e708474f4a0517eebecf0b851b885b670e87d5",
+      "file": "layered_annulus.py",
+      "source_sha256": "204b5eab86eac397f2d41bdbbcd85805431deeb960851d0622386bc3832b205b"
+    }
+  ]
+}
