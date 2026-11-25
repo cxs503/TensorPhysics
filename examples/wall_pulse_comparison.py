@@ -1,4 +1,4 @@
-"""Compare FEM, SIPG, SPH and FVM slab temperatures and wall heat after a finite Dirichlet pulse."""
+"""Compare FEM, SIPG, SPH, FVM and a fixed DEM contact chain slab temperatures and wall heat after a finite Dirichlet pulse."""
 from dataclasses import replace
 import json
 import math
@@ -9,6 +9,7 @@ import torch
 from conduction_provenance import provenance
 from tensorfem import thermal, thermal_analytic
 from tensorfvm.cht import rod
+from tensordem.thermal import contact_chain
 from tensorsph import heat_conduction_2d as sph
 from tensordg import poisson_2d_bc, transient_diffusion_2d
 
@@ -74,6 +75,20 @@ def measure(n):
         flux_order=2,method="rannacher",load_jump_times=(start,stop),return_step_heat=True)
     fvm_heat = fvm_steps["end_input"].sum(axis=0)
     fvm_balance = np.diff(cells,axis=0)/n-fvm_steps["left"]+fvm_steps["right"]
+    # Map a homogeneous, unit-area slab onto fixed resistances and stores.
+    # The DEM interval solver has exact-in-time evolution for each plateau.
+    resistances,capacities = contact_chain.cell_centered_slab_network(np.full(n,1/n),1.,1.)
+    dem_state = np.zeros(n+2)
+    dem_heat = np.zeros(2)
+    dem_balance = 0.
+    schedule = np.union1d(time,[start,stop])
+    for a,b in zip(schedule,schedule[1:]):
+        updated,links = contact_chain.constant_contact_interval(
+            resistances,capacities,b-a,dem_state,t_left=float(start<=a<stop),t_right=0.)
+        residual = capacities[1:-1]*(updated-dem_state)[1:-1]+np.diff(links)
+        dem_balance = max(dem_balance,float(abs(residual).max()))
+        dem_heat += [links[0],-links[-1]]
+        dem_state = updated
     z,w = (torch.from_numpy(a) for a in np.polynomial.legendre.leggauss(8))
     xi,eta = torch.meshgrid(z,z,indexing="ij")
     shape = torch.stack(((1-xi)*(1-eta),(1+xi)*(1-eta),(1+xi)*(1+eta),(1-xi)*(1+eta)),dim=-1)/4
@@ -99,16 +114,20 @@ def measure(n):
     # Interpolate particles between their centers and the known end values
     # for a physical L² comparison using the same quadrature as FEM and DG.
     knots = torch.cat((centers.new_zeros(1),centers,centers.new_ones(1)))
-    values = torch.cat((centers.new_zeros(1),particles[-1,0],centers.new_zeros(1)))
     lo = torch.searchsorted(knots,x)-1
-    interp = values[lo]+(x-knots[lo])*(values[lo+1]-values[lo])/(knots[lo+1]-knots[lo])
-    sph_field = interp[:,None,:,None].expand_as(fem)
+    def linear_field(values):
+        interp = values[lo]+(x-knots[lo])*(values[lo+1]-values[lo])/(knots[lo+1]-knots[lo])
+        return interp[:,None,:,None].expand_as(fem)
+    sph_field = linear_field(torch.cat((centers.new_zeros(1),particles[-1,0],centers.new_zeros(1))))
+    dem_field = linear_field(torch.from_numpy(dem_state))
     # Reconstruct the FVM quadratic from its cell mean and two face values.
     mean = torch.from_numpy(cells[-1])[:,None]
     left,right = torch.from_numpy(faces[-1][:-1,None]),torch.from_numpy(faces[-1][1:,None])
     polynomial = mean+(right-left)*z/2+((left+right)/2-mean)*(3*z.square()-1)/2
     fvm_field = polynomial[:,None,:,None].expand_as(fem)
-    return dict(n=n,fvm_l2=norm(fvm_field-exact),fvm_center_rms=center_rms((1.5*mean-(left+right)/4)[:,0]),
+    return dict(n=n,dem_l2=norm(dem_field-exact),dem_center_rms=center_rms(torch.from_numpy(dem_state[1:-1])),
+                dem_wall_heat_J=dem_heat.tolist(),dem_cell_residual_J=dem_balance,
+                fvm_l2=norm(fvm_field-exact),fvm_center_rms=center_rms((1.5*mean-(left+right)/4)[:,0]),
                 fvm_wall_heat_J=fvm_heat.tolist(),fvm_cell_residual_J=float(abs(fvm_balance).max()),
                 sph_l2=norm(sph_field-exact),sph_center_rms=center_rms(particles[-1,0]),
                 fem_center_rms=center_rms(fem_center),dg_center_rms=center_rms(dg_center),
@@ -124,13 +143,13 @@ if __name__=="__main__":
     for n in (16,32,64,128):
         row = measure(n)
         ref = np.array(row["exact_wall_heat_J"])
-        for name in ("fem","dg","sph","fvm"):
+        for name in ("fem","dg","sph","fvm","dem"):
             row[name+"_max_wall_heat_error_J"] = float(abs(ref-row[name+"_wall_heat_J"]).max())
-        row["passed"] = max(row["fvm_cell_residual_J"],row["fem_residual_J"],row["dg_residual_J"],row["sph_residual_J"],row["sph_column_residual_J"])<1e-10 and (n<128 or
-                    (max(row["fvm_l2"],row["fem_l2"],row["dg_l2"],row["sph_l2"])<3e-5 and
-                     max(row[name+"_max_wall_heat_error_J"] for name in ("fem","dg","sph","fvm"))<8e-6))
+        row["passed"] = max(row["dem_cell_residual_J"],row["fvm_cell_residual_J"],row["fem_residual_J"],row["dg_residual_J"],row["sph_residual_J"],row["sph_column_residual_J"])<1e-10 and (n<128 or
+                    (max(row["dem_l2"],row["fvm_l2"],row["fem_l2"],row["dg_l2"],row["sph_l2"])<3e-5 and
+                     max(row[name+"_max_wall_heat_error_J"] for name in ("fem","dg","sph","fvm","dem"))<8e-6))
         rows.append(row)
     sources = [provenance(p) for p in (__file__,thermal.__file__,thermal_analytic.__file__,
-                                       rod.__file__,sph.__file__,poisson_2d_bc.__file__,transient_diffusion_2d.__file__)]
+                                       contact_chain.__file__,rod.__file__,sph.__file__,poisson_2d_bc.__file__,transient_diffusion_2d.__file__)]
     print(json.dumps(dict(runs=rows,sources=sources),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
