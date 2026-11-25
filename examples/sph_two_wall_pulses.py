@@ -1,4 +1,4 @@
-"""Verify SPH, FVM, FEM or DEM interval heat at every cut under independent Dirichlet wall pulses."""
+"""Verify SPH, FVM, FEM, DG or DEM interval heat at every cut under independent Dirichlet wall pulses."""
 import argparse
 import json
 
@@ -197,10 +197,34 @@ def measure_fem(n):
                 column_energy_residual_J_m2=balance, interface_heat_mismatch_J_m2=mismatch, wall_trace_error_K=wall_error)
 
 
+def measure_dg(n):
+    from tensordg import heat_1d
+
+    schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+    indices = np.searchsorted(schedule, TIMES)
+    plateaus = [[wall(t, 0), wall(t, 1)] for t in schedule[:-1]]
+    endpoints = np.repeat(np.asarray(plateaus)[:, None, :], 2, axis=1)
+    _, history, meta = heat_1d.solve_heat_1d_wall_history(
+        schedule, endpoints, n, degree=1, backend="exact-time", initial_temperature=lambda x: 0*x,
+        integrate_face_fluxes=True)
+    cells = history[:, :, 0].numpy()
+    heat = np.asarray(meta["interval_face_heat"])
+    dx = 1/n
+    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx)
+    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
+    error = abs(np.add.reduceat(heat, indices[:-1])-np.diff(cumulative, axis=0))
+    balance = dx*np.diff(cells, axis=0)+np.diff(heat, axis=1)
+    return dict(columns=n, temperature_error_K=float(abs(cells[indices]-means).max()),
+                wall_heat_error_J_m2=float(error[:, [0, -1]].max()),
+                interior_cut_heat_error_J_m2=float(error[:, 1:-1].max()),
+                column_energy_residual_J_m2=float(abs(balance).max()))
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--fem", action="store_true", help="run the consistent-capacity LINE2 slab")
+    group.add_argument("--dg", action="store_true", help="run the SIPG linear-element slab")
     group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
     group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
     args = parser.parse_args()
@@ -209,6 +233,9 @@ if __name__ == "__main__":
     if args.fem:
         from tensorfem import thermal as solver
         run = measure_fem
+    elif args.dg:
+        from tensordg import heat_1d as solver
+        run = measure_dg
     elif args.dem:
         from tensordem.thermal import contact_chain as solver
         run = measure_dem
@@ -226,7 +253,7 @@ if __name__ == "__main__":
             errors = np.append(errors, row["interval_temperature_error_K"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
-                   row["column_energy_residual_J_m2"] < 1e-12 and row["wall_trace_error_K"] < 1e-14
+                   row["column_energy_residual_J_m2"] < 1e-12 and (args.dg or row["wall_trace_error_K"] < 1e-14)
                    and row.get("interface_heat_mismatch_J_m2", 0.) < 1e-12
                    and all(order > 0 for order in orders) and (n < 64 or min(orders) > 1.8)))
         rows.append(row)
