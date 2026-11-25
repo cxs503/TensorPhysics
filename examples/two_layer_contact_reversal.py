@@ -1,4 +1,5 @@
 """Free cooling of a two-material slab with a known contact-current reversal."""
+import argparse
 import inspect
 import json
 import math
@@ -29,7 +30,7 @@ def propagate(t,q,p,layer,distance):
     return t*co-q*si/(k*wave),q*co+k*wave*t*si
 
 
-def modes():
+def modes(reversals):
     def traces(p):
         left,flux = propagate(1.,-FILMS[0],p,0,.5)
         return left-CONTACT*flux,flux
@@ -41,18 +42,21 @@ def modes():
     for hi in np.arange(.05,30.,.05):
         if mismatch(lo)*mismatch(hi)<0:
             roots.append(brentq(mismatch,lo,hi))
-            if len(roots)==2:
+            if len(roots)==len(reversals)+1:
                 break
         lo = hi
-    p1,p2 = roots
-    q1,q2 = (traces(p)[1] for p in roots)
-    # Choose the second modal amplitude so the sum of the contact currents
-    # vanishes at REVERSAL. Distinct decay rates give a single zero.
-    factor = -q1/q2*math.exp((p2*p2-p1*p1)*REVERSAL)
-    return [(p,weight,*traces(p)) for p,weight in zip(roots,(1.,factor))]
+    # A sum of M exponentials with distinct real exponents has at most
+    # M-1 zeros. Prescribe all of them by solving for the amplitudes.
+    rates = np.square(roots)
+    fluxes = np.array([traces(p)[1] for p in roots])
+    constraints = np.exp(-np.outer(reversals,rates))*fluxes
+    weights = np.r_[1.,np.linalg.solve(constraints[:,1:],-constraints[:,0])]
+    if len(reversals)>1:
+        weights /= np.max(abs(weights))
+    return [(p,w,*traces(p)) for p,w in zip(roots,weights)]
 
 
-def measure(n):
+def measure(n,reversals=(REVERSAL,)):
     dx,m = 1/n,n//2
     # Resolve the flux zero between interval midpoints on every mesh.
     time = np.linspace(0.,.1,4*n+1)
@@ -60,7 +64,7 @@ def measure(n):
     k,c = np.repeat(K,m),np.repeat(C,m)
     edges = np.linspace(0.,1.,n+1)
     centers = (edges[1:]+edges[:-1])/2
-    modes_data = modes()
+    modes_data = modes(reversals)
     def exact(left,right,cell_average=False):
         columns = []
         for p,w,tr,q in modes_data:
@@ -69,7 +73,9 @@ def measure(n):
                 values *= np.sinc(p*np.sqrt(c/k)*dx/(2*np.pi))
             columns.append((w*np.exp(-p*p*time[:,None]))*values)
         return sum(columns)
-    exact_heat = sum(w*q*(-np.expm1(-p*p*time))/p**2 for p,w,_,q in modes_data)
+    def cumulative_heat(t):
+        return sum(w*q*(-np.expm1(-p*p*t))/p**2 for p,w,_,q in modes_data)
+    exact_heat = cumulative_heat(time)
     model,_ = slab_fem_model(k,0.,0.,CONTACT,FILMS,torch.from_numpy(c))
     nodes = (edges[:m+1],edges[m:])
     cells = (centers[:m],centers[m:])
@@ -119,33 +125,47 @@ def measure(n):
     for name,fields,reference,heat in data:
         avg = heat/dt
         switches = np.flatnonzero(np.signbit(avg[1:])!=np.signbit(avg[:-1]))
-        reversal = None
-        if len(switches)==1:
-            i = switches[0]
-            reversal = float(mid[i]-avg[i]*(mid[i+1]-mid[i])/(avg[i+1]-avg[i]))
-        rows.append(dict(solver=name,cells=n,reversal_s=reversal,
-                         direction_matches=bool(avg[0]*exact_heat[1]>0 and avg[-1]*np.diff(exact_heat)[-1]>0),
-                         errors=dict(time_s=abs(reversal-REVERSAL) if reversal is not None else None,
+        crossings = [float(mid[i]-avg[i]*(mid[i+1]-mid[i])/(avg[i+1]-avg[i])) for i in switches]
+        probes = .5*(np.r_[0.,reversals]+np.r_[reversals,time[-1]])
+        exact_power = sum(w*q*np.exp(-p*p*probes) for p,w,_,q in modes_data)
+        matched = len(crossings)==len(reversals)
+        rows.append(dict(solver=name,cells=n,
+                         **({"reversal_s":crossings[0] if matched else None} if len(reversals)==1 else
+                            {"reversals_s":crossings}),
+                         direction_matches=bool(matched and np.all(np.interp(probes,mid,avg)*exact_power>0)),
+                         errors=dict(time_s=float(np.max(abs(np.array(crossings)-reversals))) if matched else None,
                          cumulative_contact_heat_J_m2=float(abs(heat.cumsum()-exact_heat[1:]).max()),
                          temperature_K=float(abs(fields-reference).max()))))
+        if len(reversals)>1 and matched:
+            between = float(np.diff(np.interp(crossings,time,np.r_[0.,heat.cumsum()]))[0])
+            target = float(np.diff(cumulative_heat(np.array(reversals)))[0])
+            rows[-1]["heat_between_reversals_J_m2"] = between
+            rows[-1]["reference_heat_between_reversals_J_m2"] = target
+            rows[-1]["errors"]["heat_between_reversals_J_m2"] = abs(between-target)
     return rows
 
 
 if __name__=="__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--double",action="store_true",help="prescribe two reversals using three decay modes")
+    args = parser.parse_args()
+    reversals = (.02,.065) if args.double else (REVERSAL,)
     rows,previous = [],{}
-    for n in (16,32,64,128):
-        for row in measure(n):
+    meshes = (16,32,64,128,256) if args.double else (16,32,64,128)
+    for n in meshes:
+        for row in measure(n,reversals):
             errors = row["errors"]
             last = previous.get(row["solver"])
-            orders = {k:math.log2(last[k]/v) for k,v in errors.items() if last and last[k] and v}
-            passes = row["direction_matches"] and row["reversal_s"] is not None
-            if n==128 and passes:
+            orders = {k:math.log2(last[k]/v) for k,v in errors.items() if last and last.get(k) and v}
+            passes = row["direction_matches"] and errors["time_s"] is not None
+            if n==meshes[-1] and passes:
                 passes = (errors["time_s"]<1e-5 and errors["temperature_K"]<2e-4
                           and errors["cumulative_contact_heat_J_m2"]<2e-5
+                          and errors.get("heat_between_reversals_J_m2",0.)<2e-5
                           and all(v>1.7 for v in orders.values()))
             row.update(orders=orders,passed=bool(passes))
             rows.append(row)
             previous[row["solver"]] = errors
     sources = [provenance(f) for f in (__file__,inspect.getfile(slab_fem_model),thermal.__file__,energy.__file__,sph.__file__,contact_chain.__file__)]
-    print(json.dumps(dict(reference_reversal_s=REVERSAL,sources=sources,runs=rows),indent=2,allow_nan=False))
+    print(json.dumps(dict(**({"reference_reversals_s":reversals} if args.double else {"reference_reversal_s":REVERSAL}),sources=sources,runs=rows),indent=2,allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
