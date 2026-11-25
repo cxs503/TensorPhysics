@@ -9,7 +9,7 @@ from conduction_provenance import provenance
 from tensorsph import heat_conduction_2d as sph
 
 
-def measure(per_layer, omega, backend, layers=4):
+def measure(per_layer, omega, backend, layers=4, exchange=False):
     dx = 1 / (layers * per_layer)
     dtype = torch.float64
     k = torch.tensor([1., 2.5, .9, 1.6][:layers], dtype=dtype).repeat_interleave(per_layer)
@@ -29,9 +29,15 @@ def measure(per_layer, omega, backend, layers=4):
     walls = (.7, .7 + slope * total)
     # T = .7 + slope(y)*r(x). The longitudinal flux is constant through all contacts.
     source = 1j * omega * capacity * exact + k * beta**2 * wave[:, None] * r
+    exchange_options = {}
+    if exchange:
+        loss = .5 + k
+        ambient = (.2-.3j) + (.7+.1j)*wave[:, None]*(1-r)
+        source += loss*(exact-ambient)
+        exchange_options = dict(heat_loss_coefficient=loss, ambient_temperature=ambient)
     field, cuts = sph.solve_harmonic_layered_slab(source, dx, walls, omega,
         conductivity=k, volumetric_heat_capacity=capacity, contact_resistance_x=contacts,
-        backend=backend, return_x_flux=True)
+        backend=backend, return_x_flux=True, **exchange_options)
     means = torch.stack((cuts[0], -cuts[-1]))
     flux = sph.recover_dirichlet_wall_flux_2d(field, dx, k, means,
         contact_resistance_x=contacts, x_wall_temperatures=walls)
@@ -40,7 +46,16 @@ def measure(per_layer, omega, backend, layers=4):
     target = torch.stack((-slope, slope))
     sampled = sph.recover_dirichlet_wall_flux_2d(exact, dx, k, target.mean(1),
         contact_resistance_x=contacts, x_wall_temperatures=walls)
-    return dict(sequence_flux_difference_W_m2=float((sequence_flux-flux).abs().max()),
+    interface = {}
+    if exchange:
+        idx = torch.nonzero(contacts).flatten()
+        left, right = sph.layered_slab_contact_temperatures(field.mean(0), cuts, dx, k)
+        left_exact = .7 + slope.mean()*(r[idx]+bulk[idx]/2)
+        right_exact = left_exact + slope.mean()*contacts[idx]
+        interface = dict(interface_flux_error_W_m2=float(abs(cuts[idx+1]+slope.mean()).max()),
+                         interface_mean_trace_error_K=float(torch.maximum(abs(left[idx]-left_exact),
+                                                                          abs(right[idx]-right_exact)).max()))
+    return dict(**interface, sequence_flux_difference_W_m2=float((sequence_flux-flux).abs().max()),
                 sampled_wall_flux_error_W_m2=float((sampled-target).abs().max()), columns=len(k), rows=len(y), omega_rad_s=omega, backend=backend,
                 temperature_error_K=float((field - exact).abs().max()),
                 wall_flux_error_W_m2=float((flux - target).abs().max()),
@@ -51,13 +66,15 @@ def measure(per_layer, omega, backend, layers=4):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Verify fixed-wall flux on layered slabs of unit thickness")
     parser.add_argument("--layers", type=int, choices=(2, 3, 4), default=4)
-    layers = parser.parse_args().layers
+    parser.add_argument("--exchange", action="store_true", help="apply a spatially varying ambient temperature phasor")
+    args = parser.parse_args()
+    layers = args.layers
     rows = []
     for omega in (0., 1.3):
         for backend in ("torch", "banded"):
             previous = None
             for per_layer in (1, 2, 4, 8):
-                row = measure(per_layer, omega, backend, layers)
+                row = measure(per_layer, omega, backend, layers, args.exchange)
                 errors = [row["temperature_error_K"], row["wall_flux_error_W_m2"]]
                 row["orders"] = [] if previous is None else [math.log2(a / b) for a, b in zip(previous, errors)]
                 # In thin slabs the recovery stencil changes degree and which
@@ -70,10 +87,12 @@ if __name__ == "__main__":
                     and row["recovered_mean_residual_W_m2"] < 1e-12
                     and (not check_orders or all(order > .6 for order in row["orders"]))
                     and (per_layer < 8 or (errors[0] < .003 and errors[1] < .01)))
+                if args.exchange:
+                    row["passed"] &= max(row["interface_flux_error_W_m2"], row["interface_mean_trace_error_K"]) < 1e-10
                 rows.append(row)
                 previous = errors
     print(json.dumps(dict(reference="T=.7+[(.4-.2i)+(.65+.3i) exp(i beta y)] r, r=integrated bulk and upstream contact resistance",
-        layers=layers, reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_thin_contact_wall_flux.py --layers {layers}",
+        layers=layers, reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_thin_contact_wall_flux.py --layers {layers}" + (" --exchange" if args.exchange else ""),
         order_metrics=["temperature_error_K", "wall_flux_error_W_m2"], runs=rows,
         sources=[provenance(p) for p in (__file__, sph.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
