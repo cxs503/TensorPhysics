@@ -1,4 +1,5 @@
-"""Cancel the integrated external heat load on one quadrant of an inscribed polygon."""
+"""Cancel the integrated external heat load on a boundary window of an inscribed polygon."""
+import argparse
 import json
 
 import numpy as np
@@ -9,15 +10,32 @@ import bem_patterned_film_modes as films
 from conduction_provenance import provenance
 
 
-def measure(n, omega, quadratic):
+def measure(n, omega, quadratic, wrapped=False):
     mesh = geometry.regular_polygon(n)
     k, capacity = 1.7, 2.3
     wave = np.sqrt(1j*omega*capacity/k)
-    panels = np.arange(n//4)
+    if wrapped:
+        # Symmetric limits keep the two subwindows fixed under refinement.
+        # Ray/chord intersection gives the actual fractional arc endpoints.
+        step = 2*np.pi/n
+        limit = np.pi/6
+        count = int(np.ceil(limit/step))
+        segments = np.arange(-count, count)
+        centers = (segments+.5)*step
+        lo = np.maximum(-limit, segments*step)
+        hi = np.minimum(limit, (segments+1)*step)
+        start = np.clip(.5+.5*np.tan(lo-centers)/np.tan(step/2), 0., 1.)
+        end = np.clip(.5+.5*np.tan(hi-centers)/np.tan(step/2), 0., 1.)
+        panels = segments % n
+    else:
+        panels = np.arange(n//4)
+        start = np.zeros(len(panels))
+        end = np.ones(len(panels))
     nodes, weights = np.polynomial.legendre.leggauss(32)
-    pts = mesh.vertices[panels, None]+((1+nodes)/2)[None, :, None]*mesh.vectors[panels, None]
+    fractions = start[:, None]+(end-start)[:, None]*((1+nodes)/2)
+    pts = mesh.vertices[panels, None]+fractions[:, :, None]*mesh.vectors[panels, None]
     surface = .4+.22*np.sin(3*np.arctan2(pts[..., 1], pts[..., 0])-.2)
-    ds = mesh.lengths[panels, None]*weights/2
+    ds = (mesh.lengths[panels]*(end-start))[:, None]*weights/2
     def external(mode):
         t, q = modes.reference(pts.reshape(-1, 2), mode, wave, k)
         return (-(q.reshape(pts.shape)*mesh.normals[panels, None]).sum(2)
@@ -33,7 +51,7 @@ def measure(n, omega, quadratic):
         return t+coefficient*u, q+coefficient*v
 
     result, *_ = films.solve_film(mesh, omega, quadratic, k, capacity, reference)
-    loads = result.panel_inward_power(panels, component="external")
+    loads = result.panel_inward_power(panels, start, end, component="external")
     exact = (ds*target).sum(axis=1)
     # Each half retains finite complex power even though their sum vanishes.
     half = len(panels)//2
@@ -51,12 +69,15 @@ def measure(n, omega, quadratic):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--wrapped", action="store_true", help="integrate from -pi/6 to pi/6 across panel zero")
+    wrapped = parser.parse_args().wrapped
     runs = []
     for quadratic in (False, True):
         for omega in (.5, 5.):
             previous = None
             for n in (16, 32, 64):
-                row = measure(n, omega, quadratic)
+                row = measure(n, omega, quadratic, wrapped)
                 errors = np.array([row["relative_net_residual"], row["max_half_power_error_W_m"]])
                 orders = [] if previous is None else np.log2(previous/errors).tolist()
                 row.update(orders=orders, passed=bool(row["reference_net_W_m"] < 1e-12
@@ -66,8 +87,9 @@ if __name__ == "__main__":
                 runs.append(row)
                 previous = errors
     passed = all(row["passed"] for row in runs)
-    print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(p) for p in
+    print(json.dumps(dict(window_limits_rad=[-np.pi/6, np.pi/6] if wrapped else [0., np.pi/2], passed=passed, runs=runs, sources=[provenance(p) for p in
                           (__file__, films.__file__, modes.__file__, harmonic_conduction.__file__, geometry.__file__)],
-                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_window_cancellation.py"),
+                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_window_cancellation.py"
+                                       + (" --wrapped" if wrapped else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
