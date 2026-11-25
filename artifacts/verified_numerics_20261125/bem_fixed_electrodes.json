@@ -1,0 +1,175 @@
+{
+  "repository": "TensorBEM",
+  "commit": "ed1524ade9e9cb17ace8fceb02237e08354a2e89",
+  "environment": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1
+  },
+  "fixed_partition_command": "python -m tensorbem.benchmarks.cp_verification_m9204 --fixed-partition",
+  "default_partition_command": "python -c \"from tensorbem.benchmarks.cp_verification_m9204 import BoxHull,run_mesh_convergence; print(run_mesh_convergence(BoxHull()))\"",
+  "fixed_partition": {
+    "levels": {
+      "initial": {
+        "anode_area_m2": 333.33333332999996,
+        "bare_area_m2": 208.33333333750002,
+        "n_panels": 112,
+        "cell_size_m": 7.559289460184544,
+        "anode_current_A": 24.11298893063833,
+        "phi_mean_bare": -0.10301544146676893,
+        "phi_min": -1.0844275768412381,
+        "phi_max": -0.8881888094747322,
+        "charge_imbalance": 1.2891908497501e-16,
+        "nonlinear_residual": 3.037556643142717e-14
+      },
+      "coarse": {
+        "anode_area_m2": 333.33333332999996,
+        "bare_area_m2": 208.33333333749997,
+        "n_panels": 448,
+        "cell_size_m": 3.779644730092272,
+        "anode_current_A": 26.008438968238202,
+        "phi_mean_bare": -0.09025780354935005,
+        "phi_min": -1.0878079593059933,
+        "phi_max": -0.8919304153041508,
+        "charge_imbalance": 3.636934989200208e-15,
+        "nonlinear_residual": 8.061152997088334e-14
+      },
+      "medium": {
+        "anode_area_m2": 333.33333332999996,
+        "bare_area_m2": 208.3333333375,
+        "n_panels": 1792,
+        "cell_size_m": 1.889822365046136,
+        "anode_current_A": 26.875223459186685,
+        "phi_mean_bare": -0.08340048193743782,
+        "phi_min": -1.089908998109686,
+        "phi_max": -0.895275680696924,
+        "charge_imbalance": 1.3880254310835825e-15,
+        "nonlinear_residual": 1.1620236778796964e-13
+      },
+      "fine": {
+        "anode_area_m2": 333.33333332999996,
+        "bare_area_m2": 208.33333333750005,
+        "n_panels": 7168,
+        "cell_size_m": 0.944911182523068,
+        "anode_current_A": 27.248208107866922,
+        "phi_mean_bare": -0.08010719464268563,
+        "phi_min": -1.090651920936959,
+        "phi_max": -0.8980789370363879,
+        "charge_imbalance": 2.8684345269311673e-15,
+        "nonlinear_residual": 2.576496670704107e-13
+      }
+    },
+    "gci_anode_current": {
+      "values": [
+        27.248208107866922,
+        26.875223459186685,
+        26.008438968238202
+      ],
+      "cell_sizes": [
+        0.944911182523068,
+        1.889822365046136,
+        3.779644730092272
+      ],
+      "observed_order": 1.2165570868665019,
+      "extrapolated_value": 27.52993672793308,
+      "gci_fine_percent": 1.292418105765361
+    },
+    "gci_phi_mean_bare": {
+      "values": [
+        -0.08010719464268563,
+        -0.08340048193743782,
+        -0.09025780354935005
+      ],
+      "cell_sizes": [
+        0.944911182523068,
+        1.889822365046136,
+        3.779644730092272
+      ],
+      "observed_order": 1.0581168138871826,
+      "extrapolated_value": -0.0770640866811387,
+      "gci_fine_percent": 4.748493526581115
+    },
+    "gci_current_pass": true
+  },
+  "default_partition": {
+    "levels": {
+      "coarse": {
+        "anode_area_m2": 100.0,
+        "bare_area_m2": 223.750000001625,
+        "n_panels": 572,
+        "cell_size_m": 3.344968040028363,
+        "anode_current_A": 23.664378542081764,
+        "phi_mean_bare": -0.044142093663336227,
+        "phi_min": -1.0831487521107264,
+        "phi_max": -0.871415469427305,
+        "charge_imbalance": 3.274692677055974e-15,
+        "nonlinear_residual": 8.67886248978865e-14
+      },
+      "medium": {
+        "anode_area_m2": 51.94805196415585,
+        "bare_area_m2": 218.01948051551955,
+        "n_panels": 1080,
+        "cell_size_m": 2.4343224778007384,
+        "anode_current_A": 20.289415380588423,
+        "phi_mean_bare": -0.029907351869756526,
+        "phi_min": -1.0853519394554794,
+        "phi_max": -0.8524363165369072,
+        "charge_imbalance": 1.532140976286858e-15,
+        "nonlinear_residual": 1.2810858031232344e-13
+      },
+      "fine": {
+        "anode_area_m2": 111.1111111,
+        "bare_area_m2": 215.83333334124998,
+        "n_panels": 1972,
+        "cell_size_m": 1.80150939644418,
+        "anode_current_A": 25.89108066662422,
+        "phi_mean_bare": -0.029810263334550103,
+        "phi_min": -1.087970332483449,
+        "phi_max": -0.8876180717467831,
+        "charge_imbalance": 2.538526834939522e-15,
+        "nonlinear_residual": 1.2351661824961006e-13
+      }
+    },
+    "gci_anode_current": {
+      "values": [
+        25.89108066662422,
+        20.289415380588423,
+        23.664378542081764
+      ],
+      "cell_sizes": [
+        1.80150939644418,
+        2.4343224778007384,
+        3.344968040028363
+      ],
+      "observed_order": null,
+      "note": "observed order outside [0.1, 8]; GCI evaluated with p = 2",
+      "gci_fine_percent": 32.74431362690655
+    },
+    "gci_phi_mean_bare": {
+      "values": [
+        -0.029810263334550103,
+        -0.029907351869756526,
+        -0.044142093663336227
+      ],
+      "cell_sizes": [
+        1.80150939644418,
+        2.4343224778007384,
+        3.344968040028363
+      ],
+      "observed_order": null,
+      "note": "observed order outside [0.1, 8]; GCI evaluated with p = 2",
+      "gci_fine_percent": 0.49291388322406493
+    },
+    "gci_current_pass": false
+  },
+  "test_results": {
+    "python -m pytest -q tests/test_cp_galvanic.py": {
+      "passed": 17
+    },
+    "python -m pytest -q tests/test_cp_verification_m9204.py": {
+      "passed": 10,
+      "failed": [
+        "TestMeshConvergence::test_gci_anode_current"
+      ]
+    }
+  }
+}
