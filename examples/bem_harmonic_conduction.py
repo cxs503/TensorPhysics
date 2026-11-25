@@ -1,6 +1,8 @@
 """Verify harmonic BEM heat conduction against two independent planar thermal waves."""
 import argparse
 import json
+import shlex
+import sys
 
 import numpy as np
 
@@ -8,7 +10,7 @@ from conduction_provenance import provenance
 from tensorbem import geometry, harmonic_conduction
 
 
-def subregion_heat(result, center, directions, amplitudes, polynomial, gradient, hessian, storage):
+def subregion_heat(result, center, directions, amplitudes, polynomial, gradient, hessian, storage, wave, loss):
     """Check a rotated rectangle using boundary flux and independent area integrals."""
     angle = .37
     axes = np.array([[np.cos(angle), np.sin(angle)], [-np.sin(angle), np.cos(angle)]])
@@ -16,19 +18,21 @@ def subregion_heat(result, center, directions, amplitudes, polynomial, gradient,
     origin = center+np.array([.19, -.12])
     area = 4*np.prod(half)
     nodes, weights = np.polynomial.legendre.leggauss(10)
-    z = result.wave*(directions @ axes.T)*half
+    z = wave*(directions @ axes.T)*half
     # The mean exponential on [-a,a] is sinh(lambda*a)/(lambda*a).
-    centered_modes = amplitudes*np.exp(result.wave*((origin-center) @ directions.T-1))
+    centered_modes = amplitudes*np.exp(wave*((origin-center) @ directions.T-1))
     mean_modes = centered_modes*np.prod(np.sinh(z)/z, axis=1)
     second = np.diag(axes @ hessian @ axes.T)
     mean_polynomial = polynomial(origin)+np.dot(half**2, second)/6
     generated = area*(storage*mean_polynomial-result.conductivity*np.trace(hessian))
+    generated -= area*loss*mean_modes.sum()
     exact_storage = area*storage*(mean_polynomial+mean_modes.sum())
 
     uv = np.stack(np.meshgrid(nodes, nodes, indexing="ij"), axis=-1)
     interior = origin+(uv*half) @ axes
     temperature = result.temperature(interior.reshape(-1, 2)).reshape(len(nodes), len(nodes))
     stored = area*storage*(weights @ temperature @ weights)/4
+    numeric_generation = generated-loss*(stored-exact_storage)/storage
     edge_points, inward_normals, edge_weights, exact_heats = [], [], [], []
     for axis in (0, 1):
         tangent = 1-axis
@@ -38,7 +42,7 @@ def subregion_heat(result, center, directions, amplitudes, polynomial, gradient,
             inward_normals.append(-side*axes[axis])
             edge_weights.append(half[tangent]*weights)
             edge_modes = centered_modes*np.exp(side*z[:, axis])*np.sinh(z[:, tangent])/z[:, tangent]
-            mean_gradient = gradient+midpoint @ hessian+result.wave*edge_modes @ directions
+            mean_gradient = gradient+midpoint @ hessian+wave*edge_modes @ directions
             exact_heats.append(2*half[tangent]*result.conductivity*side*(mean_gradient @ axes[axis]))
     flux = result.heat_flux(np.concatenate(edge_points)).reshape(4, len(nodes), 2)
     face_heat = np.einsum("eqd,ed,eq->e", flux, inward_normals, edge_weights)
@@ -46,12 +50,13 @@ def subregion_heat(result, center, directions, amplitudes, polynomial, gradient,
     return dict(subregion_face_error_W_m=float(abs(face_heat-exact_heats).max()),
                 subregion_inward_error_W_m=float(abs(inward-(exact_storage-generated))),
                 subregion_storage_error_W_m=float(abs(stored-exact_storage)),
-                subregion_balance_W_m=float(abs(inward+generated-stored)),
-                inward_W_m=[inward.real, inward.imag], generated_W_m=[generated.real, generated.imag],
+                subregion_balance_W_m=float(abs(inward+numeric_generation-stored)),
+                inward_W_m=[inward.real, inward.imag], generated_W_m=[numeric_generation.real, numeric_generation.imag],
                 stored_W_m=[stored.real, stored.imag])
 
 
-def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False, curved_source=False, interior_flux=False, subregion=False):
+def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False, curved_source=False, interior_flux=False, subregion=False, curved_reservoir=False):
+    curved_source = curved_source or curved_reservoir
     if graded:
         local = np.arange(n//4)/(n//4)
         angle = (np.arange(4)[:, None]+(1-np.cos(np.pi*local))/2).ravel()*np.pi/2
@@ -66,7 +71,9 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
     count = len(points)
     normals = np.repeat(mesh.normals, count//n, axis=0)
     k, capacity = 1.7, 2.3
-    wave = np.sqrt(1j*omega*capacity/k)
+    loss = 2.8 if curved_reservoir else 0.
+    admittance = loss+1j*omega*capacity
+    wave = np.sqrt(admittance/k)
     directions = np.array([[.6, .8], [-.8, .6]])
     amplitudes = np.array([.7-.2j, -.3+.4j])
 
@@ -76,12 +83,16 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
     boundary = modes(points)
     base = -.25+.4j if heated or affine or curved_source else 0j
     gradient = np.array([.31+.17j, -.23+.42j]) if affine or curved_source else np.zeros(2)
-    source_gradient = 1j*omega*capacity*gradient
+    source_gradient = admittance*gradient
     hessian = (np.array([[.34+.12j, -.28+.19j], [-.28+.19j, .16-.4j]])
                if curved_source else np.zeros((2, 2)))
     storage = 1j*omega*capacity
-    source = storage*base-k*np.trace(hessian)
-    source_quadratic = storage*np.array([hessian[0, 0]/2, hessian[0, 1], hessian[1, 1]/2])
+    source = admittance*base-k*np.trace(hessian)
+    coefficients = admittance*np.array([hessian[0, 0]/2, hessian[0, 1], hessian[1, 1]/2])
+
+    # Supply all curvature through the reservoir in the exchange case.
+    reservoir = coefficients/loss if curved_reservoir else np.zeros(3)
+    source_quadratic = np.zeros(3) if curved_reservoir else coefficients
 
     def polynomial(xy):
         return base+xy @ gradient+.5*np.sum((xy @ hessian)*xy, axis=-1)
@@ -96,12 +107,13 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
     values = np.select([kinds == "flux", kinds == "film"], [flux, wall+flux/film], default=wall)
     result = harmonic_conduction.solve_mixed_harmonic_conduction(
         mesh, kinds, values, omega, conductivity=k, volumetric_heat_capacity=capacity, film_coefficients=film, quadratic=quadratic,
-        volumetric_source=source, source_gradient=source_gradient, source_quadratic=source_quadratic)
+        volumetric_source=source, source_gradient=source_gradient, source_quadratic=source_quadratic,
+        heat_loss_coefficient=loss, bulk_ambient_quadratic=reservoir)
     angles = np.arange(21)*2*np.pi/21+.137
     probes = center+np.concatenate([r*np.column_stack((np.cos(angles), np.sin(angles))) for r in (.15, .55, .83)])
     extra = {}
     if subregion:
-        extra.update(subregion_heat(result, center, directions, amplitudes, polynomial, gradient, hessian, storage))
+        extra.update(subregion_heat(result, center, directions, amplitudes, polynomial, gradient, hessian, storage, wave, loss))
     if interior_flux:
         analytic = -k*(gradient+probes @ hessian+wave*modes(probes) @ directions)
         error = abs(result.heat_flux(probes)-analytic)
@@ -119,6 +131,10 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
         panel_weights = np.array([5., 8., 5.])/18 if quadratic else np.array([1.])
         inward_rate = mesh.lengths @ (result.inward_flux.reshape(n, -1) @ panel_weights)
         generation = storage*polynomial(xy)-k*np.trace(hessian)
+        if curved_reservoir:
+            x, y = xy[..., 0], xy[..., 1]
+            ambient = reservoir[0]*x*x+reservoir[1]*x*y+reservoir[2]*y*y
+            generation = source+xy @ source_gradient+loss*(ambient-field)
         generated = np.einsum("p,i,j,pij->", jac, weights/2, weights*u/2, generation)
         extra["energy_residual_W_m"] = float(abs(inward_rate+generated-1j*omega*capacity*volume_temperature))
     worst = np.argmax(abs(result.inward_flux-flux))
@@ -136,6 +152,7 @@ if __name__ == "__main__":
     source_group.add_argument("--affine", action="store_true", help="verify an affine volume source on a translated polygon")
     source_group.add_argument("--curved-source", action="store_true", help="verify quadratic volumetric heating with a cross term")
     source_group.add_argument("--heated", action="store_true", help="add uniform volumetric generation and check total heat balance")
+    source_group.add_argument("--curved-reservoir", action="store_true", help="drive x², xy and y² curvature through volumetric exchange")
     parser.add_argument("--interior-flux", action="store_true", help="verify both Cartesian interior heat-flux components")
     parser.add_argument("--subregion", action="store_true", help="compare integrated flux and storage inside a rotated rectangle")
     args = parser.parse_args()
@@ -145,7 +162,7 @@ if __name__ == "__main__":
         refinements = (16, 32, 64, 128, 256) if args.boundary == "mixed" else (16, 32, 64, 128)
         for n in refinements:
             row = measure(n, omega, args.boundary, quadratic=args.quadratic, graded=args.graded, heated=args.heated, affine=args.affine,
-                          curved_source=args.curved_source, interior_flux=args.interior_flux, subregion=args.subregion)
+                          curved_source=args.curved_source, curved_reservoir=args.curved_reservoir, interior_flux=args.interior_flux, subregion=args.subregion)
             metrics = ["interior_error_K"]
             if args.boundary != "flux":
                 metrics.append("boundary_flux_error_W_m2")
@@ -163,6 +180,7 @@ if __name__ == "__main__":
                        and (n < 128 or (min(orders) > 1.8 and row.get("energy_residual_W_m", 0.) < .005))))
             rows.append(row)
             previous = errors
-    print(json.dumps(dict(runs=rows, sources=[provenance(p) for p in
+    command = shlex.join(["python", "examples/bem_harmonic_conduction.py", *sys.argv[1:]])
+    print(json.dumps(dict(reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src "+command, runs=rows, sources=[provenance(p) for p in
         (__file__, harmonic_conduction.__file__, geometry.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
