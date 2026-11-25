@@ -1,0 +1,139 @@
+{
+  "reference": "F=k delta^(3/2), energy integral inverted via the regularized incomplete beta function on compression and release",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDEM/src python examples/dem_hertz_contact_history.py",
+  "order_metrics": [
+    "relative_overlap_error",
+    "relative_velocity_error",
+    "relative_reaction_error",
+    "relative_energy_drift"
+  ],
+  "runs": [
+    {
+      "speed_m_s": 0.2,
+      "steps_per_contact": 256,
+      "dt_s": 2.5381258862567276e-06,
+      "reference_duration_s": 0.0006497602268817223,
+      "relative_overlap_error": 2.3168137458186586e-05,
+      "relative_velocity_error": 0.0071713139759541095,
+      "relative_reaction_error": 1.7457955108054477e-05,
+      "relative_energy_drift": 0.0067526145175687,
+      "relative_impulse_balance": 3.486262521838864e-10,
+      "reference_impulse_Ns": 0.02400700386118201,
+      "measured_impulse_Ns": 0.024007003990291473,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "speed_m_s": 0.2,
+      "steps_per_contact": 512,
+      "dt_s": 1.2690629431283638e-06,
+      "reference_duration_s": 0.0006497602268817223,
+      "relative_overlap_error": 5.775868248721726e-06,
+      "relative_velocity_error": 0.003589263637900627,
+      "relative_reaction_error": 4.359789622232038e-06,
+      "relative_energy_drift": 0.003371865009213826,
+      "relative_impulse_balance": 3.486305877273453e-10,
+      "reference_impulse_Ns": 0.02400700386118201,
+      "measured_impulse_Ns": 0.024007003868759216,
+      "orders": [
+        2.004032328261035,
+        0.9985495877463919,
+        2.0015541567210797,
+        1.0018994216795327
+      ],
+      "passed": true
+    },
+    {
+      "speed_m_s": 0.2,
+      "steps_per_contact": 1024,
+      "dt_s": 6.345314715641819e-07,
+      "reference_duration_s": 0.0006497602268817223,
+      "relative_overlap_error": 1.4409488575825335e-06,
+      "relative_velocity_error": 0.0017955330913499792,
+      "relative_reaction_error": 1.0892823243865493e-06,
+      "relative_energy_drift": 0.0016848441199590614,
+      "relative_impulse_balance": 3.486323219447289e-10,
+      "reference_impulse_Ns": 0.02400700386118201,
+      "measured_impulse_Ns": 0.024007003858035322,
+      "orders": [
+        2.0030187017684744,
+        0.9992756537477864,
+        2.0008805949409187,
+        1.000931658999389
+      ],
+      "passed": true
+    },
+    {
+      "speed_m_s": 0.8,
+      "steps_per_contact": 256,
+      "dt_s": 1.9235397268441045e-06,
+      "reference_duration_s": 0.0004924261700720908,
+      "relative_overlap_error": 2.3168056606845363e-05,
+      "relative_velocity_error": 0.007171314026362771,
+      "relative_reaction_error": 1.7457880273772917e-05,
+      "relative_energy_drift": 0.006752614567533177,
+      "relative_impulse_balance": 2.003642505916695e-10,
+      "reference_impulse_Ns": 0.09602801544472804,
+      "measured_impulse_Ns": 0.09602801596828271,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "speed_m_s": 0.8,
+      "steps_per_contact": 512,
+      "dt_s": 9.617698634220523e-07,
+      "reference_duration_s": 0.0004924261700720908,
+      "relative_overlap_error": 5.77578746558202e-06,
+      "relative_velocity_error": 0.0035892636883663167,
+      "relative_reaction_error": 4.359714818560327e-06,
+      "relative_energy_drift": 0.00337186505883591,
+      "relative_impulse_balance": 2.0036540673659188e-10,
+      "reference_impulse_Ns": 0.09602801544472804,
+      "measured_impulse_Ns": 0.09602801548215502,
+      "orders": [
+        2.0040474717216012,
+        0.9985495776028456,
+        2.001572725977843,
+        1.0018994111229997
+      ],
+      "passed": true
+    },
+    {
+      "speed_m_s": 0.8,
+      "steps_per_contact": 1024,
+      "dt_s": 4.808849317110261e-07,
+      "reference_duration_s": 0.0004924261700720908,
+      "relative_overlap_error": 1.440867920740181e-06,
+      "relative_velocity_error": 0.001795533141843717,
+      "relative_reaction_error": 1.089207273869372e-06,
+      "relative_energy_drift": 0.001684844169638211,
+      "relative_impulse_balance": 2.0036540673659188e-10,
+      "reference_impulse_Ns": 0.09602801544472804,
+      "measured_impulse_Ns": 0.09602801543925998,
+      "orders": [
+        2.0030795608331986,
+        0.9992756334610635,
+        2.0009552452380546,
+        1.0009316376916597
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "18c3ae4d61b2bef8645c05149e9a5bef0ff56aa2",
+      "file": "dem_hertz_contact_history.py",
+      "source_sha256": "2101367b653dd6eaf53b785e4e85935e0483129afe8d338ee4eb13563c290af6"
+    },
+    {
+      "commit": "193e78a05bccf041cd655d55caca402b994cabf2",
+      "file": "hertz_impact_time.py",
+      "source_sha256": "986a571525d78b9561abc30dee88d165233acfcfa9250128b5c78d24ed563e9a"
+    },
+    {
+      "commit": "193e78a05bccf041cd655d55caca402b994cabf2",
+      "file": "dem3d.py",
+      "source_sha256": "aec3bff13c616bd6ce6280c5cdf554b28dcfee7a910e727ec3b7b410968f69f4"
+    }
+  ]
+}
