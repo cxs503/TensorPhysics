@@ -12,7 +12,7 @@ from tensorfem import thermal
 from tensorfvm.cht import rod
 
 
-def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", fem_method="theta", first_step_study=False):
+def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", fem_method="theta", first_step_study=False, interior_study=False):
     m, dx, decay = n//2, 1/n, 1.7
     k, c = np.array([2.,5.]), np.array([3.,1.5])
     area = np.array([.7,2.4]) if expanding else np.array([2.4,.7])
@@ -100,7 +100,44 @@ def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", 
     t = result.temperature.numpy().reshape(len(times),2,n+2).mean(axis=1)
     cells = np.column_stack([.5*(s[:,1:]+s[:,:-1]) for s in (t[:,:m+1],t[:,m+1:])])
     local = thermal.thermal_element_nodal_heat_steps(model,result).numpy()
-    traces_fe = result.interval_temperature.numpy().reshape(len(dt),2,n+2).mean(axis=1)[:,m:m+2]
+    mean_nodes = result.interval_temperature.numpy().reshape(len(dt),2,n+2).mean(axis=1)
+    if interior_study:
+        fractions = np.array([.13,.38,.5,.73,.91])
+        points = x[:-1,None]+dx*fractions
+        positions = points-.5
+        ref_temperature = np.vstack((profile(points[:m],0),profile(points[m:],1)))
+        # Differentiate each layer's cosine/sine solution in physical x.
+        ka = (k*area).repeat(m)[:,None]
+        w = wave.repeat(m)[:,None]
+        ref_power = (ka*w*np.repeat([left_trace,right_trace],m)[:,None]*np.sin(w*positions)
+                     +q.repeat(m)[:,None]*np.cos(w*positions))
+        west = np.column_stack((mean_nodes[:,:m],mean_nodes[:,m+1:-1]))
+        east = np.column_stack((mean_nodes[:,1:m+1],mean_nodes[:,m+2:]))
+        for solver in ("FVM","FEM"):
+            if solver=="FVM":
+                field,power = rod.reconstruct_interval_rod_field(np.full(n,dx),area.repeat(m),
+                    k.repeat(m),fv_mean,fractions)
+            else:
+                field = west[:,:,None]+(east-west)[:,:,None]*fractions
+                power = -(east-west)[:,:,None]*ka/dx
+            error = abs(power-exact_mean[:,None,None]*ref_power)
+            row = dict(solver=solver,n=n,expanding=expanding,steps=len(dt),
+                       interior_temperature_error_K=float(abs(field-exact_mean[:,None,None]*ref_temperature).max()),
+                       interior_power_error_W=float(error.max()),midpoint_power_error_W=float(error[:,:,2].max()))
+            if solver=="FEM":
+                # Integrate the two edge nodal loads, both positive rightward.
+                # A linear interpolation gives constant divergence in the element
+                # and preserves its integrated heat balance.
+                west_power = (local[:,:,0]+local[:,:,3])/dt[:,None]
+                east_power = -(local[:,:,1]+local[:,:,2])/dt[:,None]
+                recovered = west_power[:,:,None]+(east_power-west_power)[:,:,None]*fractions
+                row["equilibrated_power_error_W"] = float(abs(recovered-exact_mean[:,None,None]*ref_power).max())
+                residual = (dt[:,None]*(east_power-west_power)
+                            +np.diff(cells,axis=0)*dx*(area*c).repeat(m))
+                row["cell_balance_J"] = float(abs(residual).max())
+            yield row
+        return
+    traces_fe = mean_nodes[:,m:m+2]
     histories.append(("FEM",traces_fe,cells,t[:,side],t[:,m]-t[:,m+1],
                       np.column_stack((-local[:,m-1,[1,2]].sum(axis=1),local[:,m,[0,3]].sum(axis=1))),
                       np.column_stack((local[:,0,[0,3]].sum(axis=1),local[:,-1,[1,2]].sum(axis=1)))))
@@ -140,7 +177,9 @@ if __name__ == "__main__":
     parser.add_argument("--fem-method",choices=("theta","sdirk2"),default="theta",help="FEM time integrator")
     parser.add_argument("--fixed-steps",type=int,help="hold time resolution fixed while refining the spatial grid")
     parser.add_argument("--fixed-cells",type=int,help="hold an even number of cells fixed while refining time")
-    parser.add_argument("--first-step-study",action="store_true",
+    study = parser.add_mutually_exclusive_group()
+    study.add_argument("--interior-study",action="store_true",help="check interval-mean interior fields at five local positions per cell")
+    study.add_argument("--first-step-study",action="store_true",
                         help="estimate spatial and temporal errors in the two FVM material powers over the first interval")
     args = parser.parse_args()
     if args.steps_per_cell < 1:
@@ -159,7 +198,7 @@ if __name__ == "__main__":
             n = args.fixed_cells or size
             steps = args.fixed_steps or size*args.steps_per_cell
             for row in measure(n,expanding,time_steps=steps,method=args.method,fem_method=args.fem_method,
-                               first_step_study=args.first_step_study):
+                               first_step_study=args.first_step_study,interior_study=args.interior_study):
                 if args.first_step_study:
                     row["passed"] = row["reference_resolved"]
                     if args.fixed_steps is not None:
@@ -176,6 +215,15 @@ if __name__ == "__main__":
                 errors = {k:v for k,v in row.items() if "_error_" in k}
                 rates = {} if name not in previous else {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()}
                 row["orders"] = rates
+                if args.interior_study:
+                    # Linear FEM temperature gives constant axial power in each element.
+                    row["passed"] = all(np.isfinite(v) for v in errors.values()) and row.get("cell_balance_J",0.)<1e-10
+                    if not sensitivity:
+                        row["passed"] &= all(v>(.9 if name=="FEM" and k=="interior_power_error_W" else 1.8)
+                                            for k,v in rates.items())
+                    rows.append(row)
+                    previous[name] = errors
+                    continue
                 if not sensitivity and rates:
                     row["contact_mean_order_passed"] = min(rates["mean_left_trace_error_K"],
                                                            rates["mean_right_trace_error_K"])>1.8
@@ -184,6 +232,6 @@ if __name__ == "__main__":
                     row["passed"] = row["balance_passed"] and all(v>1.8 for v in rates.values())
                 rows.append(row)
                 previous[name] = errors
-    print(json.dumps(dict(runs=rows,first_step_study=args.first_step_study,fvm_method=args.method,fem_method=args.fem_method,fixed_cells=args.fixed_cells,fixed_steps=args.fixed_steps,sources=[provenance(f) for f in
+    print(json.dumps(dict(runs=rows,interior_study=args.interior_study,first_step_study=args.first_step_study,fvm_method=args.method,fem_method=args.fem_method,fixed_cells=args.fixed_cells,fixed_steps=args.fixed_steps,sources=[provenance(f) for f in
                      (__file__,two_layer_conduction.__file__,rod.__file__,thermal.__file__)]),indent=2,allow_nan=False))
     raise SystemExit(0 if all((row["passed"] if "passed" in row else row["balance_passed"]) for row in rows) else 1)
