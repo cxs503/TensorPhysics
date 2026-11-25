@@ -1,0 +1,452 @@
+{
+  "runs": [
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 4,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 5.3820109216498716e-08,
+      "end_flux_error_W_m2": 9.1288096054662e-08,
+      "interface_flux_error_W_m2": 9.304044737691112e-08,
+      "contact_drop_residual_K": 7.850462293418876e-17,
+      "wall_balance_residual_W_m2": 2.3714374201337736e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 4,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 0.0001237478921975594,
+      "end_flux_error_W_m2": 0.00022191864370302167,
+      "interface_flux_error_W_m2": 0.00016752647158052464,
+      "contact_drop_residual_K": 1.942890293094024e-16,
+      "wall_balance_residual_W_m2": 3.342213888644167e-16,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 0.0001565962474346565,
+      "cell_balance_residual_W_m2": 2.685612988318088e-14,
+      "interface_flux_mismatch_W_m2": 1.179974363160101e-14,
+      "solver": "FVM",
+      "cells_per_layer": 4,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 0.00020683203214470218,
+      "end_flux_error_W_m2": 0.00038008164670690504,
+      "interface_flux_error_W_m2": 0.0003915793957360798,
+      "contact_drop_residual_K": 3.3766115072321297e-16,
+      "wall_balance_residual_W_m2": 5.7742271515097e-15,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 0.0020579116570282846,
+      "particle_balance_residual_W_m2": 1.6207885254150417e-14,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 4,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 0.0016101155283618572,
+      "end_flux_error_W_m2": 0.0008329466800476528,
+      "interface_flux_error_W_m2": 0.0004768616956088454,
+      "contact_drop_residual_K": 0.0013358759124796793,
+      "wall_balance_residual_W_m2": 5.978733960281817e-16,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 8,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 3.3777610669926696e-09,
+      "end_flux_error_W_m2": 5.7236526906274305e-09,
+      "interface_flux_error_W_m2": 5.8384944162929785e-09,
+      "contact_drop_residual_K": 5.721958498152797e-17,
+      "wall_balance_residual_W_m2": 4.710277376051326e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 8,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 3.089374691112278e-05,
+      "end_flux_error_W_m2": 5.553583925335207e-05,
+      "interface_flux_error_W_m2": 4.1809106727190635e-05,
+      "contact_drop_residual_K": 2.618455766672135e-16,
+      "wall_balance_residual_W_m2": 3.3472809927562375e-15,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 4.537784851617663e-05,
+      "cell_balance_residual_W_m2": 5.814651496569188e-14,
+      "interface_flux_mismatch_W_m2": 4.132655151114705e-14,
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 5.168508442337182e-05,
+      "end_flux_error_W_m2": 9.497828645617277e-05,
+      "interface_flux_error_W_m2": 9.792155943139987e-05,
+      "contact_drop_residual_K": 8.886119947416683e-17,
+      "wall_balance_residual_W_m2": 7.406995419181135e-15,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 0.0005283008362835881,
+      "particle_balance_residual_W_m2": 3.51118503146091e-14,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 8,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 0.0003985755677654548,
+      "end_flux_error_W_m2": 0.00020634138242727525,
+      "interface_flux_error_W_m2": 0.00011826288029883437,
+      "contact_drop_residual_K": 0.00032517534767666825,
+      "wall_balance_residual_W_m2": 2.5476231888929306e-16,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 2.1162118350226126e-10,
+      "end_flux_error_W_m2": 3.5821823516400766e-10,
+      "interface_flux_error_W_m2": 3.655510141694637e-10,
+      "contact_drop_residual_K": 1.3668035872266426e-16,
+      "wall_balance_residual_W_m2": 1.1857187100668868e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 7.720733921138466e-06,
+      "end_flux_error_W_m2": 1.3887467836781879e-05,
+      "interface_flux_error_W_m2": 1.0447743130553418e-05,
+      "contact_drop_residual_K": 2.237726045655905e-16,
+      "wall_balance_residual_W_m2": 5.7742271515097e-15,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 1.2129406141116794e-05,
+      "cell_balance_residual_W_m2": 1.0899537327364758e-13,
+      "interface_flux_mismatch_W_m2": 1.464821375527116e-14,
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 1.2919836006300476e-05,
+      "end_flux_error_W_m2": 2.374193442366554e-05,
+      "interface_flux_error_W_m2": 2.4482054202962973e-05,
+      "contact_drop_residual_K": 1.2357466782899476e-15,
+      "wall_balance_residual_W_m2": 1.3802979191555656e-14,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 0.00013381430554514998,
+      "particle_balance_residual_W_m2": 4.37624471251326e-14,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 9.982986266091599e-05,
+      "end_flux_error_W_m2": 5.1290539926209535e-05,
+      "interface_flux_error_W_m2": 2.9385679900857674e-05,
+      "contact_drop_residual_K": 8.083374883110683e-05,
+      "wall_balance_residual_W_m2": 3.376611507232129e-16,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 1.3358832019789883e-11,
+      "end_flux_error_W_m2": 2.2151710397905428e-11,
+      "interface_flux_error_W_m2": 2.2948100946093423e-11,
+      "contact_drop_residual_K": 1.1857187100668868e-16,
+      "wall_balance_residual_W_m2": 4.47545209131181e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 1.930014512917561e-06,
+      "end_flux_error_W_m2": 3.472086168871681e-06,
+      "interface_flux_error_W_m2": 2.611652490019284e-06,
+      "contact_drop_residual_K": 1.7626429548508935e-15,
+      "wall_balance_residual_W_m2": 1.596068683096305e-14,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 3.1309295009649393e-06,
+      "cell_balance_residual_W_m2": 2.2634991401609881e-13,
+      "interface_flux_mismatch_W_m2": 3.9120201381495503e-14,
+      "solver": "FVM",
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 3.2298694201502114e-06,
+      "end_flux_error_W_m2": 5.935318987306568e-06,
+      "interface_flux_error_W_m2": 6.1206176936747134e-06,
+      "contact_drop_residual_K": 1.636931987477171e-15,
+      "wall_balance_residual_W_m2": 9.6461706889909e-15,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 3.367226485010267e-05,
+      "particle_balance_residual_W_m2": 9.250413301621733e-14,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "trace_error_K": 2.5046114259652152e-05,
+      "end_flux_error_W_m2": 1.2780749483978622e-05,
+      "interface_flux_error_W_m2": 7.318416010439213e-06,
+      "contact_drop_residual_K": 2.0212418130088878e-05,
+      "wall_balance_residual_W_m2": 2.237726045655905e-16,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 4,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 2.365479347224283e-06,
+      "end_flux_error_W_m2": 4.852876449566435e-06,
+      "interface_flux_error_W_m2": 5.829244646523524e-06,
+      "contact_drop_residual_K": 1.415262216750919e-16,
+      "wall_balance_residual_W_m2": 2.482534153247273e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 4,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.0019052318278642984,
+      "end_flux_error_W_m2": 0.005445231225943054,
+      "interface_flux_error_W_m2": 0.004120107107872416,
+      "contact_drop_residual_K": 5.551115123125783e-17,
+      "wall_balance_residual_W_m2": 2.373385746427198e-15,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 0.0014309933941832871,
+      "cell_balance_residual_W_m2": 1.3877787807814458e-14,
+      "interface_flux_mismatch_W_m2": 1.703134228533074e-14,
+      "solver": "FVM",
+      "cells_per_layer": 4,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.0015529708654896152,
+      "end_flux_error_W_m2": 0.003180369441081584,
+      "interface_flux_error_W_m2": 0.004010969010652422,
+      "contact_drop_residual_K": 1.3877787807814457e-16,
+      "wall_balance_residual_W_m2": 3.242535543737154e-15,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 0.007880642598920665,
+      "particle_balance_residual_W_m2": 1.2334098129945518e-14,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 4,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.006503909534663935,
+      "end_flux_error_W_m2": 0.0178839348377376,
+      "interface_flux_error_W_m2": 0.007550351746242499,
+      "contact_drop_residual_K": 0.0074591944564060325,
+      "wall_balance_residual_W_m2": 1.790180836524724e-15,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 8,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 1.4857023417285503e-07,
+      "end_flux_error_W_m2": 3.038592039590634e-07,
+      "interface_flux_error_W_m2": 3.6624041468026306e-07,
+      "contact_drop_residual_K": 1.1102230246251565e-16,
+      "wall_balance_residual_W_m2": 5.978733960281817e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 8,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.0004759620838893313,
+      "end_flux_error_W_m2": 0.0013603192869515801,
+      "interface_flux_error_W_m2": 0.0010267130475144627,
+      "contact_drop_residual_K": 8.777083671441753e-17,
+      "wall_balance_residual_W_m2": 4.249413978253322e-15,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 0.0003745795382204168,
+      "cell_balance_residual_W_m2": 3.1913553475329644e-14,
+      "interface_flux_mismatch_W_m2": 1.5813567179958505e-14,
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.0003880431980329636,
+      "end_flux_error_W_m2": 0.0007933714380736242,
+      "interface_flux_error_W_m2": 0.001003134124542688,
+      "contact_drop_residual_K": 6.206335383118183e-17,
+      "wall_balance_residual_W_m2": 1.6353475863606707e-14,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 0.0020904178822749317,
+      "particle_balance_residual_W_m2": 2.354950596522318e-14,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 8,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.001628347137790566,
+      "end_flux_error_W_m2": 0.00443529713215607,
+      "interface_flux_error_W_m2": 0.0018589545281761039,
+      "contact_drop_residual_K": 0.0018240784914026697,
+      "wall_balance_residual_W_m2": 2.0014830212433605e-15,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 16,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 9.305937184706862e-09,
+      "end_flux_error_W_m2": 1.901752859020279e-08,
+      "interface_flux_error_W_m2": 2.2942189375338565e-08,
+      "contact_drop_residual_K": 2.7755575615628914e-17,
+      "wall_balance_residual_W_m2": 7.021666937153402e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 16,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.00011896841435809194,
+      "end_flux_error_W_m2": 0.0003400166401205345,
+      "interface_flux_error_W_m2": 0.000256470170498818,
+      "contact_drop_residual_K": 5.551115123125783e-17,
+      "wall_balance_residual_W_m2": 6.45458879844291e-15,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 9.540524232643409e-05,
+      "cell_balance_residual_W_m2": 1.0438275311977674e-13,
+      "interface_flux_mismatch_W_m2": 7.19592404467786e-15,
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 9.699797534609155e-05,
+      "end_flux_error_W_m2": 0.00019823612326641288,
+      "interface_flux_error_W_m2": 0.00025080683922548594,
+      "contact_drop_residual_K": 8.331297329690976e-16,
+      "wall_balance_residual_W_m2": 9.120737231489816e-15,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 0.000539531427587524,
+      "particle_balance_residual_W_m2": 7.092581502415836e-14,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 16,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.0004099499499687884,
+      "end_flux_error_W_m2": 0.0011028264209388765,
+      "interface_flux_error_W_m2": 0.00045793506426280506,
+      "contact_drop_residual_K": 0.00045379026467819557,
+      "wall_balance_residual_W_m2": 7.447602459741819e-16,
+      "passed": true
+    },
+    {
+      "solver": "DG_P2",
+      "cells_per_layer": 32,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 5.821858788202044e-10,
+      "end_flux_error_W_m2": 1.1895751176000427e-09,
+      "interface_flux_error_W_m2": 1.43541442555115e-09,
+      "contact_drop_residual_K": 1.1102230246251565e-16,
+      "wall_balance_residual_W_m2": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "FEM_Q4",
+      "cells_per_layer": 32,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 2.9740714338093987e-05,
+      "end_flux_error_W_m2": 8.500018949717253e-05,
+      "interface_flux_error_W_m2": 6.410452190111665e-05,
+      "contact_drop_residual_K": 5.551115123125783e-17,
+      "wall_balance_residual_W_m2": 2.1923180254186333e-14,
+      "passed": true
+    },
+    {
+      "cell_mean_error_K": 2.4054555192951644e-05,
+      "cell_balance_residual_W_m2": 3.181476362491034e-13,
+      "interface_flux_mismatch_W_m2": 2.6884824797806513e-14,
+      "solver": "FVM",
+      "cells_per_layer": 32,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 2.4248686802235704e-05,
+      "end_flux_error_W_m2": 4.9552372621008826e-05,
+      "interface_flux_error_W_m2": 6.270314826102267e-05,
+      "contact_drop_residual_K": 1.2015311424647602e-15,
+      "wall_balance_residual_W_m2": 7.966304722535022e-14,
+      "passed": true
+    },
+    {
+      "particle_temperature_error_K": 0.00013713670089183814,
+      "particle_balance_residual_W_m2": 1.5960783002359526e-13,
+      "cut_wall_flux_mismatch_W_m2": 0.0,
+      "solver": "SPH",
+      "cells_per_layer": 32,
+      "omega_rad_s": 6.0,
+      "trace_error_K": 0.00010313249337499688,
+      "end_flux_error_W_m2": 0.0002748444026642051,
+      "interface_flux_error_W_m2": 0.00011335798040927263,
+      "contact_drop_residual_K": 0.00011347063770663124,
+      "wall_balance_residual_W_m2": 7.021666937153402e-16,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "033be4dd50f32c4493075157e69f7eee2f6df9c4",
+      "file": "harmonic_loaded_contact_stack.py",
+      "source_sha256": "123aee22f1690de93c10a2006bd950c4097e5e1f8237b7a36a046bf2dd37e490"
+    },
+    {
+      "commit": "033be4dd50f32c4493075157e69f7eee2f6df9c4",
+      "file": "periodic_contact_heat.py",
+      "source_sha256": "88fe63d70b57856b5dc44923309748d13b1eac44ef2f7fe0611bfec266503261"
+    },
+    {
+      "commit": "033be4dd50f32c4493075157e69f7eee2f6df9c4",
+      "file": "two_layer_conduction.py",
+      "source_sha256": "c9f048d11a0c93dd9416fba8c5cb5fa40a46cbb22ce77eea08b0210df3741b0e"
+    },
+    {
+      "commit": "1dca5b490939d1a3dd9bce8c6f7039ee56171af9",
+      "file": "heat_1d.py",
+      "source_sha256": "79fa9fb6a358162736716279d00f63d013d46a90932ed6e01c77985c5f9245ca"
+    },
+    {
+      "commit": "ecfe4041e0388cf63988998424437743b242916d",
+      "file": "thermal.py",
+      "source_sha256": "372e4860203b812033e7fa500cd002389c586b4e251dcf5be4bbf7574cee0172"
+    },
+    {
+      "commit": "1dcd11b673946358a43073009a6ae8538d3aea49",
+      "file": "rod.py",
+      "source_sha256": "a058886533e8fd86091826c3a019e9f274da6438aad914705094f82b472f3bac"
+    },
+    {
+      "commit": "99e90ae4f3198c8b414b8aad9ff2ca5e9506ceac",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "d6bdca3260c55fbcaf8c5c0bed046414552fb33998c47e9505df0fc048897e3f"
+    }
+  ],
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG:../TensorFEM/src:../TensorDEM/src:../TensorFVM/src:../TensorSPH/src python examples/harmonic_loaded_contact_stack.py",
+  "reference": "Two 0.5 m layers of unit cross section with (k,C)=(1,1) and (4,2), separated by areal resistance 0.32. Add a spatially uniform temperature phasor to a homogeneous transfer solution and prescribe the corresponding layer generation, film ambients and wall storage. Compare four temperature traces, contact flux positive to the right and both inward wall fluxes. Check each end-wall energy balance and the contact drop. FVM additionally checks every cell mean against the exact spatial average and every cell energy balance including generation and storage. Compare the two one-sided contact fluxes. All runs use unit cross-sectional area. SPH compares particle temperatures with exact center values obtained from the analytic cell mean of the homogeneous mode. Check every slice energy balance from native rightward section fluxes and recover both interface temperatures independently by half-cell Fourier extrapolation.",
+  "sph_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py",
+    "counts": {
+      "tests": 155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}
