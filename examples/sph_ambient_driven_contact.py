@@ -43,7 +43,7 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls,
     left_flux = -complex(inward[interface-1, 1])
     right_flux = complex(inward[interface, 0])
     wall_state = (field[[0,-1]], torch.stack((inward[0,0], inward[-1,1])))
-    return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state
+    return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state, field[model.elements].mean(1)
 
 
 def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None, wall_capacity=(0., 0.)):
@@ -83,16 +83,19 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     # Propagate the interface state to each wall in its outward coordinate.
     # The reported boundary flux is positive inward at both ends.
     exact_walls = []
-    if films is not None:
-        for side, trace in enumerate((exact_left, exact_right)):
-            shift = loss[side] + 1j*omega*capacity[side]
-            particular = loss[side]*ambient[side]/shift
-            wave = cmath.sqrt(shift/k[side])
-            co, si = cmath.cosh(lengths[side]*wave), cmath.sinh(lengths[side]*wave)
-            outward = -exact_flux if side == 0 else exact_flux
-            wall_t = particular + co*(trace-particular) - si*outward/(k[side]*wave)
-            inward = k[side]*wave*si*(trace-particular) - co*outward
-            exact_walls.append((wall_t, inward))
+    exact_means = []
+    for side, trace in enumerate((exact_left, exact_right)):
+        shift = loss[side] + 1j*omega*capacity[side]
+        particular = loss[side]*ambient[side]/shift
+        wave = cmath.sqrt(shift/k[side])
+        co, si = cmath.cosh(lengths[side]*wave), cmath.sinh(lengths[side]*wave)
+        outward = -exact_flux if side == 0 else exact_flux
+        wall_t = particular + co*(trace-particular) - si*outward/(k[side]*wave)
+        inward = k[side]*wave*si*(trace-particular) - co*outward
+        exact_walls.append((wall_t, inward))
+        # Integrate the continuum profile from the contact to the outer wall.
+        u = wave*lengths[side]
+        exact_means.append(particular + (trace-particular)*si/u - outward*(co-1)/(k[side]*wave*u))
 
     def layers(values, dtype=torch.float64):
         return torch.tensor(values, dtype=dtype).repeat_interleave(torch.tensor([interface, n-interface]))
@@ -115,7 +118,19 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             film_coefficients=films, wall_areal_heat_capacity=wall_capacity, **options)
     left, right = heat.layered_slab_contact_temperatures(field, cuts, 1/n, conductivity)
     flux = complex(cuts[i+1])
-    comparison = {}
+    comparison = {"exact_layer_mean_K": [[t.real, t.imag] for t in exact_means]}
+
+    def layer_diagnostics(cell_means, contact_flux, inward):
+        means = (complex(cell_means[:interface].mean()), complex(cell_means[interface:].mean()))
+        errors = [abs(t-ref) for t, ref in zip(means, exact_means)]
+        # Per unit wall area: boundary input plus bulk exchange equals storage.
+        boundary_input = (complex(inward[0])-contact_flux, complex(inward[1])+contact_flux)
+        residuals = [abs(q + length*(h*(ta-t)-1j*omega*cv*t))
+                     for q, length, h, ta, cv, t in zip(boundary_input, lengths, loss, ambient, capacity, means)]
+        return dict(mean_temperature_K=[[t.real, t.imag] for t in means],
+                    mean_error_K=errors, balance_residual_W_m2=residuals)
+
+    comparison["sph_layers"] = layer_diagnostics(field, flux, (cuts[0], -cuts[-1]))
     def wall_balance(temperatures, inward):
         return max(abs(h*((ta or 0.)-complex(t)) - 1j*omega*c*complex(t) - complex(q))
                    for h, ta, t, c, q in zip(films, walls, temperatures, wall_capacity, inward))
@@ -139,7 +154,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         import numpy as np
         from tensorfvm.cht import rod
         # Unit cross-section converts the rod's power in W to the slab flux in W/m².
-        _, faces, entering, leaving, traces = rod.solve_harmonic_stepped_rod(
+        cells, faces, entering, leaving, traces = rod.solve_harmonic_stepped_rod(
             np.full(n, 1/n), np.ones(n), conductivity.numpy(), layers(capacity).numpy(),
             tuple(0. if w is None else w for w in walls), omega,
             end_types=("robin", "robin") if films is not None else tuple("power" if w is None else "temperature" for w in walls),
@@ -147,6 +162,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             heat_loss_coefficient=layers(loss).numpy(), bulk_ambient_temperature=layers(ambient, torch.complex128).numpy(),
             contact_resistance=contact.numpy(), return_traces=True)
         q = leaving[i]
+        comparison["fvm_layers"] = layer_diagnostics(cells, complex(q), (entering[0], -leaving[-1]))
         tl, tr = traces[0][i], traces[1][i]
         comparison.update(fvm_flux_relative_error=float(abs(q/exact_flux-1)),
                           fvm_max_trace_error_K=float(max(abs(tl-exact_left), abs(tr-exact_right))),
@@ -158,8 +174,9 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         if any(wall_capacity):
             comparison["fvm_wall_balance_W_m2"] = wall_balance(faces[[0,-1]], (entering[0], -leaving[-1]))
     if compare_fem:
-        fl, fr, ql, qr, fem_wall_state = fem_contact(conductivity, layers(capacity), layers(loss),
+        fl, fr, ql, qr, fem_wall_state, element_means = fem_contact(conductivity, layers(capacity), layers(loss),
                                      layers(ambient, torch.complex128), omega, resistance, walls, interface, films, wall_capacity)
+        comparison["fem_layers"] = layer_diagnostics(element_means, ql, fem_wall_state[1])
         comparison.update(fem_flux_relative_error=abs(ql/exact_flux-1),
                           fem_max_trace_error_K=max(abs(fl-exact_left), abs(fr-exact_right)),
                           fem_interface_imbalance_W_m2=abs(ql-qr),
@@ -249,6 +266,16 @@ if __name__ == "__main__":
                                                                or wall["inward_flux_phase_error_rad"] < .005))
                         if args.wall_storage:
                             row["passed"] &= all(value < 1e-10 for key, value in row.items() if key.endswith("_wall_balance_W_m2"))
+                        for key in ("sph_layers", "fvm_layers", "fem_layers"):
+                            if key in row:
+                                row["passed"] &= max(row[key]["balance_residual_W_m2"]) < 1e-10
+                                error = max(row[key]["mean_error_K"])
+                                if previous:
+                                    order = math.log2(max(previous[key]["mean_error_K"])/error)
+                                    row[key]["mean_error_order"] = order
+                                    row["passed"] &= order > 1.7
+                                if n == 64:
+                                    row["passed"] &= error < .001
                         runs.append(row)
                         previous = row
     passed = all(row["passed"] for row in runs)
