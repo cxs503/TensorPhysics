@@ -22,6 +22,57 @@
   ],
   "studies": [
     {
+      "reference_interval_left_right_K": [
+        [
+          0.900383156878353,
+          0.08133681181163842
+        ],
+        [
+          0.8359445082893905,
+          0.13395074806412957
+        ],
+        [
+          0.7902857250813129,
+          0.1712309884428453
+        ],
+        [
+          0.7396281893017869,
+          0.21259269320505217
+        ],
+        [
+          0.6871707705132637,
+          0.25542399629017504
+        ],
+        [
+          0.6368378988144742,
+          0.2965206139405106
+        ],
+        [
+          0.5921399075121584,
+          0.33301636945088614
+        ],
+        [
+          0.5551530448778851,
+          0.36320610592930225
+        ],
+        [
+          0.52583319139679,
+          0.38594224439045044
+        ],
+        [
+          0.4971862177313061,
+          0.3925459029529153
+        ],
+        [
+          0.4543584746496686,
+          0.3677463097536514
+        ],
+        [
+          0.40887982126118994,
+          0.3293589187872575
+        ]
+      ],
+      "trace_reference_discrepancy_K": 0.0,
       "contact_resistance_m2_K_W": 0.05,
       "reference_discrepancy_J_m2": 2.380104804702462e-52,
       "initial_interface_flux_W_m2": 20.0,
@@ -402,6 +453,15 @@
           "passed": true
         },
         {
+          "first_interval_left_right_K": [
+            0.8039876854211319,
+            0.09010853944560353
+          ],
+          "max_left_right_mean_error_K": [
+            0.09639547145722116,
+            0.00877172763396511
+          ],
+          "max_contact_law_residual_K": 2.220446049250313e-16,
           "solver": "FVM",
           "cells": 40,
           "interval_heat_J_m2": [
@@ -476,9 +536,19 @@
           "west_interface_east_orders": [],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 4.39163994445102e-06,
+          "left_right_trace_orders": [],
           "substeps_per_interval": 8
         },
         {
+          "first_interval_left_right_K": [
+            0.8664008832808482,
+            0.08298594378696202
+          ],
+          "max_left_right_mean_error_K": [
+            0.03398227359750483,
+            0.0016864906620461528
+          ],
+          "max_contact_law_residual_K": 2.7755575615628914e-16,
           "solver": "FVM",
           "cells": 80,
           "interval_heat_J_m2": [
@@ -557,9 +627,22 @@
           ],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 1.0893795774347126e-06,
+          "left_right_trace_orders": [
+            1.5041829921416476,
+            2.37883668608614
+          ],
           "substeps_per_interval": 16
         },
         {
+          "first_interval_left_right_K": [
+            0.8910509146588129,
+            0.08165896658331295
+          ],
+          "max_left_right_mean_error_K": [
+            0.009332242219540099,
+            0.00042392572388338934
+          ],
+          "max_contact_law_residual_K": 2.220446049250313e-16,
           "solver": "FVM",
           "cells": 160,
           "interval_heat_J_m2": [
@@ -638,9 +721,22 @@
           ],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 2.713811076138217e-07,
+          "left_right_trace_orders": [
+            1.8644867215807117,
+            1.9921409131630101
+          ],
           "substeps_per_interval": 32
         },
         {
+          "first_interval_left_right_K": [
+            0.8980088116523665,
+            0.08141129943272753
+          ],
+          "max_left_right_mean_error_K": [
+            0.0023743452259865627,
+            0.00010557150478815447
+          ],
+          "max_contact_law_residual_K": 2.220446049250313e-16,
           "solver": "FVM",
           "cells": 320,
           "interval_heat_J_m2": [
@@ -719,12 +815,67 @@
           ],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 6.773159186290734e-08,
+          "left_right_trace_orders": [
+            1.9746940373668969,
+            2.005591028164677
+          ],
           "substeps_per_interval": 64
         }
       ],
       "passed": true
     },
     {
+      "reference_interval_left_right_K": [
+        [
+          0.9807894270583924,
+          0.015685367124485275
+        ],
+        [
+          0.9655648133175896,
+          0.028116212189796062
+        ],
+        [
+          0.9522982710255521,
+          0.038948298611977746
+        ],
+        [
+          0.934450083509702,
+          0.053521282694426305
+        ],
+        [
+          0.9108992406999622,
+          0.07275046532654515
+        ],
+        [
+          0.880628325326764,
+          0.09746656423031394
+        ],
+        [
+          0.8430521781146506,
+          0.12814735958847992
+        ],
+        [
+          0.7984657616268416,
+          0.1645492203203567
+        ],
+        [
+          0.7484141161814587,
+          0.2049915349365244
+        ],
+        [
+          0.6947049129814769,
+          0.2412698920521494
+        ],
+        [
+          0.6372477043299737,
+          0.2531299840649725
+        ],
+        [
+          0.5857683309444863,
+          0.23800254842373395
+        ]
+      ],
+      "trace_reference_discrepancy_K": 0.0,
       "contact_resistance_m2_K_W": 0.3,
       "reference_discrepancy_J_m2": 5.242674308507565e-53,
       "initial_interface_flux_W_m2": 3.3333333333333335,
@@ -1105,6 +1256,15 @@
           "passed": true
         },
         {
+          "first_interval_left_right_K": [
+            0.9571436553052189,
+            0.01964788836489664
+          ],
+          "max_left_right_mean_error_K": [
+            0.023645771753173506,
+            0.0039625212404113645
+          ],
+          "max_contact_law_residual_K": 2.220446049250313e-16,
           "solver": "FVM",
           "cells": 40,
           "interval_heat_J_m2": [
@@ -1179,9 +1339,19 @@
           "west_interface_east_orders": [],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 3.7549839302930543e-06,
+          "left_right_trace_orders": [],
           "substeps_per_interval": 8
         },
         {
+          "first_interval_left_right_K": [
+            0.9729620705375911,
+            0.016710793317013126
+          ],
+          "max_left_right_mean_error_K": [
+            0.007827356520801354,
+            0.0010254261925278507
+          ],
+          "max_contact_law_residual_K": 2.220446049250313e-16,
           "solver": "FVM",
           "cells": 80,
           "interval_heat_J_m2": [
@@ -1260,9 +1430,22 @@
           ],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 9.312473336214877e-07,
+          "left_right_trace_orders": [
+            1.594985165968888,
+            1.9501950144189493
+          ],
           "substeps_per_interval": 16
         },
         {
+          "first_interval_left_right_K": [
+            0.978665242429725,
+            0.015941619007398346
+          ],
+          "max_left_right_mean_error_K": [
+            0.0021241846286674804,
+            0.0002562518829130715
+          ],
+          "max_contact_law_residual_K": 4.440892098500626e-16,
           "solver": "FVM",
           "cells": 160,
           "interval_heat_J_m2": [
@@ -1341,9 +1524,22 @@
           ],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 2.3197689262566268e-07,
+          "left_right_trace_orders": [
+            1.8816159913781185,
+            2.0005891436238707
+          ],
           "substeps_per_interval": 32
         },
         {
+          "first_interval_left_right_K": [
+            0.9802496331328424,
+            0.01574939822318998
+          ],
+          "max_left_right_mean_error_K": [
+            0.0005397939255500361,
+            6.403109870470672e-05
+          ],
+          "max_contact_law_residual_K": 5.551115123125783e-16,
           "solver": "FVM",
           "cells": 320,
           "interval_heat_J_m2": [
@@ -1422,6 +1618,10 @@
           ],
           "passed": true,
           "max_interface_difference_from_sph_J_m2": 5.789616228102368e-08,
+          "left_right_trace_orders": [
+            1.9764285199728144,
+            2.0007179350533124
+          ],
           "substeps_per_interval": 64
         }
       ],
@@ -1432,9 +1632,9 @@
   "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/sph_resistive_contact_step.py --with-fvm",
   "sources": [
     {
-      "commit": "d10f10136797e6488593a119ae7564c76fb34968",
+      "commit": "8253a91a1f155876b00c80087cdfa83d997dfdef",
       "file": "sph_resistive_contact_step.py",
-      "source_sha256": "a70880009b78e37790c9ab0bac748aecf9ba602bb665fc85dc46c7393f241a31"
+      "source_sha256": "dbad578aec9aee3c7070b1eab08142ad93f16fae3047619b9aa8a5a6ae017622"
     },
     {
       "commit": "6b8dc454005b84c400215bbf53c44f879a558a8f",
