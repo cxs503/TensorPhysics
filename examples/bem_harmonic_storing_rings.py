@@ -1,4 +1,5 @@
 """Periodic response of two storing rings with quasi-steady conduction in three annular materials."""
+import argparse
 import json
 import math
 
@@ -15,20 +16,33 @@ CAPACITY = (.25, .8)
 WALLS = np.array([1., .3j])
 
 
-def ring_response(n, formulation):
+def ring_response(n, formulation, mode=0):
     # Each pair of annuli maps its wall temperatures and sheet generation
     # into incoming/outgoing powers and the sheet temperature by linearity.
+    pattern = np.cos(mode*2*np.pi*(np.arange(n)+.5)/n)
+    projection = pattern/(pattern @ pattern)
     maps = []
+    leakage = 0.
     for i in range(2):
         radii = RADII[2*i:2*i+3]
         columns = []
         for left, right, generation in np.eye(3):
-            result = bem.solve_annulus_contact(radii, K[i:i+2], (left, right), CONTACT[i], n,
-                                               formulation=formulation, interface_source=generation)
-            columns.append([result.heat_rates[0], result.heat_rates[2], result.sheet_temperature.mean(),
-                            result.interface_flux.mean(), result.outer_interface_flux.mean()])
+            result = bem.solve_annulus_contact(radii, K[i:i+2], (left*pattern, right*pattern), CONTACT[i], n,
+                                               formulation=formulation, interface_source=generation*pattern)
+            # Normal derivatives on the bore and exterior use opposite normals.
+            # For nonzero modes the circumferential integral vanishes; match
+            # the projected radial current amplitude at the artificial join.
+            bore = K[i]*result.inner_field.normal_derivative[n:]
+            exterior = -K[i+1]*result.outer_field.normal_derivative[:n]
+            traces = np.stack((2*np.pi*radii[0]*bore, 2*np.pi*radii[2]*exterior,
+                               result.sheet_temperature, result.interface_flux, result.outer_interface_flux))
+            amplitudes = traces @ projection
+            leakage = max(leakage, float(abs(traces-amplitudes[:, None]*pattern).max()))
+            if not mode:
+                amplitudes[:2] = result.heat_rates[0], result.heat_rates[2]
+            columns.append(amplitudes)
         maps.append(np.asarray(columns).T)
-    return maps
+    return maps, leakage
 
 
 def solve_coupled(maps, omega):
@@ -61,30 +75,61 @@ def continuum(omega):
     return np.column_stack((temp, power[:-1]/surface, power[1:]/surface))
 
 
+def angular_reference(omega, mode):
+    # In a source-free annulus T_m = A*r^m+B*r^-m. Propagate the pair
+    # (T_m, r*q_m) between the two physical walls without an artificial join.
+    edges = [RADII[0], RADII[1], RADII[3], RADII[4]]
+    def propagate(initial):
+        t, p = WALLS[0], initial
+        sheets = []
+        for i, k in enumerate(K):
+            radius = edges[i+1]
+            z = mode*math.log(radius/edges[i])
+            c, s = math.cosh(z), math.sinh(z)
+            t, p = c*t-s*p/(k*mode), c*p-s*k*mode*t
+            if i < 2:
+                incoming = p/radius
+                t -= CONTACT[i]*incoming/2
+                outgoing = incoming-1j*omega*CAPACITY[i]*t
+                sheets.append([t, incoming, outgoing])
+                p = radius*outgoing
+                t -= CONTACT[i]*outgoing/2
+        return t, np.asarray(sheets)
+    offset, _ = propagate(0.)
+    unit, _ = propagate(1.)
+    end, fields = propagate((WALLS[1]-offset)/(unit-offset))
+    if abs(end-WALLS[1]) > 1e-10:
+        raise ArithmeticError("angular reference missed exterior temperature")
+    return fields
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", type=int, choices=(0, 1, 2, 3), default=0)
+    mode = parser.parse_args().mode
     runs = []
     for formulation in ("circular", "polygonal"):
         previous = {}
-        for n in (16, 32, 64):
-            maps = ring_response(n, formulation)
+        for n in ((16, 32, 64, 128) if mode else (16, 32, 64)):
+            maps, leakage = ring_response(n, formulation, mode)
             for omega in (1., 8., 24.):
                 fields, imbalance = solve_coupled(maps, omega)
-                expected = continuum(omega)
+                expected = angular_reference(omega, mode) if mode else continuum(omega)
                 ratio = fields/expected
                 error = float(abs(ratio-1).max())
                 order = None if omega not in previous or formulation == "circular" else math.log2(previous[omega]/error)
                 sheet_balance = float(abs(fields[:, 1]-fields[:, 2]-1j*omega*np.asarray(CAPACITY)*fields[:, 0]).max())
-                passed = imbalance < 1e-10 and sheet_balance < 1e-10 and (error < 1e-9 if formulation == "circular"
-                                                else n < 64 or (order > 1.7 and error < .01))
+                passed = leakage < 1e-9 and imbalance < 1e-10 and sheet_balance < 1e-10 and (error < 1e-9 if formulation == "circular"
+                                                else n < (128 if mode else 64) or (order > 1.7 and error < .01))
                 runs.append(dict(formulation=formulation, panels=n, omega=omega, max_relative_phasor_error=error,
                                  order=order, amplitude_ratios=abs(ratio).tolist(), phase_errors_deg=np.angle(ratio,deg=True).tolist(),
                                  reference_amplitudes=abs(expected).tolist(), reference_phases_deg=np.angle(expected,deg=True).tolist(),
-                                 join_power_residual_W_m=imbalance, sheet_balance_residual_W_m2=sheet_balance, passed=passed))
+                                 unit_response_mode_leakage=leakage, join_power_residual_W_m=imbalance, sheet_balance_residual_W_m2=sheet_balance, passed=passed))
                 previous[omega] = error
     passed = all(r["passed"] for r in runs)
-    print(json.dumps(dict(passed=passed, model="axisymmetric, zero bulk capacity, positive areal storage at each ring",
+    print(json.dumps(dict(passed=passed, angular_cosine_mode=mode, model="zero bulk capacity, positive areal storage at each ring",
                           columns=["sheet temperature", "incoming radial flux", "outgoing radial flux"], runs=runs,
                           sources=[provenance(p) for p in (__file__, bem.__file__)],
-                          reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_storing_rings.py"),
+                          reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_storing_rings.py --mode {mode}"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
