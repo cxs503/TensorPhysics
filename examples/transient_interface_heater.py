@@ -109,14 +109,14 @@ def fem(n,area,times,fraction,storage_fraction,initial):
     return np.column_stack((trace[:,n+np.argmax(area)],trace[:,n]-trace[:,n+1],wall,trace[:,n:n+2],np.r_[0.,contact]))
 
 
-def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.,right_stop=None,return_deposited=False):
+def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.,right_stop=None,return_deposited=False,right_sign=1.):
     from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
 
     face = np.zeros((2*n-1,2))
     face[n-1] = 1.
     branch_capacity = area*CAPACITY
     surface = STORAGE*np.array([storage_fraction,1-storage_fraction])
-    power = POWER*np.array([fraction,1-fraction])
+    power = POWER*np.array([fraction,right_sign*(1-fraction)])
     options = dict(bc=dict(top="neumann",bottom="neumann"),conductivity=np.tile((area*K).repeat(n)[:,None],(1,2)),
                    contact_resistance={"x":face*RESISTANCE/min(area)})
     def initial_field(x,y):
