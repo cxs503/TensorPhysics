@@ -149,9 +149,9 @@ def periodic_cycle(steps,cs,method="theta"):
     phase = np.exp(1j*(.37+omega*t))
     integrated = phase[0]*np.expm1(1j*omega*t[1:])/(1j*omega)
     drive = (phase*source).real
-    u,s,hi,ho,ext,traces = annulus.solve_transient_annular_sheet(radii,k,cv,(None,None),t,(phase[0]*exact).real,n,
+    u,s,hi,ho,ext,traces,average = annulus.solve_transient_annular_sheet(radii,k,cv,(None,None),t,(phase[0]*exact).real,n,
                   initial_sheet_temperature=(phase[0]*sheet).real,wall_fluxes=(phase*fluxes[:,None]).real,
-                  sheet_source_intervals=np.column_stack((drive[:-1],drive[1:])),ambient=(phase*ambient).real,return_contact_temperatures=True,method=method,**common)
+                  sheet_source_intervals=np.column_stack((drive[:-1],drive[1:])),ambient=(phase*ambient).real,return_contact_temperatures=True,return_interval_temperatures=True,method=method,**common)
     errors = dict(field_K=float(abs(u-(phase[:,None]*exact).real).max()),
                   sheet_K=float(abs(s-(phase*sheet).real).max()),
                   radial_heat_J_m=float(max(abs(h.cumsum(0)-(integrated[:,None]*q).real).max()
@@ -159,6 +159,10 @@ def periodic_cycle(steps,cs,method="theta"):
                   external_heat_J_m=float(abs(ext.cumsum()-(integrated*(2*np.pi*B*H*(sheet-ambient))).real).max()))
     contact = np.array([sheet+FRAC*R*qi[-1]/(2*np.pi*B),sheet-(1-FRAC)*R*qo[0]/(2*np.pi*B)])
     errors["contact_trace_K"] = float(abs(traces-(phase[:,None]*contact).real).max())
+    interval_phase = phase[:-1]*np.expm1(1j*omega*np.diff(t))/(1j*omega*np.diff(t))
+    errors["interval_cell_K"] = float(abs(average["cell"]-(interval_phase[:,None]*exact).real).max())
+    errors["interval_sheet_K"] = float(abs(average["sheet"]-(interval_phase*sheet).real).max())
+    errors["interval_contact_K"] = float(abs(average["contact"]-(interval_phase[:,None]*contact).real).max())
     return dict(steps=steps,method=method,sheet_capacity_J_m2_K=cs,omega_rad_s=omega,errors=errors)
 
 
