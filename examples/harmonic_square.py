@@ -1,4 +1,6 @@
 """Local complex temperature and wall flux on an anisotropic unit square."""
+import argparse
+import inspect
 import json
 import math
 
@@ -11,7 +13,7 @@ from tensorfvm.cht import energy
 from tensorlbm import scalar, scalar_harmonic
 
 
-def measure(n, mode):
+def measure(n, mode, include_dg=False):
     kx, ky, capacity, omega = 2., .5, 3., 2*math.pi
     b = mode*math.pi
     wave = np.sqrt((ky*b*b+1j*omega*capacity)/kx)
@@ -88,23 +90,41 @@ def measure(n, mode):
                                           abs(fy[1:-1]-exact_qy[1:-1]).max())),
         common_section_flux_error_W_m2=float(max(abs(fx[:,cut]-exact_qx[:,cut]).max(),
                                                  abs(fy[cut]-exact_qy[cut]).max()))))
+    if include_dg:
+        from tensordg import solve_harmonic_diffusion_2d, poisson_face_powers_2d
+
+        data = dict(bc={"bottom":"neumann","top":"neumann"},conductivity=(kx,ky),
+                    dirichlet_values={"left":lambda x,y:torch.cos(b*y)})
+        _,_,coeff = solve_harmonic_diffusion_2d(omega,ncells=n,degree=1,capacity=capacity,**data)
+        x_power,y_power = poisson_face_powers_2d(coeff,**data)
+        fx,fy = x_power.numpy().T/dx,y_power.numpy().T/dx
+        mean = coeff[:,:,0,0].numpy().T
+        residual = 1j*omega*capacity*dx**2*mean+dx*(np.diff(fx,axis=1)+np.diff(fy,axis=0))
+        reports.append(dict(solver="DG",degree=1,cells=n,transverse_mode=mode,
+            temperature_error_K=float(abs(mean-y_avg[:,None]*x_avg).max()),
+            wall_flux_error_W_m2=float(abs(np.stack((fx[:,0],-fx[:,-1]))-wall_factor[:,None]*y_avg).max()),
+            balance_residual_W=float(abs(residual.sum())),cell_power_residual_W=float(abs(residual).max()),
+            common_section_flux_error_W_m2=float(max(abs(fx[:,cut]-exact_qx[:,cut]).max(),
+                                                      abs(fy[cut]-exact_qy[cut]).max()))))
     return reports
 
 
-def main():
+def main(include_dg=False):
     rows = []
     for mode in (0,1):
         previous = {}
         for n in (16,32,64,128):
-            for row in measure(n, mode):
+            for row in measure(n, mode, include_dg and n<=64):
                 name = row["solver"]
                 errors = np.array([row["temperature_error_K"], row["wall_flux_error_W_m2"]])
                 passed = np.isfinite(errors).all() and row["balance_residual_W"] < 1e-10
-                if name in ("FVM","LBM"):
+                if name in ("FVM","LBM","DG"):
                     passed &= row["cell_power_residual_W"] < 1e-11
                     errors = np.append(errors, row["common_section_flux_error_W_m2"])
                 if name in previous:
                     passed &= (errors < previous[name]/3.7).all()
+                if name=="DG" and n==64:
+                    passed &= errors[0]<.001 and (errors[1:]<.005).all()
                 if n == 128:
                     passed &= errors[0] < .00015 and (errors[1:] < .001).all()
                     if name in ("FVM","LBM"):
@@ -112,12 +132,16 @@ def main():
                 row["passed"] = bool(passed)
                 previous[name] = errors
                 rows.append(row)
-    print(json.dumps({"sources": [provenance(f) for f in
-                      (__file__, energy.__file__, thermal.__file__, thermal_analytic.__file__,
-                       scalar.__file__, scalar_harmonic.__file__)],
+    sources = [__file__,energy.__file__,thermal.__file__,thermal_analytic.__file__,scalar.__file__,scalar_harmonic.__file__]
+    if include_dg:
+        from tensordg import solve_harmonic_diffusion_2d, poisson_face_powers_2d
+        sources.extend(inspect.getfile(f) for f in (solve_harmonic_diffusion_2d,poisson_face_powers_2d))
+    print(json.dumps({"sources": [provenance(f) for f in sources],
                       "angular_frequency_rad_s": 2*math.pi, "runs": rows}, indent=2))
     return 0 if all(r["passed"] for r in rows) else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dg",action="store_true",help="include P1 SIPG on 16, 32 and 64 cells per axis")
+    raise SystemExit(main(parser.parse_args().dg))
