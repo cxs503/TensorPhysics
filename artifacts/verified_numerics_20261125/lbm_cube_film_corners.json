@@ -1,0 +1,106 @@
+{
+  "reference": "Unit cube: affine temperature plus separated decaying cosine mode with h_i=k*beta_i*tan(beta_i/2)",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_cube_film_corners.py",
+  "order_metrics": [
+    "temperature_error_K",
+    "wall_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "n": 8,
+      "tau": 0.75,
+      "steps": 8,
+      "temperature_error_K": 0.00020911604111073512,
+      "wall_flux_error_W_m2": 0.0009135762655265445,
+      "max_cell_balance_J": 1.0130514049161432e-18,
+      "max_corner_balance_J": 5.090668012998345e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "steps": 32,
+      "temperature_error_K": 6.370148340872905e-05,
+      "wall_flux_error_W_m2": 0.00022385293475579715,
+      "max_cell_balance_J": 1.4987189210480777e-19,
+      "max_corner_balance_J": 6.334218258686065e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.7149048602116423,
+        2.028973937966321
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "steps": 128,
+      "temperature_error_K": 1.770288661934183e-05,
+      "wall_flux_error_W_m2": 5.4919788744361986e-05,
+      "max_cell_balance_J": 2.1605957599885083e-20,
+      "max_corner_balance_J": 1.4397078561485447e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.847342344482282,
+        2.0271532512732375
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "steps": 2,
+      "temperature_error_K": 0.000996781277745995,
+      "wall_flux_error_W_m2": 0.0025263876851773226,
+      "max_cell_balance_J": 9.215718466126788e-19,
+      "max_corner_balance_J": 2.812149384884277e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "steps": 8,
+      "temperature_error_K": 0.0004350815119173457,
+      "wall_flux_error_W_m2": 0.001112750501160803,
+      "max_cell_balance_J": 1.4992483166401116e-19,
+      "max_corner_balance_J": 6.320983368885216e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.1959912576964895,
+        1.1829458933902186
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "steps": 32,
+      "temperature_error_K": 0.00013918591635003752,
+      "wall_flux_error_W_m2": 0.0003325487488498313,
+      "max_cell_balance_J": 2.159934015498466e-20,
+      "max_corner_balance_J": 1.0783126465241269e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.6442724749979438,
+        1.7424924023626738
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "55c52a5502a731c2b4eb8ba0ced5f3a777406362",
+      "file": "lbm_cube_film_corners.py",
+      "source_sha256": "5f963db33170dfa526e097e11764e1a56513536cd077e264a75b5e6b11b91f34"
+    },
+    {
+      "commit": "8d3ad0018b088ea0d2bc51d161ac19cc088ed629",
+      "file": "thermal_common.py",
+      "source_sha256": "055a782b4fb823a4efe8899ea365a9211e5f549058f9726531c1a82ae2ef8a11"
+    }
+  ]
+}
