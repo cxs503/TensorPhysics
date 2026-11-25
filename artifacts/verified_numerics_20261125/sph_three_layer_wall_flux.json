@@ -1,0 +1,498 @@
+{
+  "reference": "Three layer propagators and two temperature jumps with separately driven storing walls",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_three_layer_wall_flux.py",
+  "order_metrics": [
+    "wall_error_K",
+    "contact_trace_error_K",
+    "contact_flux_error_W_m2",
+    "jump_error_K"
+  ],
+  "sources": [
+    {
+      "commit": "d29a729ec6fa9bb8d4c1f5dbe60ff7011dc05f9b",
+      "file": "sph_three_layer_wall_flux.py",
+      "source_sha256": "22a65a1ca70af73871aadd10cb72f03244192b8e5074f7a8f5ff2376b058d1c4"
+    },
+    {
+      "commit": "0c3924c8d3634867e1365199e86bfa9eeb0d34ff",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "bb0e4b2dea267eb6c88da4ab634af850256d8b965ee688784d1694d85d7bd54a"
+    }
+  ],
+  "runs": [
+    {
+      "columns_per_layer": 8,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 0.0001744923099784419,
+      "contact_trace_error_K": 0.00024223168010658268,
+      "contact_flux_error_W_m2": 4.64204095459579e-05,
+      "jump_error_K": 0.0003390026955885788,
+      "layer_balance_W_m2": 8.587704722185564e-14,
+      "wall_balance_W_m2": 2.9893669801409083e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 4.316334402537188e-05,
+      "contact_trace_error_K": 6.297577267843488e-05,
+      "contact_flux_error_W_m2": 1.1460017951499688e-05,
+      "jump_error_K": 8.655548615963664e-05,
+      "layer_balance_W_m2": 7.478074895636401e-13,
+      "wall_balance_W_m2": 2.0014830212433607e-16,
+      "orders": [
+        2.015284911824601,
+        1.9435187360043618,
+        2.018149946973911,
+        1.9695995748702533
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 1.072416504746231e-05,
+      "contact_trace_error_K": 1.61061497486399e-05,
+      "contact_flux_error_W_m2": 2.843756043944974e-06,
+      "jump_error_K": 2.1912773071023686e-05,
+      "layer_balance_W_m2": 3.691416806626383e-12,
+      "wall_balance_W_m2": 4.0412728104402656e-16,
+      "orders": [
+        2.0089413121002484,
+        1.9671852659703968,
+        2.0107396924702186,
+        1.9818531954803302
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 2.6720269830204755e-06,
+      "contact_trace_error_K": 4.076307269908531e-06,
+      "contact_flux_error_W_m2": 7.080443633291805e-07,
+      "jump_error_K": 5.516061955383175e-06,
+      "layer_balance_W_m2": 1.625315393809881e-11,
+      "wall_balance_W_m2": 2.0014830212433607e-16,
+      "orders": [
+        2.004858846211041,
+        1.9822769418677755,
+        2.0058860444573683,
+        1.9900615034321891
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 8,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 0.00047637391697868584,
+      "contact_trace_error_K": 0.0003384375209364264,
+      "contact_flux_error_W_m2": 0.0003983004573206354,
+      "jump_error_K": 0.0004546499216830181,
+      "layer_balance_W_m2": 1.0264610789191249e-14,
+      "wall_balance_W_m2": 1.2412670766236366e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 0.00011806720108651175,
+      "contact_trace_error_K": 8.673999149707212e-05,
+      "contact_flux_error_W_m2": 9.820186087730051e-05,
+      "jump_error_K": 0.0001152869239758368,
+      "layer_balance_W_m2": 9.801854118860312e-14,
+      "wall_balance_W_m2": 1.1102230246251565e-16,
+      "orders": [
+        2.0124861815147974,
+        1.9641203150795035,
+        2.020034867898674,
+        1.9795272147989034
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 2.937223381345209e-05,
+      "contact_trace_error_K": 2.2022966056719206e-05,
+      "contact_flux_error_W_m2": 2.4350106123169675e-05,
+      "jump_error_K": 2.9088403504668622e-05,
+      "layer_balance_W_m2": 4.733651263727121e-13,
+      "wall_balance_W_m2": 5.551115123125783e-17,
+      "orders": [
+        2.0070833469933755,
+        1.9776885173817906,
+        2.011822303258717,
+        1.986712867046721
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        0.0
+      ],
+      "wall_error_K": 7.323798795269235e-06,
+      "contact_trace_error_K": 5.553538737408012e-06,
+      "contact_flux_error_W_m2": 6.060402152436094e-06,
+      "jump_error_K": 7.310309847415411e-06,
+      "layer_balance_W_m2": 1.7979096763053655e-12,
+      "wall_balance_W_m2": 1.5700924586837752e-16,
+      "orders": [
+        2.0037889274738068,
+        1.9875295236757113,
+        2.006442624449755,
+        1.9924396561674549
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 8,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 0.00018388002802732109,
+      "contact_trace_error_K": 0.00037910309931575196,
+      "contact_flux_error_W_m2": 9.864997128966603e-05,
+      "jump_error_K": 0.0003900527609354789,
+      "layer_balance_W_m2": 1.0720880939244409e-13,
+      "wall_balance_W_m2": 1.7772239894833365e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 4.546145488287132e-05,
+      "contact_trace_error_K": 9.718768066109883e-05,
+      "contact_flux_error_W_m2": 2.4315799202092496e-05,
+      "jump_error_K": 9.973384096161952e-05,
+      "layer_balance_W_m2": 9.039716772497862e-13,
+      "wall_balance_W_m2": 4.449557262054371e-16,
+      "orders": [
+        2.0160490312258195,
+        1.963744894096126,
+        2.0204246207907905,
+        1.9675142673836628
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 1.1291860978720621e-05,
+      "contact_trace_error_K": 2.4660488825521444e-05,
+      "contact_flux_error_W_m2": 6.0285159027543754e-06,
+      "jump_error_K": 2.526913141545212e-05,
+      "layer_balance_W_m2": 4.460490119407251e-12,
+      "wall_balance_W_m2": 2.482534153247273e-16,
+      "orders": [
+        2.0093605827533283,
+        1.9785720545068144,
+        2.0120192213347865,
+        1.9807070376008387
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 2.813045724626004e-06,
+      "contact_trace_error_K": 6.215253994798727e-06,
+      "contact_flux_error_W_m2": 1.5003072402349022e-06,
+      "jump_error_K": 6.363612199028116e-06,
+      "layer_balance_W_m2": 1.9643319145928195e-11,
+      "wall_balance_W_m2": 1.8619006149354548e-16,
+      "orders": [
+        2.005078363844545,
+        1.988316142147991,
+        2.006544910735713,
+        1.9894582498115656
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 8,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 0.0004883833785374083,
+      "contact_trace_error_K": 0.00036047292425585596,
+      "contact_flux_error_W_m2": 0.0003603287605085161,
+      "jump_error_K": 0.0005251482885384463,
+      "layer_balance_W_m2": 2.128858077790491e-14,
+      "wall_balance_W_m2": 2.2887833992611187e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 0.00012085991938823624,
+      "contact_trace_error_K": 9.460975049036009e-05,
+      "contact_flux_error_W_m2": 8.878992671651136e-05,
+      "jump_error_K": 0.0001350439570101456,
+      "layer_balance_W_m2": 2.016304038943746e-13,
+      "wall_balance_W_m2": 5.551115123125783e-17,
+      "orders": [
+        2.0146782161071255,
+        1.929830119583516,
+        2.0208458924003905,
+        1.9592957776274451
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 3.0037987959419878e-05,
+      "contact_trace_error_K": 2.431682394198864e-05,
+      "contact_flux_error_W_m2": 2.2007898112545662e-05,
+      "jump_error_K": 3.4316881353638435e-05,
+      "layer_balance_W_m2": 9.65808637481123e-13,
+      "wall_balance_W_m2": 3.885780586188048e-16,
+      "orders": [
+        2.0084758000249487,
+        1.9600340670683485,
+        2.0123746453278613,
+        1.9764387283145908
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        0.0,
+        2.4
+      ],
+      "wall_error_K": 7.485711097359454e-06,
+      "contact_trace_error_K": 6.1701855805107494e-06,
+      "contact_flux_error_W_m2": 5.47622332269222e-06,
+      "jump_error_K": 8.65527091590592e-06,
+      "layer_balance_W_m2": 3.689464818890009e-12,
+      "wall_balance_W_m2": 1.2412670766236366e-16,
+      "orders": [
+        2.0045769045321555,
+        1.978569021412945,
+        2.006768179082473,
+        1.9872675669345232
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 8,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 3.2750752465075576e-05,
+      "contact_trace_error_K": 0.00020261668515046452,
+      "contact_flux_error_W_m2": 7.807293049164147e-06,
+      "jump_error_K": 0.0001834232280537195,
+      "layer_balance_W_m2": 8.210002150163654e-14,
+      "wall_balance_W_m2": 4.2367047432750185e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 8.094310450716132e-06,
+      "contact_trace_error_K": 5.21110418874753e-05,
+      "contact_flux_error_W_m2": 1.9032555003454128e-06,
+      "jump_error_K": 4.718949713512759e-05,
+      "layer_balance_W_m2": 5.3360858296231e-13,
+      "wall_balance_W_m2": 1.5700924586837752e-16,
+      "orders": [
+        2.0165479650979488,
+        1.9590919777504088,
+        2.0363531751467483,
+        1.9586386452848812
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 2.0099911644545877e-06,
+      "contact_trace_error_K": 1.3240121005342382e-05,
+      "contact_flux_error_W_m2": 4.6852575800179327e-07,
+      "jump_error_K": 1.1992429663401088e-05,
+      "layer_balance_W_m2": 2.6210364512475248e-12,
+      "wall_balance_W_m2": 2.9504581591051765e-16,
+      "orders": [
+        2.0097190238669107,
+        1.9766727923117318,
+        2.022268977753833,
+        1.9763418197451783
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 0.5,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 5.006583096423443e-07,
+      "contact_trace_error_K": 3.338850208239692e-06,
+      "contact_flux_error_W_m2": 1.1613520565780335e-07,
+      "jump_error_K": 3.0246206236673736e-06,
+      "layer_balance_W_m2": 1.1558597438872176e-11,
+      "wall_balance_W_m2": 3.0531133177191805e-16,
+      "orders": [
+        2.0052909288372627,
+        1.9874930314788941,
+        2.0123229822409385,
+        1.9872978755551318
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 8,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 0.0002922689108999742,
+      "contact_trace_error_K": 0.0003607920446413806,
+      "contact_flux_error_W_m2": 0.00020301854232575582,
+      "jump_error_K": 0.0005060619797743018,
+      "layer_balance_W_m2": 2.576219839756298e-14,
+      "wall_balance_W_m2": 4.440892098500626e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 7.240480059071606e-05,
+      "contact_trace_error_K": 9.505493421354317e-05,
+      "contact_flux_error_W_m2": 4.9981085875087025e-05,
+      "jump_error_K": 0.00013028002482612565,
+      "layer_balance_W_m2": 2.1182929660217274e-13,
+      "wall_balance_W_m2": 2.2887833992611187e-16,
+      "orders": [
+        2.0131391162722396,
+        1.9243341050492695,
+        2.0221573488638898,
+        1.9576981895746468
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 1.8005734551295916e-05,
+      "contact_trace_error_K": 2.4459524691000663e-05,
+      "contact_flux_error_W_m2": 1.236968989129013e-05,
+      "jump_error_K": 3.3112322967016375e-05,
+      "layer_balance_W_m2": 1.0113765425897097e-12,
+      "wall_balance_W_m2": 1.1102230246251565e-16,
+      "orders": [
+        2.007628898135982,
+        1.9583651487717257,
+        2.0145729130190704,
+        1.9761757693175648
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 4.0,
+      "films_W_m2K": [
+        1.5,
+        2.4
+      ],
+      "wall_error_K": 4.488576027258439e-06,
+      "contact_trace_error_K": 6.2086767822948964e-06,
+      "contact_flux_error_W_m2": 3.074582830515337e-06,
+      "jump_error_K": 8.351333104346749e-06,
+      "layer_balance_W_m2": 3.8713004687700534e-12,
+      "wall_balance_W_m2": 4.47545209131181e-16,
+      "orders": [
+        2.0041267194006283,
+        1.9780386355520532,
+        2.0083467530874697,
+        1.987289810119296
+      ],
+      "passed": true
+    }
+  ]
+}
