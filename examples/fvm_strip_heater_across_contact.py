@@ -11,14 +11,14 @@ from conduction_provenance import provenance
 
 
 def contact_admittance_reference(conductivities, capacities, resistance, omega, trace_capacity, trace_power,
-                                 strip_widths=(0., 0.), generation=0., strip_gaps=(0., 0.), transverse_wavenumber=0.):
-    """Outward wall powers and trace jump for heated segments at given distances from the contact."""
+                                 strip_widths=(0., 0.), generation=0., strip_gaps=(0., 0.), transverse_wavenumber=0.,
+                                 *, return_contact_power=False):
+    """Return outward wall powers and the trace jump (or rightward contact power when requested)."""
     k = np.asarray(conductivities)
     z = np.sqrt(transverse_wavenumber**2 + 1j*omega*np.asarray(capacities)/k)
     attenuation = np.exp(-z/2)
     denominator = -np.expm1(-z)
     diagonal = k*z*(1+attenuation**2)/denominator + 1j*omega*np.asarray(trace_capacity)
-    contact_matrix = np.array([[1., -1.], [-1., 1.]])/resistance
     # Integrate the Dirichlet wall and contact flux kernels over each heated
     # segment. Distances are measured from the interface, with half length 0.5.
     widths = np.asarray(strip_widths)
@@ -28,8 +28,13 @@ def contact_admittance_reference(conductivities, capacities, resistance, omega, 
     scaled_source = generation * heated_fraction / (z*denominator)
     contact_load = scaled_source * np.exp(-z*near) * (-np.expm1(-z*(1-near-far)))
     wall_load = scaled_source * (-np.expm1(-z*(near+far))) * np.exp(-z*(0.5-far))
-    traces = np.linalg.solve(np.diag(diagonal) + contact_matrix, trace_power + contact_load)
-    return np.r_[wall_load + 2*k*z*traces*attenuation/denominator, traces[0]-traces[1]]
+    # Open-contact trace potentials drive the series impedance. This form
+    # yields the through power directly, including at perfect contact (R=0).
+    isolated = (trace_power + contact_load) / diagonal
+    crossing = (isolated[0]-isolated[1]) / (resistance + sum(1/diagonal))
+    traces = isolated + np.array([-crossing, crossing]) / diagonal
+    interface_value = crossing if return_contact_power else resistance * crossing
+    return np.r_[wall_load + 2*k*z*traces*attenuation/denominator, interface_value]
 
 
 def harmonic_reference(start, end, conductivities, capacities, generation, resistance, omega, trace_capacity=(0., 0.), trace_power=(0., 0.)):

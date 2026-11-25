@@ -10,7 +10,8 @@ from conduction_provenance import provenance
 import fvm_strip_heater_across_contact as strip
 
 
-def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0, h_factor=0.9):
+def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0, h_factor=0.9,
+            homogeneous=False, contact_resistance=0.35):
     mid = n // 2
     bounds = (5/8, 5/6) if mirrored else (1/6, 3/8)
     conductivities = (4., 1.) if mirrored else (1., 4.)
@@ -18,13 +19,16 @@ def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0
     if swap_materials:
         conductivities = conductivities[::-1]
         capacities = capacities[::-1]
+    if homogeneous:
+        conductivities = (1., 1.)
+        capacities = (1.25, 1.25)
     faces = np.linspace(0., 1., n+1)
     dx = 1/n
     start, end = bounds
     source = 12 * np.diff(np.clip(faces-start, 0., end-start)) / dx
     capacity = np.repeat(capacities, mid)
     resistance = np.zeros(n-1)
-    resistance[mid-1] = 0.35
+    resistance[mid-1] = contact_resistance
     beta = 2 * math.pi * transverse_mode  # unit transverse period
     options = dict(conductivity=np.repeat(conductivities, mid), volumetric_heat_capacity=capacity,
                    contact_resistance_x=resistance, h_factor=h_factor, backend=backend, transverse_wavenumber=beta)
@@ -38,14 +42,14 @@ def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0
     driven = sph.solve_harmonic_layered_slab(np.zeros(n), dx, walls, omega, **options)
     reciprocal_power = dx * np.dot(source, driven.numpy())
     widths, gaps = strip.strip_segments(*bounds)
-    reference = strip.contact_admittance_reference(
-        conductivities, capacities, 0.35, omega, (0., 0.), (0., 0.), widths, 12., gaps, beta)
+    exact = strip.contact_admittance_reference(
+        conductivities, capacities, contact_resistance, omega, (0., 0.), (0., 0.), widths, 12., gaps, beta,
+        return_contact_power=True)
     actual = np.array([-cuts[0], cuts[-1], cuts[mid]])
-    exact = np.r_[reference[:2], reference[2]/0.35]
     ratio = actual/exact
     row = {
         "columns": n, "backend": backend, "transverse_mode": transverse_mode, "h_factor": h_factor, "omega_rad_s": omega, "strip_bounds_m": bounds,
-        "conductivities_W_m_K": conductivities, "capacities_J_m3_K": capacities,
+        "contact_resistance_m2_K_W": contact_resistance, "conductivities_W_m_K": conductivities, "capacities_J_m3_K": capacities,
         "far_wall_reciprocity_relative_error": abs(reciprocal_power/actual[far_wall]-1),
         "reference_wall_amplitudes_W_m2": abs(exact[:2]).tolist(),
         "wall_amplitudes_W_m2": abs(actual[:2]).tolist(),
@@ -66,7 +70,10 @@ def main():
     parser.add_argument("--transverse-mode", type=int, choices=(0, 1, 2), default=0,
                         help="number of sinusoidal heat-source periods across the one-metre slab width")
     parser.add_argument("--axial-stencil", action="store_true", help="restrict the kernel support to axial neighbours")
+    parser.add_argument("--homogeneous", action="store_true", help="use identical bulk properties on both sides")
+    parser.add_argument("--perfect-contact", action="store_true", help="set contact resistance to zero")
     args = parser.parse_args()
+    material_options = dict(homogeneous=args.homogeneous, contact_resistance=0. if args.perfect_contact else 0.35)
     h_factor = 0.7 if args.axial_stencil else 0.9
     swap_materials, transverse_mode = args.swap_materials, args.transverse_mode
     oblique_mode = transverse_mode != 0 and not args.axial_stencil
@@ -77,7 +84,7 @@ def main():
             previous = None
             previous_reciprocity = None
             for n in grids:
-                row = measure(n, omega, mirrored, "banded", swap_materials, transverse_mode, h_factor)
+                row = measure(n, omega, mirrored, "banded", swap_materials, transverse_mode, h_factor, **material_options)
                 error = row["max_relative_phasor_error"]
                 reciprocity = row["far_wall_reciprocity_relative_error"]
                 # With oblique ghost links the imposed temperature and reported wall
@@ -93,7 +100,7 @@ def main():
                     else:
                         passed &= row["phasor_error_order"] > 1.85
                 if n == 128:
-                    dense = measure(n, omega, mirrored, "torch", swap_materials, transverse_mode, h_factor)
+                    dense = measure(n, omega, mirrored, "torch", swap_materials, transverse_mode, h_factor, **material_options)
                     np.testing.assert_allclose(dense["wall_amplitudes_W_m2"], row["wall_amplitudes_W_m2"],
                                                rtol=1e-10, atol=0.)
                     np.testing.assert_allclose(dense["contact_amplitude_W_m2"], row["contact_amplitude_W_m2"],
@@ -117,7 +124,8 @@ def main():
         "passed": passed, "runs": runs, "sources": [provenance(p) for p in (__file__, strip.__file__, sph.__file__)],
         "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/sph_detached_strip_transmission.py"
                         + (" --swap-materials" if swap_materials else "") + (" --axial-stencil" if args.axial_stencil else "")
-                        + (f" --transverse-mode {transverse_mode}" if transverse_mode else ""),
+                        + (f" --transverse-mode {transverse_mode}" if transverse_mode else "")
+                        + (" --homogeneous" if args.homogeneous else "") + (" --perfect-contact" if args.perfect_contact else ""),
     }, indent=2, allow_nan=False))
     return 0 if passed else 1
 
