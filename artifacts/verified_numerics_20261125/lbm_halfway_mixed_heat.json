@@ -1,0 +1,218 @@
+{
+  "reference": "T=.4+.3*x+exp(-alpha*(pi^2+b^2)*t)*sin(pi*x)*cos(b*y); compare cell and time-averaged face quantities",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_halfway_dirichlet_heat.py --mixed",
+  "order_metrics": [
+    "max_wall_flux_error_W_m2",
+    "max_temperature_error_K"
+  ],
+  "runs": [
+    {
+      "n": 8,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 0.001370860242515648,
+      "max_temperature_error_K": 0.00045220230504811054,
+      "max_cell_balance_J": 9.283481101907132e-19,
+      "prescribed_flux_side": "lower",
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 0.0003430573983514984,
+      "max_temperature_error_K": 0.0001619934958832503,
+      "max_cell_balance_J": 1.384898868760781e-19,
+      "prescribed_flux_side": "lower",
+      "orders": [
+        1.9985596126842282,
+        1.481032456703467
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 8.578520380936316e-05,
+      "max_temperature_error_K": 4.811631476917683e-05,
+      "max_cell_balance_J": 2.1612575044785507e-20,
+      "prescribed_flux_side": "lower",
+      "orders": [
+        1.9996492409163935,
+        1.7513378335966876
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 2.1447595809964692e-05,
+      "max_temperature_error_K": 1.307532648926052e-05,
+      "max_cell_balance_J": 2.700537904832497e-21,
+      "prescribed_flux_side": "lower",
+      "orders": [
+        1.9999128974136542,
+        1.8796791798278423
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.013038096202653116,
+      "max_temperature_error_K": 0.0035662773630644046,
+      "max_cell_balance_J": 8.131516293641283e-19,
+      "prescribed_flux_side": "lower",
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.003640245858305524,
+      "max_temperature_error_K": 0.0013178974609414085,
+      "max_cell_balance_J": 1.7448878713438587e-19,
+      "prescribed_flux_side": "lower",
+      "orders": [
+        1.8406254285302335,
+        1.4361807854775452
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.0009352069326430956,
+      "max_temperature_error_K": 0.0003955313143983799,
+      "max_cell_balance_J": 2.4458076351967922e-20,
+      "prescribed_flux_side": "lower",
+      "orders": [
+        1.9606783621426902,
+        1.7363743026031422
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.00023539518297072126,
+      "max_temperature_error_K": 0.00010773364134500016,
+      "max_cell_balance_J": 3.2408936399827624e-21,
+      "prescribed_flux_side": "lower",
+      "orders": [
+        1.990200826570574,
+        1.8763230960025539
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 0.0013708602425163696,
+      "max_temperature_error_K": 0.000452202305047833,
+      "max_cell_balance_J": 9.283481101907132e-19,
+      "prescribed_flux_side": "upper",
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 0.00034305739835271964,
+      "max_temperature_error_K": 0.00016199349588344458,
+      "max_cell_balance_J": 1.49501315190384e-19,
+      "prescribed_flux_side": "upper",
+      "orders": [
+        1.998559612679852,
+        1.481032456700851
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 8.578520380864152e-05,
+      "max_temperature_error_K": 4.811631476902417e-05,
+      "max_cell_balance_J": 2.1612575044785507e-20,
+      "prescribed_flux_side": "upper",
+      "orders": [
+        1.9996492409336657,
+        1.7513378336029948
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "transverse_mode": 0,
+      "max_wall_flux_error_W_m2": 2.1447595814572118e-05,
+      "max_temperature_error_K": 1.3075326489517258e-05,
+      "max_cell_balance_J": 2.70136508544505e-21,
+      "prescribed_flux_side": "upper",
+      "orders": [
+        1.9999128970915943,
+        1.8796791797949373
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.013038096202652227,
+      "max_temperature_error_K": 0.003566277363064349,
+      "max_cell_balance_J": 8.131516293641283e-19,
+      "prescribed_flux_side": "upper",
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.003640245858304303,
+      "max_temperature_error_K": 0.0013178974609413252,
+      "max_cell_balance_J": 1.7279472123987727e-19,
+      "prescribed_flux_side": "upper",
+      "orders": [
+        1.8406254285306192,
+        1.4361807854776139
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.0009352069326433177,
+      "max_temperature_error_K": 0.0003955313143983105,
+      "max_cell_balance_J": 2.159934015498466e-20,
+      "prescribed_flux_side": "upper",
+      "orders": [
+        1.960678362141864,
+        1.7363743026033043
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "transverse_mode": 1,
+      "max_wall_flux_error_W_m2": 0.00023539518296877837,
+      "max_temperature_error_K": 0.00010773364134519792,
+      "max_cell_balance_J": 3.2408936399827624e-21,
+      "prescribed_flux_side": "upper",
+      "orders": [
+        1.990200826582824,
+        1.8763230959996524
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "23b7dcc90b2c5c63b6142800ee0fc7aee33f4032",
+      "file": "lbm_halfway_dirichlet_heat.py",
+      "source_sha256": "3cc9edd534c1abfac1b796ff94b768ac34c4070c970a5cf8de254ed4781b3584"
+    },
+    {
+      "commit": "1ba8a4d6fe122a6699f5c04a80d4813cba19f7f2",
+      "file": "thermal_common.py",
+      "source_sha256": "3540260cdde5ea0bf8c99a035d5300fb0ff6f5d5aca7bdbd5dcb2f8bd2999ed9"
+    }
+  ]
+}
