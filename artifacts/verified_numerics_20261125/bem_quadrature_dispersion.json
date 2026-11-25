@@ -1,0 +1,78 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "branch": "archive/verified-numerics-20261125",
+  "quadrature": {
+    "commit": "609053fef72dcfc8f6bb9b25db22121367d37550",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_gauss_rule_robustness.py tests/test_gauss_legendre_fallback.py tests/test_free_surface3d.py tests/test_kernels3d.py -o junit_family=legacy --junitxml=results.xml",
+    "reference": "Integral of exp(-x) x^m on [0,infinity) equals m! for each degree 0 through 2n-1.",
+    "tests": 29,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "measurements": {
+      "test_laguerre_fallback_is_an_exact_laguerre_rule[20]": {
+        "max_relative_moment_error": 7.993605777301127e-15
+      },
+      "test_laguerre_fallback_is_an_exact_laguerre_rule[40]": {
+        "max_relative_moment_error": 1.554312234475219e-14
+      },
+      "test_laguerre_fallback_is_an_exact_laguerre_rule[64]": {
+        "max_relative_moment_error": 2.375877272697835e-14
+      }
+    }
+  },
+  "dispersion": {
+    "commit": "49ef5af1141fe331b2891d311ef5182d43dddebc",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_flexural_gravity.py tests/test_flexural_gravity_numeric.py tests/test_flexural_gravity_mass_loading.py tests/test_flexural_gravity_evidence.py -o junit_family=legacy --junitxml=results.xml",
+    "reference": "omega = k sqrt(g H), H=200 m. Finite-depth, inertia and bending corrections lie below double precision over these four long-wave cases.",
+    "prior_relative_errors_at_k_1e-18": {
+      "open": 4767.37158203125,
+      "elastic": 4767.37158203125,
+      "inertial": 999998.9999999999
+    },
+    "tests": 234,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "measurements": {
+      "test_inverse_shallow_water_limit[1e-180]": {
+        "open_relative_error": 3.4416913763379853e-15,
+        "elastic_relative_error": 3.4416913763379853e-15,
+        "inertial_relative_error": 3.4416913763379853e-15
+      },
+      "test_inverse_shallow_water_limit[1e-18]": {
+        "open_relative_error": 3.4416913763379853e-15,
+        "elastic_relative_error": 3.4416913763379853e-15,
+        "inertial_relative_error": 3.4416913763379853e-15
+      },
+      "test_inverse_shallow_water_limit[1e-14]": {
+        "open_relative_error": 3.552713678800501e-15,
+        "elastic_relative_error": 3.552713678800501e-15,
+        "inertial_relative_error": 3.552713678800501e-15
+      },
+      "test_inverse_shallow_water_limit[1e-10]": {
+        "open_relative_error": 3.552713678800501e-15,
+        "elastic_relative_error": 3.552713678800501e-15,
+        "inertial_relative_error": 3.552713678800501e-15
+      }
+    }
+  },
+  "fox_squire_comparison": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_flexural_gravity_fox_squire.py",
+    "baseline": {
+      "tests": 52,
+      "failures": 48,
+      "errors": 0,
+      "skipped": 0,
+      "measurements": {}
+    },
+    "revised": {
+      "tests": 52,
+      "failures": 48,
+      "errors": 0,
+      "skipped": 0,
+      "measurements": {}
+    },
+    "same_failed_cases": true
+  }
+}
