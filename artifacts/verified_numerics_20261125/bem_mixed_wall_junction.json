@@ -1,6 +1,11 @@
 {
   "reference": "I_(1/2)(lambda*r) sin(theta/2), lambda^2=i omega C/k, rectangle [-1,1] x [0,1]",
   "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_mixed_wall_junction.py",
+  "coefficient_units": "W/m^(3/2)",
+  "complex_pair_order": [
+    "real",
+    "imaginary"
+  ],
   "order_metrics": [
     "wall_power_error_W_m",
     "insulated_mean_error_K",
@@ -8,6 +13,28 @@
   ],
   "runs": [
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.5350002123780625,
+        -0.21907590605719518
+      ],
+      "extrapolated_relative_error": 0.06019943323500934,
+      "flux_coefficient": [
+        -0.5434137384453083,
+        -0.2346893596221193
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.04038914826330379,
       "panels": 20,
       "quadratic": false,
       "grading": 1,
@@ -19,6 +46,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.5828723934840411,
+        -0.2401188769503917
+      ],
+      "extrapolated_relative_error": 0.024999229138954287,
+      "flux_coefficient": [
+        -0.5786537732374177,
+        -0.24388509754098422
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.02185739260362858,
       "panels": 40,
       "quadratic": false,
       "grading": 1,
@@ -34,6 +83,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.579535929801825,
+        -0.23935711439495225
+      ],
+      "extrapolated_relative_error": 0.019463475153787792,
+      "flux_coefficient": [
+        -0.5769178160878786,
+        -0.24097178334984476
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.016779863841079268,
       "panels": 80,
       "quadratic": false,
       "grading": 1,
@@ -49,6 +120,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.5798850654488753,
+        -0.23982944940923479
+      ],
+      "extrapolated_relative_error": 0.020261299264197577,
+      "flux_coefficient": [
+        -0.5777649463440999,
+        -0.2402914437856343
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.017418127239109845,
       "panels": 160,
       "quadratic": false,
       "grading": 1,
@@ -64,6 +157,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.5321882782747825,
+        -0.22039131193589337
+      ],
+      "extrapolated_relative_error": 0.06348488807036182,
+      "flux_coefficient": [
+        -0.542113232723524,
+        -0.2355567655159477
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.04248919194507591,
       "panels": 20,
       "quadratic": false,
       "grading": 2,
@@ -75,6 +190,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.5751175239806441,
+        -0.238298242322191
+      ],
+      "extrapolated_relative_error": 0.012140415970264738,
+      "flux_coefficient": [
+        -0.5715796611128424,
+        -0.2421565942253452
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.012285374655758746,
       "panels": 40,
       "quadratic": false,
       "grading": 2,
@@ -90,6 +227,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.5756768103050239,
+        -0.23839665875854016
+      ],
+      "extrapolated_relative_error": 0.01304147231021308,
+      "flux_coefficient": [
+        -0.5724525015979023,
+        -0.2397483840528754
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.00986508431658549,
       "panels": 80,
       "quadratic": false,
       "grading": 2,
@@ -105,6 +264,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.5688166130532301,
+        -0.23564753869196658
+      ],
+      "extrapolated_relative_error": 0.0010275714675865525,
+      "flux_coefficient": [
+        -0.5684292646393924,
+        -0.23679575573594216
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.002328540879673725,
       "panels": 160,
       "quadratic": false,
       "grading": 2,
@@ -120,6 +301,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.5686116900365965,
+        -0.2351173812723517
+      ],
+      "extrapolated_relative_error": 0.0007272462702962999,
+      "flux_coefficient": [
+        -0.564870490834469,
+        -0.24418267286307524
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.015335206680201491,
       "panels": 20,
       "quadratic": true,
       "grading": 1,
@@ -131,6 +334,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.5727842813296682,
+        -0.23701896612667023
+      ],
+      "extrapolated_relative_error": 0.007847212746827021,
+      "flux_coefficient": [
+        -0.5700402754270975,
+        -0.24118354847560575
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.009883525881684957,
       "panels": 40,
       "quadratic": true,
       "grading": 1,
@@ -146,6 +371,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.5713843758150051,
+        -0.23654654288796456
+      ],
+      "extrapolated_relative_error": 0.005445916795896076,
+      "flux_coefficient": [
+        -0.5699185046110273,
+        -0.2385870699915907
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.005887260807595945,
       "panels": 80,
       "quadratic": true,
       "grading": 1,
@@ -161,6 +408,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.5705530287274905,
+        -0.23626267574878113
+      ],
+      "extrapolated_relative_error": 0.004018421932603318,
+      "flux_coefficient": [
+        -0.5697185682346317,
+        -0.23723961647487266
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.0038623540760953103,
       "panels": 160,
       "quadratic": true,
       "grading": 1,
@@ -176,6 +445,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.5691551558024612,
+        -0.23565218040300584
+      ],
+      "extrapolated_relative_error": 0.0015448185676004693,
+      "flux_coefficient": [
+        -0.5650979456331654,
+        -0.24453478021641448
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.01574702066549821,
       "panels": 20,
       "quadratic": true,
       "grading": 2,
@@ -187,6 +478,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.5687692441396874,
+        -0.23556342486957121
+      ],
+      "extrapolated_relative_error": 0.0009036779656684506,
+      "flux_coefficient": [
+        -0.566763040896533,
+        -0.24000950360407564
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.007910984622698252,
       "panels": 40,
       "quadratic": true,
       "grading": 2,
@@ -202,6 +515,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.5684467317589768,
+        -0.2354504975766896
+      ],
+      "extrapolated_relative_error": 0.00034816026069809275,
+      "flux_coefficient": [
+        -0.567468140399655,
+        -0.2376828234424685
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.003959224759558959,
       "panels": 80,
       "quadratic": true,
       "grading": 2,
@@ -217,6 +552,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.5683195365214977,
+        -0.2354035702997082
+      ],
+      "extrapolated_relative_error": 0.0001277439192574688,
+      "flux_coefficient": [
+        -0.5678384770260412,
+        -0.23652296198632064
+      ],
+      "exact_flux_coefficient": [
+        -0.5682462296879879,
+        -0.2353752951041415
+      ],
+      "flux_coefficient_relative_error": 0.0019801958263562765,
       "panels": 160,
       "quadratic": true,
       "grading": 2,
@@ -232,6 +589,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.8501256923894945,
+        -0.332802813016012
+      ],
+      "extrapolated_relative_error": 0.055015485181006595,
+      "flux_coefficient": [
+        -0.8164465973921636,
+        -0.42986278553664437
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.0990714548679526,
       "panels": 20,
       "quadratic": false,
       "grading": 1,
@@ -243,6 +622,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.9147507801819748,
+        -0.36835006384109
+      ],
+      "extrapolated_relative_error": 0.02638335602227713,
+      "flux_coefficient": [
+        -0.8899090129951256,
+        -0.4094255560816932
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.042640584501788696,
       "panels": 40,
       "quadratic": false,
       "grading": 1,
@@ -258,6 +659,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.9075952694157186,
+        -0.3703031673431143
+      ],
+      "extrapolated_relative_error": 0.01905481190421417,
+      "flux_coefficient": [
+        -0.8953215575484295,
+        -0.3904887039175956
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.02378684373368381,
       "panels": 80,
       "quadratic": false,
       "grading": 1,
@@ -273,6 +696,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.9077135993345415,
+        -0.3729973494833448
+      ],
+      "extrapolated_relative_error": 0.01966628606873171,
+      "flux_coefficient": [
+        -0.9005110074981084,
+        -0.3825816014539376
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.01875968197881719,
       "panels": 160,
       "quadratic": false,
       "grading": 1,
@@ -288,6 +733,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.8456999544112769,
+        -0.34960919666422924
+      ],
+      "extrapolated_relative_error": 0.04936372327805132,
+      "flux_coefficient": [
+        -0.8176526394745259,
+        -0.4395519648291625
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.10494735893233509,
       "panels": 20,
       "quadratic": false,
       "grading": 2,
@@ -299,6 +766,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.9032421909749125,
+        -0.37426977601412725
+      ],
+      "extrapolated_relative_error": 0.01567076103570654,
+      "flux_coefficient": [
+        -0.8796298014238179,
+        -0.41426601140004926
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.048723597120428445,
       "panels": 40,
       "quadratic": false,
       "grading": 2,
@@ -314,6 +803,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.9021328218901076,
+        -0.37293039489852486
+      ],
+      "extrapolated_relative_error": 0.014091223125688286,
+      "flux_coefficient": [
+        -0.8887771206549852,
+        -0.39260766366189354
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.02517300794249451,
       "panels": 80,
       "quadratic": false,
       "grading": 2,
@@ -329,6 +840,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.8904157805082074,
+        -0.3690900005319507
+      ],
+      "extrapolated_relative_error": 0.0013260936622035754,
+      "flux_coefficient": [
+        -0.8859777752733617,
+        -0.3795382021958103
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.012107968414046252,
       "panels": 160,
       "quadratic": false,
       "grading": 2,
@@ -344,6 +877,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.900003135935418,
+        -0.37070749775458706
+      ],
+      "extrapolated_relative_error": 0.011323795165936401,
+      "flux_coefficient": [
+        -0.8519750283308228,
+        -0.449256402878081
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.09255295884553118,
       "panels": 20,
       "quadratic": true,
       "grading": 1,
@@ -355,6 +910,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.8990149113538372,
+        -0.3706415922324694
+      ],
+      "extrapolated_relative_error": 0.01030735230372288,
+      "flux_coefficient": [
+        -0.8768094042477874,
+        -0.4110551150429086
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.04620509809997979,
       "panels": 40,
       "quadratic": true,
       "grading": 1,
@@ -370,6 +947,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.8949154971261435,
+        -0.3696636321563891
+      ],
+      "extrapolated_relative_error": 0.005929364622041484,
+      "flux_coefficient": [
+        -0.8844808093836407,
+        -0.390179665423062
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.02320248900226762,
       "panels": 80,
       "quadratic": true,
       "grading": 1,
@@ -385,6 +984,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.8931329881124446,
+        -0.36939386374171845
+      ],
+      "extrapolated_relative_error": 0.004064510809734711,
+      "flux_coefficient": [
+        -0.8879638281997544,
+        -0.37966830456799106
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.011812734758479666,
       "panels": 160,
       "quadratic": true,
       "grading": 1,
@@ -400,6 +1021,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolation_window_m": [
+        0.5,
+        1.0
+      ],
+      "extrapolated_coefficient": [
+        -0.9010275860841563,
+        -0.3735326806971056
+      ],
+      "extrapolated_relative_error": 0.013255189973140688,
+      "flux_coefficient": [
+        -0.8525070607138036,
+        -0.45146154995773163
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.09441182239980084,
       "panels": 20,
       "quadratic": true,
       "grading": 2,
@@ -411,6 +1054,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolation_window_m": [
+        0.35355339059327373,
+        0.7071067811865475
+      ],
+      "extrapolated_coefficient": [
+        -0.8928000008113184,
+        -0.36971920326700414
+      ],
+      "extrapolated_relative_error": 0.0038403302210093825,
+      "flux_coefficient": [
+        -0.8717589529469522,
+        -0.4104116699000923
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.047332405056088024,
       "panels": 40,
       "quadratic": true,
       "grading": 2,
@@ -426,6 +1091,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.125,
+        0.25
+      ],
+      "extrapolation_window_m": [
+        0.25,
+        0.5
+      ],
+      "extrapolated_coefficient": [
+        -0.8903324652632592,
+        -0.3687413137265927
+      ],
+      "extrapolated_relative_error": 0.0010833052415520834,
+      "flux_coefficient": [
+        -0.8806702662703152,
+        -0.38948982940308935
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.023709885815942362,
       "panels": 80,
       "quadratic": true,
       "grading": 2,
@@ -441,6 +1128,28 @@
       "passed": true
     },
     {
+      "window_m": [
+        0.08838834764831843,
+        0.17677669529663687
+      ],
+      "extrapolation_window_m": [
+        0.17677669529663687,
+        0.35355339059327373
+      ],
+      "extrapolated_coefficient": [
+        -0.8896355597014933,
+        -0.3684841693607195
+      ],
+      "extrapolated_relative_error": 0.0003116396434275711,
+      "flux_coefficient": [
+        -0.8850251446371006,
+        -0.37895499756412215
+      ],
+      "exact_flux_coefficient": [
+        -0.8893534117694535,
+        -0.36838224489769134
+      ],
+      "flux_coefficient_relative_error": 0.011867917100741825,
       "panels": 160,
       "quadratic": true,
       "grading": 2,
@@ -458,9 +1167,9 @@
   ],
   "sources": [
     {
-      "commit": "462ef3435361295191b5cc873cad3162b5ef2c9e",
+      "commit": "dcfa6183e305f8196b7012fdcd47ab2e92b44659",
       "file": "bem_mixed_wall_junction.py",
-      "source_sha256": "7b9db9d9d8d27d95ea131e8b615db0718a3b879102ca2dc9736731937fcbcdc7"
+      "source_sha256": "f78895d729ba725b21e1430ecc4c29f42ccec26dd1ee7e6cbed684cd645df5c2"
     },
     {
       "commit": "3359bb5cd7c015d068f515c584eb64aa87518dc2",
