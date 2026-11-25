@@ -1,0 +1,282 @@
+{
+  "lbm-ramps": {
+    "runs": [
+      {
+        "columns": 8,
+        "time_steps": 150,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 0.001,
+        "temperature_error_K": 0.013659114508533854,
+        "wall_heat_error_J_m2": 0.0012814371161177437,
+        "interior_cut_heat_error_J_m2": 0.0012975611967177836,
+        "column_energy_residual_J_m2": 1.6479873021779667e-17,
+        "orders": [],
+        "passed": true
+      },
+      {
+        "columns": 16,
+        "time_steps": 600,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 0.00025,
+        "temperature_error_K": 0.005495958392274569,
+        "wall_heat_error_J_m2": 0.00030601363174899074,
+        "interior_cut_heat_error_J_m2": 0.0002958308187318709,
+        "column_energy_residual_J_m2": 1.3877787807814457e-17,
+        "orders": [
+          1.3134209725583779,
+          2.06609485701909,
+          2.1329583209872145
+        ],
+        "passed": true
+      },
+      {
+        "columns": 32,
+        "time_steps": 2400,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 6.25e-05,
+        "temperature_error_K": 0.0018042144030063767,
+        "wall_heat_error_J_m2": 7.684068914256409e-05,
+        "interior_cut_heat_error_J_m2": 7.693710651394958e-05,
+        "column_energy_residual_J_m2": 9.540979117872439e-18,
+        "orders": [
+          1.6070002913278445,
+          1.9936535580273498,
+          1.94302087750568
+        ],
+        "passed": true
+      },
+      {
+        "columns": 64,
+        "time_steps": 9600,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 1.5625e-05,
+        "temperature_error_K": 0.0005081399663906527,
+        "wall_heat_error_J_m2": 1.9245054566831288e-05,
+        "interior_cut_heat_error_J_m2": 1.904110438176454e-05,
+        "column_energy_residual_J_m2": 5.637851296924623e-18,
+        "orders": [
+          1.8280729457638503,
+          1.997382696085313,
+          2.014562415905384
+        ],
+        "passed": true
+      }
+    ],
+    "sources": [
+      {
+        "commit": "94928052ab22df23aa34c6a4c76cde2c39ff4870",
+        "file": "sph_two_wall_pulses.py",
+        "source_sha256": "8e0a2a2e1cf7271a2c5fbdae042d5aa8f28d49ce3ba4e77fe0842fc4a3fe235f"
+      },
+      {
+        "commit": "7113a789ffeacaafba49f6d7c1aaa1570c139cd4",
+        "file": "scalar.py",
+        "source_sha256": "3cdd3fa0a3ce6b04cb608648a037653ce5b7c60aa0750aeb2e39b274ed32e599"
+      }
+    ]
+  },
+  "lbm-off-grid": {
+    "runs": [
+      {
+        "columns": 8,
+        "time_steps": 150,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 0.001,
+        "temperature_error_K": 0.020216838959789984,
+        "wall_heat_error_J_m2": 0.0028019254921147277,
+        "interior_cut_heat_error_J_m2": 0.00223931707243355,
+        "column_energy_residual_J_m2": 3.469446951953614e-17,
+        "orders": [],
+        "passed": true
+      },
+      {
+        "columns": 16,
+        "time_steps": 600,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 0.00025,
+        "temperature_error_K": 0.00624350894032355,
+        "wall_heat_error_J_m2": 0.000629765787735076,
+        "interior_cut_heat_error_J_m2": 0.0005319341868712281,
+        "column_energy_residual_J_m2": 1.734723475976807e-17,
+        "orders": [
+          1.6951284625501117,
+          2.15353130284436,
+          2.073739153096987
+        ],
+        "passed": true
+      },
+      {
+        "columns": 32,
+        "time_steps": 2400,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 6.25e-05,
+        "temperature_error_K": 0.0015818957902015152,
+        "wall_heat_error_J_m2": 0.00015501617435946524,
+        "interior_cut_heat_error_J_m2": 0.00013840815581075971,
+        "column_energy_residual_J_m2": 1.214306433183765e-17,
+        "orders": [
+          1.9807025088297867,
+          2.022396630756002,
+          1.9423188030527718
+        ],
+        "passed": true
+      },
+      {
+        "columns": 64,
+        "time_steps": 9600,
+        "switch_shift_s": 0.0003333333333333333,
+        "lattice_tau": 0.692,
+        "dt_s": 1.5625e-05,
+        "temperature_error_K": 0.000407361908099535,
+        "wall_heat_error_J_m2": 3.8604795025674876e-05,
+        "interior_cut_heat_error_J_m2": 3.7541266641225035e-05,
+        "column_energy_residual_J_m2": 6.938893903907228e-18,
+        "orders": [
+          1.9572715760823736,
+          2.0055667958420327,
+          1.8823797248425809
+        ],
+        "passed": true
+      }
+    ],
+    "sources": [
+      {
+        "commit": "94928052ab22df23aa34c6a4c76cde2c39ff4870",
+        "file": "sph_two_wall_pulses.py",
+        "source_sha256": "8e0a2a2e1cf7271a2c5fbdae042d5aa8f28d49ce3ba4e77fe0842fc4a3fe235f"
+      },
+      {
+        "commit": "7113a789ffeacaafba49f6d7c1aaa1570c139cd4",
+        "file": "scalar.py",
+        "source_sha256": "3cdd3fa0a3ce6b04cb608648a037653ce5b7c60aa0750aeb2e39b274ed32e599"
+      }
+    ]
+  },
+  "lbm": {
+    "runs": [
+      {
+        "columns": 8,
+        "time_steps": 150,
+        "switch_shift_s": 0.0,
+        "lattice_tau": 0.692,
+        "dt_s": 0.001,
+        "temperature_error_K": 0.01768668733597531,
+        "wall_heat_error_J_m2": 0.002661597440312455,
+        "interior_cut_heat_error_J_m2": 0.002305550371897523,
+        "column_energy_residual_J_m2": 3.642919299551295e-17,
+        "orders": [],
+        "passed": true
+      },
+      {
+        "columns": 16,
+        "time_steps": 600,
+        "switch_shift_s": 0.0,
+        "lattice_tau": 0.692,
+        "dt_s": 0.00025,
+        "temperature_error_K": 0.005998691732264583,
+        "wall_heat_error_J_m2": 0.0006203949744662748,
+        "interior_cut_heat_error_J_m2": 0.0005288390072096492,
+        "column_energy_residual_J_m2": 1.8214596497756474e-17,
+        "orders": [
+          1.559944061194763,
+          2.101033478951948,
+          2.12421068705071
+        ],
+        "passed": true
+      },
+      {
+        "columns": 32,
+        "time_steps": 2400,
+        "switch_shift_s": 0.0,
+        "lattice_tau": 0.692,
+        "dt_s": 6.25e-05,
+        "temperature_error_K": 0.0015072670346189532,
+        "wall_heat_error_J_m2": 0.0001523420685392296,
+        "interior_cut_heat_error_J_m2": 0.0001365791033791884,
+        "column_energy_residual_J_m2": 1.3877787807814457e-17,
+        "orders": [
+          1.9927128602090645,
+          2.025872609582566,
+          1.9530918260968768
+        ],
+        "passed": true
+      },
+      {
+        "columns": 64,
+        "time_steps": 9600,
+        "switch_shift_s": 0.0,
+        "lattice_tau": 0.692,
+        "dt_s": 1.5625e-05,
+        "temperature_error_K": 0.00038892153120181905,
+        "wall_heat_error_J_m2": 3.79149577742835e-05,
+        "interior_cut_heat_error_J_m2": 3.6906984483595084e-05,
+        "column_energy_residual_J_m2": 6.071532165918825e-18,
+        "orders": [
+          1.954384022746489,
+          2.006475368923501,
+          1.8877709970888967
+        ],
+        "passed": true
+      }
+    ],
+    "sources": [
+      {
+        "commit": "94928052ab22df23aa34c6a4c76cde2c39ff4870",
+        "file": "sph_two_wall_pulses.py",
+        "source_sha256": "8e0a2a2e1cf7271a2c5fbdae042d5aa8f28d49ce3ba4e77fe0842fc4a3fe235f"
+      },
+      {
+        "commit": "7113a789ffeacaafba49f6d7c1aaa1570c139cd4",
+        "file": "scalar.py",
+        "source_sha256": "3cdd3fa0a3ce6b04cb608648a037653ce5b7c60aa0750aeb2e39b274ed32e599"
+      }
+    ]
+  },
+  "commands": {
+    "lbm-ramps": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/sph_two_wall_pulses.py --lbm-ramps",
+    "lbm-off-grid": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/sph_two_wall_pulses.py --lbm-off-grid",
+    "lbm": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/sph_two_wall_pulses.py --lbm"
+  },
+  "reference": "Integrate the unit-slab Fourier Dirichlet step response analytically in time, then superpose the wall slope changes. Compare the exact spatial means to lattice cell temperatures and differences of cumulative heat to the link transfers. Halfway walls receive the exact time average of prescribed piecewise-linear values on each lattice step.",
+  "ramp_knots_s": [
+    0.013333333333333332,
+    0.028333333333333335,
+    0.04733333333333333,
+    0.09033333333333333
+  ],
+  "ramp_wall_pairs_K": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      1.0,
+      -0.2
+    ],
+    [
+      0.25,
+      -0.6
+    ],
+    [
+      0.0,
+      0.0
+    ]
+  ],
+  "analytic_cell_balance_residual_J_m2": 2.341009330830701e-15,
+  "orders": [
+    "cell mean temperature",
+    "interval wall heat",
+    "interval interior cut heat"
+  ],
+  "lbm_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_scalar_slab.py",
+    "passed": 7
+  }
+}
