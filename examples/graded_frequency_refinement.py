@@ -59,15 +59,15 @@ def direct_sph(n,capacity,contact):
     return tuple(response)
 
 
-def direct_dg(n,capacity):
+def direct_dg(n,capacity,contact):
     from tensordg import solve_low_frequency_diffusion_2d, poisson_face_powers_2d
 
-    options = study.dg_options(capacity,study.AMBIENT.real)
-    _,_,steady,lag = solve_low_frequency_diffusion_2d(ncells=(n,2),degree=1,capacity=study.C,
-                                  reaction=lambda x,y:study.H0+study.SLOPE*x,**options)
+    options,material,*_ = study.dg_options(n,capacity,study.AMBIENT.real,contact)
+    _,_,steady,lag = solve_low_frequency_diffusion_2d(ncells=(n,2),degree=1,**material,**options)
     response = []
     for field,rate,ambient in ((steady,0*steady,study.AMBIENT.real),(lag,steady,np.zeros(2))):
-        fx,_ = poisson_face_powers_2d(field,temperature_rate=rate,**study.dg_options(capacity,ambient))
+        options["robin_films"] = dict(zip(("left","right"),zip(study.FILMS,ambient)))
+        fx,_ = poisson_face_powers_2d(field,temperature_rate=rate,**options)
         response.extend([field[:,:,0,0].mean(1).numpy(),fx[n//2].sum().item()])
     return tuple(response)
 
@@ -82,7 +82,7 @@ def campaign(contact,include_dg=False):
                       "SPH":direct_sph(n,capacity,contact)}
             if include_dg:
                 direct["DG"] = direct["FVM"]  # Both report cell means.
-                native["DG"] = direct_dg(n,capacity)
+                native["DG"] = direct_dg(n,capacity,contact)
             previous_response,previous_change = {},{}
             for omega in (.8,.4,.2,.1,.05,.025):
                 for report,(field,cut),reference in study.measure(n,omega,capacity,contact,True,return_response=True,include_dg=include_dg):
@@ -133,11 +133,9 @@ def campaign(contact,include_dg=False):
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contact",action="store_true")
-    parser.add_argument("--dg",action="store_true",help="include SIPG for the continuous plate")
+    parser.add_argument("--dg",action="store_true",help="include SIPG for the graded plate")
     args = parser.parse_args()
     contact = args.contact
-    if args.dg and contact:
-        parser.error("the DG case requires continuous contact")
     rows = campaign(contact,args.dg)
     sources = [provenance(f) for f in (__file__,study.__file__,inspect.getfile(study.slab_fem_model),
                                        study.thermal.__file__,study.energy.__file__,study.sph.__file__)]

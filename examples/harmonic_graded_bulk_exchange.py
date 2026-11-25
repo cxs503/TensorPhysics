@@ -124,33 +124,40 @@ def fvm_films(ambient,wall_c):
             for side,a,h,cw in zip(("west","east"),ambient,FILMS,wall_c)}
 
 
-def dg_options(wall_c,ambient):
+def dg_options(n,wall_c,ambient,contact):
+    _,_,_,_,_,_,k,c,_,slope,loss,contacts = slab_grid(n,contact)
+    materials = layer_materials(contact)
+    def reaction(x,y):
+        left,right = materials
+        return torch.where(x<.5,left[2]+left[3]*x,right[2]+right[3]*(x-.5))
+
     films = dict(zip(("left","right"),zip(FILMS,ambient)))
-    return dict(conductivity=K,bc=dict(left="robin",right="robin",top="neumann",bottom="neumann"),
+    data = dict(conductivity=np.tile(k[:,None],(1,2)),contact_resistance={"x":np.tile(contacts[:,None],(1,2))},
+                bc=dict(left="robin",right="robin",top="neumann",bottom="neumann"),
                 robin_films=films,wall_areal_heat_capacity=dict(zip(("left","right"),wall_c)))
 
 
-def dg_response(n,omega,wall_c,ambient):
+    return data,dict(capacity=np.tile(c[:,None],(1,2)),reaction=reaction),c,slope,loss
+
+
+def dg_response(n,omega,wall_c,ambient,contact):
     from tensordg import solve_harmonic_diffusion_2d, poisson_face_powers_2d
 
-    options = dg_options(wall_c,ambient)
-    x,_,u = solve_harmonic_diffusion_2d(omega,ncells=(n,2),degree=1,capacity=C,
-                                        reaction=lambda x,y:H0+SLOPE*x,**options)
+    options,material,c,slope,loss = dg_options(n,wall_c,ambient,contact)
+    x,_,u = solve_harmonic_diffusion_2d(omega,ncells=(n,2),degree=1,**material,**options)
     fx,_ = poisson_face_powers_2d(u,temperature_rate=1j*omega*u,**options)
     # Mean in y selects Legendre mode zero; both strips have equal width.
     modes = u[:,:,:,0].mean(1).numpy()
     face_power = fx.sum(1).numpy()
     walls = np.array([modes[0,0]-modes[0,1],modes[-1].sum()])
     # Integral of the linear loss times linear temperature uses <xi²>=1/3.
-    volume = ((H0+SLOPE*x.numpy()+1j*omega*C)*modes[:,0]+SLOPE*modes[:,1]/(6*n))/n
+    volume = ((loss+1j*omega*c)*modes[:,0]+slope*modes[:,1]/(6*n))/n
     return modes[:,0],walls,face_power[[0,-1]]*[1,-1],face_power[n//2],volume
 
 
 def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=False,include_dg=False):
     if return_response and not quasistatic:
         raise ValueError("low-frequency responses require quasistatic=True")
-    if include_dg and contact:
-        raise ValueError("DG graded slab verification requires continuous contact")
     ambient = AMBIENT.real.copy() if quasistatic else AMBIENT
     dx,edges,x,m,resistance,materials,k,c,h,slope,loss,contacts = slab_grid(n,contact)
     analytic = reference(omega,wall_c,materials,resistance,ambient)
@@ -189,7 +196,7 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=Fal
     cut = sph.stencil_x_face_power_2d(field[None,:],offsets,dx,m,wall,conductivity=k,layered_x=True,contact_resistance_x=contacts)/(dx*factor)
     rows.append(("SPH",field.numpy(),analytic(x)[0],wall.numpy(),inward.numpy(),cut.item(),dx*(loss+1j*omega*c)*field.numpy()))
     if include_dg:
-        field,wall,inward,cut,volume = dg_response(n,omega,wall_c,ambient)
+        field,wall,inward,cut,volume = dg_response(n,omega,wall_c,ambient,contact)
         rows.append(("DG",field,mean,wall,inward,cut,volume))
     if quasistatic:
         steady,tangent = static_and_lag(materials,resistance,wall_c,ambient)
@@ -238,10 +245,8 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contact",action="store_true",help="use two different graded materials and a resistive contact")
     parser.add_argument("--quasistatic",action="store_true",help="halve frequency and mesh width together and compare with the DC Airy response and lag")
-    parser.add_argument("--dg",action="store_true",help="include P1 SIPG for the continuous graded plate")
+    parser.add_argument("--dg",action="store_true",help="include P1 SIPG for the graded plate")
     args = parser.parse_args()
-    if args.dg and args.contact:
-        parser.error("the DG case requires continuous contact")
     contact = args.contact
     rows = []
     for omega,wall_c in ((w,cw) for w in ((.8,) if args.quasistatic else (1.,5.)) for cw in (np.zeros(2),np.array([.4,.9]))):
