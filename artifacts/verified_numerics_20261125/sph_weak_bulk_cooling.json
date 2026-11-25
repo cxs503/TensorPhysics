@@ -1,0 +1,135 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "loss_W_m3_K": 1.0,
+      "max_flux_error_W_m2": 0.00037496747748316794,
+      "max_cooling_error_W_m3": 0.0006020573313207933,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 1.1657341758564144e-15,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "loss_W_m3_K": 1.0,
+      "max_flux_error_W_m2": 9.36992272542736e-05,
+      "max_cooling_error_W_m3": 0.00015056414005787389,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 3.094746681142624e-15,
+      "flux_error_order": 2.0006564149719894,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "loss_W_m3_K": 1.0,
+      "max_flux_error_W_m2": 2.3422143376305993e-05,
+      "max_cooling_error_W_m3": 3.7634219269833125e-05,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 6.106226635438361e-15,
+      "flux_error_order": 2.000164046014469,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "loss_W_m3_K": 1.0,
+      "max_flux_error_W_m2": 5.856683393090645e-06,
+      "max_cooling_error_W_m3": 9.40874388533075e-06,
+      "mean_cooling_error_W_m3": 4.440892098500626e-16,
+      "max_column_balance_error_W_m2": 1.481106903788998e-14,
+      "flux_error_order": 1.9997172929837361,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "loss_W_m3_K": 1e-07,
+      "max_flux_error_W_m2": 0.0005119024703090225,
+      "max_cooling_error_W_m3": 6.401368324304713e-11,
+      "mean_cooling_error_W_m3": 8.881784197001252e-16,
+      "max_column_balance_error_W_m2": 7.216449660063518e-16,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "loss_W_m3_K": 1e-07,
+      "max_flux_error_W_m2": 0.00012786767360056794,
+      "max_cooling_error_W_m3": 1.602096233455086e-11,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 2.0261570199409107e-15,
+      "flux_error_order": 2.001217387787538,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "loss_W_m3_K": 1e-07,
+      "max_flux_error_W_m2": 3.196017833062559e-05,
+      "max_cooling_error_W_m3": 4.006572851267265e-12,
+      "mean_cooling_error_W_m3": 4.440892098500626e-16,
+      "max_column_balance_error_W_m2": 4.6629367034256575e-15,
+      "flux_error_order": 2.0003042173162826,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "loss_W_m3_K": 1e-07,
+      "max_flux_error_W_m2": 7.989623430904036e-06,
+      "max_cooling_error_W_m3": 1.0018652574217413e-12,
+      "mean_cooling_error_W_m3": 4.440892098500626e-16,
+      "max_column_balance_error_W_m2": 1.2916751002123306e-14,
+      "flux_error_order": 2.0000760458282634,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "loss_W_m3_K": 1e-14,
+      "max_flux_error_W_m2": 0.0005119024842820119,
+      "max_cooling_error_W_m3": 8.881784197001252e-16,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 5.273559366969494e-16,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "loss_W_m3_K": 1e-14,
+      "max_flux_error_W_m2": 0.00012786767708611313,
+      "max_cooling_error_W_m3": 8.881784197001252e-16,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 2.3314683517128287e-15,
+      "flux_error_order": 2.0012173878411956,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "loss_W_m3_K": 1e-14,
+      "max_flux_error_W_m2": 3.196017920048533e-05,
+      "max_cooling_error_W_m3": 8.881784197001252e-16,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 6.196432256189155e-15,
+      "flux_error_order": 2.000304217376898,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "loss_W_m3_K": 1e-14,
+      "max_flux_error_W_m2": 7.989623645787702e-06,
+      "max_cooling_error_W_m3": 8.881784197001252e-16,
+      "mean_cooling_error_W_m3": 0.0,
+      "max_column_balance_error_W_m2": 8.576472865229334e-15,
+      "flux_error_order": 2.000076046292296,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "6d5a7dbef5c0cde763538ceb5a9766c089cffb57",
+      "file": "sph_weak_bulk_cooling.py",
+      "source_sha256": "a983ad5ba03f20e64b5f163ec05ec5ac2115ce854fdd4d5498e2cbd9b4dc706b"
+    },
+    {
+      "commit": "edb7ac2a7eee8f077be8aa38fa3c7a94b0016caa",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "3093220f7b1ce1540e6dd5baab2d5910aa5d76bd20c17717ffb30bee8bf959d9"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_weak_bulk_cooling.py"
+}
