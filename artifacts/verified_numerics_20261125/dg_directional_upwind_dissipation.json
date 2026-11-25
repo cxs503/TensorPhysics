@@ -1,0 +1,36 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "02eb7093978476ecda248c6ef30bfdb07efdca65",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_3d.py tests/test_advection_3d_porder_convergence.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Periodic non-unit cuboids. Directional P0 checkerboard face jumps have magnitude 0.75, with one stationary axis. For a seeded general P3 field compute each directional RHS, then polarize the quadratic modal energy to measure its exact directional derivative. Compare to independently integrated squared interface jumps.",
+  "suite": {
+    "tests": 56,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_directional_dissipation_checkerboard": {
+      "absolute_rate_error_0": 0.0,
+      "absolute_rate_error_1": 0.0,
+      "absolute_rate_error_2": 0.0
+    },
+    "test_directional_dissipation_matches_modal_energy_derivative": {
+      "relative_energy_budget_error_0": 3.565995535220567e-16,
+      "relative_energy_budget_error_1": 1.8245469351301867e-16,
+      "relative_energy_budget_error_2": 6.432944526722062e-16
+    }
+  },
+  "api_contract": {
+    "command": "python -m pytest -q tests/test_public_api_contract.py",
+    "baseline_commit": "ed3e27f",
+    "baseline_and_current": "22 passed, same 5 failed",
+    "failures": [
+      "test_every_public_symbol_is_reachable_from_the_package_root",
+      "test_exported_names_are_the_same_objects_as_their_sources",
+      "test_dunder_all_is_consistent_with_the_namespace",
+      "test_no_unregistered_claims_about_missing_modules",
+      "test_case_registry_matches_its_modules"
+    ]
+  }
+}
