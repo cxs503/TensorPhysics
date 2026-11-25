@@ -29,14 +29,14 @@ def measure(n, coarse_fvm):
                            np.zeros((n+1,n)), fvm_bc, source=source.T, high_order=False, return_wall_power=True)
         flux = -np.stack([info["wall_power"][s] for s in ("west","east","south","north")])/width
         yield "FVM", t.T, ambient+flux/np.array(films)[:,None], flux, info["ledger"].residual_inf, exact, trace, outward
-    if n > 12:
-        return  # The SIPG implementation uses dense matrices.
+    if n > 24:
+        return
     sides = ("left","right","bottom","top")
     boundaries = dict.fromkeys(sides, "robin")
     data = {side:(h, lambda x,y,factor=1-sign/h: factor*torch.exp(x+.5*y))
             for side,h,sign in zip(sides,films,(1.,-1.,.5,-.5))}
     for degree in (1,2,3):
-        _, _, coeff, _ = dg.solve_poisson_2d_bc(n, degree, bc=boundaries, robin_films=data,
+        _, _, coeff, _ = dg.solve_poisson_2d_bc(n, degree, sparse=True, bc=boundaries, robin_films=data,
                                     forcing=lambda x,y: -1.25*torch.exp(x+.5*y))
         fx, fy = dg.poisson_face_powers_2d(coeff, bc=boundaries, robin_films=data)
         flux = np.stack((-fx[0],fx[-1],-fy[:,0],fy[:,-1]))/width
