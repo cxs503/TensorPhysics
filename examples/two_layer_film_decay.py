@@ -95,11 +95,11 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
     faces[0,m-1] = resistance
     bc = {side: {"type": "robin", "values": 0., "film_coefficient": h}
           for side, h in zip(("west", "east"), films)}
-    power_options = dict(return_wall_power=True,return_interior_power=True) if implicit_sph else {}
+    power_options = dict(return_face_heat=True,return_interior_power=True) if implicit_sph else {}
     fvm_result = energy.solve_transient_conduction(np.full(n,1/n),[1.],k,capacity,bc,time,
                                                    initial,contact_resistance_x=faces,**power_options)
     if implicit_sph:
-        fvm_result,fvm_walls,fvm_interior = fvm_result
+        fvm_result,fvm_interior,fvm_heat = fvm_result
     fvm_history = fvm_result[:,0]
     final = fvm_history[-1]
     # Recover each wall trace from the half-cell drop and the film law.
@@ -169,11 +169,11 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
                                       cap*(nodal[:,m+1:-1]+nodal[:,m+2:]).sum(axis=1)*dx/2))
         check_sections("FEM",integrate(fem_power),fem_stored,nodal[:,m:m+2])
         # Wall powers point inward; interior x powers point eastward.
-        fvm_power = np.column_stack((fvm_walls["west"][:,0],fvm_interior["x"][:,0,m-1],
-                                     -fvm_walls["east"][:,0]))
+        fvm_sections = np.column_stack((fvm_heat["wall"]["west"][:,0],fvm_heat["interior"]["x"][:,0,m-1],
+                                        -fvm_heat["wall"]["east"][:,0]))
         def cell_stores(fields):
             return (dx*capacity*fields).reshape(len(time),2,m).sum(axis=2)
-        check_sections("FVM",integrate(fvm_power),cell_stores(fvm_history),half_cell_traces(fvm_history,fvm_power[:,1]))
+        check_sections("FVM",fvm_sections,cell_stores(fvm_history),half_cell_traces(fvm_history,fvm_interior["x"][:,0,m-1]))
 
         states,interval_heat,traces = sph.solve_transient_layered_slab(initial,time,dx,(None,None),
                 conductivity=k,volumetric_heat_capacity=capacity,contact_resistance_x=faces[0],

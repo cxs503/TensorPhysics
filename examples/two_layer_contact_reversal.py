@@ -91,11 +91,10 @@ def measure(n,reversals=(REVERSAL,)):
     contacts = np.zeros(n-1)
     contacts[m-1] = CONTACT
     start = cell_exact[0]
-    fields,interior = energy.solve_transient_conduction(np.full(n,dx),[1.],k,c,bc,time,start,
-                                          contact_resistance_x=contacts[None,:],return_interior_power=True)
+    fields,fvm_heat = energy.solve_transient_conduction(np.full(n,dx),[1.],k,c,bc,time,start,
+                                          contact_resistance_x=contacts[None,:],return_face_heat=True)
     u = fields[:,0]
-    power = interior["x"][:,0,m-1]
-    data.append(("FVM",u,cell_exact,.5*(power[1:]+power[:-1])*dt))
+    data.append(("FVM",u,cell_exact,fvm_heat["interior"]["x"][:,0,m-1]))
     states,heat = sph.solve_transient_layered_slab(start,time,dx,(None,None),conductivity=k,
             volumetric_heat_capacity=c,contact_resistance_x=contacts,x_wall_films=((FILMS[0],0.),(FILMS[1],0.)),
             return_x_heat=True)
