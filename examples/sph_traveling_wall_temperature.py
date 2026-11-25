@@ -20,6 +20,12 @@ def measure(n, flux_wall=None):
         mu = np.sqrt(wave**2+1j*omega*capacity/k)
         phase_y = np.exp(1j*wave*x)
         axial = (west*np.sinh(mu*(1-x))+east*np.sinh(mu*x))/np.sinh(mu)
+        if wave == 0.:
+            # Only the transverse mean contributes to the volume integral
+            # and to the net rightward flux across an entire section.
+            volume_mean = (west+east)*np.tanh(mu/2)/mu
+            faces = np.arange(n+1)/n
+            section_flux = k*mu*(west*np.cosh(mu*(1-faces))-east*np.cosh(mu*faces))/np.sinh(mu)
         fields += phase_y[:, None]*axial
         walls += np.array([west, east])[:, None]*phase_y
         flux = k*mu*np.array([west*np.cosh(mu)-east, east*np.cosh(mu)-west])/np.sinh(mu)
@@ -31,10 +37,10 @@ def measure(n, flux_wall=None):
 
     temperatures = [wall(side) for side in walls]
     fluxes = [0., 0.]
-    if flux_wall is not None:
-        side = ("west", "east").index(flux_wall)
-        temperatures[side] = None
-        fluxes[side] = wall(inward[side])
+    for side, name in enumerate(("west", "east")):
+        if flux_wall in (name, "both"):
+            temperatures[side] = None
+            fluxes[side] = wall(inward[side])
     history, cuts, heat = sph.solve_transient_slab_2d(
         fields.real, times, 1/n, temperatures, x_wall_inward_flux=fluxes,
         conductivity=k, volumetric_heat_capacity=capacity, method="sdirk2",
@@ -46,7 +52,14 @@ def measure(n, flux_wall=None):
     flux_error = abs(heat.numpy()/dt[:, None, None]-(interval_phase[:, None, None]*inward).real)
     balance = capacity*np.diff(history.numpy().mean(axis=(1, 2))) - heat.numpy().mean(axis=2).sum(axis=1)
     boundary = cuts.numpy()[:, [0, -1]]*[1., -1.]
-    return dict(columns=n, steps=len(dt), max_temperature_error_K=float(field_error),
+    closed_metrics = {}
+    if flux_wall == "both":
+        mean_error = abs(history.numpy().mean(axis=(1, 2))-(phase*volume_mean).real)
+        interior_flux_error = abs(cuts.numpy()[:, 1:-1]/dt[:, None]
+                                  -(interval_phase[:, None]*section_flux[1:-1]).real)
+        closed_metrics = dict(max_volume_mean_error_K=float(mean_error.max()),
+                              max_interior_section_mean_flux_error_W_m2=float(interior_flux_error.max()))
+    return dict(**closed_metrics, columns=n, steps=len(dt), max_temperature_error_K=float(field_error),
                 max_west_east_row_flux_errors_W_m2=flux_error.max(axis=(0, 2)).tolist(),
                 max_energy_residual_J_m2=float(abs(balance).max()),
                 max_wall_cut_difference_J_m2=float(abs(heat.numpy().mean(axis=2)-boundary).max()))
@@ -54,13 +67,15 @@ def measure(n, flux_wall=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--flux-wall", choices=("west", "east"), help="prescribe inward heat flux on this wall")
+    parser.add_argument("--flux-wall", choices=("west", "east", "both"), help="walls with prescribed inward heat flux")
     flux_wall = parser.parse_args().flux_wall
     runs = []
     previous = None
     for n in (8, 16, 32, 64):
         row = measure(n, flux_wall)
         errors = np.array([row["max_temperature_error_K"], *row["max_west_east_row_flux_errors_W_m2"]])
+        if flux_wall == "both":
+            errors = np.r_[errors, row["max_volume_mean_error_K"], row["max_interior_section_mean_flux_error_W_m2"]]
         orders = [] if previous is None else np.log2(previous/errors).tolist()
         row.update(orders=orders, passed=bool(row["max_energy_residual_J_m2"] < 1e-11
                    and row["max_wall_cut_difference_J_m2"] < 1e-11 and (not orders or min(orders) > 0.)
