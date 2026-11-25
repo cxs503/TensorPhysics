@@ -8,18 +8,20 @@ import harmonic_stepped_section
 from tensorfvm.cht import rod
 
 
-def measure(count, omega):
+def measure(count, omega, resistive=False):
     length = np.array([.25,.5,.25])
     area = np.array([.7,2.4,1.3])
     k, c = np.array([2.,5.,.9]), np.array([3.,1.5,2.])
     source = np.array([.4+.2j,-.6j,.7-.3j])
     film, cw = np.array([1.8,4.]), np.array([.6,.4])
     ambient = np.array([1.+.3j,-.5j])
+    resistance = np.array([.14,.32]) if resistive else np.zeros(2)
     # Independently propagate the continuum state from a known temperature
     # and axial power, adding film input and removing surface storage at each step.
     t, power = .7+.1j, 1.-.5j
     left_end = t
-    widths, means, left, right, surface = [], [], [], [], []
+    widths, means, left, right = [], [], [], []
+    west, east = [], []
     for j,L in enumerate(length):
         s = np.linspace(0.,1.,count+1)
         x = L*(s+.6*s*(1-s))
@@ -36,34 +38,47 @@ def measure(count, omega):
         widths.extend(dx)
         left.extend(p[:-1])
         right.extend(p[1:])
-        surface.extend(nodes[:-1])
+        west.extend(nodes[:-1])
+        east.extend(nodes[1:])
         t, power = nodes[-1],p[-1]
         if j < 2:
+            r = resistance[j]/min(area[j],area[j+1])
+            if area[j+1] > area[j]:
+                t -= r*power
             power += abs(area[j+1]-area[j])*(film[j]*(ambient[j]-t)-1j*omega*cw[j]*t)
-    surface.append(t)
+            if area[j] > area[j+1]:
+                t -= r*power
     n = len(widths)
     indices = np.array([count-1,2*count-1])
     hs,cap,air = np.zeros(n-1),np.zeros(n-1),np.zeros(n-1,complex)
     hs[indices],cap[indices],air[indices] = film,cw,ambient
+    contacts = np.zeros(n-1)
+    contacts[indices] = resistance
     for order in (1,2):
-        cell,faces,enter,leave = rod.solve_harmonic_stepped_rod(widths,area.repeat(count),k.repeat(count),
+        cell,faces,enter,leave,traces = rod.solve_harmonic_stepped_rod(widths,area.repeat(count),k.repeat(count),
                       c.repeat(count),(left_end,t),omega,source=source.repeat(count),film_coefficient=hs,
-                      ambient_temperature=air,shoulder_areal_heat_capacity=cap,flux_order=order)
+                      ambient_temperature=air,shoulder_areal_heat_capacity=cap,flux_order=order,
+                      contact_resistance=contacts,return_traces=True)
         powers = abs(np.diff(area.repeat(count)))*(hs*(air-faces[1:-1])-1j*omega*cap*faces[1:-1])
         face_balance = leave[:-1]-enter[1:]+powers
         cell_balance = enter-leave+(source.repeat(count)-1j*omega*c.repeat(count)*cell)*area.repeat(count)*widths
-        yield dict(n=n,omega_rad_s=omega,flux_order=order,temperature_error_K=float(abs(cell-means).max()),
-                   trace_error_K=float(abs(faces-surface).max()),
+        row = dict(n=n,resistive=resistive,omega_rad_s=omega,flux_order=order,temperature_error_K=float(abs(cell-means).max()),
+                   trace_error_K=float(max(abs(traces[0]-east[:-1]).max(),abs(traces[1]-west[1:]).max())),
                    axial_power_error_W=float(max(abs(enter-left).max(),abs(leave-right).max())),
                    max_balance_W=float(max(abs(face_balance).max(),abs(cell_balance).max())))
+        if resistive:
+            power_from_jump = (traces[0][indices]-traces[1][indices])*np.minimum(area[:-1],area[1:])/resistance
+            reference = np.where(area[1:]>area[:-1],np.array(right)[indices],np.array(left)[indices+1])
+            row["contact_power_error_W"] = float(abs(power_from_jump-reference).max())
+        yield row
 
 
 if __name__ == "__main__":
     rows = []
-    for omega in (1.,7.):
+    for omega,resistive in ((1.,False),(7.,False),(1.,True),(7.,True)):
         previous = {}
         for count in (8,16,32,64,128):
-            for row in measure(count,omega):
+            for row in measure(count,omega,resistive):
                 order = row["flux_order"]
                 errors = {k:v for k,v in row.items() if "_error_" in k}
                 rates = {} if order not in previous else {k:np.log2(previous[order][k]/v) for k,v in errors.items()}
