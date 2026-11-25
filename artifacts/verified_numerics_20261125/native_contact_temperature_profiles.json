@@ -1,0 +1,3082 @@
+[
+  {
+    "passed": true,
+    "runs": [
+      {
+        "sph_particle_error_K": 0.0011411764070294304,
+        "fvm_cell_mean_error_K": 0.0010246688912477606,
+        "fem_nodal_error_K": 3.842131123065699e-05,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00028935446942890544,
+        "fvm_cell_mean_error_K": 0.00025927618129680744,
+        "fem_nodal_error_K": 9.598648456034905e-06,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9796119921387552,
+        "fvm_cell_mean_error_K_order": 1.9825962138771673,
+        "fem_nodal_error_K_order": 2.001003570065726
+      },
+      {
+        "sph_particle_error_K": 7.284457181309734e-05,
+        "fvm_cell_mean_error_K": 6.521319038663478e-05,
+        "fem_nodal_error_K": 2.4001491838391885e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9899445528979487,
+        "fvm_cell_mean_error_K_order": 1.9912539707504378,
+        "fem_nodal_error_K_order": 1.9997071996427436
+      },
+      {
+        "sph_particle_error_K": 0.0011830216113143798,
+        "fvm_cell_mean_error_K": 0.0010190776616548637,
+        "fem_nodal_error_K": 5.0371751974949e-05,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0003103625161860477,
+        "fvm_cell_mean_error_K": 0.0002585773848062012,
+        "fem_nodal_error_K": 1.2663660797133456e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9304501962368332,
+        "fvm_cell_mean_error_K_order": 1.9785959927094898,
+        "fem_nodal_error_K_order": 1.9919203923490765
+      },
+      {
+        "sph_particle_error_K": 7.986854690927666e-05,
+        "fvm_cell_mean_error_K": 6.512586475709686e-05,
+        "fem_nodal_error_K": 3.1654178995593836e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9582549562486837,
+        "fvm_cell_mean_error_K_order": 1.9892935733824586,
+        "fem_nodal_error_K_order": 2.000226635318628
+      },
+      {
+        "sph_particle_error_K": 0.0011165230185653599,
+        "fvm_cell_mean_error_K": 0.0011103663752988946,
+        "fem_nodal_error_K": 0.00032883936877209407,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00028679666436773094,
+        "fvm_cell_mean_error_K": 0.00028565445511913334,
+        "fem_nodal_error_K": 8.204737190658675e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9609128447245168,
+        "fvm_cell_mean_error_K_order": 1.9586928494912794,
+        "fem_nodal_error_K_order": 2.002854001320551
+      },
+      {
+        "sph_particle_error_K": 7.322058299723498e-05,
+        "fvm_cell_mean_error_K": 7.24864085538138e-05,
+        "fem_nodal_error_K": 2.0501638453303242e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.969707078819704,
+        "fvm_cell_mean_error_K_order": 1.978488615223333,
+        "fem_nodal_error_K_order": 2.00071791103865
+      },
+      {
+        "sph_particle_error_K": 0.001016841356030697,
+        "fvm_cell_mean_error_K": 0.0009309443960358316,
+        "fem_nodal_error_K": 0.00033422382696296146,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0002730805211234667,
+        "fvm_cell_mean_error_K": 0.00024690041925576664,
+        "fem_nodal_error_K": 8.362775590547503e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8966962973848143,
+        "fvm_cell_mean_error_K_order": 1.9147657139772074,
+        "fem_nodal_error_K_order": 1.9987608325759558
+      },
+      {
+        "sph_particle_error_K": 7.07683693200312e-05,
+        "fvm_cell_mean_error_K": 6.362527421905343e-05,
+        "fem_nodal_error_K": 2.0911060683020932e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.948149828611617,
+        "fvm_cell_mean_error_K_order": 1.9562574120924239,
+        "fem_nodal_error_K_order": 1.9997156073549773
+      },
+      {
+        "sph_particle_error_K": 0.0009162189231376336,
+        "fvm_cell_mean_error_K": 0.0008913861683629296,
+        "fem_nodal_error_K": 0.00010841935149368292,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00023414970922708495,
+        "fvm_cell_mean_error_K": 0.00022728431380287855,
+        "fem_nodal_error_K": 2.7088567629702182e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9682611134179515,
+        "fvm_cell_mean_error_K_order": 1.9715524559158244,
+        "fem_nodal_error_K_order": 2.0008662677834743
+      },
+      {
+        "sph_particle_error_K": 5.94950935678435e-05,
+        "fvm_cell_mean_error_K": 5.738152969346645e-05,
+        "fem_nodal_error_K": 6.771125833775593e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9765886439758802,
+        "fvm_cell_mean_error_K_order": 1.9858397853980576,
+        "fem_nodal_error_K_order": 2.0002164742581665
+      },
+      {
+        "sph_particle_error_K": 0.0008481252400523325,
+        "fvm_cell_mean_error_K": 0.0006428581991334513,
+        "fem_nodal_error_K": 0.00012940431331614932,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0002267814527033746,
+        "fvm_cell_mean_error_K": 0.00016405527583845725,
+        "fem_nodal_error_K": 3.23374597991499e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9029746644235492,
+        "fvm_cell_mean_error_K_order": 1.9703185546583861,
+        "fem_nodal_error_K_order": 2.0006074456585843
+      },
+      {
+        "sph_particle_error_K": 5.892899468478763e-05,
+        "fvm_cell_mean_error_K": 4.143767092544942e-05,
+        "fem_nodal_error_K": 8.083514472876141e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9442530949829857,
+        "fvm_cell_mean_error_K_order": 1.9851671688038008,
+        "fem_nodal_error_K_order": 2.000151779808771
+      },
+      {
+        "sph_particle_error_K": 0.0008351156534323531,
+        "fvm_cell_mean_error_K": 0.0008370446631910213,
+        "fem_nodal_error_K": 0.000337216784784863,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00022547135444166963,
+        "fvm_cell_mean_error_K": 0.00022423703042016637,
+        "fem_nodal_error_K": 8.415837014564245e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8890318528508159,
+        "fvm_cell_mean_error_K_order": 1.9002800604881924,
+        "fem_nodal_error_K_order": 2.002497677402291
+      },
+      {
+        "sph_particle_error_K": 5.8518489548275355e-05,
+        "fvm_cell_mean_error_K": 5.799633316680852e-05,
+        "fem_nodal_error_K": 2.10304467521203e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9459797175077427,
+        "fvm_cell_mean_error_K_order": 1.950990950473754,
+        "fem_nodal_error_K_order": 2.0006272671987797
+      },
+      {
+        "sph_particle_error_K": 0.0007572682336812765,
+        "fvm_cell_mean_error_K": 0.0005943769647779572,
+        "fem_nodal_error_K": 0.00022520982588916937,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00019417427585442521,
+        "fvm_cell_mean_error_K": 0.0001504586682782577,
+        "fem_nodal_error_K": 5.6236940081224266e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9634523253452418,
+        "fvm_cell_mean_error_K_order": 1.9820109788421296,
+        "fem_nodal_error_K_order": 2.0016797705703713
+      },
+      {
+        "sph_particle_error_K": 4.925068500118131e-05,
+        "fvm_cell_mean_error_K": 3.7855354288560196e-05,
+        "fem_nodal_error_K": 1.4055106131592669e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9791363901541075,
+        "fvm_cell_mean_error_K_order": 1.9907979505439464,
+        "fem_nodal_error_K_order": 2.0004237500912323
+      },
+      {
+        "sph_particle_error_K": 0.0009765565496565074,
+        "fvm_cell_mean_error_K": 0.0009459520468721522,
+        "fem_nodal_error_K": 0.00011031255903063943,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00024914187729468273,
+        "fvm_cell_mean_error_K": 0.0002412155606576516,
+        "fem_nodal_error_K": 2.756284082989107e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.970736049971358,
+        "fvm_cell_mean_error_K_order": 1.971444073356897,
+        "fem_nodal_error_K_order": 2.0008005547799157
+      },
+      {
+        "sph_particle_error_K": 6.336867606043244e-05,
+        "fvm_cell_mean_error_K": 6.09014743316489e-05,
+        "fem_nodal_error_K": 6.889754947599293e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9751257597547434,
+        "fvm_cell_mean_error_K_order": 1.985773918441284,
+        "fem_nodal_error_K_order": 2.00020001482808
+      },
+      {
+        "sph_particle_error_K": 0.0009635707600318794,
+        "fvm_cell_mean_error_K": 0.0007281565123667222,
+        "fem_nodal_error_K": 0.00013366442085402952,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00025746635191966797,
+        "fvm_cell_mean_error_K": 0.00018580780437537693,
+        "fem_nodal_error_K": 3.34020612605057e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9040067151353648,
+        "fvm_cell_mean_error_K_order": 1.9704374817342185,
+        "fem_nodal_error_K_order": 2.0006064560797623
+      },
+      {
+        "sph_particle_error_K": 6.689354038021076e-05,
+        "fvm_cell_mean_error_K": 4.6930117764519876e-05,
+        "fem_nodal_error_K": 8.349638394019227e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9444450920182998,
+        "fvm_cell_mean_error_K_order": 1.985225113936895,
+        "fem_nodal_error_K_order": 2.0001515111484363
+      },
+      {
+        "sph_particle_error_K": 0.001012763625438917,
+        "fvm_cell_mean_error_K": 0.0010317431813113766,
+        "fem_nodal_error_K": 0.00044210428909791316,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0002745544717422296,
+        "fvm_cell_mean_error_K": 0.00027698167533705086,
+        "fem_nodal_error_K": 0.00011040810759054928,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8831331806242264,
+        "fvm_cell_mean_error_K_order": 1.8972214655910646,
+        "fem_nodal_error_K_order": 2.0015406134151004
+      },
+      {
+        "sph_particle_error_K": 7.139331030027121e-05,
+        "fvm_cell_mean_error_K": 7.172183023476982e-05,
+        "fem_nodal_error_K": 2.759459768996666e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9432316068208808,
+        "fvm_cell_mean_error_K_order": 1.949306323816826,
+        "fem_nodal_error_K_order": 2.0003883600205263
+      },
+      {
+        "sph_particle_error_K": 0.0007909433461948672,
+        "fvm_cell_mean_error_K": 0.0005756611168134209,
+        "fem_nodal_error_K": 0.00034512916940166897,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0002300426045872874,
+        "fvm_cell_mean_error_K": 0.00015538279305255483,
+        "fem_nodal_error_K": 8.620128603211777e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.7816732834211553,
+        "fvm_cell_mean_error_K_order": 1.8893930184463543,
+        "fem_nodal_error_K_order": 2.0013551136099985
+      },
+      {
+        "sph_particle_error_K": 6.235905817526736e-05,
+        "fvm_cell_mean_error_K": 4.033453048411911e-05,
+        "fem_nodal_error_K": 2.1545206865707637e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8832300334849268,
+        "fvm_cell_mean_error_K_order": 1.9457393824833118,
+        "fem_nodal_error_K_order": 2.000342442449446
+      },
+      {
+        "sph_particle_error_K": 0.0011411764070294306,
+        "fvm_cell_mean_error_K": 0.0010246688912477606,
+        "fem_nodal_error_K": 3.842131123065699e-05,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00028935446942890717,
+        "fvm_cell_mean_error_K": 0.00025927618129680744,
+        "fem_nodal_error_K": 9.598648456034905e-06,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.979611992138747,
+        "fvm_cell_mean_error_K_order": 1.9825962138771673,
+        "fem_nodal_error_K_order": 2.001003570065726
+      },
+      {
+        "sph_particle_error_K": 7.284457181309616e-05,
+        "fvm_cell_mean_error_K": 6.521319038663478e-05,
+        "fem_nodal_error_K": 2.4001491838391885e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9899445528979807,
+        "fvm_cell_mean_error_K_order": 1.9912539707504378,
+        "fem_nodal_error_K_order": 1.9997071996427436
+      },
+      {
+        "sph_particle_error_K": 0.001183021611314377,
+        "fvm_cell_mean_error_K": 0.0010190776616548637,
+        "fem_nodal_error_K": 5.0371751974949e-05,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00031036251618605484,
+        "fvm_cell_mean_error_K": 0.0002585773848062012,
+        "fem_nodal_error_K": 1.2663660797133456e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9304501962367966,
+        "fvm_cell_mean_error_K_order": 1.9785959927094898,
+        "fem_nodal_error_K_order": 1.9919203923490765
+      },
+      {
+        "sph_particle_error_K": 7.986854690927523e-05,
+        "fvm_cell_mean_error_K": 6.512586475709686e-05,
+        "fem_nodal_error_K": 3.1654178995593836e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9582549562487426,
+        "fvm_cell_mean_error_K_order": 1.9892935733824586,
+        "fem_nodal_error_K_order": 2.000226635318628
+      },
+      {
+        "sph_particle_error_K": 0.0011165230185653913,
+        "fvm_cell_mean_error_K": 0.0011103663752988946,
+        "fem_nodal_error_K": 0.00032883936877209407,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0002867966643677413,
+        "fvm_cell_mean_error_K": 0.00028565445511913334,
+        "fem_nodal_error_K": 8.204737190658675e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9609128447245054,
+        "fvm_cell_mean_error_K_order": 1.9586928494912794,
+        "fem_nodal_error_K_order": 2.002854001320551
+      },
+      {
+        "sph_particle_error_K": 7.322058299720736e-05,
+        "fvm_cell_mean_error_K": 7.24864085538138e-05,
+        "fem_nodal_error_K": 2.0501638453303242e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9697070788203002,
+        "fvm_cell_mean_error_K_order": 1.978488615223333,
+        "fem_nodal_error_K_order": 2.00071791103865
+      },
+      {
+        "sph_particle_error_K": 0.0010168413560306983,
+        "fvm_cell_mean_error_K": 0.0009309443960358316,
+        "fem_nodal_error_K": 0.00033422382696296146,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00027308052112347096,
+        "fvm_cell_mean_error_K": 0.00024690041925576664,
+        "fem_nodal_error_K": 8.362775590547503e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8966962973847934,
+        "fvm_cell_mean_error_K_order": 1.9147657139772074,
+        "fem_nodal_error_K_order": 1.9987608325759558
+      },
+      {
+        "sph_particle_error_K": 7.076836932002921e-05,
+        "fvm_cell_mean_error_K": 6.362527421905343e-05,
+        "fem_nodal_error_K": 2.0911060683020932e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9481498286116803,
+        "fvm_cell_mean_error_K_order": 1.9562574120924239,
+        "fem_nodal_error_K_order": 1.9997156073549773
+      },
+      {
+        "sph_particle_error_K": 0.0009162189231375939,
+        "fvm_cell_mean_error_K": 0.0008913861683629296,
+        "fem_nodal_error_K": 0.00010841935149368292,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0002341497092270758,
+        "fvm_cell_mean_error_K": 0.00022728431380287855,
+        "fem_nodal_error_K": 2.7088567629702182e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9682611134179455,
+        "fvm_cell_mean_error_K_order": 1.9715524559158244,
+        "fem_nodal_error_K_order": 2.0008662677834743
+      },
+      {
+        "sph_particle_error_K": 5.949509356783185e-05,
+        "fvm_cell_mean_error_K": 5.738152969346645e-05,
+        "fem_nodal_error_K": 6.771125833775593e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9765886439761065,
+        "fvm_cell_mean_error_K_order": 1.9858397853980576,
+        "fem_nodal_error_K_order": 2.0002164742581665
+      },
+      {
+        "sph_particle_error_K": 0.0008481252400523079,
+        "fvm_cell_mean_error_K": 0.0006428581991334513,
+        "fem_nodal_error_K": 0.00012940431331614932,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00022678145270323184,
+        "fvm_cell_mean_error_K": 0.00016405527583845725,
+        "fem_nodal_error_K": 3.23374597991499e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9029746644244154,
+        "fvm_cell_mean_error_K_order": 1.9703185546583861,
+        "fem_nodal_error_K_order": 2.0006074456585843
+      },
+      {
+        "sph_particle_error_K": 5.8928994684759034e-05,
+        "fvm_cell_mean_error_K": 4.143767092544942e-05,
+        "fem_nodal_error_K": 8.083514472876141e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9442530949827777,
+        "fvm_cell_mean_error_K_order": 1.9851671688038008,
+        "fem_nodal_error_K_order": 2.000151779808771
+      },
+      {
+        "sph_particle_error_K": 0.0008351156534323673,
+        "fvm_cell_mean_error_K": 0.0008370446631910213,
+        "fem_nodal_error_K": 0.000337216784784863,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00022547135444171994,
+        "fvm_cell_mean_error_K": 0.00022423703042016637,
+        "fem_nodal_error_K": 8.415837014564245e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8890318528505186,
+        "fvm_cell_mean_error_K_order": 1.9002800604881924,
+        "fem_nodal_error_K_order": 2.002497677402291
+      },
+      {
+        "sph_particle_error_K": 5.851848954813703e-05,
+        "fvm_cell_mean_error_K": 5.799633316680852e-05,
+        "fem_nodal_error_K": 2.10304467521203e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9459797175114746,
+        "fvm_cell_mean_error_K_order": 1.950990950473754,
+        "fem_nodal_error_K_order": 2.0006272671987797
+      },
+      {
+        "sph_particle_error_K": 0.0007572682336813177,
+        "fvm_cell_mean_error_K": 0.0005943769647779572,
+        "fem_nodal_error_K": 0.00022520982588916937,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00019417427585428551,
+        "fvm_cell_mean_error_K": 0.0001504586682782577,
+        "fem_nodal_error_K": 5.6236940081224266e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9634523253463583,
+        "fvm_cell_mean_error_K_order": 1.9820109788421296,
+        "fem_nodal_error_K_order": 2.0016797705703713
+      },
+      {
+        "sph_particle_error_K": 4.925068500082499e-05,
+        "fvm_cell_mean_error_K": 3.7855354288560196e-05,
+        "fem_nodal_error_K": 1.4055106131592669e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.979136390163507,
+        "fvm_cell_mean_error_K_order": 1.9907979505439464,
+        "fem_nodal_error_K_order": 2.0004237500912323
+      },
+      {
+        "sph_particle_error_K": 0.0009765565496564074,
+        "fvm_cell_mean_error_K": 0.0009459520468721522,
+        "fem_nodal_error_K": 0.00011031255903063943,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.000249141877294706,
+        "fvm_cell_mean_error_K": 0.0002412155606576516,
+        "fem_nodal_error_K": 2.756284082989107e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9707360499710755,
+        "fvm_cell_mean_error_K_order": 1.971444073356897,
+        "fem_nodal_error_K_order": 2.0008005547799157
+      },
+      {
+        "sph_particle_error_K": 6.336867606042546e-05,
+        "fvm_cell_mean_error_K": 6.09014743316489e-05,
+        "fem_nodal_error_K": 6.889754947599293e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9751257597550367,
+        "fvm_cell_mean_error_K_order": 1.985773918441284,
+        "fem_nodal_error_K_order": 2.00020001482808
+      },
+      {
+        "sph_particle_error_K": 0.0009635707600318096,
+        "fvm_cell_mean_error_K": 0.0007281565123667222,
+        "fem_nodal_error_K": 0.00013366442085402952,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0002574663519258093,
+        "fvm_cell_mean_error_K": 0.00018580780437537693,
+        "fem_nodal_error_K": 3.34020612605057e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9040067151008477,
+        "fvm_cell_mean_error_K_order": 1.9704374817342185,
+        "fem_nodal_error_K_order": 2.0006064560797623
+      },
+      {
+        "sph_particle_error_K": 6.689354038005717e-05,
+        "fvm_cell_mean_error_K": 4.6930117764519876e-05,
+        "fem_nodal_error_K": 8.349638394019227e-06,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9444450920560252,
+        "fvm_cell_mean_error_K_order": 1.985225113936895,
+        "fem_nodal_error_K_order": 2.0001515111484363
+      },
+      {
+        "sph_particle_error_K": 0.0010127636254390763,
+        "fvm_cell_mean_error_K": 0.0010317431813113766,
+        "fem_nodal_error_K": 0.00044210428909791316,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00027455447174239367,
+        "fvm_cell_mean_error_K": 0.00027698167533705086,
+        "fem_nodal_error_K": 0.00011040810759054928,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.883133180623591,
+        "fvm_cell_mean_error_K_order": 1.8972214655910646,
+        "fem_nodal_error_K_order": 2.0015406134151004
+      },
+      {
+        "sph_particle_error_K": 7.139331030240097e-05,
+        "fvm_cell_mean_error_K": 7.172183023476982e-05,
+        "fem_nodal_error_K": 2.759459768996666e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9432316067787054,
+        "fvm_cell_mean_error_K_order": 1.949306323816826,
+        "fem_nodal_error_K_order": 2.0003883600205263
+      },
+      {
+        "sph_particle_error_K": 0.0007909433461950174,
+        "fvm_cell_mean_error_K": 0.0005756611168134209,
+        "fem_nodal_error_K": 0.00034512916940166897,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00023004260458677273,
+        "fvm_cell_mean_error_K": 0.00015538279305255483,
+        "fem_nodal_error_K": 8.620128603211777e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.781673283424657,
+        "fvm_cell_mean_error_K_order": 1.8893930184463543,
+        "fem_nodal_error_K_order": 2.0013551136099985
+      },
+      {
+        "sph_particle_error_K": 6.23590581737812e-05,
+        "fvm_cell_mean_error_K": 4.033453048411911e-05,
+        "fem_nodal_error_K": 2.1545206865707637e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8832300335160816,
+        "fvm_cell_mean_error_K_order": 1.9457393824833118,
+        "fem_nodal_error_K_order": 2.000342442449446
+      }
+    ],
+    "sources": [
+      {
+        "commit": "96cdacaf903b0718b675c5f3296e244caea09a87",
+        "file": "sph_ambient_driven_contact.py",
+        "source_sha256": "7471519d873cf16e1f016e12621cf4b26976e3dceb338f88a0926811474850ab"
+      },
+      {
+        "commit": "4d1bd5933ee17b4c5bcb32ae6e9765acd827d463",
+        "file": "heat_conduction_2d.py",
+        "source_sha256": "3126a6f83b0d3757b39315a6ca1816fe2ca3429b8246a6fb3b657eae01d2bcdc"
+      },
+      {
+        "commit": "b1cf09bbf4c86fca7237be79758f2989160e2db1",
+        "file": "rod.py",
+        "source_sha256": "52b03d7134d7117d4b73bcb7697c27295b2112835f81a82942a43e7bdb952403"
+      },
+      {
+        "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+        "file": "thermal.py",
+        "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+      }
+    ],
+    "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src:../TensorFEM/src python examples/sph_ambient_driven_contact.py --compare-fvm --compare-fem --left-thickness 0.5"
+  },
+  {
+    "passed": true,
+    "runs": [
+      {
+        "sph_particle_error_K": 0.0012313199470153412,
+        "fvm_cell_mean_error_K": 0.0011904580565338498,
+        "fem_nodal_error_K": 3.219798333986817e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00031430939952840523,
+        "fvm_cell_mean_error_K": 0.0003017647461886358,
+        "fem_nodal_error_K": 8.095786140959558e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9699483592228266,
+        "fvm_cell_mean_error_K_order": 1.980020613678989,
+        "fem_nodal_error_K_order": 1.9917272453972443
+      },
+      {
+        "sph_particle_error_K": 8.022795258616331e-05,
+        "fvm_cell_mean_error_K": 7.59674637731846e-05,
+        "fem_nodal_error_K": 2.0234517330598445e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9700085317367428,
+        "fvm_cell_mean_error_K_order": 1.9899707103888562,
+        "fem_nodal_error_K_order": 2.0003527444583447
+      },
+      {
+        "sph_particle_error_K": 0.0013410000747653673,
+        "fvm_cell_mean_error_K": 0.0010182073124993523,
+        "fem_nodal_error_K": 4.486019012349501e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00035356264263287603,
+        "fvm_cell_mean_error_K": 0.00025726793765504957,
+        "fem_nodal_error_K": 1.1209319976863606e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9232715646893332,
+        "fvm_cell_mean_error_K_order": 1.9846877561339484,
+        "fem_nodal_error_K_order": 2.0007369763221816
+      },
+      {
+        "sph_particle_error_K": 9.122860621524547e-05,
+        "fvm_cell_mean_error_K": 6.466388675802899e-05,
+        "fem_nodal_error_K": 2.8019723217866254e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9544076669064239,
+        "fvm_cell_mean_error_K_order": 1.9922395391816752,
+        "fem_nodal_error_K_order": 2.0001841486099727
+      },
+      {
+        "sph_particle_error_K": 0.0024459201933560303,
+        "fvm_cell_mean_error_K": 0.002308116073085681,
+        "fem_nodal_error_K": 0.0004780381999432041,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0006229497160255836,
+        "fvm_cell_mean_error_K": 0.000587772860356674,
+        "fem_nodal_error_K": 0.00012029757299266375,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9731897117576354,
+        "fvm_cell_mean_error_K_order": 1.9733851265639277,
+        "fem_nodal_error_K_order": 1.9905183719139825
+      },
+      {
+        "sph_particle_error_K": 0.00015716945374715207,
+        "fvm_cell_mean_error_K": 0.00014828703762391878,
+        "fem_nodal_error_K": 3.0070100802409146e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9867948611577257,
+        "fvm_cell_mean_error_K_order": 1.9868662545362328,
+        "fem_nodal_error_K_order": 2.00020592708659
+      },
+      {
+        "sph_particle_error_K": 0.0021931422854886374,
+        "fvm_cell_mean_error_K": 0.0019355166118782202,
+        "fem_nodal_error_K": 0.0005648574491198386,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0005765808809107275,
+        "fvm_cell_mean_error_K": 0.0004916075754267265,
+        "fem_nodal_error_K": 0.00014116445256524853,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9274045096259873,
+        "fvm_cell_mean_error_K_order": 1.97713963763918,
+        "fem_nodal_error_K_order": 2.0005099851325263
+      },
+      {
+        "sph_particle_error_K": 0.00014877505970589596,
+        "fvm_cell_mean_error_K": 0.00012392900454032281,
+        "fem_nodal_error_K": 3.5362489861971744e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9543903019114053,
+        "fvm_cell_mean_error_K_order": 1.9879932694634312,
+        "fem_nodal_error_K_order": 1.997085077856343
+      },
+      {
+        "sph_particle_error_K": 0.0012223073437970212,
+        "fvm_cell_mean_error_K": 0.0011653497163902368,
+        "fem_nodal_error_K": 5.549677274759214e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0003112415379331972,
+        "fvm_cell_mean_error_K": 0.00029517853255179986,
+        "fem_nodal_error_K": 1.386942970626896e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.97350057139793,
+        "fvm_cell_mean_error_K_order": 1.9811032589247322,
+        "fem_nodal_error_K_order": 2.000495411141863
+      },
+      {
+        "sph_particle_error_K": 7.937177437003627e-05,
+        "fvm_cell_mean_error_K": 7.42815668216556e-05,
+        "fem_nodal_error_K": 3.4670598556361615e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9713366509158516,
+        "fvm_cell_mean_error_K_order": 1.9905116508514098,
+        "fem_nodal_error_K_order": 2.0001238183655157
+      },
+      {
+        "sph_particle_error_K": 0.0013457263666084684,
+        "fvm_cell_mean_error_K": 0.0010194473308093456,
+        "fem_nodal_error_K": 5.175935100153131e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00035435386979270223,
+        "fvm_cell_mean_error_K": 0.0002575143312041805,
+        "fem_nodal_error_K": 1.2936780948862342e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9251223797660457,
+        "fvm_cell_mean_error_K_order": 1.9850626126267599,
+        "fem_nodal_error_K_order": 2.0003408507476466
+      },
+      {
+        "sph_particle_error_K": 9.136463790223257e-05,
+        "fvm_cell_mean_error_K": 6.471716076824561e-05,
+        "fem_nodal_error_K": 3.234004300431137e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9554830118090374,
+        "fvm_cell_mean_error_K_order": 1.9924325022545053,
+        "fem_nodal_error_K_order": 2.0000851747230506
+      },
+      {
+        "sph_particle_error_K": 0.002190192329256743,
+        "fvm_cell_mean_error_K": 0.0020498614515076204,
+        "fem_nodal_error_K": 0.000376154401644781,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0005610952751268851,
+        "fvm_cell_mean_error_K": 0.0005249391892549906,
+        "fem_nodal_error_K": 9.519442235686796e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.964739894698778,
+        "fvm_cell_mean_error_K_order": 1.9653041915647693,
+        "fem_nodal_error_K_order": 1.982376021884647
+      },
+      {
+        "sph_particle_error_K": 0.0001419953731632254,
+        "fvm_cell_mean_error_K": 0.00013281480949341875,
+        "fem_nodal_error_K": 2.3796325967213735e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9824018430918187,
+        "fvm_cell_mean_error_K_order": 1.9827342826203675,
+        "fem_nodal_error_K_order": 2.000138199562607
+      },
+      {
+        "sph_particle_error_K": 0.0019486943973707036,
+        "fvm_cell_mean_error_K": 0.001788497872050413,
+        "fem_nodal_error_K": 0.00048369596940833325,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0005091331427459889,
+        "fvm_cell_mean_error_K": 0.0004562913861391511,
+        "fem_nodal_error_K": 0.00012080352328232084,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9363929706421734,
+        "fvm_cell_mean_error_K_order": 1.9707210778383881,
+        "fem_nodal_error_K_order": 2.001437983950314
+      },
+      {
+        "sph_particle_error_K": 0.00013087124806580053,
+        "fvm_cell_mean_error_K": 0.00011529771072436305,
+        "fem_nodal_error_K": 3.020095105815993e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9598948056691445,
+        "fvm_cell_mean_error_K_order": 1.9845915508001166,
+        "fem_nodal_error_K_order": 1.9999966447571276
+      },
+      {
+        "sph_particle_error_K": 0.0012605406996583344,
+        "fvm_cell_mean_error_K": 0.001249434999907285,
+        "fem_nodal_error_K": 0.00010990116729075696,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00032443314730995693,
+        "fvm_cell_mean_error_K": 0.0003158571328437185,
+        "fem_nodal_error_K": 2.746270157238605e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9580495676671956,
+        "fvm_cell_mean_error_K_order": 1.9839317918435548,
+        "fem_nodal_error_K_order": 2.000661250652652
+      },
+      {
+        "sph_particle_error_K": 8.25635318586249e-05,
+        "fvm_cell_mean_error_K": 7.94094725302723e-05,
+        "fem_nodal_error_K": 6.86488918878409e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9743446350971035,
+        "fvm_cell_mean_error_K_order": 1.991889134510126,
+        "fem_nodal_error_K_order": 2.0001652157938787
+      },
+      {
+        "sph_particle_error_K": 0.0013271757184363934,
+        "fvm_cell_mean_error_K": 0.001023517303545247,
+        "fem_nodal_error_K": 0.00014386945980404234,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0003528788371514059,
+        "fvm_cell_mean_error_K": 0.0002588145482664132,
+        "fem_nodal_error_K": 3.5953602446915664e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9111145800595195,
+        "fvm_cell_mean_error_K_order": 1.9835448724293352,
+        "fem_nodal_error_K_order": 2.0005521365289884
+      },
+      {
+        "sph_particle_error_K": 9.148382419239985e-05,
+        "fvm_cell_mean_error_K": 6.50792212178029e-05,
+        "fem_nodal_error_K": 8.987541227436544e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9475843319757213,
+        "fvm_cell_mean_error_K_order": 1.9916498232170372,
+        "fem_nodal_error_K_order": 2.0001379431986215
+      },
+      {
+        "sph_particle_error_K": 0.0015149366950582327,
+        "fvm_cell_mean_error_K": 0.001544540304009091,
+        "fem_nodal_error_K": 0.0002958068219172911,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0003984472513819687,
+        "fvm_cell_mean_error_K": 0.0004050050027897024,
+        "fem_nodal_error_K": 7.380471294412549e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.926796858651803,
+        "fvm_cell_mean_error_K_order": 1.9311658838772467,
+        "fem_nodal_error_K_order": 2.0028704739029144
+      },
+      {
+        "sph_particle_error_K": 0.00010216023874488605,
+        "fvm_cell_mean_error_K": 0.00010370125624698364,
+        "fem_nodal_error_K": 1.8441944644417632e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9635549433422324,
+        "fvm_cell_mean_error_K_order": 1.9655063576712257,
+        "fem_nodal_error_K_order": 2.0007221539446283
+      },
+      {
+        "sph_particle_error_K": 0.0012395423249558992,
+        "fvm_cell_mean_error_K": 0.0009170937583401303,
+        "fem_nodal_error_K": 0.00025565743590333633,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00034729655962806327,
+        "fvm_cell_mean_error_K": 0.00024089502598376912,
+        "fem_nodal_error_K": 6.398376434334353e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.8355675096499984,
+        "fvm_cell_mean_error_K_order": 1.928664629100761,
+        "fem_nodal_error_K_order": 1.998434210186244
+      },
+      {
+        "sph_particle_error_K": 9.247683917179111e-05,
+        "fvm_cell_mean_error_K": 6.169873975384555e-05,
+        "fem_nodal_error_K": 1.6003359392376013e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9090041262889552,
+        "fvm_cell_mean_error_K_order": 1.96509167843541,
+        "fem_nodal_error_K_order": 1.9993310882369908
+      },
+      {
+        "sph_particle_error_K": 0.00123131994701536,
+        "fvm_cell_mean_error_K": 0.0011904580565338498,
+        "fem_nodal_error_K": 3.219798333986817e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.000314309399528528,
+        "fvm_cell_mean_error_K": 0.0003017647461886358,
+        "fem_nodal_error_K": 8.095786140959558e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.969948359222285,
+        "fvm_cell_mean_error_K_order": 1.980020613678989,
+        "fem_nodal_error_K_order": 1.9917272453972443
+      },
+      {
+        "sph_particle_error_K": 8.0227952586095e-05,
+        "fvm_cell_mean_error_K": 7.59674637731846e-05,
+        "fem_nodal_error_K": 2.0234517330598445e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.970008531738535,
+        "fvm_cell_mean_error_K_order": 1.9899707103888562,
+        "fem_nodal_error_K_order": 2.0003527444583447
+      },
+      {
+        "sph_particle_error_K": 0.0013410000747653673,
+        "fvm_cell_mean_error_K": 0.0010182073124993523,
+        "fem_nodal_error_K": 4.486019012349501e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00035356264263276653,
+        "fvm_cell_mean_error_K": 0.00025726793765504957,
+        "fem_nodal_error_K": 1.1209319976863606e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.92327156468978,
+        "fvm_cell_mean_error_K_order": 1.9846877561339484,
+        "fem_nodal_error_K_order": 2.0007369763221816
+      },
+      {
+        "sph_particle_error_K": 9.122860621522059e-05,
+        "fvm_cell_mean_error_K": 6.466388675802899e-05,
+        "fem_nodal_error_K": 2.8019723217866254e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9544076669063706,
+        "fvm_cell_mean_error_K_order": 1.9922395391816752,
+        "fem_nodal_error_K_order": 2.0001841486099727
+      },
+      {
+        "sph_particle_error_K": 0.0024459201933561383,
+        "fvm_cell_mean_error_K": 0.002308116073085681,
+        "fem_nodal_error_K": 0.0004780381999432041,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.000622949716025422,
+        "fvm_cell_mean_error_K": 0.000587772860356674,
+        "fem_nodal_error_K": 0.00012029757299266375,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.973189711758073,
+        "fvm_cell_mean_error_K_order": 1.9733851265639277,
+        "fem_nodal_error_K_order": 1.9905183719139825
+      },
+      {
+        "sph_particle_error_K": 0.00015716945374727464,
+        "fvm_cell_mean_error_K": 0.00014828703762391878,
+        "fem_nodal_error_K": 3.0070100802409146e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9867948611562265,
+        "fvm_cell_mean_error_K_order": 1.9868662545362328,
+        "fem_nodal_error_K_order": 2.00020592708659
+      },
+      {
+        "sph_particle_error_K": 0.002193142285488873,
+        "fvm_cell_mean_error_K": 0.0019355166118782202,
+        "fem_nodal_error_K": 0.0005648574491198386,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0005765808809107989,
+        "fvm_cell_mean_error_K": 0.0004916075754267265,
+        "fem_nodal_error_K": 0.00014116445256524853,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9274045096259635,
+        "fvm_cell_mean_error_K_order": 1.97713963763918,
+        "fem_nodal_error_K_order": 2.0005099851325263
+      },
+      {
+        "sph_particle_error_K": 0.0001487750597054832,
+        "fvm_cell_mean_error_K": 0.00012392900454032281,
+        "fem_nodal_error_K": 3.5362489861971744e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9543903019155864,
+        "fvm_cell_mean_error_K_order": 1.9879932694634312,
+        "fem_nodal_error_K_order": 1.997085077856343
+      },
+      {
+        "sph_particle_error_K": 0.0012223073437970325,
+        "fvm_cell_mean_error_K": 0.0011653497163902368,
+        "fem_nodal_error_K": 5.549677274759214e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00031124153793327466,
+        "fvm_cell_mean_error_K": 0.00029517853255179986,
+        "fem_nodal_error_K": 1.386942970626896e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.973500571397584,
+        "fvm_cell_mean_error_K_order": 1.9811032589247322,
+        "fem_nodal_error_K_order": 2.000495411141863
+      },
+      {
+        "sph_particle_error_K": 7.937177436979681e-05,
+        "fvm_cell_mean_error_K": 7.42815668216556e-05,
+        "fem_nodal_error_K": 3.4670598556361615e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.971336650920563,
+        "fvm_cell_mean_error_K_order": 1.9905116508514098,
+        "fem_nodal_error_K_order": 2.0001238183655157
+      },
+      {
+        "sph_particle_error_K": 0.0013457263666083543,
+        "fvm_cell_mean_error_K": 0.0010194473308093456,
+        "fem_nodal_error_K": 5.175935100153131e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00035435386979260975,
+        "fvm_cell_mean_error_K": 0.0002575143312041805,
+        "fem_nodal_error_K": 1.2936780948862342e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9251223797663,
+        "fvm_cell_mean_error_K_order": 1.9850626126267599,
+        "fem_nodal_error_K_order": 2.0003408507476466
+      },
+      {
+        "sph_particle_error_K": 9.136463790230373e-05,
+        "fvm_cell_mean_error_K": 6.471716076824561e-05,
+        "fem_nodal_error_K": 3.234004300431137e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9554830118075373,
+        "fvm_cell_mean_error_K_order": 1.9924325022545053,
+        "fem_nodal_error_K_order": 2.0000851747230506
+      },
+      {
+        "sph_particle_error_K": 0.002190192329256849,
+        "fvm_cell_mean_error_K": 0.0020498614515076204,
+        "fem_nodal_error_K": 0.000376154401644781,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0005610952751268185,
+        "fvm_cell_mean_error_K": 0.0005249391892549906,
+        "fem_nodal_error_K": 9.519442235686796e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9647398946990187,
+        "fvm_cell_mean_error_K_order": 1.9653041915647693,
+        "fem_nodal_error_K_order": 1.982376021884647
+      },
+      {
+        "sph_particle_error_K": 0.0001419953731633436,
+        "fvm_cell_mean_error_K": 0.00013281480949341875,
+        "fem_nodal_error_K": 2.3796325967213735e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9824018430904466,
+        "fvm_cell_mean_error_K_order": 1.9827342826203675,
+        "fem_nodal_error_K_order": 2.000138199562607
+      },
+      {
+        "sph_particle_error_K": 0.0019486943973709633,
+        "fvm_cell_mean_error_K": 0.001788497872050413,
+        "fem_nodal_error_K": 0.00048369596940833325,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0005091331427459615,
+        "fvm_cell_mean_error_K": 0.0004562913861391511,
+        "fem_nodal_error_K": 0.00012080352328232084,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9363929706424434,
+        "fvm_cell_mean_error_K_order": 1.9707210778383881,
+        "fem_nodal_error_K_order": 2.001437983950314
+      },
+      {
+        "sph_particle_error_K": 0.00013087124806539235,
+        "fvm_cell_mean_error_K": 0.00011529771072436305,
+        "fem_nodal_error_K": 3.020095105815993e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9598948056735663,
+        "fvm_cell_mean_error_K_order": 1.9845915508001166,
+        "fem_nodal_error_K_order": 1.9999966447571276
+      },
+      {
+        "sph_particle_error_K": 0.0012605406996583836,
+        "fvm_cell_mean_error_K": 0.001249434999907285,
+        "fem_nodal_error_K": 0.00010990116729075696,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00032443314731005554,
+        "fvm_cell_mean_error_K": 0.0003158571328437185,
+        "fem_nodal_error_K": 2.746270157238605e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9580495676668135,
+        "fvm_cell_mean_error_K_order": 1.9839317918435548,
+        "fem_nodal_error_K_order": 2.000661250652652
+      },
+      {
+        "sph_particle_error_K": 8.256353185769759e-05,
+        "fvm_cell_mean_error_K": 7.94094725302723e-05,
+        "fem_nodal_error_K": 6.86488918878409e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9743446351137457,
+        "fvm_cell_mean_error_K_order": 1.991889134510126,
+        "fem_nodal_error_K_order": 2.0001652157938787
+      },
+      {
+        "sph_particle_error_K": 0.0013271757184362934,
+        "fvm_cell_mean_error_K": 0.001023517303545247,
+        "fem_nodal_error_K": 0.00014386945980404234,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0003528788371512567,
+        "fvm_cell_mean_error_K": 0.0002588145482664132,
+        "fem_nodal_error_K": 3.5953602446915664e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.911114580060021,
+        "fvm_cell_mean_error_K_order": 1.9835448724293352,
+        "fem_nodal_error_K_order": 2.0005521365289884
+      },
+      {
+        "sph_particle_error_K": 9.148382419237462e-05,
+        "fvm_cell_mean_error_K": 6.50792212178029e-05,
+        "fem_nodal_error_K": 8.987541227436544e-06,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.947584331975509,
+        "fvm_cell_mean_error_K_order": 1.9916498232170372,
+        "fem_nodal_error_K_order": 2.0001379431986215
+      },
+      {
+        "sph_particle_error_K": 0.0015149366950582637,
+        "fvm_cell_mean_error_K": 0.001544540304009091,
+        "fem_nodal_error_K": 0.0002958068219172911,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.00039844725138149853,
+        "fvm_cell_mean_error_K": 0.0004050050027897024,
+        "fem_nodal_error_K": 7.380471294412549e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.926796858653535,
+        "fvm_cell_mean_error_K_order": 1.9311658838772467,
+        "fem_nodal_error_K_order": 2.0028704739029144
+      },
+      {
+        "sph_particle_error_K": 0.00010216023874498271,
+        "fvm_cell_mean_error_K": 0.00010370125624698364,
+        "fem_nodal_error_K": 1.8441944644417632e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.9635549433391648,
+        "fvm_cell_mean_error_K_order": 1.9655063576712257,
+        "fem_nodal_error_K_order": 2.0007221539446283
+      },
+      {
+        "sph_particle_error_K": 0.0012395423249560614,
+        "fvm_cell_mean_error_K": 0.0009170937583401303,
+        "fem_nodal_error_K": 0.00025565743590333633,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_particle_error_K": 0.0003472965596278327,
+        "fvm_cell_mean_error_K": 0.00024089502598376912,
+        "fem_nodal_error_K": 6.398376434334353e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.835567509651145,
+        "fvm_cell_mean_error_K_order": 1.928664629100761,
+        "fem_nodal_error_K_order": 1.998434210186244
+      },
+      {
+        "sph_particle_error_K": 9.247683917168224e-05,
+        "fvm_cell_mean_error_K": 6.169873975384555e-05,
+        "fem_nodal_error_K": 1.6003359392376013e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_particle_error_K_order": 1.909004126289696,
+        "fvm_cell_mean_error_K_order": 1.96509167843541,
+        "fem_nodal_error_K_order": 1.9993310882369908
+      }
+    ],
+    "sources": [
+      {
+        "commit": "96cdacaf903b0718b675c5f3296e244caea09a87",
+        "file": "sph_ambient_driven_contact.py",
+        "source_sha256": "7471519d873cf16e1f016e12621cf4b26976e3dceb338f88a0926811474850ab"
+      },
+      {
+        "commit": "4d1bd5933ee17b4c5bcb32ae6e9765acd827d463",
+        "file": "heat_conduction_2d.py",
+        "source_sha256": "3126a6f83b0d3757b39315a6ca1816fe2ca3429b8246a6fb3b657eae01d2bcdc"
+      },
+      {
+        "commit": "b1cf09bbf4c86fca7237be79758f2989160e2db1",
+        "file": "rod.py",
+        "source_sha256": "52b03d7134d7117d4b73bcb7697c27295b2112835f81a82942a43e7bdb952403"
+      },
+      {
+        "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+        "file": "thermal.py",
+        "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+      }
+    ],
+    "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src:../TensorFEM/src python examples/sph_ambient_driven_contact.py --compare-fvm --compare-fem --left-thickness 0.25 --wall-storage"
+  }
+]
