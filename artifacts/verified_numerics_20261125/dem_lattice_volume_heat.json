@@ -1,0 +1,130 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "intervals": 16,
+      "periodic_y": false,
+      "temperature_error_K": 0.00320346424643958,
+      "x_flux_error_W_m2": 0.007505603982502329,
+      "y_flux_error_W_m2": 0.0030313650071711606,
+      "discrete_error_K": 5.684341886080802e-14,
+      "balance_error_W": 1.518056513827304e-13,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "intervals": 32,
+      "periodic_y": false,
+      "temperature_error_K": 0.0008026097348761141,
+      "x_flux_error_W_m2": 0.00188844741379679,
+      "y_flux_error_W_m2": 0.0007572020322348383,
+      "discrete_error_K": 5.684341886080802e-14,
+      "balance_error_W": 1.6099187954976557e-13,
+      "orders": [
+        1.9968623289840863,
+        1.990767560774285,
+        2.0012173895633736
+      ],
+      "passed": true
+    },
+    {
+      "intervals": 64,
+      "periodic_y": false,
+      "temperature_error_K": 0.0002007613259138452,
+      "x_flux_error_W_m2": 0.00047286652160760667,
+      "y_flux_error_W_m2": 0.00018926059403190365,
+      "discrete_error_K": 5.684341886080802e-14,
+      "balance_error_W": 1.9948452611995293e-13,
+      "orders": [
+        1.9992172752949438,
+        1.9976957012565515,
+        2.000304224435264
+      ],
+      "passed": true
+    },
+    {
+      "intervals": 128,
+      "periodic_y": false,
+      "temperature_error_K": 5.0197135919916036e-05,
+      "x_flux_error_W_m2": 0.00011826382219126685,
+      "y_flux_error_W_m2": 4.731265345792046e-05,
+      "discrete_error_K": 5.684341886080802e-14,
+      "balance_error_W": 2.0930999988788557e-13,
+      "orders": [
+        1.9998044231175025,
+        1.9994241945949862,
+        2.0000760790437444
+      ],
+      "passed": true
+    },
+    {
+      "intervals": 16,
+      "periodic_y": true,
+      "temperature_error_K": 0.009094398061108677,
+      "x_flux_error_W_m2": 0.03512636079793552,
+      "y_flux_error_W_m2": 0.01021371892345213,
+      "discrete_error_K": 0.0,
+      "balance_error_W": 1.8461274176040376e-13,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "intervals": 32,
+      "periodic_y": true,
+      "temperature_error_K": 0.002286497513637187,
+      "x_flux_error_W_m2": 0.008869328729568693,
+      "y_flux_error_W_m2": 0.0025570078900014614,
+      "discrete_error_K": 5.684341886080802e-14,
+      "balance_error_W": 2.2029600366124669e-13,
+      "orders": [
+        1.9918388017731241,
+        1.9856572923704152,
+        1.9979797451134098
+      ],
+      "passed": true
+    },
+    {
+      "intervals": 64,
+      "periodic_y": true,
+      "temperature_error_K": 0.0005716511608397923,
+      "x_flux_error_W_m2": 0.0022198088492251244,
+      "y_flux_error_W_m2": 0.0006398698019518534,
+      "discrete_error_K": 5.684341886080802e-14,
+      "balance_error_W": 2.0090699937025391e-13,
+      "orders": [
+        1.999932406706276,
+        1.9983894695690592,
+        1.9986063257261415
+      ],
+      "passed": true
+    },
+    {
+      "intervals": 128,
+      "periodic_y": true,
+      "temperature_error_K": 0.000142861577955955,
+      "x_flux_error_W_m2": 0.0005549016387416117,
+      "y_flux_error_W_m2": 0.0001601245366398274,
+      "discrete_error_K": 5.684341886080802e-14,
+      "balance_error_W": 2.0847210134393446e-13,
+      "orders": [
+        2.0005170769242437,
+        2.0001314807907913,
+        1.998583985606677
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "6045b546ad509176fbde309b28a4d9c30530d5c1",
+      "file": "dem_lattice_volume_heat.py",
+      "source_sha256": "815d4dc19bf2cec1e52bf2fc500a7db7b8719c55b403bad303616d32c6200b07"
+    },
+    {
+      "commit": "750e9bd913a702d96e2625acfddda213e627a747",
+      "file": "contact_chain.py",
+      "source_sha256": "8a94c19b0f2f706f3ea5da68f0a0f5780de00b77b92ed97509c4b095be625047"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_lattice_volume_heat.py"
+}
