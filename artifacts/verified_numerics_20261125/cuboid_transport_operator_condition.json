@@ -1,0 +1,57 @@
+{
+  "TensorDG": {
+    "commit": "f414371e299ab0370c08a2b435aa1e2edfb6f10f",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_1d.py tests/test_advection_2d.py tests/test_advection_3d.py -o junit_family=legacy --junitxml=measured.xml",
+    "counts": {
+      "tests": 31,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_oblique_custom_wave_on_rectangular_mesh": {
+        "mesh_6x10_absolute_l2": 0.007801562114846429,
+        "mesh_12x20_absolute_l2": 0.001091079753556254,
+        "mesh_24x40_absolute_l2": 0.00012034750595652073
+      },
+      "test_oblique_custom_wave_on_cuboid": {
+        "grid_(4, 5, 6)_L2": 0.011155317595380562,
+        "grid_(8, 10, 12)_L2": 0.0016264850527522305,
+        "grid_(16, 20, 24)_L2": 0.0002459341324987563
+      }
+    }
+  },
+  "TensorBEM": {
+    "commit": "008e47e6b4ab3577112f446e458ab1e8d9603760",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_conditioning.py tests/test_solver3d.py -o junit_family=legacy --junitxml=measured.xml",
+    "counts": {
+      "tests": 29,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_scaled_nonnormal_shear_condition[1e-150]": {
+        "relative_error": 0.0
+      },
+      "test_scaled_nonnormal_shear_condition[1.0]": {
+        "relative_error": 0.0
+      },
+      "test_scaled_nonnormal_shear_condition[1e+150]": {
+        "relative_error": 2.220446049250313e-16
+      },
+      "test_ellipsoid_condition_estimates_against_svd[1]": {
+        "single_svd": 21.740691700430773,
+        "single_relative_error": 6.68302135539145e-05,
+        "exterior_double_svd": 2.2462926074540817,
+        "exterior_double_relative_error": 0.0049842629354137635
+      },
+      "test_ellipsoid_condition_estimates_against_svd[2]": {
+        "single_svd": 44.67000993385534,
+        "single_relative_error": 0.00031318223239085174,
+        "exterior_double_svd": 2.1304866002120275,
+        "exterior_double_relative_error": 0.00881279141888236
+      }
+    }
+  }
+}
