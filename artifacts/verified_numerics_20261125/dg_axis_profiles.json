@@ -1,0 +1,29 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "144d1aa4396c783d55b726d74ce6183231d265ff",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_2d_var.py tests/test_advection_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "P2 projection at t=1 on the 5x9 unit-square mesh: 1+x and 1+y have L1 mass 1.5 and L2 norm sqrt(7/3); the constant 1 has unit mass and norm. Centered disk L1 coverage for these three functions is its area.",
+  "counts": {
+    "tests": 31,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "results": {
+    "test_axis_dependent_projection_and_norms_cover_the_domain[x]": {
+      "mass": 1.5,
+      "reference_l2": 1.5275252316519465,
+      "projection_error_l2": 1.1556248355679918e-15
+    },
+    "test_axis_dependent_projection_and_norms_cover_the_domain[y]": {
+      "mass": 1.5,
+      "reference_l2": 1.5275252316519465,
+      "projection_error_l2": 1.152676914956062e-15
+    },
+    "test_axis_dependent_projection_and_norms_cover_the_domain[constant]": {
+      "mass": 0.9999999999999998,
+      "reference_l2": 0.9999999999999998,
+      "projection_error_l2": 7.378462312441966e-16
+    }
+  }
+}
