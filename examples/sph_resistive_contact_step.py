@@ -1,4 +1,5 @@
 """Transient contact heat between unequal finite layers with a resistive interface."""
+import argparse
 import json
 
 import mpmath as mp
@@ -30,27 +31,45 @@ def interval_reference(times, resistance, method):
     return np.diff(np.vstack((np.zeros(3), cumulative)), axis=0)
 
 
-def measure(n, times, resistance, reference):
+def measure(n, times, resistance, reference, solver="SPH"):
     left = 2*n//5
     conductivity = np.repeat([1., 3.], [left, n-left])
     capacity = np.repeat([4., 2.], [left, n-left])
     initial = np.repeat([1., 0.], [left, n-left])
     contacts = np.zeros(n-1)
     contacts[left-1] = resistance
-    temperature, heat = sph.solve_transient_layered_slab(
-        initial, times, 1./n, (1., 0.), conductivity=conductivity,
-        volumetric_heat_capacity=capacity, contact_resistance_x=contacts,
-        method="exponential", h_factor=.9, return_x_heat=True)
-    measured = heat.numpy()[:, [0, left, n]]
-    storage = np.diff(temperature.numpy(), axis=0)*capacity/n
+    if solver == "SPH":
+        temperature, heat = sph.solve_transient_layered_slab(
+            initial, times, 1./n, (1., 0.), conductivity=conductivity,
+            volumetric_heat_capacity=capacity, contact_resistance_x=contacts,
+            method="exponential", h_factor=.9, return_x_heat=True)
+        measured = heat.numpy()[:, [0, left, n]]
+        temperature = temperature.numpy()
+    else:
+        from tensorfvm.cht import rod
+
+        # Refine each interval along with the spatial mesh to limit SDIRK2 error.
+        count = n // 5
+        subtime = np.r_[times[0], np.concatenate([np.linspace(a, b, count+1)[1:]
+                        for a, b in zip(times[:-1], times[1:])])]
+        temperature, _, _, _, heat = rod.solve_transient_stepped_rod(
+            np.full(n, 1./n), 1., conductivity, capacity, (1., 0.), subtime, initial,
+            contact_resistance=contacts, method="sdirk2", return_step_heat=True)
+        cuts = np.column_stack((heat["left"][:, 0], heat["contact"][:, left-1], heat["right"][:, -1]))
+        measured = cuts.reshape(len(times)-1, count, 3).sum(axis=1)
+        temperature = temperature[::count]
+    storage = np.diff(temperature, axis=0)*capacity/n
     layer_storage = np.column_stack((storage[:, :left].sum(axis=1), storage[:, left:].sum(axis=1)))
     errors = np.max(abs(measured-reference), axis=0)
-    return dict(cells=n, max_west_interface_east_interval_errors_J_m2=errors.tolist(),
+    return dict(solver=solver, cells=n, interval_heat_J_m2=measured.tolist(), max_west_interface_east_interval_errors_J_m2=errors.tolist(),
                 max_layer_balance_error_J_m2=float(abs(layer_storage + np.diff(measured, axis=1)).max()),
                 first_interval_mean_interface_flux_W_m2=float(measured[0, 1]/times[1]))
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--with-fvm", action="store_true", help="also run the SDIRK2 finite-volume rod")
+    with_fvm = parser.parse_args().with_fvm
     times = np.r_[0., .00025*2.**np.arange(12)]
     studies = []
     for resistance in (.05, .3):
@@ -58,25 +77,42 @@ if __name__ == "__main__":
         audit = interval_reference(times, resistance, "dehoog")
         discrepancy = float(abs(reference-audit).max())
         rows = []
-        previous = None
-        for n in (40, 80, 160, 320):
-            row = measure(n, times, resistance, reference)
-            errors = np.array(row["max_west_interface_east_interval_errors_J_m2"])
-            orders = [] if previous is None else np.log2(previous/errors).tolist()
-            row.update(west_interface_east_orders=orders,
-                       passed=bool(row["max_layer_balance_error_J_m2"] < 1e-10
-                                   and (not orders or min(orders) > 0.)
-                                   and (n != 320 or (min(orders) > 1.85 and max(errors) < 5e-5))))
-            rows.append(row)
-            previous = errors
+        for solver in (("SPH", "FVM") if with_fvm else ("SPH",)):
+            previous = None
+            for n in (40, 80, 160, 320):
+                row = measure(n, times, resistance, reference, solver)
+                errors = np.array(row["max_west_interface_east_interval_errors_J_m2"])
+                orders = [] if previous is None else np.log2(previous/errors).tolist()
+                row.update(west_interface_east_orders=orders,
+                           passed=bool(row["max_layer_balance_error_J_m2"] < 1e-10
+                                       and (not orders or min(orders) > 0.)
+                                       and (n != 320 or (min(orders) > 1.85 and max(errors) < 5e-5))))
+                if solver == "FVM":
+                    counterpart = next(r for r in rows if r["solver"] == "SPH" and r["cells"] == n)
+                    interface_heat = np.asarray(row["interval_heat_J_m2"])[:, 1]
+                    sph_heat = np.asarray(counterpart["interval_heat_J_m2"])[:, 1]
+                    difference = float(np.max(abs(interface_heat - sph_heat)))
+                    row["max_interface_difference_from_sph_J_m2"] = difference
+                    row["passed"] = row["passed"] and (n != 320 or difference < 1e-7)
+                    row["substeps_per_interval"] = n // 5
+                rows.append(row)
+                previous = errors
         studies.append(dict(contact_resistance_m2_K_W=resistance, reference_discrepancy_J_m2=discrepancy,
                             initial_interface_flux_W_m2=1./resistance,
                             reference_first_interval_mean_flux_W_m2=reference[0, 1]/times[1],
                             reference_interval_heat_J_m2=reference.tolist(), runs=rows,
                             passed=discrepancy < 1e-12 and all(row["passed"] for row in rows)))
     passed = all(study["passed"] for study in studies)
+    sources = [provenance(__file__), provenance(sph.__file__)]
+    paths, flags = "../TensorSPH/src", ""
+    if with_fvm:
+        from tensorfvm.cht import rod
+
+        sources.append(provenance(rod.__file__))
+        paths += ":../TensorFVM/src"
+        flags = " --with-fvm"
     print(json.dumps(dict(reference="Finite-layer Laplace impedances in series; Talbot and de Hoog inversions",
         cut_order=["west", "interface", "east"], times_s=times.tolist(), studies=studies, passed=passed,
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_resistive_contact_step.py",
-        sources=[provenance(__file__), provenance(sph.__file__)]), indent=2, allow_nan=False))
+        reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={paths} python examples/sph_resistive_contact_step.py{flags}",
+        sources=sources), indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
