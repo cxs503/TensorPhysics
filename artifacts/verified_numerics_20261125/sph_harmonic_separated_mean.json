@@ -1,0 +1,330 @@
+{
+  "reference": "Uniform complex pole plus an exact piecewise-linear zero-capacity-mean temperature and two resistive jumps",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_harmonic_separated_mean.py",
+  "runs": [
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 0.0,
+      "cut_flux_error_W_m2": 0.0,
+      "inward_error_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 1.0,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 2.369546013013814e-14,
+      "cut_flux_error_W_m2": 3.922423602383365e-14,
+      "inward_error_W_m2": 2.2344962252874603e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 0.0001,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 0.0,
+      "cut_flux_error_W_m2": 0.0,
+      "inward_error_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 0.0001,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 2.652772445219376e-14,
+      "cut_flux_error_W_m2": 4.528706410826496e-14,
+      "inward_error_W_m2": 1.517042171485272e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 1e-08,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 0.0,
+      "cut_flux_error_W_m2": 0.0,
+      "inward_error_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 1e-08,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 2.448106279707003e-14,
+      "cut_flux_error_W_m2": 4.1298281949337035e-14,
+      "inward_error_W_m2": 1.1314644741894731e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 1e-12,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 0.0,
+      "cut_flux_error_W_m2": 0.0,
+      "inward_error_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "omega_rad_s": 1e-12,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 2.446185973840144e-14,
+      "cut_flux_error_W_m2": 4.130764512088052e-14,
+      "inward_error_W_m2": 1.1267020296171488e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.790382917785142e-17,
+      "cut_flux_error_W_m2": 5.613707837851963e-17,
+      "inward_error_W_m2": 5.613707837851963e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 1.0,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 8.150899134174957e-14,
+      "cut_flux_error_W_m2": 1.4505926572022192e-13,
+      "inward_error_W_m2": 3.243053433759889e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 0.0001,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.9703926330255837e-17,
+      "cut_flux_error_W_m2": 5.782411584554651e-17,
+      "inward_error_W_m2": 5.782411584554651e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 0.0001,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.0266934488451932e-13,
+      "cut_flux_error_W_m2": 1.8579395731028747e-13,
+      "inward_error_W_m2": 9.805852781653154e-15,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 1e-08,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.970392635134329e-17,
+      "cut_flux_error_W_m2": 5.782411586589018e-17,
+      "inward_error_W_m2": 5.782411586589018e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 1e-08,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 9.374426660526951e-14,
+      "cut_flux_error_W_m2": 1.6319803825304259e-13,
+      "inward_error_W_m2": 3.3972427719044384e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 1e-12,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 1.970392635134329e-17,
+      "cut_flux_error_W_m2": 5.782411586589018e-17,
+      "inward_error_W_m2": 5.782411586589018e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "omega_rad_s": 1e-12,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 9.379186847396779e-14,
+      "cut_flux_error_W_m2": 1.6324564200362848e-13,
+      "inward_error_W_m2": 3.391054418217139e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 1.0,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 6.2992479909507054e-18,
+      "cut_flux_error_W_m2": 5.282645323572398e-17,
+      "inward_error_W_m2": 5.282645323572398e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 1.0,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 3.46282321132762e-13,
+      "cut_flux_error_W_m2": 6.113083415133244e-13,
+      "inward_error_W_m2": 1.7122249025856432e-13,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 0.0001,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 6.334436986435959e-18,
+      "cut_flux_error_W_m2": 5.319818659218247e-17,
+      "inward_error_W_m2": 5.319818659218247e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 0.0001,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 3.5030100754703496e-13,
+      "cut_flux_error_W_m2": 6.134075675044977e-13,
+      "inward_error_W_m2": 8.72518935116691e-15,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 1e-08,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 6.334436986841088e-18,
+      "cut_flux_error_W_m2": 5.3198186596570083e-17,
+      "inward_error_W_m2": 5.3198186596570083e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 1e-08,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 0.0,
+      "relative_temperature_error_K": 3.0916472583504344e-13,
+      "cut_flux_error_W_m2": 5.416784970793233e-13,
+      "inward_error_W_m2": 5.5273610378366544e-14,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 1e-12,
+      "through_flux_W_m2": [
+        0.0,
+        0.0
+      ],
+      "mean_rate_error_K_s": 1.1102230246251565e-16,
+      "relative_temperature_error_K": 6.334436986841088e-18,
+      "cut_flux_error_W_m2": 5.3198186596570083e-17,
+      "inward_error_W_m2": 5.3198186596570083e-17,
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "omega_rad_s": 1e-12,
+      "through_flux_W_m2": [
+        0.35,
+        -0.21
+      ],
+      "mean_rate_error_K_s": 5.551115123125783e-17,
+      "relative_temperature_error_K": 3.09131405138424e-13,
+      "cut_flux_error_W_m2": 5.415975731663224e-13,
+      "inward_error_W_m2": 5.532122799703024e-14,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "fabc6f4791952b6999dac0edc7f540b9c7c4f738",
+      "file": "sph_harmonic_separated_mean.py",
+      "source_sha256": "38a13b5c32b9bdcf3a9f83abb8bfe6e1784bb8e3e723f73dfc6f714dfc8b4780"
+    },
+    {
+      "commit": "e472e45271028c19c7fc18d76241e3bcad4b1595",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "bca0cf92b23a827525068bd9aec26d123efe0d7e2eacc24880d60b98159f68f6"
+    }
+  ]
+}
