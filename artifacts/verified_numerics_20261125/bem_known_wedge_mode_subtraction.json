@@ -1,0 +1,20 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "d057d3190e0e925866944c69d1b88979d2ed3c6e",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_solver.py tests/test_linear_density_solver.py tests/test_interior_field_domain_guard.py tests/test_exterior_solver.py tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Translated L-shaped polygon rotated by 0.37 rad, opening 3\u03c0/2, known singular coefficient 1.7. Superpose the leading wedge mode with Re(z\u00b2) in local coordinates; independent complex-power evaluation supplies Dirichlet data and target fluxes. Compare direct and subtracted corner-adjacent midpoint normal derivatives, 4/8/16 panels per side. No coefficient estimation.",
+  "suite": {
+    "tests": 144,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "raw_tip_flux_error_4": 0.3976243131690218,
+    "subtracted_tip_flux_error_4": 0.026341133404617967,
+    "raw_tip_flux_error_8": 0.487740850952592,
+    "subtracted_tip_flux_error_8": 0.012087835848505701,
+    "raw_tip_flux_error_16": 0.608608981138933,
+    "subtracted_tip_flux_error_16": 0.005797632744701797
+  }
+}
