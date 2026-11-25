@@ -1,0 +1,112 @@
+{
+  "runs": [
+    {
+      "steps": 32,
+      "theta": 0.5,
+      "temperature_error_K": 0.003456250807637895,
+      "contact_flux_error_W_m2": 0.0029878117540736993,
+      "node_energy_residual_J": 1.734723475976807e-16,
+      "temperature_and_flux_orders": [],
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "theta": 0.5,
+      "temperature_error_K": 0.0008629904655197418,
+      "contact_flux_error_W_m2": 0.0007460899086215722,
+      "node_energy_residual_J": 1.8127860323957634e-16,
+      "temperature_and_flux_orders": [
+        2.0017913870285566,
+        2.001667854466983
+      ],
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "theta": 0.5,
+      "temperature_error_K": 0.00021568082455070137,
+      "contact_flux_error_W_m2": 0.00018646849047054825,
+      "node_energy_residual_J": 1.3357370765021415e-16,
+      "temperature_and_flux_orders": [
+        2.00044670324177,
+        2.0004176311482245
+      ],
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "theta": 0.5,
+      "temperature_error_K": 5.391603514892651e-05,
+      "contact_flux_error_W_m2": 4.6613747898716085e-05,
+      "node_energy_residual_J": 1.3660947373317356e-16,
+      "temperature_and_flux_orders": [
+        2.0001116037561166,
+        2.0001044437368622
+      ],
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "theta": 1.0,
+      "temperature_error_K": 0.09009773896693393,
+      "contact_flux_error_W_m2": 0.06342400970838591,
+      "node_energy_residual_J": 3.7383290907300193e-16,
+      "temperature_and_flux_orders": [],
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "theta": 1.0,
+      "temperature_error_K": 0.04598302949683969,
+      "contact_flux_error_W_m2": 0.03260868051904453,
+      "node_energy_residual_J": 2.1337098754514727e-16,
+      "temperature_and_flux_orders": [
+        0.9703893834081231,
+        0.9597730235630427
+      ],
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "theta": 1.0,
+      "temperature_error_K": 0.02319972903638043,
+      "contact_flux_error_W_m2": 0.016540440757353503,
+      "node_energy_residual_J": 1.3417001884508117e-16,
+      "temperature_and_flux_orders": [
+        0.9869935628213831,
+        0.9792583860240026
+      ],
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "theta": 1.0,
+      "temperature_error_K": 0.011652963482083195,
+      "contact_flux_error_W_m2": 0.008330846490104293,
+      "node_energy_residual_J": 1.1308228659023811e-16,
+      "temperature_and_flux_orders": [
+        0.9934110599330117,
+        0.9894626797386038
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "bf5eeea67077d1ff793576a053131d4b5e0ba0f6",
+      "file": "transient_contact_time_order.py",
+      "source_sha256": "94fd7a84d838ab530005d93f604b44ebb0e068ff8706655d31d1a8e296299e30"
+    },
+    {
+      "commit": "6c26f161a5df8eccb2034f44f14e8da3666c12e4",
+      "file": "contact_chain.py",
+      "source_sha256": "e974af18b4cec8d4f6f5c2f6112becc2efbfdfb6721b164a2f5e8562da090402"
+    }
+  ],
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDEM/src python examples/transient_contact_time_order.py",
+  "reference": "Piecewise-linear temperature in space and sinusoidal in time, with q=-k dT/dx, T_left-T_right=0.32 q, cell heating C dT/dt and ambient temperatures from the two storing wall balances. The continuum samples satisfy the spatially discrete equations exactly for this fixed chain. Maximum errors use every sampled time across one full period.",
+  "dem_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_thermal_contact_chain.py",
+    "passed": 61
+  }
+}
