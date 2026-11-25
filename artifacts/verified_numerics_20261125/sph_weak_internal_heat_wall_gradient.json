@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "amplitude_K": 2.384185791015625e-07,
+      "absolute_fit_error_over_scale": 0.03882798196794955,
+      "relative_fit_error_over_scale": 0.03881758625881665,
+      "field_error_over_amplitude": 0.026008913982964676,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "amplitude_K": 2.384185791015625e-07,
+      "absolute_fit_error_over_scale": 0.007385322892306278,
+      "relative_fit_error_over_scale": 0.007377387422624745,
+      "field_error_over_amplitude": 0.006556915132381325,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "amplitude_K": 2.384185791015625e-07,
+      "absolute_fit_error_over_scale": 0.0017348748150302835,
+      "relative_fit_error_over_scale": 0.0016932767620944696,
+      "field_error_over_amplitude": 0.0016417134175122916,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "amplitude_K": 2.384185791015625e-07,
+      "absolute_fit_error_over_scale": 0.0005163869266624453,
+      "relative_fit_error_over_scale": 0.00041369526339938716,
+      "field_error_over_amplitude": 0.00041046901594299356,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "amplitude_K": 9.094947017729282e-13,
+      "absolute_fit_error_over_scale": 3.6436458035485586,
+      "relative_fit_error_over_scale": 0.03881758625881665,
+      "field_error_over_amplitude": 0.026008913982964676,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "amplitude_K": 9.094947017729282e-13,
+      "absolute_fit_error_over_scale": 5.36304089038061,
+      "relative_fit_error_over_scale": 0.007377387422624745,
+      "field_error_over_amplitude": 0.006556915132381325,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "amplitude_K": 9.094947017729282e-13,
+      "absolute_fit_error_over_scale": 10.76801648080115,
+      "relative_fit_error_over_scale": 0.0016932767620944696,
+      "field_error_over_amplitude": 0.0016417134175122916,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "amplitude_K": 9.094947017729282e-13,
+      "absolute_fit_error_over_scale": 20.63264886047603,
+      "relative_fit_error_over_scale": 0.00041369526339938716,
+      "field_error_over_amplitude": 0.00041046901594299356,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "amplitude_K": 5.684341886080802e-14,
+      "absolute_fit_error_over_scale": 41.30421285810267,
+      "relative_fit_error_over_scale": 0.03881758625881665,
+      "field_error_over_amplitude": 0.026008913982964676,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "amplitude_K": 5.684341886080802e-14,
+      "absolute_fit_error_over_scale": 0.9971530620747399,
+      "relative_fit_error_over_scale": 0.007377387422624745,
+      "field_error_over_amplitude": 0.006556915132381325,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "amplitude_K": 5.684341886080802e-14,
+      "absolute_fit_error_over_scale": 0.9996518489222429,
+      "relative_fit_error_over_scale": 0.0016932767620944696,
+      "field_error_over_amplitude": 0.0016417134175122916,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "amplitude_K": 5.684341886080802e-14,
+      "absolute_fit_error_over_scale": 0.9999982987057829,
+      "relative_fit_error_over_scale": 0.00041369526339938716,
+      "field_error_over_amplitude": 0.00041046901594299356,
+      "section_flux_change_W_m2": 0.0,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "efd898f9ae98d32b40d9dcdd937fe55ec9e01ba6",
+      "file": "sph_weak_internal_heat_wall_gradient.py",
+      "source_sha256": "0fb8fddbfd2764827226b4f6f8a6c55be6bf9c8782bb3aa5ea2b4daeaddc5f37"
+    },
+    {
+      "commit": "cfd14ecfe0fad1380830c689034a17c5f743a0c2",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "8cef4a83180a28caa06d837ada2bf9b6d0faa3dfd3fc0fcb539f1d2423724c29"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_weak_internal_heat_wall_gradient.py"
+}
