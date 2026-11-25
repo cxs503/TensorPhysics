@@ -1,0 +1,26 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "85c2a50d824d810ca548ac316457ce7ecc813e17",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "CPU float64/complex128. Cubic manufactured fields across four contact resistances test reconstruction in isolation. The solved harmonic slab has k=1/2/1, contacts at x=1/8 and 7/8, unit inward flux magnitude, beta=2*pi and omega=0.5. Report maximum absolute flux error over both walls and periodic rows.",
+  "suite": {
+    "tests": 131,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_wall_flux_with_resistive_contacts_and_internal_heat[False]": {
+      "max_flux_error": 2.3364326363345898e-14
+    },
+    "test_wall_flux_with_resistive_contacts_and_internal_heat[True]": {
+      "max_flux_error": 3.040633126371917e-14
+    },
+    "test_fixed_wall_flux_from_solved_contact_slab": {
+      "wall_flux_error_16": 8.61884847489265,
+      "wall_flux_error_32": 0.577945043029344,
+      "wall_flux_error_64": 0.09732835234029934,
+      "wall_flux_error_128": 0.048395615755793854
+    }
+  }
+}
