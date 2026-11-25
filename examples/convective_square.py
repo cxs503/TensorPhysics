@@ -1,4 +1,4 @@
-"""Steady unit-conductivity square with prescribed ambient temperatures on four films."""
+"""Steady unit-conductivity square with prescribed ambient temperatures and optional prescribed wall heat fluxes."""
 import argparse
 import json
 
@@ -10,7 +10,7 @@ from tensordg import poisson_2d_bc as dg
 from tensorfvm.cht import energy
 
 
-def measure(n, coarse_fvm, oscillatory=False):
+def measure(n, coarse_fvm, oscillatory=False, mixed=False):
     width = 1/n
     center = (np.arange(n)+.5)*width
     ix = np.exp(center)*np.sinh(width/2)/(width/2)
@@ -43,12 +43,20 @@ def measure(n, coarse_fvm, oscillatory=False):
     source = source_factor*exact
     fvm_bc = {side: dict(type="robin", values=amb, film_coefficient=h)
               for side,amb,h in zip(("west","east","south","north"), ambient, films)}
+    if mixed:
+        fvm_bc["west"] = dict(type="neumann", values=-outward[0])
+        fvm_bc["south"] = dict(type="neumann", values=-outward[2])
     widths = np.full(n,width)
     if n >= 6 or coarse_fvm:
         t, info = energy.solve_steady_energy(widths, widths, np.ones((n,n)), np.zeros((n,n+1)),
                            np.zeros((n+1,n)), fvm_bc, source=source.T, high_order=False, return_wall_power=True)
         flux = -np.stack([info["wall_power"][s] for s in ("west","east","south","north")])/width
-        yield "FVM", t.T, ambient+flux/np.array(films)[:,None], flux, info["ledger"].residual_inf, exact, trace, outward
+        wall_t = ambient+flux/np.array(films)[:,None]
+        if mixed:
+            # Extrapolate across the boundary half cell with Fourier's law (k=1).
+            wall_t[0] = t[:,0] - width/2*flux[0]
+            wall_t[2] = t[0,:] - width/2*flux[2]
+        yield "FVM", t.T, wall_t, flux, info["ledger"].residual_inf, exact, trace, outward
     if n > 24:
         return
     sides = ("left","right","bottom","top")
@@ -56,10 +64,17 @@ def measure(n, coarse_fvm, oscillatory=False):
     data = {side: (h, lambda x,y,h=h,d=derivative,s=sign: temperature(x,y)-s*d(x,y)/h)
             for side,h,derivative,sign in zip(sides, films,
                     (temperature, temperature, y_derivative, y_derivative), (1.,-1.,1.,-1.))}
+    gradients = {}
+    if mixed:
+        for side, derivative in (("left", temperature), ("bottom", y_derivative)):
+            boundaries[side] = "neumann"
+            del data[side]
+            gradients[side] = lambda x,y,d=derivative: -d(x,y)
+    options = dict(bc=boundaries, robin_films=data, neumann_flux=gradients)
     for degree in (1,2,3):
-        _, _, coeff, _ = dg.solve_poisson_2d_bc(n, degree, sparse=True, bc=boundaries, robin_films=data,
+        _, _, coeff, _ = dg.solve_poisson_2d_bc(n, degree, sparse=True, **options,
                                     forcing=lambda x,y: source_factor*temperature(x,y))
-        fx, fy = dg.poisson_face_powers_2d(coeff, bc=boundaries, robin_films=data)
+        fx, fy = dg.poisson_face_powers_2d(coeff, **options)
         flux = np.stack((-fx[0],fx[-1],-fy[:,0],fy[:,-1]))/width
         # Legendre modes of positive tangential degree integrate to zero.
         u = coeff.numpy()
@@ -75,10 +90,12 @@ def main():
     parser.add_argument("--coarse-fvm", action="store_true", help="include the three-cell FVM control grid")
     parser.add_argument("--oscillatory", action="store_true",
                         help="use exp(x) cos(2 pi y + 0.3) with sign-changing side fluxes")
+    parser.add_argument("--mixed", action="store_true",
+                        help="prescribe west and south heat fluxes, retaining east and north films")
     args = parser.parse_args()
     runs, previous = [], {}
     for n in (3,6,12,24,48,96):
-        for name, t, wall, q, balance, exact, trace, power in measure(n, args.coarse_fvm, args.oscillatory):
+        for name, t, wall, q, balance, exact, trace, power in measure(n, args.coarse_fvm, args.oscillatory, args.mixed):
             errors = np.array([abs(t-exact).max(), abs(wall-trace).max(), abs(q-power).max()])
             rates = np.log2(previous[name]/errors) if name in previous else None
             passed = np.isfinite(errors).all() and balance < 1e-10
@@ -88,8 +105,14 @@ def main():
                              max_wall_mean_error_K=errors[1], max_wall_flux_error_W_m2=errors[2],
                              max_cell_balance_W=balance, orders=None if rates is None else rates.tolist(),
                              passed=bool(passed)))
+            if args.mixed:
+                # NW and SE are the two corners where the boundary type changes.
+                faces = ([0, 3, 1, 2], [-1, 0, 0, -1])
+                runs[-1]["junction_wall_face_temperature_error_K"] = float(abs(wall-trace)[faces].max())
+                runs[-1]["junction_wall_face_flux_error_W_m2"] = float(abs(q-power)[faces].max())
             previous[name] = errors
     print(json.dumps(dict(reference="exp(x) cos(2 pi y + 0.3)" if args.oscillatory else "exp(x + y/2)",
+                          prescribed_flux_sides=["west", "south"] if args.mixed else [],
                           runs=runs,sources=[provenance(f) for f in (__file__,dg.__file__,energy.__file__)]),
                      indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in runs) else 1
