@@ -1,0 +1,31 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "2e34d918d6c1a0d3ad926aadbc593e0f180394c2",
+  "dependencies": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "scikit-fem": "12.0.2",
+    "capytaine": "3.0.0",
+    "pytest": "9.2.0"
+  },
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_laplace_sphere_xval.py tests/test_sphere_velocity.py tests/test_near_singular.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Triaxial ellipsoid, semi-axes (1.4,1,0.7), piecewise constant triangular panels. For interior Dirichlet data use u=xyz, exterior u=1/|x-(0.2,-0.1,0.07)|. Evaluate exact gradients at all panel centroids displaced into the solved domain by 0.1 sqrt(panel area), with every eleventh offset zero. Measure area-weighted relative L2 errors over 80/320/1280 panels, CPU float64.",
+  "counts": {
+    "tests": 44,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_recovered_gradient_at_local_offsets_on_triaxial_ellipsoid[interior]": {
+      "area_weighted_gradient_relative_error_80": 0.351868127342566,
+      "area_weighted_gradient_relative_error_320": 0.11070058149808376,
+      "area_weighted_gradient_relative_error_1280": 0.04080678163550762
+    },
+    "test_recovered_gradient_at_local_offsets_on_triaxial_ellipsoid[exterior]": {
+      "area_weighted_gradient_relative_error_80": 0.13167176757781393,
+      "area_weighted_gradient_relative_error_320": 0.05563893607534741,
+      "area_weighted_gradient_relative_error_1280": 0.02275939492161448
+    }
+  }
+}
