@@ -50,3 +50,7 @@ python -m pytest -q tests/test_layered_annulus.py tests/test_multiloop_annulus.p
 python -m tensorbem.benchmarks.conducting_sheet --reservoir --equal-area
 python -m tensorbem.benchmarks.conducting_sheet --reservoir
 ```
+
+## TensorSPH 双侧对流壁面的横向行波
+
+在两侧壁面均有面热容的均匀平板上，以解析温度振幅 `exp(-λx)` 和对应的向内导热热流构造两侧环境温度，其中 `λ² = β² + iω C/k`。粒子列数从 16 加密到 32、64，两种线性求解后端的粒子温度、壁温和向内热流最大误差均随每次加密至少下降 1.8 倍。64 列时三者的误差分别为 0.00257 K、0.00252 K 和 0.00757 W/m²。二维导热回归共 127 项通过，包括独立检查低频一阶展开的余项随频率减半而缩小约四倍。复现命令、求解器版本及逐网格误差见[验证报告](sph_traveling_film.json)。
