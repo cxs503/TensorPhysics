@@ -43,7 +43,7 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls,
     left_flux = -complex(inward[interface-1, 1])
     right_flux = complex(inward[interface, 0])
     wall_state = (field[[0,-1]], torch.stack((inward[0,0], inward[-1,1])))
-    return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state, field[model.elements]
+    return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state, field[model.elements], inward
 
 
 def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None, wall_capacity=(0., 0.)):
@@ -84,7 +84,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     # The reported boundary flux is positive inward at both ends.
     exact_walls = []
     exact_means = []
-    centers, cell_means, element_nodes = [], [], []
+    centers, cell_means, element_nodes, face_fluxes = [], [], [], []
     for side, trace in enumerate((exact_left, exact_right)):
         shift = loss[side] + 1j*omega*capacity[side]
         particular = loss[side]*ambient[side]/shift
@@ -113,8 +113,15 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         # value by sinh(w*dx/2)/(w*dx/2). The constant particular term is exact.
         half = wave/(2*n)
         cell_means.append(particular + at_center*cmath.sinh(half)/half)
+        # Fourier flux in +x; the local coordinate points toward the outer wall.
+        direction = -1 if side == 0 else 1
+        edge_flux = direction*(outward*torch.cosh(wave*edges)
+                               - k[side]*wave*(trace-particular)*torch.sinh(wave*edges))
+        face_fluxes.append(edge_flux)
         nodes = particular + excess(edges)
         element_nodes.append(torch.stack((nodes[:-1], nodes[1:]), dim=1))
+
+    exact_cuts = torch.cat((face_fluxes[0], face_fluxes[1][1:]))
 
     def layers(values, dtype=torch.float64):
         return torch.tensor(values, dtype=dtype).repeat_interleave(torch.tensor([interface, n-interface]))
@@ -139,6 +146,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     flux = complex(cuts[i+1])
     comparison = {"exact_layer_mean_K": [[t.real, t.imag] for t in exact_means]}
 
+    comparison["sph_face_flux_error_W_m2"] = float(abs(cuts-exact_cuts).max())
     comparison["sph_particle_error_K"] = float(abs(field-torch.cat(centers)).max())
 
     def layer_diagnostics(cell_means, contact_flux, inward):
@@ -182,6 +190,8 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             end_areal_heat_capacity=wall_capacity, end_film_coefficient=films if films is not None else 0.,
             heat_loss_coefficient=layers(loss).numpy(), bulk_ambient_temperature=layers(ambient, torch.complex128).numpy(),
             contact_resistance=contact.numpy(), return_traces=True)
+        comparison["fvm_face_flux_error_W_m2"] = max(float(abs(torch.from_numpy(entering)-exact_cuts[:-1]).max()),
+                                                     float(abs(torch.from_numpy(leaving)-exact_cuts[1:]).max()))
         comparison["fvm_cell_mean_error_K"] = float(abs(torch.from_numpy(cells)-torch.cat(cell_means)).max())
         q = leaving[i]
         comparison["fvm_layers"] = layer_diagnostics(cells, complex(q), (entering[0], -leaving[-1]))
@@ -196,9 +206,11 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         if any(wall_capacity):
             comparison["fvm_wall_balance_W_m2"] = wall_balance(faces[[0,-1]], (entering[0], -leaving[-1]))
     if compare_fem:
-        fl, fr, ql, qr, fem_wall_state, nodal_field = fem_contact(conductivity, layers(capacity), layers(loss),
+        fl, fr, ql, qr, fem_wall_state, nodal_field, nodal_power = fem_contact(conductivity, layers(capacity), layers(loss),
                                      layers(ambient, torch.complex128), omega, resistance, walls, interface, films, wall_capacity)
         comparison["fem_layers"] = layer_diagnostics(nodal_field.mean(1), ql, fem_wall_state[1])
+        comparison["fem_face_flux_error_W_m2"] = max(float(abs(nodal_power[:, 0]-exact_cuts[:-1]).max()),
+                                                     float(abs(-nodal_power[:, 1]-exact_cuts[1:]).max()))
         comparison["fem_nodal_error_K"] = float(abs(nodal_field-torch.cat(element_nodes)).max())
         comparison.update(fem_flux_relative_error=abs(ql/exact_flux-1),
                           fem_max_trace_error_K=max(abs(fl-exact_left), abs(fr-exact_right)),
@@ -237,17 +249,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
     files = [__file__, heat.__file__]
     path = "../TensorSPH/src"
-    metrics = ["flux_relative_error", "max_trace_error_K", "sph_particle_error_K"]
+    metrics = ["flux_relative_error", "max_trace_error_K", "sph_particle_error_K", "sph_face_flux_error_W_m2"]
     if args.compare_fvm:
         from tensorfvm.cht import rod
         files.append(rod.__file__)
         path += ":../TensorFVM/src"
-        metrics.extend(["fvm_flux_relative_error", "fvm_max_trace_error_K", "fvm_cell_mean_error_K"])
+        metrics.extend(["fvm_flux_relative_error", "fvm_max_trace_error_K", "fvm_cell_mean_error_K", "fvm_face_flux_error_W_m2"])
     if args.compare_fem:
         from tensorfem import thermal
         files.append(thermal.__file__)
         path += ":../TensorFEM/src"
-        metrics.extend(["fem_flux_relative_error", "fem_max_trace_error_K", "fem_nodal_error_K"])
+        metrics.extend(["fem_flux_relative_error", "fem_max_trace_error_K", "fem_nodal_error_K", "fem_face_flux_error_W_m2"])
     boundaries = [((0., 0.), None), ((None, 0.), None), ((None, None), None)]
     if args.films or args.wall_storage:
         west, east = .35+.5j, -.4+.15j
@@ -303,6 +315,8 @@ if __name__ == "__main__":
                             for metric in ("sph_particle_error_K", "fem_nodal_error_K", "fvm_cell_mean_error_K"):
                                 if metric in row:
                                     row["passed"] &= row[metric] < .001
+                        if n == 64:
+                            row["passed"] &= all(row[k] < .005 for k in metrics if k.endswith("_face_flux_error_W_m2"))
                         runs.append(row)
                         previous = row
     passed = all(row["passed"] for row in runs)
