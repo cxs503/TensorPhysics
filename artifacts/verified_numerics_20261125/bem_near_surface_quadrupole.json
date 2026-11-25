@@ -1,0 +1,55 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "998a4dd144b8df0dae1a4a9183c4ea26550347bd",
+  "dependencies": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "scikit-fem": "12.0.2",
+    "capytaine": "3.0.0",
+    "pytest": "9.2.0"
+  },
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_laplace_sphere_xval.py tests/test_near_singular.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Sphere of radius 1.4 with trace nx*ny. Interior field xy/a\u00b2; exterior field xy*a\u00b3/r\u2075. Compare near-surface representations with analytical values and gradients at three fixed directions at r/a=0.90 or 1.10, then at three panel centroids offset along their normals into each domain by 0.01*h_max. Smooth harmonic expressions are extended across the geometric discrepancy between smooth and faceted surfaces. Compare gradients of the discrete potential by centered differences of step 0.0001*h_max. Panel-offset gradient discrepancies against the continuum remain substantial on these meshes.",
+  "counts": {
+    "tests": 23,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_near_surface_quadrupole_at_fixed_and_panel_scaled_clearance[interior]": {
+      "fixed_field_relative_error_80": 0.12754970145967462,
+      "fixed_gradient_relative_error_80": 0.4195825819912976,
+      "panel_field_relative_error_80": 0.12083652131064974,
+      "panel_gradient_relative_error_80": 0.2936255806141757,
+      "panel_gradient_fd_relative_error_80": 8.398571697824019e-09,
+      "fixed_field_relative_error_320": 0.02674860509522831,
+      "fixed_gradient_relative_error_320": 0.07703185900558428,
+      "panel_field_relative_error_320": 0.029638985001483896,
+      "panel_gradient_relative_error_320": 0.27341103508611864,
+      "panel_gradient_fd_relative_error_320": 7.864650855525277e-09,
+      "fixed_field_relative_error_1280": 0.005203024608103797,
+      "fixed_gradient_relative_error_1280": 0.007876955401406453,
+      "panel_field_relative_error_1280": 0.00734542464380012,
+      "panel_gradient_relative_error_1280": 0.29136331349644284,
+      "panel_gradient_fd_relative_error_1280": 7.876616824289145e-09
+    },
+    "test_near_surface_quadrupole_at_fixed_and_panel_scaled_clearance[exterior]": {
+      "fixed_field_relative_error_80": 0.13841675066978318,
+      "fixed_gradient_relative_error_80": 0.11954795783025278,
+      "panel_field_relative_error_80": 0.15695417079011087,
+      "panel_gradient_relative_error_80": 0.3419798348926992,
+      "panel_gradient_fd_relative_error_80": 9.439525457700902e-09,
+      "fixed_field_relative_error_320": 0.038134619122056686,
+      "fixed_gradient_relative_error_320": 0.038346383583907136,
+      "panel_field_relative_error_320": 0.042774867930694495,
+      "panel_gradient_relative_error_320": 0.2640096645173017,
+      "panel_gradient_fd_relative_error_320": 6.9695888490926e-09,
+      "fixed_field_relative_error_1280": 0.010990046922218498,
+      "fixed_gradient_relative_error_1280": 0.011528230777754209,
+      "panel_field_relative_error_1280": 0.010919658349156241,
+      "panel_gradient_relative_error_1280": 0.24386051163426428,
+      "panel_gradient_fd_relative_error_1280": 7.817581902633624e-09
+    }
+  }
+}
