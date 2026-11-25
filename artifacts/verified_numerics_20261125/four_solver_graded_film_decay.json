@@ -1,0 +1,586 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "solver": "FVM",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.0010453588157346982,
+      "max_wall_temperature_errors_K": [
+        0.0008876946975355793,
+        0.0016856547011665501
+      ],
+      "max_section_heat_error_J_m2": 0.0005894037832251398,
+      "max_wall_heat_errors_J_m2": [
+        0.00044890347785320195,
+        0.0005894037832251398
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4712519500439194,
+        0.7823318238959238
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 5.828670879282072e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.0002625994622034167,
+      "max_wall_temperature_errors_K": [
+        0.00022219244339805044,
+        0.00044280628994952664
+      ],
+      "max_section_heat_error_J_m2": 0.00014740041071392707,
+      "max_wall_heat_errors_J_m2": [
+        0.00011227956317361176,
+        0.00014740041071392707
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.471588573958599,
+        0.7826898858156645
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 6.635317295611287e-16,
+      "orders": [
+        1.9930623605630151,
+        1.998253827070541,
+        1.9285614164222862,
+        1.9995157764261664,
+        1.9993099173578106,
+        1.9995157764261664
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 6.574816341853307e-05,
+      "max_wall_temperature_errors_K": [
+        5.556763730985015e-05,
+        0.00011358150104684439
+      ],
+      "max_section_heat_error_J_m2": 3.685106971218488e-05,
+      "max_wall_heat_errors_J_m2": [
+        2.807367024604268e-05,
+        3.685106971218488e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47167277985152656,
+        0.7827792439926822
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 9.03303040006298e-16,
+      "orders": [
+        1.9978414611878483,
+        1.9994929480608876,
+        1.9629478323059315,
+        1.999962140772455,
+        1.9998057623176044,
+        1.999962140772455
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 1.6445802073938864e-05,
+      "max_wall_temperature_errors_K": [
+        1.3892595134956665e-05,
+        2.8769806041051282e-05
+      ],
+      "max_section_heat_error_J_m2": 9.213024131149439e-06,
+      "max_wall_heat_errors_J_m2": [
+        7.018707212813613e-06,
+        9.213024131149439e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716938348145598,
+        0.7828015742715639
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 8.83008130590085e-16,
+      "orders": [
+        1.99923122413893,
+        1.9999287796496554,
+        1.981100483143426,
+        1.999959801532235,
+        1.9999404609554847,
+        1.999959801532235
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.0010544954362848302,
+      "max_wall_temperature_errors_K": [
+        0.0008776785603107351,
+        0.0016856547011664946
+      ],
+      "max_section_heat_error_J_m2": 0.0006134937395627649,
+      "max_wall_heat_errors_J_m2": [
+        0.000463959142673942,
+        0.0006134937395627649
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47123689437909866,
+        0.782306814803187
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 4.904930628324422e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.00026479030047693586,
+      "max_wall_temperature_errors_K": [
+        0.0002200543353958473,
+        0.00044280628994952664
+      ],
+      "max_section_heat_error_J_m2": 0.00015338648838170155,
+      "max_wall_heat_errors_J_m2": [
+        0.00011604493998146337,
+        0.00015338648838170155
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47158480858179114,
+        0.7826836355177084
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 6.961662149529424e-16,
+      "orders": [
+        1.993630670433526,
+        1.9958328707695245,
+        1.9285614164222389,
+        1.9998772185978053,
+        1.9993141470088795,
+        1.9998772185978053
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 6.62757397364433e-05,
+      "max_wall_temperature_errors_K": [
+        5.503110115279153e-05,
+        0.00011358150104684439
+      ],
+      "max_section_heat_error_J_m2": 3.834994575202533e-05,
+      "max_wall_heat_errors_J_m2": [
+        2.9014676911909287e-05,
+        3.834994575202533e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716718388448607,
+        0.7827776822563863
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 5.12122896173528e-16,
+      "orders": [
+        1.998297502877008,
+        1.9995406933541966,
+        1.9629478323059315,
+        1.9998749612132085,
+        1.999828847638202,
+        1.9998749612132085
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 1.6574505020350294e-05,
+      "max_wall_temperature_errors_K": [
+        1.3759779639355152e-05,
+        2.8769806041051282e-05
+      ],
+      "max_section_heat_error_J_m2": 9.587530896748575e-06,
+      "max_wall_heat_errors_J_m2": [
+        7.253884163338498e-06,
+        9.587530896748575e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47169359963760926,
+        0.7828011839788418
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 6.525812876190251e-16,
+      "orders": [
+        1.9995150813626041,
+        1.9997898310741984,
+        1.981100483143426,
+        1.9999933100027147,
+        1.9999572517610187,
+        1.9999933100027147
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FEM",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.0011558483911872086,
+      "max_wall_temperature_errors_K": [
+        0.00028156982739269143,
+        0.00021352216705863847
+      ],
+      "max_section_heat_error_J_m2": 0.00044121259382967626,
+      "max_wall_heat_errors_J_m2": [
+        0.00016835007668669633,
+        0.00044121259382967626
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4715325034450859,
+        0.7823678044054885
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 3.2742905609062234e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "FEM",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.00029015305298984995,
+      "max_wall_temperature_errors_K": [
+        7.035573247071714e-05,
+        5.336204373357356e-05
+      ],
+      "max_section_heat_error_J_m2": 0.00011022701822260839,
+      "max_wall_heat_errors_J_m2": [
+        4.206772790726898e-05,
+        0.00011022701822260839
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.47165878579386533,
+        0.7826987899810955
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 4.597017211338539e-16,
+      "orders": [
+        1.9940661625902845,
+        2.000752863375278,
+        2.0005000256993335,
+        2.000996078842542,
+        2.000678573482406,
+        2.000996078842542
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FEM",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 7.260854883506251e-05,
+      "max_wall_temperature_errors_K": [
+        1.7586274229541843e-05,
+        1.3338635071330485e-05
+      ],
+      "max_section_heat_error_J_m2": 2.755266246390331e-05,
+      "max_wall_heat_errors_J_m2": [
+        1.0516125539206111e-05,
+        2.755266246390331e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716903373962334,
+        0.7827814643368542
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 4.0345873343616834e-16,
+      "orders": [
+        1.9986027846544152,
+        2.000218106162082,
+        2.0002028773259477,
+        2.000214251603554,
+        2.0001106299968088,
+        2.000214251603554
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FEM",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 1.8156478966524503e-05,
+      "max_wall_temperature_errors_K": [
+        4.39630283144421e-06,
+        3.334516481795502e-06
+      ],
+      "max_section_heat_error_J_m2": 6.887997891613651e-06,
+      "max_wall_heat_errors_J_m2": [
+        2.629034481116399e-06,
+        6.887997891613651e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4716982244872915,
+        0.7828021290014265
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 5.184112687739439e-16,
+      "orders": [
+        1.9996549671633266,
+        2.0000871982497737,
+        2.0000615594440054,
+        2.000035129534493,
+        1.999998300881646,
+        2.000035129534493
+      ],
+      "passed": true
+    },
+    {
+      "solver": "DG",
+      "cells": 16,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.0004801702993194601,
+      "max_wall_temperature_errors_K": [
+        0.00041849025060025635,
+        0.0014281427461247387
+      ],
+      "max_section_heat_error_J_m2": 0.0006214423039684336,
+      "max_wall_heat_errors_J_m2": [
+        0.00022554818506287377,
+        0.0006214423039684336
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4719259203118433,
+        0.7834120559591067
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 1.825449513770394e-14,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "DG",
+      "cells": 32,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 0.00012045332618626503,
+      "max_wall_temperature_errors_K": [
+        0.00010450707260756253,
+        0.0003520731815125355
+      ],
+      "max_section_heat_error_J_m2": 0.0001553374504432714,
+      "max_wall_heat_errors_J_m2": [
+        5.6351349560057606e-05,
+        0.0001553374504432714
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4717570880637644,
+        0.7829597836996086
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 1.95179159293013e-14,
+      "orders": [
+        1.9950719366224856,
+        2.0015934320195368,
+        2.020192945213956,
+        2.000214762321276,
+        2.000913609983126,
+        2.000214762321276
+      ],
+      "passed": true
+    },
+    {
+      "solver": "DG",
+      "cells": 64,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 3.013221626940732e-05,
+      "max_wall_temperature_errors_K": [
+        2.61093992419692e-05,
+        8.73114979127454e-05
+      ],
+      "max_section_heat_error_J_m2": 3.8832154513834816e-05,
+      "max_wall_heat_errors_J_m2": [
+        1.4085620757553485e-05,
+        3.8832154513834816e-05
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4717149097305231,
+        0.7828467083852221
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 2.957145162421626e-14,
+      "orders": [
+        1.9990955382473428,
+        2.000959413463237,
+        2.011631779206505,
+        2.0000820330481144,
+        2.000227016836108,
+        2.0000820330481144
+      ],
+      "passed": true
+    },
+    {
+      "solver": "DG",
+      "cells": 128,
+      "films_W_m2_K": [
+        0.4904841706305086,
+        1.3946522479865364
+      ],
+      "max_cell_mean_error_K": 7.533093046185879e-06,
+      "max_wall_temperature_errors_K": [
+        6.527300618897058e-06,
+        2.173399574467716e-05
+      ],
+      "max_section_heat_error_J_m2": 9.70785833309673e-06,
+      "max_wall_heat_errors_J_m2": [
+        3.5211896481368576e-06,
+        9.70785833309673e-06
+      ],
+      "final_outward_wall_heat_J_m2": [
+        0.4717043673717446,
+        0.7828184397406532
+      ],
+      "final_exact_outward_wall_heat_J_m2": [
+        0.4717008535217726,
+        0.7828090169993182
+      ],
+      "max_cell_balance_error_J_m2": 3.351848963314974e-14,
+      "orders": [
+        1.9999925349765724,
+        2.000010872519474,
+        2.006218217549386,
+        2.0000267936346323,
+        2.0000883084436736,
+        2.0000267936346323
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "ca37a6ef42e8aabe9f97f0d006476a7bf8a6a038",
+      "file": "graded_film_decay.py",
+      "source_sha256": "6a3dfb5498b92f41124aba4f99f64f6a9fce2302072ddc9ee5e9f428d6e23c59"
+    },
+    {
+      "commit": "4647d87121b148d7212da19f9c3e2409e287cbca",
+      "file": "rod.py",
+      "source_sha256": "2d911ffd6a32943d52ebc789fe7864f1db37433ba361577df96c6ec807e92492"
+    },
+    {
+      "commit": "fff373c9e630b1f24a41ad5d3d14f552a3d3bff7",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "1dfa8901bb43a884096cb302ad2055badda9718d9953683f6925d6bff9d8ef41"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src:../TensorFEM/src:../TensorDG python examples/graded_film_decay.py --all"
+}
