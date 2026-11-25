@@ -55,9 +55,15 @@ def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroi
     # With radial flux positive outward, the film ambient lies above the
     # inner wall by q(a)/h_in and below the outer wall by q(c)/h_out.
     ambient = walls + np.array([qa@ci,-qc@co])/films
-    for name, wall_data, h in (("FVM", walls, (None,None)), ("FVM_film", ambient, films)):
+    inward_flux = (qa@ci, -qc@co)
+    for name, wall_data, h, flux in (
+        ("FVM", walls, (None,None), (None,None)),
+        ("FVM_film", ambient, films, (None,None)),
+        ("FVM_flux", (None,None), (None,None), inward_flux),
+    ):
         t, rates = annulus.solve_annular_conduction(edges, np.repeat(k,n), props, wall_data, omega,
-                          contact_resistance=contact, azimuthal_mode=mode, film_coefficients=h, cell_location=cell_location)
+                          contact_resistance=contact, azimuthal_mode=mode, film_coefficients=h, cell_location=cell_location,
+                          wall_fluxes=flux)
         angular_loss = 2*np.pi*mode**2*np.repeat(k,n)*np.log(edges[1:]/edges[:-1])*t
         residual = np.diff(rates) + 1j*omega*props*volume*t + angular_loss
         rows.append(row(name, t-exact, rates[[0,n,-1]], resistance*rates[n]/(2*np.pi*b),
@@ -105,7 +111,7 @@ def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroi
     return rows
 
 
-def main(cell_location="volume_centroid"):
+def main(cell_location="volume_centroid", baseline=False):
     rows = []
     for spacing in ("linear","log"):
         for mode in (0,2):
@@ -113,6 +119,8 @@ def main(cell_location="volume_centroid"):
             levels = (4,8,16,32,64,128) if (spacing,mode) == ("linear",2) else (4,8,16,32,64)
             for n in levels:
                 for row in measure(n,mode,spacing,include_fem=n<=64,cell_location=cell_location):
+                    if baseline and row["solver"] == "FVM_flux":
+                        continue
                     errors = np.array([row[key] for key in ("temperature_error_K","rate_amplitude_error_W_m",
                                                             "jump_error_K")])
                     name = row["solver"]
@@ -136,4 +144,6 @@ def main(cell_location="volume_centroid"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cell-location", choices=("midpoint", "volume_centroid"), default="volume_centroid")
-    raise SystemExit(main(parser.parse_args().cell_location))
+    parser.add_argument("--baseline", action="store_true", help="report the original 62 temperature and film cases")
+    args = parser.parse_args()
+    raise SystemExit(main(args.cell_location, args.baseline))

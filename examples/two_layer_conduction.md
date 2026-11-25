@@ -369,7 +369,7 @@ nonzero net storage in mode zero.
 On the linear mesh the mode-two film FVM temperature error fell from
 8.248e-4 K to 2.471e-4 K at 16→32 cells per layer, a 3.34-fold reduction
 against the 3.5-fold rate gate. At 64 cells the reduction reached 3.67.
-Running with `--cell-location midpoint` retains this failed row and returns exit status 1. It extends
+Running with `--baseline --cell-location midpoint` retains this failed row and returns exit status 1. It extends
 both mode-two FVM runs to 128 cells on that mesh. Absolute targets from
 64 cells are 3e-4 K for temperature, 0.008 W/m for rate and 2e-5 K for jump.
 
@@ -382,3 +382,12 @@ mode-two film case, the 32-cell temperature error falls from 2.471e-4 to
 0.00916 W/m. The minimum reduction across the three errors is 3.975,
 meeting the existing 3.5 gate. All 62 original comparisons pass with the
 centroid option. The solver API still defaults to the arithmetic midpoint.
+
+
+Run with `--baseline` for the original temperature and film comparisons.
+The expanded default also prescribes the two exact inward wall flux phasors
+and measures the resulting contact transfer and temperature field. At 64
+linear cells per layer the mode-two jump error for this new case is
+2.1343e-5 K versus the 2e-5 K target. Refinement to 128 cells lowers it
+to 5.3372e-6 K. The full run passes 82/83 and returns status 1 for the
+retained 64-cell miss. All 62 baseline cases pass with volume centroids.
