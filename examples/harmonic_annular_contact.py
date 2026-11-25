@@ -11,7 +11,7 @@ from tensorfvm.cht import annulus
 from tensorfem import thermal, thermal_analytic
 
 
-def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroid"):
+def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroid", distributed_source=True):
     a, b, c = .25, .6, 1.
     k, capacity = np.array([2.,1.3]), np.array([1.,2.5])
     omega, resistance = 2*np.pi, .15
@@ -63,7 +63,7 @@ def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroi
     ):
         t, rates = annulus.solve_annular_conduction(edges, np.repeat(k,n), props, wall_data, omega,
                           contact_resistance=contact, azimuthal_mode=mode, film_coefficients=h, cell_location=cell_location,
-                          wall_fluxes=flux)
+                          wall_fluxes=flux, distributed_source=distributed_source)
         angular_loss = 2*np.pi*mode**2*np.repeat(k,n)*np.log(edges[1:]/edges[:-1])*t
         residual = np.diff(rates) + 1j*omega*props*volume*t + angular_loss
         rows.append(row(name, t-exact, rates[[0,n,-1]], resistance*rates[n]/(2*np.pi*b),
@@ -71,6 +71,7 @@ def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroi
 
     for result in rows:
         result["cell_location"] = cell_location
+        result["distributed_source"] = distributed_source
     if not include_fem:
         return rows
 
@@ -111,14 +112,15 @@ def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroi
     return rows
 
 
-def main(cell_location="volume_centroid", baseline=False):
+def main(cell_location="volume_centroid", baseline=False, distributed_source=True):
     rows = []
     for spacing in ("linear","log"):
         for mode in (0,2):
             previous = {}
             levels = (4,8,16,32,64,128) if (spacing,mode) == ("linear",2) else (4,8,16,32,64)
             for n in levels:
-                for row in measure(n,mode,spacing,include_fem=n<=64,cell_location=cell_location):
+                for row in measure(n,mode,spacing,include_fem=n<=64,cell_location=cell_location,
+                                   distributed_source=distributed_source):
                     if baseline and row["solver"] == "FVM_flux":
                         continue
                     errors = np.array([row[key] for key in ("temperature_error_K","rate_amplitude_error_W_m",
@@ -145,5 +147,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cell-location", choices=("midpoint", "volume_centroid"), default="volume_centroid")
     parser.add_argument("--baseline", action="store_true", help="report the original 62 temperature and film cases")
+    parser.add_argument("--lumped-source", action="store_true", help="reproduce constant-power half-shell drops")
     args = parser.parse_args()
-    raise SystemExit(main(args.cell_location, args.baseline))
+    raise SystemExit(main(args.cell_location, args.baseline, not args.lumped_source))

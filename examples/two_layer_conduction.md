@@ -369,7 +369,7 @@ nonzero net storage in mode zero.
 On the linear mesh the mode-two film FVM temperature error fell from
 8.248e-4 K to 2.471e-4 K at 16→32 cells per layer, a 3.34-fold reduction
 against the 3.5-fold rate gate. At 64 cells the reduction reached 3.67.
-Running with `--baseline --cell-location midpoint` retains this failed row and returns exit status 1. It extends
+Running with `--baseline --lumped-source --cell-location midpoint` retains this failed row and returns exit status 1. It extends
 both mode-two FVM runs to 128 cells on that mesh. Absolute targets from
 64 cells are 3e-4 K for temperature, 0.008 W/m for rate and 2e-5 K for jump.
 
@@ -389,5 +389,17 @@ The expanded default also prescribes the two exact inward wall flux phasors
 and measures the resulting contact transfer and temperature field. At 64
 linear cells per layer the mode-two jump error for this new case is
 2.1343e-5 K versus the 2e-5 K target. Refinement to 128 cells lowers it
-to 5.3372e-6 K. The full run passes 82/83 and returns status 1 for the
+to 5.3372e-6 K. The `--lumped-source` run passes 82/83 and returns status 1 for the
 retained 64-cell miss. All 62 baseline cases pass with volume centroids.
+
+
+The default now integrates the effect of net volumetric heating in each
+half-cell temperature drop. A constant net density g gives
+Q(r) = Q(face) + πg(r² − r_face²); integrating Fourier's law from the
+face to the representative cell radius accounts for this variation. The two
+half-cell relations share a single power at each contact. Net heating
+includes the source, harmonic storage and angular conduction and is solved
+implicitly. At 64 linear cells per layer the two-flux mode-two jump error
+falls to 7.5681e-6 K and the rate error to 1.9021e-4 W/m. Temperature
+error increases from 7.818e-5 to 1.954e-4 K, within the same 3e-4 K
+limit. All 83 rows pass. Use `--lumped-source` for the previous closure.
