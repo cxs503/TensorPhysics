@@ -1,0 +1,42 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "12743d01371d8884950657a086312ad581ef197f",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_solver.py tests/test_linear_density_solver.py tests/test_interior_field_domain_guard.py tests/test_exterior_solver.py tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Regular 24/48/96-sided polygons inscribed in the unit circle, u=x\u00b2-y\u00b2 with exact gradient (2x,-2y), Dirichlet midpoint traces, reference length 2. Evaluate inward from eight azimuths at midpoint and 0.4 panel lengths past midpoint, with clearance either fixed at 0.15 or equal to 0.2 panel lengths. Each measurement is the maximum Euclidean error over eight angles.",
+  "suite": {
+    "tests": 135,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_interior_gradient_at_fixed_and_panel_scaled_clearance[False]": {
+      "gradient_error_fixed_shift_0.0_24": 0.05605889705206683,
+      "gradient_error_scaled_shift_0.0_24": 0.4236368354290128,
+      "gradient_error_fixed_shift_0.4_24": 0.03851045147269492,
+      "gradient_error_scaled_shift_0.4_24": 0.6530847371756638,
+      "gradient_error_fixed_shift_0.0_48": 0.004694698711585015,
+      "gradient_error_scaled_shift_0.0_48": 0.4334924542209829,
+      "gradient_error_fixed_shift_0.4_48": 0.003989249059806045,
+      "gradient_error_scaled_shift_0.4_48": 0.7093458190082803,
+      "gradient_error_fixed_shift_0.0_96": 0.0009278278712367902,
+      "gradient_error_scaled_shift_0.0_96": 0.4384786561655097,
+      "gradient_error_fixed_shift_0.4_96": 0.0009279818298657697,
+      "gradient_error_scaled_shift_0.4_96": 0.7218299087884505
+    },
+    "test_interior_gradient_at_fixed_and_panel_scaled_clearance[True]": {
+      "gradient_error_fixed_shift_0.0_24": 0.004566626019156988,
+      "gradient_error_scaled_shift_0.0_24": 0.01455901031318472,
+      "gradient_error_fixed_shift_0.4_24": 0.006301127788480465,
+      "gradient_error_scaled_shift_0.4_24": 0.031097725583456328,
+      "gradient_error_fixed_shift_0.0_48": 0.001293611970460948,
+      "gradient_error_scaled_shift_0.0_48": 0.009548737077861172,
+      "gradient_error_fixed_shift_0.4_48": 0.001304918713274433,
+      "gradient_error_scaled_shift_0.4_48": 0.015391144089144264,
+      "gradient_error_fixed_shift_0.0_96": 0.00031682288313202316,
+      "gradient_error_scaled_shift_0.0_96": 0.0050950386152070985,
+      "gradient_error_fixed_shift_0.4_96": 0.00031697421990264615,
+      "gradient_error_scaled_shift_0.4_96": 0.00735417885672061
+    }
+  }
+}
