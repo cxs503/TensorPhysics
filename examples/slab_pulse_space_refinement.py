@@ -38,10 +38,10 @@ if __name__ == "__main__":
         if args.dg_only:
             previous_dg_error = None
             for n in (16,32,64):
-                _, centers, _ = pulse.dg.measure(n,2,width,return_profiles=True)
+                _, centers, _ = pulse.dg.measure(n,2,width,wall_penalty=40.,return_profiles=True)
                 error = float(abs(centers-exact_profile(n,width)).max())
                 order = None if previous_dg_error is None else math.log2(previous_dg_error/error)
-                runs.append(dict(solver="dg", method="exact-time", cells=n, width_over_interval=width,
+                runs.append(dict(solver="dg", wall_penalty=40., interior_penalty=20., method="exact-time", cells=n, width_over_interval=width,
                                  center_error_over_peak=error, spatial_order=order,
                                  passed=n < 64 or (error < 1e-6 and order > 3.5)))
                 previous_dg_error = error

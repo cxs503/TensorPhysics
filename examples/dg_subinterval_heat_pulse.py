@@ -9,7 +9,7 @@ from tensordg import heat_1d
 from conduction_provenance import provenance
 
 
-def measure(n, degree, width, *, return_section_heat=False, return_profiles=False):
+def measure(n, degree, width, *, wall_penalty=None, return_section_heat=False, return_profiles=False):
     amplitude, rate = 2**-44, math.pi**2
     dt = 1/(16*rate)
     output = np.arange(19)*dt
@@ -21,7 +21,7 @@ def measure(n, degree, width, *, return_section_heat=False, return_profiles=Fals
 
     sources = [heating if start <= t < stop else None for t in knots[:-1]]
     centers, states, info = heat_1d.solve_heat_1d_wall_history(
-        knots, np.zeros((len(knots), 2)), n, degree, backend="exact-time",
+        knots, np.zeros((len(knots), 2)), n, degree, backend="exact-time", wall_penalty=wall_penalty,
         initial_temperature=torch.zeros_like, interval_sources=sources, integrate_face_fluxes=True,
         return_interval_temperatures=True)
     ids = np.searchsorted(knots, output)
