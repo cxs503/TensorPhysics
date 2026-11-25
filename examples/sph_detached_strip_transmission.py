@@ -11,7 +11,7 @@ import fvm_strip_heater_across_contact as strip
 
 
 def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0, h_factor=0.9,
-            homogeneous=False, contact_resistance=0.35, varying_property=None):
+            homogeneous=False, contact_resistance=0.35, varying_property=None, split_interface_links=False):
     mid = n // 2
     bounds = (5/8, 5/6) if mirrored else (1/6, 3/8)
     conductivities = (4., 1.) if mirrored else (1., 4.)
@@ -32,7 +32,7 @@ def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0
     resistance[mid-1] = contact_resistance
     beta = 2 * math.pi * transverse_mode  # unit transverse period
     options = dict(conductivity=np.repeat(conductivities, mid), volumetric_heat_capacity=capacity,
-                   contact_resistance_x=resistance, h_factor=h_factor, backend=backend, transverse_wavenumber=beta)
+                   contact_resistance_x=resistance, h_factor=h_factor, backend=backend, transverse_wavenumber=beta, split_interface_links=split_interface_links)
     field, cuts = sph.solve_harmonic_layered_slab(source, dx, (0., 0.), omega, return_x_flux=True, **options)
     field, cuts = field.numpy(), cuts.numpy()
     far_wall = 0 if mirrored else 1
@@ -49,7 +49,7 @@ def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0
     actual = np.array([-cuts[0], cuts[-1], cuts[mid]])
     ratio = actual/exact
     row = {
-        "columns": n, "backend": backend, "transverse_mode": transverse_mode, "h_factor": h_factor, "omega_rad_s": omega, "strip_bounds_m": bounds,
+        "columns": n, "backend": backend, "transverse_mode": transverse_mode, "h_factor": h_factor, "split_interface_links": split_interface_links, "omega_rad_s": omega, "strip_bounds_m": bounds,
         "contact_resistance_m2_K_W": contact_resistance, "conductivities_W_m_K": conductivities, "capacities_J_m3_K": capacities,
         "far_wall_reciprocity_relative_error": abs(reciprocal_power/actual[far_wall]-1),
         "reference_wall_amplitudes_W_m2": abs(exact[:2]).tolist(),
@@ -76,8 +76,9 @@ def main():
     materials.add_argument("--vary-only", choices=("capacity", "conductivity"), help="vary just one bulk material property across the interface")
     materials.add_argument("--homogeneous", action="store_true", help="use identical bulk properties on both sides")
     parser.add_argument("--perfect-contact", action="store_true", help="set contact resistance to zero")
+    parser.add_argument("--split-interface-links", action="store_true", help="resolve normal and tangential exchange at material jumps")
     args = parser.parse_args()
-    material_options = dict(homogeneous=args.homogeneous, varying_property=args.vary_only, contact_resistance=0. if args.perfect_contact else 0.35)
+    material_options = dict(split_interface_links=args.split_interface_links, homogeneous=args.homogeneous, varying_property=args.vary_only, contact_resistance=0. if args.perfect_contact else 0.35)
     h_factor = 0.7 if args.axial_stencil else 0.9
     swap_materials, transverse_mode = args.swap_materials, args.transverse_mode
     oblique_mode = transverse_mode != 0 and not args.axial_stencil
@@ -117,7 +118,8 @@ def main():
                     row["dense_backend"] = dense
                 if n == grids[-1]:
                     if oblique_mode:
-                        passed &= reciprocity < 1e-6 and row["phasor_error_order"] > 0.8
+                        minimum_order = 1.85 if args.split_interface_links else 0.8
+                        passed &= reciprocity < 1e-6 and row["phasor_error_order"] > minimum_order
                     passed &= error < 1e-3 and row["max_phase_error_rad"] < 1e-3
                 row["passed"] = bool(passed)
                 runs.append(row)
@@ -130,7 +132,7 @@ def main():
                         + (" --swap-materials" if swap_materials else "") + (" --axial-stencil" if args.axial_stencil else "")
                         + (f" --transverse-mode {transverse_mode}" if transverse_mode else "")
                         + (" --homogeneous" if args.homogeneous else "") + (" --perfect-contact" if args.perfect_contact else "")
-                        + (f" --vary-only {args.vary_only}" if args.vary_only else ""),
+                        + (f" --vary-only {args.vary_only}" if args.vary_only else "") + (" --split-interface-links" if args.split_interface_links else ""),
     }, indent=2, allow_nan=False))
     return 0 if passed else 1
 
