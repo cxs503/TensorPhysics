@@ -95,9 +95,7 @@ def measure_fem(n, times, initial_sheet, exact_heat, exact_temperature):
     return row
 
 
-def measure_fvm(n, times, initial_sheet, exact_heat, exact_temperature, *, width_scale=1.):
-    from tensorfvm.cht import rod
-
+def sheet_cell_arrays(n, initial_sheet, width_scale):
     left = 2*n//5
     # One well-mixed control volume represents the sheet. Its numerical width
     # cancels from its capacitance and both half-cell resistances. The extra
@@ -110,6 +108,31 @@ def measure_fvm(n, times, initial_sheet, exact_heat, exact_temperature, *, width
     contacts = np.zeros(n)
     contacts[left-1:left+1] = np.array([LEFT_R, RIGHT_R]) - half_resistance
     initial = np.r_[np.ones(left), initial_sheet, np.zeros(n-left)]
+    return left, widths, conductivity, capacity, contacts, initial
+
+
+def measure_sph(n, times, initial_sheet, exact_heat, exact_temperature):
+    from tensorsph import heat_conduction_2d as sph
+
+    left, widths, k, capacity, contacts, initial = sheet_cell_arrays(n, initial_sheet, 1.)
+    # The compact kernel reaches adjacent columns only, so every heat path
+    # from the left material to the right passes through the sheet column.
+    state, heat = sph.solve_transient_layered_slab(
+        initial, times, 1./n, (1., 0.), conductivity=k, volumetric_heat_capacity=capacity,
+        contact_resistance_x=contacts, h_factor=.9, method="exponential", return_x_heat=True)
+    state, heat = state.numpy(), heat.numpy()
+    row = summarize(n, initial_sheet, heat[:,left:left+2], state[1:,left], exact_heat, exact_temperature)
+    stored = np.diff(state, axis=0)*(capacity*widths)
+    material_storage = np.column_stack((stored[:,:left].sum(axis=1), stored[:,left+1:].sum(axis=1)))
+    material_net_heat = heat[:,[0, left+1]] - heat[:,[left, -1]]
+    row["max_material_balance_residual_J_m2"] = float(abs(material_storage-material_net_heat).max())
+    return row
+
+
+def measure_fvm(n, times, initial_sheet, exact_heat, exact_temperature, *, width_scale=1.):
+    from tensorfvm.cht import rod
+
+    left, widths, conductivity, capacity, contacts, initial = sheet_cell_arrays(n, initial_sheet, width_scale)
     count = n//5
     time = np.r_[times[0], np.concatenate([np.linspace(a,b,count+1)[1:] for a,b in zip(times[:-1], times[1:])])]
     field, _, _, _, ledger = rod.solve_transient_stepped_rod(
@@ -138,7 +161,7 @@ def summarize(n, initial_sheet, heats, temperatures, exact_heat, exact_temperatu
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("DEM", "FEM", "FVM"), default="DEM")
+    parser.add_argument("--solver", choices=("DEM", "FEM", "FVM", "SPH"), default="DEM")
     solver = parser.parse_args().solver
     if solver == "FEM":
         from tensorfem import thermal as implementation
@@ -146,6 +169,9 @@ if __name__ == "__main__":
     elif solver == "FVM":
         from tensorfvm.cht import rod as implementation
         solve = measure_fvm
+    elif solver == "SPH":
+        from tensorsph import heat_conduction_2d as implementation
+        solve = measure_sph
     else:
         from tensordem.thermal import contact_chain as implementation
         solve = measure
@@ -164,6 +190,8 @@ if __name__ == "__main__":
             row.update(orders=orders, passed=bool(row["max_sheet_balance_residual_J_m2"] < 1e-10
                        and (not orders or min(orders) > 0.) and (n != 320 or
                            (min(orders) > 1.85 and max(errors[:2]) < 5e-5 and errors[2] < 5e-4))))
+            if solver == "SPH":
+                row["passed"] &= row["max_material_balance_residual_J_m2"] < 1e-10
             if solver == "FEM":
                 row["passed"] &= row["max_element_link_heat_discrepancy_J_m2"] < 1e-10
             if solver == "FVM":
