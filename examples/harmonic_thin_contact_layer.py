@@ -27,14 +27,17 @@ def reference(widths, k, c, contact_face, resistance, omega):
     state = np.array([1.,q0,0.])
     means = []
     flux = [q0]
+    traces = []
     for i,(layer,d) in enumerate(zip(layers,widths),1):
         state[2] = 0.
         state = layer @ state
         means.append(state[2]/d)
         flux.append(state[1])
         if i == contact_face:
+            traces.append(state[0])
             state = jump @ state
-    return np.array(means),np.array(flux)
+            traces.append(state[0])
+    return np.array(means),np.array(flux),np.array(traces)
 
 
 def fem_response(widths,k,c,contact_face,resistance,omega):
@@ -56,10 +59,9 @@ def fem_response(widths,k,c,contact_face,resistance,omega):
     # Element endpoint powers point inward. Orient every cut to the right.
     cuts = np.r_[power[:,0],-power[-1,1]]
     lag_cuts = np.r_[lag_power[:,0].numpy(),-lag_power[-1,1].item()]
-    jump = state[elements[contact_face-1,1]]-state[elements[contact_face,0]]
-    extra = dict(max_interior_power_disagreement_W=float(abs(power[:-1,1]+power[1:,0]).max()),
-                 jump_K=jump.item())
-    return state[elements].mean(1).numpy(),cuts,low.first_order.temperature[elements].mean(1).numpy(),lag_cuts,extra
+    traces = state[[elements[contact_face-1,1].item(),elements[contact_face,0].item()]].numpy()
+    extra = dict(max_interior_power_disagreement_W=float(abs(power[:-1,1]+power[1:,0]).max()))
+    return state[elements].mean(1).numpy(),cuts,low.first_order.temperature[elements].mean(1).numpy(),lag_cuts,traces,extra
 
 
 def measure(m, order, resistance):
@@ -69,7 +71,7 @@ def measure(m, order, resistance):
     omega = 4.
     extra = {}
     if order is None:
-        temperature,measured,lag_temperature,measured_lag,extra = fem_response(widths,k,c,m,resistance,omega)
+        temperature,measured,lag_temperature,measured_lag,traces,extra = fem_response(widths,k,c,m,resistance,omega)
     else:
         contacts = np.zeros(len(widths)-1)
         contacts[m-1] = resistance
@@ -80,7 +82,11 @@ def measure(m, order, resistance):
         lag_temperature = lag[0]
         measured = np.r_[power["west"],interior["x"].ravel(),-power["east"]]
         measured_lag = np.r_[lag[1]["west"],lag[2]["x"].ravel(),-lag[1]["east"]]
-    exact,flux = reference(widths,k,c,m,resistance,omega)
+        # The half-cell resistances used by the interior face operator
+        # give the two temperatures on either side of the massless contact.
+        traces = temperature[0,[m-1,m]] + measured[m]*np.array(
+            [-widths[m-1]/(2*k[m-1]),widths[m]/(2*k[m])])
+    exact,flux,reference_traces = reference(widths,k,c,m,resistance,omega)
     # At zero frequency T=1. The first flux coefficient satisfies q1'=-c.
     # The integral of q1/k and the contact temperature drop must sum to zero.
     stored = np.r_[0.,np.cumsum(c*widths)]
@@ -93,8 +99,9 @@ def measure(m, order, resistance):
         surface_lag -= (inlet*d-cap*d*d/2)/material
         if i == m:
             surface_lag -= resistance*(q1-stored[m])
-    if order is None:
-        extra["contact_jump_error_K"] = float(abs(extra.pop("jump_K")-resistance*flux[m]))
+    extra["coating_trace_error_K"],extra["substrate_trace_error_K"] = abs(traces-reference_traces).tolist()
+    extra["contact_jump_error_K"] = float(abs(traces[0]-traces[1]-resistance*flux[m]))
+    extra["contact_law_defect_K"] = float(abs(traces[0]-traces[1]-resistance*measured[m]))
     residual = 1j*omega*c*widths*temperature.ravel()+np.diff(measured)
     return dict(**extra,solver="FEM-LINE2" if order is None else "FVM",coating_cells=m,substrate_cells=8*m,dirichlet_flux_order=order,
                 contact_resistance_m2K_W=resistance,
@@ -116,9 +123,10 @@ if __name__ == "__main__":
                 if previous:
                     row["orders"] = {key:float(np.log2(previous[key]/row[key])) for key in
                         ("temperature_error_K","wall_flux_error_W_m2","contact_flux_error_W_m2",
-                         "lag_temperature_error_K_s","lag_flux_error_W_s_m2")
+                         "lag_temperature_error_K_s","lag_flux_error_W_s_m2",
+                         "coating_trace_error_K","substrate_trace_error_K","contact_jump_error_K")
                         if min(previous[key],row[key]) > 1e-11}
-                row["passed"] = row["max_cell_power_residual_W"] < 1e-10
+                row["passed"] = row["max_cell_power_residual_W"] < 1e-10 and row["contact_law_defect_K"] < 1e-10
                 if order is None:
                     row["passed"] &= row["max_interior_power_disagreement_W"] < 1e-10
                 if m == 32:
@@ -131,8 +139,9 @@ if __name__ == "__main__":
                     # by the trapezoid rule exactly for this constant DC field.
                     lag_limit = 1e-11 if order in (None,1) else 3e-6
                     row["passed"] &= row["lag_flux_error_W_s_m2"] < lag_limit
-                if order is None and m == 32:
-                    row["passed"] &= row["contact_jump_error_K"] < 3e-6
+                if m == 32:
+                    row["passed"] &= max(row["coating_trace_error_K"],row["substrate_trace_error_K"],
+                                         row["contact_jump_error_K"]) < 1e-5
                 runs.append(row)
                 previous = row
     print(json.dumps(dict(runs=runs,sources=[provenance(__file__),provenance(energy.__file__),provenance(thermal.__file__)]),
