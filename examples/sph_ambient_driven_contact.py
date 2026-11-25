@@ -10,18 +10,17 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls):
+def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls, interface):
     from tensorfem import thermal
 
     n = len(conductivity)
-    mid = n//2
     x = torch.linspace(0., 1., n+1, dtype=torch.float64)
     start = torch.arange(n)
     contact = {}
     if resistance:
-        x = torch.cat((x[:mid+1], x[mid:]))
-        start[mid:] += 1
-        contact = dict(contact_pairs=torch.tensor([[mid, mid+1]]), contact_conductance=1/resistance)
+        x = torch.cat((x[:interface+1], x[interface:]))
+        start[interface:] += 1
+        contact = dict(contact_pairs=torch.tensor([[interface, interface+1]]), contact_conductance=1/resistance)
     fixed = [node for node, wall in zip((0, len(x)-1), walls) if wall is not None]
     prescribed = [wall for wall in walls if wall is not None]
     model = thermal.ThermalModel(
@@ -34,39 +33,43 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls)
         state = thermal.solve_harmonic_thermal(model, omega)
     field = state.temperature
     inward = thermal.thermal_element_nodal_power(model, field, omega)
-    left_flux = -complex(inward[mid-1, 1])
-    right_flux = complex(inward[mid, 0])
-    return complex(field[start[mid-1]+1]), complex(field[start[mid]]), left_flux, right_flux
+    left_flux = -complex(inward[interface-1, 1])
+    right_flux = complex(inward[interface, 0])
+    return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux
 
 
-def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False):
+def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5):
     k = (1., 2.5)
     capacity = (1.3, .7)
     loss = (2., 4.)
     ambient = (.8-.1j, -.2+.55j)
-    # Solve k*T''=(H+i*w*C)*T-H*Ta on each half slab. At the interface
+    interface = round(n*left_thickness)
+    if interface/n != left_thickness or not 0 < interface < n:
+        raise ValueError("material interface must coincide with an interior mesh face")
+    lengths = (left_thickness, 1-left_thickness)
+    # Solve k*T''=(H+i*w*C)*T-H*Ta in each layer. At the interface
     # the left and right traces are free[0]-Z[0]*q and free[1]+Z[1]*q.
     free, impedance = [], []
-    for conductivity, cv, h, ta, wall in zip(k, capacity, loss, ambient, walls):
+    for conductivity, cv, h, ta, wall, length in zip(k, capacity, loss, ambient, walls, lengths):
         shift = h + 1j*omega*cv
         wave = cmath.sqrt(shift/conductivity)
         particular = h*ta/shift
-        z = cmath.tanh(.5*wave)
+        z = cmath.tanh(length*wave)
         if wall is None:
             free.append(particular)
             impedance.append(1/(conductivity*wave*z))
         else:
-            free.append(particular+(wall-particular)/cmath.cosh(.5*wave))
+            free.append(particular+(wall-particular)/cmath.cosh(length*wave))
             impedance.append(z/(conductivity*wave))
     exact_flux = (free[0]-free[1])/(resistance+sum(impedance))
     exact_left = free[0]-impedance[0]*exact_flux
     exact_right = free[1]+impedance[1]*exact_flux
 
     def layers(values, dtype=torch.float64):
-        return torch.tensor(values, dtype=dtype).repeat_interleave(n//2)
+        return torch.tensor(values, dtype=dtype).repeat_interleave(torch.tensor([interface, n-interface]))
 
     contact = torch.zeros(n-1, dtype=torch.float64)
-    i = n//2-1
+    i = interface-1
     contact[i] = resistance
     conductivity = layers(k)
     field, cuts = heat.solve_harmonic_layered_slab(
@@ -96,7 +99,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
                           solver_trace_difference_K=float(max(abs(tl-complex(left[i])), abs(tr-complex(right[i])))))
     if compare_fem:
         fl, fr, ql, qr = fem_contact(conductivity, layers(capacity), layers(loss),
-                                     layers(ambient, torch.complex128), omega, resistance, walls)
+                                     layers(ambient, torch.complex128), omega, resistance, walls, interface)
         comparison.update(fem_flux_relative_error=abs(ql/exact_flux-1),
                           fem_max_trace_error_K=max(abs(fl-exact_left), abs(fr-exact_right)),
                           fem_interface_imbalance_W_m2=abs(ql-qr),
@@ -104,7 +107,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
                           fem_sph_flux_difference_W_m2=abs(ql-flux))
         if compare_fvm:
             comparison["fem_fvm_flux_difference_W_m2"] = float(abs(ql-q))
-    return dict(**comparison, columns=n, omega_rad_s=omega, contact_resistance_m2_K_W=resistance, backend=backend,
+    return dict(**comparison, columns=n, left_thickness_m=left_thickness, omega_rad_s=omega, contact_resistance_m2_K_W=resistance, backend=backend,
                 wall_conditions=["insulated" if w is None else "zero_temperature_phasor" for w in walls],
                 exact_flux_W_m2=[exact_flux.real, exact_flux.imag], flux_relative_error=abs(flux/exact_flux-1),
                 flux_phase_error_rad=abs(cmath.phase(flux/exact_flux)),
@@ -116,6 +119,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compare-fvm", action="store_true", help="also verify the unit-area finite-volume rod")
     parser.add_argument("--compare-fem", action="store_true", help="also verify the unit-area linear finite elements")
+    parser.add_argument("--left-thickness", type=float, choices=(.25, .5, .75), default=.5,
+                        help="left material thickness in the unit-length slab (m)")
     args = parser.parse_args()
     files = [__file__, heat.__file__]
     path = "../TensorSPH/src"
@@ -137,7 +142,7 @@ if __name__ == "__main__":
                 for resistance in (0., .25):
                     previous = None
                     for n in (16, 32, 64):
-                        row = measure(n, omega, resistance, walls, backend, args.compare_fvm, args.compare_fem)
+                        row = measure(n, omega, resistance, walls, backend, args.compare_fvm, args.compare_fem, args.left_thickness)
                         row["passed"] = True
                         for metric in metrics:
                             if previous:
@@ -161,6 +166,7 @@ if __name__ == "__main__":
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(f) for f in files],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/sph_ambient_driven_contact.py"
-                          + (" --compare-fvm" if args.compare_fvm else "") + (" --compare-fem" if args.compare_fem else "")),
+                          + (" --compare-fvm" if args.compare_fvm else "") + (" --compare-fem" if args.compare_fem else "")
+                          + f" --left-thickness {args.left_thickness}"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
