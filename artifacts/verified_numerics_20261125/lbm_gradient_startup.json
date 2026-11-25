@@ -1,0 +1,483 @@
+{
+  "reference": "Exact space and time integrals of a moving Fourier mode; equal physical diffusivity and end time across grids and relaxation times",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_gradient_startup.py",
+  "runs": [
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.008204003535111415,
+        0.019518492673821664,
+        0.03704925321070296
+      ],
+      "n": 8,
+      "steps": 8,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0048255610455505416,
+      "total_flux_errors_xyz_W_m2": [
+        0.028921238201905175,
+        0.019518492673821664,
+        0.04326068642885866
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.028921238201904287,
+        0.019518492673821664,
+        0.043260686428857664
+      ],
+      "max_cell_energy_residual_J": 1.5178830414797062e-18,
+      "tau": 0.75,
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.7333405368930179,
+        0.7498424541124773,
+        0.7622188920270697
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.0020291303784387704,
+        0.005461259667289942,
+        0.009972595448485277
+      ],
+      "n": 16,
+      "steps": 32,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0014925373357191907,
+      "total_flux_errors_xyz_W_m2": [
+        0.009291257809835196,
+        0.005461259667289942,
+        0.01210436304929452
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.009291257809834752,
+        0.005461259667289942,
+        0.012104363049292632
+      ],
+      "max_cell_energy_residual_J": 2.0498197323554068e-19,
+      "tau": 0.75,
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.8224272346372197,
+        0.8269726368716057,
+        0.8303816885473926
+      ],
+      "temperature_and_total_flux_orders": [
+        1.6929296667191707,
+        1.6381834988763457,
+        1.8375359847139892,
+        1.837529392666735
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.0005087170237894068,
+        0.0013781776274469637,
+        0.0025749279870255215
+      ],
+      "n": 32,
+      "steps": 128,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0003933936865087029,
+      "total_flux_errors_xyz_W_m2": [
+        0.0024361572931021203,
+        0.0013781776274469637,
+        0.0031115240142319534
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.002436157293099983,
+        0.0013781776274418567,
+        0.003111524014229275
+      ],
+      "max_cell_energy_residual_J": 3.0387306982748025e-20,
+      "tau": 0.75,
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.8463739337292057,
+        0.8475380386613955,
+        0.8484111173605361
+      ],
+      "temperature_and_total_flux_orders": [
+        1.9237213114489369,
+        1.9312666301717252,
+        1.9864719116216183,
+        1.9598338785774987
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.009466450398389031,
+        0.02750575964534635,
+        0.024829627024252843
+      ],
+      "n": 8,
+      "steps": 8,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.008036852121764637,
+      "total_flux_errors_xyz_W_m2": [
+        0.021248431367215742,
+        0.03651434352358751,
+        0.031005756883322133
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.03651434352358751,
+        0.031005756883322133
+      ],
+      "max_cell_energy_residual_J": 1.1655173354219173e-18,
+      "tau": 0.75,
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.219584006909821,
+        0.7651863091862514,
+        0.7722459776159447
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.0025120213065077945,
+        0.007209917277792577,
+        0.006541970977185452
+      ],
+      "n": 16,
+      "steps": 32,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0020292616825121623,
+      "total_flux_errors_xyz_W_m2": [
+        0.005469880031825108,
+        0.010668347685983126,
+        0.008658108868199621
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.010668347685983126,
+        0.008658108868199621
+      ],
+      "max_cell_energy_residual_J": 2.176874674443552e-19,
+      "tau": 0.75,
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.22330236260190203,
+        0.8318461397997317,
+        0.8335234815041388
+      ],
+      "temperature_and_total_flux_orders": [
+        1.9856756173585977,
+        1.9577752438773524,
+        1.7751265443711701,
+        1.8404122612122016
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.0006373421843739457,
+        0.0018228556095221116,
+        0.0016568958443000659
+      ],
+      "n": 32,
+      "steps": 128,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0005233745769950282,
+      "total_flux_errors_xyz_W_m2": [
+        0.0013769646601926588,
+        0.002771559786601152,
+        0.002211355779774382
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.002771559786596156,
+        0.0022113557797699412
+      ],
+      "max_cell_energy_residual_J": 2.9354985578281846e-20,
+      "tau": 0.75,
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.22413795656653876,
+        0.8488009942780039,
+        0.849225481582703
+      ],
+      "temperature_and_total_flux_orders": [
+        1.9550391671152947,
+        1.990017658277627,
+        1.944566714695113,
+        1.9691207856979793
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.2250054994977723,
+        0.18019133123856657,
+        0.15343434556475688
+      ],
+      "n": 8,
+      "steps": 2,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.1913024017714422,
+      "total_flux_errors_xyz_W_m2": [
+        0.2250054994977723,
+        0.1900631704074518,
+        0.19431432361819934
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.2250054994977723,
+        0.19006317040745158,
+        0.19431432361819934
+      ],
+      "max_cell_energy_residual_J": 9.75781955236954e-19,
+      "tau": 1.5,
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.4321591176941754,
+        0.36359075493007165,
+        0.3121644828569926
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.06865650156846126,
+        0.05598779158278089,
+        0.049683921640673756
+      ],
+      "n": 16,
+      "steps": 8,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.052737402721756865,
+      "total_flux_errors_xyz_W_m2": [
+        0.09118738942419302,
+        0.08455890005701283,
+        0.0859964365495069
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.09118738942419302,
+        0.08455890005701233,
+        0.0859964365495069
+      ],
+      "max_cell_energy_residual_J": 1.6940658945086007e-19,
+      "tau": 1.5,
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.4234547199134284,
+        0.4062998856937227,
+        0.3934337600289439
+      ],
+      "temperature_and_total_flux_orders": [
+        1.8589565602096736,
+        1.3030540349689579,
+        1.1684504847009924,
+        1.1760434662209664
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.01838169660977851,
+        0.014758664996852966,
+        0.013046824307019311
+      ],
+      "n": 32,
+      "steps": 32,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.012997870803936773,
+      "total_flux_errors_xyz_W_m2": [
+        0.027001661018573708,
+        0.02644692956167677,
+        0.02801271474985345
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.02700166101857282,
+        0.026446929561676047,
+        0.028012714749853007
+      ],
+      "max_cell_energy_residual_J": 2.3505164286306834e-20,
+      "tau": 1.5,
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.426838263121774,
+        0.42224876795604144,
+        0.4188066465817396
+      ],
+      "temperature_and_total_flux_orders": [
+        2.0205512081980603,
+        1.7557861655880411,
+        1.6768563723460965,
+        1.6181950761239743
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.03396315634554101,
+        0.09147343659687876,
+        0.08419336227735019
+      ],
+      "n": 8,
+      "steps": 2,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.07082452159361463,
+      "total_flux_errors_xyz_W_m2": [
+        0.06459869690764514,
+        0.09147343659687876,
+        0.08419336227735019
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.09147343659687796,
+        0.08419336227735019
+      ],
+      "max_cell_energy_residual_J": 1.5178830414797062e-18,
+      "tau": 1.5,
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.07693223408342222,
+        0.36863348740838275,
+        0.3451493258814738
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.009593404585581139,
+        0.02687729832529051,
+        0.024572301166662536
+      ],
+      "n": 16,
+      "steps": 8,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.022668048347584957,
+      "total_flux_errors_xyz_W_m2": [
+        0.025479969101223104,
+        0.030674567007609857,
+        0.035598456586113214
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.03067456700760955,
+        0.035598456586113214
+      ],
+      "max_cell_energy_residual_J": 2.270048298641525e-19,
+      "tau": 1.5,
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.10229476552295773,
+        0.4109201370263388,
+        0.40426780161983
+      ],
+      "temperature_and_total_flux_orders": [
+        1.6435887668834541,
+        1.3421415349189256,
+        1.5763098737817367,
+        1.2418918043341904
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.0024719374226016555,
+        0.006994273197033163,
+        0.0063828570834492115
+      ],
+      "n": 32,
+      "steps": 32,
+      "velocity_m_s": [
+        0.0,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.006372269982550471,
+      "total_flux_errors_xyz_W_m2": [
+        0.007706841641370615,
+        0.008926462753857445,
+        0.010404242492013771
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        null,
+        0.008926462753856779,
+        0.010404242492013216
+      ],
+      "max_cell_energy_residual_J": 2.5940384009662948e-20,
+      "tau": 1.5,
+      "periodic_axes": "yz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.10965152559418684,
+        0.42301995988841773,
+        0.42132390286977617
+      ],
+      "temperature_and_total_flux_orders": [
+        1.83078088674196,
+        1.7251518759132205,
+        1.7808824754832486,
+        1.7746427630444548
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "0a67cdaee7893a10966081d7c2660cca06331d19",
+      "file": "lbm_gradient_startup.py",
+      "source_sha256": "350f44975878f42d00bd8179c8d3ddeaf67baa32f38ee9b33077e8d157c09bc0"
+    },
+    {
+      "commit": "0a67cdaee7893a10966081d7c2660cca06331d19",
+      "file": "lbm_periodic_advective_flux.py",
+      "source_sha256": "5456b9b34349de36f7a14eae1ada0ef1e62f558558e1b4a025775893f667882d"
+    },
+    {
+      "commit": "e4e3faadedb863ed09316f440aecec291c8cb820",
+      "file": "thermal_common.py",
+      "source_sha256": "96572fcb497010178b6096c22cc2c06597cdf0bce915eb523610e3d33706ea91"
+    }
+  ]
+}
