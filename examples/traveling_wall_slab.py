@@ -1,11 +1,11 @@
 """Cross-solver harmonic conduction with independently driven periodic slab walls."""
 import json
-import math
 
 import numpy as np
 import torch
 
 from conduction_provenance import provenance
+from tensorfvm.cht import energy
 from tensorlbm import scalar, scalar_harmonic
 from tensorsph import heat_conduction_2d as sph
 
@@ -31,6 +31,12 @@ def reference(n, omega, k, capacity):
 
 def responses(n, omega, k, capacity, traces):
     dx = 1/n
+    widths = np.full(n, dx)
+    bc = {side: {"type": "dirichlet", "values": trace}
+          for side, trace in zip(("west", "east"), traces)}
+    t, powers = energy.solve_harmonic_conduction(widths, widths, k, capacity, bc, omega,
+                                                 periodic_y=True)
+    yield "FVM", t, np.stack((powers["west"], powers["east"]))/dx, omega
     walls = tuple(torch.from_numpy(row) for row in traces)
     t = sph.solve_harmonic_slab_2d(torch.zeros((n, n)), dx, walls, omega, conductivity=k,
                                    volumetric_heat_capacity=capacity)
@@ -74,7 +80,7 @@ def main():
                                  passed=bool(passed)))
                 previous[name] = errors
     print(json.dumps(dict(conductivity_W_mK=k, capacity_J_m3K=capacity, runs=runs,
-          sources=[provenance(f) for f in (__file__, sph.__file__, scalar.__file__, scalar_harmonic.__file__)]),
+          sources=[provenance(f) for f in (__file__, energy.__file__, sph.__file__, scalar.__file__, scalar_harmonic.__file__)]),
           indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in runs) else 1
 
