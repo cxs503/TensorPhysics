@@ -12,7 +12,7 @@ from tensorfem import thermal
 from tensorfvm.cht import rod
 
 
-def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", fem_method="theta"):
+def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", fem_method="theta", first_step_study=False):
     m, dx, decay = n//2, 1/n, 1.7
     k, c = np.array([2.,5.]), np.array([3.,1.5])
     area = np.array([.7,2.4]) if expanding else np.array([2.4,.7])
@@ -42,12 +42,41 @@ def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", 
 
     contacts = np.zeros(n-1)
     contacts[m-1] = resistance
-    fv,faces,_,_,(up,down),step_heat,fv_mean = rod.solve_transient_stepped_rod(np.full(n,dx),area.repeat(m),
-                        k.repeat(m),c.repeat(m),lambda t:nodes[[0,-1]]*np.exp(-decay*t),times,means,
-                        flux_order=2,film_coefficient=h,ambient_temperature=lambda t:ambient*np.exp(-decay*t),
-                        shoulder_areal_heat_capacity=cw,initial_shoulder_temperature=surface,
-                        contact_resistance=contacts,return_traces=True,method=method,return_step_heat=True,
-                        return_interval_temperatures=True)
+    def advance_fvm(grid, integrator):
+        return rod.solve_transient_stepped_rod(np.full(n,dx),area.repeat(m),k.repeat(m),c.repeat(m),
+                lambda t:nodes[[0,-1]]*np.exp(-decay*t),grid,means,flux_order=2,film_coefficient=h,
+                ambient_temperature=lambda t:ambient*np.exp(-decay*t),shoulder_areal_heat_capacity=cw,
+                initial_shoulder_temperature=surface,contact_resistance=contacts,return_traces=True,
+                method=integrator,return_step_heat=True,return_interval_temperatures=True)
+
+    if first_step_study:
+        width = dt[0]
+        target = q*exact_mean[0]
+        def first_power(count, integrator):
+            heat = advance_fvm(np.linspace(0.,width,count+1),integrator)[-2]
+            return np.array([heat["right"][:,m-1].sum(),heat["left"][:,m].sum()])/width
+
+        # Resolve the same discrete initial-value problem on the original
+        # first interval. Extrapolate the integrated power, not its peak.
+        ref = [first_power(count,"sdirk2") for count in (32,64,128)]
+        extrapolated = ref[-1]+(ref[-1]-ref[-2])/3
+        previous = ref[-2]+(ref[-2]-ref[-3])/3
+        # Crank-Nicolson uses different stages; check the SDIRK2 estimate
+        # against its own independently refined and extrapolated integral.
+        cn64,cn128 = [first_power(count,"theta") for count in (64,128)]
+        cn_reference = cn128+(cn128-cn64)/3
+        uncertainty = np.maximum(abs(extrapolated-previous),abs(extrapolated-cn_reference))
+        power = first_power(1,method)
+        for side in (0,1):
+            total = power[side]-target[side]
+            yield dict(n=n,expanding=expanding,material=("left","right")[side],interval_s=float(width),
+                       continuum_W=float(target[side]),refined_FVM_W=float(extrapolated[side]),
+                       spatial_estimate_W=float(extrapolated[side]-target[side]),
+                       temporal_estimate_W=float(power[side]-extrapolated[side]),total_error_W=float(total),
+                       reference_disagreement_W=float(uncertainty[side]),
+                       reference_resolved=bool(uncertainty[side]<max(1e-10,.01*abs(total))))
+        return
+    fv,faces,_,_,(up,down),step_heat,fv_mean = advance_fvm(times,method)
     traces_fv = np.column_stack((fv_mean["trace_left"][:,m-1],fv_mean["trace_right"][:,m-1]))
     histories = [("FVM",traces_fv,fv,faces[:,m],up[:,m-1]-down[:,m-1],
                   np.column_stack((step_heat["right"][:,m-1],step_heat["left"][:,m])),
@@ -109,6 +138,8 @@ if __name__ == "__main__":
     parser.add_argument("--fem-method",choices=("theta","sdirk2"),default="theta",help="FEM time integrator")
     parser.add_argument("--fixed-steps",type=int,help="hold time resolution fixed while refining the spatial grid")
     parser.add_argument("--fixed-cells",type=int,help="hold an even number of cells fixed while refining time")
+    parser.add_argument("--first-step-study",action="store_true",
+                        help="estimate spatial and temporal errors in the two FVM material powers over the first interval")
     args = parser.parse_args()
     if args.steps_per_cell < 1:
         parser.error("steps per cell must be positive")
@@ -125,7 +156,12 @@ if __name__ == "__main__":
         for size in (16,32,64,128,256,512):
             n = args.fixed_cells or size
             steps = args.fixed_steps or size*args.steps_per_cell
-            for row in measure(n,expanding,time_steps=steps,method=args.method,fem_method=args.fem_method):
+            for row in measure(n,expanding,time_steps=steps,method=args.method,fem_method=args.fem_method,
+                               first_step_study=args.first_step_study):
+                if args.first_step_study:
+                    row["passed"] = row["reference_resolved"]
+                    rows.append(row)
+                    continue
                 name = row["solver"]
                 errors = {k:v for k,v in row.items() if "_error_" in k}
                 rates = {} if name not in previous else {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()}
@@ -138,6 +174,6 @@ if __name__ == "__main__":
                     row["passed"] = row["balance_passed"] and all(v>1.8 for v in rates.values())
                 rows.append(row)
                 previous[name] = errors
-    print(json.dumps(dict(runs=rows,fvm_method=args.method,fem_method=args.fem_method,fixed_cells=args.fixed_cells,fixed_steps=args.fixed_steps,sources=[provenance(f) for f in
+    print(json.dumps(dict(runs=rows,first_step_study=args.first_step_study,fvm_method=args.method,fem_method=args.fem_method,fixed_cells=args.fixed_cells,fixed_steps=args.fixed_steps,sources=[provenance(f) for f in
                      (__file__,two_layer_conduction.__file__,rod.__file__,thermal.__file__)]),indent=2,allow_nan=False))
-    raise SystemExit(0 if all(row.get("passed",row["balance_passed"]) for row in rows) else 1)
+    raise SystemExit(0 if all((row["passed"] if "passed" in row else row["balance_passed"]) for row in rows) else 1)
