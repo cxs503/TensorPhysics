@@ -5,13 +5,12 @@ import math
 
 import numpy as np
 from scipy.optimize import brentq
-from tensordem.thermal import contact_chain
 
 import dg_reversing_wall_pulse as pulse
 from conduction_provenance import provenance
 
 
-def measure(n, resistance, width, sheet_capacity=0.):
+def contact_modes(resistance, sheet_capacity):
     # The antisymmetric mode has zero sheet temperature and
     # one-sided temperatures +/-sin(k/2) and rightward flux -k*cos(k/2).
     pi = math.pi
@@ -22,6 +21,14 @@ def measure(n, resistance, width, sheet_capacity=0.):
         return math.sin(h/2) + .5*resistance*h*math.cos(h/2)
 
     h = brentq(lambda h: sheet_capacity*h*sheet_shape(h)-2*math.cos(h/2), 0., pi) if sheet_capacity else pi
+    return h, k, sheet_shape(h)
+
+
+def measure(n, resistance, width, sheet_capacity=0.):
+    from tensordem.thermal import contact_chain
+
+    pi = math.pi
+    h, k, sheet_amplitude = contact_modes(resistance, sheet_capacity)
     rates = np.square([h, k])
     dt = 1/(16*pi*pi)
     start, stop = 1.2*dt, (1.2+width)*dt
@@ -41,7 +48,7 @@ def measure(n, resistance, width, sheet_capacity=0.):
     bulk = capacity > 0
     if sheet_capacity:
         bulk[cut+1] = False
-        source[cut+1] = sheet_capacity*sheet_shape(h)
+        source[cut+1] = sheet_capacity*sheet_amplitude
     source[bulk] = (symmetric + odd)/n
     states = [np.zeros_like(capacity)]
     heats, residuals = [], []
@@ -67,7 +74,7 @@ def measure(n, resistance, width, sheet_capacity=0.):
     storage_metrics = {}
     if sheet_capacity:
         stored = sheet_capacity*states[:, cut+1]
-        exact_stored = sheet_capacity*sheet_shape(h)*even_amplitude
+        exact_stored = sheet_capacity*sheet_amplitude*even_amplitude
         left_heat, right_heat = np.asarray(heats).T
         balance = np.diff(stored)-source[cut+1]*np.diff(active)-left_heat+right_heat
         side_errors = np.abs(np.asarray(heats)-exact_heat).max(axis=0)/np.abs(exact_heat).max(axis=0)
@@ -98,6 +105,8 @@ def measure(n, resistance, width, sheet_capacity=0.):
 
 
 if __name__ == "__main__":
+    from tensordem.thermal import contact_chain
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sheet-capacity", type=float, choices=(0., .25, 1.), default=0.)
     sheet_capacity = parser.parse_args().sheet_capacity
