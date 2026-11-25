@@ -41,6 +41,25 @@ def window_powers(solution, omega, reference):
     return windows
 
 
+def solve_film(mesh, omega, quadratic, k, capacity, reference):
+    points = harmonic_conduction.harmonic_boundary_points(mesh, quadratic=quadratic)
+    angle = np.arctan2(points[:, 1], points[:, 0])
+    film = 2.+.65*np.cos(2*angle+.3)
+    surface = .4+.22*np.sin(3*angle-.2)
+    wall, flux = reference(points)
+    normals = np.repeat(mesh.normals, len(points)//mesh.panel_count, axis=0)
+    # Use the actual chord normals so the analytic field solves the PDE and
+    # boundary condition on each polygon, including at off-midpoint samples.
+    inward = -(flux*normals).sum(axis=1)
+    storage = 1j*omega*surface*wall
+    external = inward+storage
+    ambient = wall+external/film
+    result = harmonic_conduction.solve_mixed_harmonic_conduction(
+        mesh, "film", ambient, omega, conductivity=k, volumetric_heat_capacity=capacity,
+        film_coefficients=film, wall_areal_heat_capacity=surface, quadratic=quadratic)
+    return result, wall, inward, storage, external, surface
+
+
 def measure(n, omega, quadratic, mode, integrate=False, cancel=False):
     k, capacity = 1.7, 2.3
     wave = np.sqrt(1j*omega*capacity/k)
@@ -62,21 +81,7 @@ def measure(n, omega, quadratic, mode, integrate=False, cancel=False):
         return temperature, flux
 
     mesh = geometry.regular_polygon(n)
-    points = harmonic_conduction.harmonic_boundary_points(mesh, quadratic=quadratic)
-    angle = np.arctan2(points[:, 1], points[:, 0])
-    film = 2.+.65*np.cos(2*angle+.3)
-    surface = .4+.22*np.sin(3*angle-.2)
-    wall, flux = reference(points)
-    normals = np.repeat(mesh.normals, len(points)//n, axis=0)
-    # Use the actual chord normals so the analytic field solves the PDE and
-    # boundary condition on each polygon, including at off-midpoint samples.
-    inward = -(flux*normals).sum(axis=1)
-    storage = 1j*omega*surface*wall
-    external = inward+storage
-    ambient = wall+external/film
-    result = harmonic_conduction.solve_mixed_harmonic_conduction(
-        mesh, "film", ambient, omega, conductivity=k, volumetric_heat_capacity=capacity,
-        film_coefficients=film, wall_areal_heat_capacity=surface, quadratic=quadratic)
+    result, wall, inward, storage, external, surface = solve_film(mesh, omega, quadratic, k, capacity, reference)
     theta = 2*np.pi*np.arange(17)/17+.19
     probes = .65*np.column_stack((np.cos(theta), np.sin(theta)))
     ref_temp, ref_flux = reference(probes)
