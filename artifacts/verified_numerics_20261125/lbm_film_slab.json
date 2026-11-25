@@ -1,0 +1,367 @@
+{
+  "reference": "Series-resistance steady slab plus cos(beta*(x-.5))*exp(-alpha*beta^2*t); h=k*beta*tan(beta/2)",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_film_slab.py",
+  "order_metrics": [
+    "temperature_error_K",
+    "wall_temperature_error_K",
+    "inward_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "n": 8,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 0.0,
+      "wall_temperature_error_K": 0.0,
+      "inward_flux_error_W_m2": 8.673617379884035e-17,
+      "balance_J_m2": 1.4823076576950256e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 1.1102230246251565e-16,
+      "wall_temperature_error_K": 1.1102230246251565e-16,
+      "inward_flux_error_W_m2": 8.673617379884035e-17,
+      "balance_J_m2": 2.3592239273284576e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 2.220446049250313e-16,
+      "wall_temperature_error_K": 2.220446049250313e-16,
+      "inward_flux_error_W_m2": 8.673617379884035e-17,
+      "balance_J_m2": 5.898059818321144e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 5.336824782764538e-06,
+      "wall_temperature_error_K": 0.00044207293164011396,
+      "inward_flux_error_W_m2": 3.284475388155156e-05,
+      "balance_J_m2": 9.73613550891983e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 1.7550363879959008e-06,
+      "wall_temperature_error_K": 0.00010894984364040461,
+      "inward_flux_error_W_m2": 8.094661635909411e-06,
+      "balance_J_m2": 1.3126977803368245e-16,
+      "orders": [
+        1.6044807030019157,
+        2.0206202740458945,
+        2.020620273957755
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 5.461293500763631e-07,
+      "wall_temperature_error_K": 2.7017554963371104e-05,
+      "inward_flux_error_W_m2": 2.007327026373046e-06,
+      "balance_J_m2": 1.312223441886362e-16,
+      "orders": [
+        1.6841863456093606,
+        2.0116951014042583,
+        2.0116951014014366
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 0.75,
+      "beta": 2.4,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 1.1102230246251565e-16,
+      "wall_temperature_error_K": 2.7755575615628914e-17,
+      "inward_flux_error_W_m2": 6.938893903907228e-17,
+      "balance_J_m2": 2.2914612915481136e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "beta": 2.4,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 1.6653345369377348e-16,
+      "wall_temperature_error_K": 2.7755575615628914e-17,
+      "inward_flux_error_W_m2": 2.636779683484747e-16,
+      "balance_J_m2": 2.397340409954901e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "beta": 2.4,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 3.3306690738754696e-16,
+      "wall_temperature_error_K": 2.220446049250313e-16,
+      "inward_flux_error_W_m2": 2.220446049250313e-16,
+      "balance_J_m2": 9.027084228773254e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 0.75,
+      "beta": 2.4,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 0.0001692891884921277,
+      "wall_temperature_error_K": 0.0013396425124557187,
+      "inward_flux_error_W_m2": 0.0011246972591077986,
+      "balance_J_m2": 8.586881206085195e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "beta": 2.4,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 4.232688491079273e-05,
+      "wall_temperature_error_K": 0.0003005738325994045,
+      "inward_flux_error_W_m2": 0.000252346848163984,
+      "balance_J_m2": 1.0625181290357943e-16,
+      "orders": [
+        1.999843618603308,
+        2.1560567431485493,
+        2.1560567431459683
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "beta": 2.4,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 1.1129279084143295e-05,
+      "wall_temperature_error_K": 6.981805166472732e-05,
+      "inward_flux_error_W_m2": 5.8615765484715254e-05,
+      "balance_J_m2": 8.402566836762659e-17,
+      "orders": [
+        1.9272141730293897,
+        2.1060474134980742,
+        2.1060474135026093
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 0.0,
+      "wall_temperature_error_K": 0.0,
+      "inward_flux_error_W_m2": 2.42861286636753e-17,
+      "balance_J_m2": 1.3552527156068805e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 1.1102230246251565e-16,
+      "wall_temperature_error_K": 0.0,
+      "inward_flux_error_W_m2": 3.469446951953614e-17,
+      "balance_J_m2": 4.790445655173531e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 1.6653345369377348e-16,
+      "wall_temperature_error_K": 1.1102230246251565e-16,
+      "inward_flux_error_W_m2": 8.673617379884035e-17,
+      "balance_J_m2": 6.2686367327449e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 7.917184596417659e-05,
+      "wall_temperature_error_K": 0.004199997363865227,
+      "inward_flux_error_W_m2": 0.0003120477863414878,
+      "balance_J_m2": 1.431146867680866e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 2.6543016698798994e-05,
+      "wall_temperature_error_K": 0.001326447334813241,
+      "inward_flux_error_W_m2": 9.855124150512373e-05,
+      "balance_J_m2": 1.194790794079026e-16,
+      "orders": [
+        1.57665514259984,
+        1.6628210263570444,
+        1.6628210263566023
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "beta": 1.0,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.07429713861875552,
+      "temperature_error_K": 7.696133901724522e-06,
+      "wall_temperature_error_K": 0.0003375892673516123,
+      "inward_flux_error_W_m2": 2.5081916592662595e-05,
+      "balance_J_m2": 1.1579279202145187e-16,
+      "orders": [
+        1.7861265416656191,
+        1.9742264523432618,
+        1.9742264523415802
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "beta": 2.4,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 5.551115123125783e-17,
+      "wall_temperature_error_K": 2.7755575615628914e-17,
+      "inward_flux_error_W_m2": 1.3877787807814457e-17,
+      "balance_J_m2": 1.518425142565949e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "beta": 2.4,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 1.1102230246251565e-16,
+      "wall_temperature_error_K": 2.7755575615628914e-17,
+      "inward_flux_error_W_m2": 9.71445146547012e-17,
+      "balance_J_m2": 6.575686176124584e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "beta": 2.4,
+      "amplitude_K": 0.0,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 2.220446049250313e-16,
+      "wall_temperature_error_K": 1.1102230246251565e-16,
+      "inward_flux_error_W_m2": 2.220446049250313e-16,
+      "balance_J_m2": 9.397661143197011e-18,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "beta": 2.4,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 0.001227059138048825,
+      "wall_temperature_error_K": 0.006751682756245714,
+      "inward_flux_error_W_m2": 0.0056683772123618525,
+      "balance_J_m2": 1.734723475976807e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "beta": 2.4,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 0.00044924864824869015,
+      "wall_temperature_error_K": 0.0025993626443626683,
+      "inward_flux_error_W_m2": 0.00218229566049144,
+      "balance_J_m2": 1.3444106938820255e-16,
+      "orders": [
+        1.449618713379259,
+        1.3770891949277317,
+        1.3770891949277404
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "beta": 2.4,
+      "amplitude_K": 0.6,
+      "film_W_m2K": 0.8395502894620305,
+      "temperature_error_K": 0.00013301839565371676,
+      "wall_temperature_error_K": 0.0007202902472745465,
+      "inward_flux_error_W_m2": 0.0006047198855960167,
+      "balance_J_m2": 6.331740687315346e-17,
+      "orders": [
+        1.7558883871187196,
+        1.8515076468248586,
+        1.8515076468248557
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "7dae9de39a37225e72c2033208441b110abb88f6",
+      "file": "lbm_film_slab.py",
+      "source_sha256": "a0b2c3e553d37353444459ea31df474f2879b7ff46e2429d4081b39c9c4243bb"
+    },
+    {
+      "commit": "8d3ad0018b088ea0d2bc51d161ac19cc088ed629",
+      "file": "thermal_common.py",
+      "source_sha256": "055a782b4fb823a4efe8899ea365a9211e5f549058f9726531c1a82ae2ef8a11"
+    }
+  ]
+}
