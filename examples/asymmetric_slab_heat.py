@@ -8,6 +8,7 @@ from scipy.optimize import brentq
 
 from conduction_provenance import provenance
 from tensordg import heat_1d as dg, sipg_sparse
+from tensorlbm import scalar as lbm
 from tensorfem import thermal
 from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
@@ -28,6 +29,22 @@ def particle_slab(initial, dx, end, steps):
         powers[i] = power.numpy()/(dx*calibration)
     return field[0].numpy(), powers
 
+
+
+def lattice_slab(initial, dx, end):
+    # Scale lattice time so D_physical = D_lattice * dx²/dt = 1 m²/s.
+    steps = math.ceil(end/(lbm.scalar_diffusivity(.9)*dx**2))
+    dt = end/steps
+    tau = lbm.tau_from_diffusivity(dt/dx**2)
+    field = torch.from_numpy(initial[None,:])
+    zero = torch.zeros_like(field)
+    g = lbm.scalar_equilibrium(field, zero, zero)
+    increments = np.empty((steps,2))
+    for i in range(steps):
+        post = lbm.scalar_collide_bgk(g, g.sum(dim=0), zero, zero, tau)
+        g, exchange = lbm.scalar_stream_slab(post, 0., 0.)
+        increments[i] = dx*exchange[:,0].numpy()
+    return g.sum(dim=0)[0].numpy(), increments, tau
 
 
 def downward_crossing(times, values):
@@ -89,6 +106,9 @@ def measure(n, end=.03):
     inward = increments.sum(axis=0)
     results.append(("FVM", history[-1], inward, float((history[-1]-history[0]).mean())))
 
+    lattice, lbm_increments, tau = lattice_slab(initial, dx, end)
+    results.append(("LBM", lattice, lbm_increments.sum(axis=0), float((lattice-initial).mean())))
+
     steps = math.ceil(end/(.16*dx**2))
     particles, particle_power = particle_slab(initial, dx, end, steps)
     supplied = (end/steps)*particle_power.sum(axis=0)
@@ -105,7 +125,10 @@ def measure(n, end=.03):
             return math.expm1(-math.pi**2*t)/math.pi - .4*math.expm1(-4*math.pi**2*t)/math.pi
         exact_heat_zero = brentq(exact_east_heat, exact_power_zero, end)
         particle_times = np.linspace(0., end, steps+1)
+        lattice_times = np.linspace(0., end, len(lbm_increments)+1)
         for name, rate_times, east_rate, heat_times, east_heat in (
+            ("LBM", .5*(lattice_times[1:]+lattice_times[:-1]), lbm_increments[:,1]/lattice_times[1],
+             lattice_times, np.r_[0., lbm_increments[:,1].cumsum()]),
             ("FVM", times, rates[:,1], times, np.r_[0., increments[:,1].cumsum()]),
             ("SPH", .5*(particle_times[1:]+particle_times[:-1]), particle_power[:,1],
              particle_times, np.r_[0., (end/steps)*particle_power[:,1].cumsum()]),
@@ -119,6 +142,8 @@ def measure(n, end=.03):
                 row[f"east_{label}_reversal_s"] = crossing
                 row[f"exact_east_{label}_reversal_s"] = reference
                 row[f"east_{label}_reversal_error_s"] = abs(crossing-reference)
+    lattice_row = next(row for row in rows if row["solver"] == "LBM")
+    lattice_row.update(steps=len(lbm_increments), tau=tau)
     particle_row = rows[-1]
     particle_row["steps"] = steps
     if n == 64:
@@ -159,7 +184,7 @@ def campaign(end):
 def main():
     rows = campaign(.03) + campaign(.08)
     print(json.dumps({"sources": [provenance(f) for f in
-                     (__file__, dg.__file__, sipg_sparse.__file__, thermal.__file__, energy.__file__, sph.__file__)],
+                     (__file__, dg.__file__, sipg_sparse.__file__, thermal.__file__, energy.__file__, sph.__file__, lbm.__file__)],
                      "runs": rows}, indent=2))
     return 0 if all(row["passed"] for row in rows) else 1
 

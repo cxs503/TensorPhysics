@@ -416,3 +416,12 @@ compare directly with the common analytic field. On 64 radial cells per
 layer the FVM probe temperature and interface modal flux errors are
 1.29e-5 K and 5.26e-6 W/m². The 128-panel circular Fourier map resolves
 these angular modes to roundoff.
+
+The signed-heat slab campaign also uses TensorLBM's D2Q5 BGK transport,
+with cell-average initial data and stationary halfway anti-bounce-back
+walls. Unit physical diffusivity sets dt=(τ−0.5)dx²/3. Each step measures
+incoming minus outgoing populations at each wall and multiplies by dx to
+obtain heat per unit wall area. On the 64-cell lattice the right wall's
+power and cumulative heat reversal times differ from the analytic values
+by 5.73e-6 and 9.27e-7 s respectively. All five solvers pass on the four
+resolutions and two end times (40 comparisons).
