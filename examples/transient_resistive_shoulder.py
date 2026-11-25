@@ -97,7 +97,7 @@ def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--steps-per-cell",type=int,default=2,help="number of time steps per axial cell")
-    parser.add_argument("--method",choices=("theta","sdirk2"),default="theta",help="FVM time integrator")
+    parser.add_argument("--method",choices=("theta","sdirk2","rannacher"),default="theta",help="FVM time integrator")
     parser.add_argument("--fixed-steps",type=int,help="hold time resolution fixed while refining the spatial grid")
     parser.add_argument("--fixed-cells",type=int,help="hold an even number of cells fixed while refining time")
     args = parser.parse_args()

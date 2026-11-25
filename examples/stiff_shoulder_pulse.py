@@ -38,7 +38,8 @@ def measure(steps,method):
     balance = (np.diff(got,axis=0) @ mass-budget["left"][:,0]+budget["right"][:,-1]
                -budget["ambient"].sum(axis=1))
     return dict(method=method,steps=steps,dt_times_fastest_rate=float(np.diff(time)[0]*rates[-1]),
-                peak_temperature_error_K=float(abs(got-exact).max()),minimum_temperature_K=float(got.min()),
+                peak_temperature_error_K=float(abs(got-exact).max()),
+                common_time_temperature_error_K=float(abs(got[::steps//4]-exact[::steps//4]).max()),minimum_temperature_K=float(got.min()),
                 peak_step_contact_heat_error_J=float(abs(budget["contact"]-exact_contact).max()),
                 cumulative_contact_heat_error_J=float(abs(np.cumsum(budget["contact"]-exact_contact,axis=0)).max()),
                 max_energy_residual_J=float(abs(balance).max()))
@@ -46,14 +47,14 @@ def measure(steps,method):
 
 if __name__ == "__main__":
     rows = []
-    for method in ("theta","sdirk2"):
+    for method in ("theta","sdirk2","rannacher"):
         previous = None
-        for steps in (4,8,16,32,64,128,256,512):
+        for steps in (4,8,16,32,64,128,256,512,1024,2048,4096):
             row = measure(steps,method)
             errors = {k:v for k,v in row.items() if "error" in k}
             rates = {} if previous is None else {k:np.log2(previous[k]/v) for k,v in errors.items()}
             row.update(orders=rates,passed=row["max_energy_residual_J"]<1e-12
-                       and (steps!=512 or all(p>1.9 for p in rates.values())))
+                       and ((steps!=4096 and (steps!=512 or method=="rannacher")) or all(p>1.9 for p in rates.values())))
             rows.append(row)
             previous = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in (__file__,rod.__file__)]),
