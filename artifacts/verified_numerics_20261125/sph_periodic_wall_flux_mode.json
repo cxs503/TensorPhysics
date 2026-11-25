@@ -1,0 +1,306 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 8,
+      "rows": 8,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.05510373522617074,
+      "max_wall_flux_error_over_scale": 0.05439043761743625,
+      "max_mean_flux_over_scale": 2.078793909453279e-17,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "rows": 16,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.021502924781250227,
+      "max_wall_flux_error_over_scale": 0.060247444055331605,
+      "max_mean_flux_over_scale": 3.118190864179918e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.35761721028853,
+        "max_wall_flux_error_over_scale": -0.14754700401500598
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "rows": 32,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.0067498794228964655,
+      "max_wall_flux_error_over_scale": 0.03934983977225599,
+      "max_mean_flux_over_scale": 2.078793909453279e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.6715992696276119,
+        "max_wall_flux_error_over_scale": 0.6145422763097436
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "rows": 64,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.0018767965324430517,
+      "max_wall_flux_error_over_scale": 0.021923103447394406,
+      "max_mean_flux_over_scale": 1.0393969547266395e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.8465894777079719,
+        "max_wall_flux_error_over_scale": 0.8439057197545028
+      },
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "rows": 128,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.0004938938602213513,
+      "max_wall_flux_error_over_scale": 0.011508064526986146,
+      "max_mean_flux_over_scale": 9.094723353858095e-18,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.925999313706908,
+        "max_wall_flux_error_over_scale": 0.9298068259495111
+      },
+      "passed": true
+    },
+    {
+      "columns": 8,
+      "rows": 8,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.055103778366283725,
+      "max_wall_flux_error_over_scale": 0.05439029887438189,
+      "max_mean_flux_over_scale": 0.0,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "rows": 16,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.021502945050928205,
+      "max_wall_flux_error_over_scale": 0.06024730451961417,
+      "max_mean_flux_over_scale": 0.0,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.35761697980608,
+        "max_wall_flux_error_over_scale": -0.1475473428016186
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "rows": 32,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.006749906506016889,
+      "max_wall_flux_error_over_scale": 0.03934988192858749,
+      "max_mean_flux_over_scale": 0.0,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.6715948409423247,
+        "max_wall_flux_error_over_scale": 0.6145373893715482
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "rows": 64,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.0018766567170175818,
+      "max_wall_flux_error_over_scale": 0.021923994560309586,
+      "max_mean_flux_over_scale": 7.795477160449796e-18,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.8467027465817505,
+        "max_wall_flux_error_over_scale": 0.8438486250123522
+      },
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "rows": 128,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "torch",
+      "max_interior_flux_error_over_scale": 0.0004939472452845412,
+      "max_wall_flux_error_over_scale": 0.01150898225629543,
+      "max_mean_flux_over_scale": 1.0393969547266395e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.9257359007693724,
+        "max_wall_flux_error_over_scale": 0.9297504208075219
+      },
+      "passed": true
+    },
+    {
+      "columns": 8,
+      "rows": 8,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.05510373522617074,
+      "max_wall_flux_error_over_scale": 0.05439043761743625,
+      "max_mean_flux_over_scale": 2.078793909453279e-17,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "rows": 16,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.02150292478125031,
+      "max_wall_flux_error_over_scale": 0.06024744405533127,
+      "max_mean_flux_over_scale": 2.078793909453279e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.3576172102885242,
+        "max_wall_flux_error_over_scale": -0.147547004014998
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "rows": 32,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.006749879422897131,
+      "max_wall_flux_error_over_scale": 0.039349839772255826,
+      "max_mean_flux_over_scale": 1.0393969547266395e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.671599269627475,
+        "max_wall_flux_error_over_scale": 0.6145422763097417
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "rows": 64,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.0018767965324430517,
+      "max_wall_flux_error_over_scale": 0.021923103447394406,
+      "max_mean_flux_over_scale": 6.4962309670414966e-18,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.8465894777081142,
+        "max_wall_flux_error_over_scale": 0.8439057197544967
+      },
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "rows": 128,
+      "east_K": 0.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.0004938938602208525,
+      "max_wall_flux_error_over_scale": 0.011508064526986312,
+      "max_mean_flux_over_scale": 1.429170812749129e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.925999313708365,
+        "max_wall_flux_error_over_scale": 0.9298068259494903
+      },
+      "passed": true
+    },
+    {
+      "columns": 8,
+      "rows": 8,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.055103778366283725,
+      "max_wall_flux_error_over_scale": 0.05439029887438189,
+      "max_mean_flux_over_scale": 0.0,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "rows": 16,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.02150294505092837,
+      "max_wall_flux_error_over_scale": 0.060247304519614506,
+      "max_mean_flux_over_scale": 0.0,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.3576169798060687,
+        "max_wall_flux_error_over_scale": -0.1475473428016266
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "rows": 32,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.006749906506017388,
+      "max_wall_flux_error_over_scale": 0.03934988192858732,
+      "max_mean_flux_over_scale": 0.0,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.6715948409422294,
+        "max_wall_flux_error_over_scale": 0.6145373893715622
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "rows": 64,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.001876656717016584,
+      "max_wall_flux_error_over_scale": 0.021923994560307424,
+      "max_mean_flux_over_scale": 7.795477160449796e-18,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.8467027465826242,
+        "max_wall_flux_error_over_scale": 0.8438486250124885
+      },
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "rows": 128,
+      "east_K": 305.0,
+      "amplitude_K": 2.384185791015625e-07,
+      "backend": "banded",
+      "max_interior_flux_error_over_scale": 0.0004939472452842085,
+      "max_wall_flux_error_over_scale": 0.01150898225629543,
+      "max_mean_flux_over_scale": 1.2992461934082993e-17,
+      "orders": {
+        "max_interior_flux_error_over_scale": 1.925735900769577,
+        "max_wall_flux_error_over_scale": 0.9297504208073796
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "2c3e764111d264add5bfa40fdb8ce5951876e6f2",
+      "file": "sph_periodic_wall_flux_mode.py",
+      "source_sha256": "c7c17c1f353f22bd10653e472c35e68c3b5f1f5cef115d2d08939e7af6c10001"
+    },
+    {
+      "commit": "c8026063a9ac7f023697de65a1930b354f1b42c8",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "a491302ee027c79fa76cf640fe3fe7d0db91596f7fdc2e34cea39ae454f5cb66"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_periodic_wall_flux_mode.py"
+}
