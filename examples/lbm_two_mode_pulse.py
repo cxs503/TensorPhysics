@@ -25,6 +25,11 @@ def measure(n, width, tau=1.):
     field = zero
     g = lbm.thermal_equilibrium_3d(zero, zero, zero, zero)
     wall_history = []
+    # The two cell-average sine vectors are orthogonal on this uniform slab.
+    basis = torch.stack(waves).reshape(2, n)
+    projection = basis / basis.square().sum(dim=1, keepdim=True)
+    coefficients = [np.zeros(2)]
+    max_projection_residual = 0.
     deposited = max_balance = max_temp = 0.
     peak = -math.expm1(-rate*(stop-start))
     for step in range(steps):
@@ -45,6 +50,9 @@ def measure(n, width, tau=1.):
         exact = sum(-math.expm1(-k*k*rate*on)*math.exp(-k*k*rate*off)*wave/(k*k)
                     for k, wave in enumerate(waves, start=1))
         max_temp = max(max_temp, float((updated-exact).abs().max())/peak)
+        modal = projection @ updated.flatten()
+        coefficients.append(modal.numpy())
+        max_projection_residual = max(max_projection_residual, float((modal @ basis - updated.flatten()).abs().max())/peak)
         field = updated
     walls = np.asarray(wall_history)
     times = dt*np.arange(1, steps+1)
@@ -59,9 +67,24 @@ def measure(n, width, tau=1.):
     wall_heat_error = float(np.abs(dt*np.cumsum(walls, axis=0)-exact_heat).max()/peak)
     power = walls[:, 1]
     first = math.ceil(stop/dt)
-    j = first + pulse.reversal_bracket_index(power[first:])
-    crossing = (j+.5-power[j]/(power[j+1]-power[j]))*dt
+
+    def midpoint_crossing(samples):
+        j = first + pulse.reversal_bracket_index(samples[first:])
+        return (j+.5-samples[j]/(samples[j+1]-samples[j]))*dt
+
+    crossing = midpoint_crossing(power)
     exact_crossing = pulse.exact_reversal_time(start*rate, stop*rate, rate)
+    # Evaluate the continuum endpoint derivative with the simulated modal
+    # amplitudes. Use the same endpoint averaging and root interpolation on
+    # analytic amplitudes to measure the sampling error separately.
+    derivative = math.pi*np.array([1., -2.])
+    modal_power = np.asarray(coefficients) @ derivative
+    exact_coefficients = np.column_stack([
+        -np.expm1(-k*k*rate*on_time)*np.exp(-k*k*rate*off_time)/(k*k) for k in (1, 2)])
+    exact_power = np.r_[0., exact_coefficients @ derivative]
+    modal_crossing = midpoint_crossing(.5*(modal_power[1:]+modal_power[:-1]))
+    sampled_exact = midpoint_crossing(.5*(exact_power[1:]+exact_power[:-1]))
+    interval = 1/(16*rate)
     exact_input = (stop-start)*rate*2/math.pi
     return dict(cells=n, dt=dt, end_time=steps*dt, width_over_interval=width, pulse_duration_in_steps=(stop-start)/dt,
                 start_in_steps=start/dt, stop_in_steps=stop/dt,
@@ -69,6 +92,11 @@ def measure(n, width, tau=1.):
                 relative_heat_error=abs(deposited/exact_input-1),
                 max_cumulative_wall_heat_error_over_peak=wall_heat_error,
                 max_balance_over_peak=float(max_balance), max_temperature_error_over_peak=max_temp,
+                max_projection_residual_over_peak=max_projection_residual,
+                modal_reversal_time=modal_crossing, sampled_exact_reversal_time=sampled_exact,
+                sampling_shift_over_interval=(sampled_exact-exact_crossing)/interval,
+                temperature_mode_shift_over_interval=(modal_crossing-sampled_exact)/interval,
+                wall_readout_shift_over_interval=(crossing-modal_crossing)/interval,
                 reversal_time=crossing, exact_reversal_time=exact_crossing,
                 reversal_error_over_interval=abs(crossing-exact_crossing)*16*rate)
 
@@ -85,12 +113,14 @@ if __name__ == "__main__":
             row["orders"] = {} if previous is None else {
                 k: math.log2(previous[k]/row[k]) for k in ("max_temperature_error_over_peak", "reversal_error_over_interval",
                                                               "max_cumulative_wall_heat_error_over_peak")}
-            row["passed"] = bool(max(row["relative_heat_error"], row["max_balance_over_peak"]) < 1e-12
+            row["passed"] = bool(max(row["relative_heat_error"], row["max_balance_over_peak"],
+                                     row["max_projection_residual_over_peak"]) < 1e-12
                                  and (n < 64 or min(row["orders"].values()) > 1.7))
             runs.append(row)
             previous = row
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, runs=runs, diffusivity=1., relaxation_time=tau,
+                          timing_shifts="Signed in output intervals: analytic root to sampled analytic root, then to the temperature-mode root, then to the D3Q7 wall-exchange root.",
                           sources=[provenance(f) for f in (__file__, pulse.__file__, lbm.__file__)],
                           reproduction=f"OMP_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_two_mode_pulse.py --tau {tau:g}"),
                      indent=2, allow_nan=False))
