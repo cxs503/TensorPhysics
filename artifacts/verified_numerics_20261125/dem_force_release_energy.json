@@ -1,0 +1,31 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "135d67583bd8de5b820d31e80ee4779f3e1b5674",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_dem3d_contact_impact.py tests/test_dem3d_contact_impact_convention.py tests/test_contact_impact_dashpot_convention.py tests/test_dem3d_restitution_verification.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Independent event-driven solve_ivp integration of overlap, overlap rate, and cumulative c*rate^2 during compressive contact, at damping ratios 0, 1e-9, 0.3, 1 and 4. Compare spring energy at release and active viscous work separately. Pair simulation checks their sum against kinetic loss at target restitution 0.08 with actual relative speed twice each sphere speed.",
+  "suite": {
+    "tests": 42,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_overdamped_dem_pair_at_three_time_steps": {
+      "total_loss_relative_error_0.2": 2.80622636101855e-05,
+      "restitution_error_0.2": 0.00017445687614252303,
+      "force_duration_relative_error_0.2": 0.0014762648020764102,
+      "geometric_duration_relative_error_0.2": 0.00048210702867523825,
+      "total_loss_relative_error_0.1": 5.430034532385825e-06,
+      "restitution_error_0.1": 3.37276232625916e-05,
+      "force_duration_relative_error_0.1": 0.000684414100095454,
+      "geometric_duration_relative_error_0.1": 0.00033292525360484326,
+      "total_loss_relative_error_0.05": 6.985314818013891e-06,
+      "restitution_error_0.05": 4.339057126864776e-05,
+      "force_duration_relative_error_0.05": 0.0002884887491050314,
+      "geometric_duration_relative_error_0.05": 0.00010915259099941732
+    },
+    "test_active_dashpot_work_and_residual_spring_energy": {
+      "max_component_error_over_incident_energy": 5.352971238490693e-13
+    }
+  }
+}
