@@ -1,4 +1,6 @@
 """Decay of a two-layer temperature mode with a resistive contact and two storing walls."""
+import argparse
+import inspect
 import json
 from dataclasses import replace
 
@@ -39,6 +41,46 @@ def measure(n, wall_flux_order):
     means *= np.sinc(np.sqrt(decay*capacity/k)*dx/(2*np.pi))
     times = np.linspace(0.,1.,2*n+1)
     signal = np.exp(-decay*times)
+    if wall_flux_order=="DG":
+        from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
+
+        contact = np.zeros((n-1,2))
+        contact[mid-1] = resistance
+        opts = dict(bc=dict(left="robin",right="robin",bottom="neumann",top="neumann"),
+                    conductivity=np.tile(k[:,None],(1,2)),contact_resistance={"x":contact},
+                    wall_areal_heat_capacity=dict(zip(("left","right"),wall_capacity)))
+        def films(amplitude):
+            return dict(zip(("left","right"),zip(film,air*amplitude)))
+        def initial(x,y):
+            a,b = np.sqrt(decay*np.array([1.,2.])/np.array([1.,4.]))
+            return torch.where(x<.5,start*torch.cos(a*x)-west_flux/a*torch.sin(a*x),
+                        cold*torch.cos(b*(x-.5))-contact_flux/(4*b)*torch.sin(b*(x-.5)))
+        _,_,state,avg,drive = solve_transient_diffusion_2d(initial,times,ncells=(n,2),degree=1,
+                capacity=np.tile(capacity[:,None],(1,2)),robin_films=films(1.),**opts,
+                load_amplitude=lambda t:np.exp(-decay*t),return_interval_means=True,return_load_means=True)
+        modes = state[:,:,:,:,0].mean(2).numpy()
+        field = modes[:,:,0]
+        surface = np.stack((modes[:,0,0]-modes[:,0,1],modes[:,-1].sum(1)),axis=1)
+        q = []
+        for i,dt in enumerate(np.diff(times)):
+            fx,_ = poisson_face_powers_2d(avg[i],temperature_rate=(state[i+1]-state[i])/dt,
+                                          robin_films=films(float(drive[i])),**opts)
+            q.append(fx[[0,mid,-1]].sum(1).numpy())
+        q = np.array(q)
+        dt = np.diff(times)
+        wall_heat = dt[:,None]*q[:,[0,-1]]*np.array([1,-1])
+        contact_heat = dt*q[:,1]
+        wall_residual = wall_capacity*np.diff(surface,axis=0)+wall_heat-dt[:,None]*film*(
+                              drive.numpy()[:,None]*air-.5*(surface[:-1]+surface[1:]))
+        stored = dx*(field*capacity).reshape(len(times),2,mid).sum(2)
+        layer_residual = np.diff(stored,axis=0)-wall_heat+np.column_stack((contact_heat,-contact_heat))
+        ref_interval = -np.diff(signal)/decay
+        return dict(solver="DG",n=n,steps=len(dt),max_cell_mean_error_K=float(abs(field-signal[:,None]*means).max()),
+                    max_wall_temperature_error_K=float(abs(surface-signal[:,None]*walls).max()),
+                    max_cumulative_wall_heat_error_J_m2=float(abs((wall_heat-ref_interval[:,None]*inward).cumsum(0)).max()),
+                    max_cumulative_contact_heat_error_J_m2=float(abs((contact_heat-ref_interval*contact_flux).cumsum()).max()),
+                    max_wall_step_residual_J_m2=float(abs(wall_residual).max()),
+                    max_layer_step_residual_J_m2=float(abs(layer_residual).max()))
     if wall_flux_order is None:
         model, ends = two_layer_conduction.slab_fem_model(k,0.,0.,resistance,film,torch.from_numpy(capacity))
         model = replace(model,wall_areal_heat_capacity=torch.from_numpy(wall_capacity))
@@ -104,6 +146,9 @@ def measure(n, wall_flux_order):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dg",action="store_true",help="also verify P1 DG heat transfer across the contact")
+    args = parser.parse_args()
     rows = []
     for order in (1,2):
         previous = None
@@ -131,8 +176,21 @@ if __name__ == "__main__":
                          max(row["max_layer_step_residual_J_m2"],row["max_wall_step_residual_J_m2"]) < 1e-10)
         rows.append(row)
         previous = errors
+    sources = [__file__,energy.__file__,thermal.__file__,two_layer_conduction.__file__]
+    if args.dg:
+        from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
+        sources.extend(inspect.getfile(f) for f in (solve_transient_diffusion_2d,poisson_face_powers_2d))
+        previous = None
+        for n in (8,16,32,64):
+            row = measure(n,"DG")
+            errors = {k:v for k,v in row.items() if "_error_" in k}
+            orders = {k:np.log2(previous[k]/v) for k,v in errors.items()} if previous else {}
+            row.update(orders=orders,passed=bool(max(row["max_layer_step_residual_J_m2"],row["max_wall_step_residual_J_m2"])<1e-10
+                       and (n<64 or min(orders.values())>1.8)))
+            rows.append(row)
+            previous = errors
     metrics = ["cell temperature","wall temperature","instantaneous wall flux","interface flux",
                "cumulative wall heat","wall flux from storage"]
-    print(json.dumps(dict(runs=rows,order_metrics=metrics,sources=[provenance(f) for f in (__file__,energy.__file__,thermal.__file__,two_layer_conduction.__file__)]),
+    print(json.dumps(dict(runs=rows,order_metrics=metrics,sources=[provenance(f) for f in sources]),
                      indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
