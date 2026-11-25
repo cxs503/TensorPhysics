@@ -1,0 +1,79 @@
+{
+  "reference": "Finite Dirichlet slab sine series integrated over time and cell width",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_wall_step_heat.py",
+  "passed": true,
+  "runs": [
+    {
+      "cells": 32,
+      "first_interval_s": 0.0004,
+      "first_interval_west_heat_J_m2": 0.01827879669186167,
+      "exact_first_interval_west_heat_J_m2": 0.022567583341910225,
+      "west_max_interval_error_J_m2": 0.004288786650048556,
+      "east_max_interval_error_J_m2": 1.3136675457948652e-05,
+      "max_temperature_vs_cell_mean_K": 0.11703120829529035,
+      "max_energy_residual_J_m2": 7.065528717653535e-15,
+      "west_east_temperature_orders": [],
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "first_interval_s": 0.0004,
+      "first_interval_west_heat_J_m2": 0.021641618512303794,
+      "exact_first_interval_west_heat_J_m2": 0.022567583341910225,
+      "west_max_interval_error_J_m2": 0.00092596482960643,
+      "east_max_interval_error_J_m2": 3.2797777325937333e-06,
+      "max_temperature_vs_cell_mean_K": 0.027433247183587972,
+      "max_energy_residual_J_m2": 3.0324701083550565e-14,
+      "west_east_temperature_orders": [
+        2.2115402468842804,
+        2.001930261027536,
+        2.0928959949678307
+      ],
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "first_interval_s": 0.0004,
+      "first_interval_west_heat_J_m2": 0.02234912251011911,
+      "exact_first_interval_west_heat_J_m2": 0.022567583341910225,
+      "west_max_interval_error_J_m2": 0.00021846083179111533,
+      "east_max_interval_error_J_m2": 8.196622906520012e-07,
+      "max_temperature_vs_cell_mean_K": 0.006393186470146639,
+      "max_energy_residual_J_m2": 1.2494172363375355e-13,
+      "west_east_temperature_orders": [
+        2.0835827577659773,
+        2.0004965161200374,
+        2.101318320707076
+      ],
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "first_interval_s": 0.0004,
+      "first_interval_west_heat_J_m2": 0.02251358326437098,
+      "exact_first_interval_west_heat_J_m2": 0.022567583341910225,
+      "west_max_interval_error_J_m2": 5.400007753924435e-05,
+      "east_max_interval_error_J_m2": 2.048977990366796e-07,
+      "max_temperature_vs_cell_mean_K": 0.0016047465687574203,
+      "max_energy_residual_J_m2": 5.08006831045904e-13,
+      "west_east_temperature_orders": [
+        2.0163412557276614,
+        2.0001251395114865,
+        1.9941896973118611
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "0830f5ed625573b7a0d222ff35e8f79d793015df",
+      "file": "sph_wall_step_heat.py",
+      "source_sha256": "d57520c6b6bef780f2cea0ce8035766df31286abf3f86f3a7b3b77959e0b141f"
+    },
+    {
+      "commit": "6b8dc454005b84c400215bbf53c44f879a558a8f",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "cb8f74386b6ef0b6ceee5c6052e4f9f8282827b5f2a523c61f801bf1f9c6fdd6"
+    }
+  ]
+}
