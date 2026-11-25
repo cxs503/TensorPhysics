@@ -1,0 +1,46 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "fae81fe027216722afacd428fa7d9312b30fb0d8",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q tests/test_heat_1d.py tests/test_advection_diffusion_1d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Three source-free layers (L,k,C)=(0.5,1.4,2.1),(0.2,2.6,1.2),(0.3,1.8,1.4); omega=2.7. Apply an independent exact hyperbolic transfer in each material, T_after=T_before-R*q_before and q_after=q_before+S-i*omega*Cs*T_after at each interface. R=(0.23,0); test Cs=(0.7,0.19) or zero and S=(0.43+0.18i,-0.27i) or zero. Compare all six temperature and flux traces, each interface balance, temperature jumps and superposition. CPU complex128, SIPG degree 2, 4/8/16 cells per layer.",
+  "suite": {
+    "tests": 125,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_harmonic_stack_internal_states_against_propagated_traces[False-False]": {
+      "max_trace_error_4_K": 2.3385660971754456e-06,
+      "max_flux_error_4_W_per_m2": 5.945336108916198e-06,
+      "max_trace_error_8_K": 1.4677964490607125e-07,
+      "max_flux_error_8_W_per_m2": 3.7098375360831647e-07,
+      "max_trace_error_16_K": 9.192706772405328e-09,
+      "max_flux_error_16_W_per_m2": 2.3192556741406842e-08
+    },
+    "test_harmonic_stack_internal_states_against_propagated_traces[False-True]": {
+      "max_trace_error_4_K": 2.333895215939595e-06,
+      "max_flux_error_4_W_per_m2": 5.960828848721721e-06,
+      "max_trace_error_8_K": 1.464859336293312e-07,
+      "max_flux_error_8_W_per_m2": 3.719557496447767e-07,
+      "max_trace_error_16_K": 9.174307262460354e-09,
+      "max_flux_error_16_W_per_m2": 2.3253399975432096e-08
+    },
+    "test_harmonic_stack_internal_states_against_propagated_traces[True-False]": {
+      "max_trace_error_4_K": 2.1590829913065764e-06,
+      "max_flux_error_4_W_per_m2": 6.652638207272901e-06,
+      "max_trace_error_8_K": 1.3551458384375332e-07,
+      "max_flux_error_8_W_per_m2": 4.15299549563417e-07,
+      "max_trace_error_16_K": 8.487051246217246e-09,
+      "max_flux_error_16_W_per_m2": 2.5967030537423754e-08
+    },
+    "test_harmonic_stack_internal_states_against_propagated_traces[True-True]": {
+      "max_trace_error_4_K": 2.1545197028202053e-06,
+      "max_flux_error_4_W_per_m2": 6.665386785326443e-06,
+      "max_trace_error_8_K": 1.3522792521394775e-07,
+      "max_flux_error_8_W_per_m2": 4.1610055398070117e-07,
+      "max_trace_error_16_K": 8.469100112995735e-09,
+      "max_flux_error_16_W_per_m2": 2.6017185602087725e-08
+    }
+  }
+}
