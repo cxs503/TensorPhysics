@@ -1,0 +1,156 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "9ef2ac97f79463fb1f9e1b4d78483e33595db910",
+  "study_command": "python -m tensorbem.benchmarks.case_cylinder_polygon_exact --output benchmarks/verified/case_bem_laplace_cylinder_polygon_exact",
+  "study_result": "PASS",
+  "criteria": [
+    {
+      "name": "geometry_gate_all_levels",
+      "value": 2.6478584094569e-07,
+      "threshold": "<= 1e-6",
+      "ok": true,
+      "note": "the Schwarz-Christoffel map must reproduce the mesh geometry"
+    },
+    {
+      "name": "exact_solution_no_flux",
+      "value": 3.7192471324942744e-15,
+      "threshold": "<= 1e-12 U",
+      "ok": true,
+      "note": "closed-form wall velocity has zero normal component on every edge"
+    },
+    {
+      "name": "exact_solution_mirror_symmetry",
+      "value": 0.0,
+      "threshold": "<= 1e-12 U",
+      "ok": true,
+      "note": "lift-free flow: v_y must change sign under y -> -y"
+    },
+    {
+      "name": "exact_solution_far_field",
+      "value": 1.2777949629925528e-06,
+      "threshold": "<= 1e-5 U",
+      "ok": true,
+      "note": "uniform stream recovered at 1e3 radii"
+    },
+    {
+      "name": "exact_neumann_data_matches_closed_form_velocity",
+      "value": 1.8735013540549517e-15,
+      "threshold": "<= 1e-5 U",
+      "ok": true,
+      "note": "U cos(theta) re-derived from the closed-form complex velocity"
+    },
+    {
+      "name": "neumann_surface_velocity_relative_l2_budget",
+      "value": 5.3598824904202316e-05,
+      "threshold": "< 0.03",
+      "ok": true,
+      "note": "route N vs polygon-exact wall velocity at 128 panels"
+    },
+    {
+      "name": "neumann_cp_relative_l2_budget",
+      "value": 0.00015270269696065496,
+      "threshold": "< 0.03",
+      "ok": true,
+      "note": "route N vs polygon-exact Cp at 128 panels"
+    },
+    {
+      "name": "neumann_velocity_relative_l2_budget",
+      "value": 7.563133167818373e-05,
+      "threshold": "< 0.03",
+      "ok": true,
+      "note": "route N vs polygon-exact exterior velocity at 128 panels"
+    },
+    {
+      "name": "neumann_potential_relative_l2_up_to_constant_budget",
+      "value": 0.00019823476528369065,
+      "threshold": "< 0.03",
+      "ok": true,
+      "note": "route N vs polygon-exact perturbation potential at 128 panels"
+    },
+    {
+      "name": "dirichlet_velocity_relative_l2_budget",
+      "value": 1.3258089102791685e-07,
+      "threshold": "< 0.03",
+      "ok": true,
+      "note": "route D vs polygon-exact exterior velocity at the budget mesh"
+    },
+    {
+      "name": "dirichlet_potential_relative_l2_budget",
+      "value": 3.475032423480778e-07,
+      "threshold": "< 0.03",
+      "ok": true,
+      "note": "route D vs polygon-exact perturbation potential at the budget mesh"
+    },
+    {
+      "name": "neumann_no_flux_at_budget",
+      "value": 1.8318679906315083e-15,
+      "threshold": "<= 0.01 U",
+      "ok": true,
+      "note": "the polygon must be a streamline for the panel solution"
+    },
+    {
+      "name": "neumann_surface_velocity_observed_order",
+      "value": [
+        2.3261778465247613,
+        2.2652924260441596,
+        2.170801392787399,
+        2.098122769243469
+      ],
+      "threshold": ">= 1.5",
+      "ok": true,
+      "note": "order of the panel solution against the exact polygon field"
+    },
+    {
+      "name": "dirichlet_velocity_observed_order",
+      "value": [
+        2.4024836759104247,
+        4.956725679186057,
+        7.444173161915501,
+        3.127871618900014
+      ],
+      "threshold": ">= 1.5",
+      "ok": true,
+      "note": "order of the exterior field against the exact polygon field"
+    },
+    {
+      "name": "faceting_dominates_anchor_surface_metric",
+      "value": 8.332625561308225,
+      "threshold": "> 1 on every ladder level",
+      "ok": true,
+      "note": "the anchor's wall-velocity error is larger than the panel error because the circle is the wrong reference for a polygon body"
+    },
+    {
+      "name": "triangle_inequality_consistent",
+      "value": 1.951957505179347e-08,
+      "threshold": ">= 0",
+      "ok": true,
+      "note": "recovered wall field, polygon and cylinder obey the triangle inequality"
+    },
+    {
+      "name": "wrong_reference_control",
+      "value": 0.0347056494756932,
+      "threshold": ">= 0.03",
+      "ok": true,
+      "note": "the same numbers against the polygon rotated by pi/n must fail the case tolerance, so the reference is not interchangeable with its symmetric twin"
+    }
+  ],
+  "regression_command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_polygon_stream_exact.py tests/test_linear_density_solver.py tests/test_solver.py -o junit_family=legacy --junitxml=results.xml",
+  "counts": {
+    "tests": 49,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "ellipse_measurements": {
+    "test_integral_wall_velocity_on_ellipse_with_dipole_data[False]": {
+      "relative_velocity_error_16": 0.1943617415037075,
+      "relative_velocity_error_32": 0.11150745920407108,
+      "relative_velocity_error_64": 0.05277711252702766
+    },
+    "test_integral_wall_velocity_on_ellipse_with_dipole_data[True]": {
+      "relative_velocity_error_16": 0.04359253351919643,
+      "relative_velocity_error_32": 0.018572881829910386,
+      "relative_velocity_error_64": 0.006310422581579038
+    }
+  }
+}
