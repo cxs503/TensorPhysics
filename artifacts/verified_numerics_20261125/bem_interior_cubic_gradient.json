@@ -1,0 +1,30 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "58993ec08141cfcaf3c4dcdbf4d5306a55218303",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_solver.py tests/test_linear_density_solver.py tests/test_interior_field_domain_guard.py tests/test_exterior_solver.py tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Interior 2D Laplace Dirichlet problem on polygonal ellipse meshes. u=Re(z^3), grad u=(Re(3z^2),-Im(3z^2)). Compare maximum absolute potential and gradient vector errors at four fixed interior targets over 24/48/96 panels and two density bases.",
+  "suite": {
+    "tests": 133,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_interior_field_gradient_cubic_harmonic_on_ellipse[False]": {
+      "max_potential_error_24": 0.005251285445906282,
+      "max_gradient_error_24": 0.020200075692787443,
+      "max_potential_error_48": 0.001138698001853334,
+      "max_gradient_error_48": 0.0042706351467804386,
+      "max_potential_error_96": 0.0002631159299867382,
+      "max_gradient_error_96": 0.0010014102228496707
+    },
+    "test_interior_field_gradient_cubic_harmonic_on_ellipse[True]": {
+      "max_potential_error_24": 0.005026894140545433,
+      "max_gradient_error_24": 0.014263560655435567,
+      "max_potential_error_48": 0.001413595028951685,
+      "max_gradient_error_48": 0.003990559678412705,
+      "max_potential_error_96": 0.00035731153220409234,
+      "max_gradient_error_96": 0.0010077745785125475
+    }
+  }
+}
