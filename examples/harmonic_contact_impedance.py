@@ -55,7 +55,7 @@ def reference_integrals(lengths, areas, conductivity, capacity, omega, resistanc
     return np.asarray(components), np.asarray(capacity_norms)
 
 
-def measure(n, omega, solver="FVM", phased=False, reactive=False, *, resistance=.32, sensitivity=False):
+def measure(n, omega, solver="FVM", phased=False, reactive=False, *, resistance=.32, sensitivity=False, contact_response=False):
     lengths = np.array([.37, .63])
     areas = np.array([.8, 1.4])
     conductivity = np.array([.9, 3.7])
@@ -80,6 +80,7 @@ def measure(n, omega, solver="FVM", phased=False, reactive=False, *, resistance=
     contact[n-1] = resistance*min(areas)
     columns = []
     contact_currents = []
+    contact_traces = []
     jump_error = power_error = continuity = balance = 0.
     drives = list(np.eye(2))
     if phased or reactive:
@@ -131,6 +132,7 @@ def measure(n, omega, solver="FVM", phased=False, reactive=False, *, resistance=
         else:
             columns.append(ends)
             contact_currents.append(p_left)
+            contact_traces.append(traces)
         target_power = contact_power @ drive
         jump_error = max(jump_error, abs(jump-resistance*target_power))
         power_error = max(power_error, abs(p_left-target_power), abs(p_right-target_power))
@@ -138,6 +140,12 @@ def measure(n, omega, solver="FVM", phased=False, reactive=False, *, resistance=
         bulk_storage = 1j*omega*np.dot(widths*np.repeat(areas*capacity, n), cell)
         balance = max(balance, abs(drive.sum()-storage @ ends-bulk_storage))
 
+    if contact_response:
+        currents = np.asarray(contact_currents)
+        traces = np.asarray(contact_traces)
+        extra.update(exact_contact_power_W=np.stack((contact_power.real, contact_power.imag), axis=-1).tolist(),
+                     contact_currents=np.stack((currents.real, currents.imag), axis=-1).tolist(),
+                     contact_traces_K=np.stack((traces.real, traces.imag), axis=-1).tolist())
     if sensitivity:
         # Differentiate the contact transfer and the two end equations at fixed drives.
         transfer_r = layers[1] @ [[0., -1.], [0., 0.]] @ layers[0]
