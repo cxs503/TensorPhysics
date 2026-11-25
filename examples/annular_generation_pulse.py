@@ -31,6 +31,7 @@ def measure(n,boundary):
     sheet_flux = h*(sheet+rise-ambient)
     sheet_source = cs*rate[:,None]+qo-qi+np.column_stack((sheet_flux[:-1],sheet_flux[1:]))
     walls = (offsets[0]+curvature[0]*(a*a-b*b)+rise,offsets[1]+curvature[1]*(c*c-b*b)+rise)
+    wall_reference = np.column_stack(walls)
     fluxes = (None,None)
     inward = (-2*ki*curvature[0]*a,2*ko*curvature[1]*c)
     films = (None,None)
@@ -39,9 +40,9 @@ def measure(n,boundary):
     elif boundary=="film":
         films = (1.4,2.6)
         walls = tuple(w+q/hwall for w,q,hwall in zip(walls,inward,films))
-    u,s,hi,ho,external = annulus.solve_transient_annular_sheet(r,k,cv,walls,times,profile,n,
+    u,s,hi,ho,external,surface = annulus.solve_transient_annular_sheet(r,k,cv,walls,times,profile,n,
              initial_sheet_temperature=sheet,sheet_capacity=cs,sheet_film=h,ambient=ambient,
-             resistance=resistance,inner_resistance_fraction=fraction,wall_fluxes=fluxes,film_coefficients=films,
+             resistance=resistance,inner_resistance_fraction=fraction,wall_fluxes=fluxes,film_coefficients=films,return_wall_temperatures=True,
              source_intervals=np.repeat(source[:,None,:],2,axis=1),sheet_source_intervals=sheet_source)
     inner_rate = -4*np.pi*ki*curvature[0]*r[:n+1]**2
     outer_rate = -4*np.pi*ko*curvature[1]*r[n:]**2
@@ -49,12 +50,15 @@ def measure(n,boundary):
     cell_residual = (np.diff(u,axis=0)*cv*volume+np.column_stack((np.diff(hi),np.diff(ho)))
                      -dt[:,None]*source*volume)
     sheet_residual = 2*np.pi*b*(cs*np.diff(s)-dt*sheet_source.mean(1))+ho[:,0]-hi[:,-1]+external
-    return dict(cells_per_layer=n,boundary=boundary,
+    result = dict(cells_per_layer=n,boundary=boundary,
                 errors=dict(field_K=float(abs(u-profile-rise[:,None]).max()),sheet_K=float(abs(s-sheet-rise).max()),
                             inner_heat_J_m=float(abs(hi.cumsum(0)-times[1:,None]*inner_rate).max()),
                             outer_heat_J_m=float(abs(ho.cumsum(0)-times[1:,None]*outer_rate).max()),
                             reservoir_heat_J_m=float(abs(external.cumsum()-absorbed).max())),
                 cell_residual_J_m=float(abs(cell_residual).max()),sheet_residual_J_m=float(abs(sheet_residual).max()))
+    if boundary!="temperature":
+        result["errors"]["surface_K"] = float(abs(surface-wall_reference).max())
+    return result
 
 
 if __name__=="__main__":
