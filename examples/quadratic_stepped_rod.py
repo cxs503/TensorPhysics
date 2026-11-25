@@ -66,6 +66,11 @@ def measure(n, resolve_source=False):
                end_power_W=float(np.max(abs(np.array([left[0],right[-1]])-wall))),
                contact_power_W=abs(conductance*(hot[n-1]-cold[n-1])-interface))
     if resolve_source:
+        local_power = thermal.thermal_element_nodal_power(model,state)
+        sections = thermal.thermal_element_section_power(model,local_power,fractions,
+            net_line_source_gradient=cell_area*(2*beta*midpoints),
+            net_line_source_curvature=cell_area*2*beta)
+        fem["probe_power_W"] = float(abs(sections.numpy()-np.concatenate(probe_power)).max())
         t,p = rod.reconstruct_steady_rod_field(dx,cell_area,cell_k,cell,left,right,fractions,**derivatives)
         fvm["probe_temperature_K"] = float(np.max(abs(t-np.concatenate(probe_temperature))))
         fvm["probe_power_W"] = float(np.max(abs(p-np.concatenate(probe_power))))
@@ -75,7 +80,7 @@ def measure(n, resolve_source=False):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--resolve-source", action="store_true", help="include within-cell source derivatives in FVM face powers")
+    parser.add_argument("--resolve-source", action="store_true", help="resolve within-cell generation in FEM and FVM section powers")
     resolve = parser.parse_args().resolve_source
     rows = []
     previous = None
