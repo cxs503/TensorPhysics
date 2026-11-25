@@ -8,8 +8,10 @@ import numpy as np
 from conduction_provenance import provenance
 
 
-def interval_reference(times, resistance, method, include_traces=False):
+def interval_reference(times, resistance, method, include_traces=False, surface_capacities=(0., 0.), return_trace_changes=False):
     """Invert integrals of cut fluxes and optional left/right interface temperatures."""
+    if return_trace_changes and not include_traces:
+        raise ValueError("Trace changes require include_traces=True")
     with mp.workdps(32):
         def transform(s, cut):
             roots = (mp.sqrt(4*s), mp.sqrt(2*s/3))
@@ -17,23 +19,33 @@ def interval_reference(times, resistance, method, include_traces=False):
             arguments = [length*root for length, root in zip(lengths, roots)]
             left = mp.tanh(arguments[0])/roots[0]
             right = mp.tanh(arguments[1])/(3*roots[1])
+            # A trace initially at its adjoining material temperature stores
+            # heat in parallel with the finite layer's thermal admittance.
+            factors = (1+s*surface_capacities[0]*left, 1+s*surface_capacities[1]*right)
+            left, right = left/factors[0], right/factors[1]
             impedance = resistance + left + right
             # A unit initial jump drives the flux. Integration introduces
             # a second factor 1/s. Each fixed outer wall sees a sech transfer.
             heat = 1 / (s*s*impedance)
             # Time integrals of the two material-side interface temperatures.
-            if cut == 3:
-                return 1/s**2 - left*heat
-            if cut == 4:
-                return right*heat
+            if cut in (3, 5):
+                trace = 1/s**2 - left*heat
+                return trace if cut == 3 else s*trace
+            if cut in (4, 6):
+                trace = right*heat
+                return trace if cut == 4 else s*trace
             if cut == 1:
                 return heat
-            wall_argument = arguments[0] if cut == 0 else arguments[1]
-            return heat / mp.cosh(wall_argument)
+            wall = 0 if cut == 0 else 1
+            return heat / (mp.cosh(arguments[wall])*factors[wall])
 
+        channels = 7 if return_trace_changes else (5 if include_traces else 3)
         cumulative = [[float(mp.invertlaplace(lambda s: transform(s, cut), t, method=method))
-                       for cut in range(5 if include_traces else 3)] for t in times[1:]]
-    return np.diff(np.vstack((np.zeros_like(cumulative[0]), cumulative)), axis=0)
+                       for cut in range(channels)] for t in times[1:]]
+    initial = np.zeros(channels)
+    if return_trace_changes:
+        initial[5] = 1.
+    return np.diff(np.vstack((initial, cumulative)), axis=0)
 
 
 def measure(n, times, resistance, reference, solver="SPH"):
