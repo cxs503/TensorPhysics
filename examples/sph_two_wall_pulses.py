@@ -155,37 +155,53 @@ def reference_temperature_integral(x):
     return result
 
 
-def measure_dem(n):
+def measure_dem(n, ramps=False):
     from tensordem.thermal import contact_chain
 
     dx = 1/n
     centers = (np.arange(n)+.5)*dx
     links, stores = contact_chain.cell_centered_slab_network(np.full(n, dx), 1., 1.)
-    schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+    cuts = np.arange(n+1)*dx
+    if ramps:
+        schedule = np.union1d(TIMES, RAMP_KNOTS)
+        wall_levels = np.column_stack([np.interp(schedule, RAMP_KNOTS, side) for side in RAMP_LEVELS.T])
+        temperature, _, time_integral = ramp_reference(
+            centers, TIMES, RAMP_KNOTS, RAMP_LEVELS, return_point_integral=True)
+        _, cumulative = ramp_reference(cuts, TIMES, RAMP_KNOTS, RAMP_LEVELS)
+    else:
+        schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+        temperature, _ = reference(centers, TIMES, 64)
+        _, cumulative = reference(cuts, TIMES, 64)
+        time_integral = reference_temperature_integral(centers)
     state = np.zeros(n+2)
     history = [state[1:-1]]
     indices = np.searchsorted(schedule, TIMES)
     heats, integrals = [], []
-    balance = wall_error = 0.
-    for a, b in zip(schedule[:-1], schedule[1:]):
-        ends = [wall(a, side) for side in (0, 1)]
-        new, heat, mean = contact_chain.constant_contact_interval(
-            links, stores, b-a, state, t_left=ends[0], t_right=ends[1],
-            return_interval_temperature=True)
-        wall_error = max(wall_error, np.max(abs(new[[0, -1]]-ends)), np.max(abs(mean[[0, -1]]-ends)))
+    balance = wall_error = constitutive_error = 0.
+    for i, (a, b) in enumerate(zip(schedule[:-1], schedule[1:])):
+        if ramps:
+            start, end = wall_levels[i:i+2]
+            new, heat, mean = contact_chain.affine_contact_interval(
+                links, stores, b-a, state, t_left=(start[0], end[0]), t_right=(start[1], end[1]),
+                return_interval_temperature=True)
+        else:
+            start = end = np.array([wall(a, side) for side in (0, 1)])
+            new, heat, mean = contact_chain.constant_contact_interval(
+                links, stores, b-a, state, t_left=end[0], t_right=end[1], return_interval_temperature=True)
+        wall_error = max(wall_error, np.max(abs(new[[0, -1]]-end)), np.max(abs(mean[[0, -1]]-(start+end)/2)))
+        constitutive_error = max(constitutive_error, np.max(abs(heat+(b-a)*np.diff(mean)/links)))
         balance = max(balance, np.max(abs(dx*(new-state)[1:-1]+np.diff(heat))))
         heats.append(heat)
         integrals.append((b-a)*mean[1:-1])
         history.append(new[1:-1])
         state = new
-    temperature, _ = reference(centers, TIMES, 64)
-    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
     heat_error = abs(np.add.reduceat(heats, indices[:-1])-np.diff(cumulative, axis=0))
-    integral_error = np.add.reduceat(integrals, indices[:-1])-np.diff(reference_temperature_integral(centers), axis=0)
+    integral_error = np.add.reduceat(integrals, indices[:-1])-np.diff(time_integral, axis=0)
     return dict(columns=n, temperature_error_K=float(abs(np.asarray(history)[indices]-temperature).max()),
                 interval_temperature_error_K=float(abs(integral_error/np.diff(TIMES)[:, None]).max()),
                 wall_heat_error_J_m2=float(heat_error[:, [0, -1]].max()),
                 interior_cut_heat_error_J_m2=float(heat_error[:, 1:-1].max()),
+                link_heat_residual_J_m2=float(constitutive_error),
                 column_energy_residual_J_m2=float(balance), wall_trace_error_K=float(wall_error))
 
 
@@ -382,6 +398,7 @@ if __name__ == "__main__":
     group.add_argument("--lbm-off-grid", action="store_true", help="shift both wall pulses between lattice times")
     group.add_argument("--dg-ramps", action="store_true", help="run SIPG under independent wall ramps")
     group.add_argument("--dg", action="store_true", help="run the SIPG linear-element slab")
+    group.add_argument("--dem-ramps", action="store_true", help="drive the fixed thermal chain with independent wall ramps")
     group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
     group.add_argument("--fvm-ramps", action="store_true", help="run the finite-volume slab under independent ramps")
     group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
@@ -400,9 +417,9 @@ if __name__ == "__main__":
     elif args.dg or args.dg_ramps:
         from tensordg import heat_1d as solver
         run = partial(measure_dg, ramps=args.dg_ramps, degree=args.dg_degree or 1)
-    elif args.dem:
+    elif args.dem or args.dem_ramps:
         from tensordem.thermal import contact_chain as solver
-        run = measure_dem
+        run = partial(measure_dem, ramps=args.dem_ramps)
     elif args.fvm or args.fvm_ramps:
         from tensorfvm.cht import rod as solver
         run = partial(measure_fvm, ramps=args.fvm_ramps)
@@ -414,13 +431,14 @@ if __name__ == "__main__":
         row = run(n)
         errors = np.array([row[k] for k in ("temperature_error_K", "wall_heat_error_J_m2",
                                             "interior_cut_heat_error_J_m2")])
-        if args.dem or args.sph_ramps:
+        if args.dem or args.dem_ramps or args.sph_ramps:
             errors = np.append(errors, row["interval_temperature_error_K"])
         if args.fvm_ramps:
             errors = np.append(errors, row["subcell_heat_error_J_m2"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
                    row["column_energy_residual_J_m2"] < 1e-12 and row.get("wall_trace_error_K", 0.) < 1e-14
+                   and row.get("link_heat_residual_J_m2", 0.) < 1e-12
                    and row.get("interval_wall_error_K", 0.) < 1e-14
                    and row.get("reconstruction_face_mismatch_J_m2", 0.) < 1e-12
                    and row.get("interface_heat_mismatch_J_m2", 0.) < 1e-12
