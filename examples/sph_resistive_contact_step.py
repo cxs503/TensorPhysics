@@ -6,7 +6,6 @@ import mpmath as mp
 import numpy as np
 
 from conduction_provenance import provenance
-from tensorsph import heat_conduction_2d as sph
 
 
 def interval_reference(times, resistance, method, include_traces=False):
@@ -46,6 +45,8 @@ def measure(n, times, resistance, reference, solver="SPH"):
     contacts[left-1] = resistance
     trace_metrics = {}
     if solver == "SPH":
+        from tensorsph import heat_conduction_2d as sph
+
         temperature, heat = sph.solve_transient_layered_slab(
             initial, times, 1./n, (1., 0.), conductivity=conductivity,
             volumetric_heat_capacity=capacity, contact_resistance_x=contacts,
@@ -84,6 +85,8 @@ def measure(n, times, resistance, reference, solver="SPH"):
 
 
 if __name__ == "__main__":
+    from tensorsph import heat_conduction_2d as sph
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--with-fvm", action="store_true", help="also run the SDIRK2 finite-volume rod")
     with_fvm = parser.parse_args().with_fvm
