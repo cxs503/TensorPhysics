@@ -1,0 +1,29 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "35a12b743cb66d9bd677cdb39e67a2a5a771449f",
+  "dependencies": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "scikit-fem": "12.0.2",
+    "capytaine": "3.0.0",
+    "pytest": "9.2.0"
+  },
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_laplace_sphere_xval.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Sphere with prescribed boundary potential -(1+cos(theta)), exact exterior potential -(1/r+z/r^3) for unit radius. Separate dipole test uses +z/r^3. Independent Capytaine Rankine BEM and scikit-fem axisymmetric FEM checks included.",
+  "counts": {
+    "tests": 9,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "dipole_relative_error": 0.007346435343948813,
+    "density_linf_rel_error_80_panels": 0.033340725457687674,
+    "density_linf_rel_error_320_panels": 0.01661395419826643,
+    "density_linf_rel_error_1280_panels": 0.008768959051294975,
+    "probe_potential_l2_rel_error_80_panels": 0.06370482362237488,
+    "probe_potential_l2_rel_error_320_panels": 0.016999210247963466,
+    "probe_potential_l2_rel_error_1280_panels": 0.004341047530314919,
+    "final_probe_order_in_h": 1.9693525990426626
+  }
+}
