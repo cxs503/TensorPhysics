@@ -15,13 +15,15 @@ CAPACITY = (.25, .8)
 WALLS = np.array([1., .3j])
 
 
-def continuum(omega, walls=WALLS, generation=(0., 0.)):
+def continuum(omega, walls=WALLS, generation=(0., 0.), fractions=(.5, .5)):
     # Exact radial resistances in K m/W, with heat rates per unit axial length.
     a, r1, _, r2, b = RADII
     surface = 2*np.pi*np.array([r1, r2])
-    half_contact = np.asarray(CONTACT)/(2*surface)
+    contact = np.asarray(CONTACT)/surface
+    inner = contact*fractions
+    outer = contact-inner
     resistance = np.log([r1/a, r2/r1, b/r2])/(2*np.pi*np.array(K))
-    resistance += [half_contact[0], half_contact.sum(), half_contact[1]]
+    resistance += [inner[0], outer[0]+inner[1], outer[1]]
     g0, g1, g2 = 1/resistance
     matrix = np.array([[g0+g1, -g1], [-g1, g1+g2]]) + 1j*omega*np.diag(surface*CAPACITY)
     temp = np.linalg.solve(matrix, walls*[g0, g2] + surface*generation)
@@ -29,7 +31,7 @@ def continuum(omega, walls=WALLS, generation=(0., 0.)):
     return np.column_stack((temp, power[:-1]/surface, power[1:]/surface))
 
 
-def angular_reference(omega, mode, walls=WALLS, generation=(0., 0.)):
+def angular_reference(omega, mode, walls=WALLS, generation=(0., 0.), fractions=(.5, .5)):
     # In a source-free annulus T_m = A*r^m+B*r^-m. Propagate the pair
     # (T_m, r*q_m) between the two physical walls without an artificial join.
     edges = [RADII[0], RADII[1], RADII[3], RADII[4]]
@@ -43,11 +45,11 @@ def angular_reference(omega, mode, walls=WALLS, generation=(0., 0.)):
             t, p = c*t-s*p/(k*mode), c*p-s*k*mode*t
             if i < 2:
                 incoming = p/radius
-                t -= CONTACT[i]*incoming/2
+                t -= CONTACT[i]*fractions[i]*incoming
                 outgoing = incoming+generation[i]-1j*omega*CAPACITY[i]*t
                 sheets.append([t, incoming, outgoing])
                 p = radius*outgoing
-                t -= CONTACT[i]*outgoing/2
+                t -= CONTACT[i]*(1-fractions[i])*outgoing
         return t, np.asarray(sheets)
     offset, _ = propagate(0.)
     unit, _ = propagate(1.)

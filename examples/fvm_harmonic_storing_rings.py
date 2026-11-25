@@ -9,7 +9,7 @@ from conduction_provenance import provenance
 from tensorfvm.cht import annulus, storing_rings
 
 
-def bulk_reference(edges, omega, mode, walls, generation, capacities):
+def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=(.5, .5)):
     """Solve the six continuum coefficients using wall and sheet jump conditions."""
     from scipy.special import iv, ivp, kv, kvp
 
@@ -28,9 +28,8 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities):
     for i, radius in enumerate(edges[1:-1]):
         left, incoming = basis(i, radius)
         right, outgoing = basis(i+1, radius)
-        half = reference.CONTACT[i]/2
-        sheet = left - half*incoming
-        equations.extend([sheet - right - half*outgoing,
+        sheet = left - reference.CONTACT[i]*fractions[i]*incoming
+        equations.extend([sheet - right - reference.CONTACT[i]*(1-fractions[i])*outgoing,
                           outgoing - incoming + 1j*omega*reference.CAPACITY[i]*sheet])
         rhs.extend([0., generation[i]])
         samples.append([sheet, incoming, outgoing])
@@ -38,7 +37,7 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities):
     return np.asarray(samples) @ coeff
 
 
-def measure(bulk_storage=False):
+def measure(bulk_storage=False, fractions=(.5, .5)):
     edges = np.array(reference.RADII)[[0, 1, 3, 4]]
     walls = np.zeros(2)
     generation = np.array([1., .6j])
@@ -47,11 +46,11 @@ def measure(bulk_storage=False):
     for mode in range(4):
         for omega in (1., 8., 24.):
             if bulk_storage:
-                expected = bulk_reference(edges, omega, mode, walls, generation, capacities)
+                expected = bulk_reference(edges, omega, mode, walls, generation, capacities, fractions)
             elif mode:
-                expected = reference.angular_reference(omega, mode, walls, generation)
+                expected = reference.angular_reference(omega, mode, walls, generation, fractions)
             else:
-                expected = reference.continuum(omega, walls, generation)
+                expected = reference.continuum(omega, walls, generation, fractions)
             previous = None
             for n in (4, 8, 16, 32):
                 mesh = np.r_[np.concatenate([np.geomspace(a, b, n+1)[:-1]
@@ -59,7 +58,7 @@ def measure(bulk_storage=False):
                 fields = storing_rings.solve_storing_rings(
                     mesh, np.repeat(reference.K, n), [n, 2*n], walls, omega,
                     contact_resistances=reference.CONTACT, sheet_capacities=reference.CAPACITY,
-                    sheet_generation=generation, azimuthal_mode=mode,
+                    inner_resistance_fractions=fractions, sheet_generation=generation, azimuthal_mode=mode,
                     volumetric_heat_capacity=np.repeat(capacities, n) if bulk_storage else None)
                 temp, incoming, outgoing = fields
                 balance = max(abs(incoming-outgoing+generation-1j*omega*np.asarray(reference.CAPACITY)*temp))
@@ -76,11 +75,16 @@ def measure(bulk_storage=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bulk-storage", action="store_true", help="include volumetric heat storage in all three layers")
-    bulk_storage = parser.parse_args().bulk_storage
-    runs = measure(bulk_storage)
+    parser.add_argument("--inner-fractions", nargs=2, type=float, default=(.5, .5),
+                        metavar=("RING1", "RING2"), help="fraction of each contact resistance on its inner side")
+    args = parser.parse_args()
+    bulk_storage = args.bulk_storage
+    fractions = args.inner_fractions
+    runs = measure(bulk_storage, fractions)
     passed = all(row["passed"] for row in runs)
-    print(json.dumps(dict(passed=passed, bulk_storage=bulk_storage, runs=runs, sources=[provenance(p) for p in
+    print(json.dumps(dict(passed=passed, bulk_storage=bulk_storage, inner_resistance_fractions=fractions, runs=runs, sources=[provenance(p) for p in
                           (__file__, reference.__file__, annulus.__file__, storing_rings.__file__)],
-                          reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_harmonic_storing_rings.py" + (" --bulk-storage" if bulk_storage else "")),
+                          reproduction="OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_harmonic_storing_rings.py" + (" --bulk-storage" if bulk_storage else "")
+                          + f" --inner-fractions {fractions[0]} {fractions[1]}"),
                      allow_nan=False, indent=2))
     raise SystemExit(0 if passed else 1)
