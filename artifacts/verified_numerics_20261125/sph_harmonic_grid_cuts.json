@@ -1,0 +1,46 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "3f158b0fbd248ed918906c87b62407e4c91998aa",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "CPU float64/complex128. The three-layer harmonic solution has unit flux magnitude at each wall. Direct denotes the SPH pair tally. Prescribed-wall recovery uses a cubic fit. Compare both operators on the exact and solved fields. The multimode test compares inverse-transformed cut amplitudes with real-space pair tallies on every row and cut.",
+  "suite": {
+    "tests": 133,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_fixed_wall_flux_from_solved_contact_slab": {
+      "direct_exact_field_error_16": 0.5289560572670291,
+      "direct_solved_field_error_16": 0.126376173047739,
+      "particle_temperature_error_16": 0.053106016366059904,
+      "recovered_exact_field_error_16": 4.126162952233366e-15,
+      "wall_flux_error_16": 8.61884847489265,
+      "prescribed_wall_flux_error_16": 0.18000030240411766,
+      "direct_exact_field_error_32": 0.2735110820509221,
+      "direct_solved_field_error_32": 0.0769308556958645,
+      "particle_temperature_error_32": 0.027252798757395717,
+      "recovered_exact_field_error_32": 6.562770492126068e-15,
+      "wall_flux_error_32": 0.577945043029344,
+      "prescribed_wall_flux_error_32": 0.20645826893037264,
+      "direct_exact_field_error_64": 0.1385441110592196,
+      "direct_solved_field_error_64": 0.041300689247149705,
+      "particle_temperature_error_64": 0.013994730038920364,
+      "recovered_exact_field_error_64": 1.6901664276134433e-14,
+      "wall_flux_error_64": 0.09732835234029934,
+      "prescribed_wall_flux_error_64": 0.09746550818386557,
+      "direct_exact_field_error_128": 0.06965725605032258,
+      "direct_solved_field_error_128": 0.021268921064720878,
+      "particle_temperature_error_128": 0.007115288952870311,
+      "recovered_exact_field_error_128": 3.559840580654204e-14,
+      "wall_flux_error_128": 0.048395615755793854,
+      "prescribed_wall_flux_error_128": 0.048416637931512414
+    },
+    "test_harmonic_grid_row_flux_matches_pair_tallies[torch]": {
+      "maximum_pair_tally_discrepancy": 1.9860273225978185e-15
+    },
+    "test_harmonic_grid_row_flux_matches_pair_tallies[banded]": {
+      "maximum_pair_tally_discrepancy": 1.9860273225978185e-15
+    }
+  }
+}
