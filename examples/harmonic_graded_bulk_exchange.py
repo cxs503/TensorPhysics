@@ -90,6 +90,20 @@ def static_and_lag(materials,resistance,wall_c,ambient):
     return component(0),component(2)
 
 
+def layer_materials(contact):
+    return [(K,C,H0,SLOPE),(2.3,.9,1.8,2.) if contact else (K,C,H0+.5*SLOPE,SLOPE)]
+
+
+def graded_fem_model(k,c,h,slope,resistance,wall_c,ambient):
+    m = len(k)//2
+    model,ends = slab_fem_model(k,0.,0.,resistance,FILMS,torch.from_numpy(c))
+    local_x = model.nodes[model.elements,0].numpy()-np.repeat([0.,.5],m)[:,None]
+    nodal_loss = torch.from_numpy(h[:,None]+slope[:,None]*local_x)
+    model = replace(model,heat_loss_coefficient=nodal_loss,ambient_temperature=torch.from_numpy(ambient),
+                    wall_areal_heat_capacity=torch.from_numpy(wall_c))
+    return model,ends
+
+
 def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=False):
     if return_response and not quasistatic:
         raise ValueError("low-frequency responses require quasistatic=True")
@@ -99,7 +113,7 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=Fal
     x = .5*(edges[:-1]+edges[1:])
     m = n//2
     resistance = .18 if contact else 0.
-    materials = [(K,C,H0,SLOPE),(2.3,.9,1.8,2.) if contact else (K,C,H0+.5*SLOPE,SLOPE)]
+    materials = layer_materials(contact)
     k,c,h,slope = np.repeat(np.array(materials).T,m,axis=1)
     relative_x = x-np.repeat([0.,.5],m)
     loss = h+slope*relative_x
@@ -112,11 +126,7 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=Fal
     inward_ref = inward_ref*np.array([1.,-1.])
     cut_ref = analytic(.5)[1]
 
-    model,ends = slab_fem_model(k,0.,0.,resistance,FILMS,torch.from_numpy(c))
-    local_x = model.nodes[model.elements,0].numpy()-np.repeat([0.,.5],m)[:,None]
-    nodal_loss = torch.from_numpy(h[:,None]+slope[:,None]*local_x)
-    model = replace(model,heat_loss_coefficient=nodal_loss,ambient_temperature=torch.from_numpy(ambient),
-                    wall_areal_heat_capacity=torch.from_numpy(wall_c))
+    model,ends = graded_fem_model(k,c,h,slope,resistance,wall_c,ambient)
     state = thermal.solve_harmonic_thermal(model,omega,sparse=True).temperature
     field = state.reshape(2,-1).mean(0).numpy()
     wall = state[ends].mean(1).numpy()
