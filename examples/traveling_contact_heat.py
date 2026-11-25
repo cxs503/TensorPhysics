@@ -44,8 +44,19 @@ def measure(n, mode, resistance, sph_only=False):
     traces = np.array([hot,cold])
     truth = nodes[m:m+2]
     harmonic = complex(sections[m])
-    wall_error = abs(sections.numpy()[[0,-1]] - walls * [1.,-1.])
-    yield harmonic,q,u.numpy(),point,dict(solver="SPH",n=n,mode=mode,contact_resistance_m2K_W=resistance,
+    wall_ref = walls * [1.,-1.]  # Report both walls in the positive x direction.
+    wall_flux = sections.numpy()[[0,-1]]
+    wall_error = abs(wall_flux-wall_ref)
+    # Inserting exact particle temperatures isolates the wall tally's truncation
+    # error. The remaining complex difference is induced by the solved field.
+    exact_field_flux = np.array([sph.layered_slab_modal_cut_flux(point,dx,face,(1.,0.),
+        conductivity=k,contact_resistance_x=contact,transverse_wavenumber=beta).item()
+        for face in (0,n)])
+    wall_diagnostics = {}
+    for i, side in enumerate(("west","east")):
+        wall_diagnostics[f"{side}_wall_exact_field_error_W_m2"] = float(abs(exact_field_flux[i]-wall_ref[i]))
+        wall_diagnostics[f"{side}_wall_field_contribution_W_m2"] = float(abs(wall_flux[i]-exact_field_flux[i]))
+    yield harmonic,q,u.numpy(),point,wall_flux,wall_ref,dict(**wall_diagnostics,solver="SPH",n=n,mode=mode,contact_resistance_m2K_W=resistance,
         temperature_error_K=float(abs(u.numpy()-point).max()),interface_flux_error_W_m2=float(abs(harmonic-q)),
         interface_phase_error_rad=float(abs(np.angle(harmonic/q))),
         west_wall_flux_error_W_m2=float(wall_error[0]),east_wall_flux_error_W_m2=float(wall_error[1]),
@@ -55,7 +66,7 @@ def measure(n, mode, resistance, sph_only=False):
     if sph_only:
         return
     widths = np.full(n, dx)
-    fvm, _, interior = energy.solve_harmonic_conduction(widths, widths, k, c,
+    fvm, boundary, interior = energy.solve_harmonic_conduction(widths, widths, k, c,
                     {"west": dict(type="dirichlet", values=phase_avg),
                      "east": dict(type="dirichlet", values=0.)}, omega, periodic_y=True,
                     contact_resistance_x=np.broadcast_to(contact, (n,n-1)), return_interior_power=True)
@@ -67,7 +78,11 @@ def measure(n, mode, resistance, sph_only=False):
                                fvm[:,m] + measured*dx/(2*k[m]))) / phase_avg[:,None]
     trace_error = abs(surface-truth).max(axis=0)
     jump = surface[:,0]-surface[:,1]
-    yield harmonic,q,u.numpy(),point,dict(solver="FVM",n=n,mode=mode,contact_resistance_m2K_W=resistance,
+    wall_flux = np.array([np.mean(boundary[side]/(dx*phase_avg))*sign
+                          for side,sign in (("west",1.),("east",-1.))])
+    wall_error = abs(wall_flux-wall_ref)
+    yield harmonic,q,None,None,wall_flux,wall_ref,dict(solver="FVM",n=n,mode=mode,contact_resistance_m2K_W=resistance,
+        west_wall_flux_error_W_m2=float(wall_error[0]),east_wall_flux_error_W_m2=float(wall_error[1]),
         left_trace_error_K=float(trace_error[0]),right_trace_error_K=float(trace_error[1]),
         trace_phase_error_rad=float(abs(np.angle(surface*truth.conj())).max()),
         jump_error_K=float(abs(jump-resistance*q).max()),
@@ -85,8 +100,9 @@ if __name__ == "__main__":
     for resistance in (0., .15):
         previous = {}
         previous_traces = {}
+        previous_wall = previous_wall_error = None
         for n in (16,32,64,128,256,512):
-            for harmonic, q, particle, point, row in measure(n, 1, resistance,args.sph_only):
+            for harmonic, q, particle, point, wall_flux, wall_ref, row in measure(n, 1, resistance,args.sph_only):
                 name = row["solver"]
                 errors = np.array([row["temperature_error_K"], row["interface_flux_error_W_m2"]])
                 orders = []
@@ -108,8 +124,18 @@ if __name__ == "__main__":
                 row["orders"] = orders
                 row["raw_second_order_gate"] = all(p>1.8 for p in orders) if orders else None
                 trace_keys = ("left_trace_error_K","right_trace_error_K","trace_phase_error_rad","jump_error_K")
+                trace_keys += ("west_wall_flux_error_W_m2","east_wall_flux_error_W_m2")
                 if name == "SPH":
-                    trace_keys += ("west_wall_flux_error_W_m2","east_wall_flux_error_W_m2")
+                    if previous_wall is not None:
+                        # Extrapolate complex fluxes before taking their error magnitudes.
+                        wall_error = abs(2*wall_flux-previous_wall-wall_ref)
+                        for i, side in enumerate(("west","east")):
+                            row[f"{side}_extrapolated_wall_error_W_m2"] = float(wall_error[i])
+                            if previous_wall_error is not None:
+                                row[f"{side}_extrapolated_wall_order"] = float(
+                                    np.log2(previous_wall_error[i]/wall_error[i]))
+                        previous_wall_error = wall_error
+                    previous_wall = wall_flux
                 if name in previous_traces:
                     row["trace_orders"] = {
                         k:float(np.log2(previous_traces[name][k]/row[k])) for k in trace_keys
@@ -144,9 +170,17 @@ if __name__ == "__main__":
             temp_error = row["temperature_error_K"]
             flux_order = row["orders"][1]
             flux_error = row["interface_flux_error_W_m2"]
+        if row["solver"] == "SPH":
+            wall_orders = [row[f"{side}_extrapolated_wall_order"] for side in ("west","east")]
+            wall_errors = [row[f"{side}_extrapolated_wall_error_W_m2"] for side in ("west","east")]
+        else:
+            wall_keys = [f"{side}_wall_flux_error_W_m2" for side in ("west","east")]
+            wall_orders = [row["trace_orders"][key] for key in wall_keys]
+            wall_errors = [row[key] for key in wall_keys]
+        row["wall_flux_passed"] = min(wall_orders)>1.8 and max(wall_errors)<5e-4
         row["acceptance_estimator"] = "two-grid extrapolated" if row["solver"] == "SPH" else "single-grid"
         row["passed"] = (min(temp_order, flux_order)>1.8 and flux_error<1e-4
-                         and temp_error<2e-4 and row.get("contact_trace_passed",True))
+                         and temp_error<2e-4 and row["contact_trace_passed"] and row["wall_flux_passed"])
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
                      (__file__, periodic_contact_heat.__file__, sph.__file__, energy.__file__)]),
                      indent=2, allow_nan=False))
