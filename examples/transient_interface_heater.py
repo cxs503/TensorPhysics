@@ -109,7 +109,7 @@ def fem(n,area,times,fraction,storage_fraction,initial):
     return np.column_stack((trace[:,n+np.argmax(area)],trace[:,n]-trace[:,n+1],wall,trace[:,n:n+2],np.r_[0.,contact]))
 
 
-def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.,right_stop=None,return_deposited=False,right_sign=1.):
+def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.,right_stop=None,return_deposited=False,right_sign=1.,method="theta"):
     from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
 
     face = np.zeros((2*n-1,2))
@@ -128,7 +128,7 @@ def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.
                ncells=(2*n,2),degree=1,capacity=np.tile(branch_capacity.repeat(n)[:,None],(1,2)),
                trace_heat_capacity={"x":(surface[0]*face,surface[1]*face)},
                trace_power_history=heaters,load_jump_times=tuple(t for t in (right_delay,right_stop) if t),
-               rannacher=True,return_interval_means=True,return_history_heat=True,**options)
+               method=method,rannacher=method=="theta",return_interval_means=True,return_history_heat=True,**options)
     modes = state[:,:,:,:,0].mean(2).numpy()
     traces = np.column_stack((modes[:,n-1].sum(1),modes[:,n,0]-modes[:,n,1]))
     stored = .5*branch_capacity*modes[:,:,0].reshape(len(times),2,n).mean(2)+surface*traces
