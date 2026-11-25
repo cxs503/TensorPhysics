@@ -46,9 +46,22 @@ def measure(n):
                                        layered_x=True, power_by_row=True, **material)
             field = u.numpy()
             measured = contact_power.numpy()/(factor*dx)
+            # Compare the direct Fourier cut with the row-by-row tally for
+            # each driven mode, including the one with negative wavenumber.
+            modes = np.array([0,1,-2])
+            temp_modes = np.fft.fft(field,axis=0)/n
+            west,east = (np.fft.fft(data)/n for data in walls)
+            actual = np.array([sph.layered_slab_modal_cut_flux(temp_modes[j],dx,n//2,
+                    (west[j],east[j]),transverse_wavenumber=2*np.pi*j,**material).item() for j in modes])
+            modal_defect = float(abs(actual-np.fft.fft(measured)[modes]/n).max())
+            reference_modes = np.fft.fft(flux)[modes]/n
+            modal_errors = dict(modal_cut_disagreement_W_m2=modal_defect,
+                modal_amplitude_error_W_m2=float(abs(abs(actual)-abs(reference_modes)).max()),
+                modal_phase_error_rad=float(abs(np.angle(actual*reference_modes.conj())).max()))
             net = power.sum().item()/factor
             local = (5j*c*field-source-rate.numpy()/factor)*dx**2
         else:
+            modal_errors = {}
             widths = np.full(n, dx)
             bc = {side: dict(type="dirichlet", values=value)
                   for side,value in zip(("west","east"),walls)}
@@ -60,7 +73,7 @@ def measure(n):
             fx = np.column_stack((power["west"],interior["x"],-power["east"]))
             fy = np.vstack((power["south"],interior["y"],-power["north"]))
             local = (5j*c*field-source)*dx**2+np.diff(fx,axis=1)+np.diff(fy,axis=0)
-        yield dict(solver=solver,n=n,max_temperature_error_K=float(abs(field-exact).max()),
+        yield dict(solver=solver,n=n,**modal_errors,max_temperature_error_K=float(abs(field-exact).max()),
                    max_interface_flux_error_W_m2=float(abs(measured-flux).max()),
                    max_cell_residual_W=float(abs(local).max()),
                    total_residual_W=float(abs((5j*c*field-source).mean()-net)))
@@ -72,13 +85,17 @@ if __name__ == "__main__":
         for row in measure(n):
             name = row["solver"]
             errors = np.array([row["max_temperature_error_K"],row["max_interface_flux_error_W_m2"]])
+            if name=="SPH":
+                errors = np.r_[errors,row["modal_amplitude_error_W_m2"],row["modal_phase_error_rad"]]
             row["orders"] = np.log2(previous[name]/errors).tolist() if name in previous else []
             row["balance_passed"] = max(row["max_cell_residual_W"],row["total_residual_W"]) < 1e-10
             min_order = .9 if name == "SPH" else 1.8
             row["passed"] = row["balance_passed"] and all(p>min_order for p in row["orders"])
+            if name=="SPH":
+                row["passed"] &= row["modal_cut_disagreement_W_m2"]<1e-10
             if n == 256:
                 limits = (.005, .004) if name == "SPH" else (.0001, .0001)
-                row["passed"] = bool(row["passed"] and (errors < limits).all())
+                row["passed"] = bool(row["passed"] and (errors[:2] < limits).all())
             previous[name] = errors
             rows.append(row)
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
