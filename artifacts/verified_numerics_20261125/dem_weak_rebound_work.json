@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "6c26f161a5df8eccb2034f44f14e8da3666c12e4",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_dem3d_contact_impact.py tests/test_dem3d_contact_impact_convention.py tests/test_contact_impact_dashpot_convention.py tests/test_ice_thermal_stress_coupling.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Return work is integrated as normal load times separating speed in nondimensional units with an independent adaptive solve_ivp integrator, stopped at the first unloading zero-force event. Validate its returned energy fraction against restitution squared. Compare 3D equal-sphere pair work to this reference at e=0.08 and 0.03 for time steps 0.2, 0.1, 0.05 times recommended_dt. Error denominator is the returned energy itself. The six errors are below 1%; these step sequences do not demonstrate monotone convergence. Suite ran in two complementary pytest selections.",
+  "suite": {
+    "tests": 62,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "reference_returned_fraction_0.08": 0.006400000000163075,
+    "returned_work_relative_error_0.08_0.2": 0.004356666428677269,
+    "returned_work_relative_error_0.08_0.1": 0.0008430128644314472,
+    "returned_work_relative_error_0.08_0.05": 0.0010844701287823222,
+    "reference_returned_fraction_0.03": 0.000900000000240056,
+    "returned_work_relative_error_0.03_0.2": 0.001178937926792245,
+    "returned_work_relative_error_0.03_0.1": 0.001433869627746942,
+    "returned_work_relative_error_0.03_0.05": 0.0015611970126602204
+  }
+}
