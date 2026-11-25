@@ -12,6 +12,7 @@ from tensordg import poisson_2d_bc, transient_diffusion_2d
 
 
 OMEGA, CAPACITY = 3., 1.5
+WALL_STORAGE = {"right": .8, "top": .35}
 
 
 def material(angle):
@@ -24,9 +25,8 @@ def material(angle):
     return k,s
 
 
-def dg_case(n,degree,k,s,storing_walls=False):
+def dg_solution(n,degree,k,s,storing_walls=False):
     nx,ny = n,3*n//2
-    x,y = np.linspace(0,1,nx+1),np.linspace(0,1,ny+1)
     def trace(x,y):
         return torch.exp(s[0]*x+s[1]*y)
     data = dict(conductivity=(k[0,0],k[1,1],k[0,1]),
@@ -34,21 +34,27 @@ def dg_case(n,degree,k,s,storing_walls=False):
     if storing_walls:
         # Right and top films supply k*n.grad(T) plus the local storage.
         gradient_flux = k@s
-        storage = {"right": .8, "top": .35}
         films = {"right": 2.4, "top": 1.7}
         def ambient(side, axis):
-            factor = 1+(gradient_flux[axis]+1j*OMEGA*storage[side])/films[side]
+            factor = 1+(gradient_flux[axis]+1j*OMEGA*WALL_STORAGE[side])/films[side]
             return lambda x,y: factor*trace(x,y)
         data.update(bc=dict(left="dirichlet", bottom="neumann", right="robin", top="robin"),
                     dirichlet_values={"left": trace},
                     neumann_flux={"bottom": lambda x,y: -gradient_flux[1]*trace(x,y)},
                     robin_films={side: (films[side], ambient(side, axis))
                                  for axis, side in enumerate(("right", "top"))},
-                    wall_areal_heat_capacity=storage)
+                    wall_areal_heat_capacity=WALL_STORAGE)
     _,_,coeff = transient_diffusion_2d.solve_harmonic_diffusion_2d(
         OMEGA,ncells=(nx,ny),degree=degree,capacity=CAPACITY,**data)
     rate = dict(temperature_rate=1j*OMEGA*coeff) if storing_walls else {}
     fx,fy = (v.numpy() for v in poisson_2d_bc.poisson_face_powers_2d(coeff,**rate,**data))
+    return coeff, fx, fy
+
+
+def dg_case(n,degree,k,s,storing_walls=False,solution=None):
+    nx, ny = n, 3*n//2
+    x,y = np.linspace(0,1,nx+1),np.linspace(0,1,ny+1)
+    coeff, fx, fy = dg_solution(n,degree,k,s,storing_walls) if solution is None else solution
     ex,ey = np.exp(s[0]*x),np.exp(s[1]*y)
     ax,ay = np.diff(ex)*nx/s[0],np.diff(ey)*ny/s[1]
     q = -k@s
@@ -62,7 +68,7 @@ def dg_case(n,degree,k,s,storing_walls=False):
         # tangential mode zero contributes to the segment average.
         for side, numerical, exact in (("right", coeff[-1,:,:,0].sum(1).numpy(), ex[-1]*ay),
                                        ("top", coeff[:,-1,0,:].sum(1).numpy(), ax*ey[-1])):
-            wall_errors[f"{side}_storage_error_W_m2"] = float(OMEGA*storage[side]*abs(numerical-exact).max())
+            wall_errors[f"{side}_storage_error_W_m2"] = float(OMEGA*WALL_STORAGE[side]*abs(numerical-exact).max())
         for side, error in (("right", errors_x[-1]), ("top", errors_y[:, -1])):
             # All face segments on a wall have equal length. Use their centers
             # to define the same middle half of the physical wall on each grid.
@@ -190,14 +196,38 @@ def fem_case(n,shear,k,s,warp=0.):
                 max_balance_residual_W=float(abs(storage-power[fixed].sum())))
 
 
+def compare_nested_flux(coarse, fine, k, s):
+    coeff, fx, fy = coarse
+    fine_coeff, fine_fx, fine_fy = fine
+    nx, ny = coeff.shape[:2]
+    # Sum child powers on each parent face, average temperatures over its four
+    # children, then apply the same linear extrapolation to all three fields.
+    restricted = (fine_coeff[:,:,0,0].numpy().reshape(nx,2,ny,2).mean(axis=(1,3)),
+                  fine_fx[::2].reshape(nx+1,ny,2).sum(axis=2),
+                  fine_fy[:,::2].reshape(nx,2,ny+1).sum(axis=1))
+    extrapolated = tuple(f+(f-c)/3 for f,c in zip(restricted, (coeff[:,:,0,0].numpy(), fx, fy)))
+    q = -k@s
+    ax = np.diff(np.exp(s[0]*np.linspace(0,1,nx+1)))*nx/s[0]
+    ay = np.diff(np.exp(s[1]*np.linspace(0,1,ny+1)))*ny/s[1]
+    result = dict(coarse_nx=nx, coarse_ny=ny, assumed_order=2)
+    for name, (mean, px, py) in (("restricted", restricted), ("extrapolated", extrapolated)):
+        balance = 1j*OMEGA*CAPACITY*mean/(nx*ny)+np.diff(px,axis=0)+np.diff(py,axis=1)
+        result[name] = dict(max_balance_residual_W=float(abs(balance).max()),
+                            right_flux_error_W_m2=float(abs(ny*px[-1]-q[0]*np.exp(s[0])*ay).max()),
+                            top_flux_error_W_m2=float(abs(nx*py[:,-1]-q[1]*np.exp(s[1])*ax).max()),
+                            cell_mean_error_K=float(abs(mean-np.outer(ax,ay)).max()))
+    return result
+
+
 def verify_storing_walls():
     rows = []
     for angle in (-30., 30.):
         k, s = material(angle)
         for degree in (1, 2):
-            previous = None
+            previous = previous_solution = None
             for n in ((4, 8, 16, 32, 64, 128) if degree == 1 else (4, 8, 16, 32)):
-                row = dg_case(n, degree, k, s, storing_walls=True)
+                solution = dg_solution(n, degree, k, s, storing_walls=True)
+                row = dg_case(n, degree, k, s, storing_walls=True, solution=solution)
                 errors = {key: value for key, value in row.items() if "_error_" in key}
                 orders = {} if previous is None else {
                     key: float(np.log2(previous[key]/value)) for key, value in errors.items()}
@@ -216,6 +246,14 @@ def verify_storing_walls():
                             row["passed"] &= orders[f"{side}_middle_half_flux_error_W_m2"] > 1.9
                     if degree == 2:
                         row["passed"] &= row["wall_order_above_1p8"]
+                if degree == 1 and previous_solution is not None:
+                    comparison = compare_nested_flux(previous_solution, solution, k, s)
+                    row["nested_comparison"] = comparison
+                    fine, corrected = comparison["restricted"], comparison["extrapolated"]
+                    row["passed"] &= max(fine["max_balance_residual_W"], corrected["max_balance_residual_W"]) < 1e-10
+                    row["passed"] &= all(corrected[key] < fine[key] for key in
+                                         ("right_flux_error_W_m2", "top_flux_error_W_m2", "cell_mean_error_K"))
+                previous_solution = solution
                 previous = errors
                 rows.append(row)
     print(json.dumps(dict(reference="Oblique exponential thermal wave, left fixed temperature, bottom prescribed flux, right and top films with surface heat capacity",
