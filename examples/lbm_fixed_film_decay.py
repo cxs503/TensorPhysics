@@ -26,6 +26,9 @@ def measure(n, tau, beta, fixed, reversal=False):
     rate = alpha*beta**2
     target_time = .2
     slope = -amplitude*beta*math.exp(-rate*target_time) if reversal else 0.
+    film = 1-fixed
+    if reversal == "film":
+        slope *= math.cos(beta)
     if reversal:
         base = 5.
     ramp = base+slope*coordinate if reversal else base
@@ -38,6 +41,7 @@ def measure(n, tau, beta, fixed, reversal=False):
     values = tuple(base if t == "temperature" else base+slope+k*slope/h for t in types)
     steady_flux = k*slope*np.array([orient, -orient])
     samples = []
+    wall_law_error = 0.
     # Outward flux amplitudes indexed by physical location (west, east).
     outward = amplitude*k*beta*np.array([1., -math.cos(beta)])
     if fixed == 1:
@@ -53,7 +57,11 @@ def measure(n, tau, beta, fixed, reversal=False):
         updated = lbm.thermal_macroscopic_3d(populations)
         measured = -np.array([v.item() for v in inward])
         if reversal:
-            samples.append(measured[fixed])
+            samples.append(measured[film if reversal == "film" else fixed])
+            if reversal == "film":
+                index = 0 if film == 0 else -1
+                trace = 4*(populations[1+film, ..., index]+post[2-film, ..., index]).item()
+                wall_law_error = max(wall_law_error, abs(trace-values[film]-measured[film]/h))
         total += dt*measured
         stop = (step+1)*dt
         integral = -math.expm1(-rate*stop)/rate
@@ -70,11 +78,22 @@ def measure(n, tau, beta, fixed, reversal=False):
         samples = np.asarray(samples)
         crossings = np.flatnonzero((samples[:-1] > 0.) & (samples[1:] <= 0.))
         if len(crossings) != 1 or np.any((samples[:-1] < 0.) & (samples[1:] >= 0.)):
-            raise ValueError("expected exactly one outward-to-inward reversal at the fixed wall")
+            raise ValueError("expected exactly one outward-to-inward reversal at the selected wall")
         i = crossings[0]
         crossing = dt*(i+.5+samples[i]/(samples[i]-samples[i+1]))
         extra = dict(exact_reversal_time_s=target_time, measured_reversal_time_s=float(crossing),
                      reversal_time_error_s=float(abs(crossing-target_time)))
+        if reversal == "film":
+            # The maximum of the cumulative outward heat separates the two
+            # signed phases at output-time resolution.
+            outward_phase = dt*np.cumsum(samples).max()
+            inward_phase = outward_phase-total[film]
+            exact_out = -outward[film]*math.expm1(-rate*target_time)/rate+steady_flux[film]*target_time
+            exact_in = exact_out-(outward[film]*integral+steady_flux[film]*stop)
+            extra.update(reversing_wall=("west", "east")[film], max_film_law_residual_K=wall_law_error,
+                         outward_then_inward_heat_J_m2=[float(outward_phase), float(inward_phase)],
+                         exact_outward_then_inward_heat_J_m2=[float(exact_out), float(exact_in)],
+                         max_phase_heat_error_J_m2=float(max(abs(outward_phase-exact_out), abs(inward_phase-exact_in))))
     return dict(**extra, cells=n, tau=tau, beta=beta, fixed_wall=("west", "east")[fixed], film_W_m2K=h,
                 max_temperature_error_K=temp_error, max_wall_flux_errors_W_m2=flux_error.tolist(),
                 max_wall_heat_errors_J_m2=heat_error.tolist(), final_outward_heat_J_m2=total.tolist(),
@@ -83,7 +102,8 @@ def measure(n, tau, beta, fixed, reversal=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--reversal", action="store_true", help="add a steady gradient opposing the decaying mode")
+    parser.add_argument("--reversal", nargs="?", const="fixed", choices=("fixed", "film"),
+                        help="select the wall where heat reverses; defaults to fixed when given alone")
     reversal = parser.parse_args().reversal
     runs = []
     for fixed in (0, 1):
@@ -96,14 +116,17 @@ if __name__ == "__main__":
                                        *row["max_wall_heat_errors_J_m2"]])
                     if reversal:
                         errors = np.r_[errors, row["reversal_time_error_s"]]
+                    if reversal == "film":
+                        errors = np.r_[errors, row["max_phase_heat_error_J_m2"]]
                     orders = [] if previous is None else np.log2(previous/errors).tolist()
                     row.update(orders=orders, passed=bool(row["max_balance_residual_J_m2"] < 1e-13
+                               and row.get("max_film_law_residual_K", 0.) < 1e-11
                                and (not orders or min(orders) > 0.) and (n < 64 or min(orders) > 1.8)))
                     runs.append(row)
                     previous = errors
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(__file__), provenance(lbm.__file__)],
                           reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_fixed_film_decay.py"
-                                       + (" --reversal" if reversal else "")),
+                                       + (f" --reversal {reversal}" if reversal else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
