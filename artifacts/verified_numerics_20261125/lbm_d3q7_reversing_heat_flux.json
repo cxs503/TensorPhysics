@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "b4d51f3b4f05932993c06eea8e1bb1de2057faae",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "T=exp(-2x) cos(8t-2x), unit diffusivity, conductivity, volumetric capacity, slab length and area. Impose time-step averages of the exact Fourier fluxes on both walls from t=0 to 0.5 s. Check the field and storage change after every step against the analytical temperature and its independent spatial integral. CPU float64, tau=1, n=8,16,32 and dt=dx\u00b2/8.",
+  "suite": {
+    "tests": 81,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_reversing_heat_flux_against_travelling_thermal_wave": {
+      "max_temperature_error_8_K": 0.004620832564468862,
+      "max_storage_error_8_J": 5.551115123125783e-16,
+      "max_temperature_error_16_K": 0.001190778759802961,
+      "max_storage_error_16_J": 4.996003610813204e-16,
+      "max_temperature_error_32_K": 0.00030241800095724,
+      "max_storage_error_32_J": 6.661338147750939e-16
+    }
+  }
+}
