@@ -1,4 +1,4 @@
-"""Compare FEM, SIPG and SPH slab temperatures and wall heat after a finite Dirichlet pulse."""
+"""Compare FEM, SIPG, SPH and FVM slab temperatures and wall heat after a finite Dirichlet pulse."""
 from dataclasses import replace
 import json
 import math
@@ -8,6 +8,7 @@ import torch
 
 from conduction_provenance import provenance
 from tensorfem import thermal, thermal_analytic
+from tensorfvm.cht import rod
 from tensorsph import heat_conduction_2d as sph
 from tensordg import poisson_2d_bc, transient_diffusion_2d
 
@@ -68,6 +69,11 @@ def measure(n):
     sph_heat = sph_steps.sum(dim=0)
     sph_residual = float(abs(particles.diff(dim=0).mean(dim=(1,2))-sph_steps.sum(dim=1)).max())
     sph_column_residual = float(abs(particles.diff(dim=0)[:,0,:]/n+sph_sections.diff(dim=1)).max())
+    cells,faces,_,_,fvm_steps = rod.solve_transient_stepped_rod(
+        np.full(n,1/n),1.,1.,1.,lambda t:[float(start<=t<stop),0.],time,0.,
+        flux_order=2,method="rannacher",load_jump_times=(start,stop),return_step_heat=True)
+    fvm_heat = fvm_steps["end_input"].sum(axis=0)
+    fvm_balance = np.diff(cells,axis=0)/n-fvm_steps["left"]+fvm_steps["right"]
     z,w = (torch.from_numpy(a) for a in np.polynomial.legendre.leggauss(8))
     xi,eta = torch.meshgrid(z,z,indexing="ij")
     shape = torch.stack(((1-xi)*(1-eta),(1+xi)*(1-eta),(1+xi)*(1+eta),(1-xi)*(1+eta)),dim=-1)/4
@@ -97,7 +103,14 @@ def measure(n):
     lo = torch.searchsorted(knots,x)-1
     interp = values[lo]+(x-knots[lo])*(values[lo+1]-values[lo])/(knots[lo+1]-knots[lo])
     sph_field = interp[:,None,:,None].expand_as(fem)
-    return dict(n=n,sph_l2=norm(sph_field-exact),sph_center_rms=center_rms(particles[-1,0]),
+    # Reconstruct the FVM quadratic from its cell mean and two face values.
+    mean = torch.from_numpy(cells[-1])[:,None]
+    left,right = torch.from_numpy(faces[-1][:-1,None]),torch.from_numpy(faces[-1][1:,None])
+    polynomial = mean+(right-left)*z/2+((left+right)/2-mean)*(3*z.square()-1)/2
+    fvm_field = polynomial[:,None,:,None].expand_as(fem)
+    return dict(n=n,fvm_l2=norm(fvm_field-exact),fvm_center_rms=center_rms((1.5*mean-(left+right)/4)[:,0]),
+                fvm_wall_heat_J=fvm_heat.tolist(),fvm_cell_residual_J=float(abs(fvm_balance).max()),
+                sph_l2=norm(sph_field-exact),sph_center_rms=center_rms(particles[-1,0]),
                 fem_center_rms=center_rms(fem_center),dg_center_rms=center_rms(dg_center),
                 fem_sph_difference_l2=norm(fem-sph_field),dg_sph_difference_l2=norm(dg-sph_field),
                 sph_wall_heat_J=sph_heat.tolist(),sph_residual_J=sph_residual,sph_column_residual_J=sph_column_residual,
@@ -111,13 +124,13 @@ if __name__=="__main__":
     for n in (16,32,64,128):
         row = measure(n)
         ref = np.array(row["exact_wall_heat_J"])
-        for name in ("fem","dg","sph"):
+        for name in ("fem","dg","sph","fvm"):
             row[name+"_max_wall_heat_error_J"] = float(abs(ref-row[name+"_wall_heat_J"]).max())
-        row["passed"] = max(row["fem_residual_J"],row["dg_residual_J"],row["sph_residual_J"],row["sph_column_residual_J"])<1e-10 and (n<128 or
-                    (max(row["fem_l2"],row["dg_l2"],row["sph_l2"])<3e-5 and
-                     max(row[name+"_max_wall_heat_error_J"] for name in ("fem","dg","sph"))<8e-6))
+        row["passed"] = max(row["fvm_cell_residual_J"],row["fem_residual_J"],row["dg_residual_J"],row["sph_residual_J"],row["sph_column_residual_J"])<1e-10 and (n<128 or
+                    (max(row["fvm_l2"],row["fem_l2"],row["dg_l2"],row["sph_l2"])<3e-5 and
+                     max(row[name+"_max_wall_heat_error_J"] for name in ("fem","dg","sph","fvm"))<8e-6))
         rows.append(row)
     sources = [provenance(p) for p in (__file__,thermal.__file__,thermal_analytic.__file__,
-                                       sph.__file__,poisson_2d_bc.__file__,transient_diffusion_2d.__file__)]
+                                       rod.__file__,sph.__file__,poisson_2d_bc.__file__,transient_diffusion_2d.__file__)]
     print(json.dumps(dict(runs=rows,sources=sources),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
