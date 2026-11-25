@@ -1,0 +1,49 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "bbbb008c9ad37c4bf1b87f540738f72520f7d86f",
+  "dependencies": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "scikit-fem": "12.0.2",
+    "capytaine": "3.0.0",
+    "pytest": "9.2.0"
+  },
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_laplace_sphere_xval.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Sphere radius a=1.4, trace n_x*n_y. Interior and exterior quadrupole modes scale as (r/a)^2 and (a/r)^3. Exact integrated squared-gradient energies are (2/a or 3/a)*a\u00b2*4\u03c0/15. Compare three probes per domain, integrated energy, net flux and condition number over 80, 320 and 1280 constant triangular panels with quadrature order 8.",
+  "counts": {
+    "tests": 11,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_nonaxisymmetric_sphere_quadrupole_field_and_energy[interior]": {
+      "relative_field_error_80": 0.08072055818539947,
+      "relative_energy_error_80": 0.0732595141821244,
+      "net_flux_m_80": 1.6653345369377348e-16,
+      "condition_number_80": 18.621493084053693,
+      "relative_field_error_320": 0.020660931385708264,
+      "relative_energy_error_320": 0.021493071636313976,
+      "net_flux_m_320": 1.6653345369377348e-16,
+      "condition_number_320": 37.565599920865374,
+      "relative_field_error_1280": 0.0052248051072946375,
+      "relative_energy_error_1280": 0.005712177643395933,
+      "net_flux_m_1280": 2.0816681711721685e-17,
+      "condition_number_1280": 76.1254545821446
+    },
+    "test_nonaxisymmetric_sphere_quadrupole_field_and_energy[exterior]": {
+      "relative_field_error_80": 0.16204944134482654,
+      "relative_energy_error_80": 0.07297279228755427,
+      "net_flux_m_80": 0.0,
+      "condition_number_80": 18.621493084053693,
+      "relative_field_error_320": 0.04466713381298013,
+      "relative_energy_error_320": 0.01894889665090782,
+      "net_flux_m_320": 5.551115123125783e-17,
+      "condition_number_320": 37.565599920865374,
+      "relative_field_error_1280": 0.0114133508582299,
+      "relative_energy_error_1280": 0.004786910806776179,
+      "net_flux_m_1280": 2.914335439641036e-16,
+      "condition_number_1280": 76.1254545821446
+    }
+  }
+}
