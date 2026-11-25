@@ -31,13 +31,17 @@ def measure(steps,method):
     exact = (decay*coeff) @ modes.T
     integral = (-np.expm1(-np.diff(time)[:,None]*rates)*decay[:-1]*coeff/rates) @ modes.T
     exact_contact = links[[0,3]]*(integral[:,[0,3]]-integral[:,[1,4]])
-    u,face,_,_,budget = rod.solve_transient_stepped_rod(dx,area,k,c,[0.,0.],time,0.,
+    samples = []
+    def ends(t):
+        samples.append(t)
+        return [0.,0.]
+    u,face,_,_,budget = rod.solve_transient_stepped_rod(dx,area,k,c,ends,time,0.,
                        initial_shoulder_temperature=initial[1::2],contact_resistance=resistance,
                        film_coefficient=h,shoulder_areal_heat_capacity=cw,method=method,return_step_heat=True)
     got = np.column_stack((u[:,0],face[:,1],u[:,1],face[:,2],u[:,2]))
     balance = (np.diff(got,axis=0) @ mass-budget["left"][:,0]+budget["right"][:,-1]
                -budget["ambient"].sum(axis=1))
-    return dict(method=method,steps=steps,dt_times_fastest_rate=float(np.diff(time)[0]*rates[-1]),
+    return dict(method=method,steps=steps,linear_solves=len(samples)-1,dt_times_fastest_rate=float(np.diff(time)[0]*rates[-1]),
                 peak_temperature_error_K=float(abs(got-exact).max()),
                 common_time_temperature_error_K=float(abs(got[::steps//4]-exact[::steps//4]).max()),minimum_temperature_K=float(got.min()),
                 peak_step_contact_heat_error_J=float(abs(budget["contact"]-exact_contact).max()),
@@ -47,13 +51,14 @@ def measure(steps,method):
 
 if __name__ == "__main__":
     rows = []
-    for method in ("theta","sdirk2","rannacher"):
+    for method in ("theta","sdirk2","rannacher","positive_cn"):
         previous = None
         for steps in (4,8,16,32,64,128,256,512,1024,2048,4096):
             row = measure(steps,method)
             errors = {k:v for k,v in row.items() if "error" in k}
             rates = {} if previous is None else {k:np.log2(previous[k]/v) for k,v in errors.items()}
             row.update(orders=rates,passed=row["max_energy_residual_J"]<1e-12
+                       and (method!="positive_cn" or row["minimum_temperature_K"]>=-1e-13)
                        and ((steps!=4096 and (steps!=512 or method=="rannacher")) or all(p>1.9 for p in rates.values())))
             rows.append(row)
             previous = errors
