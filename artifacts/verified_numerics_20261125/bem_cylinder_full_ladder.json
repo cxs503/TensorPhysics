@@ -1,0 +1,37 @@
+{
+  "repository": "TensorBEM",
+  "commit": "705c1d0d99091e28525c5d1070304daedc06b2ef",
+  "benchmark_command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m tensorbem.benchmarks.case_cylinder_stream --outdir /tmp/bem-cylinder --doc /tmp/bem-cylinder.md --check",
+  "benchmark": {
+    "case_id": "CASE-BEM-LAPLACE-CYLINDER",
+    "verdict": "PASS",
+    "failed_checks": [],
+    "dirichlet_velocity_relative_l2": 1.365622432388925e-07,
+    "neumann_surface_velocity_relative_l2": 0.00010075873250392351,
+    "circulation_surface_velocity_relative_l2": 0.00021307971529881266,
+    "circulation_lift_relative_error": 0.0004014146126002001,
+    "wall_seconds": 43.825024127960205
+  },
+  "acceptance": {
+    "passed": true,
+    "failed_checks": [],
+    "tolerance": 0.03,
+    "order_min": 1.5,
+    "n_checks": 55
+  },
+  "panel_ladder": [
+    32,
+    64,
+    128
+  ],
+  "test_commands": [
+    "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_case_cylinder_stream.py tests/test_case_pool_verdict.py tests/test_case_pool_registry.py tests/test_case_ellipse_2d_added_mass.py tests/test_casepool_bem_rigid_body_mass.py"
+  ],
+  "test_counts": {
+    "tests": 97,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 4
+  },
+  "external_verification_dependency": "trimesh==5.2.2"
+}
