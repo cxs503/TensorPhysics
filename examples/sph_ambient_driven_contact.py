@@ -10,7 +10,7 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls, interface, films=None, wall_capacity=(0., 0.)):
+def fem_contact(conductivity, capacity, loss, volume_load, omega, resistance, walls, interface, films=None, wall_capacity=(0., 0.)):
     from tensorfem import thermal
 
     n = len(conductivity)
@@ -33,7 +33,7 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls,
     model = thermal.ThermalModel(
         x[:, None], torch.stack((start, start+1), dim=1), conductivity, 1., capacity,
         torch.tensor(fixed, dtype=torch.long), torch.tensor(prescribed, dtype=torch.complex128),
-        heat_source=loss*ambient, heat_loss_coefficient=loss, **contact)
+        heat_source=volume_load, heat_loss_coefficient=loss, **contact)
     if omega == 0:
         state = thermal.solve_low_frequency_thermal(model).steady
     else:
@@ -46,7 +46,7 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls,
     return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state, field[model.elements], inward
 
 
-def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None, wall_capacity=(0., 0.)):
+def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None, wall_capacity=(0., 0.), graded_source=False):
     k = (1., 2.5)
     capacity = (1.3, .7)
     loss = (2., 4.)
@@ -55,27 +55,32 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     if interface/n != left_thickness or not 0 < interface < n:
         raise ValueError("material interface must coincide with an interior mesh face")
     lengths = (left_thickness, 1-left_thickness)
-    # Solve k*T''=(H+i*w*C)*T-H*Ta in each layer. At the interface
+    # Independent heat generation varies linearly with distance from the contact.
+    gradients = (2.4-1.2j, -.8+3.1j) if graded_source else (0., 0.)
+    # Solve k*T''=(H+i*w*C)*T-H*Ta-Q in each layer. At the interface
     # the left and right traces are free[0]-Z[0]*q and free[1]+Z[1]*q.
     free, impedance = [], []
     for side, (conductivity, cv, h, ta, wall, length) in enumerate(zip(k, capacity, loss, ambient, walls, lengths)):
         shift = h + 1j*omega*cv
         wave = cmath.sqrt(shift/conductivity)
         particular = h*ta/shift
+        slope = gradients[side]/shift
+        end_particular = particular + slope*length
         z = cmath.tanh(length*wave)
         if films is not None:
             film = films[side]
             admittance = conductivity*wave
             wall_admittance = film + 1j*omega*wall_capacity[side]
             denominator = wall_admittance + admittance*z
-            free.append(particular + (film*(wall or 0.)-wall_admittance*particular)/(cmath.cosh(length*wave)*denominator))
+            free.append(particular + (film*(wall or 0.)-wall_admittance*end_particular-conductivity*slope)/(cmath.cosh(length*wave)*denominator))
             impedance.append((1 + wall_admittance*z/admittance)/denominator)
         elif wall is None:
-            free.append(particular)
+            free.append(particular-slope/(wave*cmath.sinh(length*wave)))
             impedance.append(1/(conductivity*wave*z))
         else:
-            free.append(particular+(wall-particular)/cmath.cosh(length*wave))
+            free.append(particular+(wall-end_particular)/cmath.cosh(length*wave))
             impedance.append(z/(conductivity*wave))
+        free[-1] += impedance[-1]*conductivity*slope
     exact_flux = (free[0]-free[1])/(resistance+sum(impedance))
     exact_left = free[0]-impedance[0]*exact_flux
     exact_right = free[1]+impedance[1]*exact_flux
@@ -85,40 +90,43 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     exact_walls = []
     exact_means = []
     centers, cell_means, element_nodes, face_fluxes = [], [], [], []
+    element_sources = []
     for side, trace in enumerate((exact_left, exact_right)):
         shift = loss[side] + 1j*omega*capacity[side]
         particular = loss[side]*ambient[side]/shift
         wave = cmath.sqrt(shift/k[side])
         co, si = cmath.cosh(lengths[side]*wave), cmath.sinh(lengths[side]*wave)
-        outward = -exact_flux if side == 0 else exact_flux
-        wall_t = particular + co*(trace-particular) - si*outward/(k[side]*wave)
-        inward = k[side]*wave*si*(trace-particular) - co*outward
+        slope = gradients[side]/shift
+        outward = (-exact_flux if side == 0 else exact_flux) + k[side]*slope
+        wall_t = particular + slope*lengths[side] + co*(trace-particular) - si*outward/(k[side]*wave)
+        inward = k[side]*wave*si*(trace-particular) - co*outward + k[side]*slope
         exact_walls.append((wall_t, inward))
         # Integrate the continuum profile from the contact to the outer wall.
         u = wave*lengths[side]
-        exact_means.append(particular + (trace-particular)*si/u - outward*(co-1)/(k[side]*wave*u))
+        exact_means.append(particular + slope*lengths[side]/2 + (trace-particular)*si/u - outward*(co-1)/(k[side]*wave*u))
 
         count = interface if side == 0 else n-interface
         edges = torch.arange(count+1, dtype=torch.float64)/n
         if side == 0:
             edges = edges.flip((0,))
+        element_sources.append(gradients[side]*torch.stack((edges[:-1], edges[1:]), dim=1))
         midpoints = (edges[:-1]+edges[1:])/2
 
         def excess(distance):
             return (trace-particular)*torch.cosh(wave*distance) - outward*torch.sinh(wave*distance)/(k[side]*wave)
 
         at_center = excess(midpoints)
-        centers.append(particular + at_center)
+        centers.append(particular + slope*midpoints + at_center)
         # Integrating either exponential over the cell multiplies its midpoint
-        # value by sinh(w*dx/2)/(w*dx/2). The constant particular term is exact.
+        # value by sinh(w*dx/2)/(w*dx/2). A linear particular term averages to its midpoint.
         half = wave/(2*n)
-        cell_means.append(particular + at_center*cmath.sinh(half)/half)
+        cell_means.append(particular + slope*midpoints + at_center*cmath.sinh(half)/half)
         # Fourier flux in +x; the local coordinate points toward the outer wall.
         direction = -1 if side == 0 else 1
-        edge_flux = direction*(outward*torch.cosh(wave*edges)
+        edge_flux = direction*(-k[side]*slope + outward*torch.cosh(wave*edges)
                                - k[side]*wave*(trace-particular)*torch.sinh(wave*edges))
         face_fluxes.append(edge_flux)
-        nodes = particular + excess(edges)
+        nodes = particular + slope*edges + excess(edges)
         element_nodes.append(torch.stack((nodes[:-1], nodes[1:]), dim=1))
 
     exact_cuts = torch.cat((face_fluxes[0], face_fluxes[1][1:]))
@@ -135,17 +143,21 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         heat_loss_coefficient=layers(loss),
         return_x_flux=True, backend=backend)
     bulk_ambient = layers(ambient, torch.complex128)
+    source_nodes = torch.cat(element_sources)
+    source = source_nodes.mean(1)
     if films is None:
-        field, cuts = heat.solve_harmonic_layered_slab(torch.zeros(n), 1/n, walls, omega,
+        field, cuts = heat.solve_harmonic_layered_slab(source, 1/n, walls, omega,
                                                         ambient_temperature=bulk_ambient, **options)
     else:
         field, sph_wall_t, _, cuts = heat.solve_harmonic_layered_films(
-            layers(loss)*bulk_ambient, 1/n, tuple(w or 0. for w in walls), omega,
+            source + layers(loss)*bulk_ambient, 1/n, tuple(w or 0. for w in walls), omega,
             film_coefficients=films, wall_areal_heat_capacity=wall_capacity, **options)
     left, right = heat.layered_slab_contact_temperatures(field, cuts, 1/n, conductivity)
     flux = complex(cuts[i+1])
     comparison = {"exact_layer_mean_K": [[t.real, t.imag] for t in exact_means]}
 
+    if graded_source:
+        comparison["source_gradient_outward_W_m4"] = [[g.real, g.imag] for g in gradients]
     comparison["sph_face_flux_error_W_m2"] = float(abs(cuts-exact_cuts).max())
     comparison["sph_particle_error_K"] = float(abs(field-torch.cat(centers)).max())
 
@@ -154,8 +166,8 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         errors = [abs(t-ref) for t, ref in zip(means, exact_means)]
         # Per unit wall area: boundary input plus bulk exchange equals storage.
         boundary_input = (complex(inward[0])-contact_flux, complex(inward[1])+contact_flux)
-        residuals = [abs(q + length*(h*(ta-t)-1j*omega*cv*t))
-                     for q, length, h, ta, cv, t in zip(boundary_input, lengths, loss, ambient, capacity, means)]
+        residuals = [abs(q + length*(g*length/2+h*(ta-t)-1j*omega*cv*t))
+                     for q, length, h, ta, cv, t, g in zip(boundary_input, lengths, loss, ambient, capacity, means, gradients)]
         return dict(mean_temperature_K=[[t.real, t.imag] for t in means],
                     mean_error_K=errors, balance_residual_W_m2=residuals)
 
@@ -188,7 +200,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             tuple(0. if w is None else w for w in walls), omega,
             end_types=("robin", "robin") if films is not None else tuple("power" if w is None else "temperature" for w in walls),
             end_areal_heat_capacity=wall_capacity, end_film_coefficient=films if films is not None else 0.,
-            heat_loss_coefficient=layers(loss).numpy(), bulk_ambient_temperature=layers(ambient, torch.complex128).numpy(),
+            source=source.numpy(), heat_loss_coefficient=layers(loss).numpy(), bulk_ambient_temperature=layers(ambient, torch.complex128).numpy(),
             contact_resistance=contact.numpy(), return_traces=True)
         comparison["fvm_face_flux_error_W_m2"] = max(float(abs(torch.from_numpy(entering)-exact_cuts[:-1]).max()),
                                                      float(abs(torch.from_numpy(leaving)-exact_cuts[1:]).max()))
@@ -207,7 +219,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             comparison["fvm_wall_balance_W_m2"] = wall_balance(faces[[0,-1]], (entering[0], -leaving[-1]))
     if compare_fem:
         fl, fr, ql, qr, fem_wall_state, nodal_field, nodal_power = fem_contact(conductivity, layers(capacity), layers(loss),
-                                     layers(ambient, torch.complex128), omega, resistance, walls, interface, films, wall_capacity)
+                                     (layers(loss)*bulk_ambient)[:, None] + source_nodes, omega, resistance, walls, interface, films, wall_capacity)
         comparison["fem_layers"] = layer_diagnostics(nodal_field.mean(1), ql, fem_wall_state[1])
         comparison["fem_face_flux_error_W_m2"] = max(float(abs(nodal_power[:, 0]-exact_cuts[:-1]).max()),
                                                      float(abs(-nodal_power[:, 1]-exact_cuts[1:]).max()))
@@ -246,6 +258,7 @@ if __name__ == "__main__":
                         help="left material thickness in the unit-length slab (m)")
     parser.add_argument("--films", action="store_true", help="drive one or both walls through finite surface films")
     parser.add_argument("--wall-storage", action="store_true", help="include west and east wall storage with the film boundaries")
+    parser.add_argument("--graded-source", action="store_true", help="apply independent linear heat generation in both materials")
     args = parser.parse_args()
     files = [__file__, heat.__file__]
     path = "../TensorSPH/src"
@@ -272,7 +285,7 @@ if __name__ == "__main__":
                     previous = None
                     for n in (16, 32, 64):
                         row = measure(n, omega, resistance, walls, backend, args.compare_fvm, args.compare_fem, args.left_thickness, films,
-                                      (.35, .8) if args.wall_storage else (0., 0.))
+                                      (.35, .8) if args.wall_storage else (0., 0.), args.graded_source)
                         row["passed"] = True
                         for metric in metrics:
                             if previous:
@@ -324,6 +337,6 @@ if __name__ == "__main__":
                           reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/sph_ambient_driven_contact.py"
                           + (" --compare-fvm" if args.compare_fvm else "") + (" --compare-fem" if args.compare_fem else "")
                           + f" --left-thickness {args.left_thickness}" + (" --films" if args.films else "")
-                          + (" --wall-storage" if args.wall_storage else "")),
+                          + (" --wall-storage" if args.wall_storage else "") + (" --graded-source" if args.graded_source else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
