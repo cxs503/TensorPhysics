@@ -1,0 +1,104 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "steps": 32,
+      "method": "theta",
+      "columns": 12,
+      "max_cell_error_K": 0.0011297216408322486,
+      "max_wall_error_K": 0.001177081043068573,
+      "max_section_error_W": 0.008259990242891035,
+      "west_cumulative_error_J": 0.004187156974549078,
+      "east_cumulative_error_J": 0.0039692920637730555,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "theta",
+      "columns": 12,
+      "max_cell_error_K": 0.00028187518432643,
+      "max_wall_error_K": 0.0002936852713932847,
+      "max_section_error_W": 0.002062143892088031,
+      "west_cumulative_error_J": 0.0010463833383268506,
+      "east_cumulative_error_J": 0.000991659653978516,
+      "passed": true,
+      "max_cell_error_K_order": 2.0028389648879834,
+      "max_wall_error_K_order": 2.002870834615763,
+      "max_section_error_W_order": 2.0019950730018965,
+      "west_cumulative_error_J_order": 2.000559531106797,
+      "east_cumulative_error_J_order": 2.0009647554558105
+    },
+    {
+      "steps": 128,
+      "method": "theta",
+      "columns": 12,
+      "max_cell_error_K": 7.045256609294892e-05,
+      "max_wall_error_K": 7.338484013785784e-05,
+      "max_section_error_W": 0.0005156302638664734,
+      "west_cumulative_error_J": 0.00026157048143660155,
+      "east_cumulative_error_J": 0.00024792105361259864,
+      "passed": true,
+      "max_cell_error_K_order": 2.000332311920544,
+      "max_wall_error_K_order": 2.0007169483050764,
+      "max_section_error_W_order": 1.9997361571214716,
+      "west_cumulative_error_J_order": 2.00013982879108,
+      "east_cumulative_error_J_order": 1.999964269160233
+    },
+    {
+      "steps": 32,
+      "method": "sdirk2",
+      "columns": 12,
+      "max_cell_error_K": 0.0007274388985585301,
+      "max_wall_error_K": 0.0007658129937411773,
+      "max_section_error_W": 0.004684947777175763,
+      "west_cumulative_error_J": 0.00044271267407125503,
+      "east_cumulative_error_J": 0.0004159390961111509,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "sdirk2",
+      "columns": 12,
+      "max_cell_error_K": 0.0001819350469321468,
+      "max_wall_error_K": 0.00019297879815205476,
+      "max_section_error_W": 0.0011558267858093885,
+      "west_cumulative_error_J": 0.00011470769127397418,
+      "east_cumulative_error_J": 0.00010790530367199569,
+      "passed": true,
+      "max_cell_error_K_order": 1.9994025911974378,
+      "max_wall_error_K_order": 1.9885497861918364,
+      "max_section_error_W_order": 2.0191077570648197,
+      "west_cumulative_error_J_order": 1.948408546953222,
+      "east_cumulative_error_J_order": 1.946606520467342
+    },
+    {
+      "steps": 128,
+      "method": "sdirk2",
+      "columns": 12,
+      "max_cell_error_K": 4.5421487302688135e-05,
+      "max_wall_error_K": 4.8480097287861845e-05,
+      "max_section_error_W": 0.00028655266085264586,
+      "west_cumulative_error_J": 2.9192756048290747e-05,
+      "east_cumulative_error_J": 2.753731701465867e-05,
+      "passed": true,
+      "max_cell_error_K_order": 2.0019766301032167,
+      "max_wall_error_K_order": 1.9929778537052059,
+      "max_section_error_W_order": 2.0120530113612567,
+      "west_cumulative_error_J_order": 1.9742798035957683,
+      "east_cumulative_error_J_order": 1.9703058683498837
+    }
+  ],
+  "sources": [
+    {
+      "commit": "529ca79030355231db434d339e75ac79cd4bee81",
+      "file": "fvm_periodic_end_power.py",
+      "source_sha256": "137daf645d4e8c50ebec3f3768ab1f3f99e0dc82b2a0e30f522e1f7a851b9e06"
+    },
+    {
+      "commit": "0f6dbaf705bbf58781e1cfad574a9c9d4adf2f07",
+      "file": "rod.py",
+      "source_sha256": "5fc72d639fa131aa5ffd5bec9872af48528a9541a81799fa21e65544977f8317"
+    }
+  ],
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_periodic_end_power.py"
+}
