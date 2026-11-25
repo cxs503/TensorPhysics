@@ -8,6 +8,30 @@ from conduction_provenance import provenance
 from tensorfem import thermal
 from tensorfvm.cht import energy
 from tensorlbm import scalar, scalar_harmonic
+from tensorsph import heat_conduction_2d as sph
+
+
+def sph_response(modes, time, h, k, capacity):
+    """Integrate the continuous-time SPH phasors over the output intervals."""
+    n = len(modes[0][2])
+    cells = np.zeros((len(time), n))
+    heat = np.zeros((len(time)-1, 2))
+    generated = np.zeros(len(time)-1)
+    offsets = sph.lattice_offsets(h, 1.3*h)
+    factor = sph.lattice_diffusion_factor_2d(1.3, h, mode="moment")
+    walls = (0., 0.)
+    for w, amp, avg in modes:
+        source = torch.from_numpy((amp*avg)[None, :])
+        field = sph.solve_harmonic_slab_2d(source, h, walls, w, conductivity=k,
+                                           volumetric_heat_capacity=capacity)
+        _, power = sph.stencil_rhs_with_wall_power_2d(field, offsets, h, walls, conductivity=k)
+        phase = np.exp(1j*w*time)
+        duration = np.diff(phase)/(1j*w)
+        cells += (phase[:, None]*field.numpy()).real
+        # One periodic particle row spans area h; the reference rod has unit area.
+        heat += (duration[:, None]*power.numpy()/(factor*h)).real
+        generated += (duration*amp*avg.mean()).real
+    return cells, heat, generated
 
 
 def measure(n):
@@ -78,7 +102,8 @@ def measure(n):
     reports = []
     for name, cells, heat, generated in (("FEM", fem_cells, fem_heat, generation),
                                          ("FVM", history[:,0], fvm_heat, generation),
-                                         ("LBM", lbm_cells, lbm_heat, lbm_generation)):
+                                         ("LBM", lbm_cells, lbm_heat, lbm_generation),
+                                         ("SPH", *sph_response(modes, time, h, k, capacity))):
         stored = capacity*np.diff(cells.mean(axis=1))
         balance = abs(stored-heat.sum(axis=1)-generated).max()
         # Divide by interval duration to compare errors on different time grids.
@@ -104,7 +129,7 @@ def main():
             runs.append(report)
             previous[name] = errors
     print(json.dumps(dict(runs=runs, sources=[provenance(f) for f in
-                     (__file__, energy.__file__, thermal.__file__, scalar.__file__, scalar_harmonic.__file__)]), indent=2, allow_nan=False))
+                     (__file__, energy.__file__, thermal.__file__, scalar.__file__, scalar_harmonic.__file__, sph.__file__)]), indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in runs) else 1
 
 
