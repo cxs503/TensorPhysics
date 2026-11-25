@@ -205,7 +205,7 @@ def measure_dem(n, ramps=False):
                 column_energy_residual_J_m2=float(balance), wall_trace_error_K=float(wall_error))
 
 
-def measure_fem(n):
+def measure_fem(n, ramps=False):
     from dataclasses import replace
     import torch
     from tensorfem import thermal
@@ -217,13 +217,17 @@ def measure_fem(n):
     fixed = torch.tensor([0, n])
     model = thermal.ThermalModel(x[:, None], conn, 1., 1., 1., fixed, x.new_zeros(2))
     state = torch.zeros_like(x)
-    schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+    schedule = np.union1d(TIMES, RAMP_KNOTS if ramps else [event[0] for event in EVENTS])
+    fractions = np.array([.25, .5, .75])
+    subcell = []
     indices = np.searchsorted(schedule, TIMES)
     history, sections, reactions, impulses = [state], [], [], []
     wall_error = balance = mismatch = 0.
     for a, b in zip(schedule[:-1], schedule[1:]):
-        target = x.new_tensor([wall(a, 0), wall(a, 1)])
-        changed = not torch.equal(model.fixed_temperatures, target)
+        changed = False
+        if not ramps:
+            target = x.new_tensor([wall(a, 0), wall(a, 1)])
+            changed = not torch.equal(model.fixed_temperatures, target)
         local = x.new_zeros((n, 2))
         reaction = x.new_zeros(2)
         if changed:
@@ -241,10 +245,26 @@ def measure_fem(n):
         for times, theta in stages:
             if len(times) < 2:
                 continue
-            result = thermal.solve_transient_thermal(model, x.new_tensor(times), state, theta=theta, sparse=True)
-            local += thermal.thermal_element_nodal_heat_steps(model, result).sum(0)
+            prescribed = None
+            if ramps:
+                prescribed = x.new_tensor(np.column_stack([np.interp(times, RAMP_KNOTS, side)
+                                                           for side in RAMP_LEVELS.T]))
+            result = thermal.solve_transient_thermal(
+                model, x.new_tensor(times), state, theta=theta, sparse=True, fixed_temperature_history=prescribed)
+            if ramps:
+                inward, net_input = thermal.thermal_element_nodal_heat_steps(model, result, return_net_input=True)
+                dt = times[-1]-times[0]
+                # The recovery is linear in both inward and distributed power.
+                # Aggregate each over this affine segment before sampling it.
+                power = thermal.thermal_element_section_power(
+                    model, inward.sum(0)/dt, fractions, net_element_nodal_input=net_input.sum(0)/dt)
+                subcell.append((dt*power).numpy())
+            else:
+                inward = thermal.thermal_element_nodal_heat_steps(model, result)
+            local += inward.sum(0)
             reaction += result.nodal_reaction_heat_steps()[:, fixed].sum(0)
-            wall_error = max(wall_error, float(abs(result.temperature[:, fixed]-target).max()))
+            expected_walls = prescribed if ramps else target
+            wall_error = max(wall_error, float(abs(result.temperature[:, fixed]-expected_walls).max()))
             state = result.temperature[-1]
         stored = dx*(state-history[-1])[conn].mean(1)
         balance = max(balance, float(abs(stored-local.sum(1)).max()))
@@ -253,11 +273,22 @@ def measure_fem(n):
         sections.append(-local[:-1, 1].numpy())
         reactions.append(reaction.numpy()*[1., -1.])
         history.append(state)
-    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx)
-    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
+    extra = {}
+    centers = (np.arange(n)+.5)*dx
+    cuts = np.arange(n+1)*dx
+    if ramps:
+        means, _ = ramp_reference(centers, TIMES, RAMP_KNOTS, RAMP_LEVELS, cell_width=dx)
+        _, cumulative = ramp_reference(cuts, TIMES, RAMP_KNOTS, RAMP_LEVELS)
+        positions = (np.arange(n)[:, None]+fractions)*dx
+        _, exact = ramp_reference(positions.ravel(), TIMES, RAMP_KNOTS, RAMP_LEVELS)
+        interior = np.add.reduceat(subcell, indices[:-1], axis=0).reshape(len(TIMES)-1, -1)
+        extra["subcell_heat_error_J_m2"] = float(abs(interior-np.diff(exact, axis=0)).max())
+    else:
+        means, _ = reference(centers, TIMES, 64, cell_width=dx)
+        _, cumulative = reference(cuts, TIMES, 64)
     exact_heat = np.diff(cumulative, axis=0)
     cells = torch.stack(history)[indices][:, conn].mean(2).numpy()
-    return dict(columns=n, impulses=impulses, temperature_error_K=float(abs(cells-means).max()),
+    return dict(**extra, columns=n, impulses=impulses, temperature_error_K=float(abs(cells-means).max()),
                 wall_heat_error_J_m2=float(abs(np.add.reduceat(reactions, indices[:-1])-exact_heat[:, [0,-1]]).max()),
                 interior_cut_heat_error_J_m2=float(abs(np.add.reduceat(sections, indices[:-1])-exact_heat[:, 1:-1]).max()),
                 column_energy_residual_J_m2=balance, interface_heat_mismatch_J_m2=mismatch, wall_trace_error_K=wall_error)
@@ -392,6 +423,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--sph-ramps", action="store_true", help="verify particle and wall means under independent ramps")
+    group.add_argument("--fem-ramps", action="store_true", help="verify LINE2 wall reactions and subcell heat under ramps")
     group.add_argument("--fem", action="store_true", help="run the consistent-capacity LINE2 slab")
     group.add_argument("--lbm", action="store_true", help="run the D2Q5 halfway-wall slab")
     group.add_argument("--lbm-ramps", action="store_true", help="drive independent off-grid wall ramps")
@@ -408,9 +440,9 @@ if __name__ == "__main__":
         parser.error("--dg-degree requires --dg or --dg-ramps")
     rows = []
     previous = None
-    if args.fem:
+    if args.fem or args.fem_ramps:
         from tensorfem import thermal as solver
-        run = measure_fem
+        run = partial(measure_fem, ramps=args.fem_ramps)
     elif args.lbm or args.lbm_off_grid or args.lbm_ramps:
         from tensorlbm import scalar as solver
         run = partial(measure_lbm, off_grid=args.lbm_off_grid, ramps=args.lbm_ramps)
@@ -433,7 +465,7 @@ if __name__ == "__main__":
                                             "interior_cut_heat_error_J_m2")])
         if args.dem or args.dem_ramps or args.sph_ramps:
             errors = np.append(errors, row["interval_temperature_error_K"])
-        if args.fvm_ramps:
+        if args.fvm_ramps or args.fem_ramps:
             errors = np.append(errors, row["subcell_heat_error_J_m2"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
