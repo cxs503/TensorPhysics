@@ -1,0 +1,476 @@
+{
+  "reference": "I_(1/2)(lambda*r) sin(theta/2), lambda^2=i omega C/k, rectangle [-1,1] x [0,1]",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_mixed_wall_junction.py",
+  "order_metrics": [
+    "wall_power_error_W_m",
+    "insulated_mean_error_K",
+    "interior_temperature_error_K"
+  ],
+  "runs": [
+    {
+      "panels": 20,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0375752081119006,
+      "insulated_mean_error_K": 0.021661715261361236,
+      "interior_temperature_error_K": 0.03147838439702986,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.01967677261071738,
+      "insulated_mean_error_K": 0.010955693291184947,
+      "interior_temperature_error_K": 0.015320760815404635,
+      "orders": [
+        0.9332874857209636,
+        0.9834667029172041,
+        1.0388735555743076
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.010097965678773047,
+      "insulated_mean_error_K": 0.005485859835188857,
+      "interior_temperature_error_K": 0.007702395243413004,
+      "orders": [
+        0.9624289298303561,
+        0.9978911162988192,
+        0.9921088808922573
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.005124357264822643,
+      "insulated_mean_error_K": 0.002735874244785438,
+      "interior_temperature_error_K": 0.0038587307326644125,
+      "orders": [
+        0.9786217115545645,
+        1.0037158436393208,
+        0.9971807817711592
+      ],
+      "passed": true
+    },
+    {
+      "panels": 20,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0017245437495420162,
+      "insulated_mean_error_K": 0.011717488458933018,
+      "interior_temperature_error_K": 0.014390319148678096,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0015192719797512075,
+      "insulated_mean_error_K": 0.0038226616732756047,
+      "interior_temperature_error_K": 0.003950863129481318,
+      "orders": [
+        0.18283456472764809,
+        1.6160139494082404,
+        1.8648588158122423
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0011715175394113465,
+      "insulated_mean_error_K": 0.0012135422645360992,
+      "interior_temperature_error_K": 0.0010513243057385935,
+      "orders": [
+        0.3750016102077363,
+        1.6553531646250856,
+        1.9099600964042882
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0006698581342021669,
+      "insulated_mean_error_K": 0.00038245981398441316,
+      "interior_temperature_error_K": 0.0002777583055492713,
+      "orders": [
+        0.8064510616220771,
+        1.6658442814172665,
+        1.920305814267349
+      ],
+      "passed": true
+    },
+    {
+      "panels": 20,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.009066630160705495,
+      "insulated_mean_error_K": 0.00369048689298539,
+      "interior_temperature_error_K": 0.005349872251890177,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.004545844649214414,
+      "insulated_mean_error_K": 0.001860760812298397,
+      "interior_temperature_error_K": 0.002701301363286605,
+      "orders": [
+        0.996018054781476,
+        0.9879185473301947,
+        0.9858498430662924
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.002276668666996634,
+      "insulated_mean_error_K": 0.0009350098579161884,
+      "interior_temperature_error_K": 0.0013508296274379722,
+      "orders": [
+        0.9976240366141577,
+        0.992839138332564,
+        0.9998088720394757
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0011393878994605208,
+      "insulated_mean_error_K": 0.0004689239985824129,
+      "interior_temperature_error_K": 0.0006758082343218494,
+      "orders": [
+        0.9986653557002443,
+        0.9956274604155488,
+        0.999159893002719
+      ],
+      "passed": true
+    },
+    {
+      "panels": 20,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0022400335418425723,
+      "insulated_mean_error_K": 0.0009363945987874191,
+      "interior_temperature_error_K": 0.0013384477884695134,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.0005632553741129244,
+      "insulated_mean_error_K": 0.00023368826368894347,
+      "interior_temperature_error_K": 0.0003352998602465497,
+      "orders": [
+        1.9916592564582394,
+        2.002531332080543,
+        1.9970370750360187
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 0.00014100200743457963,
+      "insulated_mean_error_K": 5.8364119645688314e-05,
+      "interior_temperature_error_K": 8.373985392173392e-05,
+      "orders": [
+        1.9980734712119599,
+        2.001431655846399,
+        2.0014655753011614
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 0.5,
+      "wall_power_error_W_m": 3.526067403110661e-05,
+      "insulated_mean_error_K": 1.4584096112102241e-05,
+      "interior_temperature_error_K": 2.0927179040006936e-05,
+      "orders": [
+        1.999583744202754,
+        2.000685745663859,
+        2.000536550355655
+      ],
+      "passed": true
+    },
+    {
+      "panels": 20,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.07189981370706627,
+      "insulated_mean_error_K": 0.03249864347240535,
+      "interior_temperature_error_K": 0.04641355291141242,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.037811666369340156,
+      "insulated_mean_error_K": 0.01599336880330645,
+      "interior_temperature_error_K": 0.02269877747541686,
+      "orders": [
+        0.9271566019884229,
+        1.0229056432759709,
+        1.031931540548517
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.019554019612113175,
+      "insulated_mean_error_K": 0.007928326460463948,
+      "interior_temperature_error_K": 0.011446132178969552,
+      "orders": [
+        0.9513662257556008,
+        1.0123855825687191,
+        0.9877544258438677
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": false,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.009979367737827143,
+      "insulated_mean_error_K": 0.0039474236844843835,
+      "interior_temperature_error_K": 0.00574088797334543,
+      "orders": [
+        0.9704448860603515,
+        1.0061049940890263,
+        0.9955143637112842
+      ],
+      "passed": true
+    },
+    {
+      "panels": 20,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.005887638437869964,
+      "insulated_mean_error_K": 0.022875534328506985,
+      "interior_temperature_error_K": 0.023084543232963266,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.0046327362540231586,
+      "insulated_mean_error_K": 0.007343747091255512,
+      "interior_temperature_error_K": 0.0065305227741910684,
+      "orders": [
+        0.34582452691978405,
+        1.6392171621244462,
+        1.8216567959532335
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.0027176638431430995,
+      "insulated_mean_error_K": 0.0025478155348538415,
+      "interior_temperature_error_K": 0.0018482508612691294,
+      "orders": [
+        0.7694975353355967,
+        1.5272555467510447,
+        1.821037899802139
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": false,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.0013790724862026411,
+      "insulated_mean_error_K": 0.0009119666788052522,
+      "interior_temperature_error_K": 0.0005838965017445049,
+      "orders": [
+        0.9786687262568597,
+        1.4822078107250531,
+        1.6623760128632536
+      ],
+      "passed": true
+    },
+    {
+      "panels": 20,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.017131044147446223,
+      "insulated_mean_error_K": 0.005382628187609094,
+      "interior_temperature_error_K": 0.007948300370378072,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.008597788546890228,
+      "insulated_mean_error_K": 0.002719083696339952,
+      "interior_temperature_error_K": 0.004017639151818922,
+      "orders": [
+        0.9945755528527905,
+        0.9851902129080621,
+        0.9842984009819179
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.004307819441533962,
+      "insulated_mean_error_K": 0.001367342410760584,
+      "interior_temperature_error_K": 0.002009852862025492,
+      "orders": [
+        0.9970078474124053,
+        0.9917459909594403,
+        0.9992581048536343
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": true,
+      "grading": 1,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.0021562197825443167,
+      "insulated_mean_error_K": 0.0006860069364009113,
+      "interior_temperature_error_K": 0.001005726163893917,
+      "orders": [
+        0.9984535429912902,
+        0.9950794997393521,
+        0.9988523420450978
+      ],
+      "passed": true
+    },
+    {
+      "panels": 20,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.0042362460439806585,
+      "insulated_mean_error_K": 0.0013195304539784286,
+      "interior_temperature_error_K": 0.001984386671660247,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "panels": 40,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.0010656780713996037,
+      "insulated_mean_error_K": 0.00033588958750819213,
+      "interior_temperature_error_K": 0.0004983423670316246,
+      "orders": [
+        1.991014701454771,
+        1.9739656693934964,
+        1.9934840359792423
+      ],
+      "passed": true
+    },
+    {
+      "panels": 80,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 0.00026680069627207557,
+      "insulated_mean_error_K": 8.483054292741922e-05,
+      "interior_temperature_error_K": 0.0001245839866765471,
+      "orders": [
+        1.997937346340307,
+        1.9853313725670623,
+        2.0000185868831304
+      ],
+      "passed": true
+    },
+    {
+      "panels": 160,
+      "quadratic": true,
+      "grading": 2,
+      "omega_rad_s": 3.0,
+      "wall_power_error_W_m": 6.671880438313591e-05,
+      "insulated_mean_error_K": 2.1295304914533176e-05,
+      "interior_temperature_error_K": 3.114641793539203e-05,
+      "orders": [
+        1.999597090852947,
+        1.9940484082965342,
+        1.9999804869102853
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "462ef3435361295191b5cc873cad3162b5ef2c9e",
+      "file": "bem_mixed_wall_junction.py",
+      "source_sha256": "7b9db9d9d8d27d95ea131e8b615db0718a3b879102ca2dc9736731937fcbcdc7"
+    },
+    {
+      "commit": "3359bb5cd7c015d068f515c584eb64aa87518dc2",
+      "file": "geometry.py",
+      "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+    },
+    {
+      "commit": "3359bb5cd7c015d068f515c584eb64aa87518dc2",
+      "file": "harmonic_conduction.py",
+      "source_sha256": "66b36e1674058ea3be6d870facb8d16ccbed78fa50bee8c791eabd01ceb70a07"
+    }
+  ]
+}
