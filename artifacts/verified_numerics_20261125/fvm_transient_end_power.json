@@ -1,0 +1,183 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 4,
+      "method": "theta",
+      "errors": {
+        "cell_temperature_K": 2.273181642920008e-14,
+        "wall_temperature_K": 1.181693631835401e-14,
+        "section_power_W": 5.453415496958769e-13,
+        "interval_end_input_J": 3.344546861683284e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 4,
+      "method": "sdirk2",
+      "errors": {
+        "cell_temperature_K": 2.273181642920008e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 5.453415496958769e-13,
+        "interval_end_input_J": 2.4077961846558082e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 4,
+      "method": "rannacher",
+      "errors": {
+        "cell_temperature_K": 2.273181642920008e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 5.453415496958769e-13,
+        "interval_end_input_J": 3.2751579226442118e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 4,
+      "method": "sdirk2_start",
+      "errors": {
+        "cell_temperature_K": 2.273181642920008e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 5.453415496958769e-13,
+        "interval_end_input_J": 3.25434124093249e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 4,
+      "method": "positive_cn",
+      "errors": {
+        "cell_temperature_K": 2.273181642920008e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 5.453415496958769e-13,
+        "interval_end_input_J": 3.184952301893418e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "theta",
+      "errors": {
+        "cell_temperature_K": 3.530509218307998e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 3.2057689836051395e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "sdirk2",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 2.275957200481571e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "rannacher",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 3.1225022567582528e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "sdirk2_start",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 3.073929999430902e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "positive_cn",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 1.2351231148954867e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "theta",
+      "errors": {
+        "cell_temperature_K": 2.6756374893466273e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 3.344546861683284e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "sdirk2",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 2.0122792321330962e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "rannacher",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 3.164135620181696e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "sdirk2_start",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 2.942091015256665e-15
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "positive_cn",
+      "errors": {
+        "cell_temperature_K": 2.275957200481571e-14,
+        "wall_temperature_K": 1.1324274851176597e-14,
+        "section_power_W": 3.2738256550146616e-12,
+        "interval_end_input_J": 1.5265566588595902e-15
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "0b4059545442f9a59a71179e81e826ae36fdb892",
+      "file": "fvm_transient_end_power.py",
+      "source_sha256": "094c818fb114e971fad1925a9c24f45deccc1a998eea5c1049d41d1462b3f987"
+    },
+    {
+      "commit": "0f6dbaf705bbf58781e1cfad574a9c9d4adf2f07",
+      "file": "rod.py",
+      "source_sha256": "5fc72d639fa131aa5ffd5bec9872af48528a9541a81799fa21e65544977f8317"
+    }
+  ],
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_transient_end_power.py"
+}
