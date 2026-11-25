@@ -19,7 +19,8 @@ def measure(n, solver, storing=False):
     wave, phase = .8, .55
     angle = wave*y-phase
     films = wave*np.tan([-angle[0], angle[-1]])
-    surface = np.array([.12, .28]) if storing else np.zeros(2)
+    surface = np.array([.12 if storing in (True, "both", "west") else 0.,
+                        .28 if storing in (True, "both", "east") else 0.])
     # During modal decay the films remove heat from the slab and the walls.
     films += wave**2*surface
     initial_wall = np.cos(angle[[0, -1]])
@@ -92,7 +93,7 @@ def measure(n, solver, storing=False):
         state, cuts, wall, outward = sph.solve_transient_layered_slab(
             exact[0], times, 1/n, (None, None), conductivity=1/capacity,
             volumetric_heat_capacity=capacity, x_wall_films=tuple((h, 0.) for h in films),
-            wall_areal_heat_capacity=surface, initial_wall_temperatures=initial_wall if storing else (None, None),
+            wall_areal_heat_capacity=surface, initial_wall_temperatures=tuple(t if c else None for t, c in zip(initial_wall, surface)),
             method="exponential", h_factor=.9, return_x_heat=True, return_wall_temperatures=True, return_external_heat=True)
         outward = -outward.numpy()
         state, cuts, wall = state.numpy(), cuts.numpy(), wall.numpy()
@@ -113,6 +114,9 @@ def measure(n, solver, storing=False):
                                max_wall_balance_residual_J_m2=float(abs(wall_balance).max()),
                                final_external_heat_J_m2=outward.sum(0).tolist(),
                                final_released_storage_J_m2=release[-1].tolist())
+        passive = surface == 0
+        if passive.any():
+            storage_metrics["passive_wall_heat_mismatch_J_m2"] = float(abs(wall_balance[:, passive].cumsum(0)).max())
     return dict(**storage_metrics, solver=solver, cells=n, films_W_m2_K=films.tolist(),
                 max_cell_mean_error_K=float(abs(state-exact).max()),
                 max_wall_temperature_errors_K=abs(wall-exact_wall).max(axis=0).tolist(),
@@ -126,7 +130,8 @@ def measure(n, solver, storing=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--all", action="store_true", help="include the LINE2 and SIPG solutions")
-    parser.add_argument("--wall-storage", action="store_true", help="include distinct wall heat capacities")
+    parser.add_argument("--wall-storage", nargs="?", const="both", choices=("both", "west", "east"),
+                        help="add heat capacity to the specified wall(s); defaults to both when given alone")
     args = parser.parse_args()
     all_solvers = args.all
     modules = [__file__, rod.__file__, sph.__file__]
@@ -148,9 +153,12 @@ if __name__ == "__main__":
             errors = np.array([row["max_cell_mean_error_K"], *row["max_wall_temperature_errors_K"],
                                row["max_section_heat_error_J_m2"], *row["max_wall_heat_errors_J_m2"]])
             if args.wall_storage:
-                errors = np.r_[errors, row["max_external_heat_errors_J_m2"], row["max_released_storage_errors_J_m2"]]
+                active = np.array(row["surface_capacity_J_m2_K"]) > 0
+                release_errors = np.array(row["max_released_storage_errors_J_m2"])
+                errors = np.r_[errors, row["max_external_heat_errors_J_m2"], release_errors[active]]
             orders = [] if previous is None else np.log2(previous/errors).tolist()
             row.update(orders=orders, passed=bool(row["max_cell_balance_error_J_m2"] < 1e-11
+                       and row.get("passive_wall_heat_mismatch_J_m2", 0.) < 1e-11
                        and row.get("max_wall_balance_residual_J_m2", 0.) < 1e-11
                        and (not orders or min(orders) > 0.) and (n < grids[-1] or min(orders) > 1.85)))
             runs.append(row)
@@ -158,6 +166,6 @@ if __name__ == "__main__":
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(path) for path in modules],
                           reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={paths} python examples/graded_film_decay.py"
-                                       + (" --all" if all_solvers else "") + (" --wall-storage" if args.wall_storage else "")),
+                                       + (" --all" if all_solvers else "") + (f" --wall-storage {args.wall_storage}" if args.wall_storage else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
