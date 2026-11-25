@@ -1,0 +1,157 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "solver": "FVM",
+      "cells": 16,
+      "max_temperature_error_K": 0.0005683506426419349,
+      "max_cumulative_heat_error_J_m2": 0.00038823466190260336,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.00038823466190260336,
+        0.0002263983243326051
+      ],
+      "max_cell_balance_error_J_m2": 3.0834709785487746e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 32,
+      "max_temperature_error_K": 0.0001415481505945837,
+      "max_cumulative_heat_error_J_m2": 9.721249805760834e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        9.721249805760834e-05,
+        5.601838312657703e-05
+      ],
+      "max_cell_balance_error_J_m2": 4.0007060164715114e-16,
+      "orders": [
+        2.0054883720912957,
+        1.9977152188161504,
+        1.9977152188161504,
+        2.014891031991081
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 64,
+      "max_temperature_error_K": 3.548361249289256e-05,
+      "max_cumulative_heat_error_J_m2": 2.4313773982459486e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        2.4313773982459486e-05,
+        1.3966106922808086e-05
+      ],
+      "max_cell_balance_error_J_m2": 4.3359955383126536e-16,
+      "orders": [
+        1.9960681005513052,
+        1.9993679590646352,
+        1.9993679590646352,
+        2.0039704201504156
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 128,
+      "max_temperature_error_K": 8.876797188861474e-06,
+      "max_cumulative_heat_error_J_m2": 6.079266114789039e-06,
+      "west_east_cumulative_heat_errors_J_m2": [
+        6.079266114789039e-06,
+        3.4894779290250977e-06
+      ],
+      "max_cell_balance_error_J_m2": 5.054482765491641e-16,
+      "orders": [
+        1.9990417530800961,
+        1.9998047677329112,
+        1.9998047677329112,
+        2.00084681109611
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 16,
+      "max_temperature_error_K": 0.0005882938622169265,
+      "max_cumulative_heat_error_J_m2": 0.000402958125927555,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.000402958125927555,
+        0.0002410837360730944
+      ],
+      "max_cell_balance_error_J_m2": 2.727852665973529e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 32,
+      "max_temperature_error_K": 0.00014693606551763327,
+      "max_cumulative_heat_error_J_m2": 0.00010091131160736011,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.00010091131160736011,
+        5.9736957094852494e-05
+      ],
+      "max_cell_balance_error_J_m2": 4.4029450224636335e-16,
+      "orders": [
+        2.0013484349648567,
+        1.9975420247067475,
+        1.9975420247067475,
+        2.0128386714612203
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 64,
+      "max_temperature_error_K": 3.679836001757586e-05,
+      "max_cumulative_heat_error_J_m2": 2.5238405632455052e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        2.5238405632455052e-05,
+        1.4896242571810214e-05
+      ],
+      "max_cell_balance_error_J_m2": 3.30708767662391e-16,
+      "orders": [
+        1.997475172816705,
+        1.9993952217688187,
+        1.9993952217688187,
+        2.003675279758179
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 128,
+      "max_temperature_error_K": 9.201739625375183e-06,
+      "max_cumulative_heat_error_J_m2": 6.310331333886365e-06,
+      "west_east_cumulative_heat_errors_J_m2": [
+        6.310331333886365e-06,
+        3.721731409889184e-06
+      ],
+      "max_cell_balance_error_J_m2": 3.914782994302035e-16,
+      "orders": [
+        1.9996629322330617,
+        1.9998331115838643,
+        1.9998331115838643,
+        2.000902623408058
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "e9ea17c0bfd23853a46b2d4fec0b945e72a44db0",
+      "file": "graded_transient_slab.py",
+      "source_sha256": "567e3cb0235457570e1d7129e015337d64313ef2f56308cdaa73fb829d73743e"
+    },
+    {
+      "commit": "4647d87121b148d7212da19f9c3e2409e287cbca",
+      "file": "rod.py",
+      "source_sha256": "2d911ffd6a32943d52ebc789fe7864f1db37433ba361577df96c6ec807e92492"
+    },
+    {
+      "commit": "fff373c9e630b1f24a41ad5d3d14f552a3d3bff7",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "1dfa8901bb43a884096cb302ad2055badda9718d9953683f6925d6bff9d8ef41"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/graded_transient_slab.py"
+}
