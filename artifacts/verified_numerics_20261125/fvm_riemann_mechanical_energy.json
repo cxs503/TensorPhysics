@@ -1,0 +1,49 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "36d607e12dafa77a816e8f4a6b2b3b85e2d525bb",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_shallow_water_riemann.py tests/test_shallow_water_energy.py tests/test_shallow_water_galilean.py tests/test_shallow_water_dam_break.py tests/test_shallow_water_dam_break_robustness.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Wet flat-bed Riemann cases. Integrate mechanical energy with three Gauss points on each smooth region. Compare with boundary energy input minus hydraulic jump head loss at each shock. Independently evaluate energy flux jumps in three inertial frames. Relative numerical error is the absolute energy discrepancy divided by the final exact interval energy.",
+  "suite": {
+    "tests": 114,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_wet_riemann_mechanical_energy_balance_and_refinement[rarefaction-shock]": {
+      "exact_energy_balance_error": 7.91033905045424e-16,
+      "left_shock_loss_rate": 0.0,
+      "right_shock_loss_rate": 0.11660821998815073,
+      "relative_energy_error_200": 0.0014443017976994523,
+      "relative_energy_error_400": 0.0007420047858571857,
+      "relative_energy_error_800": 0.0003735786258167581
+    },
+    "test_wet_riemann_mechanical_energy_balance_and_refinement[rarefaction-rarefaction]": {
+      "exact_energy_balance_error": 1.7763568394002505e-15,
+      "left_shock_loss_rate": 0.0,
+      "right_shock_loss_rate": 0.0,
+      "relative_energy_error_200": 0.002476388803474461,
+      "relative_energy_error_400": 0.0012574544592895936,
+      "relative_energy_error_800": 0.0006338648765920852
+    },
+    "test_wet_riemann_mechanical_energy_balance_and_refinement[shock-shock]": {
+      "exact_energy_balance_error": 2.1316282072803006e-14,
+      "left_shock_loss_rate": 0.0345874269866667,
+      "right_shock_loss_rate": 1.5743597035345558,
+      "relative_energy_error_200": 0.0018220614494855738,
+      "relative_energy_error_400": 0.0009063558178531169,
+      "relative_energy_error_800": 0.00044882334068821277
+    },
+    "test_wet_riemann_mechanical_energy_balance_and_refinement[shock-rarefaction]": {
+      "exact_energy_balance_error": 3.552713678800501e-15,
+      "left_shock_loss_rate": 0.2515517022148436,
+      "right_shock_loss_rate": 0.0,
+      "relative_energy_error_200": 0.0006708332356241778,
+      "relative_energy_error_400": 0.000284913430608599,
+      "relative_energy_error_800": 0.00015181298516224855
+    },
+    "test_two_shock_energy_losses_match_each_moving_jump": {
+      "max_single_shock_energy_jump_error": 6.222800053024002e-14
+    }
+  }
+}
