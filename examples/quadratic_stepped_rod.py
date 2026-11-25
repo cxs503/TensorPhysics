@@ -14,6 +14,8 @@ def measure(n, resolve_source=False):
     areas, conductivities, coefficients = [.8, 1.3], [1.7, 3.1], [4., -2.2]
     conductance = 2.5
     edges, temperatures, means, sources, powers = [], [], [], [], []
+    fractions = np.array([0., .17, .64, 1.])
+    probe_temperature, probe_power = [], []
     start_temperature, start_power = 3., .4
     for i, (area, k, beta) in enumerate(zip(areas, conductivities, coefficients)):
         lo, hi = limits[i:i+2]
@@ -24,6 +26,9 @@ def measure(n, resolve_source=False):
             return start_temperature-(offset*(position-lo)+area*beta*(position**4-lo**4)/12)/(k*area)
         edges.append(x)
         temperatures.append(temperature(x))
+        probes = x[:-1,None]+np.diff(x)[:,None]*fractions
+        probe_temperature.append(temperature(probes))
+        probe_power.append(offset+area*beta*probes**3/3)
         # Three Gauss points integrate the quartic temperature exactly.
         midpoint, half = (x[1:]+x[:-1])/2, np.diff(x)/2
         shift = np.sqrt(.6)*half
@@ -60,6 +65,10 @@ def measure(n, resolve_source=False):
     fvm = dict(cell_average_temperature_K=float(np.max(abs(cell-np.concatenate(means)))),
                end_power_W=float(np.max(abs(np.array([left[0],right[-1]])-wall))),
                contact_power_W=abs(conductance*(hot[n-1]-cold[n-1])-interface))
+    if resolve_source:
+        t,p = rod.reconstruct_steady_rod_field(dx,cell_area,cell_k,cell,left,right,fractions,**derivatives)
+        fvm["probe_temperature_K"] = float(np.max(abs(t-np.concatenate(probe_temperature))))
+        fvm["probe_power_W"] = float(np.max(abs(p-np.concatenate(probe_power))))
     return fem,fvm
 
 
