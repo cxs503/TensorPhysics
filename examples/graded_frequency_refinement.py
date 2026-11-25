@@ -43,13 +43,30 @@ def direct_fvm(n,capacity,contact):
             first[0][0].real,first[2]["x"][0,m-1].real)
 
 
+def direct_sph(n,capacity,contact):
+    dx,_,_,m,_,_,k,c,_,_,loss,contacts = study.slab_grid(n,contact)
+    pair = study.sph.solve_low_frequency_layered_films(
+        np.zeros(n),dx,study.AMBIENT.real,film_coefficients=study.FILMS,conductivity=k,
+        volumetric_heat_capacity=c,wall_areal_heat_capacity=capacity,contact_resistance_x=contacts,
+        heat_loss_coefficient=loss,backend="banded")
+    offsets = study.sph.lattice_offsets(dx,1.3*dx)
+    factor = study.sph.lattice_diffusion_factor_2d(1.3,dx,mode="moment")
+    response = []
+    for field,walls,_ in pair:
+        cut = study.sph.stencil_x_face_power_2d(field[None,:],offsets,dx,m,walls,
+                        conductivity=k,layered_x=True,contact_resistance_x=contacts)/(dx*factor)
+        response.extend([field.real.numpy(),cut.real.item()])
+    return tuple(response)
+
+
 def campaign(contact):
     rows = []
     for capacity in (np.zeros(2),np.array([.4,.9])):
         previous_mesh = {}
         for n in (16,32,64,128):
             direct = direct_fem(n,capacity,contact)
-            native = {"FEM":direct["FEM"],"FVM":direct_fvm(n,capacity,contact)}
+            native = {"FEM":direct["FEM"],"FVM":direct_fvm(n,capacity,contact),
+                      "SPH":direct_sph(n,capacity,contact)}
             previous_response,previous_change = {},{}
             for omega in (.8,.4,.2,.1,.05,.025):
                 for report,(field,cut),reference in study.measure(n,omega,capacity,contact,True,return_response=True):
@@ -67,8 +84,7 @@ def campaign(contact):
                             if omega==.025:
                                 passed &= min(orders.values())>1.85
                         previous_change[name] = change
-                    if name in native:
-                        row["direct_frequency_errors"] = differences(current,native[name])
+                    row["direct_frequency_errors"] = differences(current,native[name])
                     if omega==.025:
                         # DC and Im(response)/omega are both even functions of frequency.
                         limit = [(4*x-y)/3 for x,y in zip(current,previous_response[name])]
@@ -76,13 +92,12 @@ def campaign(contact):
                         row["extrapolated_space_errors"] = error
                         cross = differences(limit,direct[name])
                         row["extrapolated_vs_direct_fem"] = cross
-                        if name in native:
-                            row["direct_space_errors"] = differences(native[name],reference)
-                            match = differences(limit,native[name])
-                            row["extrapolated_vs_direct_"+name.lower()] = match
-                            passed &= max(match.values())<1e-7
-                            if n==128:
-                                passed &= max(row["direct_space_errors"].values())<1e-4
+                        row["direct_space_errors"] = differences(native[name],reference)
+                        match = differences(limit,native[name])
+                        row["extrapolated_vs_direct_"+name.lower()] = match
+                        passed &= max(match.values())<1e-7
+                        if n==128:
+                            passed &= max(row["direct_space_errors"].values())<1e-4
                         if name=="FEM":
                             passed &= max(cross.values())<1e-7
                         elif n==128:
