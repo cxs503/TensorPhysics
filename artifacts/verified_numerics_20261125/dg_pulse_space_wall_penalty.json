@@ -1,0 +1,110 @@
+{
+  "passed": true,
+  "subdivisions": [],
+  "runs": [
+    {
+      "solver": "dg",
+      "wall_penalty": 40.0,
+      "interior_penalty": 20.0,
+      "method": "exact-time",
+      "cells": 16,
+      "width_over_interval": 0.05,
+      "center_error_over_peak": 1.0672108478049225e-06,
+      "spatial_order": null,
+      "passed": true
+    },
+    {
+      "solver": "dg",
+      "wall_penalty": 40.0,
+      "interior_penalty": 20.0,
+      "method": "exact-time",
+      "cells": 32,
+      "width_over_interval": 0.05,
+      "center_error_over_peak": 6.696579502030175e-08,
+      "spatial_order": 3.994277046128531,
+      "passed": true
+    },
+    {
+      "solver": "dg",
+      "wall_penalty": 40.0,
+      "interior_penalty": 20.0,
+      "method": "exact-time",
+      "cells": 64,
+      "width_over_interval": 0.05,
+      "center_error_over_peak": 4.203247083722772e-09,
+      "spatial_order": 3.9938482083227864,
+      "passed": true
+    },
+    {
+      "solver": "dg",
+      "wall_penalty": 40.0,
+      "interior_penalty": 20.0,
+      "method": "exact-time",
+      "cells": 16,
+      "width_over_interval": 0.5,
+      "center_error_over_peak": 1.1244747324390403e-06,
+      "spatial_order": null,
+      "passed": true
+    },
+    {
+      "solver": "dg",
+      "wall_penalty": 40.0,
+      "interior_penalty": 20.0,
+      "method": "exact-time",
+      "cells": 32,
+      "width_over_interval": 0.5,
+      "center_error_over_peak": 7.056130180149722e-08,
+      "spatial_order": 3.994230255359972,
+      "passed": true
+    },
+    {
+      "solver": "dg",
+      "wall_penalty": 40.0,
+      "interior_penalty": 20.0,
+      "method": "exact-time",
+      "cells": 64,
+      "width_over_interval": 0.5,
+      "center_error_over_peak": 4.43072922795551e-09,
+      "spatial_order": 3.993261109528438,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "3d828fc5ce178db39c04be38357f0d3082d3cb97",
+      "file": "slab_pulse_space_refinement.py",
+      "source_sha256": "fa4bd9732f9b6c0bb4a4c1306172ede6d3729cd58cb4aba670658513df04eb79"
+    },
+    {
+      "commit": "3d828fc5ce178db39c04be38357f0d3082d3cb97",
+      "file": "slab_pulse_time_refinement.py",
+      "source_sha256": "edeb38c7e6ab13f9677891e6a7f5f1d3c83f20cdd7dc2056d32fa0aa41b0d54d"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "ad21cf32fd2e55e9f140b54f544e81e37bbd7384",
+      "file": "rod.py",
+      "source_sha256": "c969a10aa786a71c7a1fc906cd0ad4ed88b81e7cd1006351ae2f699e08f4dfe1"
+    },
+    {
+      "commit": "8092762ed1a27ca10aff10d0d2b27a64c39c86d9",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "68844aa4b181a5107ce6149e2643e489faf53c173fce80b8b8648a251daf188f"
+    },
+    {
+      "commit": "3d828fc5ce178db39c04be38357f0d3082d3cb97",
+      "file": "dg_subinterval_heat_pulse.py",
+      "source_sha256": "8e701d906dcb2d52e8db2dbe895cb865221476443f75e76aa96e733d0b8423fb"
+    },
+    {
+      "commit": "427538a535bd750eadaea8a23d149244bebae2ee",
+      "file": "heat_1d.py",
+      "source_sha256": "40b60bc52d6424adcb28ed2773b85d5e813398e3528695f990c80b1c310ea460"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src:../TensorSPH/src:../TensorDG python examples/slab_pulse_space_refinement.py --dg-only"
+}
