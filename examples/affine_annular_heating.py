@@ -55,24 +55,20 @@ def fem(n, nt, quadratic=False):
     nodes = torch.cat([mesh.nodes for mesh in meshes])
     elements = torch.cat([mesh.elements+i*count for i,mesh in enumerate(meshes)])
     exact = np.concatenate([reference(mesh.nodes.numpy(), i, quadratic)[0] for i,mesh in enumerate(meshes)])
-    loads = []
-    for i, mesh in enumerate(meshes):
-        if quadratic:
-            x, y = mesh.nodes.T
-            a, cross, c = QUADRATIC[i]
-            nodal_load = a*x*x + cross*x*y + c*y*y
-        else:
-            nodal_load = mesh.nodes @ torch.from_numpy(GRADIENT[i])
-        loads.append(nodal_load[mesh.elements])
-    source = torch.cat(loads)
+    if quadratic:
+        load = dict(heat_source_quadratic=torch.from_numpy(np.repeat(QUADRATIC, n*nt, axis=0)))
+    else:
+        source = torch.cat([(mesh.nodes @ torch.from_numpy(GRADIENT[i]))[mesh.elements]
+                            for i, mesh in enumerate(meshes)])
+        load = dict(heat_source=source)
     j = torch.arange(nt)
     fixed = torch.cat((j,2*count-nt+j))
     inner, outer = count-nt+j, count+j
     chord = 2*B*np.sin(np.pi/nt)
     model = thermal.ThermalModel(nodes, elements, torch.from_numpy(np.repeat(K,n*nt)), 1., 1.,
                                  fixed, torch.from_numpy(exact)[fixed], element_type="q4",
-                                 heat_source=source, contact_pairs=torch.stack((inner,outer),dim=1),
-                                 contact_conductance=chord/RESISTANCE)
+                                 contact_pairs=torch.stack((inner,outer),dim=1),
+                                 contact_conductance=chord/RESISTANCE, **load)
     u = thermal.solve_steady_thermal(model,sparse=True)
     system = thermal.assemble_thermal(model,sparse=True)
     reaction = system.conductivity @ u - system.heat
