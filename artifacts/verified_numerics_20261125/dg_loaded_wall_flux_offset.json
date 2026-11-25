@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "f8214589d166cd5dbca4a7f2421d0f120a7296c1",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q tests/test_heat_1d.py tests/test_advection_diffusion_1d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Three layers with different conductivities, heat capacities and complex volumetric heat loads; two resistive heated interfaces. Exact transfer from expm of the constant augmented ODE for [T,q,1] in each layer, followed by the temperature and flux jumps. Verify condensed inward wall heat fluxes for zero drive and two complex wall drives through 4,8,16 cells per layer. CPU complex128, SIPG degree 2.",
+  "suite": {
+    "tests": 131,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_loaded_wall_flux_offset_against_augmented_transfer": {
+      "zero_drive_flux_error_4_W_per_m2": 3.4690386318330584e-08,
+      "max_wall_flux_error_4_W_per_m2": 3.701470503386281e-07,
+      "zero_drive_flux_error_8_W_per_m2": 2.173312653645238e-09,
+      "max_wall_flux_error_8_W_per_m2": 2.3213061993130643e-08,
+      "zero_drive_flux_error_16_W_per_m2": 1.3602519172196204e-10,
+      "max_wall_flux_error_16_W_per_m2": 1.4533151261033198e-09
+    }
+  }
+}
