@@ -33,12 +33,30 @@ def measure(n, beta, backend):
         split_interface_links=True, return_x_flux=True,
     )
     errors = np.abs(cuts.numpy()/q-1)
+    worst = int(errors.argmax())
+    # Hold the cut and both wall values fixed. The two complex differences
+    # add to the total error before their magnitudes are taken.
+    options = dict(conductivity=k, contact_resistance_x=contacts, h_factor=1.6,
+                   transverse_wavenumber=beta, split_interface_links=True)
+    def cut_flux(values):
+        return complex(sph.layered_slab_modal_cut_flux(values, dx, worst, (west, west-q*total), **options))
+    # Independent Fourier-law diagnostic on interior faces. For this
+    # piecewise linear reference the two half-cell drops and contact jump
+    # sum exactly to the centre-to-centre difference.
+    centre_resistance = dx/2*(1/k[:-1] + 1/k[1:]) + contacts
+    local_flux = -np.diff(field.numpy())/centre_resistance
+    from_exact = cut_flux(target)
+    from_solved = cut_flux(field)
+    np.testing.assert_allclose(from_solved, cuts[worst].item(), rtol=1e-12, atol=1e-13)
     return {
+        "max_interior_fourier_flux_relative_error": float(np.max(abs(local_flux/q-1))),
+        "exact_field_cut_relative_error": abs(from_exact/q-1),
+        "temperature_contribution_relative_to_flux": abs((from_solved-from_exact)/q),
         "columns": n, "interlayer_columns": last-first, "beta_rad_m": beta, "backend": backend,
         "temperature_error_K": float(abs(field.numpy()-target).max()),
         "contact_flux_relative_errors": errors[[first, last]].tolist(),
         "max_cut_flux_relative_error": float(errors.max()),
-        "worst_cut_x_m": int(errors.argmax())*dx,
+        "worst_cut_x_m": worst*dx,
         "wall_flux_relative_errors": errors[[0, -1]].tolist(),
     }
 
@@ -74,6 +92,9 @@ def main():
                 row["dense_backend"] = dense
             if beta and n == grids[-1]:
                 passed &= error < 1e-3 and row["temperature_error_K"] < 1e-4
+                fourier_error = row["max_interior_fourier_flux_relative_error"]
+                row["interior_fourier_flux_order"] = math.log2(previous["max_interior_fourier_flux_relative_error"]/fourier_error)
+                passed &= fourier_error < 1e-5 and row["interior_fourier_flux_order"] > 1.9
             row["passed"] = bool(passed)
             runs.append(row)
             previous = row
