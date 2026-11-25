@@ -16,7 +16,7 @@ from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
 
 
-def measure(n, *, time_refinement=1, sampled_dem=False):
+def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
     a, b = 1.5*math.pi, 4*math.pi/3
     phi, psi = .25, .4
     cap = 4*(b/a)**2
@@ -39,8 +39,9 @@ def measure(n, *, time_refinement=1, sampled_dem=False):
     x = np.linspace(0, 1, n+1)
     m = n//2
     initial = mode(x[:m+1], x[m:])
-    fem_t = thermal.solve_transient_thermal(
-        model, torch.from_numpy(time), torch.from_numpy(np.tile(initial, 2)), theta=.5).temperature[-1]
+    fem_history = thermal.solve_transient_thermal(
+        model, torch.from_numpy(time), torch.from_numpy(np.tile(initial, 2)), theta=.5).temperature
+    fem_t = fem_history[-1]
     walls = fem_t[ends].mean(dim=1).numpy()
     final = fem_t.reshape(2, -1).mean(dim=0).numpy()
     delta = final-initial
@@ -93,8 +94,9 @@ def measure(n, *, time_refinement=1, sampled_dem=False):
     faces[0,m-1] = resistance
     bc = {side: {"type": "robin", "values": 0., "film_coefficient": h}
           for side, h in zip(("west", "east"), films)}
-    final = energy.solve_transient_conduction(np.full(n, 1/n), [1.], k, capacity, bc, time,
-                                              initial, contact_resistance_x=faces)[-1,0]
+    fvm_history = energy.solve_transient_conduction(np.full(n, 1/n), [1.], k, capacity, bc, time,
+                                              initial, contact_resistance_x=faces)[:,0]
+    final = fvm_history[-1]
     # Recover each wall trace from the half-cell drop and the film law.
     walls = final[[0,-1]] / (1 + np.asarray(films)/(2*n*k[[0,-1]]))
     contact_jump = 1.5*(final[m-1]-final[m]) - .5*(final[m-2]-final[m+1])
@@ -117,24 +119,62 @@ def measure(n, *, time_refinement=1, sampled_dem=False):
     cell_balance = float(abs(np.diff(time) @ (.5*(inward[1:]+inward[:-1]))
                              - mass @ (temp-cell_initial)))
     dx = 1/n
-    field = torch.from_numpy(initial[None, :])
-    rhs = sph.prepare_slab_film_rhs(
-        field, sph.lattice_offsets(dx, 1.3*dx), dx, films, conductivity=torch.from_numpy(k),
-        specific_heat=torch.from_numpy(capacity), layered_x=True, contact_resistance_x=faces[0])
-    steps = math.ceil(time[-1]*max(k/capacity)/(.16*dx**2))*time_refinement
-    dt = time[-1]/steps
-    integrated_film = 0.
-    for _ in range(steps):
-        predictor, _, _ = rhs(field, (0., 0.))
-        rate, _, midwall = rhs(field + .5*dt*predictor, (0., 0.))
-        integrated_film -= dt * (films[0]*float(midwall[0]) + films[1]*float(midwall[1]))
-        field = field + dt*rate
-    final = field[0].numpy()
-    _, _, walls = rhs(field, (0., 0.))
-    jump_sph = 1.5*(final[m-1]-final[m]) - .5*(final[m-2]-final[m+1])
-    stored = np.mean(capacity*(final-initial))
-    values.append(("SPH", initial, final, walls.numpy(), jump_sph, stored))
-    sph_balance = float(abs(integrated_film-stored))
+    section_metrics = {}
+    if implicit_sph:
+        # Rightward power is -h_W*T_W on the west and +h_E*T_E on the east.
+        flux0 = np.array([-films[0]*math.sin(phi), -a*math.cos(a/2+phi), -films[1]*amp*math.sin(psi)])
+        reference = (-np.expm1(-a*a*time[1:])/a**2)[:,None]*flux0
+        def check_sections(name, interval_heat, stored):
+            cumulative = np.cumsum(interval_heat,axis=0)
+            residual = np.diff(stored,axis=0)+np.diff(interval_heat,axis=1)
+            section_metrics[name] = dict(
+                max_cumulative_heat_errors_J_m2=dict(zip(("west","contact","east"),
+                    np.max(abs(cumulative-reference),axis=0).tolist())),
+                max_layer_balance_J_m2=float(abs(residual).max()))
+
+        def integrate(power):
+            return np.diff(time)[:,None]*(power[:-1]+power[1:])/2
+
+        nodal = fem_history.reshape(len(time),2,-1).mean(dim=1).numpy()
+        fem_power = np.column_stack((-films[0]*nodal[:,0],(nodal[:,m]-nodal[:,m+1])/resistance,
+                                     films[1]*nodal[:,-1]))
+        fem_stored = np.column_stack(((nodal[:,:m]+nodal[:,1:m+1]).sum(axis=1)*dx/2,
+                                      cap*(nodal[:,m+1:-1]+nodal[:,m+2:]).sum(axis=1)*dx/2))
+        check_sections("FEM",integrate(fem_power),fem_stored)
+        fvm_power = np.column_stack((-fvm_history[:,0]/(1/films[0]+dx/(2*k[0])),
+                            (fvm_history[:,m-1]-fvm_history[:,m])/(resistance+dx/(2*k[m-1])+dx/(2*k[m])),
+                            fvm_history[:,-1]/(1/films[1]+dx/(2*k[-1]))))
+        def cell_stores(fields):
+            return (dx*capacity*fields).reshape(len(time),2,m).sum(axis=2)
+        check_sections("FVM",integrate(fvm_power),cell_stores(fvm_history))
+
+        states,interval_heat,traces = sph.solve_transient_layered_slab(initial,time,dx,(None,None),
+                conductivity=k,volumetric_heat_capacity=capacity,contact_resistance_x=faces[0],
+                x_wall_films=((films[0],0.),(films[1],0.)),return_x_heat=True,return_wall_temperatures=True)
+        final = states[-1].numpy()
+        trace_jump = 1.5*(final[m-1]-final[m])-.5*(final[m-2]-final[m+1])
+        stored = np.mean(capacity*(final-initial))
+        values.append(("SPH_implicit",initial,final,traces[-1].numpy(),trace_jump,stored))
+        check_sections("SPH_implicit",interval_heat[:,[0,m,-1]].numpy(),cell_stores(states.numpy()))
+    else:
+        field = torch.from_numpy(initial[None, :])
+        rhs = sph.prepare_slab_film_rhs(
+            field, sph.lattice_offsets(dx, 1.3*dx), dx, films, conductivity=torch.from_numpy(k),
+            specific_heat=torch.from_numpy(capacity), layered_x=True, contact_resistance_x=faces[0])
+        steps = math.ceil(time[-1]*max(k/capacity)/(.16*dx**2))*time_refinement
+        dt = time[-1]/steps
+        integrated_film = 0.
+        for _ in range(steps):
+            predictor, _, _ = rhs(field, (0., 0.))
+            rate, _, midwall = rhs(field + .5*dt*predictor, (0., 0.))
+            integrated_film -= dt * (films[0]*float(midwall[0]) + films[1]*float(midwall[1]))
+            field = field + dt*rate
+        final = field[0].numpy()
+        _, _, walls = rhs(field, (0., 0.))
+        jump_sph = 1.5*(final[m-1]-final[m]) - .5*(final[m-2]-final[m+1])
+        stored = np.mean(capacity*(final-initial))
+        values.append(("SPH", initial, final, walls.numpy(), jump_sph, stored))
+        sph_balance = float(abs(integrated_film-stored))
     wall_exact = decay * np.array([math.sin(phi), -amp*math.sin(psi)])
     rows = [{"solver": name, "cells": n,
              "errors": {"temperature_K": float(abs(final - decay*initial).max()),
@@ -143,6 +183,8 @@ def measure(n, *, time_refinement=1, sampled_dem=False):
                         "heat_change_J_m2": float(abs(heat-(decay-1)*heat0))}}
             for name, initial, final, walls, contact_jump, heat in values]
     for row in rows:
+        if row["solver"] in section_metrics:
+            row.update(section_metrics[row["solver"]])
         if row["solver"] == "DEM":
             row["initial_layer_heat_errors_J_m2"] = initial_errors
             row["initialization"] = "point_samples" if sampled_dem else "conservative_layer_projection"
@@ -157,11 +199,12 @@ def measure(n, *, time_refinement=1, sampled_dem=False):
     return rows
 
 
-def main(sampled_dem=False):
+def main(sampled_dem=False, implicit_sph=False):
     runs = []
     previous = {}
+    previous_sections = {}
     for n in (16, 32, 64, 128):
-        for row in measure(n, sampled_dem=sampled_dem):
+        for row in measure(n, sampled_dem=sampled_dem, implicit_sph=implicit_sph):
             errors = row["errors"]
             last = previous.get(row["solver"])
             row["passed"] = all(math.isfinite(v) for v in errors.values())
@@ -174,6 +217,13 @@ def main(sampled_dem=False):
                 row["passed"] &= all(value < limits[key] for key, value in errors.items())
             if "discrete_heat_balance_residual_J_m2" in row:
                 row["passed"] &= row["discrete_heat_balance_residual_J_m2"] < 1e-12
+            if "max_layer_balance_J_m2" in row:
+                section_errors = row["max_cumulative_heat_errors_J_m2"]
+                prior = previous_sections.get(row["solver"])
+                row["passed"] &= row["max_layer_balance_J_m2"]<1e-12
+                if prior:
+                    row["passed"] &= all(v<prior[k]/3 for k,v in section_errors.items())
+                previous_sections[row["solver"]] = section_errors
             previous[row["solver"]] = errors
             runs.append(row)
     print(json.dumps({"sources": [provenance(f) for f in
@@ -185,4 +235,6 @@ def main(sampled_dem=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sampled-dem", action="store_true", help="reproduce the original nodal initialization")
-    raise SystemExit(main(parser.parse_args().sampled_dem))
+    parser.add_argument("--implicit-sph",action="store_true",help="compare implicit SPH, FEM and FVM section heat histories")
+    opts = parser.parse_args()
+    raise SystemExit(main(opts.sampled_dem,opts.implicit_sph))
