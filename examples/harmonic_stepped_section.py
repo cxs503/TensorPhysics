@@ -11,6 +11,12 @@ from tensorfem import thermal
 from tensorfvm.cht import energy
 
 
+def propagate(x, t, p, wave, k_area):
+    z = wave*x
+    g = k_area*wave
+    return t*np.cosh(z)-p*np.sinh(z)/g, p*np.cosh(z)-g*t*np.sinh(z)
+
+
 def measure(n):
     omega, contact = 3., .18  # rad/s and total interface resistance in K/W
     areas = np.array([.7, 2.4])
@@ -18,24 +24,19 @@ def measure(n):
     films, cw = np.array([1.8,4.]), np.array([.6,.9])
     waves = np.sqrt(1j*omega*caps/ks)
 
-    def propagate(layer, x, t, p):
-        z = waves[layer]*x
-        g = ks[layer]*areas[layer]*waves[layer]
-        return t*np.cosh(z)-p*np.sinh(z)/g, p*np.cosh(z)-g*t*np.sinh(z)
-
     # Total axial power is continuous; the discontinuity in flux density is P/A.
     t0, p0 = .8+.2j, 1.-.4j
-    hot, cut = propagate(0,.5,t0,p0)
+    hot, cut = propagate(.5,t0,p0,waves[0],ks[0]*areas[0])
     cold = hot-contact*cut
-    t1, p1 = propagate(1,.5,cold,cut)
+    t1, p1 = propagate(.5,cold,cut,waves[1],ks[1]*areas[1])
     wall_t, wall_p = np.array([t0,t1]), np.array([p0,-p1])
     ambient = wall_t + (wall_p/areas+1j*omega*cw*wall_t)/films
     m, dx = n//2, 1/n
     local = np.arange(m+1)*dx
-    nodal = np.r_[propagate(0,local,t0,p0)[0],propagate(1,local,cold,cut)[0]]
+    nodal = np.r_[propagate(local,t0,p0,waves[0],ks[0]*areas[0])[0],propagate(local,cold,cut,waves[1],ks[1]*areas[1])[0]]
     def mean(layer,t,p):
         z = waves[layer]*dx/2
-        return propagate(layer,local[:-1]+dx/2,t,p)[0]*np.sinh(z)/z
+        return propagate(local[:-1]+dx/2,t,p,waves[layer],ks[layer]*areas[layer])[0]*np.sinh(z)/z
     avg = np.r_[mean(0,t0,p0),mean(1,cold,cut)]
     k,c,area = (v.repeat(m) for v in (ks,caps,areas))
     q4, _ = two_layer_conduction.slab_fem_model(k,0.,0.,contact,films,torch.from_numpy(c))
@@ -76,15 +77,52 @@ def metrics(name,n,delta,wall,wall_ref,cut,cut_ref,t,ambient,area,h,cw,omega,sto
                 layer_balance_W=float(abs(balance).max()))
 
 
+def shoulder(n):
+    # Perfect thermal contact between the rod segments; only the excess area
+    # of the larger cross section carries a film and surface heat capacity.
+    m, omega, h, cw = n//2, 3., 1.8, .6
+    area = np.array([.7,2.4])
+    exposed = area[1]-area[0]
+    k, c = np.array([2.,5.]), np.array([3.,1.5])
+    wave = np.sqrt(1j*omega*c/k)
+    center = .8+.2j
+    left_power, right_power = 1.-.4j, -.3+.9j
+    ambient = center + ((right_power-left_power)/exposed+1j*omega*cw*center)/h
+    x = np.arange(m+1)/n
+    left = propagate(x-.5,center,left_power,wave[0],k[0]*area[0])[0]
+    right = propagate(x,center,right_power,wave[1],k[1]*area[1])[0]
+    exact = np.r_[left,right[1:]]
+    base, _ = two_layer_conduction.slab_fem_model(k.repeat(m),0.,0.,0.,None,torch.from_numpy(c.repeat(m)))
+    q4 = replace(base,thickness=torch.from_numpy(area.repeat(m)), convection_area=exposed,
+                   convection_edges=torch.tensor([[m,m+n+1]]),
+                   convection_coefficient=h,ambient_temperature=ambient,wall_areal_heat_capacity=cw,
+                   fixed_temperatures=torch.from_numpy(exact[[0,0,-1,-1]]))
+    line = replace(q4,nodes=q4.nodes[:n+1,:1],elements=q4.elements[:,:2],element_type="line2",
+                   fixed_nodes=torch.tensor([0,n]),fixed_temperatures=torch.from_numpy(exact[[0,-1]]),
+                   convection_edges=torch.tensor([[m,m]]))
+    for name,model in (("shoulder-Q4",q4),("shoulder-LINE2",line)):
+        u = thermal.solve_harmonic_thermal(model,omega,sparse=True).temperature
+        t = u.numpy().reshape(-1,n+1).mean(axis=0)
+        powers = thermal.thermal_element_nodal_power(model,u,omega).numpy()
+        before, after = -powers[m-1,1], powers[m,0]
+        if name == "shoulder-Q4":
+            before -= powers[m-1,2]
+            after += powers[m,3]
+        net_input = exposed*(h*(ambient-t[m])-1j*omega*cw*t[m])
+        yield dict(solver=name,n=n,temperature_error_K=float(abs(t-exact).max()),
+                   interface_power_error_W=float(max(abs(before-left_power),abs(after-right_power))),
+                   shoulder_balance_W=float(abs(before+net_input-after)))
+
+
 if __name__ == "__main__":
     rows, previous = [], {}
     for n in (16,32,64,128,256):
-        for row in measure(n):
+        for row in (*measure(n), *shoulder(n)):
             name = row["solver"]
             errors = {k:v for k,v in row.items() if "_error_" in k}
             orders = {} if name not in previous else {k:np.log2(previous[name][k]/v) for k,v in errors.items()}
             row.update(orders=orders,passed=all(p>1.85 for p in orders.values()) and
-                       max(row["wall_balance_W"],row["layer_balance_W"])<1e-10)
+                       max(v for k,v in row.items() if k.endswith("balance_W"))<1e-10)
             rows.append(row)
             previous[name] = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
