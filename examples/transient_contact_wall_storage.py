@@ -36,11 +36,37 @@ def measure(n, wall_flux_order):
     # Ambient heat = heat entering the slab + rate of change of wall energy.
     air = walls+(inward-decay*wall_capacity*walls)/film
     centers = (np.arange(mid)+.5)*dx
-    means = np.r_[propagate(centers,start,west_flux,1.,1.)[0],
+    points = np.r_[propagate(centers,start,west_flux,1.,1.)[0],
                   propagate(centers,cold,contact_flux,4.,2.)[0]]
-    means *= np.sinc(np.sqrt(decay*capacity/k)*dx/(2*np.pi))
+    means = points*np.sinc(np.sqrt(decay*capacity/k)*dx/(2*np.pi))
     times = np.linspace(0.,1.,2*n+1)
     signal = np.exp(-decay*times)
+    if wall_flux_order=="SPH":
+        from tensorsph.heat_conduction_2d import solve_transient_layered_slab
+
+        contacts = np.zeros(n-1)
+        contacts[mid-1] = resistance
+        films = tuple((h,lambda t,a=a: a*np.exp(-decay*t)) for h,a in zip(film,air))
+        u,q,surface,external,mean = solve_transient_layered_slab(points,times,dx,(None,None),
+                conductivity=k,volumetric_heat_capacity=capacity,contact_resistance_x=contacts,
+                method="sdirk2",x_wall_films=films,wall_areal_heat_capacity=wall_capacity,
+                initial_wall_temperatures=walls,return_wall_temperatures=True,return_external_heat=True,
+                return_x_heat=True,return_interval_temperature=True)
+        u,q,surface,external,mean = (v.numpy() for v in (u,q,surface,external,mean))
+        ref_interval = -np.diff(signal)/decay
+        material_heat = q[:,[0,-1]]*np.array([1,-1])
+        wall_residual = wall_capacity*np.diff(surface,axis=0)+material_heat-external
+        stored = dx*(u*capacity).reshape(len(times),2,mid).sum(axis=2)
+        layer_residual = np.diff(stored,axis=0)-material_heat+np.column_stack((q[:,mid],-q[:,mid]))
+        return dict(solver="SPH",n=n,steps=len(times)-1,
+                    max_interval_particle_error_K=float(abs(mean-(ref_interval/np.diff(times))[:,None]*points).max()),
+                    max_particle_error_K=float(abs(u-signal[:,None]*points).max()),
+                    max_wall_temperature_error_K=float(abs(surface-signal[:,None]*walls).max()),
+                    max_cumulative_wall_heat_error_J_m2=float(abs((material_heat-ref_interval[:,None]*inward).cumsum(0)).max()),
+                    max_cumulative_external_heat_error_J_m2=float(abs((external-ref_interval[:,None]*(inward-decay*wall_capacity*walls)).cumsum(0)).max()),
+                    max_cumulative_contact_heat_error_J_m2=float(abs((q[:,mid]-ref_interval*contact_flux).cumsum()).max()),
+                    max_wall_step_residual_J_m2=float(abs(wall_residual).max()),
+                    max_layer_step_residual_J_m2=float(abs(layer_residual).max()))
     if wall_flux_order=="DG":
         from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
 
@@ -148,6 +174,7 @@ def measure(n, wall_flux_order):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dg",action="store_true",help="also verify P1 DG heat transfer across the contact")
+    parser.add_argument("--sph",action="store_true",help="also verify the SPH contact, wall storage and external heat")
     args = parser.parse_args()
     rows = []
     for order in (1,2):
@@ -180,9 +207,15 @@ if __name__ == "__main__":
     if args.dg:
         from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
         sources.extend(inspect.getfile(f) for f in (solve_transient_diffusion_2d,poisson_face_powers_2d))
+    if args.sph:
+        from tensorsph.heat_conduction_2d import solve_transient_layered_slab
+        sources.append(inspect.getfile(solve_transient_layered_slab))
+    for name,enabled in (("DG",args.dg),("SPH",args.sph)):
+        if not enabled:
+            continue
         previous = None
         for n in (8,16,32,64):
-            row = measure(n,"DG")
+            row = measure(n,name)
             errors = {k:v for k,v in row.items() if "_error_" in k}
             orders = {k:np.log2(previous[k]/v) for k,v in errors.items()} if previous else {}
             row.update(orders=orders,passed=bool(max(row["max_layer_step_residual_J_m2"],row["max_wall_step_residual_J_m2"])<1e-10
