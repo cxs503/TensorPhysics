@@ -1,0 +1,452 @@
+{
+  "reference": "T=.6+exp(-pi^2*kxx*t/C)*cos(pi*x); q_y=-kxy*dT/dx, unit square",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/dg_transverse_heat_transfer.py",
+  "order_metrics": [
+    "temperature_error_K",
+    "x_face_heat_error_J_m2",
+    "y_face_heat_error_J_m2"
+  ],
+  "runs": [
+    {
+      "cells_per_axis": 4,
+      "degree": 1,
+      "method": "theta",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.015356157583751529,
+      "x_face_heat_error_J_m2": 0.007638212088949464,
+      "y_face_heat_error_J_m2": 0.0021493074645247273,
+      "measured_midplane_heat_J": -0.03223895211235473,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 1.908195823574488e-15,
+      "global_heat_drift_J": 9.325873406851315e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 1,
+      "method": "theta",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.005239824124653153,
+      "x_face_heat_error_J_m2": 0.0023372385469603435,
+      "y_face_heat_error_J_m2": 0.0005728522398756111,
+      "measured_midplane_heat_J": -0.031184557173343088,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 4.6265075104301445e-15,
+      "global_heat_drift_J": 4.4297898682543744e-15,
+      "orders": [
+        1.5512269767531115,
+        1.7084299913141179,
+        1.9076369123418961
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 1,
+      "method": "theta",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.0017273917748139578,
+      "x_face_heat_error_J_m2": 0.0008698822390052624,
+      "y_face_heat_error_J_m2": 0.00018866137405301481,
+      "measured_midplane_heat_J": -0.030924357386715735,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 7.149879646672908e-15,
+      "global_heat_drift_J": 4.4297898682543744e-15,
+      "orders": [
+        1.600923063153767,
+        1.4259129749601274,
+        1.602363981444399
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "degree": 1,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.01633138150106772,
+      "x_face_heat_error_J_m2": 0.008373486826291549,
+      "y_face_heat_error_J_m2": 0.002144215883650248,
+      "measured_midplane_heat_J": -0.03223548813615213,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 2.55351295663786e-15,
+      "global_heat_drift_J": 3.0309088572266774e-15,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 1,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.005301308056156584,
+      "x_face_heat_error_J_m2": 0.0023682201422090543,
+      "y_face_heat_error_J_m2": 0.000572048534952227,
+      "measured_midplane_heat_J": -0.031184097427187297,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 5.945331033041512e-15,
+      "global_heat_drift_J": 2.3314683517128287e-15,
+      "orders": [
+        1.6232265538505941,
+        1.8220253088938319,
+        1.9062407048385317
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 1,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.0017302519103088443,
+      "x_face_heat_error_J_m2": 0.0008715450601504138,
+      "y_face_heat_error_J_m2": 0.000188703404142343,
+      "measured_midplane_heat_J": -0.030924266931488833,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 9.089951014118469e-15,
+      "global_heat_drift_J": 1.608713162681852e-14,
+      "orders": [
+        1.6153662797079613,
+        1.442156034711856,
+        1.6000171075030287
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "degree": 2,
+      "method": "theta",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.00011413803656824817,
+      "x_face_heat_error_J_m2": 5.633644572405894e-05,
+      "y_face_heat_error_J_m2": 3.0815668874299706e-05,
+      "measured_midplane_heat_J": -0.030856017475968535,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 7.631915932559963e-15,
+      "global_heat_drift_J": 8.1601392309949e-15,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 2,
+      "method": "theta",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 1.682452239690213e-05,
+      "x_face_heat_error_J_m2": 9.144348485035092e-06,
+      "y_face_heat_error_J_m2": 2.8211940014052916e-06,
+      "measured_midplane_heat_J": -0.030839384449220485,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 1.1508589220499132e-14,
+      "global_heat_drift_J": 4.406475184737247e-14,
+      "orders": [
+        2.7621421944466866,
+        2.623116256847923,
+        3.4492863236937996
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 2,
+      "method": "theta",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 2.273423756110615e-06,
+      "x_face_heat_error_J_m2": 1.4071146515748367e-06,
+      "y_face_heat_error_J_m2": 3.8198520035948036e-07,
+      "measured_midplane_heat_J": -0.030838072888265657,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 2.1228244856397183e-14,
+      "global_heat_drift_J": 2.0866641747829817e-13,
+      "orders": [
+        2.887627024877339,
+        2.700140500722462,
+        2.884717228624389
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "degree": 2,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 0.0003062383197607321,
+      "x_face_heat_error_J_m2": 0.0001843132868292463,
+      "y_face_heat_error_J_m2": 2.9048295466148344e-05,
+      "measured_midplane_heat_J": -0.030854813740994823,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 2.7946395197986362e-15,
+      "global_heat_drift_J": 1.212363542890671e-14,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 2,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 2.4972985215893084e-05,
+      "x_face_heat_error_J_m2": 1.092850296655068e-05,
+      "y_face_heat_error_J_m2": 2.2362531890626758e-06,
+      "measured_midplane_heat_J": -0.03083906482534526,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 1.5407813913626e-14,
+      "global_heat_drift_J": 2.9376501231581645e-14,
+      "orders": [
+        3.6162146260276056,
+        4.075992383061701,
+        3.6992980649868064
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 2,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": -0.55,
+      "temperature_error_K": 1.7579325981564864e-06,
+      "x_face_heat_error_J_m2": 6.23934367546819e-07,
+      "y_face_heat_error_J_m2": 2.1161002988073774e-07,
+      "measured_midplane_heat_J": -0.030837991175204617,
+      "exact_midplane_heat_J": -0.030837858961071052,
+      "max_cell_balance_J": 1.8511559472800254e-14,
+      "global_heat_drift_J": 3.105515844481488e-13,
+      "orders": [
+        3.8284166266718542,
+        4.130557699598525,
+        3.401603624702023
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "degree": 1,
+      "method": "theta",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.01535615758375175,
+      "x_face_heat_error_J_m2": 0.007638212088947244,
+      "y_face_heat_error_J_m2": 0.002149307464525449,
+      "measured_midplane_heat_J": 0.0322389521123555,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 2.284630817861455e-15,
+      "global_heat_drift_J": 6.994405055138487e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 1,
+      "method": "theta",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.005239824124653014,
+      "x_face_heat_error_J_m2": 0.0023372385469704743,
+      "y_face_heat_error_J_m2": 0.0005728522398740291,
+      "measured_midplane_heat_J": 0.031184557173342415,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 4.567960593115927e-15,
+      "global_heat_drift_J": 4.196643033083092e-15,
+      "orders": [
+        1.5512269767531706,
+        1.7084299913074452,
+        1.9076369123463648
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 1,
+      "method": "theta",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.0017273917748226175,
+      "x_face_heat_error_J_m2": 0.0008698822390061783,
+      "y_face_heat_error_J_m2": 0.00018866137405322125,
+      "measured_midplane_heat_J": 0.03092435738671461,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 7.524579917483898e-15,
+      "global_heat_drift_J": 6.761258219967204e-15,
+      "orders": [
+        1.6009230631464964,
+        1.4259129749648616,
+        1.6023639814388362
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "degree": 1,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.0163313815010655,
+      "x_face_heat_error_J_m2": 0.008373486826291465,
+      "y_face_heat_error_J_m2": 0.0021442158836495265,
+      "measured_midplane_heat_J": 0.032235488136152304,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 2.258609965721803e-15,
+      "global_heat_drift_J": 1.6320278461989802e-15,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 1,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.0053013080561545856,
+      "x_face_heat_error_J_m2": 0.0023682201422184357,
+      "y_face_heat_error_J_m2": 0.0005720485349518453,
+      "measured_midplane_heat_J": 0.031184097427186863,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 6.013852610342596e-15,
+      "global_heat_drift_J": 1.865174681370263e-15,
+      "orders": [
+        1.6232265538509418,
+        1.8220253088881024,
+        1.9062407048390086
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 1,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.001730251910322389,
+      "x_face_heat_error_J_m2": 0.0008715450601440439,
+      "y_face_heat_error_J_m2": 0.00018870340414136808,
+      "measured_midplane_heat_J": 0.030924266931492167,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 7.070624467864217e-15,
+      "global_heat_drift_J": 2.4014124022642137e-14,
+      "orders": [
+        1.6153662796961237,
+        1.4421560347281153,
+        1.60001710750952
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "degree": 2,
+      "method": "theta",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.00011413803656901145,
+      "x_face_heat_error_J_m2": 5.633644572274055e-05,
+      "y_face_heat_error_J_m2": 3.081566887654097e-05,
+      "measured_midplane_heat_J": 0.03085601747596301,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 4.956104970865738e-15,
+      "global_heat_drift_J": 3.730349362740526e-15,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 2,
+      "method": "theta",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 1.682452239679111e-05,
+      "x_face_heat_error_J_m2": 9.14434849025314e-06,
+      "y_face_heat_error_J_m2": 2.821193998032989e-06,
+      "measured_midplane_heat_J": 0.030839384449219742,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 1.333308463635774e-14,
+      "global_heat_drift_J": 3.9868108814289374e-14,
+      "orders": [
+        2.7621421944658544,
+        2.6231162559909147,
+        3.449286325523248
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 2,
+      "method": "theta",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 2.2734237571930827e-06,
+      "x_face_heat_error_J_m2": 1.4071146596794648e-06,
+      "y_face_heat_error_J_m2": 3.8198519797250086e-07,
+      "measured_midplane_heat_J": 0.030838072888272172,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 2.1748661899190225e-14,
+      "global_heat_drift_J": 2.0889956431346947e-13,
+      "orders": [
+        2.887627024180895,
+        2.7001404932361464,
+        2.884717235915097
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 4,
+      "degree": 2,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 0.00030623831976783755,
+      "x_face_heat_error_J_m2": 0.00018431328682746995,
+      "y_face_heat_error_J_m2": 2.9048295465718132e-05,
+      "measured_midplane_heat_J": 0.030854813740993747,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 2.886579864025407e-15,
+      "global_heat_drift_J": 9.092726571680033e-15,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 8,
+      "degree": 2,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 2.4972985233961964e-05,
+      "x_face_heat_error_J_m2": 1.092850295913994e-05,
+      "y_face_heat_error_J_m2": 2.236253180736003e-06,
+      "measured_midplane_heat_J": 0.030839064825344348,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 8.136720464069214e-15,
+      "global_heat_drift_J": 3.3806291099836017e-14,
+      "orders": [
+        3.616214625017236,
+        4.075992384026104,
+        3.699298070337304
+      ],
+      "passed": true
+    },
+    {
+      "cells_per_axis": 16,
+      "degree": 2,
+      "method": "sdirk2",
+      "cross_conductivity_W_mK": 0.55,
+      "temperature_error_K": 1.7579326851979715e-06,
+      "x_face_heat_error_J_m2": 6.239343640912498e-07,
+      "y_face_heat_error_J_m2": 2.1161004579162146e-07,
+      "measured_midplane_heat_J": 0.030837991175196075,
+      "exact_midplane_heat_J": 0.030837858961071052,
+      "max_cell_balance_J": 1.852532884039082e-14,
+      "global_heat_drift_J": 3.093858502722924e-13,
+      "orders": [
+        3.828416556282745,
+        4.130557706610373,
+        3.40160351085443
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "de76282e3ca32dc8af98c1cbfe11dd4ab2f929f8",
+      "file": "dg_transverse_heat_transfer.py",
+      "source_sha256": "415ce3406e29c99abe5fa1a2d6e87506fa8508dd9c443f43aeafe6d923802290"
+    },
+    {
+      "commit": "c83e060d3727b53c43ebe5a50f1134d93b0939cf",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "bb0c24da9d901913fe14d2919407130f498abfadf108b98e1c52bf5320127996"
+    },
+    {
+      "commit": "c83e060d3727b53c43ebe5a50f1134d93b0939cf",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    }
+  ]
+}
