@@ -1,0 +1,26 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "77d7d87c2b79afc8771dc1717078ac912da7c832",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_solver.py tests/test_linear_density_solver.py tests/test_interior_field_domain_guard.py tests/test_exterior_solver.py tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "270-degree L-shaped domain, homogeneous Dirichlet rays. Manufactured potential -1.35*r^(2/3)*sin(2theta/3)+2xy. Infer the leading amplitude from 24-point Gauss-Legendre angular projection of the solved field at radii 0.35 and 0.65. With the latter estimate subtract, solve again and add the analytic flux. Compare two corner-adjacent midpoint fluxes against independent boundary formula. 4/8/16 panels per side.",
+  "suite": {
+    "tests": 145,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "amplitude_error_0.35_4": 0.012325865226279653,
+    "amplitude_error_0.65_4": 0.002681075770036623,
+    "raw_tip_error_4": 0.2948425251070286,
+    "corrected_tip_error_4": 0.0005855519629969219,
+    "amplitude_error_0.35_8": 0.005168740889368584,
+    "amplitude_error_0.65_8": 0.0012469584554206659,
+    "raw_tip_error_8": 0.37772445317089565,
+    "corrected_tip_error_8": 0.0003488938523710239,
+    "amplitude_error_0.35_16": 0.002091951204556297,
+    "amplitude_error_0.65_16": 0.0005320693207984117,
+    "raw_tip_error_16": 0.478703129607176,
+    "corrected_tip_error_16": 0.00018866907336301253
+  }
+}
