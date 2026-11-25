@@ -68,11 +68,11 @@ def measure(n, width, tau=1.):
     power = walls[:, 1]
     first = math.ceil(stop/dt)
 
-    def midpoint_crossing(samples):
-        j = first + pulse.reversal_bracket_index(samples[first:])
-        return (j+.5-samples[j]/(samples[j+1]-samples[j]))*dt
+    def midpoint_crossing(samples, first_step):
+        j = pulse.reversal_bracket_index(samples)
+        return (first_step+j+.5-samples[j]/(samples[j+1]-samples[j]))*dt
 
-    crossing = midpoint_crossing(power)
+    crossing = midpoint_crossing(power[first:], first)
     exact_crossing = pulse.exact_reversal_time(start*rate, stop*rate, rate)
     # Evaluate the continuum endpoint derivative with the simulated modal
     # amplitudes. Use the same endpoint averaging and root interpolation on
@@ -82,9 +82,32 @@ def measure(n, width, tau=1.):
     exact_coefficients = np.column_stack([
         -np.expm1(-k*k*rate*on_time)*np.exp(-k*k*rate*off_time)/(k*k) for k in (1, 2)])
     exact_power = np.r_[0., exact_coefficients @ derivative]
-    modal_crossing = midpoint_crossing(.5*(modal_power[1:]+modal_power[:-1]))
-    sampled_exact = midpoint_crossing(.5*(exact_power[1:]+exact_power[:-1]))
+    modal_crossing = midpoint_crossing(.5*(modal_power[first+1:]+modal_power[first:-1]), first)
+    sampled_exact = midpoint_crossing(.5*(exact_power[first+1:]+exact_power[first:-1]), first)
     interval = 1/(16*rate)
+    # Freeze each measured amplitude pair and continue it with the exact
+    # source-free decay rates. The first endpoint already includes the
+    # fraction of one lattice step between the switch and this endpoint.
+    continuations = []
+    for offset in (0, 1, 2, 4, 8):
+        index = first+offset
+        amplitudes = coefficients[index]
+        elapsed = dt*np.arange(steps-index+1)
+        decay = np.exp(-rate*elapsed[:, None]*np.array([1., 4.]))
+        continued_power = (decay*amplitudes) @ derivative
+        mean_power = .5*(continued_power[1:]+continued_power[:-1])
+        continued_root = midpoint_crossing(mean_power, index)
+        analytic_root = index*dt + math.log(2*amplitudes[1]/amplitudes[0])/(3*rate)
+        # Endpoint averages of an exponential acquire a cosh(rate*dt/2)
+        # factor. This gives a closed-form check of the measured bracket.
+        analytic_midpoint_root = analytic_root + math.log(math.cosh(2*rate*dt)/math.cosh(rate*dt/2))/(3*rate)
+        bracket_left = dt*(index+pulse.reversal_bracket_index(mean_power)+.5)
+        continuations.append(dict(steps_after_first_endpoint=offset, endpoint_time=index*dt,
+                                  relative_amplitude_errors=(amplitudes/exact_coefficients[index-1]-1).tolist(),
+                                  analytic_midpoint_root_bracketed=bool(bracket_left <= analytic_midpoint_root <= bracket_left+dt),
+                                  exact_continuation_root=analytic_root, sampled_continuation_root=continued_root,
+                                  accumulated_shift_over_interval=(continued_root-sampled_exact)/interval,
+                                  subsequent_shift_over_interval=(modal_crossing-continued_root)/interval))
     exact_input = (stop-start)*rate*2/math.pi
     return dict(cells=n, dt=dt, end_time=steps*dt, width_over_interval=width, pulse_duration_in_steps=(stop-start)/dt,
                 start_in_steps=start/dt, stop_in_steps=stop/dt,
@@ -93,6 +116,7 @@ def measure(n, width, tau=1.):
                 max_cumulative_wall_heat_error_over_peak=wall_heat_error,
                 max_balance_over_peak=float(max_balance), max_temperature_error_over_peak=max_temp,
                 max_projection_residual_over_peak=max_projection_residual,
+                free_decay_controls=continuations,
                 modal_reversal_time=modal_crossing, sampled_exact_reversal_time=sampled_exact,
                 sampling_shift_over_interval=(sampled_exact-exact_crossing)/interval,
                 temperature_mode_shift_over_interval=(modal_crossing-sampled_exact)/interval,
@@ -115,6 +139,7 @@ if __name__ == "__main__":
                                                               "max_cumulative_wall_heat_error_over_peak")}
             row["passed"] = bool(max(row["relative_heat_error"], row["max_balance_over_peak"],
                                      row["max_projection_residual_over_peak"]) < 1e-12
+                                 and all(c["analytic_midpoint_root_bracketed"] for c in row["free_decay_controls"])
                                  and (n < 64 or min(row["orders"].values()) > 1.7))
             runs.append(row)
             previous = row
