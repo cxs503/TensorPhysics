@@ -43,7 +43,7 @@ def fem_contact(conductivity, capacity, loss, ambient, omega, resistance, walls,
     left_flux = -complex(inward[interface-1, 1])
     right_flux = complex(inward[interface, 0])
     wall_state = (field[[0,-1]], torch.stack((inward[0,0], inward[-1,1])))
-    return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state, field[model.elements].mean(1)
+    return complex(field[start[interface-1]+1]), complex(field[start[interface]]), left_flux, right_flux, wall_state, field[model.elements]
 
 
 def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem=False, left_thickness=.5, films=None, wall_capacity=(0., 0.)):
@@ -84,6 +84,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     # The reported boundary flux is positive inward at both ends.
     exact_walls = []
     exact_means = []
+    centers, cell_means, element_nodes = [], [], []
     for side, trace in enumerate((exact_left, exact_right)):
         shift = loss[side] + 1j*omega*capacity[side]
         particular = loss[side]*ambient[side]/shift
@@ -96,6 +97,24 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         # Integrate the continuum profile from the contact to the outer wall.
         u = wave*lengths[side]
         exact_means.append(particular + (trace-particular)*si/u - outward*(co-1)/(k[side]*wave*u))
+
+        count = interface if side == 0 else n-interface
+        edges = torch.arange(count+1, dtype=torch.float64)/n
+        if side == 0:
+            edges = edges.flip((0,))
+        midpoints = (edges[:-1]+edges[1:])/2
+
+        def excess(distance):
+            return (trace-particular)*torch.cosh(wave*distance) - outward*torch.sinh(wave*distance)/(k[side]*wave)
+
+        at_center = excess(midpoints)
+        centers.append(particular + at_center)
+        # Integrating either exponential over the cell multiplies its midpoint
+        # value by sinh(w*dx/2)/(w*dx/2). The constant particular term is exact.
+        half = wave/(2*n)
+        cell_means.append(particular + at_center*cmath.sinh(half)/half)
+        nodes = particular + excess(edges)
+        element_nodes.append(torch.stack((nodes[:-1], nodes[1:]), dim=1))
 
     def layers(values, dtype=torch.float64):
         return torch.tensor(values, dtype=dtype).repeat_interleave(torch.tensor([interface, n-interface]))
@@ -119,6 +138,8 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
     left, right = heat.layered_slab_contact_temperatures(field, cuts, 1/n, conductivity)
     flux = complex(cuts[i+1])
     comparison = {"exact_layer_mean_K": [[t.real, t.imag] for t in exact_means]}
+
+    comparison["sph_particle_error_K"] = float(abs(field-torch.cat(centers)).max())
 
     def layer_diagnostics(cell_means, contact_flux, inward):
         means = (complex(cell_means[:interface].mean()), complex(cell_means[interface:].mean()))
@@ -161,6 +182,7 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
             end_areal_heat_capacity=wall_capacity, end_film_coefficient=films if films is not None else 0.,
             heat_loss_coefficient=layers(loss).numpy(), bulk_ambient_temperature=layers(ambient, torch.complex128).numpy(),
             contact_resistance=contact.numpy(), return_traces=True)
+        comparison["fvm_cell_mean_error_K"] = float(abs(torch.from_numpy(cells)-torch.cat(cell_means)).max())
         q = leaving[i]
         comparison["fvm_layers"] = layer_diagnostics(cells, complex(q), (entering[0], -leaving[-1]))
         tl, tr = traces[0][i], traces[1][i]
@@ -174,9 +196,10 @@ def measure(n, omega, resistance, walls, backend, compare_fvm=False, compare_fem
         if any(wall_capacity):
             comparison["fvm_wall_balance_W_m2"] = wall_balance(faces[[0,-1]], (entering[0], -leaving[-1]))
     if compare_fem:
-        fl, fr, ql, qr, fem_wall_state, element_means = fem_contact(conductivity, layers(capacity), layers(loss),
+        fl, fr, ql, qr, fem_wall_state, nodal_field = fem_contact(conductivity, layers(capacity), layers(loss),
                                      layers(ambient, torch.complex128), omega, resistance, walls, interface, films, wall_capacity)
-        comparison["fem_layers"] = layer_diagnostics(element_means, ql, fem_wall_state[1])
+        comparison["fem_layers"] = layer_diagnostics(nodal_field.mean(1), ql, fem_wall_state[1])
+        comparison["fem_nodal_error_K"] = float(abs(nodal_field-torch.cat(element_nodes)).max())
         comparison.update(fem_flux_relative_error=abs(ql/exact_flux-1),
                           fem_max_trace_error_K=max(abs(fl-exact_left), abs(fr-exact_right)),
                           fem_interface_imbalance_W_m2=abs(ql-qr),
@@ -214,17 +237,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
     files = [__file__, heat.__file__]
     path = "../TensorSPH/src"
-    metrics = ["flux_relative_error", "max_trace_error_K"]
+    metrics = ["flux_relative_error", "max_trace_error_K", "sph_particle_error_K"]
     if args.compare_fvm:
         from tensorfvm.cht import rod
         files.append(rod.__file__)
         path += ":../TensorFVM/src"
-        metrics.extend(["fvm_flux_relative_error", "fvm_max_trace_error_K"])
+        metrics.extend(["fvm_flux_relative_error", "fvm_max_trace_error_K", "fvm_cell_mean_error_K"])
     if args.compare_fem:
         from tensorfem import thermal
         files.append(thermal.__file__)
         path += ":../TensorFEM/src"
-        metrics.extend(["fem_flux_relative_error", "fem_max_trace_error_K"])
+        metrics.extend(["fem_flux_relative_error", "fem_max_trace_error_K", "fem_nodal_error_K"])
     boundaries = [((0., 0.), None), ((None, 0.), None), ((None, None), None)]
     if args.films or args.wall_storage:
         west, east = .35+.5j, -.4+.15j
@@ -276,6 +299,10 @@ if __name__ == "__main__":
                                     row["passed"] &= order > 1.7
                                 if n == 64:
                                     row["passed"] &= error < .001
+                        if n == 64:
+                            for metric in ("sph_particle_error_K", "fem_nodal_error_K", "fvm_cell_mean_error_K"):
+                                if metric in row:
+                                    row["passed"] &= row[metric] < .001
                         runs.append(row)
                         previous = row
     passed = all(row["passed"] for row in runs)
