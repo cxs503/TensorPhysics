@@ -1,0 +1,234 @@
+{
+  "reference": "Heated unit square slab with two storing walls, left flux and right film",
+  "bulk_exchange_W_m3_K": 3.5,
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_wall_storage.py --two-walls --bulk-exchange",
+  "solver": {
+    "commit": "a32f4b6e90d64f85928c59057cd92f4039d0db65",
+    "file": "harmonic_conduction.py",
+    "source_sha256": "f2244c5381db364e6baf9ec43c5e306d4dc095297a69dcbe6ac0b58983b98257"
+  },
+  "benchmark": {
+    "commit": "90a6c50713371e87b05e31ef0aab880351fd19be",
+    "file": "bem_harmonic_wall_storage.py",
+    "source_sha256": "ff47710903fe531587a6e41ce1af1b00d387455fd861f81ab2b32974ea25c065"
+  },
+  "runs": [
+    {
+      "panels": 32,
+      "omega_rad_s": 0.5,
+      "end_influx_W_m2": [
+        [
+          -0.3880488055613759,
+          0.5509854117672522
+        ],
+        [
+          0.6916637049918768,
+          -0.043784582978644404
+        ]
+      ],
+      "exact_end_influx_W_m2": [
+        [
+          -0.3880487620148703,
+          0.5509854525856078
+        ],
+        [
+          0.6916634309624653,
+          -0.04378473306286935
+        ]
+      ],
+      "wall_error_K": 2.2785723230324686e-06,
+      "probe_error_K": 1.8887517567391372e-06,
+      "bulk_flux_error_W_m2": 4.839471361770296e-06,
+      "external_flux_error_W_m2": 4.773625146343816e-06,
+      "surface_storage_error_W_m2": 7.956041910622038e-07,
+      "bulk_storage_error_W_m": 6.192769810097938e-08,
+      "energy_residual_W_m": 2.5795798399661315e-07,
+      "distributed_heat_error_W_m": 2.1674694335342784e-07,
+      "distributed_heat_W_m": [
+        -0.40147047946538594,
+        -0.34249472567851197
+      ]
+    },
+    {
+      "panels": 64,
+      "omega_rad_s": 0.5,
+      "end_influx_W_m2": [
+        [
+          -0.3880487655043054,
+          0.5509854493909816
+        ],
+        [
+          0.6916634526951717,
+          -0.043784720667969165
+        ]
+      ],
+      "exact_end_influx_W_m2": [
+        [
+          -0.3880487620148703,
+          0.5509854525856078
+        ],
+        [
+          0.6916634309624653,
+          -0.04378473306286935
+        ]
+      ],
+      "wall_error_K": 2.927894254138431e-07,
+      "probe_error_K": 8.149290840169272e-08,
+      "bulk_flux_error_W_m2": 6.598209806273906e-07,
+      "external_flux_error_W_m2": 6.508434065814602e-07,
+      "surface_storage_error_W_m2": 1.0847390111775436e-07,
+      "bulk_storage_error_W_m": 6.122149566653691e-09,
+      "energy_residual_W_m": 2.72662023618745e-08,
+      "distributed_heat_error_W_m": 2.1427523519316458e-08,
+      "distributed_heat_W_m": [
+        -0.4014703635872179,
+        -0.3424948836898325
+      ]
+    },
+    {
+      "panels": 128,
+      "omega_rad_s": 0.5,
+      "end_influx_W_m2": [
+        [
+          -0.3880487622912838,
+          0.5509854523355547
+        ],
+        [
+          0.6916634326753403,
+          -0.043784732066480876
+        ]
+      ],
+      "exact_end_influx_W_m2": [
+        [
+          -0.3880487620148703,
+          0.5509854525856078
+        ],
+        [
+          0.6916634309624653,
+          -0.04378473306286935
+        ]
+      ],
+      "wall_error_K": 3.7098764844743276e-08,
+      "probe_error_K": 4.336539406361769e-09,
+      "bulk_flux_error_W_m2": 8.685589042514326e-08,
+      "external_flux_error_W_m2": 8.567412302415317e-08,
+      "surface_storage_error_W_m2": 1.4279020464971234e-08,
+      "bulk_storage_error_W_m": 4.5491052262898267e-10,
+      "energy_residual_W_m": 2.05006567123658e-09,
+      "distributed_heat_error_W_m": 1.5921868179113193e-09,
+      "distributed_heat_W_m": [
+        -0.4014703563410581,
+        -0.34249490215582484
+      ]
+    },
+    {
+      "panels": 32,
+      "omega_rad_s": 4.0,
+      "end_influx_W_m2": [
+        [
+          -0.3432934063485834,
+          0.7236837013338931
+        ],
+        [
+          0.7162180450369089,
+          -0.23964246133634012
+        ]
+      ],
+      "exact_end_influx_W_m2": [
+        [
+          -0.34329296612462395,
+          0.7236844943739212
+        ],
+        [
+          0.7162177425879901,
+          -0.23964369200138697
+        ]
+      ],
+      "wall_error_K": 6.119762564231629e-06,
+      "probe_error_K": 4.981758453082252e-06,
+      "bulk_flux_error_W_m2": 1.9884281218225933e-05,
+      "external_flux_error_W_m2": 1.1930568731244307e-05,
+      "surface_storage_error_W_m2": 1.5907424974607587e-05,
+      "bulk_storage_error_W_m": 3.2142188665039985e-07,
+      "energy_residual_W_m": 7.738111718230944e-07,
+      "distributed_heat_error_W_m": 1.4062207539142817e-07,
+      "distributed_heat_W_m": [
+        0.873161071230844,
+        -0.6798373206649206
+      ]
+    },
+    {
+      "panels": 64,
+      "omega_rad_s": 4.0,
+      "end_influx_W_m2": [
+        [
+          -0.343292999818929,
+          0.7236844307402517
+        ],
+        [
+          0.7162177634554422,
+          -0.23964359206948488
+        ]
+      ],
+      "exact_end_influx_W_m2": [
+        [
+          -0.34329296612462395,
+          0.7236844943739212
+        ],
+        [
+          0.7162177425879901,
+          -0.23964369200138697
+        ]
+      ],
+      "wall_error_K": 8.051241715071011e-07,
+      "probe_error_K": 2.010914570615249e-07,
+      "bulk_flux_error_W_m2": 2.766364202979551e-06,
+      "external_flux_error_W_m2": 1.6598185220030663e-06,
+      "surface_storage_error_W_m2": 2.213091362315551e-06,
+      "bulk_storage_error_W_m": 5.591991739890409e-08,
+      "energy_residual_W_m": 9.072515612992823e-08,
+      "distributed_heat_error_W_m": 2.4464963889673286e-08,
+      "distributed_heat_W_m": [
+        0.8731610350504575,
+        -0.6798374324626932
+      ]
+    },
+    {
+      "panels": 128,
+      "omega_rad_s": 4.0,
+      "end_influx_W_m2": [
+        [
+          -0.3432929687318822,
+          0.723684489331379
+        ],
+        [
+          0.7162177441126196,
+          -0.23964368403512415
+        ]
+      ],
+      "exact_end_influx_W_m2": [
+        [
+          -0.34329296612462395,
+          0.7236844943739212
+        ],
+        [
+          0.7162177425879901,
+          -0.23964369200138697
+        ]
+      ],
+      "wall_error_K": 1.0347323968010862e-07,
+      "probe_error_K": 1.0785552932994466e-08,
+      "bulk_flux_error_W_m2": 3.6822708035022775e-07,
+      "external_flux_error_W_m2": 2.2093624843187805e-07,
+      "surface_storage_error_W_m2": 2.945816642902609e-07,
+      "bulk_storage_error_W_m": 3.6923452011393934e-09,
+      "energy_residual_W_m": 6.581791940463739e-09,
+      "distributed_heat_error_W_m": 1.6154010531959959e-09,
+      "distributed_heat_W_m": [
+        0.8731610363452085,
+        -0.6798374552775908
+      ]
+    }
+  ],
+  "passed": true
+}
