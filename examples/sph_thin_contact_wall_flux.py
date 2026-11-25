@@ -35,10 +35,13 @@ def measure(per_layer, omega, backend, layers=4):
     means = torch.stack((cuts[0], -cuts[-1]))
     flux = sph.recover_dirichlet_wall_flux_2d(field, dx, k, means,
         contact_resistance_x=contacts, x_wall_temperatures=walls)
+    sequence_flux = sph.recover_dirichlet_wall_flux_2d(field, dx, k, means.tolist(),
+        contact_resistance_x=contacts, x_wall_temperatures=walls)
     target = torch.stack((-slope, slope))
     sampled = sph.recover_dirichlet_wall_flux_2d(exact, dx, k, target.mean(1),
         contact_resistance_x=contacts, x_wall_temperatures=walls)
-    return dict(sampled_wall_flux_error_W_m2=float((sampled-target).abs().max()), columns=len(k), rows=len(y), omega_rad_s=omega, backend=backend,
+    return dict(sequence_flux_difference_W_m2=float((sequence_flux-flux).abs().max()),
+                sampled_wall_flux_error_W_m2=float((sampled-target).abs().max()), columns=len(k), rows=len(y), omega_rad_s=omega, backend=backend,
                 temperature_error_K=float((field - exact).abs().max()),
                 wall_flux_error_W_m2=float((flux - target).abs().max()),
                 mean_cut_error_W_m2=float((cuts + slope.mean()).abs().max()),
@@ -61,6 +64,7 @@ if __name__ == "__main__":
                 # contacts it crosses. Report each order and gate the final refinement.
                 check_orders = layers == 4 or per_layer == 8
                 row["passed"] = (errors[0] < (.012 if layers == 4 else .02) and errors[1] < .09
+                    and row["sequence_flux_difference_W_m2"] == 0.
                     and row["sampled_wall_flux_error_W_m2"] < 1e-11
                     and row["mean_cut_error_W_m2"] < 1e-10
                     and row["recovered_mean_residual_W_m2"] < 1e-12
