@@ -61,7 +61,17 @@ def measure(n, mode, resistance, sph_only=False):
                     contact_resistance_x=np.broadcast_to(contact, (n,n-1)), return_interior_power=True)
     measured = interior["x"][:,m-1]/dx
     harmonic = np.mean(measured/phase_avg)
+    # Continue the half-cell temperature profiles to the material surface.
+    # The FVM unknowns and normal flux use cell averages in y.
+    surface = np.column_stack((fvm[:,m-1] - measured*dx/(2*k[m-1]),
+                               fvm[:,m] + measured*dx/(2*k[m]))) / phase_avg[:,None]
+    trace_error = abs(surface-truth).max(axis=0)
+    jump = surface[:,0]-surface[:,1]
     yield harmonic,q,u.numpy(),point,dict(solver="FVM",n=n,mode=mode,contact_resistance_m2K_W=resistance,
+        left_trace_error_K=float(trace_error[0]),right_trace_error_K=float(trace_error[1]),
+        trace_phase_error_rad=float(abs(np.angle(surface*truth.conj())).max()),
+        jump_error_K=float(abs(jump-resistance*q).max()),
+        contact_law_defect_K=float(abs(jump-resistance*measured/phase_avg).max()),
         temperature_error_K=float(abs(fvm-phase_avg[:,None]*avg).max()),
         interface_flux_error_W_m2=float(abs(measured-phase_avg*q).max()),
         interface_phase_error_rad=float(abs(np.angle(measured/(phase_avg*q))).max()))
@@ -74,6 +84,7 @@ if __name__ == "__main__":
     rows = []
     for resistance in (0., .15):
         previous = {}
+        previous_traces = {}
         for n in (16,32,64,128,256,512):
             for harmonic, q, particle, point, row in measure(n, 1, resistance,args.sph_only):
                 name = row["solver"]
@@ -96,12 +107,15 @@ if __name__ == "__main__":
                             row["extrapolated_flux_order"] = float(np.log2(prior_extrap/extrap_error))
                 row["orders"] = orders
                 row["raw_second_order_gate"] = all(p>1.8 for p in orders) if orders else None
-                if name=="SPH":
-                    trace_keys = ("left_trace_error_K","right_trace_error_K","trace_phase_error_rad","jump_error_K",
-                                  "west_wall_flux_error_W_m2","east_wall_flux_error_W_m2")
-                    if n>16:
-                        row["trace_orders"] = {k:float(np.log2(last_traces[k]/row[k])) for k in trace_keys}
-                    last_traces = {k:row[k] for k in trace_keys}
+                trace_keys = ("left_trace_error_K","right_trace_error_K","trace_phase_error_rad","jump_error_K")
+                if name == "SPH":
+                    trace_keys += ("west_wall_flux_error_W_m2","east_wall_flux_error_W_m2")
+                if name in previous_traces:
+                    row["trace_orders"] = {
+                        k:float(np.log2(previous_traces[name][k]/row[k])) for k in trace_keys
+                        if min(row[k],previous_traces[name][k]) > 1e-14
+                    }
+                previous_traces[name] = {k:row[k] for k in trace_keys}
                 rows.append(row)
                 previous[name] = harmonic, errors, extrap_error, particle, temp_error
     # Gate the finest refinement for each case. Retain raw orders at every resolution.
@@ -120,6 +134,12 @@ if __name__ == "__main__":
             flux_order = row["extrapolated_flux_order"]
             flux_error = row["extrapolated_flux_error_W_m2"]
         else:
+            row["contact_trace_passed"] = (
+                max(row["left_trace_error_K"],row["right_trace_error_K"]) < 1e-4
+                and min(row["trace_orders"][side] for side in
+                        ("left_trace_error_K","right_trace_error_K")) > 1.8
+                and row["jump_error_K"] < 1e-4 and row["contact_law_defect_K"] < 1e-12
+            )
             temp_order = row["orders"][0]
             temp_error = row["temperature_error_K"]
             flux_order = row["orders"][1]
