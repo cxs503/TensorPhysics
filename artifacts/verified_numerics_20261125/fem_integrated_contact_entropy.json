@@ -1,0 +1,24 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "7653c67ebdc4ce804dbd98f847ba61591029bc31",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal*.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Analytical partial-fraction integral over s=[0,1] and [0.12,0.86] of (2+4s)*(1100s-400)^2/((100+800s)*(500-300s)). Physical edge length 2 m, area-scaled linearly graded conductance; temperature traces in kelvins. Compare Gauss-Legendre orders 4,8,16,32 on CPU float64, check common temperature scaling and equal-temperature equilibrium.",
+  "suite": {
+    "tests": 178,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_integrated_contact_entropy_on_graded_subedge": {
+      "error_0.0_1.0_order_4_W_per_K": 0.011574699688853496,
+      "error_0.0_1.0_order_8_W_per_K": 4.597150882545975e-05,
+      "error_0.0_1.0_order_16_W_per_K": 7.187277439868467e-10,
+      "error_0.0_1.0_order_32_W_per_K": 1.2434497875801753e-14,
+      "error_0.12_0.86_order_4_W_per_K": 0.00032719799813585304,
+      "error_0.12_0.86_order_8_W_per_K": 5.0063109213738244e-08,
+      "error_0.12_0.86_order_16_W_per_K": 6.661338147750939e-15,
+      "error_0.12_0.86_order_32_W_per_K": 1.9984014443252818e-15
+    }
+  }
+}
