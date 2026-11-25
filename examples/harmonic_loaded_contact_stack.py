@@ -1,4 +1,4 @@
-"""Verify FEM, DG, FVM and SPH material-side heat fluxes for a heated slab with storing end walls."""
+"""Verify FEM, DG, FVM, SPH and thermal contact-chain material-side heat fluxes for a heated slab with storing end walls."""
 import json
 from dataclasses import replace
 
@@ -8,6 +8,7 @@ import torch
 from conduction_provenance import provenance
 from periodic_contact_heat import reference
 from two_layer_conduction import slab_fem_model
+from tensordem.thermal import contact_chain
 from tensordg import heat_1d as dg
 from tensorfem import thermal
 from tensorfvm.cht import rod
@@ -83,7 +84,26 @@ def measure(n, omega):
             + spacing*(1j*omega*np.repeat(c, n)*particles.numpy()-np.repeat(source, n))))),
         cut_wall_flux_mismatch_W_m2=float(max(abs(cuts[[0, -1]].numpy()*[1, -1]-wall_flux.numpy()))))
     solutions.append(("SPH", surfaces, wall_flux.numpy(), cuts[n].item()))
-    extra = {"FVM": finite_volume, "SPH": particle_metrics}
+    # Unit area converts the contact chain's link powers to flux densities.
+    links, stores = contact_chain.cell_centered_slab_network(
+        dx, np.repeat(k, n), np.repeat(c, n), films=film, wall_areal_heat_capacity=wall_capacity,
+        contact_resistance=contacts, resolve_contacts=True)
+    # Positive-capacity nodes are the left wall, material centers, and right wall.
+    centers = np.flatnonzero(stores)[1:-1]
+    left_trace, right_trace = centers[n-1]+1, centers[n]-1
+    applied = np.zeros(stores.size, dtype=complex)
+    applied[centers] = dx*np.repeat(source, n)
+    chain = contact_chain.harmonic_contact_temperatures(
+        links, stores, omega, t_left=ambient[0], t_right=ambient[1],
+        nodal_power=applied, allow_massless=True)
+    link_flux = -np.diff(chain)/links
+    surfaces = chain[[1, left_trace, right_trace, -2]]
+    solutions.append(("DEM_thermal_chain", surfaces, link_flux[[1, -2]]*[1, -1], link_flux[left_trace]))
+    chain_metrics = dict(
+        center_temperature_error_K=float(max(abs(chain[centers]-exact_points))),
+        free_node_balance_residual_W_m2=float(max(abs(np.diff(link_flux)
+            + 1j*omega*stores[1:-1]*chain[1:-1]-applied[1:-1]))))
+    extra = {"FVM": finite_volume, "SPH": particle_metrics, "DEM_thermal_chain": chain_metrics}
 
     for solver, t, material, cut in solutions:
         end_t = t[[0, -1]]
@@ -111,6 +131,9 @@ if __name__ == "__main__":
                     residuals.extend([row["particle_balance_residual_W_m2"], row["cut_wall_flux_mismatch_W_m2"]])
                 else:
                     residuals.append(row["contact_drop_residual_K"])
+                if solver == "DEM_thermal_chain":
+                    errors = np.append(errors, row["center_temperature_error_K"])
+                    residuals.append(row["free_node_balance_residual_W_m2"])
                 if solver == "FVM":
                     errors = np.append(errors, row["cell_mean_error_K"])
                     residuals.extend([row["cell_balance_residual_W_m2"], row["interface_flux_mismatch_W_m2"]])
@@ -121,5 +144,5 @@ if __name__ == "__main__":
                 runs.append(row)
     print(json.dumps(dict(runs=runs, sources=[provenance(path) for path in (
         __file__, reference.__code__.co_filename, slab_fem_model.__code__.co_filename,
-        dg.__file__, thermal.__file__, rod.__file__, sph.__file__)]), indent=2, allow_nan=False))
+        dg.__file__, thermal.__file__, rod.__file__, sph.__file__, contact_chain.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in runs) else 1)
