@@ -103,7 +103,7 @@ def fem(n,area,times,fraction,storage_fraction,initial):
     return np.column_stack((trace[:,n+np.argmax(area)],trace[:,n]-trace[:,n+1],wall,trace[:,n:n+2],np.r_[0.,contact]))
 
 
-def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.):
+def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.,right_stop=None,return_deposited=False):
     from tensordg import solve_transient_diffusion_2d, poisson_face_powers_2d
 
     face = np.zeros((2*n-1,2))
@@ -116,12 +116,12 @@ def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.
     def initial_field(x,y):
         return torch.where(x<.5,2*x*initial[0],2*(1-x)*initial[1])
     def heaters(t):
-        right = np.exp(-DECAY*(t-right_delay)) if t>=right_delay else 0.
+        right = np.exp(-DECAY*(t-right_delay)) if t>=right_delay and (right_stop is None or t<right_stop) else 0.
         return {"x":(power[0]*np.exp(-DECAY*t)*face,power[1]*right*face)}
     _,_,state,means,applied = solve_transient_diffusion_2d(initial_field,times,
                ncells=(2*n,2),degree=1,capacity=np.tile(branch_capacity.repeat(n)[:,None],(1,2)),
                trace_heat_capacity={"x":(surface[0]*face,surface[1]*face)},
-               trace_power_history=heaters,load_jump_times=(right_delay,) if right_delay else (),
+               trace_power_history=heaters,load_jump_times=tuple(t for t in (right_delay,right_stop) if t),
                rannacher=True,return_interval_means=True,return_history_heat=True,**options)
     modes = state[:,:,:,:,0].mean(2).numpy()
     traces = np.column_stack((modes[:,n-1].sum(1),modes[:,n,0]-modes[:,n,1]))
@@ -143,6 +143,9 @@ def dg_samples(n,area,times,fraction,storage_fraction,initial,idx,right_delay=0.
         left,right = traces[stop]
         rows.append([traces[stop,np.argmax(area)],left-right,*heat[:2],left,right,heat[2]])
         start = stop
+    if return_deposited:
+        totals = applied.sum(2).reshape(len(dt),2,n).sum(2).cumsum(0).numpy()
+        return np.array(rows),residual,totals[idx-1]
     return np.array(rows),residual
 
 
