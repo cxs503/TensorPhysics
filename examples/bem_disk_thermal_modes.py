@@ -16,10 +16,13 @@ def reference(points, mode, wave, conductivity):
     phase = np.exp(1j*mode*angle)/iv(mode, wave)
     t = iv(mode, wave*radius)*phase
     radial = wave*ivp(mode, wave*radius)*phase
-    # For the tested modes 0 and 2 the Cartesian gradient vanishes at the origin.
     tangent = np.divide(1j*mode*t, radius, out=np.zeros_like(t), where=radius > 0)
     cs, sn = np.cos(angle), np.sin(angle)
-    return t, -conductivity*np.column_stack((radial*cs-tangent*sn, radial*sn+tangent*cs))
+    gradient = np.column_stack((radial*cs-tangent*sn, radial*sn+tangent*cs))
+    if abs(mode) == 1:
+        # I_1(w r) exp(±i theta) = w (x ± i y)/2 + O(r^3).
+        gradient[radius == 0] = wave / (2*iv(1, wave)) * np.array([1., 1j*mode])
+    return t, -conductivity*gradient
 
 
 def arc_load_errors(solution, mode, radial_flux):
@@ -73,7 +76,10 @@ def measure(n, mode, omega, quadratic, circle_data=False):
     directions = np.column_stack((np.cos(angles), np.sin(angles)))
     probes = np.vstack(([0., 0.], .35*directions, .72*directions))
     exact_t, exact_q = reference(probes, mode, wave, conductivity)
-    component = abs(solution.heat_flux(probes)-exact_q).max(axis=0)
+    flux_error = abs(solution.heat_flux(probes)-exact_q)
+    component = flux_error.max(axis=0)
+    if abs(mode) == 1:
+        extra["center_flux_error_W_m2"] = float(flux_error[0].max())
     if circle_data:
         # Project onto the driven angular mode before integrating so the
         # nonaxisymmetric signal survives integration over the perimeter.
@@ -92,7 +98,9 @@ def measure(n, mode, omega, quadratic, circle_data=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--circle-data", action="store_true", help="use unit-circle boundary data on the inscribed polygon")
-    circle_data = parser.parse_args().circle_data
+    parser.add_argument("--dipoles", action="store_true", help="test both signed first angular modes")
+    args = parser.parse_args()
+    circle_data = args.circle_data
     rows = []
     metrics = ["interior_temperature_error_K", "interior_flux_x_error_W_m2",
                "interior_flux_y_error_W_m2", "inward_flux_error_W_m2"]
@@ -100,7 +108,7 @@ if __name__ == "__main__":
         metrics.extend(["modal_inward_power_error_W_m", "panel_arc_mean_flux_error_W_m2", "max_fixed_arc_power_error_W_m"])
     for quadratic in (False, True):
         for omega in (.5, 5.):
-            for mode in (0, 2):
+            for mode in ((-1, 1) if args.dipoles else (0, 2)):
                 previous = None
                 for n in ((16, 32, 64, 128) if circle_data else (16, 32, 64)):
                     row = measure(n, mode, omega, quadratic, circle_data)
@@ -124,7 +132,7 @@ if __name__ == "__main__":
                     previous = errors
                     rows.append(row)
     print(json.dumps(dict(reference="I_m(lambda*r) exp(i*m*theta)/I_m(lambda), lambda^2=i*omega*C/k; Dirichlet data evaluated "+("on the unit circle at matching polar angles" if circle_data else "on the actual polygon"),
-                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_disk_thermal_modes.py"+(" --circle-data" if circle_data else ""),
+                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_disk_thermal_modes.py"+(" --circle-data" if circle_data else "")+(" --dipoles" if args.dipoles else ""),
                           fixed_arcs_rad=[[.19, 1.41], [5.83, 2*np.pi+.47]] if circle_data else [],
                           order_metrics=metrics, runs=rows, sources=[provenance(__file__), provenance(harmonic_conduction.__file__), provenance(geometry.__file__)]),
                      indent=2, allow_nan=False))
