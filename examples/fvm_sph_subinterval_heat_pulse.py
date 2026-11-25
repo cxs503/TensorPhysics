@@ -20,10 +20,11 @@ def measure(n, method, width):
     dx = 1/n
     centers = (np.arange(n)+0.5)*dx
     mode = np.sin(np.pi*centers)*np.sinc(dx/2)
-    cell, _, _, _, ledger = rod.solve_transient_stepped_rod(
+    cell, _, _, _, ledger, intervals = rod.solve_transient_stepped_rod(
         np.full(n, dx), 1., 1., 1., (305., 305.), times, np.full(n, 305.), temperature_reference=305.,
         source=lambda t: amplitude*rate*mode if start <= t < stop else 0.,
         load_jump_times=(start, stop), method=method, flux_order=2, return_step_heat=True,
+        return_interval_temperatures=True,
     )
     duration = np.clip(times-start, 0, stop-start)
     factor = -np.expm1(-rate*duration)*np.exp(-rate*np.maximum(times-stop, 0))
@@ -32,11 +33,30 @@ def measure(n, method, width):
     exact_input = amplitude*rate*np.diff(duration)*(2/math.pi)
     # Integral of the modal ODE gives the temperature-time integral without quadrature.
     integral = np.diff(duration) - np.diff(factor)/rate
+    mean_factor = integral/np.diff(times)
+    cell_mean_error = abs(intervals["cell"]/amplitude - mean_factor[:, None]*mode)/peak
+    fractions = np.array([0., 0.25, 0.5, 0.75, 1.])
+    position = dx*(np.arange(n)[:, None] + fractions)
+    sampled, power = rod.reconstruct_interval_rod_field(
+        np.full(n, dx), 1., 1., intervals, fractions)
+    # Compare reconstructed point temperatures and powers to their own
+    # analytic interval means, distinct from the cell-volume averages.
+    profile = mean_factor[:, None, None]
+    sampled_error = abs(sampled/amplitude - profile*np.sin(math.pi*position))/peak
+    power_error = abs(power/(math.pi*amplitude) + profile*np.cos(math.pi*position))/peak
+    step_duration = np.diff(times)[:, None]
+    ledger_error = max(abs(power[:, :, face]*step_duration-ledger[side]).max()
+                       for face, side in ((0, "left"), (-1, "right")))
     wall_heat = ledger["end_input"]
     error = abs(wall_heat + math.pi*amplitude*integral[:, None])/(math.pi*amplitude*dt*peak)
     stored = dx*cell.sum(axis=1)
     measured_input = ledger["source"].sum(axis=1)
-    return dict(crossing_field_error_over_peak=float(field_error[2].max()),
+    return dict(crossing_cell_mean_error_over_peak=float(cell_mean_error[1].max()),
+                max_interval_cell_mean_error_over_peak=float(cell_mean_error.max()),
+                max_interval_point_temperature_error_over_peak=float(sampled_error.max()),
+                max_interval_point_power_error_over_scale=float(power_error.max()),
+                reconstructed_face_heat_mismatch_over_scale=float(ledger_error/(math.pi*amplitude*dt*peak)),
+                crossing_field_error_over_peak=float(field_error[2].max()),
                 decay_field_error_over_peak=float(field_error[3:].max()),
                 crossing_wall_heat_error_over_scale=float(error[1].max()),
                 decay_wall_heat_error_over_scale=float(error[2:].max()),
@@ -55,6 +75,10 @@ if __name__ == "__main__":
                 passed = all(max(row[key] for key in ("crossing_field_error_over_peak", "decay_field_error_over_peak",
                                  "crossing_wall_heat_error_over_scale", "decay_wall_heat_error_over_scale")) < tolerance
                              and row["energy_residual_over_peak"] < 1e-11 for row in (fv, particles))
+                passed = passed and max(fv["max_interval_cell_mean_error_over_peak"],
+                                        fv["max_interval_point_temperature_error_over_peak"],
+                                        fv["max_interval_point_power_error_over_scale"]) < tolerance
+                passed = passed and fv["reconstructed_face_heat_mismatch_over_scale"] < 1e-10
                 runs.append(dict(columns=n, method=method, width_over_interval=width, fvm=fv, sph=particles,
                                  passed=passed and fv["source_heat_relative_error"] < 1e-12))
     passed = all(row["passed"] for row in runs)
