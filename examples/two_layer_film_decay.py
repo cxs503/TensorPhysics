@@ -65,7 +65,8 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
     history = contact_chain.transient_contact_temperatures(
         links, np.r_[0., nodal_capacity, 0.], time, np.r_[0., nodal_start, 0.],
         t_left=0., t_right=0.)
-    final = history[-1, 1:-1]
+    dem_temperatures = history[:,1:-1]
+    final = dem_temperatures[-1]
     values.append(("DEM", initial, final, final[[0,-1]], final[m]-final[m+1],
                    nodal_capacity @ (final-nodal_start)))
 
@@ -134,6 +135,17 @@ def measure(n, *, time_refinement=1, sampled_dem=False, implicit_sph=False):
 
         def integrate(power):
             return np.diff(time)[:,None]*(power[:-1]+power[1:])/2
+
+        dem_power = np.column_stack((-films[0]*dem_temperatures[:,0],
+                     (dem_temperatures[:,m]-dem_temperatures[:,m+1])/resistance,
+                     films[1]*dem_temperatures[:,-1]))
+        dem_stores = (dem_temperatures*nodal_capacity).reshape(len(time),2,m+1).sum(axis=2)
+        check_sections("DEM",integrate(dem_power),dem_stores)
+
+        cells = history[:,1:-1]
+        cell_power = np.column_stack((-cells[:,0]/links[0],(cells[:,m-1]-cells[:,m])/links[m],
+                                      cells[:,-1]/links[-1]))
+        check_sections("DEM_cell",integrate(cell_power),(cells*mass).reshape(len(time),2,m).sum(axis=2))
 
         nodal = fem_history.reshape(len(time),2,-1).mean(dim=1).numpy()
         fem_power = np.column_stack((-films[0]*nodal[:,0],(nodal[:,m]-nodal[:,m+1])/resistance,
@@ -221,6 +233,8 @@ def main(sampled_dem=False, implicit_sph=False):
                 section_errors = row["max_cumulative_heat_errors_J_m2"]
                 prior = previous_sections.get(row["solver"])
                 row["passed"] &= row["max_layer_balance_J_m2"]<1e-12
+                if n==128:
+                    row["passed"] &= max(section_errors.values())<1e-5
                 if prior:
                     row["passed"] &= all(v<prior[k]/3 for k,v in section_errors.items())
                 previous_sections[row["solver"]] = section_errors
@@ -228,6 +242,7 @@ def main(sampled_dem=False, implicit_sph=False):
             runs.append(row)
     print(json.dumps({"sources": [provenance(f) for f in
                       (__file__, inspect.getfile(slab_fem_model), thermal.__file__, energy.__file__, contact_chain.__file__, sph.__file__)],
+                      **({"section_heat_reference": "Integral of rightward Fourier flux at x=0, 0.5, 1 m; maximum absolute error over all output times."} if implicit_sph else {}),
                       "time_s": .015, "runs": runs}, indent=2))
     return 0 if all(row["passed"] for row in runs) else 1
 
@@ -235,6 +250,6 @@ def main(sampled_dem=False, implicit_sph=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sampled-dem", action="store_true", help="reproduce the original nodal initialization")
-    parser.add_argument("--implicit-sph",action="store_true",help="compare implicit SPH, FEM and FVM section heat histories")
+    parser.add_argument("--implicit-sph",action="store_true",help="compare FEM, FVM, DEM and implicit SPH section heat histories")
     opts = parser.parse_args()
     raise SystemExit(main(opts.sampled_dem,opts.implicit_sph))
