@@ -1,0 +1,2863 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 0.00014907878837677746,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.5001534899127548,
+        0.015487040170286933
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.05078530913496884,
+        -0.10842423830796953,
+        -0.05878857688996838
+      ],
+      "contact_amplitude_W_m2": 0.17851073000970957,
+      "far_wall_relative_phasor_error": 0.009685489430040219,
+      "max_relative_phasor_error": 0.009685489430040219,
+      "max_phase_error_rad": 0.00019057190294601242,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 2.0,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.375
+        ],
+        "conductivities_W_m_K": [
+          1.0,
+          4.0
+        ],
+        "capacities_J_m3_K": [
+          1.25,
+          2.5
+        ],
+        "far_wall_reciprocity_relative_error": 0.00014907878837722155,
+        "reference_wall_amplitudes_W_m2": [
+          0.49989558487295194,
+          0.015338508249455858
+        ],
+        "wall_amplitudes_W_m2": [
+          0.5001534899127483,
+          0.015487040170286962
+        ],
+        "wall_and_contact_phases_rad": [
+          -0.0507853091349686,
+          -0.10842423830796931,
+          -0.05878857688996824
+        ],
+        "contact_amplitude_W_m2": 0.17851073000970927,
+        "far_wall_relative_phasor_error": 0.009685489430042212,
+        "max_relative_phasor_error": 0.00968548943004221,
+        "max_phase_error_rad": 0.00019057190294578935
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.7271143361827797e-05,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.5000023861923827,
+        0.015413641686145544
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.050764262182623254,
+        -0.10832648568890196,
+        -0.05873562933317444
+      ],
+      "contact_amplitude_W_m2": 0.1782028837579936,
+      "far_wall_relative_phasor_error": 0.004899237221026192,
+      "max_relative_phasor_error": 0.004899237221026191,
+      "max_phase_error_rad": 9.281928387845112e-05,
+      "phasor_error_order": 0.9832678047724976,
+      "reciprocity_error_order": 1.9999440166456388,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.317876199177455e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.49994321764009575,
+        0.015376291210988092
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.05075480502931317,
+        -0.10827946250034899,
+        -0.058711497038806355
+      ],
+      "contact_amplitude_W_m2": 0.17804007040491795,
+      "far_wall_relative_phasor_error": 0.0024637015669576314,
+      "max_relative_phasor_error": 0.002463701566957631,
+      "max_phase_error_rad": 4.57960953254769e-05,
+      "phasor_error_order": 0.9917296384808351,
+      "reciprocity_error_order": 1.999986009611282,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 2.329474694695577e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.499917988027368,
+        0.015357454152362992
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.05075030156011371,
+        -0.10825641017639834,
+        -0.05870001182314762
+      ],
+      "contact_amplitude_W_m2": 0.17795645866608542,
+      "far_wall_relative_phasor_error": 0.0012353951293121977,
+      "max_relative_phasor_error": 0.0012353951293121977,
+      "max_phase_error_rad": 2.274377137482411e-05,
+      "phasor_error_order": 0.9958549622897082,
+      "reciprocity_error_order": 1.9999965039839787,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690227835243e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.49990642953737086,
+        0.015347994796108787
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.05074811135113462,
+        -0.1082449997662873,
+        -0.0586944153145706
+      ],
+      "contact_amplitude_W_m2": 0.17791409799958063,
+      "far_wall_relative_phasor_error": 0.0006185829868433278,
+      "max_relative_phasor_error": 0.0006185829868433278,
+      "max_phase_error_rad": 1.1333361263782493e-05,
+      "phasor_error_order": 0.9979334878066829,
+      "reciprocity_error_order": 1.9999991351550936,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 1.455922925552855e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.49990091845142265,
+        0.015343254929647264
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.05074703098294607,
+        -0.10823932344405215,
+        -0.05869165351901937
+      ],
+      "contact_amplitude_W_m2": 0.17789277925886787,
+      "far_wall_relative_phasor_error": 0.0003095133755698086,
+      "max_relative_phasor_error": 0.0003095133755698086,
+      "max_phase_error_rad": 5.657039028637707e-06,
+      "phasor_error_order": 0.9989653982877329,
+      "reciprocity_error_order": 1.9999996347547953,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.639806656074995e-08,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.49989822925606003,
+        0.015340882425868861
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.0507464945521068,
+        -0.10823649249229163,
+        -0.05869028173460944
+      ],
+      "contact_amplitude_W_m2": 0.17788208515660828,
+      "far_wall_relative_phasor_error": 0.0001548111542849078,
+      "max_relative_phasor_error": 0.0001548111542849078,
+      "max_phase_error_rad": 2.8260872681190597e-06,
+      "phasor_error_order": 0.9994923338953099,
+      "reciprocity_error_order": 2.0000002607322602,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.099516140587205e-09,
+      "reference_wall_amplitudes_W_m2": [
+        0.49989558487295194,
+        0.015338508249455858
+      ],
+      "wall_amplitudes_W_m2": [
+        0.4998969012012156,
+        0.015339695521225466
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.05074622725722551,
+        -0.10823507880237959,
+        -0.058689598110746394
+      ],
+      "contact_amplitude_W_m2": 0.17787672938178953,
+      "far_wall_relative_phasor_error": 7.741752982428565e-05,
+      "max_relative_phasor_error": 7.741752982428565e-05,
+      "max_phase_error_rad": 1.412397356081883e-06,
+      "phasor_error_order": 0.9997772415865294,
+      "reciprocity_error_order": 2.0000000792097974,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 0.00014907878837555621,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.015487040170287087,
+        0.5001534899127518
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10842423830796966,
+        -0.05078530913496857,
+        3.082804076699825
+      ],
+      "contact_amplitude_W_m2": 0.17851073000970843,
+      "far_wall_relative_phasor_error": 0.009685489430050433,
+      "max_relative_phasor_error": 0.009685489430050433,
+      "max_phase_error_rad": 0.00019057190294612182,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 2.0,
+        "strip_bounds_m": [
+          0.625,
+          0.8333333333333334
+        ],
+        "conductivities_W_m_K": [
+          4.0,
+          1.0
+        ],
+        "capacities_J_m3_K": [
+          2.5,
+          1.25
+        ],
+        "far_wall_reciprocity_relative_error": 0.0001490787883784428,
+        "reference_wall_amplitudes_W_m2": [
+          0.015338508249455858,
+          0.49989558487295194
+        ],
+        "wall_amplitudes_W_m2": [
+          0.015487040170286764,
+          0.5001534899127442
+        ],
+        "wall_and_contact_phases_rad": [
+          -0.10842423830796886,
+          -0.05078530913496811,
+          3.0828040766998255
+        ],
+        "contact_amplitude_W_m2": 0.17851073000970596,
+        "far_wall_relative_phasor_error": 0.009685489430029105,
+        "max_relative_phasor_error": 0.009685489430029106,
+        "max_phase_error_rad": 0.0001905719029453324
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.727114336349313e-05,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.015413641686144897,
+        0.500002386192369
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10832648568890069,
+        -0.05076426218262246,
+        3.0828570242566196
+      ],
+      "contact_amplitude_W_m2": 0.17820288375798882,
+      "far_wall_relative_phasor_error": 0.004899237220983764,
+      "max_relative_phasor_error": 0.004899237220983764,
+      "max_phase_error_rad": 9.281928387715433e-05,
+      "phasor_error_order": 0.9832678047865127,
+      "reciprocity_error_order": 1.9999440165693585,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.317876192516117e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.015376291210988326,
+        0.4999432176401076
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10827946250035023,
+        -0.05075480502931323,
+        3.0828811565509864
+      ],
+      "contact_amplitude_W_m2": 0.17804007040492215,
+      "far_wall_relative_phasor_error": 0.0024637015669725284,
+      "max_relative_phasor_error": 0.0024637015669725284,
+      "max_phase_error_rad": 4.5796095326681905e-05,
+      "phasor_error_order": 0.9917296384596177,
+      "reciprocity_error_order": 1.9999860107071248,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 2.3294746942514877e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.015357454152355418,
+        0.4999179880272622
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10825641017638934,
+        -0.050750301560108076,
+        3.082892641766651
+      ],
+      "contact_amplitude_W_m2": 0.17795645866605986,
+      "far_wall_relative_phasor_error": 0.001235395128818288,
+      "max_relative_phasor_error": 0.001235395128818288,
+      "max_phase_error_rad": 2.274377136582361e-05,
+      "phasor_error_order": 0.9958549628752197,
+      "reciprocity_error_order": 1.9999965032276321,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690287787286e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.01534799479612598,
+        0.4999064295372531
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10824499976629655,
+        -0.050748111351119805,
+        3.0828982382752397
+      ],
+      "contact_amplitude_W_m2": 0.17791409799951385,
+      "far_wall_relative_phasor_error": 0.0006185829879639681,
+      "max_relative_phasor_error": 0.000618582987963968,
+      "max_phase_error_rad": 1.1333361273011794e-05,
+      "phasor_error_order": 0.9979334846162728,
+      "reciprocity_error_order": 1.9999991200282194,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 1.4559227989874302e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.015343254929616044,
+        0.49990091845105344
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10823932344399816,
+        -0.05074703098290914,
+        3.0829010000708323
+      ],
+      "contact_amplitude_W_m2": 0.1778927792585637,
+      "far_wall_relative_phasor_error": 0.0003095133735334557,
+      "max_relative_phasor_error": 0.0003095133735334557,
+      "max_phase_error_rad": 5.657038974613207e-06,
+      "phasor_error_order": 0.9989654103931459,
+      "reciprocity_error_order": 1.999999775022147,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.639806778199528e-08,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.015340882425761995,
+        0.49989822925584537
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10823649249214043,
+        -0.05074649455207036,
+        3.0829023718552193
+      ],
+      "contact_amplitude_W_m2": 0.177882085156422,
+      "far_wall_relative_phasor_error": 0.00015481114731576975,
+      "max_relative_phasor_error": 0.00015481114731576975,
+      "max_phase_error_rad": 2.8260871168960166e-06,
+      "phasor_error_order": 0.9994923893493635,
+      "reciprocity_error_order": 2.0000000869107555,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.099538011980856e-09,
+      "reference_wall_amplitudes_W_m2": [
+        0.015338508249455858,
+        0.49989558487295194
+      ],
+      "wall_amplitudes_W_m2": [
+        0.015339695520617685,
+        0.4998969011985914
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.10823507880164812,
+        -0.050746227257123785,
+        3.082903055479283
+      ],
+      "contact_amplitude_W_m2": 0.17787672938002425,
+      "far_wall_relative_phasor_error": 7.74174901927852e-05,
+      "max_relative_phasor_error": 7.741749019278519e-05,
+      "max_phase_error_rad": 1.4123966245852344e-06,
+      "phasor_error_order": 0.9997779151838024,
+      "reciprocity_error_order": 1.9999966599903969,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 0.00014907878837711053,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.4620160600899585,
+        0.013577031888345742
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.4850338422583623,
+        -1.0529494005758873,
+        -0.5621460088513116
+      ],
+      "contact_amplitude_W_m2": 0.16241566093536217,
+      "far_wall_relative_phasor_error": 0.009266604035480264,
+      "max_relative_phasor_error": 0.009266604035480262,
+      "max_phase_error_rad": 0.001710015210726813,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 20.0,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.375
+        ],
+        "conductivities_W_m_K": [
+          1.0,
+          4.0
+        ],
+        "capacities_J_m3_K": [
+          1.25,
+          2.5
+        ],
+        "far_wall_reciprocity_relative_error": 0.00014907878837655542,
+        "reference_wall_amplitudes_W_m2": [
+          0.4618780056249081,
+          0.0134545151211332
+        ],
+        "wall_amplitudes_W_m2": [
+          0.4620160600899622,
+          0.013577031888345614
+        ],
+        "wall_and_contact_phases_rad": [
+          -0.48503384225836327,
+          -1.0529494005758873,
+          -0.5621460088513125
+        ],
+        "contact_amplitude_W_m2": 0.16241566093536225,
+        "far_wall_relative_phasor_error": 0.009266604035470903,
+        "max_relative_phasor_error": 0.009266604035470902,
+        "max_phase_error_rad": 0.00171001521072694
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.72711433638262e-05,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.46193188055927253,
+        0.013516863087432817
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.48488243458583213,
+        -1.0520761582771951,
+        -0.5616935741741326
+      ],
+      "contact_amplitude_W_m2": 0.16216626899667633,
+      "far_wall_relative_phasor_error": 0.004709268802393081,
+      "max_relative_phasor_error": 0.004709268802393081,
+      "max_phase_error_rad": 0.0008367729120348258,
+      "phasor_error_order": 0.9765376530482331,
+      "reciprocity_error_order": 1.9999440165715079,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.317876197401098e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.46190096049442203,
+        0.013485960318056319
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.48481448416956063,
+        -1.0516532386148718,
+        -0.561486771410469
+      ],
+      "contact_amplitude_W_m2": 0.16203151394874477,
+      "far_wall_relative_phasor_error": 0.002373591562104294,
+      "max_relative_phasor_error": 0.002373591562104294,
+      "max_phase_error_rad": 0.00041385324971135684,
+      "phasor_error_order": 0.9884313699084714,
+      "reciprocity_error_order": 1.9999860099636713,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 2.329474691808997e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.4618885115756823,
+        0.013470305794727683
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.4847820298977815,
+        -1.0514451695342428,
+        -0.5613881836733787
+      ],
+      "contact_amplitude_W_m2": 0.16196164051215767,
+      "far_wall_relative_phasor_error": 0.0011915591049859629,
+      "max_relative_phasor_error": 0.0011915591049859629,
+      "max_phase_error_rad": 0.00020578416908251118,
+      "phasor_error_order": 0.9942211878925008,
+      "reciprocity_error_order": 1.9999965054966664,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690309991747e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.4618830126848868,
+        0.013462427457456952
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.4847662360511276,
+        -1.0513419922050442,
+        -0.5613401019369177
+      ],
+      "contact_amplitude_W_m2": 0.16192607649836446,
+      "far_wall_relative_phasor_error": 0.0005969697519220039,
+      "max_relative_phasor_error": 0.0005969697519220039,
+      "max_phase_error_rad": 0.00010260683988379901,
+      "phasor_error_order": 0.9971207773880322,
+      "reciprocity_error_order": 1.9999991130148496,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 1.455922719051373e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.4618804480742665,
+        0.013458475545345364
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.48475844094785514,
+        -1.0512906173611365,
+        -0.5613163634966601
+      ],
+      "contact_amplitude_W_m2": 0.16190813797944048,
+      "far_wall_relative_phasor_error": 0.0002987829467246479,
+      "max_relative_phasor_error": 0.0002987829467246479,
+      "max_phase_error_rad": 5.123199597603813e-05,
+      "phasor_error_order": 0.9985600253959345,
+      "reciprocity_error_order": 1.9999998597326303,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.6398074776400455e-08,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.46187921140066074,
+        0.013456496384484647
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.484754569572236,
+        -1.0512649833115093,
+        -0.561304569892284
+      ],
+      "contact_amplitude_W_m2": 0.16189912948001497,
+      "far_wall_relative_phasor_error": 0.00014946503370988178,
+      "max_relative_phasor_error": 0.00014946503370988178,
+      "max_phase_error_rad": 2.5597946348949622e-05,
+      "phasor_error_order": 0.9992897919351957,
+      "reciprocity_error_order": 1.9999997304666581,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.099511477650983e-09,
+      "reference_wall_amplitudes_W_m2": [
+        0.4618780056249081,
+        0.0134545151211332
+      ],
+      "wall_amplitudes_W_m2": [
+        0.4618786044370268,
+        0.013455505994801484
+      ],
+      "wall_and_contact_phases_rad": [
+        -0.4847526402638942,
+        -1.0512521794866334,
+        -0.5612986919137348
+      ],
+      "contact_amplitude_W_m2": 0.16189461539243463,
+      "far_wall_relative_phasor_error": 7.474932582368615e-05,
+      "max_relative_phasor_error": 7.474932582368616e-05,
+      "max_phase_error_rad": 1.2794121472971249e-05,
+      "phasor_error_order": 0.9996755429887815,
+      "reciprocity_error_order": 2.000001144141778,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 0.0001490787883774436,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.01357703188834607,
+        0.4620160600899629
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.052949400575893,
+        -0.4850338422583656,
+        2.579446644738479
+      ],
+      "contact_amplitude_W_m2": 0.162415660935363,
+      "far_wall_relative_phasor_error": 0.009266604035505626,
+      "max_relative_phasor_error": 0.009266604035505626,
+      "max_phase_error_rad": 0.0017100152107328715,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 20.0,
+        "strip_bounds_m": [
+          0.625,
+          0.8333333333333334
+        ],
+        "conductivities_W_m_K": [
+          4.0,
+          1.0
+        ],
+        "capacities_J_m3_K": [
+          2.5,
+          1.25
+        ],
+        "far_wall_reciprocity_relative_error": 0.00014907878837777666,
+        "reference_wall_amplitudes_W_m2": [
+          0.013454515121133201,
+          0.4618780056249081
+        ],
+        "wall_amplitudes_W_m2": [
+          0.013577031888345848,
+          0.46201606008996593
+        ],
+        "wall_and_contact_phases_rad": [
+          -1.0529494005758913,
+          -0.4850338422583666,
+          2.579446644738478
+        ],
+        "contact_amplitude_W_m2": 0.1624156609353632,
+        "far_wall_relative_phasor_error": 0.009266604035489137,
+        "max_relative_phasor_error": 0.009266604035489139,
+        "max_phase_error_rad": 0.0017100152107310692
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.727114336449233e-05,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.013516863087433084,
+        0.4619318805592687
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.0520761582771985,
+        -0.48488243458582947,
+        2.5798990794156595
+      ],
+      "contact_amplitude_W_m2": 0.162166268996678,
+      "far_wall_relative_phasor_error": 0.004709268802413373,
+      "max_relative_phasor_error": 0.004709268802413372,
+      "max_phase_error_rad": 0.0008367729120383183,
+      "phasor_error_order": 0.9765376530459657,
+      "reciprocity_error_order": 1.9999440165489462,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.317876198067232e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.013485960318052133,
+        0.4619009604943668
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.051653238614797,
+        -0.48481448416951756,
+        2.5801058821793688
+      ],
+      "contact_amplitude_W_m2": 0.162031513948725,
+      "far_wall_relative_phasor_error": 0.002373591561784902,
+      "max_relative_phasor_error": 0.002373591561784902,
+      "max_phase_error_rad": 0.0004138532496367306,
+      "phasor_error_order": 0.9884313701088177,
+      "reciprocity_error_order": 1.999986009886318,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 2.329474698470335e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.013470305794727215,
+        0.46188851157571614
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.0514451695342466,
+        -0.4847820298978078,
+        2.5802044699163953
+      ],
+      "contact_amplitude_W_m2": 0.16196164051216175,
+      "far_wall_relative_phasor_error": 0.0011915591049525228,
+      "max_relative_phasor_error": 0.0011915591049525228,
+      "max_phase_error_rad": 0.00020578416908643084,
+      "phasor_error_order": 0.9942211877388588,
+      "reciprocity_error_order": 1.9999965014742909,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690283346394e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.013462427457448464,
+        0.4618830126847317
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.0513419922048557,
+        -0.4847662360509884,
+        2.580252551653043
+      ],
+      "contact_amplitude_W_m2": 0.161926076498288,
+      "far_wall_relative_phasor_error": 0.0005969697512683797,
+      "max_relative_phasor_error": 0.0005969697512683797,
+      "max_phase_error_rad": 0.00010260683969550383,
+      "phasor_error_order": 0.997120778927156,
+      "reciprocity_error_order": 1.999999123741181,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 1.4559227690114085e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.013458475545377512,
+        0.46188044807433276
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.0512906173616687,
+        -0.48475844094804255,
+        2.580276290092837
+      ],
+      "contact_amplitude_W_m2": 0.1619081379796088,
+      "far_wall_relative_phasor_error": 0.00029878294917004387,
+      "max_relative_phasor_error": 0.00029878294917004387,
+      "max_phase_error_rad": 5.1231996508546604e-05,
+      "phasor_error_order": 0.9985600120085517,
+      "reciprocity_error_order": 1.999999803625686,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.639806878119628e-08,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.013456496384383431,
+        0.4618792114012966
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.0512649833104093,
+        -0.48475456957253843,
+        2.5802880836965367
+      ],
+      "contact_amplitude_W_m2": 0.16189912948059487,
+      "far_wall_relative_phasor_error": 0.00014946502611018494,
+      "max_relative_phasor_error": 0.00014946502611018494,
+      "max_phase_error_rad": 2.5597945249146086e-05,
+      "phasor_error_order": 0.9992898770982189,
+      "reciprocity_error_order": 2.0000000176021673,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.099528797130187e-09,
+      "reference_wall_amplitudes_W_m2": [
+        0.013454515121133201,
+        0.4618780056249081
+      ],
+      "wall_amplitudes_W_m2": [
+        0.013455505994618188,
+        0.46187860443799633
+      ],
+      "wall_and_contact_phases_rad": [
+        -1.051252179484696,
+        -0.4847526402648582,
+        2.5802939616769365
+      ],
+      "contact_amplitude_W_m2": 0.16189461539131192,
+      "far_wall_relative_phasor_error": 7.474931206958512e-05,
+      "max_relative_phasor_error": 7.474931206958512e-05,
+      "max_phase_error_rad": 1.2794119535924427e-05,
+      "phasor_error_order": 0.9996757350937856,
+      "reciprocity_error_order": 1.9999981605734471,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 0.0001490787883764444,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10495351959242669,
+        0.0005161148751955843
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.3615392562052335,
+        0.38412281967992334,
+        -2.5144217296804117
+      ],
+      "contact_amplitude_W_m2": 0.026090265213296215,
+      "far_wall_relative_phasor_error": 0.0018418176891749096,
+      "max_relative_phasor_error": 0.0018418176891749096,
+      "max_phase_error_rad": 0.0011642743212950122,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 200.0,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.375
+        ],
+        "conductivities_W_m_K": [
+          1.0,
+          4.0
+        ],
+        "capacities_J_m3_K": [
+          1.25,
+          2.5
+        ],
+        "far_wall_reciprocity_relative_error": 0.00014907878837577826,
+        "reference_wall_amplitudes_W_m2": [
+          0.10508374405230417,
+          0.0005153797001482526
+        ],
+        "wall_amplitudes_W_m2": [
+          0.10495351959242706,
+          0.000516114875195585
+        ],
+        "wall_and_contact_phases_rad": [
+          -2.361539256205237,
+          0.3841228196799226,
+          -2.5144217296804108
+        ],
+        "contact_amplitude_W_m2": 0.02609026521329616,
+        "far_wall_relative_phasor_error": 0.0018418176891762319,
+        "max_relative_phasor_error": 0.001841817689176232,
+        "max_phase_error_rad": 0.001164274321295741
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.727114336438131e-05,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10505093584099984,
+        0.0005161224948322183
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.3621355710909584,
+        0.38423856692931796,
+        -2.5143837652456367
+      ],
+      "contact_amplitude_W_m2": 0.026099933720848633,
+      "far_wall_relative_phasor_error": 0.0017827550750603605,
+      "max_relative_phasor_error": 0.0017827550750603605,
+      "max_phase_error_rad": 0.0010485270719004156,
+      "phasor_error_order": 0.04702175350053527,
+      "reciprocity_error_order": 1.999944016543574,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.3178761993995e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10507569291649345,
+        0.0005158448199153794
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.3622942911859877,
+        0.3846466972140482,
+        -2.5142416786687667
+      ],
+      "contact_amplitude_W_m2": 0.026096965820649715,
+      "far_wall_relative_phasor_error": 0.0011067736575580789,
+      "max_relative_phasor_error": 0.001106773657558079,
+      "max_phase_error_rad": 0.0006403967871701598,
+      "phasor_error_order": 0.6877482992760464,
+      "reciprocity_error_order": 1.9999860096757442,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 2.3294746989144244e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10508177548416768,
+        0.0005156357175594012
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.3623336585462225,
+        0.38493789775379283,
+        -2.5141401450454337
+      ],
+      "contact_amplitude_W_m2": 0.026093537897084695,
+      "far_wall_relative_phasor_error": 0.000607259466798058,
+      "max_relative_phasor_error": 0.000607259466798058,
+      "max_phase_error_rad": 0.00034919624742551695,
+      "phasor_error_order": 0.8659752308562643,
+      "reciprocity_error_order": 1.9999965014055328,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690258921488e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10508327813855338,
+        0.0005155135684391137
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.3623440161197817,
+        0.3851052514749267,
+        -2.514081771555775
+      ],
+      "contact_amplitude_W_m2": 0.026091335952198105,
+      "far_wall_relative_phasor_error": 0.0003170863554732271,
+      "max_relative_phasor_error": 0.0003170863554732271,
+      "max_phase_error_rad": 0.00018184252629169185,
+      "phasor_error_order": 0.9374372775156501,
+      "reciprocity_error_order": 1.9999991300669646,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 1.455922837845236e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10508364018656721,
+        0.0005154480994171919
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.3623467813143435,
+        0.3851943620051659,
+        -2.5140506862026606
+      ],
+      "contact_amplitude_W_m2": 0.02609011315537253,
+      "far_wall_relative_phasor_error": 0.0001619072925430988,
+      "max_relative_phasor_error": 0.0001619072925430988,
+      "max_phase_error_rad": 9.273199605249441e-05,
+      "phasor_error_order": 0.9697078300257191,
+      "reciprocity_error_order": 1.9999997293664975,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.6398069558352186e-08,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10508372444775237,
+        0.0005154142657936275
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.3623475707954587,
+        0.3852402756919081,
+        -2.5140346689231636
+      ],
+      "contact_amplitude_W_m2": 0.026089471271964437,
+      "far_wall_relative_phasor_error": 8.179400510646942e-05,
+      "max_relative_phasor_error": 8.17940051064694e-05,
+      "max_phase_error_rad": 4.681830931025959e-05,
+      "phasor_error_order": 0.9851009549000019,
+      "reciprocity_error_order": 2.0000000550068027,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.099512809918063e-09,
+      "reference_wall_amplitudes_W_m2": [
+        0.10508374405230417,
+        0.0005153797001482526
+      ],
+      "wall_amplitudes_W_m2": [
+        0.10508374231078894,
+        0.0005153970741741287
+      ],
+      "wall_and_contact_phases_rad": [
+        -2.36234781591029,
+        0.38526357227791386,
+        -2.5140265416147654
+      ],
+      "contact_amplitude_W_m2": 0.026089142710888264,
+      "far_wall_relative_phasor_error": 4.1106320609236624e-05,
+      "max_relative_phasor_error": 4.110632060923663e-05,
+      "max_phase_error_rad": 2.3521723304520208e-05,
+      "phasor_error_order": 0.9926348648913724,
+      "reciprocity_error_order": 2.000000726090028,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 0.00014907878837722155,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.0005161148751955844,
+        0.1049535195924271
+      ],
+      "wall_and_contact_phases_rad": [
+        0.38412281967992407,
+        -2.361539256205236,
+        0.6271709239093808
+      ],
+      "contact_amplitude_W_m2": 0.0260902652132962,
+      "far_wall_relative_phasor_error": 0.0018418176891747292,
+      "max_relative_phasor_error": 0.0018418176891747292,
+      "max_phase_error_rad": 0.0011642743212941847,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 200.0,
+        "strip_bounds_m": [
+          0.625,
+          0.8333333333333334
+        ],
+        "conductivities_W_m_K": [
+          4.0,
+          1.0
+        ],
+        "capacities_J_m3_K": [
+          2.5,
+          1.25
+        ],
+        "far_wall_reciprocity_relative_error": 0.00014907878837733257,
+        "reference_wall_amplitudes_W_m2": [
+          0.0005153797001482524,
+          0.10508374405230417
+        ],
+        "wall_amplitudes_W_m2": [
+          0.0005161148751955843,
+          0.10495351959242698
+        ],
+        "wall_and_contact_phases_rad": [
+          0.3841228196799259,
+          -2.3615392562052353,
+          0.6271709239093841
+        ],
+        "contact_amplitude_W_m2": 0.02609026521329615,
+        "far_wall_relative_phasor_error": 0.001841817689173385,
+        "max_relative_phasor_error": 0.001841817689173385,
+        "max_phase_error_rad": 0.0011642743212923357
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.727114336438131e-05,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.000516122494832202,
+        0.10505093584100024
+      ],
+      "wall_and_contact_phases_rad": [
+        0.3842385669293485,
+        -2.3621355710909553,
+        0.6272088883441668
+      ],
+      "contact_amplitude_W_m2": 0.026099933720848414,
+      "far_wall_relative_phasor_error": 0.0017827550750171256,
+      "max_relative_phasor_error": 0.0017827550750171253,
+      "max_phase_error_rad": 0.0010485270718697398,
+      "phasor_error_order": 0.04702175353538188,
+      "reciprocity_error_order": 1.9999440165510949,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.317876198178254e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.000515844819915363,
+        0.105075692916489
+      ],
+      "wall_and_contact_phases_rad": [
+        0.38464669721408534,
+        -2.3622942911859477,
+        0.6273509749210511
+      ],
+      "contact_amplitude_W_m2": 0.026096965820649395,
+      "far_wall_relative_phasor_error": 0.001106773657510754,
+      "max_relative_phasor_error": 0.001106773657510754,
+      "max_phase_error_rad": 0.0006403967871328814,
+      "phasor_error_order": 0.6877482993027471,
+      "reciprocity_error_order": 1.9999860098648308,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 2.3294746971380675e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.000515635717559409,
+        0.10508177548416965
+      ],
+      "wall_and_contact_phases_rad": [
+        0.38493789775372816,
+        -2.3623336585462504,
+        0.6274525085443491
+      ],
+      "contact_amplitude_W_m2": 0.026093537897084625,
+      "far_wall_relative_phasor_error": 0.0006072594668479235,
+      "max_relative_phasor_error": 0.0006072594668479235,
+      "max_phase_error_rad": 0.000349196247490056,
+      "phasor_error_order": 0.8659752306761077,
+      "reciprocity_error_order": 1.9999965023165833,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690245598812e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.000515513568438768,
+        0.10508327813852936
+      ],
+      "wall_and_contact_phases_rad": [
+        0.38510525147535196,
+        -2.3623440161197333,
+        0.6275108820339614
+      ],
+      "contact_amplitude_W_m2": 0.026091335952196874,
+      "far_wall_relative_phasor_error": 0.0003170863546797737,
+      "max_relative_phasor_error": 0.0003170863546797737,
+      "max_phase_error_rad": 0.00018184252586625645,
+      "phasor_error_order": 0.937437281244211,
+      "reciprocity_error_order": 1.9999991322672366,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 1.4559228034283228e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.000515448099417317,
+        0.1050836401866184
+      ],
+      "wall_and_contact_phases_rad": [
+        0.38519436200495977,
+        -2.362346781314854,
+        0.627541967386859
+      ],
+      "contact_amplitude_W_m2": 0.026090113155378222,
+      "far_wall_relative_phasor_error": 0.00016190729286019246,
+      "max_relative_phasor_error": 0.00016190729286019248,
+      "max_phase_error_rad": 9.273199625840665e-05,
+      "phasor_error_order": 0.9697078235901232,
+      "reciprocity_error_order": 1.999999760170307,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.6398063674170354e-08,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.0005154142657962525,
+        0.10508372444765801
+      ],
+      "wall_and_contact_phases_rad": [
+        0.3852402756891821,
+        -2.362347570794462,
+        0.6275579846668575
+      ],
+      "contact_amplitude_W_m2": 0.026089471271973325,
+      "far_wall_relative_phasor_error": 8.179401084349805e-05,
+      "max_relative_phasor_error": 8.179401084349805e-05,
+      "max_phase_error_rad": 4.681831203613062e-05,
+      "phasor_error_order": 0.9851008565349285,
+      "reciprocity_error_order": 2.000000254131454,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 200.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.09952801997349e-09,
+      "reference_wall_amplitudes_W_m2": [
+        0.0005153797001482524,
+        0.10508374405230417
+      ],
+      "wall_amplitudes_W_m2": [
+        0.0005153970741745278,
+        0.10508374231080793
+      ],
+      "wall_and_contact_phases_rad": [
+        0.38526357227940994,
+        -2.3623478159083464,
+        0.6275661119775892
+      ],
+      "contact_amplitude_W_m2": 0.02608914271083317,
+      "far_wall_relative_phasor_error": 4.11063203885328e-05,
+      "max_relative_phasor_error": 4.11063203885328e-05,
+      "max_phase_error_rad": 2.3521721808281494e-05,
+      "phasor_error_order": 0.9926349738279183,
+      "reciprocity_error_order": 1.9999980813635696,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 0.00014907878837722155,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.008409079190489582,
+        9.590010021227834e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.8636875195595028,
+        0.7782059635340077,
+        2.0860900785810497
+      ],
+      "contact_amplitude_W_m2": 0.0018036282689101561,
+      "far_wall_relative_phasor_error": 0.021485371045013628,
+      "max_relative_phasor_error": 0.021485371045013628,
+      "max_phase_error_rad": 0.014931483941216206,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 800.0,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.375
+        ],
+        "conductivities_W_m_K": [
+          1.0,
+          4.0
+        ],
+        "capacities_J_m3_K": [
+          1.25,
+          2.5
+        ],
+        "far_wall_reciprocity_relative_error": 0.00014907878837888688,
+        "reference_wall_amplitudes_W_m2": [
+          0.008487558453777664,
+          9.741599244322373e-07
+        ],
+        "wall_amplitudes_W_m2": [
+          0.008409079190489575,
+          9.590010021227851e-07
+        ],
+        "wall_and_contact_phases_rad": [
+          1.8636875195595035,
+          0.7782059635340083,
+          2.0860900785810506
+        ],
+        "contact_amplitude_W_m2": 0.0018036282689101544,
+        "far_wall_relative_phasor_error": 0.02148537104501279,
+        "max_relative_phasor_error": 0.021485371045012785,
+        "max_phase_error_rad": 0.014931483941216737
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.727114336404824e-05,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.00846738932740976,
+        9.708407598207246e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.8572373966512266,
+        0.7665294241537537,
+        2.081392996966576
+      ],
+      "contact_amplitude_W_m2": 0.0018132472986603892,
+      "far_wall_relative_phasor_error": 0.004708249864187573,
+      "max_relative_phasor_error": 0.004708249864187573,
+      "max_phase_error_rad": 0.003254944560962197,
+      "phasor_error_order": 2.1900919016374396,
+      "reciprocity_error_order": 1.9999440165639872,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.31787619506963e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.008482555624701413,
+        9.735837570450653e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.8555770586853308,
+        0.7638566047034054,
+        2.0803143716311885
+      ],
+      "contact_amplitude_W_m2": 0.0018154842894262718,
+      "far_wall_relative_phasor_error": 0.0008297487087636921,
+      "max_relative_phasor_error": 0.0008297487087636922,
+      "max_phase_error_rad": 0.0005821251106138132,
+      "phasor_error_order": 2.5044445010987793,
+      "reciprocity_error_order": 1.9999860103332494,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 2.329474692586153e-06,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.00848630091582329,
+        9.74143731171639e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.8551699560634005,
+        0.7633046457736581,
+        2.0800882569418624
+      ],
+      "contact_amplitude_W_m2": 0.0018159484433822187,
+      "far_wall_relative_phasor_error": 3.444271549558912e-05,
+      "max_relative_phasor_error": 0.00020160074009167931,
+      "max_phase_error_rad": 0.00013672417155266887,
+      "phasor_error_order": 2.041173544124714,
+      "reciprocity_error_order": 1.9999965046543733,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690247819258e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.008487244801275188,
+        9.742198614341155e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.8550673107232436,
+        0.7632243769504573,
+        2.080053274123265
+      ],
+      "contact_amplitude_W_m2": 0.001816016328892098,
+      "far_wall_relative_phasor_error": 7.934723557670815e-05,
+      "max_relative_phasor_error": 7.934723557670814e-05,
+      "max_phase_error_rad": 5.0102642334246735e-05,
+      "phasor_error_order": 1.3452490689121817,
+      "reciprocity_error_order": 1.9999991288980676,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 1.4559228456167975e-07,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.0084874799389798,
+        9.742069033271617e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.8550417649769484,
+        0.763233133856645,
+        2.080055277570769
+      ],
+      "contact_amplitude_W_m2": 0.001816009174827269,
+      "far_wall_relative_phasor_error": 6.352327279086914e-05,
+      "max_relative_phasor_error": 6.352327279086915e-05,
+      "max_phase_error_rad": 4.134573614649947e-05,
+      "phasor_error_order": 0.3208947173900377,
+      "reciprocity_error_order": 1.999999718915204,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 3.6398073444132964e-08,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.008487538835648125,
+        9.741876663879827e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.8550353640643191,
+        0.7632497335773305,
+        2.0800611522756576
+      ],
+      "contact_amplitude_W_m2": 0.0018159953219579134,
+      "far_wall_relative_phasor_error": 3.7727565924944615e-05,
+      "max_relative_phasor_error": 3.772756592494461e-05,
+      "max_phase_error_rad": 2.4746015461061982e-05,
+      "phasor_error_order": 0.7516662190989818,
+      "reciprocity_error_order": 1.9999999086886984,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.375
+      ],
+      "conductivities_W_m_K": [
+        1.0,
+        4.0
+      ],
+      "capacities_J_m3_K": [
+        1.25,
+        2.5
+      ],
+      "far_wall_reciprocity_relative_error": 9.099506592670295e-09,
+      "reference_wall_amplitudes_W_m2": [
+        0.008487558453777664,
+        9.741599244322373e-07
+      ],
+      "wall_amplitudes_W_m2": [
+        0.008487553546589848,
+        9.741748582755993e-07
+      ],
+      "wall_and_contact_phases_rad": [
+        1.855033765440175,
+        0.7632610885604455,
+        2.0800653076751576
+      ],
+      "contact_amplitude_W_m2": 0.0018159858263000741,
+      "far_wall_relative_phasor_error": 2.03551100759831e-05,
+      "max_relative_phasor_error": 2.0355110075983102e-05,
+      "max_phase_error_rad": 1.339103234600871e-05,
+      "phasor_error_order": 0.890228001298899,
+      "reciprocity_error_order": 2.0000018658317034,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 0.00014907878837755462,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.59001002122778e-07,
+        0.008409079190489584
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7782059635340131,
+        1.8636875195595044,
+        -1.0555025750087432
+      ],
+      "contact_amplitude_W_m2": 0.0018036282689101566,
+      "far_wall_relative_phasor_error": 0.021485371045021247,
+      "max_relative_phasor_error": 0.021485371045021247,
+      "max_phase_error_rad": 0.014931483941221473,
+      "dense_backend": {
+        "columns": 128,
+        "backend": "torch",
+        "transverse_mode": 1,
+        "h_factor": 0.9,
+        "omega_rad_s": 800.0,
+        "strip_bounds_m": [
+          0.625,
+          0.8333333333333334
+        ],
+        "conductivities_W_m_K": [
+          4.0,
+          1.0
+        ],
+        "capacities_J_m3_K": [
+          2.5,
+          1.25
+        ],
+        "far_wall_reciprocity_relative_error": 0.00014907878837755462,
+        "reference_wall_amplitudes_W_m2": [
+          9.741599244322373e-07,
+          0.008487558453777664
+        ],
+        "wall_amplitudes_W_m2": [
+          9.59001002122782e-07,
+          0.008409079190489572
+        ],
+        "wall_and_contact_phases_rad": [
+          0.778205963534009,
+          1.8636875195595053,
+          -1.055502575008742
+        ],
+        "contact_amplitude_W_m2": 0.0018036282689101542,
+        "far_wall_relative_phasor_error": 0.02148537104501559,
+        "max_relative_phasor_error": 0.02148537104501559,
+        "max_phase_error_rad": 0.014931483941217344
+      },
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.7271143363715176e-05,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.708407598207294e-07,
+        0.00846738932740977
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7665294241537493,
+        1.8572373966512274,
+        -1.0601996566232124
+      ],
+      "contact_amplitude_W_m2": 0.0018132472986603834,
+      "far_wall_relative_phasor_error": 0.004708249864180895,
+      "max_relative_phasor_error": 0.004708249864180894,
+      "max_phase_error_rad": 0.0032549445609576103,
+      "phasor_error_order": 2.190091901639998,
+      "reciprocity_error_order": 1.9999440165801028,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.317876195624741e-06,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.735837570450729e-07,
+        0.0084825556247014
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7638566047033979,
+        1.8555770586853408,
+        -1.0612782819586035
+      ],
+      "contact_amplitude_W_m2": 0.0018154842894262653,
+      "far_wall_relative_phasor_error": 0.0008297487087529197,
+      "max_relative_phasor_error": 0.0008297487087529197,
+      "max_phase_error_rad": 0.0005821251106063434,
+      "phasor_error_order": 2.504444501115463,
+      "reciprocity_error_order": 1.9999860102344087,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 2.3294746958058e-06,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.741437311716576e-07,
+        0.008486300915823248
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7633046457736298,
+        1.8551699560633923,
+        -1.0615043966479216
+      ],
+      "contact_amplitude_W_m2": 0.0018159484433821873,
+      "far_wall_relative_phasor_error": 3.444271546159581e-05,
+      "max_relative_phasor_error": 0.00020160074008948592,
+      "max_phase_error_rad": 0.00013672417154437955,
+      "phasor_error_order": 2.04117354412168,
+      "reciprocity_error_order": 1.9999965027463233,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 5.823690273354387e-07,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.742198614345367e-07,
+        0.008487244801276342
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7632243769499701,
+        1.8550673107231432,
+        -1.0615393794666952
+      ],
+      "contact_amplitude_W_m2": 0.001816016328892293,
+      "far_wall_relative_phasor_error": 7.934723621982438e-05,
+      "max_relative_phasor_error": 7.934723621982438e-05,
+      "max_phase_error_rad": 5.010264282150531e-05,
+      "phasor_error_order": 1.3452490572033164,
+      "reciprocity_error_order": 1.999999124566282,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 1.455922775672747e-07,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.742069033262933e-07,
+        0.008487479938983746
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7632331338574041,
+        1.855041764976626,
+        -1.0615373760185727
+      ],
+      "contact_amplitude_W_m2": 0.00181600917482649,
+      "far_wall_relative_phasor_error": 6.352327162000783e-05,
+      "max_relative_phasor_error": 6.352327162000783e-05,
+      "max_phase_error_rad": 4.134573538753127e-05,
+      "phasor_error_order": 0.3208947556749699,
+      "reciprocity_error_order": 1.9999997945495624,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 3.639806700483946e-08,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.74187666386595e-07,
+        0.008487538835622806
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7632497335785132,
+        1.8550353640663608,
+        -1.0615315013181483
+      ],
+      "contact_amplitude_W_m2": 0.0018159953219647237,
+      "far_wall_relative_phasor_error": 3.7727564073635626e-05,
+      "max_relative_phasor_error": 3.7727564073635626e-05,
+      "max_phase_error_rad": 2.4746014278392447e-05,
+      "phasor_error_order": 0.7516662633009282,
+      "reciprocity_error_order": 2.000000094611699,
+      "passed": true
+    },
+    {
+      "columns": 16384,
+      "backend": "banded",
+      "transverse_mode": 1,
+      "h_factor": 0.9,
+      "omega_rad_s": 800.0,
+      "strip_bounds_m": [
+        0.625,
+        0.8333333333333334
+      ],
+      "conductivities_W_m_K": [
+        4.0,
+        1.0
+      ],
+      "capacities_J_m3_K": [
+        2.5,
+        1.25
+      ],
+      "far_wall_reciprocity_relative_error": 9.099528464065091e-09,
+      "reference_wall_amplitudes_W_m2": [
+        9.741599244322373e-07,
+        0.008487558453777664
+      ],
+      "wall_amplitudes_W_m2": [
+        9.741748582717078e-07,
+        0.008487553546718428
+      ],
+      "wall_and_contact_phases_rad": [
+        0.7632610885620922,
+        1.8550337654301303,
+        -1.0615273458969994
+      ],
+      "contact_amplitude_W_m2": 0.0018159858262746132,
+      "far_wall_relative_phasor_error": 2.035510598411156e-05,
+      "max_relative_phasor_error": 2.035510598411156e-05,
+      "max_phase_error_rad": 1.339103069944219e-05,
+      "phasor_error_order": 0.8902282205219642,
+      "reciprocity_error_order": 1.9999981429709142,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "2d5d1e4532bc3dfbe4f8f1f2c9efb28d17f70337",
+      "file": "sph_detached_strip_transmission.py",
+      "source_sha256": "25dd61f86998f71143f8bdf9f97eb827357ef8e70182106d1430dbee0bec64c0"
+    },
+    {
+      "commit": "2d5d1e4532bc3dfbe4f8f1f2c9efb28d17f70337",
+      "file": "fvm_strip_heater_across_contact.py",
+      "source_sha256": "909ced71d3fe3b8e2d3d284b7728dac6e193f91e4e6949fd909717661f61f8f0"
+    },
+    {
+      "commit": "397f2cdf1520dc7ec0a6f1e843b4225356a9643a",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "7596105a21be2ea1eb0411bc07c1fd1f47114d3708443f5ead22be3e1d3684b5"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/sph_detached_strip_transmission.py --transverse-mode 1"
+}
