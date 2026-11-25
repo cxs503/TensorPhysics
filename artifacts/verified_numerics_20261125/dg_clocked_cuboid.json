@@ -1,0 +1,67 @@
+{
+  "repository": "cxs503/TensorDG",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_1d.py tests/test_advection_2d.py tests/test_advection_3d.py tests/test_runge_kutta_orders.py -o junit_family=legacy --junitxml=results.xml",
+  "restart": {
+    "commit": "241d04a2dccff2a9a986172b17421d951f758b6a",
+    "reference": "Equal-step RK4 and RK5 trajectories with and without an intermediate restart. P3 forward/reverse mixed-sign transport returns to the analytic initial wave in the continuum.",
+    "counts": {
+      "tests": 75,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_modal_restart_agrees_with_uninterrupted_run[rk4]": {
+        "max_coefficient_difference": 0.0
+      },
+      "test_modal_restart_agrees_with_uninterrupted_run[rk5]": {
+        "max_coefficient_difference": 0.0
+      },
+      "test_reversed_velocity_recovers_analytic_initial_wave": {
+        "absolute_l2_3": 0.0026817603943228383,
+        "mass_error_3": 1.1102230246251565e-16,
+        "absolute_l2_6": 0.00018124331467547747,
+        "mass_error_6": 0.0,
+        "absolute_l2_12": 1.3803767835869215e-05,
+        "mass_error_12": 0.0
+      }
+    }
+  },
+  "time_dependent": {
+    "commit": "9562866273ec09e62a83508be73888d7eb289465",
+    "reference": "Analytic Fourier-mode evolution for the semidiscrete P0 system and continuous characteristic displacement for smooth P3 transport through velocity reversal.",
+    "counts": {
+      "tests": 79,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_time_varying_velocity_uses_absolute_tableau_nodes[rk2-2]": {
+        "rms_error_8": 0.006927759341362023,
+        "rms_error_16": 0.001599423728632896,
+        "rms_error_32": 0.00037858672171020514,
+        "rms_error_64": 9.180119443306945e-05,
+        "observed_order": 2.04403898193677
+      },
+      "test_time_varying_velocity_uses_absolute_tableau_nodes[rk4-4]": {
+        "rms_error_8": 0.00010460245372160259,
+        "rms_error_16": 5.64380820931913e-06,
+        "rms_error_32": 3.2705983980901797e-07,
+        "rms_error_64": 1.967436601372676e-08,
+        "observed_order": 4.055165567282154
+      },
+      "test_time_varying_velocity_uses_absolute_tableau_nodes[rk5-5]": {
+        "rms_error_8": 2.5609829636944466e-06,
+        "rms_error_16": 6.410527476388359e-08,
+        "rms_error_32": 1.7949588682611883e-09,
+        "rms_error_64": 5.313465080705683e-11,
+        "observed_order": 5.078153979075772
+      },
+      "test_smooth_velocity_reversal_against_continuous_characteristics": {
+        "absolute_l2_4": 0.0011218197138183944,
+        "absolute_l2_8": 7.710676830968604e-05
+      }
+    }
+  }
+}
