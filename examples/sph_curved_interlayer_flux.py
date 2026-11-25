@@ -48,9 +48,9 @@ def measure(n, beta, resistive):
         # face 1/128 m away, independently on each side of each contact.
         gap = n//128
         for label, contact in (("first", first), ("last", last)):
-            lo, hi = contact-gap, contact+gap
-            from_left = solved_flux[lo-1] + dx*net_source[lo:contact].sum()
-            from_right = solved_flux[hi-1] - dx*net_source[contact:hi].sum()
+            from_left, from_right = sph.extrapolate_layered_face_flux(
+                solved_flux, dx, contact, gap, axial_flux_gradient=net_source
+            )
             contact_errors[label] = [float(abs(v-q[contact])) for v in (from_left, from_right)]
     face = np.arange(1, n)
     worst = int(face[corrected.argmax()])
