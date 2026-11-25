@@ -1,0 +1,42 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "f2b1e7307724a9b894eefdeab773204393833d74",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_solver.py tests/test_linear_density_solver.py tests/test_interior_field_domain_guard.py tests/test_exterior_solver.py tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "270-degree L-shaped domain with leading coefficient -1.35 and smooth term 2xy; compare homogeneous rays to boundary data shifted by the affine harmonic field 1.7+0.6x-0.8y. Project the solved interior field minus the supplied lift on two arcs and use the radius-0.65 estimate to correct two independent tip flux probes. Test uses 4/8/16 panels per side.",
+  "suite": {
+    "tests": 146,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_estimated_corner_mode_predicts_held_out_flux[False]": {
+      "amplitude_error_0.35_4": 0.012325865226279653,
+      "amplitude_error_0.65_4": 0.002681075770036623,
+      "raw_tip_error_4": 0.2948425251070286,
+      "corrected_tip_error_4": 0.0005855519629969219,
+      "amplitude_error_0.35_8": 0.005168740889368584,
+      "amplitude_error_0.65_8": 0.0012469584554206659,
+      "raw_tip_error_8": 0.37772445317089565,
+      "corrected_tip_error_8": 0.0003488938523710239,
+      "amplitude_error_0.35_16": 0.002091951204556297,
+      "amplitude_error_0.65_16": 0.0005320693207984117,
+      "raw_tip_error_16": 0.478703129607176,
+      "corrected_tip_error_16": 0.00018866907336301253
+    },
+    "test_estimated_corner_mode_predicts_held_out_flux[True]": {
+      "amplitude_error_0.35_4": 0.012325865226278987,
+      "amplitude_error_0.65_4": 0.002681075770036623,
+      "raw_tip_error_4": 0.2948425251070308,
+      "corrected_tip_error_4": 0.0005855519629980321,
+      "amplitude_error_0.35_8": 0.005168740889367918,
+      "amplitude_error_0.65_8": 0.0012469584554204438,
+      "raw_tip_error_8": 0.37772445317089653,
+      "corrected_tip_error_8": 0.0003488938523745766,
+      "amplitude_error_0.35_16": 0.002091951204556519,
+      "amplitude_error_0.65_16": 0.0005320693207981897,
+      "raw_tip_error_16": 0.4787031296071693,
+      "corrected_tip_error_16": 0.0001886690733639007
+    }
+  }
+}
