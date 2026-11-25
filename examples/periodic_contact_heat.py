@@ -10,6 +10,7 @@ from two_layer_conduction import slab_fem_model
 from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
+from tensorsph import heat_conduction_2d as sph
 
 
 def reference(n, resistance, omega):
@@ -59,10 +60,10 @@ def measure(n, resistance):
         row["left_layer_balance_J_m2"] = float(abs(left_residual))
         return row
 
-    def errors(name, temp, jump, interface, wall_phasor):
+    def errors(name, temp, jump, interface, wall_phasor, reference_temperature=avg):
         return dict(solver=name, cells=n, resistance_m2K_W=resistance,
                     interface_phase_error_deg=float(abs(np.angle(interface/q, deg=True))),
-                    temperature_error_K=float(np.max(abs(temp-avg))),
+                    temperature_error_K=float(np.max(abs(temp-reference_temperature))),
                     jump_error_K=float(abs(jump-resistance*q)),
                     interface_flux_error_W_m2=float(abs(interface-q)),
                     wall_flux_error_W_m2=float(np.max(abs(wall_phasor-wall_ref))))
@@ -93,6 +94,40 @@ def measure(n, resistance):
     row = errors("FVM_harmonic", field, jump, contact_power, wall_power)
     storage_rate = 1j*omega*dx*(capacity[:m] @ field[:m])
     row["left_layer_harmonic_balance_W_m2"] = float(abs(storage_rate - (wall_power[0]-contact_power)))
+    rows.append(row)
+
+    sph_options = dict(conductivity=torch.from_numpy(k), contact_resistance_x=torch.from_numpy(faces[0]))
+    particle = sph.solve_harmonic_layered_slab(torch.zeros(n), dx, (1., 0.), omega,
+                       volumetric_heat_capacity=torch.from_numpy(capacity), **sph_options)
+    offsets = sph.lattice_offsets(dx, 1.3*dx)
+    factor = sph.lattice_diffusion_factor_2d(1.3, dx, mode="moment")
+    def section(face):
+        return complex(sph.stencil_x_face_power_2d(particle[None,:], offsets, dx, face, (1.,0.),
+                       layered_x=True, **sph_options))/(dx*factor)
+
+    cut = section(m)
+    _, end_power = sph.stencil_rhs_with_wall_power_2d(particle[None,:], offsets, dx, (1.,0.),
+                                     layered_x=True, **sph_options)
+    ends_sph = end_power.numpy()/(dx*factor)
+    field = particle.numpy()
+    # Extrapolate flux independently from two interior sections of each layer.
+    # Integrate the one-sided linear flux over the half-cell to the contact.
+    left1, left2 = section(m-1), section(m-2)
+    right1, right2 = section(m+1), section(m+2)
+    q_left, q_right = 2*left1-left2, 2*right1-right2
+    hot = field[m-1] - dx*(.75*q_left+.25*left1)/(2*k[m-1])
+    cold = field[m] + dx*(.75*q_right+.25*right1)/(2*k[m])
+    jump = hot-cold
+    z = np.sqrt(1j*omega*capacity/k)*dx/2
+    row = errors("SPH_harmonic", field, jump, cut, ends_sph, avg*z/np.sinh(z))
+    row["trace_error_K"] = float(abs(np.array([hot, cold])-exact_nodes[m:m+2]).max())
+    row["right_layer_harmonic_balance_W_m2"] = float(abs(
+        1j*omega*dx*(capacity[m:] @ field[m:])-cut-ends_sph[1]))
+    row["left_layer_harmonic_balance_W_m2"] = float(abs(
+        1j*omega*dx*(capacity[:m] @ field[:m])-ends_sph[0]+complex(cut)))
+    row["left_section_flux_error_W_m2"] = float(abs(q_left-q))
+    row["right_section_flux_error_W_m2"] = float(abs(q_right-q))
+    row["section_flux_mismatch_W_m2"] = float(abs(q_left-q_right))
     rows.append(row)
 
     model, ends = slab_fem_model(k, 1., 0., resistance, None, torch.from_numpy(capacity))
@@ -194,9 +229,14 @@ def main():
                 if name == "FEM_harmonic":
                     errors = np.append(errors, [row["left_fourier_flux_error_W_m2"],
                                                 row["right_fourier_flux_error_W_m2"], row["contact_element_flux_error_W_m2"]])
+                if name == "SPH_harmonic":
+                    errors = np.append(errors, [row["left_section_flux_error_W_m2"],
+                                                row["right_section_flux_error_W_m2"], row["trace_error_K"]])
                 balance = (row["left_layer_harmonic_balance_W_m2"] if "left_layer_harmonic_balance_W_m2" in row
                            else row["left_layer_balance_J_m2"])
                 passed = np.isfinite(errors).all() and balance < 1e-10
+                if name == "SPH_harmonic":
+                    passed &= row["right_layer_harmonic_balance_W_m2"] < 1e-10
                 if name == "FEM_harmonic":
                     passed &= row["contact_power_mismatch_W_m2"] < 1e-11
                 if name == "FEM":
@@ -216,7 +256,7 @@ def main():
                 previous[name] = errors
                 rows.append(row)
     print(json.dumps({"sources": [provenance(f) for f in (__file__, inspect.getfile(slab_fem_model),
-                      energy.__file__, thermal.__file__, contact_chain.__file__)], "period_s": 1., "runs": rows}, indent=2))
+                      energy.__file__, thermal.__file__, contact_chain.__file__, sph.__file__)], "period_s": 1., "runs": rows}, indent=2))
     return 0 if all(r["passed"] for r in rows) else 1
 
 
