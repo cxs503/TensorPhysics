@@ -1,4 +1,4 @@
-"""Verify SPH or FVM interval heat at every cut under independent Dirichlet wall pulses."""
+"""Verify SPH, FVM or DEM interval heat at every cut under independent Dirichlet wall pulses."""
 import argparse
 import json
 
@@ -90,16 +90,78 @@ def measure_fvm(n):
                 wall_trace_error_K=float(abs(faces[:, [0, -1]]-expected_walls).max()))
 
 
+def reference_temperature_integral(x):
+    """Time integral of the continuum temperature at the material centers."""
+    wave = np.pi*np.arange(1, 65)
+    result = np.zeros((len(TIMES), len(x)))
+    for start, side, amplitude in EVENTS:
+        active = TIMES > start
+        age = TIMES[active, None]-start
+        d = x if side == 0 else 1-x
+        # Twice the stationary sine series with coefficients 1/(m*pi)^3.
+        polynomial = d*(1-d)*(2-d)/6
+        transient = (2*np.exp(-age*wave**2)/wave**3)@np.sin(wave[:, None]*d)
+        result[active] += amplitude*(age*(1-d)-polynomial+transient)
+    return result
+
+
+def measure_dem(n):
+    from tensordem.thermal import contact_chain
+
+    dx = 1/n
+    centers = (np.arange(n)+.5)*dx
+    links, stores = contact_chain.cell_centered_slab_network(np.full(n, dx), 1., 1.)
+    schedule = np.union1d(TIMES, [event[0] for event in EVENTS])
+    state = np.zeros(n+2)
+    history = [state[1:-1]]
+    indices = np.searchsorted(schedule, TIMES)
+    heats, integrals = [], []
+    balance = wall_error = 0.
+    for a, b in zip(schedule[:-1], schedule[1:]):
+        ends = [wall(a, side) for side in (0, 1)]
+        new, heat, mean = contact_chain.constant_contact_interval(
+            links, stores, b-a, state, t_left=ends[0], t_right=ends[1],
+            return_interval_temperature=True)
+        wall_error = max(wall_error, np.max(abs(new[[0, -1]]-ends)), np.max(abs(mean[[0, -1]]-ends)))
+        balance = max(balance, np.max(abs(dx*(new-state)[1:-1]+np.diff(heat))))
+        heats.append(heat)
+        integrals.append((b-a)*mean[1:-1])
+        history.append(new[1:-1])
+        state = new
+    temperature, _ = reference(centers, TIMES, 64)
+    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
+    heat_error = abs(np.add.reduceat(heats, indices[:-1])-np.diff(cumulative, axis=0))
+    integral_error = np.add.reduceat(integrals, indices[:-1])-np.diff(reference_temperature_integral(centers), axis=0)
+    return dict(columns=n, temperature_error_K=float(abs(np.asarray(history)[indices]-temperature).max()),
+                interval_temperature_error_K=float(abs(integral_error/np.diff(TIMES)[:, None]).max()),
+                wall_heat_error_J_m2=float(heat_error[:, [0, -1]].max()),
+                interior_cut_heat_error_J_m2=float(heat_error[:, 1:-1].max()),
+                column_energy_residual_J_m2=float(balance), wall_trace_error_K=float(wall_error))
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
+    group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
     args = parser.parse_args()
     rows = []
     previous = None
+    if args.dem:
+        from tensordem.thermal import contact_chain as solver
+        run = measure_dem
+    elif args.fvm:
+        from tensorfvm.cht import rod as solver
+        run = measure_fvm
+    else:
+        from tensorsph import heat_conduction_2d as solver
+        run = measure
     for n in (8, 16, 32, 64):
-        row = measure_fvm(n) if args.fvm else measure(n)
+        row = run(n)
         errors = np.array([row[k] for k in ("temperature_error_K", "wall_heat_error_J_m2",
                                             "interior_cut_heat_error_J_m2")])
+        if args.dem:
+            errors = np.append(errors, row["interval_temperature_error_K"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
                    row["column_energy_residual_J_m2"] < 1e-12 and row["wall_trace_error_K"] < 1e-14
@@ -107,10 +169,6 @@ if __name__ == "__main__":
                    and all(order > 0 for order in orders) and (n < 64 or min(orders) > 1.8)))
         rows.append(row)
         previous = errors
-    if args.fvm:
-        from tensorfvm.cht import rod as solver
-    else:
-        from tensorsph import heat_conduction_2d as solver
     print(json.dumps(dict(runs=rows, sources=[provenance(__file__), provenance(solver.__file__)]),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
