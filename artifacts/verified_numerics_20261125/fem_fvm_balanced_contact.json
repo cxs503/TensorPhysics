@@ -1,0 +1,1572 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cells": 16,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 1.1103097574110884e-15,
+      "fem_wall_amplitude_W": [
+        0.3550234105030266,
+        0.3633966429174302
+      ],
+      "fem_contact_jump_amplitude_K": 0.22314980982624497,
+      "fem_wall_and_jump_phase_rad": [
+        1.3797349978689954,
+        -1.6101187713853748,
+        1.50409814474874
+      ],
+      "fem_wall_power_error_W": 5.688938211233807e-05,
+      "fem_contact_jump_error_K": 1.1331948688008714e-05,
+      "fem_max_phase_error_rad": 2.451160443982725e-05,
+      "fem_energy_residual_W": 2.092338286423884e-16,
+      "fvm": {
+        "cells": 16,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 2.9976342908246044e-15,
+        "wall_outward_amplitude_W": [
+          0.3550108563023873,
+          0.36338379262578596
+        ],
+        "reference_wall_amplitude_W": [
+          0.35496690299043776,
+          0.3634039110213135
+        ],
+        "contact_jump_amplitude_K": 0.22314344618263304,
+        "reference_jump_amplitude_K": 0.22313865159627483,
+        "wall_and_jump_phase_rad": [
+          1.3792701441320503,
+          -1.6105836251223205,
+          1.5043644772546465
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          1.379753534706976,
+          -1.6101432829898148,
+          1.5041070027165504
+        ],
+        "max_wall_power_error_W": 0.00017713797495742055,
+        "contact_jump_error_K": 5.765285042768523e-05,
+        "max_phase_error_rad": 0.0004833905749258562,
+        "max_cell_balance_error_W": 4.994856465790269e-15
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 4.545902364027965e-16,
+      "fem_wall_amplitude_W": [
+        0.35498100791046544,
+        0.3634020775981203
+      ],
+      "fem_contact_jump_amplitude_K": 0.22314144731432486,
+      "fem_wall_and_jump_phase_rad": [
+        1.3797488658027657,
+        -1.6101371400909608,
+        1.5041047797632712
+      ],
+      "fem_wall_power_error_W": 1.420195559962075e-05,
+      "fem_contact_jump_error_K": 2.839381108886764e-06,
+      "fem_max_phase_error_rad": 6.142898854003283e-06,
+      "fem_energy_residual_W": 3.004581623802064e-15,
+      "fvm": {
+        "cells": 32,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 4.9965866366290846e-15,
+        "wall_outward_amplitude_W": [
+          0.3549778773491294,
+          0.36339887277176836
+        ],
+        "reference_wall_amplitude_W": [
+          0.35496690299043776,
+          0.3634039110213135
+        ],
+        "contact_jump_amplitude_K": 0.22313984998344844,
+        "reference_jump_amplitude_K": 0.22313865159627483,
+        "wall_and_jump_phase_rad": [
+          1.3796326544926742,
+          -1.6102533514010557,
+          1.504171364491071
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          1.379753534706976,
+          -1.6101432829898148,
+          1.5041070027165504
+        ],
+        "max_wall_power_error_W": 4.429030052925724e-05,
+        "contact_jump_error_K": 1.4411550297694477e-05,
+        "max_phase_error_rad": 0.00012088021430184429,
+        "max_cell_balance_error_W": 1.0319230060813452e-14,
+        "max_wall_power_error_W_order": 1.999810839481448,
+        "contact_jump_error_K_order": 2.0001663989597116
+      },
+      "fem_wall_power_error_W_order": 2.002069810166469,
+      "fem_contact_jump_error_K_order": 1.9967475648670046,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 4.531581184534698e-16,
+      "fem_wall_amplitude_W": [
+        0.3549704278473428,
+        0.3634034516411268
+      ],
+      "fem_contact_jump_amplitude_K": 0.2231393509106636,
+      "fem_wall_and_jump_phase_rad": [
+        1.3797523653144121,
+        -1.6101417463271825,
+        1.504106446448818
+      ],
+      "fem_wall_power_error_W": 3.549214323766018e-06,
+      "fem_contact_jump_error_K": 7.102447721980475e-07,
+      "fem_max_phase_error_rad": 1.536662632152189e-06,
+      "fem_energy_residual_W": 2.640285602688882e-15,
+      "fvm": {
+        "cells": 64,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 4.4817359052327e-15,
+        "wall_outward_amplitude_W": [
+          0.3549696457063446,
+          0.36340265091886714
+        ],
+        "reference_wall_amplitude_W": [
+          0.35496690299043776,
+          0.3634039110213135
+        ],
+        "contact_jump_amplitude_K": 0.22313895117677263,
+        "reference_jump_amplitude_K": 0.22313865159627483,
+        "wall_and_jump_phase_rad": [
+          1.3797233126209354,
+          -1.6101707990206566,
+          1.5041230927304459
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          1.379753534706976,
+          -1.6101432829898148,
+          1.5041070027165504
+        ],
+        "max_wall_power_error_W": 1.1072937140998165e-05,
+        "contact_jump_error_K": 3.6027834555404132e-06,
+        "max_phase_error_rad": 3.0222086040752048e-05,
+        "max_cell_balance_error_W": 1.8537818610537412e-14,
+        "max_wall_power_error_W_order": 1.999952833050186,
+        "contact_jump_error_K_order": 2.0000416926600866
+      },
+      "fem_wall_power_error_W_order": 2.0005180004394663,
+      "fem_contact_jump_error_K_order": 1.999188291704897,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 2.3440832492864653e-15,
+      "fem_wall_amplitude_W": [
+        0.35496778411883895,
+        0.36340379611224116
+      ],
+      "fem_contact_jump_amplitude_K": 0.22313882644892477,
+      "fem_wall_and_jump_phase_rad": [
+        1.3797532422234569,
+        -1.6101428987655235,
+        1.5041068636165191
+      ],
+      "fem_wall_power_error_W": 8.872239217531628e-07,
+      "fem_contact_jump_error_K": 1.7758615998738295e-07,
+      "fem_max_phase_error_rad": 3.8422429123787516e-07,
+      "fem_energy_residual_W": 1.4351409253682062e-14,
+      "fvm": {
+        "cells": 128,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 2.797768991917822e-14,
+        "wall_outward_amplitude_W": [
+          0.3549675886149198,
+          0.3634035959620308
+        ],
+        "reference_wall_amplitude_W": [
+          0.35496690299043776,
+          0.3634039110213135
+        ],
+        "contact_jump_amplitude_K": 0.2231387264904066,
+        "reference_jump_amplitude_K": 0.22313865159627483,
+        "wall_and_jump_phase_rad": [
+          1.3797459790584452,
+          -1.6101501619304628,
+          1.5041110251931298
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          1.379753534706976,
+          -1.6101432829898148,
+          1.5041070027165504
+        ],
+        "max_wall_power_error_W": 2.768256942074666e-06,
+        "contact_jump_error_K": 9.006893505981611e-07,
+        "max_phase_error_rad": 7.555648530891157e-06,
+        "max_cell_balance_error_W": 4.7791786609541315e-14,
+        "max_wall_power_error_W_order": 1.999988192200472,
+        "contact_jump_error_K_order": 2.0000104327344266
+      },
+      "fem_wall_power_error_W_order": 2.0001295262157215,
+      "fem_contact_jump_error_K_order": 1.9997971564354675,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 4.891364074890945e-15,
+      "fem_wall_amplitude_W": [
+        0.35496712326720564,
+        0.36340388228995535
+      ],
+      "fem_contact_jump_amplitude_K": 0.22313869531094313,
+      "fem_wall_and_jump_phase_rad": [
+        1.3797534615776228,
+        -1.6101431869300389,
+        1.5041069679394679
+      ],
+      "fem_wall_power_error_W": 2.2180103383945455e-07,
+      "fem_contact_jump_error_K": 4.4398103128161466e-08,
+      "fem_max_phase_error_rad": 9.605977592252806e-08,
+      "fem_energy_residual_W": 1.2802184637051477e-13,
+      "fvm": {
+        "cells": 256,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 1.288970726452102e-13,
+        "wall_outward_amplitude_W": [
+          0.35496707439372177,
+          0.36340383225494644
+        ],
+        "reference_wall_amplitude_W": [
+          0.35496690299043776,
+          0.3634039110213135
+        ],
+        "contact_jump_amplitude_K": 0.22313867031987292,
+        "reference_jump_amplitude_K": 0.22313865159627483,
+        "wall_and_jump_phase_rad": [
+          1.3797516457867212,
+          -1.6101450027207065,
+          1.5041080083339236
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          1.379753534706976,
+          -1.6101432829898148,
+          1.5041070027165504
+        ],
+        "max_wall_power_error_W": 6.920658557906105e-07,
+        "contact_jump_error_K": 2.2517192093348833e-07,
+        "max_phase_error_rad": 1.8889202549895126e-06,
+        "max_cell_balance_error_W": 1.5204491480185352e-13,
+        "max_wall_power_error_W_order": 1.9999966223430685,
+        "contact_jump_error_K_order": 2.000002669931592
+      },
+      "fem_wall_power_error_W_order": 2.0000321745751566,
+      "fem_contact_jump_error_K_order": 1.999949205904358,
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 4.443059973708341e-16,
+      "fem_wall_amplitude_W": [
+        0.36339664291743157,
+        0.3550234105030271
+      ],
+      "fem_contact_jump_amplitude_K": 0.22314980982624502,
+      "fem_wall_and_jump_phase_rad": [
+        -1.610118771385375,
+        1.3797349978689952,
+        -1.6374945088410533
+      ],
+      "fem_wall_power_error_W": 5.688938211280332e-05,
+      "fem_contact_jump_error_K": 1.1331948688040649e-05,
+      "fem_max_phase_error_rad": 2.4511604439636363e-05,
+      "fem_energy_residual_W": 1.006163543002404e-15,
+      "fvm": {
+        "cells": 16,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 2.998116114569966e-15,
+        "wall_outward_amplitude_W": [
+          0.36338379262577647,
+          0.35501085630239215
+        ],
+        "reference_wall_amplitude_W": [
+          0.36340391102131336,
+          0.35496690299043765
+        ],
+        "contact_jump_amplitude_K": 0.22314344618263338,
+        "reference_jump_amplitude_K": 0.22313865159627486,
+        "wall_and_jump_phase_rad": [
+          -1.6105836251223165,
+          1.3792701441320487,
+          -1.6372281763351473
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -1.6101432829898148,
+          1.379753534706976,
+          -1.6374856508732427
+        ],
+        "max_wall_power_error_W": 0.00017713797495914172,
+        "contact_jump_error_K": 5.765285042756886e-05,
+        "max_phase_error_rad": 0.000483390574927308,
+        "max_cell_balance_error_W": 2.7905940174505174e-15
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 2.2235771858605497e-15,
+      "fem_wall_amplitude_W": [
+        0.36340207759811854,
+        0.35498100791046605
+      ],
+      "fem_contact_jump_amplitude_K": 0.22314144731432523,
+      "fem_wall_and_jump_phase_rad": [
+        -1.6101371400909594,
+        1.3797488658027652,
+        -1.6374878738265224
+      ],
+      "fem_wall_power_error_W": 1.4201955600274158e-05,
+      "fem_contact_jump_error_K": 2.8393811092275828e-06,
+      "fem_max_phase_error_rad": 6.142898855281638e-06,
+      "fem_energy_residual_W": 5.552713278125747e-15,
+      "fvm": {
+        "cells": 32,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 4.8851587200300415e-15,
+        "wall_outward_amplitude_W": [
+          0.3633988727717668,
+          0.35497787734913044
+        ],
+        "reference_wall_amplitude_W": [
+          0.36340391102131336,
+          0.35496690299043765
+        ],
+        "contact_jump_amplitude_K": 0.2231398499834485,
+        "reference_jump_amplitude_K": 0.22313865159627486,
+        "wall_and_jump_phase_rad": [
+          -1.6102533514010544,
+          1.379632654492674,
+          -1.6374212890987223
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -1.6101432829898148,
+          1.379753534706976,
+          -1.6374856508732427
+        ],
+        "max_wall_power_error_W": 4.429030052954139e-05,
+        "contact_jump_error_K": 1.4411550297664316e-05,
+        "max_phase_error_rad": 0.00012088021430188233,
+        "max_cell_balance_error_W": 1.0628832003890873e-14,
+        "max_wall_power_error_W_order": 1.9998108394862102,
+        "contact_jump_error_K_order": 2.0001663989598186
+      },
+      "fem_wall_power_error_W_order": 2.002069810111892,
+      "fem_contact_jump_error_K_order": 1.9967475646978996,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 6.790550617843253e-16,
+      "fem_wall_amplitude_W": [
+        0.3634034516411367,
+        0.35497042784734456
+      ],
+      "fem_contact_jump_amplitude_K": 0.2231393509106646,
+      "fem_wall_and_jump_phase_rad": [
+        -1.6101417463271839,
+        1.3797523653144113,
+        -1.6374862071409757
+      ],
+      "fem_wall_power_error_W": 3.5492143255507493e-06,
+      "fem_contact_jump_error_K": 7.102447732134254e-07,
+      "fem_max_phase_error_rad": 1.5366626308213581e-06,
+      "fem_energy_residual_W": 5.482174119695582e-15,
+      "fvm": {
+        "cells": 64,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 2.5372547330446314e-15,
+        "wall_outward_amplitude_W": [
+          0.36340265091881613,
+          0.3549696457063549
+        ],
+        "reference_wall_amplitude_W": [
+          0.36340391102131336,
+          0.35496690299043765
+        ],
+        "contact_jump_amplitude_K": 0.22313895117677507,
+        "reference_jump_amplitude_K": 0.22313865159627486,
+        "wall_and_jump_phase_rad": [
+          -1.610170799020638,
+          1.3797233126209312,
+          -1.6374695608593492
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -1.6101432829898148,
+          1.379753534706976,
+          -1.6374856508732427
+        ],
+        "max_wall_power_error_W": 1.1072937144939023e-05,
+        "contact_jump_error_K": 3.602783455294896e-06,
+        "max_phase_error_rad": 3.022208604474315e-05,
+        "max_cell_balance_error_W": 2.0172080011898167e-14,
+        "max_wall_power_error_W_order": 1.9999528325459863,
+        "contact_jump_error_K_order": 2.000041692755382
+      },
+      "fem_wall_power_error_W_order": 2.0005179997803793,
+      "fem_contact_jump_error_K_order": 1.9991882898155666,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 3.461284149026752e-15,
+      "fem_wall_amplitude_W": [
+        0.3634037961122697,
+        0.35496778411882224
+      ],
+      "fem_contact_jump_amplitude_K": 0.22313882644892186,
+      "fem_wall_and_jump_phase_rad": [
+        -1.6101428987655388,
+        1.3797532422234622,
+        -1.637485789973271
+      ],
+      "fem_wall_power_error_W": 8.872239049213812e-07,
+      "fem_contact_jump_error_K": 1.7758615698366322e-07,
+      "fem_max_phase_error_rad": 3.842242758312365e-07,
+      "fem_energy_residual_W": 3.2250012872585085e-14,
+      "fvm": {
+        "cells": 128,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 2.454073614761008e-14,
+        "wall_outward_amplitude_W": [
+          0.3634035959621097,
+          0.3549675886149031
+        ],
+        "reference_wall_amplitude_W": [
+          0.36340391102131336,
+          0.35496690299043765
+        ],
+        "contact_jump_amplitude_K": 0.22313872649039773,
+        "reference_jump_amplitude_K": 0.22313865159627486,
+        "wall_and_jump_phase_rad": [
+          -1.6101501619305076,
+          1.379745979058455,
+          -1.637481628396657
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -1.6101432829898148,
+          1.379753534706976,
+          -1.6374856508732427
+        ],
+        "max_wall_power_error_W": 2.768256934581449e-06,
+        "contact_jump_error_K": 9.006893513250496e-07,
+        "max_phase_error_rad": 7.555648521065044e-06,
+        "max_cell_balance_error_W": 3.1815085000029597e-14,
+        "max_wall_power_error_W_order": 1.999988196619066,
+        "contact_jump_error_K_order": 2.0000104314718055
+      },
+      "fem_wall_power_error_W_order": 2.0001295543109694,
+      "fem_contact_jump_error_K_order": 1.9997971828999357,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "omega_rad_s": 2.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 1.2223243215396402e-14,
+      "fem_wall_amplitude_W": [
+        0.3634038822900845,
+        0.35496712326714985
+      ],
+      "fem_contact_jump_amplitude_K": 0.2231386953109355,
+      "fem_wall_and_jump_phase_rad": [
+        -1.6101431869301015,
+        1.3797534615776437,
+        -1.6374856856503148
+      ],
+      "fem_wall_power_error_W": 2.2180097746615737e-07,
+      "fem_contact_jump_error_K": 4.4398095192334844e-08,
+      "fem_max_phase_error_rad": 9.605971318470004e-08,
+      "fem_energy_residual_W": 6.238803424402555e-14,
+      "fvm": {
+        "cells": 256,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 2.0,
+        "max_trace_balance_error_W": 4.0980161012531386e-14,
+        "wall_outward_amplitude_W": [
+          0.3634038322546934,
+          0.35496707439366537
+        ],
+        "reference_wall_amplitude_W": [
+          0.36340391102131336,
+          0.35496690299043765
+        ],
+        "contact_jump_amplitude_K": 0.22313867031988754,
+        "reference_jump_amplitude_K": 0.22313865159627486,
+        "wall_and_jump_phase_rad": [
+          -1.6101450027206232,
+          1.3797516457867343,
+          -1.6374846452558682
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -1.6101432829898148,
+          1.379753534706976,
+          -1.6374856508732427
+        ],
+        "max_wall_power_error_W": 6.920658372312796e-07,
+        "contact_jump_error_K": 2.251719224634978e-07,
+        "max_phase_error_rad": 1.8889202416319366e-06,
+        "max_cell_balance_error_W": 1.0935171152479831e-13,
+        "max_wall_power_error_W_order": 1.9999966571271022,
+        "contact_jump_error_K_order": 2.0000026612930015
+      },
+      "fem_wall_power_error_W_order": 2.0000325138830433,
+      "fem_contact_jump_error_K_order": 1.9999494393732895,
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 2.2887833992611187e-16,
+      "fem_wall_amplitude_W": [
+        0.20833749150242714,
+        0.3621442535863666
+      ],
+      "fem_contact_jump_amplitude_K": 0.17176770667739105,
+      "fem_wall_and_jump_phase_rad": [
+        0.13576128051724293,
+        -2.418936911307318,
+        1.1440066373005657
+      ],
+      "fem_wall_power_error_W": 0.002050927373834435,
+      "fem_contact_jump_error_K": 0.00044200568584316707,
+      "fem_max_phase_error_rad": 0.005631305855358582,
+      "fem_energy_residual_W": 3.8559277963506344e-16,
+      "fvm": {
+        "cells": 16,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 1.117140368961273e-15,
+        "wall_outward_amplitude_W": [
+          0.20803061742095733,
+          0.3616108273442771
+        ],
+        "reference_wall_amplitude_W": [
+          0.20665196018783513,
+          0.36076713790155013
+        ],
+        "contact_jump_amplitude_K": 0.17153623799847695,
+        "reference_jump_amplitude_K": 0.1715628547841948,
+        "wall_and_jump_phase_rad": [
+          0.13265231208873737,
+          -2.4220458797358266,
+          1.1479122076068453
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          0.14139258637260146,
+          -2.418403019864809,
+          1.1462882245238384
+        ],
+        "max_wall_power_error_W": 0.0022770109631463334,
+        "contact_jump_error_K": 0.0002798621234103615,
+        "max_phase_error_rad": 0.00874027428386405,
+        "max_cell_balance_error_W": 5.0871936451208194e-15
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 4.440892098500626e-16,
+      "fem_wall_amplitude_W": [
+        0.20706862768290155,
+        0.3611093934009938
+      ],
+      "fem_contact_jump_amplitude_K": 0.17161407710493198,
+      "fem_wall_and_jump_phase_rad": [
+        0.13997031942155616,
+        -2.4185394943592913,
+        1.145718332178713
+      ],
+      "fem_wall_power_error_W": 0.0005100701445934823,
+      "fem_contact_jump_error_K": 0.00011039027990039986,
+      "fem_max_phase_error_rad": 0.001422266951045356,
+      "fem_energy_residual_W": 9.39188966358397e-16,
+      "fvm": {
+        "cells": 32,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 4.113166542151586e-15,
+        "wall_outward_amplitude_W": [
+          0.2069928624205178,
+          0.3609772654768015
+        ],
+        "reference_wall_amplitude_W": [
+          0.20665196018783513,
+          0.36076713790155013
+        ],
+        "contact_jump_amplitude_K": 0.17155579983158173,
+        "reference_jump_amplitude_K": 0.1715628547841948,
+        "wall_and_jump_phase_rad": [
+          0.13919215342905888,
+          -2.419317660351773,
+          1.1466940480419925
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          0.14139258637260146,
+          -2.418403019864809,
+          1.1462882245238384
+        ],
+        "max_wall_power_error_W": 0.0005686203204378616,
+        "contact_jump_error_K": 6.997933930450528e-05,
+        "max_phase_error_rad": 0.002200432943542563,
+        "max_cell_balance_error_W": 9.403030797893778e-15,
+        "max_wall_power_error_W_order": 2.0016036758859963,
+        "contact_jump_error_K_order": 1.999715296671578
+      },
+      "fem_wall_power_error_W_order": 2.007508840355239,
+      "fem_contact_jump_error_K_order": 2.0014517828470404,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 3.0038919713337027e-15,
+      "fem_wall_amplitude_W": [
+        0.2067558321873809,
+        0.3608525752023077
+      ],
+      "fem_contact_jump_amplitude_K": 0.1715756610115547,
+      "fem_wall_and_jump_phase_rad": [
+        0.14103612622306655,
+        -2.418437325414647,
+        1.1461457835187303
+      ],
+      "fem_wall_power_error_W": 0.00012735142347610728,
+      "fem_contact_jump_error_K": 2.75905712045408e-05,
+      "fem_max_phase_error_rad": 0.0003564601495349732,
+      "fem_energy_residual_W": 9.192921513844873e-15,
+      "fvm": {
+        "cells": 64,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 4.418980526335351e-15,
+        "wall_outward_amplitude_W": [
+          0.20673694988918576,
+          0.3608196197792174
+        ],
+        "reference_wall_amplitude_W": [
+          0.20665196018783513,
+          0.36076713790155013
+        ],
+        "contact_jump_amplitude_K": 0.1715610660843507,
+        "reference_jump_amplitude_K": 0.1715628547841948,
+        "wall_and_jump_phase_rad": [
+          0.14084152761382523,
+          -2.418631924023924,
+          1.1463896693151088
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          0.14139258637260146,
+          -2.418403019864809,
+          1.1462882245238384
+        ],
+        "max_wall_power_error_W": 0.00014211487742335708,
+        "contact_jump_error_K": 1.7495742461260493e-05,
+        "max_phase_error_rad": 0.0005510587587762147,
+        "max_cell_balance_error_W": 1.4249072696485687e-14,
+        "max_wall_power_error_W_order": 2.0004080643397493,
+        "contact_jump_error_K_order": 1.9999251546668382
+      },
+      "fem_wall_power_error_W_order": 2.001880573945055,
+      "fem_contact_jump_error_K_order": 2.0003659152642697,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 1.9279638981753174e-15,
+      "fem_wall_amplitude_W": [
+        0.2066779097558882,
+        0.36078848931420543
+      ],
+      "fem_contact_jump_amplitude_K": 0.1715660563824588,
+      "fem_wall_and_jump_phase_rad": [
+        0.14130341564135276,
+        -2.4184116079245053,
+        1.146252616286169
+      ],
+      "fem_wall_power_error_W": 3.182747779734283e-05,
+      "fem_contact_jump_error_K": 6.897204570908261e-06,
+      "fem_max_phase_error_rad": 8.917073124875533e-05,
+      "fem_energy_residual_W": 7.016398710624188e-15,
+      "fvm": {
+        "cells": 128,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 1.610820841780582e-14,
+        "wall_outward_amplitude_W": [
+          0.2066731928612047,
+          0.3607802552397302
+        ],
+        "reference_wall_amplitude_W": [
+          0.20665196018783513,
+          0.36076713790155013
+        ],
+        "contact_jump_amplitude_K": 0.17156240605047282,
+        "reference_jump_amplitude_K": 0.1715628547841948,
+        "wall_and_jump_phase_rad": [
+          0.14125476242946472,
+          -2.4184602611364383,
+          1.1463135850235076
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          0.14139258637260146,
+          -2.418403019864809,
+          1.1462882245238384
+        ],
+        "max_wall_power_error_W": 3.552619625565994e-05,
+        "contact_jump_error_K": 4.373993011612287e-06,
+        "max_phase_error_rad": 0.00013782394313671898,
+        "max_cell_balance_error_W": 4.2198240541194585e-14,
+        "max_wall_power_error_W_order": 2.0001024577704887,
+        "contact_jump_error_K_order": 1.9999810685805024
+      },
+      "fem_wall_power_error_W_order": 2.000470346790722,
+      "fem_contact_jump_error_K_order": 2.0000916621341776,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.16666666666666666,
+        0.625
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        0.0,
+        -0.0
+      ],
+      "trace_power_imag_W": [
+        1.0,
+        -1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 3.80575400594544e-15,
+      "fem_wall_amplitude_W": [
+        0.20665844642782738,
+        0.3607724752601481
+      ],
+      "fem_contact_jump_amplitude_K": 0.17156365518636446,
+      "fem_wall_and_jump_phase_rad": [
+        0.14137029021119016,
+        -2.4184051676090825,
+        1.1462793225904084
+      ],
+      "fem_wall_power_error_W": 7.956220883106703e-06,
+      "fem_contact_jump_error_K": 1.7242737398907545e-06,
+      "fem_max_phase_error_rad": 2.229616141135126e-05,
+      "fem_energy_residual_W": 1.5840143722667704e-15,
+      "fvm": {
+        "cells": 256,
+        "strip_bounds_m": [
+          0.16666666666666666,
+          0.625
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 6.357313865639475e-14,
+        "wall_outward_amplitude_W": [
+          0.20665726743413043,
+          0.3607704170408888
+        ],
+        "reference_wall_amplitude_W": [
+          0.20665196018783513,
+          0.36076713790155013
+        ],
+        "contact_jump_amplitude_K": 0.17156274250338194,
+        "reference_jump_amplitude_K": 0.1715628547841948,
+        "wall_and_jump_phase_rad": [
+          0.141358126685639,
+          -2.4184173311355277,
+          1.146294564604824
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          0.14139258637260146,
+          -2.418403019864809,
+          1.1462882245238384
+        ],
+        "max_wall_power_error_W": 8.88139132155615e-06,
+        "contact_jump_error_K": 1.0935018115312018e-06,
+        "max_phase_error_rad": 3.445968696243352e-05,
+        "max_cell_balance_error_W": 9.827345172658545e-14,
+        "max_wall_power_error_W_order": 2.0000256234738054,
+        "contact_jump_error_K_order": 1.999995304970275
+      },
+      "fem_wall_power_error_W_order": 2.0001175991920164,
+      "fem_contact_jump_error_K_order": 2.0000229276947135,
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 2.220446049250313e-16,
+      "fem_wall_amplitude_W": [
+        0.3621442535863667,
+        0.20833749150242686
+      ],
+      "fem_contact_jump_amplitude_K": 0.17176770667739097,
+      "fem_wall_and_jump_phase_rad": [
+        -2.4189369113073185,
+        0.13576128051724293,
+        -1.9975860162892274
+      ],
+      "fem_wall_power_error_W": 0.0020509273738341795,
+      "fem_contact_jump_error_K": 0.00044200568584308077,
+      "fem_max_phase_error_rad": 0.005631305855358557,
+      "fem_energy_residual_W": 7.499143576176368e-16,
+      "fvm": {
+        "cells": 16,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 1.2947314098277873e-15,
+        "wall_outward_amplitude_W": [
+          0.36161082734427835,
+          0.20803061742095805
+        ],
+        "reference_wall_amplitude_W": [
+          0.3607671379015498,
+          0.20665196018783485
+        ],
+        "contact_jump_amplitude_K": 0.171536237998477,
+        "reference_jump_amplitude_K": 0.17156285478419492,
+        "wall_and_jump_phase_rad": [
+          -2.4220458797358297,
+          0.1326523120887355,
+          -1.993680445982949
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -2.418403019864811,
+          0.1413925863725989,
+          -1.995304429065955
+        ],
+        "max_wall_power_error_W": 0.0022770109631468135,
+        "contact_jump_error_K": 0.0002798621234101943,
+        "max_phase_error_rad": 0.008740274283863382,
+        "max_cell_balance_error_W": 2.765443041569881e-15
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 1.0057327710640516e-15,
+      "fem_wall_amplitude_W": [
+        0.36110939340099524,
+        0.20706862768290152
+      ],
+      "fem_contact_jump_amplitude_K": 0.1716140771049322,
+      "fem_wall_and_jump_phase_rad": [
+        -2.4185394943592935,
+        0.13997031942155633,
+        -1.9958743214110812
+      ],
+      "fem_wall_power_error_W": 0.0005100701445934202,
+      "fem_contact_jump_error_K": 0.00011039027990061568,
+      "fem_max_phase_error_rad": 0.0014222669510451733,
+      "fem_energy_residual_W": 1.2008898127460164e-15,
+      "fvm": {
+        "cells": 32,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 7.207530338191146e-15,
+        "wall_outward_amplitude_W": [
+          0.3609772654768087,
+          0.20699286242051446
+        ],
+        "reference_wall_amplitude_W": [
+          0.3607671379015498,
+          0.20665196018783485
+        ],
+        "contact_jump_amplitude_K": 0.17155579983158145,
+        "reference_jump_amplitude_K": 0.17156285478419492,
+        "wall_and_jump_phase_rad": [
+          -2.419317660351794,
+          0.13919215342907365,
+          -1.9948986055477984
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -2.418403019864811,
+          0.1413925863725989,
+          -1.995304429065955
+        ],
+        "max_wall_power_error_W": 0.0005686203204331765,
+        "contact_jump_error_K": 6.997933930493925e-05,
+        "max_phase_error_rad": 0.002200432943525258,
+        "max_cell_balance_error_W": 8.249469419189563e-15,
+        "max_wall_power_error_W_order": 2.0016036758981874,
+        "contact_jump_error_K_order": 1.9997152966617695
+      },
+      "fem_wall_power_error_W_order": 2.007508840355235,
+      "fem_contact_jump_error_K_order": 2.0014517828439384,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 1.1157603309187458e-15,
+      "fem_wall_amplitude_W": [
+        0.3608525752023174,
+        0.20675583218738025
+      ],
+      "fem_contact_jump_amplitude_K": 0.17157566101155558,
+      "fem_wall_and_jump_phase_rad": [
+        -2.418437325414669,
+        0.1410361262230719,
+        -1.9954468700710652
+      ],
+      "fem_wall_power_error_W": 0.00012735142347488474,
+      "fem_contact_jump_error_K": 2.7590571205298296e-05,
+      "fem_max_phase_error_rad": 0.0003564601495295918,
+      "fem_energy_residual_W": 1.3171424419531896e-14,
+      "fvm": {
+        "cells": 64,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 8.857160358191228e-15,
+        "wall_outward_amplitude_W": [
+          0.3608196197792198,
+          0.20673694988918564
+        ],
+        "reference_wall_amplitude_W": [
+          0.3607671379015498,
+          0.20665196018783485
+        ],
+        "contact_jump_amplitude_K": 0.17156106608435293,
+        "reference_jump_amplitude_K": 0.17156285478419492,
+        "wall_and_jump_phase_rad": [
+          -2.4186319240239285,
+          0.14084152761381719,
+          -1.9952029842746954
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -2.418403019864811,
+          0.1413925863725989,
+          -1.995304429065955
+        ],
+        "max_wall_power_error_W": 0.0001421148774243745,
+        "contact_jump_error_K": 1.749574245916772e-05,
+        "max_phase_error_rad": 0.0005510587587817311,
+        "max_cell_balance_error_W": 1.5896944317353673e-14,
+        "max_wall_power_error_W_order": 2.0004080643175337,
+        "contact_jump_error_K_order": 1.9999251548483545
+      },
+      "fem_wall_power_error_W_order": 2.001880573958729,
+      "fem_contact_jump_error_K_order": 2.0003659152274818,
+      "passed": true
+    },
+    {
+      "cells": 128,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 1.6300346472626374e-15,
+      "fem_wall_amplitude_W": [
+        0.3607884893142184,
+        0.206677909755892
+      ],
+      "fem_contact_jump_amplitude_K": 0.17156605638246078,
+      "fem_wall_and_jump_phase_rad": [
+        -2.4184116079245297,
+        0.14130341564134052,
+        -1.995340037303636
+      ],
+      "fem_wall_power_error_W": 3.18274778018954e-05,
+      "fem_contact_jump_error_K": 6.897204573569366e-06,
+      "fem_max_phase_error_rad": 8.91707312609688e-05,
+      "fem_energy_residual_W": 1.7109798461897457e-14,
+      "fvm": {
+        "cells": 128,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 1.6729130687716833e-14,
+        "wall_outward_amplitude_W": [
+          0.36078025523982354,
+          0.20667319286120617
+        ],
+        "reference_wall_amplitude_W": [
+          0.3607671379015498,
+          0.20665196018783485
+        ],
+        "contact_jump_amplitude_K": 0.17156240605047549,
+        "reference_jump_amplitude_K": 0.17156285478419492,
+        "wall_and_jump_phase_rad": [
+          -2.4184602611366572,
+          0.1412547624294914,
+          -1.9952790685663022
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -2.418403019864811,
+          0.1413925863725989,
+          -1.995304429065955
+        ],
+        "max_wall_power_error_W": 3.552619625183262e-05,
+        "contact_jump_error_K": 4.373993008540245e-06,
+        "max_phase_error_rad": 0.0001378239431075008,
+        "max_cell_balance_error_W": 5.6244048893265465e-14,
+        "max_wall_power_error_W_order": 2.0001024579362423,
+        "contact_jump_error_K_order": 1.9999810694211992
+      },
+      "fem_wall_power_error_W_order": 2.0004703465705105,
+      "fem_contact_jump_error_K_order": 2.00009166161716,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "omega_rad_s": 20.0,
+      "strip_bounds_m": [
+        0.375,
+        0.8333333333333334
+      ],
+      "trace_capacity_J_K": [
+        0.0,
+        0.0
+      ],
+      "strip_generation_W_m3": 0.0,
+      "trace_power_real_W": [
+        -0.0,
+        0.0
+      ],
+      "trace_power_imag_W": [
+        -1.0,
+        1.0
+      ],
+      "fem_trace_storage_amplitude_W": [
+        0.0,
+        0.0
+      ],
+      "fem_max_trace_balance_error_W": 5.893862334744823e-15,
+      "fem_wall_amplitude_W": [
+        0.36077247526014167,
+        0.2066584464278205
+      ],
+      "fem_contact_jump_amplitude_K": 0.1715636551863655,
+      "fem_wall_and_jump_phase_rad": [
+        -2.418405167609072,
+        0.1413702902112155,
+        -1.9953133309993762
+      ],
+      "fem_wall_power_error_W": 7.95622087446316e-06,
+      "fem_contact_jump_error_K": 1.7242737390529509e-06,
+      "fem_max_phase_error_rad": 2.229616138598869e-05,
+      "fem_energy_residual_W": 1.0923723287383133e-14,
+      "fvm": {
+        "cells": 256,
+        "strip_bounds_m": [
+          0.375,
+          0.8333333333333334
+        ],
+        "omega_rad_s": 20.0,
+        "max_trace_balance_error_W": 5.5432269350553225e-14,
+        "wall_outward_amplitude_W": [
+          0.36077041704090085,
+          0.20665726743419244
+        ],
+        "reference_wall_amplitude_W": [
+          0.3607671379015498,
+          0.20665196018783485
+        ],
+        "contact_jump_amplitude_K": 0.17156274250342216,
+        "reference_jump_amplitude_K": 0.17156285478419492,
+        "wall_and_jump_phase_rad": [
+          -2.4184173311353536,
+          0.14135812668536185,
+          -1.995298088985166
+        ],
+        "reference_wall_and_jump_phase_rad": [
+          -2.418403019864811,
+          0.1413925863725989,
+          -1.995304429065955
+        ],
+        "max_wall_power_error_W": 8.881391404268134e-06,
+        "contact_jump_error_K": 1.093501773869226e-06,
+        "max_phase_error_rad": 3.445968723706651e-05,
+        "max_cell_balance_error_W": 1.1009266333517259e-13,
+        "max_wall_power_error_W_order": 2.0000256098826283,
+        "contact_jump_error_K_order": 1.9999953536457664
+      },
+      "fem_wall_power_error_W_order": 2.0001176009657047,
+      "fem_contact_jump_error_K_order": 2.0000229289523275,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "fda305362feda5ca3c1f08f021a7bec380e49d1b",
+      "file": "fem_fvm_contact_strip.py",
+      "source_sha256": "3aa868862fc329ed52af03b1a3c9f5fefd5b950835acaf9fa9556079b994cb4d"
+    },
+    {
+      "commit": "fda305362feda5ca3c1f08f021a7bec380e49d1b",
+      "file": "fvm_strip_heater_across_contact.py",
+      "source_sha256": "247de1668341fe718db32cbde1ca591587bed6e0917397e8e8a6af6d402a3171"
+    },
+    {
+      "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "90d91580c1822a13c2e2014e75e5af1ef32eb2c4",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/fem_fvm_contact_strip.py --balanced"
+}
