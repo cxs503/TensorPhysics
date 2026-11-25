@@ -1,0 +1,314 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "solver": "FVM",
+      "cells": 16,
+      "max_temperature_error_K": 0.0005683506426419349,
+      "max_cumulative_heat_error_J_m2": 0.00038823466190260336,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.00038823466190260336,
+        0.0002263983243326051
+      ],
+      "max_cell_balance_error_J_m2": 3.0834709785487746e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 32,
+      "max_temperature_error_K": 0.0001415481505945837,
+      "max_cumulative_heat_error_J_m2": 9.721249805760834e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        9.721249805760834e-05,
+        5.601838312657703e-05
+      ],
+      "max_cell_balance_error_J_m2": 4.0007060164715114e-16,
+      "orders": [
+        2.0054883720912957,
+        1.9977152188161504,
+        1.9977152188161504,
+        2.014891031991081
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 64,
+      "max_temperature_error_K": 3.548361249289256e-05,
+      "max_cumulative_heat_error_J_m2": 2.4313773982459486e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        2.4313773982459486e-05,
+        1.3966106922808086e-05
+      ],
+      "max_cell_balance_error_J_m2": 4.3359955383126536e-16,
+      "orders": [
+        1.9960681005513052,
+        1.9993679590646352,
+        1.9993679590646352,
+        2.0039704201504156
+      ],
+      "passed": true
+    },
+    {
+      "solver": "FVM",
+      "cells": 128,
+      "max_temperature_error_K": 8.876797188861474e-06,
+      "max_cumulative_heat_error_J_m2": 6.079266114789039e-06,
+      "west_east_cumulative_heat_errors_J_m2": [
+        6.079266114789039e-06,
+        3.4894779290250977e-06
+      ],
+      "max_cell_balance_error_J_m2": 5.054482765491641e-16,
+      "orders": [
+        1.9990417530800961,
+        1.9998047677329112,
+        1.9998047677329112,
+        2.00084681109611
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 16,
+      "max_temperature_error_K": 0.0005882938622169265,
+      "max_cumulative_heat_error_J_m2": 0.000402958125927555,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.000402958125927555,
+        0.0002410837360730944
+      ],
+      "max_cell_balance_error_J_m2": 2.727852665973529e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 32,
+      "max_temperature_error_K": 0.00014693606551763327,
+      "max_cumulative_heat_error_J_m2": 0.00010091131160736011,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.00010091131160736011,
+        5.9736957094852494e-05
+      ],
+      "max_cell_balance_error_J_m2": 4.4029450224636335e-16,
+      "orders": [
+        2.0013484349648567,
+        1.9975420247067475,
+        1.9975420247067475,
+        2.0128386714612203
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 64,
+      "max_temperature_error_K": 3.679836001757586e-05,
+      "max_cumulative_heat_error_J_m2": 2.5238405632455052e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        2.5238405632455052e-05,
+        1.4896242571810214e-05
+      ],
+      "max_cell_balance_error_J_m2": 3.30708767662391e-16,
+      "orders": [
+        1.997475172816705,
+        1.9993952217688187,
+        1.9993952217688187,
+        2.003675279758179
+      ],
+      "passed": true
+    },
+    {
+      "solver": "SPH",
+      "cells": 128,
+      "max_temperature_error_K": 9.201739625375183e-06,
+      "max_cumulative_heat_error_J_m2": 6.310331333886365e-06,
+      "west_east_cumulative_heat_errors_J_m2": [
+        6.310331333886365e-06,
+        3.721731409889184e-06
+      ],
+      "max_cell_balance_error_J_m2": 3.914782994302035e-16,
+      "orders": [
+        1.9996629322330617,
+        1.9998331115838643,
+        1.9998331115838643,
+        2.000902623408058
+      ],
+      "passed": true
+    },
+    {
+      "max_shared_face_mismatch_J_m2": 1.8908485888147197e-16,
+      "solver": "FEM",
+      "cells": 16,
+      "max_temperature_error_K": 0.00047367264483444416,
+      "max_cumulative_heat_error_J_m2": 0.0006390775599031118,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.0004289050171879527,
+        0.0006390775599031118
+      ],
+      "max_cell_balance_error_J_m2": 1.929879867024198e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "max_shared_face_mismatch_J_m2": 2.3245294578089215e-16,
+      "solver": "FEM",
+      "cells": 32,
+      "max_temperature_error_K": 0.00011900542782483647,
+      "max_cumulative_heat_error_J_m2": 0.0001590148515293599,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.00010716848895558906,
+        0.0001590148515293599
+      ],
+      "max_cell_balance_error_J_m2": 2.3440450969136606e-16,
+      "orders": [
+        1.9928629807490041,
+        2.0068295151762645,
+        2.000777423665563,
+        2.0068295151762645
+      ],
+      "passed": true
+    },
+    {
+      "max_shared_face_mismatch_J_m2": 2.7376104855258987e-16,
+      "solver": "FEM",
+      "cells": 64,
+      "max_temperature_error_K": 2.9755923703467246e-05,
+      "max_cumulative_heat_error_J_m2": 3.970692637111917e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        2.678906929109992e-05,
+        3.970692637111917e-05
+      ],
+      "max_cell_balance_error_J_m2": 2.7373394349827773e-16,
+      "orders": [
+        1.9997785674773847,
+        2.0016989210294107,
+        2.000164403684439,
+        2.0016989210294107
+      ],
+      "passed": true
+    },
+    {
+      "max_shared_face_mismatch_J_m2": 2.905119721174909e-16,
+      "solver": "FEM",
+      "cells": 128,
+      "max_temperature_error_K": 7.441466116420159e-06,
+      "max_cumulative_heat_error_J_m2": 9.923870867067919e-06,
+      "west_east_cumulative_heat_errors_J_m2": [
+        6.697142822975621e-06,
+        9.923870867067919e-06
+      ],
+      "max_cell_balance_error_J_m2": 2.9101341562226546e-16,
+      "orders": [
+        1.999518109622631,
+        2.0004158216189944,
+        2.000026819433059,
+        2.0004158216189944
+      ],
+      "passed": true
+    },
+    {
+      "max_2d_cell_balance_error_J_m2": 1.226917059702487e-14,
+      "solver": "DG",
+      "cells": 16,
+      "max_temperature_error_K": 0.0013188834572667174,
+      "max_cumulative_heat_error_J_m2": 0.0007097827769544929,
+      "west_east_cumulative_heat_errors_J_m2": [
+        0.0003812318562273209,
+        0.0007097827769544929
+      ],
+      "max_cell_balance_error_J_m2": 1.7577952982072986e-14,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "max_2d_cell_balance_error_J_m2": 1.3946970494330873e-14,
+      "solver": "DG",
+      "cells": 32,
+      "max_temperature_error_K": 0.0003306536872967336,
+      "max_cumulative_heat_error_J_m2": 0.00017723205669217812,
+      "west_east_cumulative_heat_errors_J_m2": [
+        9.522480849319392e-05,
+        0.00017723205669217812
+      ],
+      "max_cell_balance_error_J_m2": 1.4044429681725479e-14,
+      "orders": [
+        1.9959241918721364,
+        2.00173799380012,
+        2.001259291252543,
+        2.00173799380012
+      ],
+      "passed": true
+    },
+    {
+      "max_2d_cell_balance_error_J_m2": 1.7855730184405423e-14,
+      "solver": "DG",
+      "cells": 64,
+      "max_temperature_error_K": 8.270596914411454e-05,
+      "max_cumulative_heat_error_J_m2": 4.42948696373624e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        2.3798920145617908e-05,
+        4.42948696373624e-05
+      ],
+      "max_cell_balance_error_J_m2": 3.3849767606952685e-14,
+      "orders": [
+        1.9992576279266339,
+        2.0004280573219964,
+        2.0004413673432127,
+        2.0004280573219964
+      ],
+      "passed": true
+    },
+    {
+      "max_2d_cell_balance_error_J_m2": 1.8547383798244644e-14,
+      "solver": "DG",
+      "cells": 128,
+      "max_temperature_error_K": 2.067770212460518e-05,
+      "max_cumulative_heat_error_J_m2": 1.1072818737967172e-05,
+      "west_east_cumulative_heat_errors_J_m2": [
+        5.949172741714914e-06,
+        1.1072818737967172e-05
+      ],
+      "max_cell_balance_error_J_m2": 2.6244353641246415e-14,
+      "orders": [
+        1.9999155864047151,
+        2.0001170845612988,
+        2.000135139567156,
+        2.0001170845612988
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "5677a40d03fda6f11a2042dcf8b119eb063f0b6b",
+      "file": "graded_transient_slab.py",
+      "source_sha256": "2839f7f7d3b3a323928c2a7425c95d031ec179ac2b3c5e905c78aed3c958fe4b"
+    },
+    {
+      "commit": "4647d87121b148d7212da19f9c3e2409e287cbca",
+      "file": "rod.py",
+      "source_sha256": "2d911ffd6a32943d52ebc789fe7864f1db37433ba361577df96c6ec807e92492"
+    },
+    {
+      "commit": "fff373c9e630b1f24a41ad5d3d14f552a3d3bff7",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "1dfa8901bb43a884096cb302ad2055badda9718d9953683f6925d6bff9d8ef41"
+    },
+    {
+      "commit": "1fde6d4df57eaf683cd56fc5462eaeedd8ec3ee4",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src:../TensorFEM/src:../TensorDG python examples/graded_transient_slab.py --with-fem --with-dg"
+}
