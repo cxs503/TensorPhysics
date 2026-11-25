@@ -13,9 +13,9 @@ from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
 
 
-def reference(n, resistance, omega):
+def reference(n, resistance, omega, transverse_wavenumber=0.):
     """Propagate the continuum (temperature, rightward flux) from the cold wall."""
-    waves = np.sqrt(1j*omega*np.array([1., 2.])/np.array([1., 4.]))
+    waves = np.sqrt(transverse_wavenumber**2 + 1j*omega*np.array([1., 2.])/np.array([1., 4.]))
 
     def propagate(length, layer, temperature, flux):
         z = length*waves[layer]
