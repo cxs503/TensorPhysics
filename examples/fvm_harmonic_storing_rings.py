@@ -64,18 +64,25 @@ def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_drive
                 expected, wall_ref = reference.angular_reference(omega, mode, walls, generation, fractions, sheet_k, return_wall_rates=True)
             else:
                 expected, wall_ref = reference.continuum(omega, walls, generation, fractions, return_wall_rates=True)
+            area = 2*np.pi*edges[1:-1]
+            # Continuum angular divergence follows from the analytic radial
+            # rates on either side of each layer and its integrated storage.
+            reference_radial_drop = (np.r_[wall_ref[0], area*expected[:, 2]]
+                                     - np.r_[area*expected[:, 1], wall_ref[1]])
+            angular_ref = reference_radial_drop - (storage_ref if bulk_storage else 0.)
+            previous_angular = None
             previous_storage = None
             previous = None
             previous_wall = None
             for n in (4, 8, 16, 32):
                 mesh = np.r_[np.concatenate([np.geomspace(a, b, n+1)[:-1]
                                              for a, b in zip(edges, edges[1:])]), edges[-1]]
-                temp, incoming, outgoing, wall_rates, storage = storing_rings.solve_storing_rings(
+                temp, incoming, outgoing, wall_rates, storage, angular = storing_rings.solve_storing_rings(
                     mesh, np.repeat(reference.K, n), [n, 2*n], walls, omega,
                     contact_resistances=reference.CONTACT, sheet_capacities=reference.CAPACITY,
                     sheet_conductivities=sheet_k, inner_resistance_fractions=fractions, sheet_generation=generation, azimuthal_mode=mode,
                     volumetric_heat_capacity=np.repeat(capacities, n) if bulk_storage else None,
-                    return_wall_rates=True, return_bulk_storage=True)
+                    return_wall_rates=True, return_bulk_storage=True, return_angular_conduction=True)
                 wall_error = float(abs(wall_rates/wall_ref-1).max())
                 angular_loss = sheet_k*(mode/edges[1:-1])**2*temp
                 balance = max(abs(incoming-outgoing+generation-angular_loss-1j*omega*np.asarray(reference.CAPACITY)*temp))
@@ -90,14 +97,21 @@ def measure(bulk_storage=False, fractions=(.5, .5), sheet_k=(0., 0.), wall_drive
                 storage_order = np.log2(previous_storage/storage_error) if previous_storage is not None else None
                 passed &= (n < 32 or (storage_error < .001 and storage_order > 1.8)) if bulk_storage else np.all(storage == 0.)
                 previous_storage = storage_error
-                global_balance = None
-                if mode == 0:
-                    net_sheet = 2*np.pi*edges[1:-1] @ (generation-1j*omega*np.asarray(reference.CAPACITY)*temp)
-                    global_balance = float(abs(wall_rates[0]-wall_rates[1]+net_sheet-storage.sum()))
-                    passed &= global_balance < 1e-9
+                layer_input = np.r_[wall_rates[0], area*outgoing] - np.r_[area*incoming, wall_rates[1]]
+                layer_balance = float(max(abs(layer_input - storage - angular)))
+                net_sheet = area @ (generation-angular_loss-1j*omega*np.asarray(reference.CAPACITY)*temp)
+                global_balance = float(abs(wall_rates[0]-wall_rates[1]+net_sheet-storage.sum()-angular.sum()))
+                angular_error = float(max(abs(angular/angular_ref-1))) if mode else None
+                angular_order = np.log2(previous_angular/angular_error) if previous_angular is not None else None
+                previous_angular = angular_error
+                passed &= layer_balance < 1e-9 and global_balance < 1e-9
+                passed &= (n < 32 or (angular_error < .001 and angular_order > 1.8)) if mode else np.all(angular == 0.)
                 rows.append(dict(bulk_storage_rates_W_m=[[z.real, z.imag] for z in storage],
                                  bulk_storage_max_relative_error=storage_error, bulk_storage_order=storage_order,
-                                 axisymmetric_balance_W_m=global_balance,
+                                 axisymmetric_balance_W_m=global_balance if mode == 0 else None,
+                                 angular_conduction_W_m=[[z.real, z.imag] for z in angular],
+                                 angular_max_relative_error=angular_error, angular_order=angular_order,
+                                 max_layer_balance_W_m=layer_balance, modal_global_balance_W_m=global_balance,
                                  wall_rate_max_relative_error=wall_error, wall_rate_order=wall_order,
                                  radial_wall_rates_W_m=[[z.real, z.imag] for z in wall_rates],
                                  mode=mode, omega=omega, cells_per_layer=n, max_relative_error=error,
