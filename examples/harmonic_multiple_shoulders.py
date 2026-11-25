@@ -9,7 +9,7 @@ import harmonic_stepped_section
 from tensorfvm.cht import rod
 
 
-def measure(count, omega, resistive=False, end_types=("temperature","temperature")):
+def measure(count, omega, resistive=False, end_types=("temperature","temperature"), end_storage=False):
     length = np.array([.25,.5,.25])
     area = np.array([.7,2.4,1.3])
     k, c = np.array([2.,5.,.9]), np.array([3.,1.5,2.])
@@ -59,25 +59,31 @@ def measure(count, omega, resistive=False, end_types=("temperature","temperature
     conductance = end_film*area[[0,-1]]
     exact_ends = np.array([left_end,t])
     inward = np.array([left[0],-right[-1]])
+    wall_capacity = np.array([.3,.8])*(np.array(end_types)!="temperature")*end_storage
+    end_mass = wall_capacity*area[[0,-1]]
+    external = inward+1j*omega*end_mass*exact_ends
     robin = np.array(end_types)=="robin"
-    ends = np.where(robin,exact_ends+inward/conductance,
-                    np.where(np.array(end_types)=="power",inward,exact_ends))
+    ends = np.where(robin,exact_ends+external/conductance,
+                    np.where(np.array(end_types)=="power",external,exact_ends))
     for order in (1,2):
         cell,faces,enter,leave,traces = rod.solve_harmonic_stepped_rod(widths,area.repeat(count),k.repeat(count),
                       c.repeat(count),ends,omega,source=source.repeat(count),film_coefficient=hs,
                       ambient_temperature=air,shoulder_areal_heat_capacity=cap,flux_order=order,
-                      contact_resistance=contacts,return_traces=True,end_types=end_types,end_film_coefficient=end_film)
+                      contact_resistance=contacts,return_traces=True,end_types=end_types,end_film_coefficient=end_film,
+                      end_areal_heat_capacity=wall_capacity)
         powers = abs(np.diff(area.repeat(count)))*(hs*(air-faces[1:-1])-1j*omega*cap*faces[1:-1])
         face_balance = leave[:-1]-enter[1:]+powers
         cell_balance = enter-leave+(source.repeat(count)-1j*omega*c.repeat(count)*cell)*area.repeat(count)*widths
-        row = dict(n=n,end_types=end_types,resistive=resistive,omega_rad_s=omega,flux_order=order,temperature_error_K=float(abs(cell-means).max()),
+        row = dict(n=n,end_storage=end_storage,end_types=end_types,resistive=resistive,omega_rad_s=omega,flux_order=order,temperature_error_K=float(abs(cell-means).max()),
                    trace_error_K=float(max(abs(traces[0]-east[:-1]).max(),abs(traces[1]-west[1:]).max())),
                    axial_power_error_W=float(max(abs(enter-left).max(),abs(leave-right).max())),
                    max_balance_W=float(max(abs(face_balance).max(),abs(cell_balance).max())))
-        if robin.any():
-            exchange = conductance*(ends-faces[[0,-1]])
+        free = np.array(end_types)!="temperature"
+        if free.any():
+            exchange = np.where(robin,conductance*(ends-faces[[0,-1]]),ends)
+            exchange -= 1j*omega*end_mass*faces[[0,-1]]
             residual = np.array([enter[0],-leave[-1]])-exchange
-            row["max_balance_W"] = max(row["max_balance_W"],float(abs(residual[robin]).max()))
+            row["max_balance_W"] = max(row["max_balance_W"],float(abs(residual[free]).max()))
         prescribed = np.array(end_types)!="temperature"
         if prescribed.any():
             row["end_temperature_error_K"] = float(abs(faces[[0,-1]]-[left_end,t])[prescribed].max())
@@ -92,13 +98,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ends", nargs=2, choices=("temperature","power","robin"),
                         default=("temperature","temperature"), metavar=("WEST","EAST"))
+    parser.add_argument("--end-storage",action="store_true")
     args = parser.parse_args()
     rows = []
     for omega,resistive in ((1.,False),(7.,False),(1.,True),(7.,True)):
         previous = {}
         counts = (16,32,64,128,256) if "robin" in args.ends else (8,16,32,64,128)
         for count in counts:
-            for row in measure(count,omega,resistive,args.ends):
+            for row in measure(count,omega,resistive,args.ends,args.end_storage):
                 order = row["flux_order"]
                 errors = {k:v for k,v in row.items() if "_error_" in k}
                 rates = {} if order not in previous else {k:np.log2(previous[order][k]/v) for k,v in errors.items()}
