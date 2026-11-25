@@ -61,16 +61,13 @@ def dg(times,n):
 def fvm(times,n):
     mid = (np.arange(n)+.5)/n
     initial = background(0.,mid)+np.cos(WAVE*(mid-PEAK))*np.sinc(WAVE/(2*np.pi*n))
-    cell,wall,_,_,heat = rod.solve_transient_stepped_rod(np.full(n,1/n),1.,K,C,air,times,initial,
+    cell,wall,_,_,heat,means = rod.solve_transient_stepped_rod(np.full(n,1/n),1.,K,C,air,times,initial,
         end_types=("robin","robin"),end_film_coefficient=FILM,end_areal_heat_capacity=CW,
         initial_end_temperature=background(0.,ENDS)+np.cos(WAVE*(ENDS-PEAK)),flux_order=2,method="sdirk2",
-        heat_loss_coefficient=H,bulk_ambient_temperature=lambda t: reservoir(t,mid),return_step_heat=True)
-    # Recover the FVM interval means from the integrated linear exchange laws.
-    tm = .5*(times[1:]+times[:-1])[:,None]
-    dt = np.diff(times)[:,None]
-    cell_mean = reservoir(tm,mid)-n*heat["bulk_exchange"]/(H*dt)
-    wall_mean = air(tm)-heat["end_input"]/(FILM*dt)
-    return cell,wall[:,[0,-1]],np.column_stack((heat["left"][:,0],heat["right"])),heat["bulk_exchange"],heat["end_input"],cell_mean,wall_mean
+        heat_loss_coefficient=H,bulk_ambient_temperature=lambda t: reservoir(t,mid),return_step_heat=True,
+        return_interval_temperatures=True)
+    return (cell,wall[:,[0,-1]],np.column_stack((heat["left"][:,0],heat["right"])),
+            heat["bulk_exchange"],heat["end_input"],means["cell"],means["face"][:,[0,-1]])
 
 
 def particles(times,n,method="sdirk2"):
@@ -155,6 +152,8 @@ if __name__ == "__main__":
             errors["interval_field_K"] = float(abs(means-mean_target).max())
             errors["interval_wall_K"] = float(abs(wall_means-wall_target).max())
             errors[sample_key] = float(abs(u-ref_temperature).max())
+            bulk_exchange_residual = float(abs(bulk-H*dt*(reservoir(tm,mid)-means)/n).max())
+            end_exchange_residual = float(abs(external-FILM*dt*(air(tm)-wall_means)).max())
             balance = float(abs(C/n*np.diff(u,axis=0)+np.diff(heat)-bulk).max())
             surface_balance = float(abs(CW*np.diff(wall,axis=0)+heat[:,[0,-1]]*SIGN-external).max())
             orders = {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()} if name in previous else {}
@@ -164,10 +163,11 @@ if __name__ == "__main__":
             coarsest.setdefault(name, errors)
             overall = {k:float(np.log2(coarsest[name][k]/errors[k])/np.log2(n/12))
                        for k in interval_keys} if n==96 else {}
-            rows.append(dict(solver=name,interval_overall_orders=overall,interval_means_source="exchange laws" if name=="FVM" else "solver output",
+            rows.append(dict(solver=name,interval_overall_orders=overall,interval_means_source="solver output",
+                             bulk_exchange_residual_J_m2=bulk_exchange_residual,end_exchange_residual_J_m2=end_exchange_residual,
                              temperature_sampling="center" if name.startswith("SPH") else "cell_mean",cells=n,steps=steps,errors=errors,orders=orders,cell_balance_J_m2=balance,
                              wall_balance_J_m2=surface_balance,**({"partition_error":partition} if partition else {}),
-                             passed=max(balance,surface_balance,*partition.values())<1e-11
+                             passed=max(balance,surface_balance,bulk_exchange_residual,end_exchange_residual,*partition.values())<1e-11
                              and all(v>(0. if k in interval_keys else 1.7) for k,v in orders.items())
                              and all(v>1.7 for v in overall.values())))
             previous[name] = errors
