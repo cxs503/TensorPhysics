@@ -71,7 +71,11 @@ if __name__ == "__main__":
                         metavar=("RING1", "RING2"), help="fraction of each contact resistance on its inner side")
     parser.add_argument("--sheet-conductivities", nargs=2, type=float, default=(0., 0.),
                         metavar=("RING1", "RING2"), help="circumferential conductivity times thickness in W/K")
+    parser.add_argument("--film-walls", choices=("none", "bore", "exterior", "both"), default="none",
+                        help="use bore/exterior film coefficients of 7/3 W/(m² K)")
     args = parser.parse_args()
+    films = (7. if args.film_walls in ("bore", "both") else None,
+             3. if args.film_walls in ("exterior", "both") else None)
     sheet_k = np.array(args.sheet_conductivities)
     fractions = args.inner_fractions
     mode = args.mode
@@ -84,18 +88,22 @@ if __name__ == "__main__":
             response = harmonic_rings.assemble_ring_response(
                 (RADII[0], RADII[1], RADII[3], RADII[4]), K, CONTACT, n, mode=mode,
                 formulation=formulation, join_radius=RADII[2], inner_resistance_fractions=fractions,
-                sheet_conductivities=sheet_k)
+                sheet_conductivities=sheet_k, film_coefficients=films)
             # For straight panels the discrete angular gradient uses the chord length.
             angular_factor = mode if formulation == "circular" else np.sin(mode*np.pi/n)/np.sin(np.pi/n)
             modal_loss = sheet_k*(angular_factor/np.array([RADII[1], RADII[3]]))**2
             leakage = response.mode_leakage
             for omega in (1., 8., 24.):
-                solution = response.solve(omega, walls, CAPACITY, sheet_generation=generation)
-                fields = np.column_stack((solution.sheet_temperature, solution.incoming_flux, solution.outgoing_flux))
-                imbalance = solution.join_power_residual
                 expected, wall_reference = (
                     angular_reference(omega, mode, walls, generation, fractions, sheet_k, return_wall_rates=True)
                     if mode else continuum(omega, walls, generation, fractions, return_wall_rates=True))
+                boundary = walls.astype(complex).copy()
+                for j, (h, radius, sign) in enumerate(zip(films, (RADII[0], RADII[-1]), (1, -1))):
+                    if h is not None:
+                        boundary[j] += sign*wall_reference[j]/(2*np.pi*radius*h)
+                solution = response.solve(omega, boundary, CAPACITY, sheet_generation=generation)
+                fields = np.column_stack((solution.sheet_temperature, solution.incoming_flux, solution.outgoing_flux))
+                imbalance = solution.join_power_residual
                 wall_error = float(abs(solution.wall_heat_rates/wall_reference-1).max())
                 global_residual = None
                 relative_balance = None
@@ -121,7 +129,8 @@ if __name__ == "__main__":
                 if mode == 0:
                     passed &= (relative_balance < 1e-10 if formulation == "circular" else
                                not finest or relative_balance < .01)
-                runs.append(dict(wall_rate_max_relative_error=wall_error, wall_rate_order=wall_order,
+                runs.append(dict(boundary_temperature_data_K=[[z.real, z.imag] for z in boundary],
+                                 wall_rate_max_relative_error=wall_error, wall_rate_order=wall_order,
                                  axisymmetric_balance_W_m=global_residual, relative_global_balance=relative_balance,
                                  radial_wall_rates_W_m=[[z.real, z.imag] for z in solution.wall_heat_rates],
                                  formulation=formulation, panels=n, omega=omega, max_relative_phasor_error=error,
@@ -130,12 +139,13 @@ if __name__ == "__main__":
                                  unit_response_mode_leakage=leakage, join_power_residual_W_m=imbalance, sheet_balance_residual_W_m2=sheet_balance, passed=bool(passed)))
                 previous[omega] = (error, wall_error)
     passed = all(r["passed"] for r in runs)
-    print(json.dumps(dict(passed=passed, angular_cosine_mode=mode, inner_resistance_fractions=fractions,
+    print(json.dumps(dict(passed=passed, film_coefficients_W_m2_K=films, angular_cosine_mode=mode, inner_resistance_fractions=fractions,
                           sheet_conductivities_W_K=sheet_k.tolist(), wall_temperatures_K=[[z.real, z.imag] for z in walls],
                           sheet_generation_W_m2=[[z.real, z.imag] for z in generation], model="zero bulk capacity, positive areal storage at each ring",
                           columns=["sheet temperature", "incoming radial flux", "outgoing radial flux"], runs=runs,
                           sources=[provenance(p) for p in (__file__, harmonic_rings.__file__, layered_annulus.__file__)],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_storing_rings.py --mode {mode}" + (" --sheet-driven" if args.sheet_driven else "")
+                          + f" --film-walls {args.film_walls}"
                           + f" --inner-fractions {fractions[0]} {fractions[1]}"
                           + f" --sheet-conductivities {sheet_k[0]} {sheet_k[1]}"),
                      indent=2, allow_nan=False))
