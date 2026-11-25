@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "84a3aeaf1c0c591cef6837cb75172cef1d91dc75",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q tests/test_heat_1d.py tests/test_advection_diffusion_1d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Two layers with different k,C,L and distinct complex sources S(x)=a+b*x in local physical coordinates. At omega=2.3 subtract Tpart=S/(i*omega*C), propagate the homogeneous temperature/flux analytically and restore the particular solution. Apply R=0.21 m\u00b2 K/W and a 0.7-0.4i W/m\u00b2 contact heater. Compare all four material-side temperatures and fluxes for 4/8/16 cells per layer; check the interface flux jump. CPU complex128, SIPG degree 2.",
+  "suite": {
+    "tests": 130,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_stack_with_affine_volume_generation_and_contact_heater": {
+      "max_temperature_error_4_K": 1.4611871968608562e-07,
+      "max_flux_error_4_W_per_m2": 9.538098962442049e-07,
+      "max_temperature_error_8_K": 9.160598965358764e-09,
+      "max_flux_error_8_W_per_m2": 5.97911624861554e-08,
+      "max_temperature_error_16_K": 5.736292324929147e-10,
+      "max_flux_error_16_W_per_m2": 3.744177713097458e-09
+    }
+  }
+}
