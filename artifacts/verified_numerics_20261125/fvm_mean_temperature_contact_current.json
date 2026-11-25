@@ -1,0 +1,138 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cells": 16,
+      "mean_K": 0.0,
+      "current_W": -1e-05,
+      "mean_error_K": 3.2009966029959025e-22,
+      "cell_error_K": 1.847378857961629e-18,
+      "jump_error_K": 1.4916250201148229e-18,
+      "current_error_W": 3.708310243079327e-18,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "mean_K": 0.0,
+      "current_W": -1e-05,
+      "mean_error_K": 2.4623050792276174e-22,
+      "cell_error_K": 2.6052192358700516e-17,
+      "jump_error_K": 2.047109226924193e-17,
+      "current_error_W": 5.0962584304502234e-17,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "mean_K": 0.0,
+      "current_W": -1e-05,
+      "mean_error_K": 2.954766095073141e-22,
+      "cell_error_K": 3.882976907132636e-16,
+      "jump_error_K": 3.0344108302438055e-16,
+      "current_error_W": 7.594006125972649e-16,
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "mean_K": 0.0,
+      "current_W": 1e-05,
+      "mean_error_K": 3.2009966029959025e-22,
+      "cell_error_K": 1.847378857961629e-18,
+      "jump_error_K": 1.4916250201148229e-18,
+      "current_error_W": 3.708310243079327e-18,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "mean_K": 0.0,
+      "current_W": 1e-05,
+      "mean_error_K": 2.4623050792276174e-22,
+      "cell_error_K": 2.6052192358700516e-17,
+      "jump_error_K": 2.047109226924193e-17,
+      "current_error_W": 5.0962584304502234e-17,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "mean_K": 0.0,
+      "current_W": 1e-05,
+      "mean_error_K": 2.954766095073141e-22,
+      "cell_error_K": 3.882976907132636e-16,
+      "jump_error_K": 3.0344108302438055e-16,
+      "current_error_W": 7.594006125972649e-16,
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "mean_K": 305.0,
+      "current_W": -1e-05,
+      "mean_error_K": 0.0,
+      "cell_error_K": 5.684341886080802e-14,
+      "jump_error_K": 1.009902983451199e-14,
+      "current_error_W": 3.708310243079327e-18,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "mean_K": 305.0,
+      "current_W": -1e-05,
+      "mean_error_K": 0.0,
+      "cell_error_K": 5.684341886080802e-14,
+      "jump_error_K": 1.009902983451199e-14,
+      "current_error_W": 5.0962584304502234e-17,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "mean_K": 305.0,
+      "current_W": -1e-05,
+      "mean_error_K": 5.684341886080802e-14,
+      "cell_error_K": 5.684341886080802e-14,
+      "jump_error_K": 1.009902983451199e-14,
+      "current_error_W": 7.594006125972649e-16,
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "mean_K": 305.0,
+      "current_W": 1e-05,
+      "mean_error_K": 0.0,
+      "cell_error_K": 5.684341886080802e-14,
+      "jump_error_K": 1.009902983451199e-14,
+      "current_error_W": 3.708310243079327e-18,
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "mean_K": 305.0,
+      "current_W": 1e-05,
+      "mean_error_K": 0.0,
+      "cell_error_K": 5.684341886080802e-14,
+      "jump_error_K": 1.009902983451199e-14,
+      "current_error_W": 5.0962584304502234e-17,
+      "passed": true
+    },
+    {
+      "cells": 256,
+      "mean_K": 305.0,
+      "current_W": 1e-05,
+      "mean_error_K": 5.684341886080802e-14,
+      "cell_error_K": 5.684341886080802e-14,
+      "jump_error_K": 1.009902983451199e-14,
+      "current_error_W": 7.594006125972649e-16,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "462022b1f9a52992d284a00eef204ef1c969a4f6",
+      "file": "fvm_mean_temperature_contact_current.py",
+      "source_sha256": "fbb9cbd25873b0e627f30da48b9c8d00a2696fc5fdcdf52a3f12c0fd5cd72ed6"
+    },
+    {
+      "commit": "f66b25265b3bcdaf7bf813838af2a42d5e3a5b12",
+      "file": "rod.py",
+      "source_sha256": "abca4189fb1c1d59e935f22a76510a3755fbef070f6af4e4c233adfc5542964f"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorFVM/src python examples/fvm_mean_temperature_contact_current.py"
+}
