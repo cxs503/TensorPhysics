@@ -19,6 +19,14 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
         z = wave*radius
         t, q = np.zeros((2, 6), dtype=complex)
         active = slice(2*layer, 2*layer+2)
+        if wave == 0:
+            if mode:
+                t[active] = [radius**mode, radius**(-mode)]
+                q[active] = -reference.K[layer]*mode/radius*np.array([radius**mode, -radius**(-mode)])
+            else:
+                t[active] = [1., np.log(radius)]
+                q[active] = [0., -reference.K[layer]/radius]
+            return t, q
         t[active] = [iv(mode, z), kv(mode, z)]
         q[active] = -reference.K[layer]*wave*np.array([ivp(mode, z), kvp(mode, z)])
         return t, q
