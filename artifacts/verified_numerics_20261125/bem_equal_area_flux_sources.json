@@ -1,0 +1,597 @@
+{
+  "repository": "TensorBEM",
+  "commit": "856174ecc1a1012fbd1feb67281866972f9a6497",
+  "regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_layered_annulus.py tests/test_multiloop_annulus.py",
+    "passed": 78
+  },
+  "benchmarks": [
+    {
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m tensorbem.benchmarks.annulus_prescribed_flux --equal-area",
+      "passed": 20,
+      "total": 20,
+      "runs": [
+        {
+          "panels": 16,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "bore",
+          "temperature_error_K": 0.009852992759718737,
+          "interior_flux_error_W_m2": 0.1124560992581319,
+          "wall_flux_error_W_m2": 0.15479477815191434,
+          "contact_flux_error_W_m2": 0.039015410069608514,
+          "rate_error_W_m": 0.1931305571536015,
+          "condition_number": 29.62639044999685,
+          "passed": true
+        },
+        {
+          "panels": 32,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "bore",
+          "temperature_error_K": 0.0026515719139190708,
+          "interior_flux_error_W_m2": 0.016250365070754065,
+          "wall_flux_error_W_m2": 0.0399611096161383,
+          "contact_flux_error_W_m2": 0.010651571437352736,
+          "rate_error_W_m": 0.04550507470430176,
+          "condition_number": 57.73115654864829,
+          "passed": true
+        },
+        {
+          "panels": 64,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "bore",
+          "temperature_error_K": 0.0006854103993004235,
+          "interior_flux_error_W_m2": 0.004031815082036528,
+          "wall_flux_error_W_m2": 0.010180407391005453,
+          "contact_flux_error_W_m2": 0.0027727885039343647,
+          "rate_error_W_m": 0.011068017401747454,
+          "condition_number": 114.11077094417837,
+          "passed": true
+        },
+        {
+          "panels": 128,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "bore",
+          "temperature_error_K": 0.00017416618862275968,
+          "interior_flux_error_W_m2": 0.0010034288800386906,
+          "wall_flux_error_W_m2": 0.0025603352693019943,
+          "contact_flux_error_W_m2": 0.0007042070045750748,
+          "rate_error_W_m": 0.0027306630107606367,
+          "condition_number": 226.9489945555661,
+          "passed": true
+        },
+        {
+          "panels": 16,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "exterior",
+          "temperature_error_K": 0.039428103306030415,
+          "interior_flux_error_W_m2": 0.21066846460439054,
+          "wall_flux_error_W_m2": 0.1521025717528417,
+          "contact_flux_error_W_m2": 0.06260804782979701,
+          "rate_error_W_m": 0.08174457366115107,
+          "condition_number": 31.277325459865747,
+          "passed": true
+        },
+        {
+          "panels": 32,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "exterior",
+          "temperature_error_K": 0.010147308879185968,
+          "interior_flux_error_W_m2": 0.03500831935254284,
+          "wall_flux_error_W_m2": 0.03762714664558686,
+          "contact_flux_error_W_m2": 0.015456916635309348,
+          "rate_error_W_m": 0.02024819471943573,
+          "condition_number": 60.971192217861116,
+          "passed": true
+        },
+        {
+          "panels": 64,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "exterior",
+          "temperature_error_K": 0.002659889964034712,
+          "interior_flux_error_W_m2": 0.0085765127386644,
+          "wall_flux_error_W_m2": 0.00931944369672344,
+          "contact_flux_error_W_m2": 0.0038342383593246154,
+          "rate_error_W_m": 0.00505044841977309,
+          "condition_number": 120.5153119265469,
+          "passed": true
+        },
+        {
+          "panels": 128,
+          "formulation": "polygonal_equal_area",
+          "flux_wall": "exterior",
+          "temperature_error_K": 0.0006782988610630758,
+          "interior_flux_error_W_m2": 0.0021618751956688402,
+          "wall_flux_error_W_m2": 0.002309506932679284,
+          "contact_flux_error_W_m2": 0.0009510805574075576,
+          "rate_error_W_m": 0.0012618893471447734,
+          "condition_number": 239.68659715071098,
+          "passed": true
+        },
+        {
+          "panels": 16,
+          "formulation": "circular",
+          "flux_wall": "bore",
+          "temperature_error_K": 1.7208456881689926e-15,
+          "interior_flux_error_W_m2": 9.04746621261025e-15,
+          "wall_flux_error_W_m2": 1.0658141036401503e-14,
+          "contact_flux_error_W_m2": 6.217248937900877e-15,
+          "rate_error_W_m": 1.5987211554602254e-14,
+          "condition_number": 32.947047211778,
+          "passed": true
+        },
+        {
+          "panels": 32,
+          "formulation": "circular",
+          "flux_wall": "bore",
+          "temperature_error_K": 4.3021142204224816e-15,
+          "interior_flux_error_W_m2": 1.3330075727505561e-14,
+          "wall_flux_error_W_m2": 3.552713678800501e-14,
+          "contact_flux_error_W_m2": 1.1546319456101628e-14,
+          "rate_error_W_m": 5.5067062021407764e-14,
+          "condition_number": 65.84761134289793,
+          "passed": true
+        },
+        {
+          "panels": 64,
+          "formulation": "circular",
+          "flux_wall": "bore",
+          "temperature_error_K": 9.325873406851315e-15,
+          "interior_flux_error_W_m2": 2.8567917499490804e-14,
+          "wall_flux_error_W_m2": 5.5067062021407764e-14,
+          "contact_flux_error_W_m2": 1.5987211554602254e-14,
+          "rate_error_W_m": 8.171241461241152e-14,
+          "condition_number": 131.66086743989047,
+          "passed": true
+        },
+        {
+          "panels": 128,
+          "formulation": "circular",
+          "flux_wall": "bore",
+          "temperature_error_K": 6.827871601444713e-15,
+          "interior_flux_error_W_m2": 4.928702543232445e-14,
+          "wall_flux_error_W_m2": 1.5720758028692217e-13,
+          "contact_flux_error_W_m2": 4.6629367034256575e-14,
+          "rate_error_W_m": 1.1191048088221578e-13,
+          "condition_number": 263.288125435335,
+          "passed": true
+        },
+        {
+          "panels": 16,
+          "formulation": "circular",
+          "flux_wall": "exterior",
+          "temperature_error_K": 1.7763568394002505e-15,
+          "interior_flux_error_W_m2": 4.119810118670014e-15,
+          "wall_flux_error_W_m2": 1.0658141036401503e-14,
+          "contact_flux_error_W_m2": 4.440892098500626e-15,
+          "rate_error_W_m": 8.881784197001252e-15,
+          "condition_number": 34.78500846229004,
+          "passed": true
+        },
+        {
+          "panels": 32,
+          "formulation": "circular",
+          "flux_wall": "exterior",
+          "temperature_error_K": 5.551115123125783e-15,
+          "interior_flux_error_W_m2": 1.632896157031126e-14,
+          "wall_flux_error_W_m2": 4.618527782440651e-14,
+          "contact_flux_error_W_m2": 1.509903313490213e-14,
+          "rate_error_W_m": 5.1514348342607263e-14,
+          "condition_number": 69.543311355602,
+          "passed": true
+        },
+        {
+          "panels": 64,
+          "formulation": "circular",
+          "flux_wall": "exterior",
+          "temperature_error_K": 4.440892098500626e-15,
+          "interior_flux_error_W_m2": 1.4366560488860628e-14,
+          "wall_flux_error_W_m2": 5.861977570020827e-14,
+          "contact_flux_error_W_m2": 1.5987211554602254e-14,
+          "rate_error_W_m": 3.197442310920451e-14,
+          "condition_number": 139.05035206532466,
+          "passed": true
+        },
+        {
+          "panels": 128,
+          "formulation": "circular",
+          "flux_wall": "exterior",
+          "temperature_error_K": 5.995204332975845e-15,
+          "interior_flux_error_W_m2": 1.5688708685855528e-14,
+          "wall_flux_error_W_m2": 2.1316282072803006e-13,
+          "contact_flux_error_W_m2": 2.042810365310288e-14,
+          "rate_error_W_m": 1.1546319456101628e-13,
+          "condition_number": 278.0652083514384,
+          "passed": true
+        },
+        {
+          "panels": 16,
+          "formulation": "circular",
+          "flux_wall": "both",
+          "temperature_error_K": 5.440092820663267e-15,
+          "interior_flux_error_W_m2": 8.95090418262362e-15,
+          "wall_flux_error_W_m2": 8.881784197001252e-15,
+          "contact_flux_error_W_m2": 9.325873406851315e-15,
+          "rate_error_W_m": 7.105427357601002e-15,
+          "condition_number": 128.08958740968214,
+          "passed": true
+        },
+        {
+          "panels": 32,
+          "formulation": "circular",
+          "flux_wall": "both",
+          "temperature_error_K": 9.048317650695026e-15,
+          "interior_flux_error_W_m2": 1.9959327572255808e-14,
+          "wall_flux_error_W_m2": 2.1316282072803006e-14,
+          "contact_flux_error_W_m2": 1.4654943925052066e-14,
+          "rate_error_W_m": 5.329070518200751e-15,
+          "condition_number": 362.08713135530434,
+          "passed": true
+        },
+        {
+          "panels": 64,
+          "formulation": "circular",
+          "flux_wall": "both",
+          "temperature_error_K": 8.193445921733655e-14,
+          "interior_flux_error_W_m2": 3.257326998510068e-14,
+          "wall_flux_error_W_m2": 5.5067062021407764e-14,
+          "contact_flux_error_W_m2": 2.7533531010703882e-14,
+          "rate_error_W_m": 3.907985046680551e-14,
+          "condition_number": 1023.777884940738,
+          "passed": true
+        },
+        {
+          "panels": 128,
+          "formulation": "circular",
+          "flux_wall": "both",
+          "temperature_error_K": 6.261657858885883e-14,
+          "interior_flux_error_W_m2": 8.424127671971871e-14,
+          "wall_flux_error_W_m2": 1.2789769243681803e-13,
+          "contact_flux_error_W_m2": 4.707345624410664e-14,
+          "rate_error_W_m": 1.0658141036401503e-14,
+          "condition_number": 2895.1828252392515,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m tensorbem.benchmarks.annulus_sheet_source --equal-area",
+      "passed": 23,
+      "total": 24,
+      "runs": [
+        {
+          "sheet_error_K": 0.0013962280535961824,
+          "rate_error_W_m": 0.08431769523461341,
+          "condition": 16.443941793461647,
+          "case": "radial",
+          "panels": 16,
+          "formulation": "polygonal_equal_area",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.0005522676993701126,
+          "rate_error_W_m": 0.019843550721153846,
+          "condition": 31.52673919313476,
+          "case": "radial",
+          "panels": 32,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 1.338094948403433,
+            "rate_error_W_m": 2.0871652338706017
+          },
+          "passed": false
+        },
+        {
+          "sheet_error_K": 0.0001635683158975887,
+          "rate_error_W_m": 0.004819073711784583,
+          "condition": 61.749522919681375,
+          "case": "radial",
+          "panels": 64,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 1.7554744333806036,
+            "rate_error_W_m": 2.041842424987773
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 4.409875130306773e-05,
+          "rate_error_W_m": 0.0011877586826347653,
+          "condition": 122.22454120124016,
+          "case": "radial",
+          "panels": 128,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 1.8910836069725714,
+            "rate_error_W_m": 2.02051411544808
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.007765732676504156,
+          "inner_flux_error_W_m2": 0.02628410647721524,
+          "outer_flux_error_W_m2": 0.02628410647721502,
+          "interior_error_K": 0.011230554343246268,
+          "interior_flux_error_W_m2": 0.07611750087313174,
+          "condition": 19.411890544702086,
+          "case": "angular",
+          "panels": 16,
+          "formulation": "polygonal_equal_area",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.001690744080798945,
+          "inner_flux_error_W_m2": 0.005462758557560621,
+          "outer_flux_error_W_m2": 0.005462758557560843,
+          "interior_error_K": 0.0021432970478754143,
+          "interior_flux_error_W_m2": 0.011773578890770686,
+          "condition": 38.67569858719247,
+          "case": "angular",
+          "panels": 32,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 2.1994637425515933,
+            "inner_flux_error_W_m2": 2.2664891261517113,
+            "outer_flux_error_W_m2": 2.26648912615164,
+            "interior_error_K": 2.3895254236173713,
+            "interior_flux_error_W_m2": 2.6926752627557606
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.00039944018876436616,
+          "inner_flux_error_W_m2": 0.0011733012150374478,
+          "outer_flux_error_W_m2": 0.0011733012150374478,
+          "interior_error_K": 0.0005154633748700732,
+          "interior_flux_error_W_m2": 0.0026268776879641575,
+          "condition": 78.14884380186547,
+          "case": "angular",
+          "panels": 64,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 2.0816069043033725,
+            "inner_flux_error_W_m2": 2.2190562244388703,
+            "outer_flux_error_W_m2": 2.219056224438929,
+            "interior_error_K": 2.0558899838028357,
+            "interior_flux_error_W_m2": 2.164131999632685
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 9.698528497792402e-05,
+          "inner_flux_error_W_m2": 0.000270039152881818,
+          "outer_flux_error_W_m2": 0.000270039152881818,
+          "interior_error_K": 0.00012786900231809284,
+          "interior_flux_error_W_m2": 0.0006407226852064851,
+          "condition": 157.81948366399828,
+          "case": "angular",
+          "panels": 128,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 2.0421417164017077,
+            "inner_flux_error_W_m2": 2.11933293251844,
+            "outer_flux_error_W_m2": 2.11933293251844,
+            "interior_error_K": 2.011203351573342,
+            "interior_flux_error_W_m2": 2.0355770515397644
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.009780967470292445,
+          "inner_flux_error_W_m2": 0.031291425381027915,
+          "outer_flux_error_W_m2": 0.03129142538102769,
+          "interior_error_K": 0.008063160013200399,
+          "interior_flux_error_W_m2": 0.0729789823477659,
+          "condition": 19.411890544702086,
+          "case": "angular_bulk",
+          "panels": 16,
+          "formulation": "polygonal_equal_area",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.002292353207397513,
+          "inner_flux_error_W_m2": 0.006653846711404121,
+          "outer_flux_error_W_m2": 0.006653846711404565,
+          "interior_error_K": 0.00193657717044049,
+          "interior_flux_error_W_m2": 0.011042648786379693,
+          "condition": 38.67569858719247,
+          "case": "angular_bulk",
+          "panels": 32,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 2.0931478216445654,
+            "inner_flux_error_W_m2": 2.233506841945735,
+            "outer_flux_error_W_m2": 2.2335068419456285,
+            "interior_error_K": 2.0578363603384426,
+            "interior_flux_error_W_m2": 2.7243947623792013
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.0005613407814764049,
+          "inner_flux_error_W_m2": 0.001467191332087614,
+          "outer_flux_error_W_m2": 0.001467191332087392,
+          "interior_error_K": 0.00047560490145137635,
+          "interior_flux_error_W_m2": 0.0024518735316542417,
+          "condition": 78.14884380186547,
+          "case": "angular_bulk",
+          "panels": 64,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 2.0298805724994082,
+            "inner_flux_error_W_m2": 2.181131609507783,
+            "outer_flux_error_W_m2": 2.1811316095080975,
+            "interior_error_K": 2.0256735040149025,
+            "interior_flux_error_W_m2": 2.1711297996523826
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 0.00014768766327999394,
+          "inner_flux_error_W_m2": 0.00034175795001178955,
+          "outer_flux_error_W_m2": 0.00034175795001178955,
+          "interior_error_K": 0.00011715832132175308,
+          "interior_flux_error_W_m2": 0.0005972969367422226,
+          "condition": 157.81948366399828,
+          "case": "angular_bulk",
+          "panels": 128,
+          "formulation": "polygonal_equal_area",
+          "orders": {
+            "sheet_error_K": 1.926327555868864,
+            "inner_flux_error_W_m2": 2.102010217409966,
+            "outer_flux_error_W_m2": 2.1020102174097475,
+            "interior_error_K": 2.0213041560456144,
+            "interior_flux_error_W_m2": 2.037364338320106
+          },
+          "passed": true
+        },
+        {
+          "sheet_error_K": 1.1102230246251565e-14,
+          "rate_error_W_m": 6.394884621840902e-14,
+          "condition": 17.742988007010425,
+          "case": "radial",
+          "panels": 16,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 5.329070518200751e-15,
+          "rate_error_W_m": 5.861977570020827e-14,
+          "condition": 35.37586858511827,
+          "case": "radial",
+          "panels": 32,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 6.661338147750939e-15,
+          "rate_error_W_m": 1.2079226507921703e-13,
+          "condition": 70.64460922838585,
+          "case": "radial",
+          "panels": 64,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 1.509903313490213e-14,
+          "rate_error_W_m": 2.0694557179012918e-13,
+          "condition": 141.18407585094164,
+          "case": "radial",
+          "panels": 128,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 1.7763568394002505e-15,
+          "inner_flux_error_W_m2": 1.6653345369377348e-15,
+          "outer_flux_error_W_m2": 1.7763568394002505e-15,
+          "interior_error_K": 6.661338147750939e-16,
+          "interior_flux_error_W_m2": 1.1657341758564144e-14,
+          "condition": 20.418278408667653,
+          "case": "angular",
+          "panels": 16,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 8.881784197001252e-16,
+          "inner_flux_error_W_m2": 8.659739592076221e-15,
+          "outer_flux_error_W_m2": 8.881784197001252e-15,
+          "interior_error_K": 8.881784197001252e-16,
+          "interior_flux_error_W_m2": 1.554312234475219e-14,
+          "condition": 41.332555281450134,
+          "case": "angular",
+          "panels": 32,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 2.6645352591003757e-15,
+          "inner_flux_error_W_m2": 5.10702591327572e-15,
+          "outer_flux_error_W_m2": 5.329070518200751e-15,
+          "interior_error_K": 1.3322676295501878e-15,
+          "interior_flux_error_W_m2": 1.3322676295501878e-14,
+          "condition": 84.8354895966508,
+          "case": "angular",
+          "panels": 64,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 2.220446049250313e-15,
+          "inner_flux_error_W_m2": 1.354472090042691e-14,
+          "outer_flux_error_W_m2": 1.3766765505351941e-14,
+          "interior_error_K": 1.3322676295501878e-15,
+          "interior_flux_error_W_m2": 1.3322676295501878e-14,
+          "condition": 174.7008638337798,
+          "case": "angular",
+          "panels": 128,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 1.9984014443252818e-15,
+          "inner_flux_error_W_m2": 2.9976021664879227e-15,
+          "outer_flux_error_W_m2": 3.1086244689504383e-15,
+          "interior_error_K": 1.3322676295501878e-15,
+          "interior_flux_error_W_m2": 1.6431300764452317e-14,
+          "condition": 20.418278408667653,
+          "case": "angular_bulk",
+          "panels": 16,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 1.1102230246251565e-15,
+          "inner_flux_error_W_m2": 1.0769163338864018e-14,
+          "outer_flux_error_W_m2": 1.0658141036401503e-14,
+          "interior_error_K": 8.881784197001252e-16,
+          "interior_flux_error_W_m2": 1.5765166949677223e-14,
+          "condition": 41.332555281450134,
+          "case": "angular_bulk",
+          "panels": 32,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 3.1086244689504383e-15,
+          "inner_flux_error_W_m2": 2.886579864025407e-15,
+          "outer_flux_error_W_m2": 3.1086244689504383e-15,
+          "interior_error_K": 2.220446049250313e-15,
+          "interior_flux_error_W_m2": 2.3314683517128287e-14,
+          "condition": 84.8354895966508,
+          "case": "angular_bulk",
+          "panels": 64,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        },
+        {
+          "sheet_error_K": 2.886579864025407e-15,
+          "inner_flux_error_W_m2": 1.3766765505351941e-14,
+          "outer_flux_error_W_m2": 1.3766765505351941e-14,
+          "interior_error_K": 1.5543122344752192e-15,
+          "interior_flux_error_W_m2": 1.509903313490213e-14,
+          "condition": 174.7008638337798,
+          "case": "angular_bulk",
+          "panels": 128,
+          "formulation": "circular",
+          "orders": {},
+          "passed": true
+        }
+      ]
+    }
+  ]
+}
