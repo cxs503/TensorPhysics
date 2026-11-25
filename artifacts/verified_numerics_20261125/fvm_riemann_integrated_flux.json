@@ -1,0 +1,42 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "0fa800acb7d8be15c98efe00419725c0ab610463",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_shallow_water_riemann.py tests/test_shallow_water_galilean.py tests/test_shallow_water_dam_break.py tests/test_shallow_water_dam_break_robustness.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Self-similar analytic face integrals t*F(U)-(x-x0)*(U-U0) checked against shock arrival time and exact cell averages for four wave families. Numerical momentum mismatch is normalized by initial volume times reference gravity-wave speed.",
+  "suite": {
+    "tests": 94,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_off_center_dam_initialization_and_stationary_shock": {
+      "stationary_shock_position_error": 0.005156121052619755,
+      "relative_volume_budget_error": 8.91353101981154e-16,
+      "relative_momentum_budget_error": 3.8984540205066606e-16
+    },
+    "test_integrated_flux_across_shock_agrees_with_arrival_time": {
+      "maximum_integrated_flux_error": 8.881784197001252e-16
+    },
+    "test_integrated_flux_balances_cells_cut_by_waves[rarefaction-shock]": {
+      "max_cell_mass_residual": 2.3418766925686896e-16,
+      "max_cell_momentum_residual": 7.216449660063518e-16,
+      "normalized_numerical_momentum_residual": 2.599424166640167e-16
+    },
+    "test_integrated_flux_balances_cells_cut_by_waves[rarefaction-rarefaction]": {
+      "max_cell_mass_residual": 1.6653345369377348e-16,
+      "max_cell_momentum_residual": 4.718447854656915e-16,
+      "normalized_numerical_momentum_residual": 1.5754085858425253e-17
+    },
+    "test_integrated_flux_balances_cells_cut_by_waves[shock-shock]": {
+      "max_cell_mass_residual": 5.551115123125783e-17,
+      "max_cell_momentum_residual": 1.2351231148954867e-15,
+      "normalized_numerical_momentum_residual": 7.237033191214101e-16
+    },
+    "test_integrated_flux_balances_cells_cut_by_waves[shock-rarefaction]": {
+      "max_cell_mass_residual": 4.5102810375396984e-17,
+      "max_cell_momentum_residual": 3.0531133177191805e-16,
+      "normalized_numerical_momentum_residual": 2.5206537373480403e-15
+    }
+  }
+}
