@@ -1,0 +1,146 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "intervals": 16,
+      "cooled_face": "upper",
+      "generated_W": 3.75,
+      "cooled_face_outward_W": 3.7476067086000238,
+      "pinned_ends_outward_W": 0.002393291399869213,
+      "balance_error_W": 1.0702549957386509e-13,
+      "field_error_K": 0.0004746977711533873,
+      "cooled_flux_error_W_m2": 0.0037780656304047255,
+      "surface_error_K": 0.0010794473229793766,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "intervals": 32,
+      "cooled_face": "upper",
+      "generated_W": 3.875,
+      "cooled_face_outward_W": 3.8743721669366042,
+      "pinned_ends_outward_W": 0.000627833063572325,
+      "balance_error_W": 1.7656980478425455e-13,
+      "field_error_K": 0.00012381136519934444,
+      "cooled_flux_error_W_m2": 0.0009739536954556094,
+      "surface_error_K": 0.0002782724844223594,
+      "orders": {
+        "field_error_K": 1.938865523837244,
+        "cooled_flux_error_W_m2": 1.9557226744186438,
+        "surface_error_K": 1.9557226743939133
+      },
+      "passed": true
+    },
+    {
+      "intervals": 64,
+      "cooled_face": "upper",
+      "generated_W": 3.9375,
+      "cooled_face_outward_W": 3.937339239835951,
+      "pinned_ends_outward_W": 0.00016076016416946003,
+      "balance_error_W": 1.202593526063861e-13,
+      "field_error_K": 3.159227298965561e-05,
+      "cooled_flux_error_W_m2": 0.00024734283121397027,
+      "surface_error_K": 7.066938036359716e-05,
+      "orders": {
+        "field_error_K": 1.970500107622639,
+        "cooled_flux_error_W_m2": 1.9773410979016535,
+        "surface_error_K": 1.9773410975932861
+      },
+      "passed": true
+    },
+    {
+      "intervals": 128,
+      "cooled_face": "upper",
+      "generated_W": 3.96875,
+      "cooled_face_outward_W": 3.968709327110514,
+      "pinned_ends_outward_W": 4.06728899065456e-05,
+      "balance_error_W": 4.2037484197831113e-13,
+      "field_error_K": 7.977817688242794e-06,
+      "cooled_flux_error_W_m2": 6.232904022684949e-05,
+      "surface_error_K": 1.780829722974886e-05,
+      "orders": {
+        "field_error_K": 1.9855056793652948,
+        "cooled_flux_error_W_m2": 1.9885356834815353,
+        "surface_error_K": 1.9885356820348912
+      },
+      "passed": true
+    },
+    {
+      "intervals": 16,
+      "cooled_face": "lower",
+      "generated_W": 3.75,
+      "cooled_face_outward_W": 3.7476067086000238,
+      "pinned_ends_outward_W": 0.002393291399869213,
+      "balance_error_W": 1.0702549957386509e-13,
+      "field_error_K": 0.0004746977711533873,
+      "cooled_flux_error_W_m2": 0.0037780656304047255,
+      "surface_error_K": 0.0010794473229793766,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "intervals": 32,
+      "cooled_face": "lower",
+      "generated_W": 3.875,
+      "cooled_face_outward_W": 3.8743721669366042,
+      "pinned_ends_outward_W": 0.000627833063572325,
+      "balance_error_W": 1.7656980478425455e-13,
+      "field_error_K": 0.00012381136519934444,
+      "cooled_flux_error_W_m2": 0.0009739536954556094,
+      "surface_error_K": 0.0002782724844223594,
+      "orders": {
+        "field_error_K": 1.938865523837244,
+        "cooled_flux_error_W_m2": 1.9557226744186438,
+        "surface_error_K": 1.9557226743939133
+      },
+      "passed": true
+    },
+    {
+      "intervals": 64,
+      "cooled_face": "lower",
+      "generated_W": 3.9375,
+      "cooled_face_outward_W": 3.937339239835951,
+      "pinned_ends_outward_W": 0.00016076016416946003,
+      "balance_error_W": 1.202593526063861e-13,
+      "field_error_K": 3.159227298965561e-05,
+      "cooled_flux_error_W_m2": 0.00024734283121397027,
+      "surface_error_K": 7.066938036359716e-05,
+      "orders": {
+        "field_error_K": 1.970500107622639,
+        "cooled_flux_error_W_m2": 1.9773410979016535,
+        "surface_error_K": 1.9773410975932861
+      },
+      "passed": true
+    },
+    {
+      "intervals": 128,
+      "cooled_face": "lower",
+      "generated_W": 3.96875,
+      "cooled_face_outward_W": 3.968709327110514,
+      "pinned_ends_outward_W": 4.06728899065456e-05,
+      "balance_error_W": 4.2037484197831113e-13,
+      "field_error_K": 7.977817688242794e-06,
+      "cooled_flux_error_W_m2": 6.232904022684949e-05,
+      "surface_error_K": 1.780829722974886e-05,
+      "orders": {
+        "field_error_K": 1.9855056793652948,
+        "cooled_flux_error_W_m2": 1.9885356834815353,
+        "surface_error_K": 1.9885356820348912
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "a10dfa1913ddf6de52f3c5724f196317d7d5b22e",
+      "file": "dem_lattice_one_sided_cooling.py",
+      "source_sha256": "d222414702bd33f433aa98f1a28b416c123e91eddaeb9bb308ba9916a3561c0f"
+    },
+    {
+      "commit": "96553ce7ba6692a250a1610d43b378eadf02ef65",
+      "file": "contact_chain.py",
+      "source_sha256": "79482a95bfd79095b75c7f86084cca81807b4a7f352d84633c96404a17992ede"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_lattice_one_sided_cooling.py"
+}
