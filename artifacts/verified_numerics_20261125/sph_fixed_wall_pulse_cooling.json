@@ -1,0 +1,63 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "9ad5a4751ebbd9fe222f16ed265d136a3fbe9d4f",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit homogeneous slab, left wall held at 1 K above baseline until 0.023 s then reset. Superpose two Fourier-series Dirichlet step solutions (40 modes), integrate outward heat at both walls from 0.04 to 0.08 s and stored heat at 0.08 s. Common 192-step grid, 12/24/48 particle columns, off-grid shutoff event.",
+  "suite": {
+    "tests": 142,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_fixed_temperature_pulse_cooling_against_fourier_series[theta]": {
+      "max_cooling_wall_heat_error_12_J_per_m2": 0.0014151040821156965,
+      "residual_stored_heat_error_12_J_per_m2": 0.00025543543247328465,
+      "cooling_balance_error_12_J_per_m2": 1.1709383462843448e-16,
+      "max_cooling_wall_heat_error_24_J_per_m2": 0.00031041767739635115,
+      "residual_stored_heat_error_24_J_per_m2": 5.938780429674134e-05,
+      "cooling_balance_error_24_J_per_m2": 6.401129626354418e-16,
+      "max_cooling_wall_heat_error_48_J_per_m2": 7.526675134681901e-05,
+      "residual_stored_heat_error_48_J_per_m2": 1.4077121484365462e-05,
+      "cooling_balance_error_48_J_per_m2": 6.036837696399289e-16
+    },
+    "test_fixed_temperature_pulse_cooling_against_fourier_series[sdirk2]": {
+      "max_cooling_wall_heat_error_12_J_per_m2": 0.0014146640078718728,
+      "residual_stored_heat_error_12_J_per_m2": 0.00025610425120991404,
+      "cooling_balance_error_12_J_per_m2": 5.143455106271233e-16,
+      "max_cooling_wall_heat_error_24_J_per_m2": 0.0003099916828659226,
+      "residual_stored_heat_error_24_J_per_m2": 6.0055488363762455e-05,
+      "cooling_balance_error_24_J_per_m2": 1.994931997373328e-15,
+      "max_cooling_wall_heat_error_48_J_per_m2": 7.484914383565702e-05,
+      "residual_stored_heat_error_48_J_per_m2": 1.4744554347294325e-05,
+      "cooling_balance_error_48_J_per_m2": 6.288372600415926e-16
+    }
+  },
+  "preliminary_joint_refinement": {
+    "description": "Same setup with step count equal to particle column count. Rannacher-CN wall heat error was nonmonotonic. This run does not establish uniform joint convergence.",
+    "measurements": {
+      "test_fixed_temperature_pulse_cooling_against_fourier_series[theta]": {
+        "max_cooling_wall_heat_error_12_J_per_m2": 0.0010774023067323876,
+        "residual_stored_heat_error_12_J_per_m2": 4.144220356215589e-05,
+        "cooling_balance_error_12_J_per_m2": 3.0357660829594124e-18,
+        "max_cooling_wall_heat_error_24_J_per_m2": 2.7112386532305872e-05,
+        "residual_stored_heat_error_24_J_per_m2": 2.0020419726901606e-06,
+        "cooling_balance_error_24_J_per_m2": 1.2576745200831851e-17,
+        "max_cooling_wall_heat_error_48_J_per_m2": 6.335089569903599e-05,
+        "residual_stored_heat_error_48_J_per_m2": 4.955266624875887e-07,
+        "cooling_balance_error_48_J_per_m2": 4.787836793695988e-16
+      },
+      "test_fixed_temperature_pulse_cooling_against_fourier_series[sdirk2]": {
+        "max_cooling_wall_heat_error_12_J_per_m2": 0.001142609773903732,
+        "residual_stored_heat_error_12_J_per_m2": 0.00023827049773635783,
+        "cooling_balance_error_12_J_per_m2": 9.540979117872439e-18,
+        "max_cooling_wall_heat_error_24_J_per_m2": 0.0002481833610663911,
+        "residual_stored_heat_error_24_J_per_m2": 5.6272061374436355e-05,
+        "cooling_balance_error_24_J_per_m2": 2.40692882291782e-16,
+        "max_cooling_wall_heat_error_48_J_per_m2": 6.134555683329213e-05,
+        "residual_stored_heat_error_48_J_per_m2": 1.3892730825977584e-05,
+        "cooling_balance_error_48_J_per_m2": 7.7021722333370235e-16
+      }
+    }
+  }
+}
