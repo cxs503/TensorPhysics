@@ -1,4 +1,4 @@
-"""Verify FEM and DG material-side heat fluxes for a heated slab with storing end walls."""
+"""Verify FEM, DG and FVM material-side heat fluxes for a heated slab with storing end walls."""
 import json
 from dataclasses import replace
 
@@ -10,6 +10,7 @@ from periodic_contact_heat import reference
 from two_layer_conduction import slab_fem_model
 from tensordg import heat_1d as dg
 from tensorfem import thermal
+from tensorfvm.cht import rod
 
 
 def measure(n, omega):
@@ -18,7 +19,7 @@ def measure(n, omega):
     film = np.array([1.8, 3.5])
     wall_capacity = np.array([.37, .81])
     base, amplitude = -.25+.4j, .8-.3j
-    nodes, _, contact, inward = reference(2*n, resistance, omega)
+    nodes, mean, contact, inward = reference(2*n, resistance, omega)
     exact = base + amplitude*nodes[[0, n, n+1, -1]]
     inward = amplitude*inward
     contact *= amplitude
@@ -49,9 +50,24 @@ def measure(n, omega):
     surfaces = state.reshape(2, -1).mean(0)[[0, n, n+1, -1]].numpy()
     solutions.append(("FEM_Q4", surfaces, q, -power[n-1, [1, 2]].sum().item()))
 
+    dx = np.full(2*n, .5/n)
+    contacts = np.zeros(2*n-1)
+    contacts[n-1] = resistance
+    cell, faces, from_left, to_right, (hot, cold) = rod.solve_harmonic_stepped_rod(
+        dx, 1., np.repeat(k, n), np.repeat(c, n), ambient, omega,
+        end_types=("robin", "robin"), end_film_coefficient=film, end_areal_heat_capacity=wall_capacity,
+        contact_resistance=contacts, source=np.repeat(source, n), flux_order=2, return_traces=True)
+    surfaces = np.array([faces[0], hot[n-1], cold[n-1], faces[-1]])
+    finite_volume = dict(
+        cell_mean_error_K=float(max(abs(cell-(base+amplitude*mean)))),
+        cell_balance_residual_W_m2=float(max(abs(from_left-to_right
+            + dx*(np.repeat(source, n)-1j*omega*np.repeat(c, n)*cell)))),
+        interface_flux_mismatch_W_m2=float(abs(to_right[n-1]-from_left[n])))
+    solutions.append(("FVM", surfaces, np.array([from_left[0], -to_right[-1]]), to_right[n-1]))
+
     for solver, t, material, cut in solutions:
         end_t = t[[0, -1]]
-        yield dict(solver=solver, cells_per_layer=n, omega_rad_s=omega,
+        yield dict(**(finite_volume if solver == "FVM" else {}), solver=solver, cells_per_layer=n, omega_rad_s=omega,
                    trace_error_K=float(max(abs(t-exact))),
                    end_flux_error_W_m2=float(max(abs(material-inward))),
                    interface_flux_error_W_m2=float(abs(cut-contact)),
@@ -68,12 +84,16 @@ if __name__ == "__main__":
                 solver = row["solver"]
                 errors = np.array([row[key] for key in ("trace_error_K", "end_flux_error_W_m2",
                                                         "interface_flux_error_W_m2")])
-                row["passed"] = bool(max(row["contact_drop_residual_K"], row["wall_balance_residual_W_m2"]) < 1e-10
+                residuals = [row["contact_drop_residual_K"], row["wall_balance_residual_W_m2"]]
+                if solver == "FVM":
+                    errors = np.append(errors, row["cell_mean_error_K"])
+                    residuals.extend([row["cell_balance_residual_W_m2"], row["interface_flux_mismatch_W_m2"]])
+                row["passed"] = bool(max(residuals) < 1e-10
                                      and (solver not in previous or np.all(errors < previous[solver]/3))
                                      and (n != 32 or max(errors) < 5e-4))
                 previous[solver] = errors
                 runs.append(row)
     print(json.dumps(dict(runs=runs, sources=[provenance(path) for path in (
         __file__, reference.__code__.co_filename, slab_fem_model.__code__.co_filename,
-        dg.__file__, thermal.__file__)]), indent=2, allow_nan=False))
+        dg.__file__, thermal.__file__, rod.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in runs) else 1)
