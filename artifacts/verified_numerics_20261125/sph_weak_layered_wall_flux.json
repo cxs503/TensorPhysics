@@ -1,0 +1,258 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 4.859383176161433e-28,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 2.6398883079536972e-12,
+      "max_temperature_error_K": 1.0286746204081994e-26,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 2.6398883079536972e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 2.6398883079536972e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 4.67005655890839e-28,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 2.5726087926614127e-12,
+      "max_temperature_error_K": 1.0274124429598458e-26,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 2.5726087926614127e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "torch",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 2.5726087926614127e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 1.7030821197749901e-13,
+      "max_temperature_error_K": 4.733165431326071e-28,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 2.573496971081113e-12,
+      "max_temperature_error_K": 1.0242569993389617e-26,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 1.7030821197749901e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 2.573496971081113e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 1.7030821197749901e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 1,
+      "max_flux_relative_error": 2.573496971081113e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 4.859383176161433e-28,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 0.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 2.5728308372663378e-12,
+      "max_temperature_error_K": 1.0261502655114922e-26,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": 5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 2.5728308372663378e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 1.6497914145929826e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "west_K": 305.0,
+      "drop_K": -5.684341886080802e-14,
+      "backend": "banded",
+      "sampled_rows": 5,
+      "max_flux_relative_error": 2.5728308372663378e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "6f01e94d189da01412ae38f1571a54b7560976a2",
+      "file": "sph_weak_layered_wall_flux.py",
+      "source_sha256": "6faee5759bacb04bbab74d926d50a771e40a625a544210820ac287fa43f8b414"
+    },
+    {
+      "commit": "c8026063a9ac7f023697de65a1930b354f1b42c8",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "a491302ee027c79fa76cf640fe3fe7d0db91596f7fdc2e34cea39ae454f5cb66"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorSPH/src python examples/sph_weak_layered_wall_flux.py"
+}
