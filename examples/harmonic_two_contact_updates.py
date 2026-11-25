@@ -1,6 +1,7 @@
 """Verify coupled finite resistance changes in a three-material harmonic rod."""
 import argparse
 from dataclasses import replace
+from functools import lru_cache
 import json
 
 import numpy as np
@@ -82,6 +83,42 @@ def fem_response(n, omega, resistance, probe_contacts=False):
     return np.column_stack(ends), np.column_stack(drops), diagnostics
 
 
+@lru_cache(maxsize=1)
+def dg_layers(n, omega):
+    from tensordg import heat_1d
+
+    # Convert each layer's inward flux-density map to total power before
+    # joining the interfaces, whose resistances are specified in K/W.
+    return [area*heat_1d.harmonic_heat_wall_admittance_1d(
+        omega, ncells=n, degree=2, thickness=length, conductivity=k, capacity=c)
+        for area, length, k, c in zip(AREA, LENGTH, K, C)]
+
+
+def dg_response(n, omega, resistance, probe_contacts=False):
+    from tensordg import heat_1d
+
+    layers = dg_layers(n, omega)
+    ends, drops = [], []
+    continuity = contact_error = 0.
+    drive_count = 4 if probe_contacts else 2
+    for drive in np.eye(4)[:drive_count]:
+        opts = dict(interface_left_heat_sources=drive[2:], interface_heat_sources=-drive[2:])
+        y, offset = heat_1d.compose_heat_wall_admittances_1d(layers, resistance, return_flux_offset=True, **opts)
+        wall, _ = heat_1d.solve_heat_wall_admittance_1d(
+            y, ("neumann", "neumann"), drive[:2], flux_offset=offset,
+            angular_frequency=omega, wall_areal_heat_capacity=WALL_C*AREA[[0, -1]])
+        _, traces, flux = heat_1d.compose_heat_wall_admittances_1d(layers, resistance, wall_temperatures=wall, **opts)
+        jump = (traces[:-1, 1]-traces[1:, 0]).numpy()
+        left, right = -flux[:-1, 1].numpy(), flux[1:, 0].numpy()
+        continuity = max(continuity, abs(left-right).max())
+        contact_error = max(contact_error, abs(left+drive[2:]-jump/resistance).max(),
+                            abs(right+drive[2:]-jump/resistance).max())
+        ends.append(wall.numpy())
+        drops.append(jump)
+    return np.column_stack(ends), np.column_stack(drops), dict(
+        element_power_discontinuity_W=float(continuity), element_contact_law_residual_W=float(contact_error))
+
+
 def reference(omega, resistance):
     # Transfer temperature and rightward power through each layer and jump.
     transfer = np.eye(2)
@@ -96,8 +133,8 @@ def reference(omega, resistance):
     return np.vstack((initial[0], (transfer @ initial)[0])), np.asarray(contact_rows) @ initial
 
 
-def cases(n, omega, fem=False):
-    solve = fem_response if fem else response
+def cases(n, omega, fem=False, dg=False):
+    solve = dg_response if dg else fem_response if fem else response
     ends, drops, *baseline = solve(n, omega, BASE, probe_contacts=True)
     q0 = drops[:, :2]/BASE[:, None]
     # Applying a series temperature jump at a contact sends power through
@@ -109,7 +146,7 @@ def cases(n, omega, fem=False):
         q = np.linalg.solve(np.eye(2)+feedback*delta, q0)
         z = ends[:, :2]+q0.T @ (delta[:, None]*q)
         direct_z, direct_drops, *direct = solve(n, omega, resistance)
-        diagnostics = {key: max(baseline[0][key], value) for key, value in direct[0].items()} if fem else {}
+        diagnostics = {key: max(baseline[0][key], value) for key, value in direct[0].items()} if direct else {}
         exact_z, exact_q = reference(omega, resistance)
         yield dict(**diagnostics, cells_per_material=n, omega_rad_s=omega, resistance_K_W=resistance.tolist(),
                    impedance_error_K_W=float(abs(z-exact_z).max()),
@@ -121,25 +158,32 @@ def cases(n, omega, fem=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--fem", action="store_true", help="verify the sparse LINE2 solver including both material-side element powers")
-    fem = parser.parse_args().fem
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--fem", action="store_true", help="verify the sparse LINE2 solver including both material-side element powers")
+    modes.add_argument("--dg", action="store_true", help="verify degree-two SIPG layer admittances with independent trace loads")
+    args = parser.parse_args()
+    fem, dg = args.fem, args.dg
+    levels = (2, 4, 8, 16) if dg else (4, 8, 16, 32, 64)
     rows = []
     for omega in (.5, 4., 12.):
         previous = {}
-        for n in (4, 8, 16, 32, 64):
-            for row in cases(n, omega, fem):
+        for n in levels:
+            for row in cases(n, omega, fem, dg):
                 key = tuple(row["resistance_K_W"])
                 errors = np.array([row["impedance_error_K_W"], row["contact_power_error_W"]])
                 orders = np.log2(previous[key]/errors).tolist() if key in previous else []
                 previous[key] = errors
-                row.update(orders=orders, passed=bool(all(p > 1.8 for p in orders)
-                           and (n < 64 or max(errors) < 2e-5)
+                row.update(orders=orders, passed=bool(all(p > (3.5 if dg else 1.8) for p in orders)
+                           and (n < levels[-1] or max(errors) < (2e-7 if dg else 2e-5))
                            and row["direct_impedance_difference_K_W"] < 1e-10
                            and row["direct_power_difference_W"] < 1e-10))
-                if fem:
+                if fem or dg:
                     row["passed"] &= max(row["element_power_discontinuity_W"], row["element_contact_law_residual_W"]) < 1e-10
                 rows.append(row)
-    if fem:
+    if dg:
+        from tensordg import heat_1d
+        path, option, module = "../TensorDG", " --dg", heat_1d
+    elif fem:
         from tensorfem import thermal
         path, option, module = "../TensorFEM/src", " --fem", thermal
     else:
