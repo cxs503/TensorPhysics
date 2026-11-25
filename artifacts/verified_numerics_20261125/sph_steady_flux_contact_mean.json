@@ -1,0 +1,167 @@
+{
+  "reference": "Piecewise quadratic temperature, linear rightward flux, exact heat-capacity integrals and two resistive jumps",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_steady_flux_contact_mean.py",
+  "sources": [
+    {
+      "commit": "8d0693c1e4966796faab31f3115230a9a2585dcb",
+      "file": "sph_steady_flux_contact_mean.py",
+      "source_sha256": "009d205137261a3623926eb15835c938f87997fff5888802d975c74cf4ceb147"
+    },
+    {
+      "commit": "b77a7145b7b025af03caf72b621a38ebefef840c",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "af6449f06f2c3c6f6895bd2484e61bc27ca1dd103f06c06f35d4a1fec32d6e82"
+    }
+  ],
+  "order_metrics": [
+    "temperature_error_K",
+    "wall_error_K",
+    "contact_trace_error_K"
+  ],
+  "runs": [
+    {
+      "columns_per_layer": 8,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "temperature_error_K": 0.0003336803488790251,
+      "wall_error_K": 0.00021464851652708232,
+      "contact_trace_error_K": 0.0003336803488791288,
+      "flux_error_W_m2": 7.245050083151095e-14,
+      "inward_error_W_m2": 3.534703067126311e-14,
+      "mean_residual_K": 1.2412670766236366e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "temperature_error_K": 8.753445875701159e-05,
+      "wall_error_K": 5.3037439232019476e-05,
+      "contact_trace_error_K": 8.75344587571773e-05,
+      "flux_error_W_m2": 4.979241409872363e-13,
+      "inward_error_W_m2": 2.464738626930949e-13,
+      "mean_residual_K": 1.0007415106216802e-16,
+      "orders": [
+        1.930543761502365,
+        2.016893176453292,
+        1.9305437615000824
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "temperature_error_K": 2.248604544520769e-05,
+      "wall_error_K": 1.3166566388983353e-05,
+      "contact_trace_error_K": 2.2486045445506514e-05,
+      "flux_error_W_m2": 2.368779216277439e-12,
+      "inward_error_W_m2": 1.3636248202349634e-12,
+      "mean_residual_K": 1.0007415106216802e-16,
+      "orders": [
+        1.9608210982505412,
+        2.010131955617052,
+        1.9608210982341
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "temperature_error_K": 5.703434642111334e-06,
+      "wall_error_K": 3.2789386515799764e-06,
+      "contact_trace_error_K": 5.703434642718478e-06,
+      "flux_error_W_m2": 9.108522484300616e-12,
+      "inward_error_W_m2": 6.109554355970226e-12,
+      "mean_residual_K": 1.0007415106216802e-16,
+      "orders": [
+        1.9791270752938528,
+        2.005578350421318,
+        1.979127075159447
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 8,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "temperature_error_K": 0.0004111540149991345,
+      "wall_error_K": 0.00013415532283128423,
+      "contact_trace_error_K": 0.0004111540149992404,
+      "flux_error_W_m2": 7.245050083151095e-14,
+      "inward_error_W_m2": 3.534703067126311e-14,
+      "mean_residual_K": 1.2412670766236366e-16,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 16,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "temperature_error_K": 0.00010671087210968602,
+      "wall_error_K": 3.314839953944454e-05,
+      "contact_trace_error_K": 0.00010671087210985323,
+      "flux_error_W_m2": 4.979241409872363e-13,
+      "inward_error_W_m2": 2.464738626930949e-13,
+      "mean_residual_K": 1.0007415106216802e-16,
+      "orders": [
+        1.945971746241156,
+        2.0168931756275286,
+        1.9459717462392672
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 32,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "temperature_error_K": 2.725100456589057e-05,
+      "wall_error_K": 8.229104084679349e-06,
+      "contact_trace_error_K": 2.7251004566188553e-05,
+      "flux_error_W_m2": 2.368779216277439e-12,
+      "inward_error_W_m2": 1.3636248202349634e-12,
+      "mean_residual_K": 5.551115123125783e-17,
+      "orders": [
+        1.969325852220043,
+        2.0101319404100115,
+        1.969325852206528
+      ],
+      "passed": true
+    },
+    {
+      "columns_per_layer": 64,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "temperature_error_K": 6.890642384806471e-06,
+      "wall_error_K": 2.0493370193232783e-06,
+      "contact_trace_error_K": 6.890642385410583e-06,
+      "flux_error_W_m2": 9.108522484300616e-12,
+      "inward_error_W_m2": 6.109554355970226e-12,
+      "mean_residual_K": 1.1102230246251565e-16,
+      "orders": [
+        1.9835990230433842,
+        2.005578111572433,
+        1.9835990229326768
+      ],
+      "passed": true
+    }
+  ]
+}
