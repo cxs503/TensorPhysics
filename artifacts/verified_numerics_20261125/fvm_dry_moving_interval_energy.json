@@ -1,0 +1,21 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "08fa0c8d08313f1016189ee12cd1c8b15fcbaa34",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_shallow_water_energy.py tests/test_shallow_water_riemann.py tests/test_shallow_water_momentum.py tests/test_shallow_water_galilean.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit Ritter fan first wetting of independently moving faces. Compare lab-frame energy transfer to direct adaptive quadrature of the analytic moving-face power after each arrival. Two symmetric retreating streams generate a vacuum across the expanding interval; each side exports half the initial energy (1.25 per unit width and density).",
+  "suite": {
+    "tests": 115,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_moving_dry_interval_first_wetting": {
+      "maximum_moving_transport_error": 6.5052130349130266e-18,
+      "wetting_balance_error": 6.938893903907228e-18
+    },
+    "test_moving_interval_becomes_vacuum": {
+      "maximum_vacuum_transport_error": 0.0
+    }
+  }
+}
