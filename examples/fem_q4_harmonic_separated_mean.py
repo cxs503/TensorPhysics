@@ -29,7 +29,7 @@ def boundary_metrics(model, temperature, exact, edge_power, target, areas, n):
                        max_W_m2=float(np.max(values))) for name, values in errors.items()}
 
 
-def measure(n, omega, sparse, shear, curved=False, boundary_recovery=False):
+def measure(n, omega, sparse, shear, curved=False, boundary_recovery=False, steady_drift=False):
     mesh = thermal_analytic.structured_quad_mesh(n, n, shear=shear, dtype=torch.float64)
     coords, conn = mesh.nodes.numpy(), mesh.elements.numpy()
     k = np.array([[2.1, .63], [.63, 1.2]])
@@ -50,8 +50,20 @@ def measure(n, omega, sparse, shear, curved=False, boundary_recovery=False):
     exact = a*u+b*v+d*u*v+e*u**3+f*v**3
     divergence = 2*d*(k[0, 1]-shear*k[1, 1])
     divergence += 6*(e*u*(k[0, 0]-2*shear*k[0, 1]+shear**2*k[1, 1])+f*v*k[1, 1])
-    generation = c*(rate+1j*omega*exact)-divergence
     points = coords[conn]
+    shift = 0j
+    if steady_drift:
+        # Aligned material interface: two bulk capacities and continuous K.
+        # For the centered odd cubics, the cell mean is the midpoint value
+        # plus the second derivative times the squared width divided by 24.
+        uc, vc = local(points.mean(axis=1))
+        c = np.where(uc < 0., 1.1, 3.4)
+        cell_mean = a*uc+b*vc+d*uc*vc+e*(uc**3+uc/(4*n*n))+f*(vc**3+vc/(4*n*n))
+        shift = np.average(cell_mean, weights=c)
+        exact -= shift
+        generation = c[:, None]*rate-divergence[conn]
+    else:
+        generation = (c*(rate+1j*omega*exact)-divergence)[conn]
     tangent = np.roll(points, -1, axis=1)-points
     normals = np.stack((tangent[..., 1], -tangent[..., 0]), axis=-1)
     # Two Gauss points integrate quadratic edge flux times each linear
@@ -69,14 +81,17 @@ def measure(n, omega, sparse, shear, curved=False, boundary_recovery=False):
     for edge, selected in enumerate((ids[0], ids[:, -1], ids[-1], ids[:, 0])):
         np.add.at(loads, conn[selected, edge], first[selected, edge])
         np.add.at(loads, conn[selected, (edge+1)%4], second[selected, edge])
-    model = thermal.ThermalModel(mesh.nodes, mesh.elements, torch.from_numpy(k[None]), 1., c,
+    model = thermal.ThermalModel(mesh.nodes, mesh.elements, torch.from_numpy(k[None]), 1., torch.from_numpy(c) if steady_drift else c,
         torch.empty(0, dtype=torch.long), torch.empty(0, dtype=torch.float64),
-        nodal_heat=torch.from_numpy(loads), heat_source=torch.from_numpy(generation[conn]),
+        nodal_heat=torch.from_numpy(loads), heat_source=torch.from_numpy(generation),
         thickness=thickness, element_type="q4")
-    result = thermal.solve_harmonic_thermal(model, omega, sparse=sparse, separate_mean=True)
+    result = thermal.solve_harmonic_thermal(model, omega, sparse=sparse, separate_mean=not steady_drift,
+                                           return_mean_rate=steady_drift)
     local_power = thermal.thermal_element_nodal_power(model, result.temperature, omega,
-                                                       mean_temperature=result.mean_temperature)
+                                                       mean_temperature=result.mean_temperature,
+                                                       mean_heating_rate=result.mean_heating_rate)
     edge_power = thermal.thermal_element_edge_power(model, result.temperature)
+    numeric_rate = result.mean_heating_rate.numpy() if steady_drift else 1j*omega*result.mean_temperature.numpy()
     component_error = np.zeros(2)
     square_errors = np.zeros(3)
     for xi in (-3**-.5, 3**-.5):
@@ -87,17 +102,23 @@ def measure(n, omega, sparse, shear, curved=False, boundary_recovery=False):
             error = abs(numerical-flux(samples))
             component_error = np.maximum(component_error, error.max(axis=0))
             su, sv = local(samples)
-            sample_t = a*su+b*sv+d*su*sv+e*su**3+f*sv**3
+            sample_t = a*su+b*sv+d*su*sv+e*su**3+f*sv**3-shift
             error_t = abs(result.temperature.numpy()[conn] @ shape-sample_t)
             square_errors += np.r_[np.mean(error_t**2), np.mean(error**2, axis=0)]/4
     rms = np.sqrt(square_errors)
     row = dict(rms_temperature_error_K=rms[0], rms_x_flux_error_W_m2=rms[1], rms_y_flux_error_W_m2=rms[2],
                 curved=curved, cells_per_axis=n, omega_rad_s=omega, sparse=sparse, shear=shear,
-                mean_rate_error_K_s=float(max(abs(1j*omega*result.mean_temperature.numpy()-rate))),
+                mean_rate_error_K_s=float(max(abs(numeric_rate-rate))),
                 relative_temperature_error_K=float(max(abs(result.temperature.numpy()-exact))),
                 x_flux_error_W_m2=float(component_error[0]), y_flux_error_W_m2=float(component_error[1]),
                 inward_nodal_power_error_W=float(abs(local_power.numpy()-exact_local).max()),
                 outward_edge_power_error_W=float(abs(edge_power.numpy()+first+second).max()))
+    if steady_drift:
+        # Linear generation integrates exactly by corner averaging on these
+        # parallelograms. Compare bulk storage with applied plus inward power.
+        volume = thickness/n**2
+        row["max_cell_energy_residual_W"] = float(abs(local_power.numpy().sum(axis=1)
+            +volume*(generation.mean(axis=1)-c*rate)).max())
     if boundary_recovery:
         row["boundary_flux"] = boundary_metrics(model, result.temperature, exact, edge_power,
                                                 -first-second, thickness*np.linalg.norm(tangent, axis=-1), n)
@@ -107,16 +128,18 @@ def measure(n, omega, sparse, shear, curved=False, boundary_recovery=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--boundary-recovery", action="store_true", help="compare outward edge-averaged flux estimates")
-    recovery = parser.parse_args().boundary_recovery
+    parser.add_argument("--steady-drift", action="store_true", help="verify steady heating in two capacity regions at zero frequency")
+    args = parser.parse_args()
+    recovery, steady_drift = args.boundary_recovery, args.steady_drift
     rows = []
     metrics = ["rms_temperature_error_K", "rms_x_flux_error_W_m2", "rms_y_flux_error_W_m2"]
     for curved in (False, True):
-        for omega in (1., 1e-6, 1e-12):
+        for omega in ((0.,) if steady_drift else (1., 1e-6, 1e-12)):
             for sparse in (False, True):
                 for shear in (0., .38):
                     previous = previous_max = None
                     for n in ((4, 8, 16, 32) if curved else (4, 8, 16)):
-                        row = measure(n, omega, sparse, shear, curved, recovery)
+                        row = measure(n, omega, sparse, shear, curved, recovery, steady_drift)
                         errors = np.array([row[k] for k in metrics])
                         if curved:
                             maxima = np.array([row[k] for k in ("relative_temperature_error_K", "x_flux_error_W_m2", "y_flux_error_W_m2")])
@@ -134,10 +157,12 @@ if __name__ == "__main__":
                                 row["passed"] &= boundary["cubic"]["rms_W_m2"] < boundary["raw"]["rms_W_m2"]
                             if not curved:
                                 row["passed"] &= max(method["max_W_m2"] for method in boundary.values()) < 1e-10
+                        if steady_drift:
+                            row["passed"] &= row["max_cell_energy_residual_W"] < 1e-12
                         rows.append(row)
                         previous = errors
-    print(json.dumps(dict(reference="Uniform temperature pole and a zero-mean bilinear field with optional cubic terms in sheared coordinates with off-diagonal conductivity",
-                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_q4_harmonic_separated_mean.py"+(" --boundary-recovery" if recovery else ""),
+    print(json.dumps(dict(reference=("Common heating rate, capacity-weighted relative temperature, and two aligned capacity regions" if steady_drift else "Uniform temperature pole and a zero-mean bilinear field")+" with optional cubic terms in sheared coordinates with off-diagonal conductivity",
+                          reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_q4_harmonic_separated_mean.py"+(" --boundary-recovery" if recovery else "")+(" --steady-drift" if steady_drift else ""),
                           curved_case_note="Acceptance uses RMS at four Gauss points per cell. Pointwise maxima and their refinement orders are reported separately; the 4-to-8 refinement does not meet 1.7/0.85 temperature/flux maximum-error order targets.",
                           order_metrics=metrics, runs=rows, sources=[provenance(p) for p in (__file__, thermal.__file__, thermal_analytic.__file__, *((patches.__file__,) if recovery else ()))]),
                      indent=2, allow_nan=False))
