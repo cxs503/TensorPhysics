@@ -10,8 +10,7 @@ from conduction_provenance import provenance
 
 
 def measure(n, method, width):
-    # Unit material properties and area. Use excess above the 305 K walls in
-    # the linear rod solve so weak temperatures survive at the output.
+    # Unit material properties and area, with absolute initial and wall inputs.
     amplitude = 2**-44
     rate = math.pi**2
     dt = 1/(16*rate)
@@ -22,7 +21,7 @@ def measure(n, method, width):
     centers = (np.arange(n)+0.5)*dx
     mode = np.sin(np.pi*centers)*np.sinc(dx/2)
     cell, _, _, _, ledger = rod.solve_transient_stepped_rod(
-        np.full(n, dx), 1., 1., 1., (0., 0.), times, np.zeros(n),
+        np.full(n, dx), 1., 1., 1., (305., 305.), times, np.full(n, 305.), temperature_reference=305.,
         source=lambda t: amplitude*rate*mode if start <= t < stop else 0.,
         load_jump_times=(start, stop), method=method, flux_order=2, return_step_heat=True,
     )
