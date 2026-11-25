@@ -1,0 +1,220 @@
+{
+  "runs": [
+    {
+      "solver": "SPH",
+      "n": 16,
+      "modal_cut_disagreement_W_m2": 8.400361489980554e-16,
+      "modal_amplitude_error_W_m2": 0.04311321249569888,
+      "modal_phase_error_rad": 0.044591656747809336,
+      "max_all_cut_flux_error_W_m2": 1.1842764171229316,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.46875,
+      "max_temperature_error_K": 0.08029004511317966,
+      "max_interface_flux_error_W_m2": 0.06842686674837933,
+      "max_cell_residual_W": 2.5700898681300825e-15,
+      "total_residual_W": 1.8589937808743057e-14,
+      "orders": [],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": null
+    },
+    {
+      "solver": "FVM",
+      "n": 16,
+      "max_all_cut_flux_error_W_m2": 0.25612841065708664,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.46875,
+      "max_temperature_error_K": 0.012360616884267081,
+      "max_interface_flux_error_W_m2": 0.018576320321773837,
+      "max_cell_residual_W": 5.053820846001587e-15,
+      "total_residual_W": 2.7036837134769744e-14,
+      "orders": [],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": null
+    },
+    {
+      "solver": "SPH",
+      "n": 32,
+      "modal_cut_disagreement_W_m2": 5.900916318210353e-16,
+      "modal_amplitude_error_W_m2": 0.017462720033123214,
+      "modal_phase_error_rad": 0.020082504666752623,
+      "max_all_cut_flux_error_W_m2": 0.7179707891061463,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.796875,
+      "max_temperature_error_K": 0.038997832176625925,
+      "max_interface_flux_error_W_m2": 0.03183986639719627,
+      "max_cell_residual_W": 3.313011663305538e-15,
+      "total_residual_W": 8.284229860329705e-14,
+      "orders": [
+        1.0418271947972084,
+        1.1037286059632476,
+        1.303851772144935,
+        1.1508345904292543
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 0.7220088000292544
+    },
+    {
+      "solver": "FVM",
+      "n": 32,
+      "max_all_cut_flux_error_W_m2": 0.06610944517240883,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.140625,
+      "max_temperature_error_K": 0.0030914993060380566,
+      "max_interface_flux_error_W_m2": 0.004711377525672278,
+      "max_cell_residual_W": 7.714964182567091e-15,
+      "total_residual_W": 5.09082959121979e-14,
+      "orders": [
+        1.999372159102814,
+        1.9792439088997749
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 1.9539389786369892
+    },
+    {
+      "solver": "SPH",
+      "n": 64,
+      "modal_cut_disagreement_W_m2": 9.453208419344607e-16,
+      "modal_amplitude_error_W_m2": 0.007297777935759475,
+      "modal_phase_error_rad": 0.00916727778195944,
+      "max_all_cut_flux_error_W_m2": 0.3899100879984204,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.8046875,
+      "max_temperature_error_K": 0.019316809585026136,
+      "max_interface_flux_error_W_m2": 0.01502990071885261,
+      "max_cell_residual_W": 3.2977148315363993e-15,
+      "total_residual_W": 4.186438639903063e-13,
+      "orders": [
+        1.0135370946832263,
+        1.0829988027680224,
+        1.2587491370375496,
+        1.131373916728989
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 0.8807836671579845
+    },
+    {
+      "solver": "FVM",
+      "n": 64,
+      "max_all_cut_flux_error_W_m2": 0.01673263572813502,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.1328125,
+      "max_temperature_error_K": 0.000774859360857343,
+      "max_interface_flux_error_W_m2": 0.0011824780321691263,
+      "max_cell_residual_W": 1.2574500268295178e-14,
+      "total_residual_W": 2.782580606884655e-13,
+      "orders": [
+        1.996300295678023,
+        1.9943355589820517
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 1.982191689941414
+    },
+    {
+      "solver": "SPH",
+      "n": 128,
+      "modal_cut_disagreement_W_m2": 5.578801654593729e-16,
+      "modal_amplitude_error_W_m2": 0.0033664025296822886,
+      "modal_phase_error_rad": 0.004315654407970287,
+      "max_all_cut_flux_error_W_m2": 0.20244363778554378,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.80078125,
+      "max_temperature_error_K": 0.009639650739374664,
+      "max_interface_flux_error_W_m2": 0.007265168454920364,
+      "max_cell_residual_W": 3.616381009362223e-15,
+      "total_residual_W": 1.3248227900751429e-12,
+      "orders": [
+        1.0028040532821694,
+        1.0487673248304268,
+        1.1162495579360454,
+        1.086914049628836
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 0.9456211775099597
+    },
+    {
+      "solver": "FVM",
+      "n": 128,
+      "max_all_cut_flux_error_W_m2": 0.00419511452166056,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.46484375,
+      "max_temperature_error_K": 0.00019362060709852245,
+      "max_interface_flux_error_W_m2": 0.0002956576286552395,
+      "max_cell_residual_W": 1.18970442728595e-14,
+      "total_residual_W": 3.0285118305112383e-13,
+      "orders": [
+        2.000701973715531,
+        1.9998139741385792
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 1.995882616706616
+    },
+    {
+      "solver": "SPH",
+      "n": 256,
+      "modal_cut_disagreement_W_m2": 7.550332863779066e-16,
+      "modal_amplitude_error_W_m2": 0.001731064082271777,
+      "modal_phase_error_rad": 0.002084150174251833,
+      "max_all_cut_flux_error_W_m2": 0.10306285740355914,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.802734375,
+      "max_temperature_error_K": 0.004816262899849427,
+      "max_interface_flux_error_W_m2": 0.0035626511322146433,
+      "max_cell_residual_W": 3.931987419994989e-15,
+      "total_residual_W": 5.3381634645800486e-12,
+      "orders": [
+        1.0010667311587145,
+        1.0280450330808322,
+        0.9595485610264683,
+        1.0501201049818953
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 0.973995807339858
+    },
+    {
+      "solver": "FVM",
+      "n": 256,
+      "max_all_cut_flux_error_W_m2": 0.0010492605800061774,
+      "worst_cut_x_m": 1.0,
+      "worst_row_y_m": 0.466796875,
+      "max_temperature_error_K": 4.842510626084466e-05,
+      "max_interface_flux_error_W_m2": 7.392239216338186e-05,
+      "max_cell_residual_W": 1.600266599785389e-14,
+      "total_residual_W": 4.331783347875286e-12,
+      "orders": [
+        1.9994053875452553,
+        1.9998441535619327
+      ],
+      "balance_passed": true,
+      "passed": true,
+      "all_cut_flux_order": 1.9993371846496246
+    }
+  ],
+  "curved": true,
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/multimode_contact_heat.py --curved",
+  "sources": [
+    {
+      "commit": "9074a1be6cbc8b4a8352da424b6a40b34d4286fd",
+      "file": "multimode_contact_heat.py",
+      "source_sha256": "682a18280c69cd43ab72060578729c7db902b4d0b11f42187a1c0f7c3c176192"
+    },
+    {
+      "commit": "e472e45271028c19c7fc18d76241e3bcad4b1595",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "bca0cf92b23a827525068bd9aec26d123efe0d7e2eacc24880d60b98159f68f6"
+    },
+    {
+      "commit": "1a1b13178160acc0d9ab578431323a5d83f59d96",
+      "file": "energy.py",
+      "source_sha256": "c598382c7ef39582553da9a2a8991bf21baae47aaf686aef691d80591a4d9142"
+    }
+  ]
+}
