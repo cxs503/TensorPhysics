@@ -47,24 +47,17 @@ def sph_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, star
     widths, conductivity, cv, generation = sheet_cell_profiles(n, resistance, capacity, h, k, sheet_shape)
     # A wider support can also carry heat across the entire sheet column.
     sheet = n//2
-    contacts = None
+    materials = dict(conductivity=conductivity, volumetric_heat_capacity=cv)
     if sheet_columns == 2:
-        # Two columns span the largest x-offset at h/dx=1.3. Place half
-        # the prescribed storage in each and resolve the two contact jumps.
         dx = widths[0]
-        # Remove the two columns' internal series resistance from the
-        # explicit contacts so total resistance R is independent of dx.
-        conductivity = np.insert(conductivity, sheet, conductivity[sheet])
-        conductivity[sheet:sheet+2] = 1/dx
-        cv = np.insert(cv, sheet, cv[sheet])
-        cv[sheet:sheet+2] *= .5
+        materials = heat.two_column_sheet_materials(
+            np.delete(conductivity, sheet), np.delete(cv, sheet), dx, sheet,
+            resistance=resistance, areal_heat_capacity=capacity, sheet_conductivity=1/dx)
         generation = np.insert(generation, sheet, generation[sheet])
         generation[sheet:sheet+2] *= .5
-        contacts = np.zeros(n+1)
-        contacts[[sheet-1, sheet+1]] = resistance/2-dx**2
     states, cuts = heat.solve_transient_layered_slab(
-        np.zeros(n+sheet_columns), grid, widths[0], (0., 0.), conductivity=conductivity,
-        volumetric_heat_capacity=cv, contact_resistance_x=contacts, h_factor=h_factor, method=method, return_x_heat=True,
+        np.zeros(n+sheet_columns), grid, widths[0], (0., 0.), **materials,
+        h_factor=h_factor, method=method, return_x_heat=True,
         heat_source=lambda t: generation if start <= t < stop else 0., load_jump_times=(start, stop))
     return (states[:, sheet:sheet+sheet_columns].mean(dim=1).numpy(), cuts[:, sheet].numpy(),
             cuts[:, sheet+sheet_columns].numpy(), cuts[:, -1].numpy())
