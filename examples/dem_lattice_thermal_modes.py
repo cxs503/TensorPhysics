@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser.add_argument("--periodic", action="store_true", help="drive a phase-shifted Fourier mode across the periodic seam")
     periodic = parser.parse_args().periodic
     runs = []
-    grids = (8, 16, 32, 64, 128, 256, 512) if periodic else (8, 16, 32, 64, 128, 256)
+    grids = (12, 24, 48, 96, 192, 384) if periodic else (8, 16, 32, 64, 128, 256)
     for mode in (1, 2):
         for ky in (.6, 2.4):
             previous = None
