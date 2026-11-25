@@ -1,0 +1,1638 @@
+{
+  "reference": "T = affine(x) + sum(Hii*xi\u00b2)/2 + alpha*t*trace(H); exact cell averages, step-mean wall data and gradient-initialized BGK populations",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_quadratic_wall_startup.py",
+  "runs": [
+    {
+      "n": 8,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -1.6263032587282567e-18,
+            -3.155028321932818e-17
+          ],
+          "peak_error_W_m2": 1.8041124150158794e-16,
+          "prediction_residual_W_m2": 1.8041124150158794e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            3.245017102249115e-16,
+            8.760353553682876e-17
+          ],
+          "peak_error_W_m2": 3.469446951953614e-16,
+          "prediction_residual_W_m2": 3.469446951953614e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -9.31871767251291e-17,
+            1.9466850006977232e-16
+          ],
+          "peak_error_W_m2": 2.914335439641036e-16,
+          "prediction_residual_W_m2": 2.914335439641036e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            9.044956623960321e-17,
+            -4.0389241430516254e-16
+          ],
+          "peak_error_W_m2": 5.412337245047638e-16,
+          "prediction_residual_W_m2": 5.412337245047638e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -5.79885531953872e-16,
+            -1.7653521873495226e-16
+          ],
+          "peak_error_W_m2": 6.175615574477433e-16,
+          "prediction_residual_W_m2": 6.175615574477433e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -1.296841323564224e-16,
+            -6.478107980600889e-18
+          ],
+          "peak_error_W_m2": 5.30825383648903e-16,
+          "prediction_residual_W_m2": 5.30825383648903e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            2.312196658096899e-16,
+            9.509062916419897e-16
+          ],
+          "peak_error_W_m2": 1.394717674685353e-15,
+          "prediction_residual_W_m2": 1.394717674685353e-15
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            1.2441219929271163e-15,
+            2.646673028308677e-16
+          ],
+          "peak_error_W_m2": 1.3114509478384662e-15,
+          "prediction_residual_W_m2": 1.3114509478384662e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            3.5296201725265597e-16,
+            -7.834207729155024e-16
+          ],
+          "peak_error_W_m2": 1.1587952819525071e-15,
+          "prediction_residual_W_m2": 1.1587952819525071e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0005666666666666662,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0005666666666666353,
+            -0.0005666666666666728
+          ],
+          "peak_error_W_m2": 0.0005666666666670761,
+          "prediction_residual_W_m2": 5.615083051302427e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0017000000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0017000000000001415,
+            0.0016999999999998709
+          ],
+          "peak_error_W_m2": 0.00170000000000025,
+          "prediction_residual_W_m2": 4.440892098500626e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0017000000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0016999999999997755,
+            0.00170000000000013
+          ],
+          "peak_error_W_m2": 0.0017000000000005795,
+          "prediction_residual_W_m2": 5.793976409762536e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0002833333333333331,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0002833333333330702,
+            -0.0002833333333335217
+          ],
+          "peak_error_W_m2": 0.000283333333333996,
+          "prediction_residual_W_m2": 8.011711953581635e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0008500000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0008499999999997891,
+            0.0008500000000002288
+          ],
+          "peak_error_W_m2": 0.0008500000000008084,
+          "prediction_residual_W_m2": 9.055256544598933e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0008500000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0008500000000001543,
+            0.000849999999999933
+          ],
+          "peak_error_W_m2": 0.0008500000000004823,
+          "prediction_residual_W_m2": 1.932481952238163e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.00014166666666666654,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.00014166666666690872,
+            -0.0001416666666664741
+          ],
+          "peak_error_W_m2": 0.00014166666666792782,
+          "prediction_residual_W_m2": 1.2612794923066994e-15
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00042500000000000003,
+          "mean_signed_wall_errors_W_m2": [
+            0.00042500000000086295,
+            0.00042499999999945825
+          ],
+          "peak_error_W_m2": 0.00042500000000092464,
+          "prediction_residual_W_m2": 1.6982942829812941e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00042500000000000003,
+          "mean_signed_wall_errors_W_m2": [
+            0.00042500000000030263,
+            0.00042499999999906165
+          ],
+          "peak_error_W_m2": 0.00042500000000231936,
+          "prediction_residual_W_m2": 2.319325287380991e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0005312499999999999,
+          "mean_signed_wall_errors_W_m2": [
+            0.0005312499999999918,
+            0.0005312499999999519
+          ],
+          "peak_error_W_m2": 0.0005312500000004272,
+          "prediction_residual_W_m2": 5.441610703704747e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.00031874999999999975,
+          "tangential_contribution_W_m2": 0.0014875,
+          "mean_signed_wall_errors_W_m2": [
+            0.0018062500000005552,
+            0.0018062500000000578
+          ],
+          "peak_error_W_m2": 0.0018062500000006407,
+          "prediction_residual_W_m2": 6.407634839389331e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0004958333333333329,
+          "tangential_contribution_W_m2": -0.0009562500000000001,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0014520833333334037,
+            -0.0014520833333332838
+          ],
+          "peak_error_W_m2": 0.0014520833333336314,
+          "prediction_residual_W_m2": 2.983724378680108e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00026562499999999996,
+          "mean_signed_wall_errors_W_m2": [
+            0.00026562500000019366,
+            0.00026562499999974035
+          ],
+          "peak_error_W_m2": 0.0002656250000013932,
+          "prediction_residual_W_m2": 1.3932540017524975e-15
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.00015937499999999988,
+          "tangential_contribution_W_m2": 0.00074375,
+          "mean_signed_wall_errors_W_m2": [
+            0.0009031249999997877,
+            0.0009031249999999619
+          ],
+          "peak_error_W_m2": 0.0009031250000012189,
+          "prediction_residual_W_m2": 1.2189685025254526e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.00024791666666666647,
+          "tangential_contribution_W_m2": -0.00047812500000000003,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0007260416666666051,
+            -0.0007260416666672535
+          ],
+          "peak_error_W_m2": 0.0007260416666675096,
+          "prediction_residual_W_m2": 8.430756093247282e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00013281249999999998,
+          "mean_signed_wall_errors_W_m2": [
+            0.0001328124999998181,
+            0.00013281250000062294
+          ],
+          "peak_error_W_m2": 0.000132812500002355,
+          "prediction_residual_W_m2": 2.4744475132093546e-15
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 7.968749999999994e-05,
+          "tangential_contribution_W_m2": 0.000371875,
+          "mean_signed_wall_errors_W_m2": [
+            0.00045156250000030664,
+            0.00045156250000007685
+          ],
+          "peak_error_W_m2": 0.00045156250000247256,
+          "prediction_residual_W_m2": 2.472577264461817e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.00012395833333333323,
+          "tangential_contribution_W_m2": -0.00023906250000000002,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0003630208333329906,
+            -0.0003630208333331078
+          ],
+          "peak_error_W_m2": 0.0003630208333346152,
+          "prediction_residual_W_m2": 1.6046192152785466e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0005666666666666662,
+          "tangential_contribution_W_m2": 0.00053125,
+          "mean_signed_wall_errors_W_m2": [
+            -3.541666666665507e-05,
+            -3.541666666676338e-05
+          ],
+          "peak_error_W_m2": 3.541666666706522e-05,
+          "prediction_residual_W_m2": 5.445947512394689e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.00031874999999999975,
+          "tangential_contribution_W_m2": 0.0031875000000000002,
+          "mean_signed_wall_errors_W_m2": [
+            0.003506250000000517,
+            0.0035062499999998892
+          ],
+          "peak_error_W_m2": 0.0035062500000005437,
+          "prediction_residual_W_m2": 5.43835809718729e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0004958333333333329,
+          "tangential_contribution_W_m2": 0.0007437500000000003,
+          "mean_signed_wall_errors_W_m2": [
+            0.00024791666666657436,
+            0.0002479166666668499
+          ],
+          "peak_error_W_m2": 0.00024791666666808265,
+          "prediction_residual_W_m2": 1.4153175159625775e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0002833333333333331,
+          "tangential_contribution_W_m2": 0.000265625,
+          "mean_signed_wall_errors_W_m2": [
+            -1.7708333332968365e-05,
+            -1.770833333360601e-05
+          ],
+          "peak_error_W_m2": 1.7708333334004456e-05,
+          "prediction_residual_W_m2": 7.996533123166838e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.00015937499999999988,
+          "tangential_contribution_W_m2": 0.0015937500000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0017531249999996265,
+            0.001753124999999951
+          ],
+          "peak_error_W_m2": 0.0017531250000004453,
+          "prediction_residual_W_m2": 1.0048385734595655e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.00024791666666666647,
+          "tangential_contribution_W_m2": 0.00037187500000000014,
+          "mean_signed_wall_errors_W_m2": [
+            0.00012395833333354715,
+            0.00012395833333273183
+          ],
+          "peak_error_W_m2": 0.0001239583333336597,
+          "prediction_residual_W_m2": 6.454255532806208e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 0.75,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.00014166666666666654,
+          "tangential_contribution_W_m2": 0.0001328125,
+          "mean_signed_wall_errors_W_m2": [
+            -8.854166667123455e-06,
+            -8.854166666338046e-06
+          ],
+          "peak_error_W_m2": 8.85416666793204e-06,
+          "prediction_residual_W_m2": 1.265507880779393e-15
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 7.968749999999994e-05,
+          "tangential_contribution_W_m2": 0.0007968750000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0008765625000001414,
+            0.0008765624999998122
+          ],
+          "peak_error_W_m2": 0.0008765625000020857,
+          "prediction_residual_W_m2": 2.0857881394276134e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.00012395833333333323,
+          "tangential_contribution_W_m2": 0.00018593750000000007,
+          "mean_signed_wall_errors_W_m2": [
+            6.197916666683573e-05,
+            6.197916666689265e-05
+          ],
+          "peak_error_W_m2": 6.197916666982051e-05,
+          "prediction_residual_W_m2": 3.153673069217211e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            1.4094628242311558e-17,
+            -3.7838655819744105e-17
+          ],
+          "peak_error_W_m2": 1.249000902703301e-16,
+          "prediction_residual_W_m2": 1.249000902703301e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            9.855397747893235e-17,
+            1.3877787807814457e-17
+          ],
+          "peak_error_W_m2": 1.0408340855860843e-16,
+          "prediction_residual_W_m2": 1.0408340855860843e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -3.935653886122381e-17,
+            4.85722573273506e-17
+          ],
+          "peak_error_W_m2": 4.85722573273506e-17,
+          "prediction_residual_W_m2": 4.85722573273506e-17
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            4.892462303340839e-17,
+            -5.51316804708879e-17
+          ],
+          "peak_error_W_m2": 1.8041124150158794e-16,
+          "prediction_residual_W_m2": 1.8041124150158794e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -1.235177325004111e-16,
+            -5.846560215128083e-17
+          ],
+          "peak_error_W_m2": 2.2898349882893854e-16,
+          "prediction_residual_W_m2": 2.2898349882893854e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            9.269928574751063e-18,
+            -1.0084435456830798e-16
+          ],
+          "peak_error_W_m2": 1.942890293094024e-16,
+          "prediction_residual_W_m2": 1.942890293094024e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            1.389811659854856e-17,
+            3.1407304057831653e-16
+          ],
+          "peak_error_W_m2": 4.2327252813834093e-16,
+          "prediction_residual_W_m2": 4.2327252813834093e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            3.296245654899055e-16,
+            4.4289658746032856e-17
+          ],
+          "peak_error_W_m2": 3.7470027081099033e-16,
+          "prediction_residual_W_m2": 3.7470027081099033e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            1.5586761482194733e-16,
+            -1.9309979505145736e-16
+          ],
+          "peak_error_W_m2": 4.3368086899420177e-16,
+          "prediction_residual_W_m2": 4.3368086899420177e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0028333333333333335,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0028333333333332923,
+            -0.0028333333333334957
+          ],
+          "peak_error_W_m2": 0.002833333333333604,
+          "prediction_residual_W_m2": 2.706168622523819e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0017000000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0016999999999999676,
+            0.001699999999999961
+          ],
+          "peak_error_W_m2": 0.00170000000000025,
+          "prediction_residual_W_m2": 2.498001805406602e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0017000000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.001699999999999922,
+            0.0016999999999999572
+          ],
+          "peak_error_W_m2": 0.0017000000000000973,
+          "prediction_residual_W_m2": 2.914335439641036e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0014166666666666668,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.001416666666666699,
+            -0.0014166666666663155
+          ],
+          "peak_error_W_m2": 0.0014166666666667674,
+          "prediction_residual_W_m2": 6.002143226879753e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0008500000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0008500000000001549,
+            0.0008500000000000425
+          ],
+          "peak_error_W_m2": 0.0008500000000005378,
+          "prediction_residual_W_m2": 5.377642775528102e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0008500000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0008500000000001512,
+            0.0008500000000000015
+          ],
+          "peak_error_W_m2": 0.0008500000000003852,
+          "prediction_residual_W_m2": 3.8510861166685117e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0007083333333333334,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0007083333333332064,
+            -0.0007083333333336161
+          ],
+          "peak_error_W_m2": 0.000708333333334081,
+          "prediction_residual_W_m2": 7.476658181460039e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00042500000000000003,
+          "mean_signed_wall_errors_W_m2": [
+            0.0004249999999997659,
+            0.0004249999999998394
+          ],
+          "peak_error_W_m2": 0.00042500000000023075,
+          "prediction_residual_W_m2": 1.0044048925905713e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00042500000000000003,
+          "mean_signed_wall_errors_W_m2": [
+            0.00042499999999999835,
+            0.0004249999999996289
+          ],
+          "peak_error_W_m2": 0.0004250000000003869,
+          "prediction_residual_W_m2": 1.160530005428484e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0005312499999999999,
+          "mean_signed_wall_errors_W_m2": [
+            0.0005312500000000116,
+            0.0005312499999999541
+          ],
+          "peak_error_W_m2": 0.0005312500000000595,
+          "prediction_residual_W_m2": 6.537739100087592e-17
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.00159375,
+          "tangential_contribution_W_m2": 0.0014875,
+          "mean_signed_wall_errors_W_m2": [
+            0.003081250000000168,
+            0.0030812500000000063
+          ],
+          "peak_error_W_m2": 0.003081250000000202,
+          "prediction_residual_W_m2": 2.0187844451680093e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0024791666666666664,
+          "tangential_contribution_W_m2": -0.0009562500000000001,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0034354166666667072,
+            -0.0034354166666667246
+          ],
+          "peak_error_W_m2": 0.0034354166666667324,
+          "prediction_residual_W_m2": 6.591949208711867e-17
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00026562499999999996,
+          "mean_signed_wall_errors_W_m2": [
+            0.0002656250000000473,
+            0.000265624999999978
+          ],
+          "peak_error_W_m2": 0.0002656250000004218,
+          "prediction_residual_W_m2": 4.218088552054855e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.000796875,
+          "tangential_contribution_W_m2": 0.00074375,
+          "mean_signed_wall_errors_W_m2": [
+            0.0015406249999997393,
+            0.001540624999999976
+          ],
+          "peak_error_W_m2": 0.0015406250000002744,
+          "prediction_residual_W_m2": 3.292721997838477e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0012395833333333332,
+          "tangential_contribution_W_m2": -0.00047812500000000003,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0017177083333333022,
+            -0.0017177083333336195
+          ],
+          "peak_error_W_m2": 0.0017177083333337478,
+          "prediction_residual_W_m2": 4.145989107584569e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00013281249999999998,
+          "mean_signed_wall_errors_W_m2": [
+            0.00013281249999990875,
+            0.00013281250000022677
+          ],
+          "peak_error_W_m2": 0.000132812500000426,
+          "prediction_residual_W_m2": 5.384961140192379e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0003984375,
+          "tangential_contribution_W_m2": 0.000371875,
+          "mean_signed_wall_errors_W_m2": [
+            0.0007703125000006034,
+            0.000770312500000019
+          ],
+          "peak_error_W_m2": 0.0007703125000007374,
+          "prediction_residual_W_m2": 7.374201076160158e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0006197916666666666,
+          "tangential_contribution_W_m2": -0.00023906250000000002,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0008588541666666037,
+            -0.000858854166666563
+          ],
+          "peak_error_W_m2": 0.0008588541666672694,
+          "prediction_residual_W_m2": 8.543513119185775e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0028333333333333335,
+          "tangential_contribution_W_m2": 0.00053125,
+          "mean_signed_wall_errors_W_m2": [
+            -0.002302083333333333,
+            -0.0023020833333335143
+          ],
+          "peak_error_W_m2": 0.002302083333333621,
+          "prediction_residual_W_m2": 2.875304161431558e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.00159375,
+          "tangential_contribution_W_m2": 0.0031875000000000002,
+          "mean_signed_wall_errors_W_m2": [
+            0.004781250000000018,
+            0.004781249999999961
+          ],
+          "peak_error_W_m2": 0.004781250000000105,
+          "prediction_residual_W_m2": 2.3505503099485736e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0024791666666666664,
+          "tangential_contribution_W_m2": 0.0007437500000000003,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0017354166666667396,
+            -0.0017354166666668077
+          ],
+          "peak_error_W_m2": 0.0017354166666668294,
+          "prediction_residual_W_m2": 3.22441726097189e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0014166666666666668,
+          "tangential_contribution_W_m2": 0.000265625,
+          "mean_signed_wall_errors_W_m2": [
+            -0.001151041666666593,
+            -0.001151041666666297
+          ],
+          "peak_error_W_m2": 0.0011510416666667689,
+          "prediction_residual_W_m2": 3.7665183472146424e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.000796875,
+          "tangential_contribution_W_m2": 0.0015937500000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.002390625000000037,
+            0.002390624999999986
+          ],
+          "peak_error_W_m2": 0.0023906250000003473,
+          "prediction_residual_W_m2": 3.473783760643556e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0012395833333333332,
+          "tangential_contribution_W_m2": 0.00037187500000000014,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0008677083333332303,
+            -0.0008677083333333465
+          ],
+          "peak_error_W_m2": 0.0008677083333335639,
+          "prediction_residual_W_m2": 2.583653777032957e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.0,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0007083333333333334,
+          "tangential_contribution_W_m2": 0.0001328125,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0005755208333334371,
+            -0.0005755208333336204
+          ],
+          "peak_error_W_m2": 0.0005755208333340783,
+          "prediction_residual_W_m2": 7.449553127147901e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0003984375,
+          "tangential_contribution_W_m2": 0.0007968750000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0011953124999999985,
+            0.0011953124999999223
+          ],
+          "peak_error_W_m2": 0.0011953125000003506,
+          "prediction_residual_W_m2": 7.17958678619901e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0006197916666666666,
+          "tangential_contribution_W_m2": 0.00018593750000000007,
+          "mean_signed_wall_errors_W_m2": [
+            -0.00043385416666669933,
+            -0.0004338541666669288
+          ],
+          "peak_error_W_m2": 0.0004338541666676493,
+          "prediction_residual_W_m2": 9.827750592494855e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            8.348356728138384e-18,
+            -3.65376132127615e-17
+          ],
+          "peak_error_W_m2": 5.551115123125783e-17,
+          "prediction_residual_W_m2": 5.551115123125783e-17
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            9.345822726825048e-17,
+            1.1600963245594897e-17
+          ],
+          "peak_error_W_m2": 1.0408340855860843e-16,
+          "prediction_residual_W_m2": 1.0408340855860843e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -3.745918505937418e-17,
+            4.786752591523502e-17
+          ],
+          "peak_error_W_m2": 4.85722573273506e-17,
+          "prediction_residual_W_m2": 4.85722573273506e-17
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            3.9193908535350985e-17,
+            -5.5429836068321414e-17
+          ],
+          "peak_error_W_m2": 1.249000902703301e-16,
+          "prediction_residual_W_m2": 1.249000902703301e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -1.1836777218110495e-16,
+            -6.274820073259857e-17
+          ],
+          "peak_error_W_m2": 1.6653345369377348e-16,
+          "prediction_residual_W_m2": 1.6653345369377348e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            1.1980434005964824e-17,
+            -9.820161177287456e-17
+          ],
+          "peak_error_W_m2": 1.942890293094024e-16,
+          "prediction_residual_W_m2": 1.942890293094024e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            9.242823520438925e-18,
+            3.038815401569528e-16
+          ],
+          "peak_error_W_m2": 4.2327252813834093e-16,
+          "prediction_residual_W_m2": 4.2327252813834093e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            3.269140600586917e-16,
+            5.000204894231586e-17
+          ],
+          "peak_error_W_m2": 3.469446951953614e-16,
+          "prediction_residual_W_m2": 3.469446951953614e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            1.551527190144647e-16,
+            -1.9280163945402384e-16
+          ],
+          "peak_error_W_m2": 3.157196726277789e-16,
+          "prediction_residual_W_m2": 3.157196726277789e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.003966666666666666,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.003966666666666652,
+            -0.003966666666666778
+          ],
+          "peak_error_W_m2": 0.003966666666666896,
+          "prediction_residual_W_m2": 2.2985086056692694e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0017000000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0017000000000000617,
+            0.0016999999999999873
+          ],
+          "peak_error_W_m2": 0.0017000000000001944,
+          "prediction_residual_W_m2": 2.2898349882893854e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0017000000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0016999999999999836,
+            0.00170000000000004
+          ],
+          "peak_error_W_m2": 0.001700000000000132,
+          "prediction_residual_W_m2": 2.914335439641036e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.001983333333333333,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0019833333333333803,
+            -0.001983333333333197
+          ],
+          "peak_error_W_m2": 0.0019833333333335312,
+          "prediction_residual_W_m2": 3.8467493079785697e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0008500000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0008499999999999623,
+            0.0008499999999999782
+          ],
+          "peak_error_W_m2": 0.0008500000000005378,
+          "prediction_residual_W_m2": 5.377642775528102e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0008500000000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0008500000000000394,
+            0.0008499999999998413
+          ],
+          "peak_error_W_m2": 0.0008500000000003852,
+          "prediction_residual_W_m2": 3.8510861166685117e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0009916666666666665,
+          "tangential_contribution_W_m2": 0.0,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0009916666666665204,
+            -0.000991666666666738
+          ],
+          "peak_error_W_m2": 0.0009916666666674179,
+          "prediction_residual_W_m2": 7.513521055324546e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00042500000000000003,
+          "mean_signed_wall_errors_W_m2": [
+            0.000425000000000148,
+            0.00042499999999997564
+          ],
+          "peak_error_W_m2": 0.0004250000000006887,
+          "prediction_residual_W_m2": 1.0044048925905713e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00042500000000000003,
+          "mean_signed_wall_errors_W_m2": [
+            0.00042500000000022153,
+            0.00042499999999994994
+          ],
+          "peak_error_W_m2": 0.0004250000000003869,
+          "prediction_residual_W_m2": 1.160530005428484e-15
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.0005312499999999999,
+          "mean_signed_wall_errors_W_m2": [
+            0.0005312500000000175,
+            0.0005312499999999636
+          ],
+          "peak_error_W_m2": 0.0005312500000000595,
+          "prediction_residual_W_m2": 5.952269926945419e-17
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0022312499999999997,
+          "tangential_contribution_W_m2": 0.0014875,
+          "mean_signed_wall_errors_W_m2": [
+            0.0037187500000000887,
+            0.003718750000000012
+          ],
+          "peak_error_W_m2": 0.0037187500000001664,
+          "prediction_residual_W_m2": 1.6653345369377348e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0034708333333333327,
+          "tangential_contribution_W_m2": -0.0009562500000000001,
+          "mean_signed_wall_errors_W_m2": [
+            -0.004427083333333341,
+            -0.004427083333333346
+          ],
+          "peak_error_W_m2": 0.004427083333333456,
+          "prediction_residual_W_m2": 1.235990476633475e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00026562499999999996,
+          "mean_signed_wall_errors_W_m2": [
+            0.00026562500000004165,
+            0.0002656249999999743
+          ],
+          "peak_error_W_m2": 0.0002656250000004218,
+          "prediction_residual_W_m2": 4.218088552054855e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0011156249999999999,
+          "tangential_contribution_W_m2": 0.00074375,
+          "mean_signed_wall_errors_W_m2": [
+            0.0018593749999998815,
+            0.0018593749999999969
+          ],
+          "peak_error_W_m2": 0.0018593750000003503,
+          "prediction_residual_W_m2": 3.5041414214731503e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0017354166666666664,
+          "tangential_contribution_W_m2": -0.00047812500000000003,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0022135416666666506,
+            -0.0022135416666668115
+          ],
+          "peak_error_W_m2": 0.002213541666666999,
+          "prediction_residual_W_m2": 3.3241638608405566e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.0,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0,
+          "tangential_contribution_W_m2": 0.00013281249999999998,
+          "mean_signed_wall_errors_W_m2": [
+            0.0001328124999999029,
+            0.00013281250000022395
+          ],
+          "peak_error_W_m2": 0.00013281250000066885,
+          "prediction_residual_W_m2": 6.688714252606198e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0005578124999999999,
+          "tangential_contribution_W_m2": 0.000371875,
+          "mean_signed_wall_errors_W_m2": [
+            0.0009296875000003224,
+            0.0009296874999999917
+          ],
+          "peak_error_W_m2": 0.000929687500000588,
+          "prediction_residual_W_m2": 6.192962809237201e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0008677083333333332,
+          "tangential_contribution_W_m2": -0.00023906250000000002,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0011067708333333142,
+            -0.0011067708333334615
+          ],
+          "peak_error_W_m2": 0.0011067708333335896,
+          "prediction_residual_W_m2": 3.542088497510143e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 8,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.003966666666666666,
+          "tangential_contribution_W_m2": 0.00053125,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0034354166666666513,
+            -0.0034354166666667823
+          ],
+          "peak_error_W_m2": 0.003435416666666885,
+          "prediction_residual_W_m2": 2.190088388420719e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0022312499999999997,
+          "tangential_contribution_W_m2": 0.0031875000000000002,
+          "mean_signed_wall_errors_W_m2": [
+            0.005418750000000019,
+            0.00541874999999999
+          ],
+          "peak_error_W_m2": 0.005418750000000194,
+          "prediction_residual_W_m2": 2.2898349882893854e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0034708333333333327,
+          "tangential_contribution_W_m2": 0.0007437500000000003,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0027270833333333227,
+            -0.0027270833333333955
+          ],
+          "peak_error_W_m2": 0.0027270833333335603,
+          "prediction_residual_W_m2": 2.2789929665645303e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.001983333333333333,
+          "tangential_contribution_W_m2": 0.000265625,
+          "mean_signed_wall_errors_W_m2": [
+            -0.001717708333333376,
+            -0.0017177083333331403
+          ],
+          "peak_error_W_m2": 0.0017177083333335397,
+          "prediction_residual_W_m2": 4.0397372946809895e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0011156249999999999,
+          "tangential_contribution_W_m2": 0.0015937500000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0027093749999999197,
+            0.002709374999999959
+          ],
+          "peak_error_W_m2": 0.002709375000000541,
+          "prediction_residual_W_m2": 5.412337245047638e-16
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0017354166666666664,
+          "tangential_contribution_W_m2": 0.00037187500000000014,
+          "mean_signed_wall_errors_W_m2": [
+            -0.001363541666666678,
+            -0.0013635416666667119
+          ],
+          "peak_error_W_m2": 0.0013635416666670508,
+          "prediction_residual_W_m2": 3.845665105806084e-16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "tau": 1.5,
+      "diagonal_curvature_K_m2": [
+        0.8,
+        -0.45,
+        0.7
+      ],
+      "axes": [
+        {
+          "axis": "x",
+          "normal_contribution_W_m2": -0.0009916666666666665,
+          "tangential_contribution_W_m2": 0.0001328125,
+          "mean_signed_wall_errors_W_m2": [
+            -0.0008588541666665759,
+            -0.0008588541666667253
+          ],
+          "peak_error_W_m2": 0.0008588541666674221,
+          "prediction_residual_W_m2": 7.55580494005148e-16
+        },
+        {
+          "axis": "y",
+          "normal_contribution_W_m2": 0.0005578124999999999,
+          "tangential_contribution_W_m2": 0.0007968750000000001,
+          "mean_signed_wall_errors_W_m2": [
+            0.0013546875000002442,
+            0.0013546874999999972
+          ],
+          "peak_error_W_m2": 0.001354687500000687,
+          "prediction_residual_W_m2": 1.0061396160665481e-15
+        },
+        {
+          "axis": "z",
+          "normal_contribution_W_m2": -0.0008677083333333332,
+          "tangential_contribution_W_m2": 0.00018593750000000007,
+          "mean_signed_wall_errors_W_m2": [
+            -0.000681770833333289,
+            -0.0006817708333335605
+          ],
+          "peak_error_W_m2": 0.000681770833333848,
+          "prediction_residual_W_m2": 5.149418218219903e-16
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "394a50477ed13a96935bcb40b73ee7d20017e805",
+      "file": "lbm_quadratic_wall_startup.py",
+      "source_sha256": "ca0222614ce6df7e3390b11691731061013f0ecf1159087b382d75d4755c37e2"
+    },
+    {
+      "commit": "8d3ad0018b088ea0d2bc51d161ac19cc088ed629",
+      "file": "thermal_common.py",
+      "source_sha256": "055a782b4fb823a4efe8899ea365a9211e5f549058f9726531c1a82ae2ef8a11"
+    }
+  ]
+}
