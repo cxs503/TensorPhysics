@@ -9,7 +9,8 @@ from conduction_provenance import provenance
 from tensorfvm.cht import annulus, storing_rings
 
 
-def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=(.5, .5), sheet_k=(0., 0.), *, return_wall_rates=False, return_bulk_storage=False):
+def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=(.5, .5), sheet_k=(0., 0.), *,
+                   return_wall_rates=False, return_bulk_storage=False, films=(None, None), return_contact_temperatures=False):
     """Solve the six continuum coefficients using wall and sheet jump conditions."""
     from scipy.special import iv, ivp, kv, kvp
 
@@ -22,9 +23,13 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
         q[active] = -reference.K[layer]*wave*np.array([ivp(mode, z), kvp(mode, z)])
         return t, q
 
-    equations = [basis(0, edges[0])[0], basis(2, edges[-1])[0]]
+    bore, bore_flux = basis(0, edges[0])
+    exterior, exterior_flux = basis(2, edges[-1])
+    equations = [bore if films[0] is None else bore+bore_flux/films[0],
+                 exterior if films[1] is None else exterior-exterior_flux/films[1]]
     rhs = list(walls)
     samples = []
+    traces = []
     for i, radius in enumerate(edges[1:-1]):
         left, incoming = basis(i, radius)
         right, outgoing = basis(i+1, radius)
@@ -33,11 +38,12 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
                           outgoing - incoming + (1j*omega*reference.CAPACITY[i]+sheet_k[i]*(mode/radius)**2)*sheet])
         rhs.extend([0., generation[i]])
         samples.append([sheet, incoming, outgoing])
+        traces.append([left, right])
     coeff = np.linalg.solve(equations, rhs)
     fields = np.asarray(samples) @ coeff
     result = (fields,)
     if return_wall_rates:
-        wall_flux = np.array([basis(0, edges[0])[1], basis(2, edges[-1])[1]]) @ coeff
+        wall_flux = np.array([bore_flux, exterior_flux]) @ coeff
         result += (2*np.pi*edges[[0, -1]]*wall_flux,)
     if return_bulk_storage:
         from scipy.integrate import quad_vec
@@ -47,6 +53,8 @@ def bulk_reference(edges, omega, mode, walls, generation, capacities, fractions=
                                    epsabs=1e-13, epsrel=1e-12)
             rates.append(2j*np.pi*omega*capacities[i]*integral)
         result += (np.asarray(rates),)
+    if return_contact_temperatures:
+        result += (np.asarray(traces) @ coeff,)
     return result if len(result) > 1 else fields
 
 
