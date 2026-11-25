@@ -1,0 +1,122 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "field_error_K": 7.496177921093724e-16,
+      "interval_mean_error_K": 1.3759119468860082e-15,
+      "amplitude_K": 1.4210854715202004e-14,
+      "wall_and_ambient_K": 305.0,
+      "bulk_exchange_W_m3_K": 39.47841760435743,
+      "columns": 256,
+      "steps": 8,
+      "method": "theta",
+      "field_error_over_amplitude": 0.05274966264396974,
+      "interval_mean_error_over_amplitude": 0.09682119580141313,
+      "cumulative_wall_error_over_peak": 0.08589523954593484,
+      "passed": true
+    },
+    {
+      "field_error_K": 1.9025213480730484e-16,
+      "interval_mean_error_K": 3.663783408244651e-16,
+      "amplitude_K": 1.4210854715202004e-14,
+      "wall_and_ambient_K": 305.0,
+      "bulk_exchange_W_m3_K": 39.47841760435743,
+      "columns": 256,
+      "steps": 16,
+      "method": "theta",
+      "field_error_over_amplitude": 0.01338780380350968,
+      "interval_mean_error_over_amplitude": 0.025781583737713776,
+      "cumulative_wall_error_over_peak": 0.021653278253027878,
+      "passed": true,
+      "field_error_over_amplitude_order": 1.9782425534271593,
+      "interval_mean_error_over_amplitude_order": 1.9089820227008163,
+      "cumulative_wall_error_over_peak_order": 1.9879927151047472,
+      "field_error_K_order": 1.9782425534271593,
+      "interval_mean_error_K_order": 1.9089820227008163
+    },
+    {
+      "field_error_K": 4.7778648868293446e-17,
+      "interval_mean_error_K": 9.243757136554428e-17,
+      "amplitude_K": 1.4210854715202004e-14,
+      "wall_and_ambient_K": 305.0,
+      "bulk_exchange_W_m3_K": 39.47841760435743,
+      "columns": 256,
+      "steps": 32,
+      "method": "theta",
+      "field_error_over_amplitude": 0.003362123519367377,
+      "interval_mean_error_over_amplitude": 0.006504715811826545,
+      "cumulative_wall_error_over_peak": 0.005504535363194751,
+      "passed": true,
+      "field_error_over_amplitude_order": 1.993474680678508,
+      "interval_mean_error_over_amplitude_order": 1.9867829570598579,
+      "cumulative_wall_error_over_peak_order": 1.9758927655440361,
+      "field_error_K_order": 1.993474680678508,
+      "interval_mean_error_K_order": 1.9867829570598579
+    },
+    {
+      "field_error_K": 1.8714914580057396e-16,
+      "interval_mean_error_K": 4.555568499449884e-16,
+      "amplitude_K": 1.4210854715202004e-14,
+      "wall_and_ambient_K": 305.0,
+      "bulk_exchange_W_m3_K": 39.47841760435743,
+      "columns": 256,
+      "steps": 8,
+      "method": "sdirk2",
+      "field_error_over_amplitude": 0.01316945036390893,
+      "interval_mean_error_over_amplitude": 0.032056963432161356,
+      "cumulative_wall_error_over_peak": 0.02107899293501901,
+      "passed": true
+    },
+    {
+      "field_error_K": 4.1191567391063337e-17,
+      "interval_mean_error_K": 1.1583276539259916e-16,
+      "amplitude_K": 1.4210854715202004e-14,
+      "wall_and_ambient_K": 305.0,
+      "bulk_exchange_W_m3_K": 39.47841760435743,
+      "columns": 256,
+      "steps": 16,
+      "method": "sdirk2",
+      "field_error_over_amplitude": 0.0028985988680187424,
+      "interval_mean_error_over_amplitude": 0.008151006235303182,
+      "cumulative_wall_error_over_peak": 0.005738135564255506,
+      "passed": true,
+      "field_error_over_amplitude_order": 2.18376753467354,
+      "interval_mean_error_over_amplitude_order": 1.9755876989203613,
+      "cumulative_wall_error_over_peak_order": 1.8771519852704894,
+      "field_error_K_order": 2.18376753467354,
+      "interval_mean_error_K_order": 1.9755876989203613
+    },
+    {
+      "field_error_K": 9.67961287083746e-18,
+      "interval_mean_error_K": 2.875634962324552e-17,
+      "amplitude_K": 1.4210854715202004e-14,
+      "wall_and_ambient_K": 305.0,
+      "bulk_exchange_W_m3_K": 39.47841760435743,
+      "columns": 256,
+      "steps": 32,
+      "method": "sdirk2",
+      "field_error_over_amplitude": 0.000681142201846785,
+      "interval_mean_error_over_amplitude": 0.0020235482101216284,
+      "cumulative_wall_error_over_peak": 0.0015028302486693372,
+      "passed": true,
+      "field_error_over_amplitude_order": 2.0893277694008985,
+      "interval_mean_error_over_amplitude_order": 2.010090948930681,
+      "cumulative_wall_error_over_peak_order": 1.9328999927170252,
+      "field_error_K_order": 2.0893277694008985,
+      "interval_mean_error_K_order": 2.010090948930681
+    }
+  ],
+  "sources": [
+    {
+      "commit": "3d71a675f4e56d88e0ad7fbd5e8f2edf63610372",
+      "file": "sph_smooth_source_wall_heat.py",
+      "source_sha256": "82a6b4329fe478d97d25cfed21e8e32aa0be0d4ad09fa92133c967f956717979"
+    },
+    {
+      "commit": "93d62a12675112af5434e565ea5b8ca2ba72acc1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "9090b6b80f1a0d30a04d80d2583eafb3f289b41cd959e4d61336ecd80c8c65b2"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_smooth_source_wall_heat.py --weak-exchange"
+}
