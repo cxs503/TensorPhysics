@@ -1,4 +1,5 @@
 """Harmonic radial and angular conduction in a two-material annulus."""
+import argparse
 import json
 
 import numpy as np
@@ -10,7 +11,7 @@ from tensorfvm.cht import annulus
 from tensorfem import thermal, thermal_analytic
 
 
-def measure(n, mode, spacing, *, include_fem=True):
+def measure(n, mode, spacing, *, include_fem=True, cell_location="volume_centroid"):
     a, b, c = .25, .6, 1.
     k, capacity = np.array([2.,1.3]), np.array([1.,2.5])
     omega, resistance = 2*np.pi, .15
@@ -35,6 +36,9 @@ def measure(n, mode, spacing, *, include_fem=True):
     grid = np.geomspace if spacing == "log" else np.linspace
     edges = np.r_[grid(a,b,n+1), grid(b,c,n+1)[1:]]
     centers = .5*(edges[:-1]+edges[1:])
+    if cell_location == "volume_centroid":
+        # Independent integral of r² dr / integral of r dr on each shell.
+        centers = (2./3)*np.diff(edges**3)/np.diff(edges**2)
     contact = np.zeros(2*n-1)
     contact[n-1] = resistance
     props = np.repeat(capacity,n)
@@ -53,12 +57,14 @@ def measure(n, mode, spacing, *, include_fem=True):
     ambient = walls + np.array([qa@ci,-qc@co])/films
     for name, wall_data, h in (("FVM", walls, (None,None)), ("FVM_film", ambient, films)):
         t, rates = annulus.solve_annular_conduction(edges, np.repeat(k,n), props, wall_data, omega,
-                          contact_resistance=contact, azimuthal_mode=mode, film_coefficients=h)
+                          contact_resistance=contact, azimuthal_mode=mode, film_coefficients=h, cell_location=cell_location)
         angular_loss = 2*np.pi*mode**2*np.repeat(k,n)*np.log(edges[1:]/edges[:-1])*t
         residual = np.diff(rates) + 1j*omega*props*volume*t + angular_loss
         rows.append(row(name, t-exact, rates[[0,n,-1]], resistance*rates[n]/(2*np.pi*b),
                         max(abs(residual[:n].sum()),abs(residual[n:].sum()))))
 
+    for result in rows:
+        result["cell_location"] = cell_location
     if not include_fem:
         return rows
 
@@ -99,14 +105,14 @@ def measure(n, mode, spacing, *, include_fem=True):
     return rows
 
 
-def main():
+def main(cell_location="volume_centroid"):
     rows = []
     for spacing in ("linear","log"):
         for mode in (0,2):
             previous = {}
             levels = (4,8,16,32,64,128) if (spacing,mode) == ("linear",2) else (4,8,16,32,64)
             for n in levels:
-                for row in measure(n,mode,spacing,include_fem=n<=64):
+                for row in measure(n,mode,spacing,include_fem=n<=64,cell_location=cell_location):
                     errors = np.array([row[key] for key in ("temperature_error_K","rate_amplitude_error_W_m",
                                                             "jump_error_K")])
                     name = row["solver"]
@@ -128,4 +134,6 @@ def main():
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--cell-location", choices=("midpoint", "volume_centroid"), default="volume_centroid")
+    raise SystemExit(main(parser.parse_args().cell_location))
