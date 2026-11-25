@@ -1,4 +1,4 @@
-"""Verify FEM, DG and FVM material-side heat fluxes for a heated slab with storing end walls."""
+"""Verify FEM, DG, FVM and SPH material-side heat fluxes for a heated slab with storing end walls."""
 import json
 from dataclasses import replace
 
@@ -11,6 +11,7 @@ from two_layer_conduction import slab_fem_model
 from tensordg import heat_1d as dg
 from tensorfem import thermal
 from tensorfvm.cht import rod
+from tensorsph import heat_conduction_2d as sph
 
 
 def measure(n, omega):
@@ -65,9 +66,28 @@ def measure(n, omega):
         interface_flux_mismatch_W_m2=float(abs(to_right[n-1]-from_left[n])))
     solutions.append(("FVM", surfaces, np.array([from_left[0], -to_right[-1]]), to_right[n-1]))
 
+    spacing = dx[0]
+    particles, walls, wall_flux, cuts = sph.solve_harmonic_layered_films(
+        np.repeat(source, n), spacing, ambient, omega, film_coefficients=film,
+        conductivity=np.repeat(k, n), volumetric_heat_capacity=np.repeat(c, n),
+        contact_resistance_x=contacts, wall_areal_heat_capacity=wall_capacity,
+        backend="banded", return_x_flux=True)
+    left, right = sph.layered_slab_contact_temperatures(particles, cuts, spacing, np.repeat(k, n))
+    surfaces = np.array([walls[0], left[n-1], right[n-1], walls[1]])
+    # Convert the analytic mean of the homogeneous mode to a midpoint value.
+    z = spacing/2*np.sqrt(1j*omega*np.repeat(c, n)/np.repeat(k, n))
+    exact_points = base + amplitude*mean*z/np.sinh(z)
+    particle_metrics = dict(
+        particle_temperature_error_K=float(max(abs(particles.numpy()-exact_points))),
+        particle_balance_residual_W_m2=float(max(abs(cuts.diff().numpy()
+            + spacing*(1j*omega*np.repeat(c, n)*particles.numpy()-np.repeat(source, n))))),
+        cut_wall_flux_mismatch_W_m2=float(max(abs(cuts[[0, -1]].numpy()*[1, -1]-wall_flux.numpy()))))
+    solutions.append(("SPH", surfaces, wall_flux.numpy(), cuts[n].item()))
+    extra = {"FVM": finite_volume, "SPH": particle_metrics}
+
     for solver, t, material, cut in solutions:
         end_t = t[[0, -1]]
-        yield dict(**(finite_volume if solver == "FVM" else {}), solver=solver, cells_per_layer=n, omega_rad_s=omega,
+        yield dict(**extra.get(solver, {}), solver=solver, cells_per_layer=n, omega_rad_s=omega,
                    trace_error_K=float(max(abs(t-exact))),
                    end_flux_error_W_m2=float(max(abs(material-inward))),
                    interface_flux_error_W_m2=float(abs(cut-contact)),
@@ -84,7 +104,13 @@ if __name__ == "__main__":
                 solver = row["solver"]
                 errors = np.array([row[key] for key in ("trace_error_K", "end_flux_error_W_m2",
                                                         "interface_flux_error_W_m2")])
-                residuals = [row["contact_drop_residual_K"], row["wall_balance_residual_W_m2"]]
+                residuals = [row["wall_balance_residual_W_m2"]]
+                if solver == "SPH":
+                    # SPH recovers each material trace by half-cell extrapolation.
+                    errors = np.append(errors, [row["particle_temperature_error_K"], row["contact_drop_residual_K"]])
+                    residuals.extend([row["particle_balance_residual_W_m2"], row["cut_wall_flux_mismatch_W_m2"]])
+                else:
+                    residuals.append(row["contact_drop_residual_K"])
                 if solver == "FVM":
                     errors = np.append(errors, row["cell_mean_error_K"])
                     residuals.extend([row["cell_balance_residual_W_m2"], row["interface_flux_mismatch_W_m2"]])
@@ -95,5 +121,5 @@ if __name__ == "__main__":
                 runs.append(row)
     print(json.dumps(dict(runs=runs, sources=[provenance(path) for path in (
         __file__, reference.__code__.co_filename, slab_fem_model.__code__.co_filename,
-        dg.__file__, thermal.__file__, rod.__file__)]), indent=2, allow_nan=False))
+        dg.__file__, thermal.__file__, rod.__file__, sph.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in runs) else 1)
