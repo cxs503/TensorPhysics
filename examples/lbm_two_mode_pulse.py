@@ -11,6 +11,23 @@ from conduction_provenance import provenance
 from tensorlbm import thermal_common as lbm
 
 
+def lattice_decay_rates(n, tau, dt):
+    """Fourier symbol for x-dependent D3Q7 BGK diffusion on the odd slab extension."""
+    # Combine the five populations stationary along x into one component.
+    weights = np.array([.75, .125, .125])
+    collision = (1-1/tau)*np.eye(3) + np.outer(weights, np.ones(3))/tau
+    speeds = np.array([0, 1, -1])
+    rates = []
+    for k in (1, 2):
+        stream = np.exp(-1j*k*math.pi*speeds/n)
+        eigenvalues = np.linalg.eigvals(stream[:, None]*collision)
+        slow = eigenvalues[np.argmin(abs(eigenvalues-1))]
+        if abs(slow.imag) > 1e-12 or not 0 < slow.real < 1:
+            raise ValueError("expected a real decaying diffusion mode")
+        rates.append(-math.log(slow.real)/dt)
+    return np.asarray(rates)
+
+
 def measure(n, width, tau=1.):
     rate = math.pi**2
     start, stop = 1.2/(16*rate), (1.2+width)/(16*rate)
@@ -88,6 +105,11 @@ def measure(n, width, tau=1.):
     # Freeze each measured amplitude pair and continue it with the exact
     # source-free decay rates. The first endpoint already includes the
     # fraction of one lattice step between the switch and this endpoint.
+    discrete_rates = lattice_decay_rates(n, tau, dt)
+    # Measure attenuation over the final quarter of the run, well past both switches.
+    fit_start = 3*steps//4
+    measured_rates = np.log(coefficients[fit_start]/coefficients[-1])/((steps-fit_start)*dt)
+    rate_mismatch = float(np.max(np.abs(measured_rates/discrete_rates-1)))
     continuations = []
     for offset in (0, 1, 2, 4, 8):
         index = first+offset
@@ -102,9 +124,14 @@ def measure(n, width, tau=1.):
         # factor. This gives a closed-form check of the measured bracket.
         analytic_midpoint_root = analytic_root + math.log(math.cosh(2*rate*dt)/math.cosh(rate*dt/2))/(3*rate)
         bracket_left = dt*(index+pulse.reversal_bracket_index(mean_power)+.5)
+        slow_power = (amplitudes*np.exp(-elapsed[:, None]*discrete_rates)) @ derivative
+        slow_root = midpoint_crossing(.5*(slow_power[:-1]+slow_power[1:]), index)
         continuations.append(dict(steps_after_first_endpoint=offset, endpoint_time=index*dt,
                                   relative_amplitude_errors=(amplitudes/exact_coefficients[index-1]-1).tolist(),
                                   analytic_midpoint_root_bracketed=bool(bracket_left <= analytic_midpoint_root <= bracket_left+dt),
+                                  discrete_rate_root=slow_root,
+                                  decay_rate_shift_over_interval=(slow_root-continued_root)/interval,
+                                  remaining_shift_over_interval=(modal_crossing-slow_root)/interval,
                                   exact_continuation_root=analytic_root, sampled_continuation_root=continued_root,
                                   accumulated_shift_over_interval=(continued_root-sampled_exact)/interval,
                                   subsequent_shift_over_interval=(modal_crossing-continued_root)/interval))
@@ -117,6 +144,9 @@ def measure(n, width, tau=1.):
                 max_balance_over_peak=float(max_balance), max_temperature_error_over_peak=max_temp,
                 max_projection_residual_over_peak=max_projection_residual,
                 free_decay_controls=continuations,
+                discrete_decay_rates=discrete_rates.tolist(), measured_decay_rates=measured_rates.tolist(),
+                relative_decay_rate_errors=(discrete_rates/(rate*np.array([1., 4.]))-1).tolist(),
+                max_relative_rate_mismatch=rate_mismatch,
                 modal_reversal_time=modal_crossing, sampled_exact_reversal_time=sampled_exact,
                 sampling_shift_over_interval=(sampled_exact-exact_crossing)/interval,
                 temperature_mode_shift_over_interval=(modal_crossing-sampled_exact)/interval,
@@ -139,8 +169,10 @@ if __name__ == "__main__":
                                                               "max_cumulative_wall_heat_error_over_peak")}
             row["passed"] = bool(max(row["relative_heat_error"], row["max_balance_over_peak"],
                                      row["max_projection_residual_over_peak"]) < 1e-12
+                                 and row["max_relative_rate_mismatch"] < 1e-8
                                  and all(c["analytic_midpoint_root_bracketed"] for c in row["free_decay_controls"])
-                                 and (n < 64 or min(row["orders"].values()) > 1.7))
+                                 and (n < 64 or (min(row["orders"].values()) > 1.7 and
+                                      abs(row["free_decay_controls"][-1]["remaining_shift_over_interval"]) < 1e-6)))
             runs.append(row)
             previous = row
     passed = all(r["passed"] for r in runs)
