@@ -9,22 +9,30 @@ import torch
 from conduction_provenance import provenance
 
 
+def exact_reversal_time(start, stop, rate):
+    # After switch-off the two outward powers cancel at A1 exp(-s) = 2 A2 exp(-4s).
+    duration = stop-start
+    ratio = math.expm1(-4*duration)/(2*math.expm1(-duration))
+    return (stop + math.log(ratio)/3)/rate
+
+
+def reversal_bracket_index(power):
+    outward = power >= 0
+    crossings = np.flatnonzero(outward[:-1] != outward[1:])
+    if not np.isfinite(power).all() or len(crossings) != 1 or outward[0]:
+        raise ValueError("expected one sustained inward-to-outward reversal after switch-off")
+    return crossings[0]
+
+
 def reversal_time(grid, right_heat, start, stop, rate):
     """Interpolate signed step-average powers at step midpoints after switch-off."""
     mids = (grid[1:] + grid[:-1])/2
     after = grid[:-1] >= stop/rate
     mids = mids[after]
     power = right_heat[after]/np.diff(grid)[after]
-    outward = power >= 0
-    crossings = np.flatnonzero(outward[:-1] != outward[1:])
-    if not np.isfinite(power).all() or len(crossings) != 1 or outward[0]:
-        raise ValueError("expected one sustained inward-to-outward reversal after switch-off")
-    j = crossings[0]
+    j = reversal_bracket_index(power)
     estimate = mids[j] - power[j]*(mids[j+1]-mids[j])/(power[j+1]-power[j])
-    # After switch-off the two outward powers cancel at A1 exp(-s) = 2 A2 exp(-4s).
-    duration = stop-start
-    ratio = math.expm1(-4*duration)/(2*math.expm1(-duration))
-    exact = (stop + math.log(ratio)/3)/rate
+    exact = exact_reversal_time(start, stop, rate)
     return dict(reversal_time=float(estimate), exact_reversal_time=exact,
                 bracketing_midpoints=mids[j:j+2].tolist(),
                 timing_error_over_output_interval=float(abs(estimate-exact)*16*rate))
@@ -47,6 +55,7 @@ def measure(cells, width, solver="dg"):
                                      for a, b in zip(knots, knots[1:])]), knots[-1]]/rate
         steps = indices*subdivisions
     if solver == "dg":
+        from scipy.optimize import brentq
         from tensordg import heat_1d
 
         def source(x):
@@ -56,6 +65,24 @@ def measure(cells, width, solver="dg"):
             knots/rate, np.zeros((len(knots), 2)), cells, 2, backend="exact-time",
             wall_penalty=40., initial_temperature=torch.zeros_like, integrate_face_fluxes=True,
             interval_sources=[source if start <= t < stop else None for t in knots[:-1]])
+
+        # Locate the bracket from post-pulse states, independently of the continuum root.
+        first = np.searchsorted(knots, stop)
+        right_power = np.array([float(heat_1d.sipg_heat_face_fluxes(state, wall_penalty=40.)[-1])
+                                for state in states[first:]])
+        left = first + reversal_bracket_index(right_power)
+        bracket = knots[left:left+2]/rate
+
+        def power_at(t):
+            _, state, _ = heat_1d.solve_heat_1d_exact_time(
+                cells, 2, t-bracket[0], wall_penalty=40., initial_temperature=states[left])
+            return float(heat_1d.sipg_heat_face_fluxes(state, wall_penalty=40.)[-1])
+
+        estimate = brentq(power_at, *bracket, xtol=1e-14)
+        exact = exact_reversal_time(start, stop, rate)
+        timing = dict(reversal_time=estimate, exact_reversal_time=exact,
+                      bracketing_state_times=bracket.tolist(),
+                      timing_error_over_output_interval=abs(estimate-exact)*16*rate)
         sections = np.add.reduceat(np.asarray(info["interval_face_heat"]), indices[:-1], axis=0)
         # Outward heat has opposite orientation to the solver's +x flux at the left wall.
         walls = sections[:, [0, -1]] * [-1, 1]
@@ -180,6 +207,9 @@ if __name__ == "__main__":
             row = measure(cells, width, solver)
             orders = {} if previous is None else {
                 key: math.log2(previous[key]/row[key]) for key in ("left_error", "right_error")}
+            if solver == "dg" and previous is not None:
+                key = "timing_error_over_output_interval"
+                orders[key] = math.log2(previous[key]/row[key])
             row["orders"] = orders
             row["passed"] = (row["signs_match"] and row["balance_error"] < 1e-8 and
                              (cells < 64 or (min(orders.values()) > required_order and
@@ -189,7 +219,9 @@ if __name__ == "__main__":
                                      row["max_step_shared_face_mismatch"]) < 1e-10
             if solver.startswith("fem-"):
                 row["passed"] &= row["max_step_free_node_residual"] < 1e-10
-            if solver != "dg":
+            if solver == "dg":
+                row["passed"] &= row["timing_error_over_output_interval"] < 1e-5*(64/cells)**4
+            else:
                 row["passed"] &= row["timing_error_over_output_interval"] < .01*(64/cells)**2
             runs.append(row)
             previous = row
