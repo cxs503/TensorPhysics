@@ -9,7 +9,7 @@ import sph_subinterval_heat_pulse as sph
 from conduction_provenance import provenance
 
 
-def measure(n, method, width, *, return_mean_profile=False):
+def measure(n, method, width, *, return_mean_profile=False, return_profiles=False):
     # Unit material properties and area, with absolute initial and wall inputs.
     amplitude = 2**-44
     rate = math.pi**2
@@ -62,6 +62,15 @@ def measure(n, method, width, *, return_mean_profile=False):
                 decay_wall_heat_error_over_scale=float(error[2:].max()),
                 source_heat_relative_error=float(abs(measured_input-exact_input).max()/exact_input.max()),
                 energy_residual_over_peak=float(abs(np.diff(stored)-measured_input-wall_heat.sum(axis=1)).max()/(amplitude*peak)))
+    if return_profiles:
+        # Each face is counted once, with positive heat pointing right.
+        scale = math.pi*amplitude*dt*peak
+        cuts = np.column_stack((ledger["left"][:, 0], ledger["right"]))
+        reference = -math.pi*amplitude*integral[:, None]*np.cos(math.pi*np.arange(n+1)*dx)
+        residual = dx*np.diff(cell, axis=0) - ledger["source"] + np.diff(cuts, axis=1)
+        metrics["section_heat_error_over_scale"] = float(abs(cuts-reference).max()/scale)
+        metrics["cell_balance_error_over_heat_scale"] = float(abs(residual).max()/scale)
+        return metrics, sampled[:, :, 2]/(amplitude*peak), cuts/scale
     if return_mean_profile:
         # SPH particles lie at the cell centers. Use the reconstructed center
         # value at fraction 0.5, preserving the temporal interval averaging.
@@ -75,8 +84,9 @@ if __name__ == "__main__":
     for n in (16, 32, 64):
         for method in ("theta", "sdirk2"):
             for width in (0.05, 0.5):
-                fv, centers = measure(n, method, width, return_mean_profile=True)
-                particles, particle_means = sph.measure(n, method, width, 0, return_mean_profile=True)
+                fv, centers, fv_cuts = measure(n, method, width, return_profiles=True)
+                particles, particle_means, sph_cuts = sph.measure(n, method, width, 0, return_profiles=True)
+                cut_differences = abs(fv_cuts-sph_cuts).max(axis=1)
                 # Take the maximum over every SPH row and x location for each interval.
                 differences = abs(centers[:, None, :] - particle_means).max(axis=(1, 2))
                 worst = float(differences.max())
@@ -94,7 +104,13 @@ if __name__ == "__main__":
                 passed = passed and max(particles["crossing_mean_error_over_peak"],
                                         particles["decay_mean_error_over_peak"]) < tolerance
                 passed = passed and worst < tolerance and (n < 64 or order > 1.8)
-                runs.append(dict(center_mean_difference_over_peak=differences.tolist(),
+                passed = passed and max(fv["section_heat_error_over_scale"], particles["section_heat_error_over_scale"],
+                                        cut_differences.max()) < tolerance
+                passed = passed and max(fv["cell_balance_error_over_heat_scale"],
+                                        particles["cell_balance_error_over_heat_scale"]) < 1e-10
+                runs.append(dict(section_heat_difference_over_scale=cut_differences.tolist(),
+                                 max_section_heat_difference_over_scale=float(cut_differences.max()),
+                                 center_mean_difference_over_peak=differences.tolist(),
                                  max_center_mean_difference_over_peak=worst, center_mean_difference_order=order,
                                  columns=n, method=method, width_over_interval=width, fvm=fv, sph=particles,
                                  passed=passed and fv["source_heat_relative_error"] < 1e-12))

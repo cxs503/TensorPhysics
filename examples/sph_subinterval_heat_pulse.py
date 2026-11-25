@@ -8,7 +8,7 @@ from tensorsph import heat_conduction_2d as heat
 from conduction_provenance import provenance
 
 
-def measure(n, method, width_fraction, mode_y, *, return_mean_profile=False):
+def measure(n, method, width_fraction, mode_y, *, return_mean_profile=False, return_profiles=False):
     base, amplitude = 305., 2**-44
     x = (torch.arange(n, dtype=torch.float64)+0.5)/n
     lateral = torch.cos(2*torch.pi*mode_y*x)
@@ -60,6 +60,16 @@ def measure(n, method, width_fraction, mode_y, *, return_mean_profile=False):
                 split_field_difference_over_peak=float(abs(field[2]-detail[4]).max()/(amplitude*peak)),
                 split_section_heat_difference_over_scale=float(abs(cuts[1]-subcuts[1:4].sum(0)).max()/heat_scale),
                 split_wall_heat_difference_over_scale=float(abs(walls[1]-subwalls[1:4].sum(0)).max()/heat_scale))
+    if return_profiles:
+        faces = torch.arange(n+1, dtype=x.dtype)/n
+        # Section heat integrates over y. The transverse cosine mode has
+        # zero analytical mean unless mode_y is zero.
+        reference = -torch.pi*amplitude*integral[:, None]*torch.cos(torch.pi*faces)*(mode_y == 0)
+        generated = amplitude*rate*on_duration.diff()[:, None]*mode.mean(0)/n
+        residual = field.mean(1).diff(dim=0)/n - generated + cuts.diff(dim=1)
+        metrics["section_heat_error_over_scale"] = float(abs(cuts-reference).max()/heat_scale)
+        metrics["cell_balance_error_over_heat_scale"] = float(abs(residual).max()/heat_scale)
+        return metrics, means.numpy()/(amplitude*peak), cuts.numpy()/heat_scale
     if return_mean_profile:
         return metrics, means.numpy()/(amplitude*peak)
     return metrics
