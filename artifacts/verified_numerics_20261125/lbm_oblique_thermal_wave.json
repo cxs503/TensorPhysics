@@ -1,0 +1,200 @@
+{
+  "reference": "Cell, face and step averages of exp(s dot x + i omega t); k*(s dot s)=i omega C; all six inward boundary fluxes prescribed",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_oblique_thermal_wave.py",
+  "runs": [
+    {
+      "cells_xyz": [
+        8,
+        6,
+        4
+      ],
+      "omega_rad_s": 4.0,
+      "steps": 32,
+      "temperature_error_K": 0.003161264572902861,
+      "interior_flux_errors_xyz_W_m2": [
+        0.010978084037847502,
+        0.011662477125049309,
+        0.0109780840378364
+      ],
+      "cell_energy_residual_J": 1.1993986533120893e-18,
+      "temperature_and_xyz_flux_orders": [],
+      "all_orders_above_1p7": null,
+      "passed": true
+    },
+    {
+      "cells_xyz": [
+        16,
+        12,
+        8
+      ],
+      "omega_rad_s": 4.0,
+      "steps": 128,
+      "temperature_error_K": 0.0009178552952638086,
+      "interior_flux_errors_xyz_W_m2": [
+        0.0028914212134383277,
+        0.0030415926603688526,
+        0.0028914212134214523
+      ],
+      "cell_energy_residual_J": 1.8973538018496328e-19,
+      "temperature_and_xyz_flux_orders": [
+        1.7841631543032328,
+        1.9247755917205547,
+        1.9389753904913052,
+        1.9247755917275156
+      ],
+      "all_orders_above_1p7": true,
+      "passed": true
+    },
+    {
+      "cells_xyz": [
+        32,
+        24,
+        16
+      ],
+      "omega_rad_s": 4.0,
+      "steps": 512,
+      "temperature_error_K": 0.00024581421008193494,
+      "interior_flux_errors_xyz_W_m2": [
+        0.0007378361346699336,
+        0.000773362027047586,
+        0.0007378361346201956
+      ],
+      "cell_energy_residual_J": 2.5622746654442585e-20,
+      "temperature_and_xyz_flux_orders": [
+        1.9006984053181153,
+        1.9704064413516005,
+        1.9756111224429354,
+        1.9704064414404334
+      ],
+      "all_orders_above_1p7": true,
+      "passed": true
+    },
+    {
+      "cells_xyz": [
+        48,
+        36,
+        24
+      ],
+      "omega_rad_s": 4.0,
+      "steps": 1152,
+      "temperature_error_K": 0.00011169101853325536,
+      "interior_flux_errors_xyz_W_m2": [
+        0.0003298756725547136,
+        0.00034542020883954194,
+        0.00032987567259112893
+      ],
+      "cell_energy_residual_J": 7.768053132485483e-21,
+      "temperature_and_xyz_flux_orders": [
+        1.945518111051598,
+        1.9853889039210195,
+        1.9878050925116344,
+        1.9853889034825067
+      ],
+      "all_orders_above_1p7": true,
+      "passed": true
+    },
+    {
+      "cells_xyz": [
+        8,
+        6,
+        4
+      ],
+      "omega_rad_s": 16.0,
+      "steps": 32,
+      "temperature_error_K": 0.03155043428674631,
+      "interior_flux_errors_xyz_W_m2": [
+        0.09543662955426768,
+        0.15550200774700507,
+        0.09543662955425702
+      ],
+      "cell_energy_residual_J": 7.589415207398531e-18,
+      "temperature_and_xyz_flux_orders": [],
+      "all_orders_above_1p7": null,
+      "passed": true
+    },
+    {
+      "cells_xyz": [
+        16,
+        12,
+        8
+      ],
+      "omega_rad_s": 16.0,
+      "steps": 128,
+      "temperature_error_K": 0.012560916040836645,
+      "interior_flux_errors_xyz_W_m2": [
+        0.02672784719717214,
+        0.04683441138976896,
+        0.026727847197051346
+      ],
+      "cell_energy_residual_J": 1.4471557903839721e-18,
+      "temperature_and_xyz_flux_orders": [
+        1.3287181830731336,
+        1.8361994536918562,
+        1.731292368935882,
+        1.836199453698215
+      ],
+      "all_orders_above_1p7": false,
+      "passed": true
+    },
+    {
+      "cells_xyz": [
+        32,
+        24,
+        16
+      ],
+      "omega_rad_s": 16.0,
+      "steps": 512,
+      "temperature_error_K": 0.0038533782118168602,
+      "interior_flux_errors_xyz_W_m2": [
+        0.009972468156817627,
+        0.012635568731685254,
+        0.009972468156817627
+      ],
+      "cell_energy_residual_J": 1.9820570965750628e-19,
+      "temperature_and_xyz_flux_orders": [
+        1.7047459811349857,
+        1.4223211231871153,
+        1.8900783316366117,
+        1.4223211231805952
+      ],
+      "all_orders_above_1p7": false,
+      "passed": true
+    },
+    {
+      "cells_xyz": [
+        48,
+        36,
+        24
+      ],
+      "omega_rad_s": 16.0,
+      "steps": 1152,
+      "temperature_error_K": 0.0018271684109407715,
+      "interior_flux_errors_xyz_W_m2": [
+        0.004979564129371283,
+        0.005755035973052713,
+        0.004979564129527603
+      ],
+      "cell_energy_residual_J": 6.365981994208101e-20,
+      "temperature_and_xyz_flux_orders": [
+        1.84031314693877,
+        1.712812606613592,
+        1.9396008277887793,
+        1.7128126065361695
+      ],
+      "all_orders_above_1p7": true,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "7380a4605c0fb179e6ad16688a4140b8eba68862",
+      "file": "lbm_oblique_thermal_wave.py",
+      "source_sha256": "4ae8ba95e7f2443b3dc97fa6f8a7481228b21fd63a79bee299b96a56c9a51616"
+    },
+    {
+      "commit": "9f3d49e0eb24a8bcf87591e87dea4b031c728859",
+      "file": "thermal_common.py",
+      "source_sha256": "38f20f3fdf28a7f15698eaa555a3b2cf1630ca6a865372eac7a7a5135a5b117c"
+    }
+  ]
+}
