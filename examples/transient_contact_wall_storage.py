@@ -1,7 +1,12 @@
 """Decay of a two-layer temperature mode with a resistive contact and two storing walls."""
 import json
+from dataclasses import replace
 
 import numpy as np
+import torch
+
+from tensorfem import thermal
+import two_layer_conduction
 
 from conduction_provenance import provenance
 from tensorfvm.cht import energy
@@ -34,6 +39,36 @@ def measure(n, wall_flux_order):
     means *= np.sinc(np.sqrt(decay*capacity/k)*dx/(2*np.pi))
     times = np.linspace(0.,1.,2*n+1)
     signal = np.exp(-decay*times)
+    if wall_flux_order is None:
+        model, ends = two_layer_conduction.slab_fem_model(k,0.,0.,resistance,film,torch.from_numpy(capacity))
+        model = replace(model,wall_areal_heat_capacity=torch.from_numpy(wall_capacity))
+        xn = np.arange(mid+1)*dx
+        nodal = np.r_[propagate(xn,start,west_flux,1.,1.)[0],propagate(xn,cold,contact_flux,4.,2.)[0]]
+        loads = torch.zeros((len(times),len(model.nodes)),dtype=torch.float64)
+        # Each end edge has unit area and two linear shape functions.
+        loads[:,ends] = torch.from_numpy((signal[:,None]*air*film/2)[:,:,None])
+        result = thermal.solve_transient_thermal(model,torch.from_numpy(times),
+                       torch.from_numpy(np.tile(nodal,2)),theta=.5,sparse=True,nodal_heat_history=loads)
+        traces = result.temperature.numpy().reshape(len(times),2,n+2).mean(axis=1)
+        surface = traces[:,[0,-1]]
+        field = np.column_stack([.5*(u[:,1:]+u[:,:-1]) for u in (traces[:,:mid+1],traces[:,mid+1:])])
+        element_heat = thermal.thermal_element_nodal_heat_steps(model,result).numpy()
+        wall_heat = np.column_stack((element_heat[:,0,[0,3]].sum(axis=1),element_heat[:,-1,[1,2]].sum(axis=1)))
+        contact_heat = -element_heat[:,mid-1,[1,2]].sum(axis=1)
+        dt = np.diff(times)
+        exact_interval = -np.diff(signal)/decay
+        external = film*(signal[:,None]*air-surface)
+        wall_residual = wall_capacity*np.diff(surface,axis=0)+wall_heat-.5*dt[:,None]*(external[:-1]+external[1:])
+        stored = dx*np.column_stack((field[:,:mid] @ capacity[:mid],field[:,mid:] @ capacity[mid:]))
+        layer_residual = np.diff(stored,axis=0)-wall_heat+np.column_stack((contact_heat,-contact_heat))
+        return dict(solver="FEM",n=n,steps=len(dt),
+                    max_cell_mean_error_K=float(abs(field-signal[:,None]*means).max()),
+                    max_wall_temperature_error_K=float(abs(surface-signal[:,None]*walls).max()),
+                    max_step_mean_wall_flux_error_W_m2=float(abs((wall_heat-exact_interval[:,None]*inward)/dt[:,None]).max()),
+                    max_step_mean_contact_flux_error_W_m2=float(abs((contact_heat-exact_interval*contact_flux)/dt).max()),
+                    max_cumulative_wall_heat_error_J_m2=float(abs((wall_heat-exact_interval[:,None]*inward).cumsum(axis=0)).max()),
+                    max_wall_step_residual_J_m2=float(abs(wall_residual).max()),
+                    max_layer_step_residual_J_m2=float(abs(layer_residual).max()))
     bc = {side:dict(type="robin", values=lambda t,a=a:a*np.exp(-decay*t),
                     film_coefficient=h,wall_areal_heat_capacity=cw,initial_wall_temperature=w)
           for side,a,h,cw,w in zip(("west","east"),air,film,wall_capacity,walls)}
@@ -57,7 +92,7 @@ def measure(n, wall_flux_order):
     recovered = ext-wall_capacity*np.gradient(surface,times,axis=0,edge_order=2)
     cumulative = integrated(q).cumsum(axis=0)
     exact_heat = -np.expm1(-decay*times[1:,None])*inward/decay
-    return dict(n=n,wall_flux_order=wall_flux_order,max_wall_storage_flux_error_W_m2=float(abs(recovered-signal[:,None]*inward).max()),
+    return dict(solver="FVM",n=n,wall_flux_order=wall_flux_order,max_wall_storage_flux_error_W_m2=float(abs(recovered-signal[:,None]*inward).max()),
                 max_cumulative_wall_heat_error_J_m2=float(abs(cumulative-exact_heat).max()),
                 steps=len(times)-1,
                 max_cell_mean_error_K=float(abs(field-signal[:,None]*means).max()),
@@ -86,8 +121,18 @@ if __name__ == "__main__":
                              and all(p>floor for p,floor in zip(orders,floors)))
             rows.append(row)
             previous = errors
+    previous = None
+    for n in (16,32,64,128,256):
+        row = measure(n,None)
+        errors = {k:v for k,v in row.items() if "_error_" in k}
+        orders = {} if previous is None else {k:np.log2(previous[k]/v) for k,v in errors.items()}
+        row["orders"] = orders
+        row["passed"] = (all(v>1.85 for v in orders.values()) and
+                         max(row["max_layer_step_residual_J_m2"],row["max_wall_step_residual_J_m2"]) < 1e-10)
+        rows.append(row)
+        previous = errors
     metrics = ["cell temperature","wall temperature","instantaneous wall flux","interface flux",
                "cumulative wall heat","wall flux from storage"]
-    print(json.dumps(dict(runs=rows,order_metrics=metrics,sources=[provenance(f) for f in (__file__,energy.__file__)]),
+    print(json.dumps(dict(runs=rows,order_metrics=metrics,sources=[provenance(f) for f in (__file__,energy.__file__,thermal.__file__,two_layer_conduction.__file__)]),
                      indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
