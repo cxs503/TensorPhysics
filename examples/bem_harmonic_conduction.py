@@ -8,7 +8,7 @@ from conduction_provenance import provenance
 from tensorbem import geometry, harmonic_conduction
 
 
-def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False, curved_source=False):
+def measure(n, omega, condition="temperature", *, quadratic=False, graded=False, heated=False, affine=False, curved_source=False, interior_flux=False):
     if graded:
         local = np.arange(n//4)/(n//4)
         angle = (np.arange(4)[:, None]+(1-np.cos(np.pi*local))/2).ravel()*np.pi/2
@@ -57,6 +57,10 @@ def measure(n, omega, condition="temperature", *, quadratic=False, graded=False,
     angles = np.arange(21)*2*np.pi/21+.137
     probes = center+np.concatenate([r*np.column_stack((np.cos(angles), np.sin(angles))) for r in (.15, .55, .83)])
     extra = {}
+    if interior_flux:
+        analytic = -k*(gradient+probes @ hessian+wave*modes(probes) @ directions)
+        error = abs(result.heat_flux(probes)-analytic)
+        extra["interior_x_flux_error_W_m2"], extra["interior_y_flux_error_W_m2"] = error.max(axis=0).tolist()
     if heated or affine or curved_source:
         # Integrate the analytic storage over the actual polygon, using
         # triangles from the origin to each panel. No BEM flux enters storage.
@@ -87,6 +91,7 @@ if __name__ == "__main__":
     source_group.add_argument("--affine", action="store_true", help="verify an affine volume source on a translated polygon")
     source_group.add_argument("--curved-source", action="store_true", help="verify quadratic volumetric heating with a cross term")
     source_group.add_argument("--heated", action="store_true", help="add uniform volumetric generation and check total heat balance")
+    parser.add_argument("--interior-flux", action="store_true", help="verify both Cartesian interior heat-flux components")
     args = parser.parse_args()
     rows = []
     for omega in (1., 6.):
@@ -94,12 +99,14 @@ if __name__ == "__main__":
         refinements = (16, 32, 64, 128, 256) if args.boundary == "mixed" else (16, 32, 64, 128)
         for n in refinements:
             row = measure(n, omega, args.boundary, quadratic=args.quadratic, graded=args.graded, heated=args.heated, affine=args.affine,
-                          curved_source=args.curved_source)
+                          curved_source=args.curved_source, interior_flux=args.interior_flux)
             metrics = ["interior_error_K"]
             if args.boundary != "flux":
                 metrics.append("boundary_flux_error_W_m2")
             if args.boundary != "temperature":
                 metrics.append("wall_temperature_error_K")
+            if args.interior_flux:
+                metrics.extend(["interior_x_flux_error_W_m2", "interior_y_flux_error_W_m2"])
             errors = np.array([row[key] for key in metrics])
             row["order_metrics"] = metrics
             orders = np.log2(previous/errors).tolist() if previous is not None else []
