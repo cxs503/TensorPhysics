@@ -1,0 +1,105 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "branch": "archive/verified-numerics-20261125",
+  "near_field": {
+    "commit": "153498837b9cb73c10e9ca4d99223ef9b4f8fe8d",
+    "reference": "Unit-normalized endpoint and midpoint logarithmic integrals, off-panel Gauss-Legendre integral, and signed midpoint angle for constant and linear double-layer density. Five panel lengths, L=1e-220 to 1e220, reference length L.",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py tests/test_solver.py tests/test_mixed_boundary.py -o junit_family=legacy --junitxml=results.xml",
+    "counts": {
+      "tests": 84,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_single_layer_near_field_scales_with_panel[1e-220]": {
+        "scalar_relative_error": 2.220446049250313e-16,
+        "batch_relative_error": 2.220446049250313e-16
+      },
+      "test_single_layer_near_field_scales_with_panel[1e-16]": {
+        "scalar_relative_error": 0.0,
+        "batch_relative_error": 0.0
+      },
+      "test_single_layer_near_field_scales_with_panel[1.0]": {
+        "scalar_relative_error": 0.0,
+        "batch_relative_error": 0.0
+      },
+      "test_single_layer_near_field_scales_with_panel[1e+16]": {
+        "scalar_relative_error": 0.0,
+        "batch_relative_error": 0.0
+      },
+      "test_single_layer_near_field_scales_with_panel[1e+220]": {
+        "scalar_relative_error": 1.1102230246251565e-16,
+        "batch_relative_error": 1.1102230246251565e-16
+      },
+      "test_double_layer_near_field_scales_with_panel[1e-220]": {
+        "scalar_absolute_error": 0.0,
+        "batch_absolute_error": 0.0,
+        "first_moment_over_length_absolute_error": 2.7755575615628914e-17
+      },
+      "test_double_layer_near_field_scales_with_panel[1e-16]": {
+        "scalar_absolute_error": 0.0,
+        "batch_absolute_error": 0.0,
+        "first_moment_over_length_absolute_error": 2.7755575615628914e-17
+      },
+      "test_double_layer_near_field_scales_with_panel[1.0]": {
+        "scalar_absolute_error": 0.0,
+        "batch_absolute_error": 0.0,
+        "first_moment_over_length_absolute_error": 0.0
+      },
+      "test_double_layer_near_field_scales_with_panel[1e+16]": {
+        "scalar_absolute_error": 0.0,
+        "batch_absolute_error": 0.0,
+        "first_moment_over_length_absolute_error": 2.7755575615628914e-17
+      },
+      "test_double_layer_near_field_scales_with_panel[1e+220]": {
+        "scalar_absolute_error": 0.0,
+        "batch_absolute_error": 0.0,
+        "first_moment_over_length_absolute_error": 2.7755575615628914e-17
+      }
+    }
+  },
+  "double_layer_far_field": {
+    "commit": "f8d7a5444027d81a78587434653fb1477b3c9fb5",
+    "reference": "Independent 32-point Gauss-Legendre quadrature of the physical point double-layer kernel times density 1 or s. Six distances from 3.99 to 1e16 panel lengths, three directions.",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py tests/test_solver.py tests/test_mixed_boundary.py tests/test_linear_density_solver.py -o junit_family=legacy --junitxml=results.xml",
+    "counts": {
+      "tests": 96,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_double_layer_distance_range_against_gaussian_quadrature[3.99]": {
+        "scalar_relative_error": 4.440892098500626e-16,
+        "batch_relative_error": 4.440892098500626e-16,
+        "first_moment_relative_error": 2.1094237467877974e-15
+      },
+      "test_double_layer_distance_range_against_gaussian_quadrature[4.0]": {
+        "scalar_relative_error": 2.220446049250313e-16,
+        "batch_relative_error": 2.220446049250313e-16,
+        "first_moment_relative_error": 4.440892098500626e-16
+      },
+      "test_double_layer_distance_range_against_gaussian_quadrature[4.01]": {
+        "scalar_relative_error": 2.220446049250313e-16,
+        "batch_relative_error": 2.220446049250313e-16,
+        "first_moment_relative_error": 2.220446049250313e-16
+      },
+      "test_double_layer_distance_range_against_gaussian_quadrature[10000.0]": {
+        "scalar_relative_error": 2.220446049250313e-16,
+        "batch_relative_error": 2.220446049250313e-16,
+        "first_moment_relative_error": 2.220446049250313e-16
+      },
+      "test_double_layer_distance_range_against_gaussian_quadrature[10000000000.0]": {
+        "scalar_relative_error": 2.220446049250313e-16,
+        "batch_relative_error": 2.220446049250313e-16,
+        "first_moment_relative_error": 2.220446049250313e-16
+      },
+      "test_double_layer_distance_range_against_gaussian_quadrature[1e+16]": {
+        "scalar_relative_error": 2.220446049250313e-16,
+        "batch_relative_error": 2.220446049250313e-16,
+        "first_moment_relative_error": 2.220446049250313e-16
+      }
+    }
+  }
+}
