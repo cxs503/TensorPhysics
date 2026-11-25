@@ -1,0 +1,58 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "4c0e22f195c76713f49ad7e7707ff35a9dbeca42",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_annular_conduction.py tests/test_robin_conduction.py tests/test_harmonic_conduction.py tests/test_transient_conduction.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Hollow homogeneous cylinder, r=0.5 to 1.2 m. For angular modes 0 and 2 use T=(1+0.3i)I_m(br)+(0.2-0.1i)K_m(br), b\u00b2=i omega C/k. k=1.6, C=2.1, omega=3.2, h=2.7. Drive one end by exact flux and the other by a convective film, then swap ends. Check complex field at volume centroids, radial modal rate amplitudes 2\u03c0r(-k dT/dr) at every face and cell balances on geometric grids. CPU double precision.",
+  "suite": {
+    "tests": 120,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_harmonic_flux_and_film_annulus_against_bessel_solution[0-0]": {
+      "max_temperature_error_16_K": 0.0005658577586275954,
+      "max_radial_rate_error_16_W_per_m": 0.013351513146676893,
+      "max_shell_balance_error_16_W_per_m": 9.386999686437996e-14,
+      "max_temperature_error_32_K": 0.00015219082090638333,
+      "max_radial_rate_error_32_W_per_m": 0.0033464755972233812,
+      "max_shell_balance_error_32_W_per_m": 2.082505795448109e-13,
+      "max_temperature_error_64_K": 3.953589044336038e-05,
+      "max_radial_rate_error_64_W_per_m": 0.0008371571867202358,
+      "max_shell_balance_error_64_W_per_m": 4.60276306538595e-13
+    },
+    "test_harmonic_flux_and_film_annulus_against_bessel_solution[0-2]": {
+      "max_temperature_error_16_K": 0.0007481577476291781,
+      "max_radial_rate_error_16_W_per_m": 0.010716581427502625,
+      "max_shell_balance_error_16_W_per_m": 3.1951477977094986e-14,
+      "max_temperature_error_32_K": 0.00019241147362296574,
+      "max_radial_rate_error_32_W_per_m": 0.0026846306363106373,
+      "max_shell_balance_error_32_W_per_m": 8.988481072012315e-14,
+      "max_temperature_error_64_K": 4.878039748846567e-05,
+      "max_radial_rate_error_64_W_per_m": 0.0006715011735959964,
+      "max_shell_balance_error_64_W_per_m": 2.398281414839222e-13
+    },
+    "test_harmonic_flux_and_film_annulus_against_bessel_solution[1-0]": {
+      "max_temperature_error_16_K": 0.0009840468202863368,
+      "max_radial_rate_error_16_W_per_m": 0.0021061215058021518,
+      "max_shell_balance_error_16_W_per_m": 9.404716214064811e-14,
+      "max_temperature_error_32_K": 0.00025976985791553546,
+      "max_radial_rate_error_32_W_per_m": 0.0005240939346320755,
+      "max_shell_balance_error_32_W_per_m": 2.5787920393611193e-13,
+      "max_temperature_error_64_K": 6.678493800059904e-05,
+      "max_radial_rate_error_64_W_per_m": 0.00013091185523628893,
+      "max_shell_balance_error_64_W_per_m": 4.538010504165665e-13
+    },
+    "test_harmonic_flux_and_film_annulus_against_bessel_solution[1-2]": {
+      "max_temperature_error_16_K": 0.0008272519725296352,
+      "max_radial_rate_error_16_W_per_m": 0.005339905816540603,
+      "max_shell_balance_error_16_W_per_m": 3.307912788499e-14,
+      "max_temperature_error_32_K": 0.00021621293689242263,
+      "max_radial_rate_error_32_W_per_m": 0.0013366750578918403,
+      "max_shell_balance_error_32_W_per_m": 8.816492077661547e-14,
+      "max_temperature_error_64_K": 5.532948794994426e-05,
+      "max_radial_rate_error_64_W_per_m": 0.00033427512982758773,
+      "max_shell_balance_error_64_W_per_m": 1.7668299747605561e-13
+    }
+  }
+}
