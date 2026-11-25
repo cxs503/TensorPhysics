@@ -95,6 +95,37 @@ def measure_fem(n, times, initial_sheet, exact_heat, exact_temperature):
     return row
 
 
+def measure_fvm(n, times, initial_sheet, exact_heat, exact_temperature, *, width_scale=1.):
+    from tensorfvm.cht import rod
+
+    left = 2*n//5
+    # One well-mixed control volume represents the sheet. Its numerical width
+    # cancels from its capacitance and both half-cell resistances. The extra
+    # series resistance on the right gives the specified asymmetric contact.
+    width = width_scale/n
+    half_resistance = min(LEFT_R, RIGHT_R)
+    widths = np.r_[np.full(left, 1./n), width, np.full(n-left, 1./n)]
+    conductivity = np.r_[np.ones(left), width/(2*half_resistance), np.full(n-left, 3.)]
+    capacity = np.r_[np.full(left, 4.), SHEET_CAPACITY/width, np.full(n-left, 2.)]
+    contacts = np.zeros(n)
+    contacts[left-1:left+1] = np.array([LEFT_R, RIGHT_R]) - half_resistance
+    initial = np.r_[np.ones(left), initial_sheet, np.zeros(n-left)]
+    count = n//5
+    time = np.r_[times[0], np.concatenate([np.linspace(a,b,count+1)[1:] for a,b in zip(times[:-1], times[1:])])]
+    field, _, _, _, ledger = rod.solve_transient_stepped_rod(
+        widths, 1., conductivity, capacity, (1., 0.), time, initial,
+        contact_resistance=contacts, flux_order=1, method="sdirk2", return_step_heat=True)
+    # Read each side from its adjoining material volume, independently of the sheet storage.
+    material_heat = np.column_stack((ledger["right"][:,left-1], ledger["left"][:,left+1]))
+    sheet_heat = np.column_stack((ledger["left"][:,left], ledger["right"][:,left]))
+    heats = material_heat.reshape(-1,count,2).sum(axis=1)
+    discrepancy = abs((material_heat-sheet_heat).reshape(-1,count,2).sum(axis=1)).max()
+    row = summarize(n, initial_sheet, heats, field[count::count,left], exact_heat, exact_temperature)
+    row["max_shared_face_heat_discrepancy_J_m2"] = float(discrepancy)
+    row["substeps_per_interval"] = count
+    return row
+
+
 def summarize(n, initial_sheet, heats, temperatures, exact_heat, exact_temperature):
     heats = np.array(heats)
     stored = SHEET_CAPACITY*np.diff(np.r_[initial_sheet, temperatures])
@@ -107,11 +138,14 @@ def summarize(n, initial_sheet, heats, temperatures, exact_heat, exact_temperatu
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--solver", choices=("DEM", "FEM"), default="DEM")
+    parser.add_argument("--solver", choices=("DEM", "FEM", "FVM"), default="DEM")
     solver = parser.parse_args().solver
     if solver == "FEM":
         from tensorfem import thermal as implementation
         solve = measure_fem
+    elif solver == "FVM":
+        from tensorfvm.cht import rod as implementation
+        solve = measure_fvm
     else:
         from tensordem.thermal import contact_chain as implementation
         solve = measure
@@ -132,6 +166,14 @@ if __name__ == "__main__":
                            (min(orders) > 1.85 and max(errors[:2]) < 5e-5 and errors[2] < 5e-4))))
             if solver == "FEM":
                 row["passed"] &= row["max_element_link_heat_discrepancy_J_m2"] < 1e-10
+            if solver == "FVM":
+                row["passed"] &= row["max_shared_face_heat_discrepancy_J_m2"] < 1e-10
+                if n == 80:
+                    control = measure_fvm(n, times, initial, heat, temperature, width_scale=4.)
+                    for key, label in (("interval_left_right_heat_J_m2", "width_control_heat_difference_J_m2"),
+                                       ("sheet_endpoint_temperature_K", "width_control_temperature_difference_K")):
+                        row[label] = float(abs(np.asarray(row[key])-control[key]).max())
+                        row["passed"] &= row[label] < 1e-10
             rows.append(row)
             previous = errors
         q_diff = float(abs(heat-audit_heat).max())
