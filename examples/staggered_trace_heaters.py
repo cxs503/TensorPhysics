@@ -57,7 +57,7 @@ def fvm(n,area,times,idx,stop,right_sign,fraction,initial):
                             np.r_[0.,transfer.cumsum()]))[idx],float(abs(balance).max()),deposited.cumsum(0)[idx-1]
 
 
-def fem(n,area,times,idx,stop,right_sign,fraction,initial):
+def fem(n,area,times,idx,stop,right_sign,fraction,initial,method="theta"):
     model,ends,left_nodes = slab.fem_contact_model(n,area,STORAGE_LEFT)
     # Align the state update with the switching instant. The FEM load
     # accepts integrated joules, including an exact partial-interval pulse.
@@ -75,14 +75,15 @@ def fem(n,area,times,idx,stop,right_sign,fraction,initial):
     x = np.arange(n+1)/n
     initial = np.tile(np.r_[initial[0]*x,initial[1]*x[::-1]],2)
     result = slab.thermal.solve_transient_thermal(model,torch.from_numpy(grid),torch.from_numpy(initial),
-                                                 theta=.5,sparse=True,nodal_step_heat=nodal)
+                                                 theta=.5,sparse=True,nodal_step_heat=nodal,method=method)
     strip = result.temperature.numpy().reshape(len(grid),2,-1).mean(1)
     traces = strip[:,n:n+2]
     bulk = .5*(area*slab.CAPACITY)*np.stack(
         [(.5*(u[:,1:]+u[:,:-1])).mean(1) for u in np.split(strip,2,axis=1)],axis=1)
     stored = bulk+slab.STORAGE*np.array([STORAGE_LEFT,1-STORAGE_LEFT])*traces
     jump = traces[:,0]-traces[:,1]
-    transfer = step*.5*(jump[:-1]+jump[1:])*min(area)/slab.RESISTANCE
+    stage = result.interval_temperature.numpy().reshape(len(step),2,-1).mean(1)
+    transfer = step*(stage[:,n]-stage[:,n+1])*min(area)/slab.RESISTANCE
     wall = -result.nodal_reaction_heat_steps()[:,ends].sum(-1).numpy()
     applied = result.additional_stage_power.numpy()*step[:,None]
     deposited = np.column_stack([applied[:,left_nodes+i].sum(1) for i in (0,1)])
@@ -120,7 +121,8 @@ if __name__=="__main__":
                 if solver=="FVM":
                     sample,balance,deposited = fvm(n,area,times,idx,stop,right_sign,fraction,initial)
                 elif solver=="FEM":
-                    sample,balance,deposited = fem(n,area,times,idx,stop,right_sign,fraction,initial)
+                    sample,balance,deposited = fem(n,area,times,idx,stop,right_sign,fraction,initial,
+                                                   method="sdirk2" if args.short_pulse else "theta")
                 else:
                     sample,balance,deposited = slab.dg_samples(n,area,times,fraction,STORAGE_LEFT,initial,idx,DELAY,stop,return_deposited=True,right_sign=right_sign,method="sdirk2" if args.short_pulse else "theta")
                 active_time = np.maximum(observations-DELAY,0.)
