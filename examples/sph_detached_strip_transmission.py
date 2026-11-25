@@ -82,6 +82,7 @@ def main():
     h_factor = 0.7 if args.axial_stencil else 0.9
     swap_materials, transverse_mode = args.swap_materials, args.transverse_mode
     oblique_mode = transverse_mode != 0 and not args.axial_stencil
+    oblique_wall_links = oblique_mode and not args.split_interface_links
     grids = (128, 256, 512, 1024, 2048, 4096, 8192, 16384) if oblique_mode else (128, 256, 512, 1024)
     runs = []
     for omega in (2., 20., 200., 800.):
@@ -94,15 +95,15 @@ def main():
                 reciprocity = row["far_wall_reciprocity_relative_error"]
                 # With oblique ghost links the imposed temperature and reported wall
                 # power sample different transverse rows. Test the continuum limit.
-                passed = np.isfinite(reciprocity) if oblique_mode else reciprocity < 1e-9
+                passed = np.isfinite(reciprocity) if oblique_wall_links else reciprocity < 1e-9
                 if transverse_mode == 0:
                     passed &= row["max_column_residual_W_m2"] < 1e-9
                 if previous is not None:
                     row["phasor_error_order"] = math.log2(previous/error)
-                    if oblique_mode:
+                    if oblique_wall_links:
                         row["reciprocity_error_order"] = math.log2(previous_reciprocity/reciprocity)
                         passed &= row["reciprocity_error_order"] > 1.9
-                    else:
+                    elif not oblique_mode:
                         passed &= row["phasor_error_order"] > 1.85
                 if n == 128:
                     dense = measure(n, omega, mirrored, "torch", swap_materials, transverse_mode, h_factor, **material_options)
