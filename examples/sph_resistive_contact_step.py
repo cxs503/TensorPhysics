@@ -48,7 +48,7 @@ def interval_reference(times, resistance, method, include_traces=False, surface_
     return np.diff(np.vstack((initial, cumulative)), axis=0)
 
 
-def measure(n, times, resistance, reference, solver="SPH"):
+def measure(n, times, resistance, reference, solver="SPH", surface_capacities=(0., 0.)):
     left = 2*n//5
     conductivity = np.repeat([1., 3.], [left, n-left])
     capacity = np.repeat([4., 2.], [left, n-left])
@@ -56,7 +56,10 @@ def measure(n, times, resistance, reference, solver="SPH"):
     contacts = np.zeros(n-1)
     contacts[left-1] = resistance
     trace_metrics = {}
+    surface_storage = 0.
     if solver == "SPH":
+        if any(surface_capacities):
+            raise ValueError("independent trace capacities require the FVM rod")
         from tensorsph import heat_conduction_2d as sph
 
         temperature, heat = sph.solve_transient_layered_slab(
@@ -72,8 +75,14 @@ def measure(n, times, resistance, reference, solver="SPH"):
         count = n // 5
         subtime = np.r_[times[0], np.concatenate([np.linspace(a, b, count+1)[1:]
                         for a, b in zip(times[:-1], times[1:])])]
-        temperature, _, _, _, heat, means = rod.solve_transient_stepped_rod(
+        face = left-1
+        surface = np.zeros(n-1)
+        total = sum(surface_capacities)
+        surface[face] = total
+        temperature, _, _, _, endpoints, heat, means = rod.solve_transient_stepped_rod(
             np.full(n, 1./n), 1., conductivity, capacity, (1., 0.), subtime, initial,
+            interface_heat_capacity=surface, interface_capacity_left_fraction=surface_capacities[0]/total if total else .5,
+            initial_trace_temperatures=(1., 0.) if total else None, return_traces=True,
             contact_resistance=contacts, method="sdirk2", return_step_heat=True, return_interval_temperatures=True)
         cuts = np.column_stack((heat["left"][:, 0], heat["contact"][:, left-1], heat["right"][:, -1]))
         measured = cuts.reshape(len(times)-1, count, 3).sum(axis=1)
@@ -88,11 +97,23 @@ def measure(n, times, resistance, reference, solver="SPH"):
                              max_left_right_mean_error_K=np.max(abs(trace-exact_trace), axis=0).tolist(),
                              max_contact_law_residual_K=float(max(abs(jump-resistance*measured[:, 1]/dt))))
 
+        if total:
+            endpoint_trace = np.column_stack([side[::count, face] for side in endpoints])
+            surface_storage = np.diff(endpoint_trace, axis=0)*surface_capacities
+            material_heat = np.column_stack((heat["right"][:, face], heat["left"][:, left]))
+            material_heat = material_heat.reshape(len(dt), count, 2).sum(axis=1)
+            net = np.column_stack((material_heat[:, 0]-measured[:, 1], measured[:, 1]-material_heat[:, 1]))
+            trace_metrics.update(interval_trace_storage_J_m2=surface_storage.tolist(),
+                                 interval_material_heat_J_m2=material_heat.tolist(),
+                                 interval_mean_trace_K=trace.tolist(),
+                                 max_trace_balance_residual_J_m2=abs(surface_storage-net).max(0).tolist(),
+                                 max_trace_storage_errors_J_m2=abs(surface_storage-reference[:, 5:7]*surface_capacities).max(0).tolist())
+
     storage = np.diff(temperature, axis=0)*capacity/n
     layer_storage = np.column_stack((storage[:, :left].sum(axis=1), storage[:, left:].sum(axis=1)))
     errors = np.max(abs(measured-reference[:, :3]), axis=0)
     return dict(**trace_metrics, solver=solver, cells=n, interval_heat_J_m2=measured.tolist(), max_west_interface_east_interval_errors_J_m2=errors.tolist(),
-                max_layer_balance_error_J_m2=float(abs(layer_storage + np.diff(measured, axis=1)).max()),
+                max_layer_balance_error_J_m2=float(abs(layer_storage + surface_storage + np.diff(measured, axis=1)).max()),
                 first_interval_mean_interface_flux_W_m2=float(measured[0, 1]/times[1]))
 
 
