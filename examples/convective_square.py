@@ -10,17 +10,37 @@ from tensordg import poisson_2d_bc as dg
 from tensorfvm.cht import energy
 
 
-def measure(n, coarse_fvm):
+def measure(n, coarse_fvm, oscillatory=False):
     width = 1/n
     center = (np.arange(n)+.5)*width
     ix = np.exp(center)*np.sinh(width/2)/(width/2)
-    iy = np.exp(.5*center)*np.sinh(width/4)/(width/4)
+    if oscillatory:
+        k = 2*np.pi
+        phase = .3
+        iy = np.cos(k*center+phase)*np.sinc(width)
+        lower = upper = np.cos(phase)
+        bottom_flux = -k*np.sin(phase)
+        top_flux = -bottom_flux
+        source_factor = k*k-1
+        def temperature(x, y):
+            return torch.exp(x)*torch.cos(k*y+phase)
+        def y_derivative(x, y):
+            return -k*torch.exp(x)*torch.sin(k*y+phase)
+    else:
+        iy = np.exp(.5*center)*np.sinh(width/4)/(width/4)
+        lower, upper = 1., np.exp(.5)
+        bottom_flux, top_flux = .5, -.5*upper
+        source_factor = -1.25
+        def temperature(x, y):
+            return torch.exp(x+.5*y)
+        def y_derivative(x, y):
+            return .5*temperature(x, y)
     exact = ix[:, None]*iy  # x index first, square-cell means
-    trace = np.stack((iy, np.e*iy, ix, np.exp(.5)*ix))
-    outward = np.array([1., -1., .5, -.5])[:, None]*trace
+    trace = np.stack((iy, np.e*iy, lower*ix, upper*ix))
+    outward = np.stack((iy, -np.e*iy, bottom_flux*ix, top_flux*ix))
     films = [2., 5., 3., 7.]
     ambient = trace-outward/np.array(films)[:,None]
-    source = -1.25*exact
+    source = source_factor*exact
     fvm_bc = {side: dict(type="robin", values=amb, film_coefficient=h)
               for side,amb,h in zip(("west","east","south","north"), ambient, films)}
     widths = np.full(n,width)
@@ -33,11 +53,12 @@ def measure(n, coarse_fvm):
         return
     sides = ("left","right","bottom","top")
     boundaries = dict.fromkeys(sides, "robin")
-    data = {side:(h, lambda x,y,factor=1-sign/h: factor*torch.exp(x+.5*y))
-            for side,h,sign in zip(sides,films,(1.,-1.,.5,-.5))}
+    data = {side: (h, lambda x,y,h=h,d=derivative,s=sign: temperature(x,y)-s*d(x,y)/h)
+            for side,h,derivative,sign in zip(sides, films,
+                    (temperature, temperature, y_derivative, y_derivative), (1.,-1.,1.,-1.))}
     for degree in (1,2,3):
         _, _, coeff, _ = dg.solve_poisson_2d_bc(n, degree, sparse=True, bc=boundaries, robin_films=data,
-                                    forcing=lambda x,y: -1.25*torch.exp(x+.5*y))
+                                    forcing=lambda x,y: source_factor*temperature(x,y))
         fx, fy = dg.poisson_face_powers_2d(coeff, bc=boundaries, robin_films=data)
         flux = np.stack((-fx[0],fx[-1],-fy[:,0],fy[:,-1]))/width
         # Legendre modes of positive tangential degree integrate to zero.
@@ -52,10 +73,12 @@ def measure(n, coarse_fvm):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--coarse-fvm", action="store_true", help="include the three-cell FVM control grid")
-    coarse = parser.parse_args().coarse_fvm
+    parser.add_argument("--oscillatory", action="store_true",
+                        help="use exp(x) cos(2 pi y + 0.3) with sign-changing side fluxes")
+    args = parser.parse_args()
     runs, previous = [], {}
     for n in (3,6,12,24,48,96):
-        for name, t, wall, q, balance, exact, trace, power in measure(n, coarse):
+        for name, t, wall, q, balance, exact, trace, power in measure(n, args.coarse_fvm, args.oscillatory):
             errors = np.array([abs(t-exact).max(), abs(wall-trace).max(), abs(q-power).max()])
             rates = np.log2(previous[name]/errors) if name in previous else None
             passed = np.isfinite(errors).all() and balance < 1e-10
@@ -66,7 +89,8 @@ def main():
                              max_cell_balance_W=balance, orders=None if rates is None else rates.tolist(),
                              passed=bool(passed)))
             previous[name] = errors
-    print(json.dumps(dict(runs=runs,sources=[provenance(f) for f in (__file__,dg.__file__,energy.__file__)]),
+    print(json.dumps(dict(reference="exp(x) cos(2 pi y + 0.3)" if args.oscillatory else "exp(x + y/2)",
+                          runs=runs,sources=[provenance(f) for f in (__file__,dg.__file__,energy.__file__)]),
                      indent=2, allow_nan=False))
     return 0 if all(row["passed"] for row in runs) else 1
 
