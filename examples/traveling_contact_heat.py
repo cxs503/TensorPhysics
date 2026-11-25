@@ -1,4 +1,5 @@
 """Traveling thermal wave across two materials with a massless thermal contact."""
+import argparse
 import json
 
 import numpy as np
@@ -24,47 +25,57 @@ def refine_layer_centers(coarse):
     return np.concatenate([(half[nodes]*weights).sum(axis=1) for half in np.split(coarse, 2)])
 
 
-def measure(n, mode, resistance):
+def measure(n, mode, resistance, sph_only=False):
     dx, m, omega = 1/n, n//2, 2*np.pi
     beta = 2*np.pi*mode
     phase = np.exp(1j*beta*(np.arange(n)+.5)*dx)
     phase_avg = phase*np.sinc(mode*dx)
     k, c = np.repeat([1., 4.], m), np.repeat([1., 2.], m)
-    _, avg, q, _ = periodic_contact_heat.reference(n, resistance, omega, beta)
+    nodes, avg, q, walls = periodic_contact_heat.reference(n, resistance, omega, beta)
     z = .5*dx*np.sqrt(beta**2+1j*omega*c/k)
     point = avg*z/np.sinh(z)
     contact = np.zeros(n-1)
     contact[m-1] = resistance
+    u,sections = sph.solve_harmonic_layered_slab(torch.zeros(n), dx, (1.,0.), omega,
+                  conductivity=k, volumetric_heat_capacity=c, contact_resistance_x=contact,
+                  transverse_wavenumber=beta,return_x_flux=True,backend="banded")
+    left,right = sph.layered_slab_contact_temperatures(u,sections,dx,k)
+    hot,cold = complex(left[m-1]),complex(right[m-1])
+    traces = np.array([hot,cold])
+    truth = nodes[m:m+2]
+    harmonic = complex(sections[m])
+    wall_error = abs(sections.numpy()[[0,-1]] - walls * [1.,-1.])
+    yield harmonic,q,u.numpy(),point,dict(solver="SPH",n=n,mode=mode,contact_resistance_m2K_W=resistance,
+        temperature_error_K=float(abs(u.numpy()-point).max()),interface_flux_error_W_m2=float(abs(harmonic-q)),
+        interface_phase_error_rad=float(abs(np.angle(harmonic/q))),
+        west_wall_flux_error_W_m2=float(wall_error[0]),east_wall_flux_error_W_m2=float(wall_error[1]),
+        left_trace_error_K=float(abs(hot-truth[0])),right_trace_error_K=float(abs(cold-truth[1])),
+        trace_phase_error_rad=float(abs(np.angle(traces*truth.conj())).max()),
+        jump_error_K=float(abs(hot-cold-resistance*q)),contact_law_defect_K=float(abs(hot-cold-resistance*harmonic)))
+    if sph_only:
+        return
     widths = np.full(n, dx)
     fvm, _, interior = energy.solve_harmonic_conduction(widths, widths, k, c,
                     {"west": dict(type="dirichlet", values=phase_avg),
                      "east": dict(type="dirichlet", values=0.)}, omega, periodic_y=True,
                     contact_resistance_x=np.broadcast_to(contact, (n,n-1)), return_interior_power=True)
-    u = sph.solve_harmonic_layered_slab(torch.zeros(n), dx, (1.,0.), omega,
-                  conductivity=k, volumetric_heat_capacity=c, contact_resistance_x=contact,
-                  transverse_wavenumber=beta)
-    field = torch.from_numpy(phase[:,None])*u
-    row_power = sph.stencil_x_face_power_2d(field, sph.lattice_offsets(dx,1.3*dx), dx, m,
-                  (torch.from_numpy(phase),0.), conductivity=k, layered_x=True,
-                  contact_resistance_x=contact, power_by_row=True)
-    flux = row_power.numpy()/(dx*sph.lattice_diffusion_factor_2d(1.3,dx,mode="moment"))
-    for name, t, target, measured, exact in (
-            ("SPH", field.numpy(), phase[:,None]*point, flux, phase*q),
-            ("FVM", fvm, phase_avg[:,None]*avg, interior["x"][:,m-1]/dx, phase_avg*q)):
-        # Remove the known transverse phase before comparing different row centers.
-        harmonic = np.mean(measured/(phase if name == "SPH" else phase_avg))
-        yield harmonic, q, u.numpy(), point, dict(solver=name, n=n, mode=mode, contact_resistance_m2K_W=resistance,
-                   temperature_error_K=float(abs(t-target).max()),
-                   interface_flux_error_W_m2=float(abs(measured-exact).max()),
-                   interface_phase_error_rad=float(abs(np.angle(measured/exact)).max()))
+    measured = interior["x"][:,m-1]/dx
+    harmonic = np.mean(measured/phase_avg)
+    yield harmonic,q,u.numpy(),point,dict(solver="FVM",n=n,mode=mode,contact_resistance_m2K_W=resistance,
+        temperature_error_K=float(abs(fvm-phase_avg[:,None]*avg).max()),
+        interface_flux_error_W_m2=float(abs(measured-phase_avg*q).max()),
+        interface_phase_error_rad=float(abs(np.angle(measured/(phase_avg*q))).max()))
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sph-only",action="store_true",help="run only the banded SPH modal refinement")
+    args = parser.parse_args()
     rows = []
     for resistance in (0., .15):
         previous = {}
         for n in (16,32,64,128,256,512):
-            for harmonic, q, particle, point, row in measure(n, 1, resistance):
+            for harmonic, q, particle, point, row in measure(n, 1, resistance,args.sph_only):
                 name = row["solver"]
                 errors = np.array([row["temperature_error_K"], row["interface_flux_error_W_m2"]])
                 orders = []
@@ -85,12 +96,25 @@ if __name__ == "__main__":
                             row["extrapolated_flux_order"] = float(np.log2(prior_extrap/extrap_error))
                 row["orders"] = orders
                 row["raw_second_order_gate"] = all(p>1.8 for p in orders) if orders else None
+                if name=="SPH":
+                    trace_keys = ("left_trace_error_K","right_trace_error_K","trace_phase_error_rad","jump_error_K",
+                                  "west_wall_flux_error_W_m2","east_wall_flux_error_W_m2")
+                    if n>16:
+                        row["trace_orders"] = {k:float(np.log2(last_traces[k]/row[k])) for k in trace_keys}
+                    last_traces = {k:row[k] for k in trace_keys}
                 rows.append(row)
                 previous[name] = harmonic, errors, extrap_error, particle, temp_error
     # Gate the finest refinement for each case. Retain raw orders at every resolution.
     finest = [r for r in rows if r["n"] == 512]
     for row in finest:
         if row["solver"] == "SPH":
+            # The one-sided raw traces contain a first-order contact contribution.
+            row["contact_trace_passed"] = (
+                max(row["left_trace_error_K"],row["right_trace_error_K"]) < 1e-4
+                and min(row["trace_orders"][side] for side in
+                        ("left_trace_error_K","right_trace_error_K","jump_error_K")) > .85
+                and row["jump_error_K"] < 1e-4 and row["contact_law_defect_K"] < 1e-6
+            )
             temp_order = row["extrapolated_temperature_order"]
             temp_error = row["extrapolated_temperature_error_K"]
             flux_order = row["extrapolated_flux_order"]
@@ -102,7 +126,7 @@ if __name__ == "__main__":
             flux_error = row["interface_flux_error_W_m2"]
         row["acceptance_estimator"] = "two-grid extrapolated" if row["solver"] == "SPH" else "single-grid"
         row["passed"] = (min(temp_order, flux_order)>1.8 and flux_error<1e-4
-                         and temp_error<2e-4)
+                         and temp_error<2e-4 and row.get("contact_trace_passed",True))
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
                      (__file__, periodic_contact_heat.__file__, sph.__file__, energy.__file__)]),
                      indent=2, allow_nan=False))
