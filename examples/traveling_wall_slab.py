@@ -61,22 +61,42 @@ def main():
     k, capacity = 2., 3.
     for omega in (.5, 15.):
         previous = {}
+        previous_modes = {}
         for n in (16, 32, 64, 128):
             traces, field, flux = reference(n, omega, k, capacity)
             for name, t, q, storage_frequency in responses(n, omega, k, capacity, traces):
                 delta = q.mean(axis=1)/flux.mean(axis=1)
                 errors = np.array([abs(t-field).max(), np.linalg.norm(q-flux)/np.linalg.norm(flux),
                                    abs(np.angle(delta)).max()])
+                # A wall mean carries only the transverse zero mode. Compare
+                # the two traveling components separately on both walls.
+                modes = (1,-1)
+                spectrum = np.fft.fft(q,axis=1)[:,modes]/n
+                exact = np.fft.fft(flux,axis=1)[:,modes]/n
+                ratio = spectrum/exact
+                modal = {str(mode): {
+                    side: dict(amplitude_error_W_m2=float(abs(abs(spectrum[i,j])-abs(exact[i,j]))),
+                               phase_error_rad=float(abs(np.angle(ratio[i,j]))))
+                    for i,side in enumerate(("west","east"))}
+                    for j,mode in enumerate(modes)}
+                modal_errors = np.array([abs(abs(spectrum)-abs(exact)).max(),
+                                         abs(np.angle(ratio)).max()])
+                modal_orders = (np.log2(previous_modes[name]/modal_errors).tolist()
+                                if name in previous_modes else None)
+                previous_modes[name] = modal_errors
                 balance = abs(1j*storage_frequency*capacity*t.mean()-q.mean(axis=1).sum())
                 orders = np.log2(previous[name]/errors) if name in previous else None
                 passed = np.isfinite(errors).all() and balance < 1e-10
                 if orders is not None:
                     passed &= (orders > [1.7, .45 if name == "SPH" else 1.7, 1.7]).all()
                 if n == 128:
+                    limits = (.16,.004) if name == "SPH" else (.006,.0003)
+                    passed &= (modal_errors < limits).all()
+                    passed &= min(modal_orders) > (.85 if name == "SPH" else 1.8)
                     passed &= (errors < [.001, .015, .002]).all()
                 runs.append(dict(solver=name, n=n, omega_rad_s=omega, max_temperature_error_K=errors[0],
                                  relative_wall_flux_L2=errors[1], max_net_wall_phase_error_rad=errors[2],
-                                 balance_W=balance, orders=orders.tolist() if orders is not None else None,
+                                 wall_modes=modal, wall_mode_amplitude_phase_orders=modal_orders, balance_W=balance, orders=orders.tolist() if orders is not None else None,
                                  passed=bool(passed)))
                 previous[name] = errors
     print(json.dumps(dict(conductivity_W_mK=k, capacity_J_m3K=capacity, runs=runs,
