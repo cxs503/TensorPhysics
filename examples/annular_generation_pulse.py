@@ -48,10 +48,10 @@ def measure(n,boundary,off_grid=False,method="theta"):
     elif boundary=="film":
         films = (1.4,2.6)
         walls = tuple(w+q/hwall for w,q,hwall in zip(walls,inward,films))
-    u,s,hi,ho,external,surface,contact = annulus.solve_transient_annular_sheet(r,k,cv,walls,times,profile,n,
+    u,s,hi,ho,external,surface,contact,means = annulus.solve_transient_annular_sheet(r,k,cv,walls,times,profile,n,
              initial_sheet_temperature=sheet,sheet_capacity=cs,sheet_film=h,ambient=ambient,
              source_times=source_times,wall_times=wall_times,method=method,
-             resistance=resistance,inner_resistance_fraction=fraction,wall_fluxes=fluxes,film_coefficients=films,return_wall_temperatures=True,return_contact_temperatures=True,
+             resistance=resistance,inner_resistance_fraction=fraction,wall_fluxes=fluxes,film_coefficients=films,return_wall_temperatures=True,return_contact_temperatures=True,return_interval_temperatures=True,
              source_intervals=np.repeat(source[:,None,:],2,axis=1),sheet_source_intervals=sheet_source)
     inner_rate = -4*np.pi*ki*curvature[0]*r[:n+1]**2
     outer_rate = -4*np.pi*ko*curvature[1]*r[n:]**2
@@ -72,6 +72,12 @@ def measure(n,boundary,off_grid=False,method="theta"):
     result["errors"].update(inner_trace_K=float(abs(contact[:,0]-offsets[0]-rise).max()),
                             outer_trace_K=float(abs(contact[:,1]-offsets[1]-rise).max()),
                             jump_K=float(abs(contact[:,0]-contact[:,1]-(offsets[0]-offsets[1])).max()))
+    mean_rise = np.diff(int_rise)/dt
+    result["errors"].update(
+        mean_field_K=float(abs(means["cell"]-profile-mean_rise[:,None]).max()),
+        mean_sheet_K=float(abs(means["sheet"]-sheet-mean_rise).max()),
+        mean_contact_K=float(abs(means["contact"]-offsets-mean_rise[:,None]).max()),
+    )
     if boundary!="temperature":
         result["errors"]["surface_K"] = float(abs(surface-wall_reference).max())
     return result
@@ -90,7 +96,8 @@ if __name__=="__main__":
                 errors = row["errors"]
                 orders = {k:float(np.log2(previous[k]/v)) for k,v in errors.items()} if previous else {}
                 row.update(orders=orders,passed=max(row["cell_residual_J_m"],row["sheet_residual_J_m"])<1e-11
-                           and all(v>1.8 for v in orders.values()))
+                           and all(v>1.8 for k,v in orders.items() if n>=32 or not k.startswith("mean_"))
+                           and all(v>0 for v in orders.values()))
                 rows.append(row)
                 previous = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in (__file__,annulus.__file__)]),
