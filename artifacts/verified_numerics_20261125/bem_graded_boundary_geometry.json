@@ -1,0 +1,59 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "graded-slope": {
+    "commit": "b4a21dca8c122332d516f7bd8a96618732806e01",
+    "reference": "Periodic arc-length sine with an analytic derivative sampled on a repeating 1:2:4:1 angular mesh.",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_linear_density_solver.py tests/test_solver.py tests/test_mixed_boundary.py -o junit_family=legacy --junitxml=results.xml",
+    "counts": {
+      "tests": 30,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "results": {
+      "test_graded_periodic_panel_slope_converges_at_second_order": {
+        "max_error_48": 0.005237114926316955,
+        "max_error_96": 0.0013312800413708414,
+        "max_error_192": 0.00033420158780217424,
+        "max_error_384": 8.36368473220439e-05
+      }
+    }
+  },
+  "local-polygon": {
+    "commit": "1a7a7a737f19c5b717231d8a745ee93d26968a87",
+    "reference": "Analytic rectangle area, distances and interior Dirichlet harmonic potential (x-origin)/size.",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_geometry.py tests/test_interior_field_domain_guard.py tests/test_solver.py tests/test_mixed_boundary.py tests/test_linear_density_solver.py -o junit_family=legacy --junitxml=results.xml",
+    "counts": {
+      "tests": 52,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "results": {
+      "test_rectangle_geometry_under_translation_and_scaling[1.0-35184372088832.0]": {
+        "normalized_clearance_max_error": 0.0,
+        "area_relative_error": 0.0
+      },
+      "test_rectangle_geometry_under_translation_and_scaling[1e-130-0.0]": {
+        "normalized_clearance_max_error": 0.0,
+        "area_relative_error": 0.0
+      },
+      "test_rectangle_geometry_under_translation_and_scaling[1e+130-0.0]": {
+        "normalized_clearance_max_error": 8.881784197001252e-16,
+        "area_relative_error": 0.0
+      },
+      "test_rectangle_harmonic_field_in_scaled_coordinates[1.0-0.0]": {
+        "max_absolute_potential_error": 5.732350988330026e-06
+      },
+      "test_rectangle_harmonic_field_in_scaled_coordinates[1.0-35184372088832.0]": {
+        "max_absolute_potential_error": 5.732350988330026e-06
+      },
+      "test_rectangle_harmonic_field_in_scaled_coordinates[1e-60-0.0]": {
+        "max_absolute_potential_error": 5.73235098899616e-06
+      },
+      "test_rectangle_harmonic_field_in_scaled_coordinates[1e+60-0.0]": {
+        "max_absolute_potential_error": 5.732350985665491e-06
+      }
+    }
+  }
+}
