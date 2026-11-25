@@ -1,0 +1,30 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "921a69a8cd63c0d586c03d0f1330ace28edece86",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_dem3d_contact_impact.py tests/test_dem3d_contact_impact_convention.py tests/test_contact_impact_dashpot_convention.py tests/test_dem3d_restitution_verification.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Analytic maximum of the clamped linear normal load compared with force-slope zero events and the initial load in independent solve_ivp trajectories. Nine damping ratios from 0 to 4 include points on both sides of the 0.5 peak transition. IceDEM3D two-sphere impacts check a later peak at target restitution 0.5 and a first-touch peak at 0.08.",
+  "suite": {
+    "tests": 45,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_overdamped_dem_pair_at_three_time_steps": {
+      "peak_load_relative_error_0.2": 0.0001600152730143467,
+      "peak_load_delay_in_steps_0.2": 0.3342321439942024,
+      "peak_load_relative_error_0.1": 0.0001600152730119042,
+      "peak_load_delay_in_steps_0.1": 0.6684642879884048,
+      "peak_load_relative_error_0.05": 4.032655075114633e-05,
+      "peak_load_delay_in_steps_0.05": 0.33692857597681
+    },
+    "test_peak_force_against_integrated_force_turning_point": {
+      "max_relative_peak_load_error": 2.0583534876550402e-13,
+      "max_dimensionless_peak_time_error": 6.875099813553816e-14
+    },
+    "test_dem_pair_has_interior_load_peak_at_weak_damping": {
+      "relative_peak_load_error": 0.014849880180854536,
+      "peak_time_error_in_steps": 0.05027136316945826
+    }
+  }
+}
