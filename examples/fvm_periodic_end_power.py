@@ -9,7 +9,7 @@ from tensorfvm.cht import rod
 from conduction_provenance import provenance
 
 
-def measure(steps, method, alternating=False, compare_fem=False, compare_sph=False, massless=False):
+def measure(steps, method, alternating=False, compare_fem=False, compare_sph=False, massless=False, single_store=None):
     # T-base = 0.3*x + (0.7-1.4*x)*sin(omega*t), so the two wall
     # temperatures oscillate in opposite phases and the axial flux is uniform.
     n, area, k, cv = 12, 1.5, 2., 1.2
@@ -18,6 +18,8 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
     centers = (np.arange(n)+.5)/n
     film = np.array([2., 4.])
     capacity = np.zeros(2) if massless else np.array([.25, .6])
+    if single_store is not None:
+        capacity[1 if single_store == "west" else 0] = 0.
     ambient = np.array([.3, -.2])
     times = np.linspace(0., 1., steps+1)
 
@@ -64,6 +66,13 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
     wall_energy = area*capacity*np.diff(faces[:, [0,-1]], axis=0)
     conduction = np.column_stack((heats["left"][:, 0], -heats["right"][:, -1]))
     residual = heats["end_input"]-conduction-wall_energy
+    # Independent wall storage from external input less heat conducted into
+    # the rod, compared with the exact change in wall energy at each end.
+    exact_storage = area*capacity*amplitude(ends)*np.diff(wave, axis=0)
+    def storage_errors(external_heat, conductive_heat):
+        return (abs(external_heat-conductive_heat-exact_storage)/dt[:, None]).max(axis=0).tolist()
+
+    storage = {"fvm": storage_errors(heats["end_input"], conduction)}
     fem_errors = {}
     if compare_fem:
         import torch
@@ -100,6 +109,7 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         film_fem = area*film*(ambient-result.interval_temperature[:, [0,-1]].numpy())*dt[:, None]
         heater = (result.additional_stage_power[:, [0,-1]].numpy()
                   - cosine[:, None]*volume_power[[0,-1]].numpy())*dt[:, None]
+        storage["fem"] = storage_errors(heater+film_fem, face_heat)
         fem_errors = dict(fem_wall_error_K=float(abs(wall_t-exact_wall).max()),
                           fem_cumulative_end_error_J=float(abs(recovered.cumsum(axis=0)-exact_heat[1:]).max()),
                           fem_interval_film_error_W=float((abs(film_fem-film_heat)/dt[:, None]).max()),
@@ -117,7 +127,7 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
             .3*centers, times, 1/n, (None, None), conductivity=np.full(n, k),
             volumetric_heat_capacity=cv, heat_source=lambda t: cv*omega*amplitude(centers)*math.cos(omega*t),
             x_wall_films=tuple(zip(film, ambient)), x_wall_inward_flux=wall_loads,
-            wall_areal_heat_capacity=capacity, initial_wall_temperatures=(None, None) if massless else .3*ends,
+            wall_areal_heat_capacity=capacity, initial_wall_temperatures=tuple(.3*x if c else None for x, c in zip(ends, capacity)),
             method=method, return_x_heat=True, return_external_heat=True,
             return_wall_temperatures=True, return_interval_wall_temperatures=True, return_wall_heat_components=True)
         external = area*external.numpy()
@@ -125,6 +135,7 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
         heater_sph = area*components["applied"].numpy()
         conduction_sph = area*cuts.numpy()[:, [0,-1]]*np.array([1., -1.])
         storage_sph = area*capacity*np.diff(wall.numpy(), axis=0)
+        storage["sph"] = storage_errors(external, conduction_sph)
         sph_errors = dict(sph_particle_error_K=float(abs(state.numpy()-exact_t).max()),
                           sph_wall_error_K=float(abs(wall.numpy()-exact_wall).max()),
                           sph_cumulative_end_error_J=float(abs(external.cumsum(axis=0)-exact_heat[1:]).max()),
@@ -133,7 +144,7 @@ def measure(steps, method, alternating=False, compare_fem=False, compare_sph=Fal
                           sph_component_sum_residual_J=float(abs(external-film_sph-heater_sph).max()),
                           sph_film_law_residual_J=float(abs(film_sph-area*film*(ambient-wall_mean.numpy())*dt[:, None]).max()),
                           sph_wall_balance_residual_J=float(abs(external-conduction_sph-storage_sph).max()))
-    return dict(**sph_errors, **fem_errors, min_dt_s=float(dt.min()), max_dt_s=float(dt.max()),
+    return dict(wall_capacity_J_m2_K=capacity.tolist(), storage_power_errors_W=storage, **sph_errors, **fem_errors, min_dt_s=float(dt.min()), max_dt_s=float(dt.max()),
                 interval_heater_power_error_W=float((abs(heats["end_applied"]-applied_heat)/dt[:, None]).max()),
                 interval_film_power_error_W=float((abs(heats["end_film"]-film_heat)/dt[:, None]).max()),
                 max_input_split_residual_J=float(abs(split_residual).max()),
@@ -151,7 +162,9 @@ if __name__ == "__main__":
     parser.add_argument("--alternating", action="store_true", help="alternate short and long steps in a 1:3 ratio")
     parser.add_argument("--compare-fem", action="store_true", help="recover end heat from linear finite elements")
     parser.add_argument("--compare-sph", action="store_true", help="verify the same external heat on a layered particle slab")
-    parser.add_argument("--massless", action="store_true", help="apply heaters and convection at walls without surface storage")
+    storage_group = parser.add_mutually_exclusive_group()
+    storage_group.add_argument("--single-store", choices=("west", "east"), help="retain surface heat capacity only at the selected end")
+    storage_group.add_argument("--massless", action="store_true", help="apply heaters and convection at walls without surface storage")
     args = parser.parse_args()
     files = [__file__, rod.__file__]
     path = "../TensorFVM/src"
@@ -173,7 +186,7 @@ if __name__ == "__main__":
     for method in ("theta", "sdirk2"):
         previous = None
         for steps in (32, 64, 128):
-            row = measure(steps, method, args.alternating, args.compare_fem, args.compare_sph, args.massless)
+            row = measure(steps, method, args.alternating, args.compare_fem, args.compare_sph, args.massless, args.single_store)
             row["passed"] = max(row["max_wall_energy_residual_J"], row["max_input_split_residual_J"]) < 1e-11
             for key in ("max_cell_error_K", "max_wall_error_K", "max_section_error_W",
                         "west_cumulative_error_J", "east_cumulative_error_J",
@@ -194,12 +207,19 @@ if __name__ == "__main__":
                                      row["sph_film_law_residual_J"]) < 1e-11
                 if steps == 128:
                     row["passed"] &= row["sph_cumulative_end_error_J"] < .002
+            for errors in row["storage_power_errors_W"].values():
+                for capacity, error in zip(row["wall_capacity_J_m2_K"], errors):
+                    if capacity == 0:
+                        row["passed"] &= error < 1e-10
+                    elif steps == 128:
+                        row["passed"] &= error < .005
             runs.append(row)
             previous = row
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(f) for f in files],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_periodic_end_power.py"
                           + (" --alternating" if args.alternating else "") + (" --compare-fem" if args.compare_fem else "")
-                          + (" --compare-sph" if args.compare_sph else "") + (" --massless" if args.massless else "")),
+                          + (" --compare-sph" if args.compare_sph else "") + (" --massless" if args.massless else "")
+                          + (f" --single-store {args.single_store}" if args.single_store else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
