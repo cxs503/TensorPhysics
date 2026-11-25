@@ -4,7 +4,7 @@ import json
 import math
 
 import numpy as np
-from tensorbem import layered_annulus as bem
+from tensorbem import harmonic_rings, layered_annulus
 
 from conduction_provenance import provenance
 
@@ -14,51 +14,6 @@ K = (1., 2.5, .8)
 CONTACT = (.5, .9)
 CAPACITY = (.25, .8)
 WALLS = np.array([1., .3j])
-
-
-def ring_response(n, formulation, mode=0):
-    # Each pair of annuli maps its wall temperatures and sheet generation
-    # into incoming/outgoing powers and the sheet temperature by linearity.
-    pattern = np.cos(mode*2*np.pi*(np.arange(n)+.5)/n)
-    projection = pattern/(pattern @ pattern)
-    maps = []
-    leakage = 0.
-    for i in range(2):
-        radii = RADII[2*i:2*i+3]
-        columns = []
-        for left, right, generation in np.eye(3):
-            result = bem.solve_annulus_contact(radii, K[i:i+2], (left*pattern, right*pattern), CONTACT[i], n,
-                                               formulation=formulation, interface_source=generation*pattern)
-            # Normal derivatives on the bore and exterior use opposite normals.
-            # For nonzero modes the circumferential integral vanishes; match
-            # the projected radial current amplitude at the artificial join.
-            bore = K[i]*result.inner_field.normal_derivative[n:]
-            exterior = -K[i+1]*result.outer_field.normal_derivative[:n]
-            traces = np.stack((2*np.pi*radii[0]*bore, 2*np.pi*radii[2]*exterior,
-                               result.sheet_temperature, result.interface_flux, result.outer_interface_flux))
-            amplitudes = traces @ projection
-            leakage = max(leakage, float(abs(traces-amplitudes[:, None]*pattern).max()))
-            if not mode:
-                amplitudes[:2] = result.heat_rates[0], result.heat_rates[2]
-            columns.append(amplitudes)
-        maps.append(np.asarray(columns).T)
-    return maps, leakage
-
-
-def solve_coupled(maps, omega):
-    def outputs(unknown):
-        join, source1, source2 = unknown
-        a = maps[0] @ [WALLS[0], join, source1]
-        b = maps[1] @ [join, WALLS[1], source2]
-        residual = np.array([a[1]-b[0], source1+1j*omega*CAPACITY[0]*a[2],
-                             source2+1j*omega*CAPACITY[1]*b[2]])
-        return residual, np.stack((a[2:], b[2:]))
-
-    base, _ = outputs(np.zeros(3))
-    matrix = np.column_stack([outputs(unit)[0]-base for unit in np.eye(3)])
-    unknown = np.linalg.solve(matrix, -base)
-    residual, fields = outputs(unknown)
-    return fields, float(abs(residual[0]))
 
 
 def continuum(omega):
@@ -111,9 +66,14 @@ if __name__ == "__main__":
     for formulation in ("circular", "polygonal"):
         previous = {}
         for n in ((16, 32, 64, 128) if mode else (16, 32, 64)):
-            maps, leakage = ring_response(n, formulation, mode)
+            response = harmonic_rings.assemble_ring_response(
+                (RADII[0], RADII[1], RADII[3], RADII[4]), K, CONTACT, n, mode=mode,
+                formulation=formulation, join_radius=RADII[2])
+            leakage = response.mode_leakage
             for omega in (1., 8., 24.):
-                fields, imbalance = solve_coupled(maps, omega)
+                solution = response.solve(omega, WALLS, CAPACITY)
+                fields = np.column_stack((solution.sheet_temperature, solution.incoming_flux, solution.outgoing_flux))
+                imbalance = solution.join_power_residual
                 expected = angular_reference(omega, mode) if mode else continuum(omega)
                 ratio = fields/expected
                 error = float(abs(ratio-1).max())
@@ -129,7 +89,7 @@ if __name__ == "__main__":
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, angular_cosine_mode=mode, model="zero bulk capacity, positive areal storage at each ring",
                           columns=["sheet temperature", "incoming radial flux", "outgoing radial flux"], runs=runs,
-                          sources=[provenance(p) for p in (__file__, bem.__file__)],
+                          sources=[provenance(p) for p in (__file__, harmonic_rings.__file__, layered_annulus.__file__)],
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_harmonic_storing_rings.py --mode {mode}"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
