@@ -1,0 +1,30 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "490abc132afb10eca10d418a5d1eba2726f7850b",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_shallow_water_riemann.py tests/test_shallow_water_energy.py tests/test_shallow_water_momentum.py tests/test_shallow_water_galilean.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Four wet shallow-water Riemann patterns. Independently integrate F-wE in time at both moving boundaries by adaptive quadrature with wave crossing breakpoints. Compare the expanding interval energy change, boundary transport and shock residence losses. A translated hydraulic jump on a shared boundary has dissipation rate 9/8 and is counted only in the right interval.",
+  "suite": {
+    "tests": 113,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_moving_energy_budget_against_time_quadrature[rarefaction-shock]": {
+      "max_transport_error": 8.881784197001252e-16,
+      "balance_error": 1.214306433183765e-16
+    },
+    "test_moving_energy_budget_against_time_quadrature[rarefaction-rarefaction]": {
+      "max_transport_error": 4.440892098500626e-16,
+      "balance_error": 4.440892098500626e-16
+    },
+    "test_moving_energy_budget_against_time_quadrature[shock-shock]": {
+      "max_transport_error": 0.0,
+      "balance_error": 2.220446049250313e-15
+    },
+    "test_moving_energy_budget_against_time_quadrature[shock-rarefaction]": {
+      "max_transport_error": 1.7763568394002505e-15,
+      "balance_error": 4.163336342344337e-17
+    }
+  }
+}
