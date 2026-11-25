@@ -1,0 +1,364 @@
+{
+  "reference": "D3Q7 eigenvalue of streaming times BGK collision nearest unity; continuum exp(-alpha |k|^2 t)",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_directional_diffusion.py --eigenmodes",
+  "order_metrics": [
+    "relative_diffusivity_error",
+    "max_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "n": 16,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.0889963393121405,
+      "relative_diffusivity_error": 0.1124542414017562,
+      "max_flux_error_W_m2": 0.26304295744533457,
+      "discrete_temperature_error_K": 4.718447854656915e-16,
+      "max_cell_balance_J": 1.0164395367051604e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.0820750490468291,
+      "relative_diffusivity_error": 0.025938113085363534,
+      "max_flux_error_W_m2": 0.06504862183298954,
+      "discrete_temperature_error_K": 3.3306690738754696e-15,
+      "max_cell_balance_J": 2.1387581918171084e-20,
+      "orders": [
+        2.116192638746624,
+        2.0157080283344486
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.0805091260223291,
+      "relative_diffusivity_error": 0.006364075279113646,
+      "max_flux_error_W_m2": 0.016226068474830768,
+      "discrete_temperature_error_K": 3.4416913763379853e-15,
+      "max_cell_balance_J": 2.150669592637872e-21,
+      "orders": [
+        2.0270507257895063,
+        2.0032050095157463
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.08124169081858523,
+      "relative_diffusivity_error": 0.015521135232315464,
+      "max_flux_error_W_m2": 0.03212971427389766,
+      "discrete_temperature_error_K": 1.8041124150158794e-15,
+      "max_cell_balance_J": 1.7618285302889447e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.08031072458022646,
+      "relative_diffusivity_error": 0.003884057252830697,
+      "max_flux_error_W_m2": 0.008693880742045579,
+      "discrete_temperature_error_K": 3.885780586188048e-15,
+      "max_cell_balance_J": 2.4352197233561135e-20,
+      "orders": [
+        1.9985977096017717,
+        1.8858359403801372
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.08007765431612487,
+      "relative_diffusivity_error": 0.0009706789515608882,
+      "max_flux_error_W_m2": 0.002216215160067536,
+      "discrete_temperature_error_K": 2.921274333544943e-15,
+      "max_cell_balance_J": 3.427836458419747e-21,
+      "orders": [
+        2.0004983532654848,
+        1.9719023541757716
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.08124169081858523,
+      "relative_diffusivity_error": 0.015521135232315464,
+      "max_flux_error_W_m2": 0.03212971427390676,
+      "discrete_temperature_error_K": 3.1086244689504383e-15,
+      "max_cell_balance_J": 1.6601845766184287e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.08031072458022646,
+      "relative_diffusivity_error": 0.003884057252830697,
+      "max_flux_error_W_m2": 0.008693880742048465,
+      "discrete_temperature_error_K": 4.107825191113079e-15,
+      "max_cell_balance_J": 2.5622746654442585e-20,
+      "orders": [
+        1.9985977096017717,
+        1.885835940380067
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "tau": 0.75,
+      "diffusivity_m2_s": 0.08007765431612528,
+      "relative_diffusivity_error": 0.0009706789515659953,
+      "max_flux_error_W_m2": 0.0022162151601279323,
+      "discrete_temperature_error_K": 3.3653635433950058e-15,
+      "max_cell_balance_J": 3.2491654461082927e-21,
+      "orders": [
+        2.0004983532578944,
+        1.9719023541369345
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.059400754643439205,
+      "relative_diffusivity_error": 0.25749056695701,
+      "max_flux_error_W_m2": 0.5262778361184761,
+      "discrete_temperature_error_K": 1.2212453270876722e-15,
+      "max_cell_balance_J": 9.486769009248164e-20,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.0748915475880429,
+      "relative_diffusivity_error": 0.06385565514946379,
+      "max_flux_error_W_m2": 0.15370475325398836,
+      "discrete_temperature_error_K": 2.220446049250313e-15,
+      "max_cell_balance_J": 2.0328790734103208e-20,
+      "orders": [
+        2.011633282960971,
+        1.7756628574091275
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        3,
+        0,
+        0
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.0787568778993496,
+      "relative_diffusivity_error": 0.015539026258130084,
+      "max_flux_error_W_m2": 0.03919720363192836,
+      "discrete_temperature_error_K": 2.9976021664879227e-15,
+      "max_cell_balance_J": 2.157287037538296e-21,
+      "orders": [
+        2.038918291617695,
+        1.9713391406439935
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.08700976532677944,
+      "relative_diffusivity_error": 0.08762206658474292,
+      "max_flux_error_W_m2": 0.21768922395668877,
+      "discrete_temperature_error_K": 1.3877787807814457e-15,
+      "max_cell_balance_J": 1.3552527156068805e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.081637751186694,
+      "relative_diffusivity_error": 0.020471889833675094,
+      "max_flux_error_W_m2": 0.05218481914190254,
+      "discrete_temperature_error_K": 2.9976021664879227e-15,
+      "max_cell_balance_J": 2.456395547037471e-20,
+      "orders": [
+        2.0976499524564907,
+        2.0605679082413966
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        2,
+        -2,
+        1
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.08040154920672973,
+      "relative_diffusivity_error": 0.0050193650841217075,
+      "max_flux_error_W_m2": 0.012973390012416819,
+      "discrete_temperature_error_K": 2.7131075164277263e-15,
+      "max_cell_balance_J": 2.8852059765849605e-21,
+      "orders": [
+        2.028067499246148,
+        2.0080746673451295
+      ],
+      "passed": true
+    },
+    {
+      "n": 16,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.08700976532677941,
+      "relative_diffusivity_error": 0.0876220665847427,
+      "max_flux_error_W_m2": 0.217689223956689,
+      "discrete_temperature_error_K": 1.4988010832439613e-15,
+      "max_cell_balance_J": 1.3552527156068805e-19,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "n": 32,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.08163775118669407,
+      "relative_diffusivity_error": 0.02047188983367576,
+      "max_flux_error_W_m2": 0.05218481914190709,
+      "discrete_temperature_error_K": 2.0539125955565396e-15,
+      "max_cell_balance_J": 2.414043899674756e-20,
+      "orders": [
+        2.09764995245644,
+        2.0605679082412722
+      ],
+      "passed": true
+    },
+    {
+      "n": 64,
+      "mode_xyz": [
+        -1,
+        2,
+        2
+      ],
+      "steps": 4,
+      "tau": 1.25,
+      "diffusivity_m2_s": 0.08040154920673004,
+      "relative_diffusivity_error": 0.005019365084125482,
+      "max_flux_error_W_m2": 0.012973390012425812,
+      "discrete_temperature_error_K": 5.329070518200751e-15,
+      "max_cell_balance_J": 3.255782891008717e-21,
+      "orders": [
+        2.0280674992451098,
+        2.0080746673442555
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "fde20f45e8be94e6c3b396fa5d2e7e86c97a37ab",
+      "file": "lbm_directional_diffusion.py",
+      "source_sha256": "b008cbed452c782e7f5f21a5957063fe626272623de82153fa2348b56116fc88"
+    },
+    {
+      "commit": "e4e3faadedb863ed09316f440aecec291c8cb820",
+      "file": "thermal_common.py",
+      "source_sha256": "96572fcb497010178b6096c22cc2c06597cdf0bce915eb523610e3d33706ea91"
+    }
+  ]
+}
