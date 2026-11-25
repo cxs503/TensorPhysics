@@ -1,0 +1,119 @@
+{
+  "reference": "T=cos(omega*t)*(3*x^2-2*x^3+.6*(3*y^2-2*y^3)), insulated boundaries, one period",
+  "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/dg_reversing_interval_heat.py",
+  "runs": [
+    {
+      "steps": 8,
+      "method": "theta",
+      "max_interval_face_mean_power_error_W": 0.045086002898031996,
+      "max_interval_cell_balance_J": 1.6854573292590658e-14,
+      "midplane_net_heat_J": -0.008114429934804462,
+      "midplane_absolute_heat_J": 0.6237281784081716,
+      "max_midplane_interval_error_J": 0.014987100774816561,
+      "max_cumulative_midplane_error_J": 0.02900113535909854,
+      "power_order": null,
+      "passed": true
+    },
+    {
+      "steps": 16,
+      "method": "theta",
+      "max_interval_face_mean_power_error_W": 0.012204830512343834,
+      "max_interval_cell_balance_J": 9.554856905680253e-15,
+      "midplane_net_heat_J": -0.001863965375866427,
+      "midplane_absolute_heat_J": 0.6677630402790387,
+      "max_midplane_interval_error_J": 0.0020448084891623725,
+      "max_cumulative_midplane_error_J": 0.0071881373479483444,
+      "power_order": 1.8852273527899637,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "theta",
+      "max_interval_face_mean_power_error_W": 0.003075135430820719,
+      "max_interval_cell_balance_J": 6.158268339717665e-15,
+      "midplane_net_heat_J": -0.00045584820009355025,
+      "midplane_absolute_heat_J": 0.6815674628855481,
+      "max_midplane_interval_error_J": 0.0002581338844746192,
+      "max_cumulative_midplane_error_J": 0.0017931450436012458,
+      "power_order": 1.9887304065255156,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "theta",
+      "max_interval_face_mean_power_error_W": 0.0007724120291284775,
+      "max_interval_cell_balance_J": 3.7312817766088635e-15,
+      "midplane_net_heat_J": -0.00011333041401555971,
+      "midplane_absolute_heat_J": 0.6864423679275972,
+      "max_midplane_interval_error_J": 3.240230373768166e-05,
+      "max_cumulative_midplane_error_J": 0.0004480428781001431,
+      "power_order": 1.9932074116806717,
+      "passed": true
+    },
+    {
+      "steps": 8,
+      "method": "sdirk2",
+      "max_interval_face_mean_power_error_W": 0.01370134944629764,
+      "max_interval_cell_balance_J": 1.6112111644872584e-14,
+      "midplane_net_heat_J": -0.00015205617593525012,
+      "midplane_absolute_heat_J": 0.6639553925245748,
+      "max_midplane_interval_error_J": 0.0045544845784319665,
+      "max_cumulative_midplane_error_J": 0.00676191245897436,
+      "power_order": null,
+      "passed": true
+    },
+    {
+      "steps": 16,
+      "method": "sdirk2",
+      "max_interval_face_mean_power_error_W": 0.0035949907818761395,
+      "max_interval_cell_balance_J": 1.0874330949595112e-14,
+      "midplane_net_heat_J": 0.00014387448406974826,
+      "midplane_absolute_heat_J": 0.6780144030159003,
+      "max_midplane_interval_error_J": 0.0006023080502127187,
+      "max_cumulative_midplane_error_J": 0.0015528311548113792,
+      "power_order": 1.9302580147751234,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "sdirk2",
+      "max_interval_face_mean_power_error_W": 0.0009078195845451664,
+      "max_interval_cell_balance_J": 6.77496253542742e-15,
+      "midplane_net_heat_J": 5.655720002747044e-05,
+      "midplane_absolute_heat_J": 0.6842580501225495,
+      "max_midplane_interval_error_J": 7.589247790096287e-05,
+      "max_cumulative_midplane_error_J": 0.0003760559836676763,
+      "power_order": 1.9855105541436355,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "sdirk2",
+      "max_interval_face_mean_power_error_W": 0.00022766434847432127,
+      "max_interval_cell_balance_J": 3.400491693783536e-15,
+      "midplane_net_heat_J": 1.6607507567439547e-05,
+      "midplane_absolute_heat_J": 0.6871055683241425,
+      "max_midplane_interval_error_J": 9.530800912427306e-06,
+      "max_cumulative_midplane_error_J": 9.211443827283373e-05,
+      "power_order": 1.9954972244892126,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "e6489d7e225a543bf462e12a65f6b983fbc4a889",
+      "file": "dg_reversing_interval_heat.py",
+      "source_sha256": "a92295e3df1d367e243e2d6bbaa6029db13acb7e034226ffe693bc764fefc3ed"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    }
+  ]
+}
