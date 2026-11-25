@@ -1,0 +1,237 @@
+{
+  "dem": {
+    "runs": [
+      {
+        "columns": 8,
+        "temperature_error_K": 0.06546333131320226,
+        "interval_temperature_error_K": 0.04551019249313139,
+        "wall_heat_error_J_m2": 0.01600353429272809,
+        "interior_cut_heat_error_J_m2": 0.0053265605383292225,
+        "column_energy_residual_J_m2": 1.942890293094024e-16,
+        "wall_trace_error_K": 0.0,
+        "orders": [],
+        "passed": true
+      },
+      {
+        "columns": 16,
+        "temperature_error_K": 0.013330923825704721,
+        "interval_temperature_error_K": 0.021753449063830397,
+        "wall_heat_error_J_m2": 0.0034062292799512117,
+        "interior_cut_heat_error_J_m2": 0.0027806001817597265,
+        "column_energy_residual_J_m2": 5.516420653606247e-16,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.29591025858514,
+          2.2321430975615657,
+          0.9378079412481913,
+          1.0649455264349528
+        ],
+        "passed": true
+      },
+      {
+        "columns": 32,
+        "temperature_error_K": 0.003058752116098684,
+        "interval_temperature_error_K": 0.006562527619454633,
+        "wall_heat_error_J_m2": 0.0008216828263167206,
+        "interior_cut_heat_error_J_m2": 0.0007851309727096092,
+        "column_energy_residual_J_m2": 1.0720591081536668e-15,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.123761662366263,
+          2.0515220299417782,
+          1.8243910723252847,
+          1.7289206674030957
+        ],
+        "passed": true
+      },
+      {
+        "columns": 64,
+        "temperature_error_K": 0.0007605948857003497,
+        "interval_temperature_error_K": 0.0017747480953370478,
+        "wall_heat_error_J_m2": 0.00020383495610363372,
+        "interior_cut_heat_error_J_m2": 0.0002015786229653746,
+        "column_energy_residual_J_m2": 2.085137618124122e-15,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.0077430510677168,
+          2.011180130196794,
+          1.961590687401102,
+          1.8866373239738152
+        ],
+        "passed": true
+      }
+    ],
+    "sources": [
+      {
+        "commit": "bb1c46dd834682862627fc6274cb266e96eae40e",
+        "file": "sph_two_wall_pulses.py",
+        "source_sha256": "64f74500b81d816fe33f6fca2c36c057393ff8f04a686036c70b5d2da867d22b"
+      },
+      {
+        "commit": "eb47cec4623c67346126f064ac1c4ec6405f9668",
+        "file": "contact_chain.py",
+        "source_sha256": "fcb1bd0cf330f28e6f7c0545e6a2455f9ef918277327009114fc4477104949f4"
+      }
+    ]
+  },
+  "fvm": {
+    "runs": [
+      {
+        "columns": 8,
+        "time_steps": 23,
+        "temperature_error_K": 0.026008488967384447,
+        "wall_heat_error_J_m2": 0.0035662608966146175,
+        "interior_cut_heat_error_J_m2": 0.006456200290577845,
+        "column_energy_residual_J_m2": 7.632783294297951e-17,
+        "interface_heat_mismatch_J_m2": 3.2959746043559335e-17,
+        "wall_trace_error_K": 0.0,
+        "orders": [],
+        "passed": true
+      },
+      {
+        "columns": 16,
+        "time_steps": 80,
+        "temperature_error_K": 0.006883658809468063,
+        "wall_heat_error_J_m2": 0.0008837563650188271,
+        "interior_cut_heat_error_J_m2": 0.0013553219941140685,
+        "column_energy_residual_J_m2": 5.551115123125783e-17,
+        "interface_heat_mismatch_J_m2": 5.551115123125783e-17,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          1.917735087827326,
+          2.012691644232548,
+          2.2520496917191273
+        ],
+        "passed": true
+      },
+      {
+        "columns": 32,
+        "time_steps": 310,
+        "temperature_error_K": 0.001615456587516384,
+        "wall_heat_error_J_m2": 0.0002689863704427517,
+        "interior_cut_heat_error_J_m2": 0.0003312522871854219,
+        "column_energy_residual_J_m2": 3.122502256758253e-17,
+        "interface_heat_mismatch_J_m2": 3.1008182133085427e-17,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.091233610259176,
+          1.7161156274042242,
+          2.0326333232580764
+        ],
+        "passed": true
+      },
+      {
+        "columns": 64,
+        "time_steps": 1231,
+        "temperature_error_K": 0.0004016838109925369,
+        "wall_heat_error_J_m2": 6.714477533405899e-05,
+        "interior_cut_heat_error_J_m2": 8.25217061754778e-05,
+        "column_energy_residual_J_m2": 1.8648277366750676e-17,
+        "interface_heat_mismatch_J_m2": 2.076247160309741e-17,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.0078097583681083,
+          2.0021860229629365,
+          2.005084860869973
+        ],
+        "passed": true
+      }
+    ],
+    "sources": [
+      {
+        "commit": "bb1c46dd834682862627fc6274cb266e96eae40e",
+        "file": "sph_two_wall_pulses.py",
+        "source_sha256": "64f74500b81d816fe33f6fca2c36c057393ff8f04a686036c70b5d2da867d22b"
+      },
+      {
+        "commit": "1dcd11b673946358a43073009a6ae8538d3aea49",
+        "file": "rod.py",
+        "source_sha256": "a058886533e8fd86091826c3a019e9f274da6438aad914705094f82b472f3bac"
+      }
+    ]
+  },
+  "sph": {
+    "runs": [
+      {
+        "columns": 8,
+        "temperature_error_K": 0.09801596994848805,
+        "wall_heat_error_J_m2": 0.020324034822835832,
+        "interior_cut_heat_error_J_m2": 0.006151628168261647,
+        "column_energy_residual_J_m2": 8.326672684688674e-17,
+        "wall_trace_error_K": 0.0,
+        "orders": [],
+        "passed": true
+      },
+      {
+        "columns": 16,
+        "temperature_error_K": 0.019944489002176324,
+        "wall_heat_error_J_m2": 0.00423533680524571,
+        "interior_cut_heat_error_J_m2": 0.003297449690168104,
+        "column_energy_residual_J_m2": 2.498001805406602e-16,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.2970266691181798,
+          2.2626382349598897,
+          0.8996176548712699
+        ],
+        "passed": true
+      },
+      {
+        "columns": 32,
+        "temperature_error_K": 0.004456675368293084,
+        "wall_heat_error_J_m2": 0.0010041700670382417,
+        "interior_cut_heat_error_J_m2": 0.0009527061071383201,
+        "column_energy_residual_J_m2": 4.3021142204224816e-16,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.1619503790393213,
+          2.0764730751088147,
+          1.791247506006176
+        ],
+        "passed": true
+      },
+      {
+        "columns": 64,
+        "temperature_error_K": 0.0011097302392013564,
+        "wall_heat_error_J_m2": 0.0002483537189715834,
+        "interior_cut_heat_error_J_m2": 0.0002452073789674103,
+        "column_energy_residual_J_m2": 1.205632815803881e-15,
+        "wall_trace_error_K": 0.0,
+        "orders": [
+          2.005758857412664,
+          2.0155353702772123,
+          1.958028842685689
+        ],
+        "passed": true
+      }
+    ],
+    "sources": [
+      {
+        "commit": "bb1c46dd834682862627fc6274cb266e96eae40e",
+        "file": "sph_two_wall_pulses.py",
+        "source_sha256": "64f74500b81d816fe33f6fca2c36c057393ff8f04a686036c70b5d2da867d22b"
+      },
+      {
+        "commit": "99e90ae4f3198c8b414b8aad9ff2ca5e9506ceac",
+        "file": "heat_conduction_2d.py",
+        "source_sha256": "d6bdca3260c55fbcaf8c5c0bed046414552fb33998c47e9505df0fc048897e3f"
+      }
+    ]
+  },
+  "commands": {
+    "dem": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDEM/src:../TensorFVM/src:../TensorSPH/src python examples/sph_two_wall_pulses.py --dem",
+    "fvm": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDEM/src:../TensorFVM/src:../TensorSPH/src python examples/sph_two_wall_pulses.py --fvm",
+    "sph": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDEM/src:../TensorFVM/src:../TensorSPH/src python examples/sph_two_wall_pulses.py"
+  },
+  "dem_reference": "Fixed center-lumped, unit-area thermal chain. Split at switches and output times. Integrate each constant plateau, then accumulate each link heat and time-weighted center temperature into reporting windows. Compare against the continuum Fourier solution and its analytic time integral with the stationary cubic sine series summed exactly.",
+  "dem_orders": [
+    "endpoint center temperature",
+    "wall heat",
+    "interior link heat",
+    "interval mean center temperature"
+  ],
+  "dem_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_thermal_contact_chain.py",
+    "passed": 61
+  }
+}
