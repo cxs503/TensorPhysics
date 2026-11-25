@@ -128,7 +128,7 @@ if __name__ == "__main__":
             for row in measure(n,expanding,time_steps=steps,method=args.method,fem_method=args.fem_method):
                 name = row["solver"]
                 errors = {k:v for k,v in row.items() if "_error_" in k}
-                rates = {} if name not in previous else {k:np.log2(previous[name][k]/v) for k,v in errors.items()}
+                rates = {} if name not in previous else {k:float(np.log2(previous[name][k]/v)) for k,v in errors.items()}
                 row["orders"] = rates
                 if not sensitivity and rates:
                     row["contact_mean_order_passed"] = min(rates["mean_left_trace_error_K"],
