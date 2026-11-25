@@ -9,6 +9,27 @@ import torch
 from conduction_provenance import provenance
 
 
+def reversal_time(grid, right_heat, start, stop, rate):
+    """Interpolate signed step-average powers at step midpoints after switch-off."""
+    mids = (grid[1:] + grid[:-1])/2
+    after = grid[:-1] >= stop/rate
+    mids = mids[after]
+    power = right_heat[after]/np.diff(grid)[after]
+    outward = power >= 0
+    crossings = np.flatnonzero(outward[:-1] != outward[1:])
+    if not np.isfinite(power).all() or len(crossings) != 1 or outward[0]:
+        raise ValueError("expected one sustained inward-to-outward reversal after switch-off")
+    j = crossings[0]
+    estimate = mids[j] - power[j]*(mids[j+1]-mids[j])/(power[j+1]-power[j])
+    # After switch-off the two outward powers cancel at A1 exp(-s) = 2 A2 exp(-4s).
+    duration = stop-start
+    ratio = math.expm1(-4*duration)/(2*math.expm1(-duration))
+    exact = (stop + math.log(ratio)/3)/rate
+    return dict(reversal_time=float(estimate), exact_reversal_time=exact,
+                bracketing_midpoints=mids[j:j+2].tolist(),
+                timing_error_over_output_interval=float(abs(estimate-exact)*16*rate))
+
+
 def measure(cells, width, solver="dg"):
     # Time is scaled by the decay rate of the first sine mode.
     rate = math.pi**2
@@ -19,6 +40,7 @@ def measure(cells, width, solver="dg"):
 
     indices = np.searchsorted(knots, output)
     local_errors = {}
+    timing = {}
     if solver != "dg":
         subdivisions = cells//8
         grid = np.r_[np.concatenate([np.linspace(a, b, subdivisions, endpoint=False)
@@ -59,6 +81,7 @@ def measure(cells, width, solver="dg"):
             model, torch.from_numpy(grid), torch.zeros_like(x), theta=.5,
             method=solver.removeprefix("fem-"), sparse=True, nodal_step_heat=torch.from_numpy(nodal_heat))
         reaction = result.nodal_reaction_heat_steps().numpy()
+        right_heat = -reaction[:, -1]
         walls = -np.add.reduceat(reaction[:, [0, -1]], steps[:-1], axis=0)
         temperatures = result.temperature.numpy()[steps]
         storage = (.5*(temperatures[:, :-1] + temperatures[:, 1:])).mean(axis=1)
@@ -76,6 +99,7 @@ def measure(cells, width, solver="dg"):
             temperature_reference=305., method=solver.removeprefix("fvm-"), flux_order=2,
             source=lambda t: amplitude*rate*profile if start/rate <= t < stop/rate else 0.,
             load_jump_times=(start/rate, stop/rate), return_step_heat=True)
+        right_heat = -ledger["end_input"][:, -1]
         walls = -np.add.reduceat(ledger["end_input"], steps[:-1], axis=0)
         storage = field[steps].mean(axis=1)
         source_mean = 2/math.pi
@@ -94,9 +118,12 @@ def measure(cells, width, solver="dg"):
             torch.full_like(profile, 305.), grid, 1/cells, (305., 305.), temperature_reference=305.,
             method=solver, wall_jump_times=[start/rate, stop/rate], return_x_heat=True,
             heat_source=lambda t: amplitude*rate*profile if start/rate <= t < stop/rate else 0.)
+        right_heat = cuts.numpy()[:, -1]
         walls = np.add.reduceat(cuts.numpy()[:, [0, -1]], steps[:-1], axis=0)*[-1, 1]
         storage = field[steps].numpy().mean(axis=(1, 2))
         source_mean = float(profile.mean())
+    if solver != "dg":
+        timing = reversal_time(grid, right_heat, start, stop, rate)
     # Independently integrate -dT/dx at both walls by Gauss quadrature.
     points, weights = np.polynomial.legendre.leggauss(12)
     a, b = knots[:-1, None], knots[1:, None]
@@ -114,7 +141,7 @@ def measure(cells, width, solver="dg"):
     # Use the load integrated by each discretization for the energy ledger.
     deposited = amplitude*source_mean*np.diff(np.clip(output-start, 0, stop-start))
     balance = np.diff(storage) + walls.sum(axis=1) - deposited
-    return dict(**{key: value/scale for key, value in local_errors.items()},
+    return dict(**timing, **{key: value/scale for key, value in local_errors.items()},
                 cells=cells, width_over_interval=width, left_error=float(errors[0]),
                 right_error=float(errors[1]), balance_error=float(abs(balance).max()/scale),
                 right_heat_over_scale=(walls[:, 1]/scale).tolist(),
@@ -162,6 +189,8 @@ if __name__ == "__main__":
                                      row["max_step_shared_face_mismatch"]) < 1e-10
             if solver.startswith("fem-"):
                 row["passed"] &= row["max_step_free_node_residual"] < 1e-10
+            if solver != "dg":
+                row["passed"] &= row["timing_error_over_output_interval"] < .01*(64/cells)**2
             runs.append(row)
             previous = row
     passed = all(row["passed"] for row in runs)
