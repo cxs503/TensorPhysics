@@ -63,7 +63,7 @@ def measure(n):
                 wall_trace_error_K=float(abs(walls.numpy()-expected_walls).max()))
 
 
-def measure_fvm(n):
+def measure_fvm(n, ramps=False):
     from tensorfvm.cht import rod
 
     dx = 1/n
@@ -73,18 +73,44 @@ def measure_fvm(n):
               for a, b in zip(TIMES[:-1], TIMES[1:])]
     grid = np.concatenate(([TIMES[0]], *pieces))
     indices = np.r_[0, np.cumsum([len(piece) for piece in pieces])]
-    cells, faces, _, _, step = rod.solve_transient_stepped_rod(
-        np.full(n, dx), 1., 1., 1., lambda t: [wall(t, 0), wall(t, 1)], grid, 0.,
-        flux_order=2, method="rannacher", load_jump_times=[event[0] for event in EVENTS],
-        return_step_heat=True)
-    means, _ = reference((np.arange(n)+.5)*dx, TIMES, 64, cell_width=dx)
-    _, cumulative = reference(np.arange(n+1)*dx, TIMES, 64)
+    widths = np.full(n, dx)
+    centers = (np.arange(n)+.5)*dx
+    cuts = np.arange(n+1)*dx
+    if ramps:
+        def boundaries(t):
+            return [np.interp(t, RAMP_KNOTS, side) for side in RAMP_LEVELS.T]
+        events = RAMP_KNOTS
+        method = "theta"
+        means, _ = ramp_reference(centers, TIMES, RAMP_KNOTS, RAMP_LEVELS, cell_width=dx)
+        _, cumulative = ramp_reference(cuts, TIMES, RAMP_KNOTS, RAMP_LEVELS)
+    else:
+        def boundaries(t):
+            return [wall(t, 0), wall(t, 1)]
+        events = [event[0] for event in EVENTS]
+        method = "rannacher"
+        means, _ = reference(centers, TIMES, 64, cell_width=dx)
+        _, cumulative = reference(cuts, TIMES, 64)
+    cells, faces, _, _, step, *temperatures = rod.solve_transient_stepped_rod(
+        widths, 1., 1., 1., boundaries, grid, 0.,
+        flux_order=2, method=method, load_jump_times=events,
+        return_step_heat=True, return_interval_temperatures=ramps)
+    extra = {}
+    if ramps:
+        fractions = np.array([0., .25, .5, .75, 1.])
+        _, power = rod.reconstruct_interval_rod_field(widths, 1., 1., temperatures[0], fractions)
+        heat = np.diff(grid)[:, None, None]*power
+        positions = (np.arange(n)[:, None]+fractions[1:-1])*dx
+        _, exact = ramp_reference(positions.ravel(), TIMES, RAMP_KNOTS, RAMP_LEVELS)
+        interior = np.add.reduceat(heat[:, :, 1:-1], indices[:-1], axis=0).reshape(len(TIMES)-1, -1)
+        extra["subcell_heat_error_J_m2"] = float(abs(interior-np.diff(exact, axis=0)).max())
+        extra["reconstruction_face_mismatch_J_m2"] = float(max(abs(heat[:, :, 0]-step["left"]).max(),
+                                                               abs(heat[:, :, -1]-step["right"]).max()))
     q = np.column_stack((step["left"][:, 0], step["right"]))
     intervals = np.add.reduceat(q, indices[:-1], axis=0)
     error = abs(intervals-np.diff(cumulative, axis=0))
     balance = dx*np.diff(cells, axis=0)-step["left"]+step["right"]
-    expected_walls = [[wall(t, 0), wall(t, 1)] for t in grid]
-    return dict(columns=n, time_steps=len(grid)-1,
+    expected_walls = [boundaries(t) for t in grid]
+    return dict(**extra, columns=n, time_steps=len(grid)-1,
                 temperature_error_K=float(abs(cells[indices]-means).max()),
                 wall_heat_error_J_m2=float(error[:, [0, -1]].max()),
                 interior_cut_heat_error_J_m2=float(error[:, 1:-1].max()),
@@ -325,6 +351,7 @@ if __name__ == "__main__":
     group.add_argument("--dg-ramps", action="store_true", help="run SIPG under independent wall ramps")
     group.add_argument("--dg", action="store_true", help="run the SIPG linear-element slab")
     group.add_argument("--dem", action="store_true", help="run the fixed thermal contact chain")
+    group.add_argument("--fvm-ramps", action="store_true", help="run the finite-volume slab under independent ramps")
     group.add_argument("--fvm", action="store_true", help="run the finite-volume cell-mean comparison")
     parser.add_argument("--dg-degree", type=int, choices=(1, 2), help="polynomial degree for the DG slab (default 1)")
     args = parser.parse_args()
@@ -344,9 +371,9 @@ if __name__ == "__main__":
     elif args.dem:
         from tensordem.thermal import contact_chain as solver
         run = measure_dem
-    elif args.fvm:
+    elif args.fvm or args.fvm_ramps:
         from tensorfvm.cht import rod as solver
-        run = measure_fvm
+        run = partial(measure_fvm, ramps=args.fvm_ramps)
     else:
         from tensorsph import heat_conduction_2d as solver
         run = measure
@@ -357,9 +384,12 @@ if __name__ == "__main__":
                                             "interior_cut_heat_error_J_m2")])
         if args.dem:
             errors = np.append(errors, row["interval_temperature_error_K"])
+        if args.fvm_ramps:
+            errors = np.append(errors, row["subcell_heat_error_J_m2"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
                    row["column_energy_residual_J_m2"] < 1e-12 and row.get("wall_trace_error_K", 0.) < 1e-14
+                   and row.get("reconstruction_face_mismatch_J_m2", 0.) < 1e-12
                    and row.get("interface_heat_mismatch_J_m2", 0.) < 1e-12
                    and all(order > 0 for order in orders) and (n < 64 or min(orders) > minimum_order)))
         rows.append(row)
