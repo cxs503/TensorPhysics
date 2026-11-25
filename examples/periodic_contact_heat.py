@@ -151,6 +151,34 @@ def measure(n, resistance):
     storage_rate = 1j*omega*(stores[1:m+1] @ field[:m])
     row["left_layer_harmonic_balance_W_m2"] = float(abs(storage_rate-(link_flux[0]-link_flux[m])))
     rows.append(row)
+    # Resolve the two interface traces as separate, massless nodes. The
+    # adjacent cell halves and the areal contact resistance now form three links.
+    resolved_r = np.r_[links[:m], dx/(2*k[m-1]), resistance, dx/(2*k[m]), links[m+1:]]
+    resolved_c = np.insert(stores, m+1, [0., 0.])
+    hot, cold = m+1, m+2
+    cell_ids = np.flatnonzero(resolved_c)
+    phasor = contact_chain.harmonic_contact_temperatures(resolved_r, resolved_c, omega,
+                                       t_left=1., t_right=0., allow_massless=True)
+    flux = -np.diff(phasor)/resolved_r
+    row = errors("DEM_massless_harmonic", phasor[cell_ids], phasor[hot]-phasor[cold],
+                 flux[hot], flux[[0,-1]]*[1.,-1.])
+    row["trace_error_K"] = float(abs(phasor[[hot,cold]]-exact_nodes[m:m+2]).max())
+    row["junction_flux_mismatch_W_m2"] = float(abs(np.diff(flux[m:m+3])).max())
+    row["left_layer_harmonic_balance_W_m2"] = float(abs(
+                1j*omega*(stores[1:m+1] @ phasor[cell_ids[:m]])-flux[0]+flux[hot]))
+    rows.append(row)
+
+    initial = np.zeros_like(resolved_c)
+    initial[cell_ids] = avg.real
+    history = contact_chain.transient_contact_temperatures(resolved_r, resolved_c, time, initial,
+                                       t_left=phase.real, t_right=0., allow_massless=True)
+    flux = -np.diff(history, axis=1)/resolved_r
+    walls = flux[:, [0,-1]]*[1.,-1.]
+    row = record("DEM_massless_transient", history[:,cell_ids], history[:,hot]-history[:,cold],
+                 flux[:,hot], harmonic(walls), dt @ (.5*(walls[1:,0]+walls[:-1,0])))
+    row["trace_error_K"] = float(abs(harmonic(history[:,[hot,cold]])-exact_nodes[m:m+2]).max())
+    row["junction_flux_mismatch_W_m2"] = float(abs(np.diff(flux[:,m:m+3], axis=1)).max())
+    rows.append(row)
     return rows
 
 
@@ -174,11 +202,14 @@ def main():
                 if name == "FEM":
                     errors = np.append(errors, row["max_contact_mean_power_error_W_m2"])
                     passed &= max(row["max_contact_step_mismatch_J_m2"], row["max_left_step_balance_J_m2"]) < 1e-12
+                if name.startswith("DEM_massless"):
+                    errors = np.append(errors, row["trace_error_K"])
+                    passed &= row["junction_flux_mismatch_W_m2"] < 1e-10
                 if name in previous:
                     passed &= (errors < previous[name]/3).all()
                 if n == 128:
                     passed &= (errors[:4] < [.001, .001, .002, .003]).all()
-                    if name in ("FEM", "FEM_harmonic"):
+                    if len(errors) > 4:
                         passed &= (errors[4:] < .002).all()
                     passed &= row["interface_phase_error_deg"] < .1
                 row["passed"] = bool(passed)
