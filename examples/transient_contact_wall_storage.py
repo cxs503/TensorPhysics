@@ -7,7 +7,7 @@ from conduction_provenance import provenance
 from tensorfvm.cht import energy
 
 
-def measure(n):
+def measure(n, wall_flux_order):
     dx, mid, decay, resistance = 1/n, n//2, 1.7, .35
     k = np.repeat([1., 4.], mid)
     capacity = np.repeat([1., 2.], mid)
@@ -40,10 +40,12 @@ def measure(n):
     faces = np.zeros((1,n-1))
     faces[0,mid-1] = resistance
     u, power = energy.solve_transient_conduction(np.full(n,dx),[1.],k,capacity,bc,times,means,
-                          contact_resistance_x=faces,return_wall_power=True)
+                          contact_resistance_x=faces,return_wall_power=True,wall_flux_order=wall_flux_order)
     field = u[:,0,:]
     q = np.column_stack((power["west"][:,0],power["east"][:,0]))
     surface = field[:,[0,-1]]+q*dx/(2*k[[0,-1]])
+    if wall_flux_order == 2:
+        surface = (2*dx*q/k[[0,-1]]+7*field[:,[0,-1]]-field[:,[1,-2]])/6
     contact = (field[:,mid-1]-field[:,mid])/(dx/(2*k[mid-1])+resistance+dx/(2*k[mid]))
     def integrated(rate):
         return np.diff(times)[:,None]*(rate[:-1]+rate[1:])/2
@@ -55,7 +57,7 @@ def measure(n):
     recovered = ext-wall_capacity*np.gradient(surface,times,axis=0,edge_order=2)
     cumulative = integrated(q).cumsum(axis=0)
     exact_heat = -np.expm1(-decay*times[1:,None])*inward/decay
-    return dict(n=n,max_wall_storage_flux_error_W_m2=float(abs(recovered-signal[:,None]*inward).max()),
+    return dict(n=n,wall_flux_order=wall_flux_order,max_wall_storage_flux_error_W_m2=float(abs(recovered-signal[:,None]*inward).max()),
                 max_cumulative_wall_heat_error_J_m2=float(abs(cumulative-exact_heat).max()),
                 steps=len(times)-1,
                 max_cell_mean_error_K=float(abs(field-signal[:,None]*means).max()),
@@ -67,20 +69,23 @@ def measure(n):
 
 
 if __name__ == "__main__":
-    rows, previous = [], None
-    for n in (16,32,64,128,256):
-        row = measure(n)
-        errors = np.array([row[k] for k in ("max_cell_mean_error_K","max_wall_temperature_error_K",
-                                            "max_wall_flux_error_W_m2","max_contact_flux_error_W_m2",
-                                            "max_cumulative_wall_heat_error_J_m2",
-                                            "max_wall_storage_flux_error_W_m2")])
-        orders = [] if previous is None else np.log2(previous/errors).tolist()
-        row["orders"] = orders
-        row["all_metrics_second_order_gate"] = all(p>1.85 for p in orders) if orders else None
-        row["passed"] = (max(row["max_wall_step_residual_J_m2"],row["max_layer_step_residual_J_m2"])<1e-10
-                         and all(p>floor for p,floor in zip(orders,(1.7,1.85,.95,1.85,1.85,1.25))))
-        rows.append(row)
-        previous = errors
+    rows = []
+    for order in (1,2):
+        previous = None
+        for n in (16,32,64,128,256):
+            row = measure(n,order)
+            errors = np.array([row[k] for k in ("max_cell_mean_error_K","max_wall_temperature_error_K",
+                                                "max_wall_flux_error_W_m2","max_contact_flux_error_W_m2",
+                                                "max_cumulative_wall_heat_error_J_m2",
+                                                "max_wall_storage_flux_error_W_m2")])
+            orders = [] if previous is None else np.log2(previous/errors).tolist()
+            row["orders"] = orders
+            row["all_metrics_second_order_gate"] = all(p>1.85 for p in orders) if orders else None
+            floors = (1.7,1.85,.95,1.85,1.85,1.25) if order == 1 else (1.8,)*6
+            row["passed"] = (max(row["max_wall_step_residual_J_m2"],row["max_layer_step_residual_J_m2"])<1e-10
+                             and all(p>floor for p,floor in zip(orders,floors)))
+            rows.append(row)
+            previous = errors
     metrics = ["cell temperature","wall temperature","instantaneous wall flux","interface flux",
                "cumulative wall heat","wall flux from storage"]
     print(json.dumps(dict(runs=rows,order_metrics=metrics,sources=[provenance(f) for f in (__file__,energy.__file__)]),
