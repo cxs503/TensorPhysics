@@ -90,9 +90,54 @@ def measure(n,omega=0.):
                 bem_net_power_residual_W_m=float(abs(balance)))
 
 
+def transient_decay(n,mode,power_walls):
+    # A decaying separated solution has ordinary Bessel radial factors.
+    # Propagate independent traces from the sheet to prescribe both walls.
+    decay,cs,ta = 1.6,.43,.36
+    ts,qi,qo = 1.2,.65,-.35
+    inner = ts+FRAC*R*qi
+    outer = ts-(1-FRAC)*R*qo
+    def shape(r,k,cv,trace,flux):
+        wave = np.sqrt(decay*cv/k)
+        x = wave*B
+        a,b = np.linalg.solve([[special.jv(mode,x),special.yv(mode,x)],
+                  [-k*wave*special.jvp(mode,x),-k*wave*special.yvp(mode,x)]],[trace,flux])
+        return (a*special.jv(mode,wave*r)+b*special.yv(mode,wave*r),
+                -k*wave*(a*special.jvp(mode,wave*r)+b*special.yvp(mode,wave*r)))
+    edges = np.r_[np.linspace(A,B,n+1),np.linspace(B,C,n+1)[1:]]
+    centers = (2/3)*np.diff(edges**3)/np.diff(edges**2)
+    initial = np.r_[shape(centers[:n],KI,1.2,inner,qi)[0],shape(centers[n:],KO,2.3,outer,qo)[0]]
+    rates = [2*np.pi*r*shape(r,k,cv,trace,flux)[1] for r,k,cv,trace,flux in
+             ((edges[:n+1],KI,1.2,inner,qi),(edges[n:],KO,2.3,outer,qo))]
+    times = np.linspace(0.,.22,2*n+1)
+    signal = np.exp(-decay*times)
+    wall = (shape(A,KI,1.2,inner,qi)[0]*signal,shape(C,KO,2.3,outer,qo)[0]*signal)
+    generation = qo-qi+(KS*(mode/B)**2-decay*cs)*ts+H*(ts-ta)
+    flux_bc = (None,None)
+    if power_walls:
+        wall = (None,None)
+        flux_bc = (rates[0][0]*signal/(2*np.pi*A),-rates[1][-1]*signal/(2*np.pi*C))
+    power = generation*np.column_stack((signal[:-1],signal[1:]))
+    u,s,hi,ho,external = annulus.solve_transient_annular_sheet(edges,np.repeat([KI,KO],n),
+               np.repeat([1.2,2.3],n),wall,times,initial,n,initial_sheet_temperature=ts,sheet_capacity=cs,
+               azimuthal_mode=mode,sheet_film=H,ambient=ta*signal,sheet_conductivity=KS,
+               resistance=R,inner_resistance_fraction=FRAC,sheet_source_intervals=power,wall_fluxes=flux_bc)
+    integral = -np.expm1(-decay*times[1:])/decay
+    dt = np.diff(times)
+    circumference = 2*np.pi*B
+    mean_sheet = .5*(s[1:]+s[:-1])
+    balance = circumference*(cs*np.diff(s)+dt*(KS*(mode/B)**2*mean_sheet-power.mean(axis=1)))+ho[:,0]-hi[:,-1]+external
+    errors = dict(field_K=float(abs(u-signal[:,None]*initial).max()),sheet_K=float(abs(s-ts*signal).max()),
+                  inner_heat_J_m=float(abs(hi.cumsum(0)-integral[:,None]*rates[0]).max()),
+                  outer_heat_J_m=float(abs(ho.cumsum(0)-integral[:,None]*rates[1]).max()),
+                  reservoir_heat_J_m=float(abs(external.cumsum()-circumference*integral*H*(ts-ta)).max()))
+    return dict(cells_per_layer=n,steps=len(dt),mode=mode,power_walls=power_walls,errors=errors,sheet_balance_J_m=float(abs(balance).max()))
+
+
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--harmonic",action="store_true",help="also verify FVM storage and phase against modified Bessel functions")
+    parser.add_argument("--transient",action="store_true",help="also verify cumulative heat for two decaying Bessel modes")
     args = parser.parse_args()
     rows = []
     for omega in ((0.,.6,6.) if args.harmonic else (0.,)):
@@ -107,6 +152,16 @@ if __name__=="__main__":
             row.update(fvm_orders=orders,passed=bool(passed))
             rows.append(row)
             previous = errors
+    if args.transient:
+        for mode,power_walls in ((0,False),(3,False),(0,True),(3,True)):
+            previous = {}
+            for n in (8,16,32,64):
+                row = transient_decay(n,mode,power_walls)
+                errors = row["errors"]
+                orders = {k:float(np.log2(previous[k]/e)) for k,e in errors.items()} if previous else {}
+                row.update(orders=orders,passed=row["sheet_balance_J_m"]<1e-11 and all(v>1.8 for v in orders.values()))
+                rows.append(row)
+                previous = errors
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
                     (__file__,annulus.__file__,layered_annulus.__file__)]),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
