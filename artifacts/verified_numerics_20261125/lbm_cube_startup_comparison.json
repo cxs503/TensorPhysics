@@ -1,0 +1,1359 @@
+{
+  "reference": "Unit cube: affine temperature plus separated decaying cosine mode with h_i=k*beta_i*tan(beta_i/2)",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_cube_film_corners.py --mixed --compare-starts",
+  "order_metrics": [
+    "temperature_error_K",
+    "wall_flux_error_W_m2"
+  ],
+  "runs": [
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.008634575636337447,
+      "subsequent_flux_error_W_m2": 0.0010561224060665064,
+      "peak_flux_step": 1,
+      "peak_flux_axis": "x",
+      "peak_flux_side": "lower",
+      "wall_types_xyz": [
+        "temperature",
+        "flux",
+        "film"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.008634575636337447,
+          0.00863457563633667
+        ],
+        [
+          1.3877787807814457e-16,
+          1.6653345369377348e-16
+        ],
+        [
+          0.0009135762655265445,
+          0.000913576265526489
+        ]
+      ],
+      "n": 8,
+      "tau": 0.75,
+      "steps": 8,
+      "temperature_error_K": 0.0008747811952680151,
+      "wall_flux_error_W_m2": 0.008634575636337447,
+      "max_cell_balance_J": 9.215718466126788e-19,
+      "max_corner_balance_J": 3.6591823321385775e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 3.3306690738754696e-16,
+        "first_three_flux_error_W_m2": 0.005795294165480927,
+        "subsequent_flux_error_W_m2": 0.001276560340542101,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "x",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "temperature",
+          "flux",
+          "film"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.005795294165480927,
+            0.00579529416548015
+          ],
+          [
+            1.3877787807814457e-16,
+            1.3877787807814457e-16
+          ],
+          [
+            0.000687573354855725,
+            0.0006875733548556973
+          ]
+        ],
+        "n": 8,
+        "tau": 0.75,
+        "steps": 8,
+        "temperature_error_K": 0.0008607157415706501,
+        "wall_flux_error_W_m2": 0.005795294165480927,
+        "max_cell_balance_J": 1.0130514049161432e-18,
+        "max_corner_balance_J": 4.590918574118308e-19,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.004347002207227703,
+      "subsequent_flux_error_W_m2": 0.000638380420071815,
+      "peak_flux_step": 1,
+      "peak_flux_axis": "x",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "temperature",
+        "flux",
+        "film"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.004347002207225573,
+          0.004347002207227703
+        ],
+        [
+          4.85722573273506e-16,
+          2.7755575615628914e-16
+        ],
+        [
+          0.00022385293475579715,
+          0.00022385293475574164
+        ]
+      ],
+      "n": 16,
+      "tau": 0.75,
+      "steps": 32,
+      "temperature_error_K": 0.0002667427870552963,
+      "wall_flux_error_W_m2": 0.004347002207227703,
+      "max_cell_balance_J": 1.4981895254560437e-19,
+      "max_corner_balance_J": 8.057400910756532e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.7134729479139015,
+        0.9901044471773193
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.002986071016756499,
+        "subsequent_flux_error_W_m2": 0.0007334439112044178,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "x",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "temperature",
+          "flux",
+          "film"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.00298607101675534,
+            0.002986071016756499
+          ],
+          [
+            4.85722573273506e-16,
+            2.7755575615628914e-16
+          ],
+          [
+            0.00017308633237198,
+            0.00017308633237245186
+          ]
+        ],
+        "n": 16,
+        "tau": 0.75,
+        "steps": 32,
+        "temperature_error_K": 0.00026625799228485736,
+        "wall_flux_error_W_m2": 0.002986071016756499,
+        "max_cell_balance_J": 1.4981895254560437e-19,
+        "max_corner_balance_J": 5.770411953169921e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.002170328200474511,
+      "subsequent_flux_error_W_m2": 0.00033685744176144283,
+      "peak_flux_step": 1,
+      "peak_flux_axis": "x",
+      "peak_flux_side": "lower",
+      "wall_types_xyz": [
+        "temperature",
+        "flux",
+        "film"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.002170328200474511,
+          0.002170328200473734
+        ],
+        [
+          9.71445146547012e-16,
+          5.273559366969494e-16
+        ],
+        [
+          5.4919788744361986e-05,
+          5.491978874433423e-05
+        ]
+      ],
+      "n": 32,
+      "tau": 0.75,
+      "steps": 128,
+      "temperature_error_K": 7.382116722309817e-05,
+      "wall_flux_error_W_m2": 0.002170328200474511,
+      "max_cell_balance_J": 2.1600994516209765e-20,
+      "max_corner_balance_J": 1.0080850125183748e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.8533428058712287,
+        1.0021076023563542
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0015081464298989725,
+        "subsequent_flux_error_W_m2": 0.0003829512566928643,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "x",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "temperature",
+          "flux",
+          "film"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.0015081464298978137,
+            0.0015081464298989725
+          ],
+          [
+            9.783840404509192e-16,
+            5.273559366969494e-16
+          ],
+          [
+            4.336818754197003e-05,
+            4.336818754194227e-05
+          ]
+        ],
+        "n": 32,
+        "tau": 0.75,
+        "steps": 128,
+        "temperature_error_K": 7.380202560669513e-05,
+        "wall_flux_error_W_m2": 0.0015081464298989725,
+        "max_cell_balance_J": 2.1605957599885083e-20,
+        "max_corner_balance_J": 1.0080850125183748e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.009147459374776751,
+      "subsequent_flux_error_W_m2": null,
+      "peak_flux_step": 2,
+      "peak_flux_axis": "x",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "temperature",
+        "flux",
+        "film"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.009147459374776679,
+          0.009147459374776751
+        ],
+        [
+          4.163336342344337e-17,
+          5.551115123125783e-17
+        ],
+        [
+          0.0025263876851773504,
+          0.0025263876851773504
+        ]
+      ],
+      "n": 8,
+      "tau": 1.5,
+      "steps": 2,
+      "temperature_error_K": 0.0030004714221906204,
+      "wall_flux_error_W_m2": 0.009147459374776751,
+      "max_cell_balance_J": 9.215718466126788e-19,
+      "max_corner_balance_J": 4.675621868843738e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.01299461865807433,
+        "subsequent_flux_error_W_m2": null,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "x",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "temperature",
+          "flux",
+          "film"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.01299461865807433,
+            0.012994618658073918
+          ],
+          [
+            4.163336342344337e-17,
+            4.163336342344337e-17
+          ],
+          [
+            0.0042459204625538705,
+            0.004245920462553926
+          ]
+        ],
+        "n": 8,
+        "tau": 1.5,
+        "steps": 2,
+        "temperature_error_K": 0.003756171354536375,
+        "wall_flux_error_W_m2": 0.01299461865807433,
+        "max_cell_balance_J": 8.334804200982315e-19,
+        "max_corner_balance_J": 4.1335207826009857e-19,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.004603861379385142,
+      "subsequent_flux_error_W_m2": 0.004289894278725184,
+      "peak_flux_step": 3,
+      "peak_flux_axis": "x",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "temperature",
+        "flux",
+        "film"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.004603861379384955,
+          0.004603861379385142
+        ],
+        [
+          6.938893903907228e-17,
+          8.326672684688674e-17
+        ],
+        [
+          0.001363934045413212,
+          0.0013639340454132537
+        ]
+      ],
+      "n": 16,
+      "tau": 1.5,
+      "steps": 8,
+      "temperature_error_K": 0.0016712962748887672,
+      "wall_flux_error_W_m2": 0.004603861379385142,
+      "max_cell_balance_J": 1.4992483166401116e-19,
+      "max_corner_balance_J": 8.07857673443789e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        0.8442216828185156,
+        0.9905267082621555
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.006094345839204672,
+        "subsequent_flux_error_W_m2": 0.004094879339694827,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "x",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "temperature",
+          "flux",
+          "film"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.006094345839203749,
+            0.006094345839204672
+          ],
+          [
+            6.938893903907228e-17,
+            8.326672684688674e-17
+          ],
+          [
+            0.0013891099195087186,
+            0.0013891099195087603
+          ]
+        ],
+        "n": 16,
+        "tau": 1.5,
+        "steps": 8,
+        "temperature_error_K": 0.0017263247881248445,
+        "wall_flux_error_W_m2": 0.006094345839204672,
+        "max_cell_balance_J": 1.376428539288238e-19,
+        "max_corner_balance_J": 5.2304284492953046e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.002249723065144583,
+      "subsequent_flux_error_W_m2": 0.002110331466547547,
+      "peak_flux_step": 3,
+      "peak_flux_axis": "x",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "temperature",
+        "flux",
+        "film"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.002249723065143913,
+          0.002249723065144583
+        ],
+        [
+          2.42861286636753e-16,
+          1.6653345369377348e-16
+        ],
+        [
+          0.00042145775514371153,
+          0.00042145775514375317
+        ]
+      ],
+      "n": 32,
+      "tau": 1.5,
+      "steps": 32,
+      "temperature_error_K": 0.0005370093896983064,
+      "wall_flux_error_W_m2": 0.002249723065144583,
+      "max_cell_balance_J": 2.161919248968593e-20,
+      "max_corner_balance_J": 1.0078368583346089e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.6379482869382118,
+        1.0330969745992205
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.002923903226552362,
+        "subsequent_flux_error_W_m2": 0.0020023946076859547,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "x",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "temperature",
+          "flux",
+          "film"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.0029239032265512,
+            0.002923903226552362
+          ],
+          [
+            2.498001805406602e-16,
+            1.6653345369377348e-16
+          ],
+          [
+            0.00042237434015285347,
+            0.0004223743401528951
+          ]
+        ],
+        "n": 32,
+        "tau": 1.5,
+        "steps": 32,
+        "temperature_error_K": 0.0005377937116127773,
+        "wall_flux_error_W_m2": 0.002923903226552362,
+        "max_cell_balance_J": 2.1612575044785507e-20,
+        "max_corner_balance_J": 8.615913260352336e-21,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.004871851657574172,
+      "subsequent_flux_error_W_m2": 0.0014638446367110924,
+      "peak_flux_step": 1,
+      "peak_flux_axis": "y",
+      "peak_flux_side": "lower",
+      "wall_types_xyz": [
+        "film",
+        "temperature",
+        "flux"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.0001782218148347614,
+          0.0001782218148347059
+        ],
+        [
+          0.004871851657574172,
+          0.004871851657574089
+        ],
+        [
+          1.6653345369377348e-16,
+          1.3877787807814457e-16
+        ]
+      ],
+      "n": 8,
+      "tau": 0.75,
+      "steps": 8,
+      "temperature_error_K": 0.0008010305826930963,
+      "wall_flux_error_W_m2": 0.004871851657574172,
+      "max_cell_balance_J": 8.724439356719293e-19,
+      "max_corner_balance_J": 5.988522937087903e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 3.3306690738754696e-16,
+        "first_three_flux_error_W_m2": 0.00552559910048539,
+        "subsequent_flux_error_W_m2": 0.0013268314675816961,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "y",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "film",
+          "temperature",
+          "flux"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.00011961767285091629,
+            0.00011961767285085731
+          ],
+          [
+            0.00552559910048539,
+            0.005525599100485307
+          ],
+          [
+            1.6653345369377348e-16,
+            1.3877787807814457e-16
+          ]
+        ],
+        "n": 8,
+        "tau": 0.75,
+        "steps": 8,
+        "temperature_error_K": 0.0007993533191457125,
+        "wall_flux_error_W_m2": 0.00552559910048539,
+        "max_cell_balance_J": 1.1079190950086248e-18,
+        "max_corner_balance_J": 5.082197683525802e-19,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.002352761158871286,
+      "subsequent_flux_error_W_m2": 0.0007770686203182053,
+      "peak_flux_step": 1,
+      "peak_flux_axis": "y",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "film",
+        "temperature",
+        "flux"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          4.532992921033041e-05,
+          4.53299292105247e-05
+        ],
+        [
+          0.0023527611588708836,
+          0.002352761158871286
+        ],
+        [
+          2.7755575615628914e-16,
+          2.7755575615628914e-16
+        ]
+      ],
+      "n": 16,
+      "tau": 0.75,
+      "steps": 32,
+      "temperature_error_K": 0.0002452514348931234,
+      "wall_flux_error_W_m2": 0.002352761158871286,
+      "max_cell_balance_J": 1.7300647947669084e-19,
+      "max_corner_balance_J": 1.0934665953460983e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.7075957473549308,
+        1.0501153330121231
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0027862503024519147,
+        "subsequent_flux_error_W_m2": 0.0007124105666827807,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "y",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "film",
+          "temperature",
+          "flux"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            3.113832967019392e-05,
+            3.113832967038474e-05
+          ],
+          [
+            0.0027862503024519147,
+            0.002786250302451332
+          ],
+          [
+            2.7755575615628914e-16,
+            2.7755575615628914e-16
+          ]
+        ],
+        "n": 16,
+        "tau": 0.75,
+        "steps": 32,
+        "temperature_error_K": 0.00024520551352585906,
+        "wall_flux_error_W_m2": 0.0027862503024519147,
+        "max_cell_balance_J": 1.4981895254560437e-19,
+        "max_corner_balance_J": 8.639736061993863e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.0011497455488157504,
+      "subsequent_flux_error_W_m2": 0.00039262424011948793,
+      "peak_flux_step": 1,
+      "peak_flux_axis": "y",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "film",
+        "temperature",
+        "flux"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          1.1375248757189427e-05,
+          1.1375248756422679e-05
+        ],
+        [
+          0.001149745548815348,
+          0.0011497455488157504
+        ],
+        [
+          5.273559366969494e-16,
+          5.273559366969494e-16
+        ]
+      ],
+      "n": 32,
+      "tau": 0.75,
+      "steps": 128,
+      "temperature_error_K": 6.781336321842746e-05,
+      "wall_flux_error_W_m2": 0.0011497455488157504,
+      "max_cell_balance_J": 2.4481237409119407e-20,
+      "max_corner_balance_J": 1.0804633161167647e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.8546200750384174,
+        1.0330402600482893
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0013949058846994544,
+        "subsequent_flux_error_W_m2": 0.00036121969116445496,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "y",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "film",
+          "temperature",
+          "flux"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            7.904583646967112e-06,
+            7.9045836471614e-06
+          ],
+          [
+            0.0013949058846952078,
+            0.0013949058846994544
+          ],
+          [
+            5.273559366969494e-16,
+            5.273559366969494e-16
+          ]
+        ],
+        "n": 32,
+        "tau": 0.75,
+        "steps": 128,
+        "temperature_error_K": 6.781283962098428e-05,
+        "wall_flux_error_W_m2": 0.0013949058846994544,
+        "max_cell_balance_J": 2.3035325698376715e-20,
+        "max_corner_balance_J": 1.0798842896879776e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.0007888602457097708,
+      "subsequent_flux_error_W_m2": null,
+      "peak_flux_step": 2,
+      "peak_flux_axis": "x",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "film",
+        "temperature",
+        "flux"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.0007888602457097604,
+          0.0007888602457097708
+        ],
+        [
+          0.0007583148515776239,
+          0.0007583148515775406
+        ],
+        [
+          5.551115123125783e-17,
+          5.551115123125783e-17
+        ]
+      ],
+      "n": 8,
+      "tau": 1.5,
+      "steps": 2,
+      "temperature_error_K": 0.0005618757179853828,
+      "wall_flux_error_W_m2": 0.0007888602457097708,
+      "max_cell_balance_J": 9.215718466126788e-19,
+      "max_corner_balance_J": 4.1674021004911577e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0010103015069221066,
+        "subsequent_flux_error_W_m2": null,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "x",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "film",
+          "temperature",
+          "flux"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.0010103015069220928,
+            0.0010103015069221066
+          ],
+          [
+            0.00041998409578985346,
+            0.00041998409578969387
+          ],
+          [
+            5.551115123125783e-17,
+            5.551115123125783e-17
+          ]
+        ],
+        "n": 8,
+        "tau": 1.5,
+        "steps": 2,
+        "temperature_error_K": 0.0008794412602981527,
+        "wall_flux_error_W_m2": 0.0010103015069221066,
+        "max_cell_balance_J": 8.809142651444724e-19,
+        "max_corner_balance_J": 5.522654816098038e-19,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.0004448383440265047,
+      "subsequent_flux_error_W_m2": 0.00042708591732468215,
+      "peak_flux_step": 3,
+      "peak_flux_axis": "y",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "film",
+        "temperature",
+        "flux"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          0.00023438290496498315,
+          0.00023438290496492417
+        ],
+        [
+          0.00044483834402639366,
+          0.0004448383440265047
+        ],
+        [
+          1.1102230246251565e-16,
+          8.326672684688674e-17
+        ]
+      ],
+      "n": 16,
+      "tau": 1.5,
+      "steps": 8,
+      "temperature_error_K": 0.0003606399100741786,
+      "wall_flux_error_W_m2": 0.0004448383440265047,
+      "max_cell_balance_J": 1.4992483166401116e-19,
+      "max_corner_balance_J": 4.648093298057973e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        0.6396919932710861,
+        0.8264885850066248
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0007190089307548761,
+        "subsequent_flux_error_W_m2": 0.00032211322461447867,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "y",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "film",
+          "temperature",
+          "flux"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            0.00024649275822140326,
+            0.0002464927582214692
+          ],
+          [
+            0.0007190089307548761,
+            0.0007190089307547443
+          ],
+          [
+            1.1102230246251565e-16,
+            8.326672684688674e-17
+          ]
+        ],
+        "n": 16,
+        "tau": 1.5,
+        "steps": 8,
+        "temperature_error_K": 0.0003932332090243462,
+        "wall_flux_error_W_m2": 0.0007190089307548761,
+        "max_cell_balance_J": 1.3827812863926453e-19,
+        "max_corner_balance_J": 5.759824041329242e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.000363830560485251,
+      "subsequent_flux_error_W_m2": 0.00034753074395990624,
+      "peak_flux_step": 3,
+      "peak_flux_axis": "y",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "film",
+        "temperature",
+        "flux"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          5.983072095018527e-05,
+          5.9830720950147104e-05
+        ],
+        [
+          0.0003638305604851677,
+          0.000363830560485251
+        ],
+        [
+          1.6653345369377348e-16,
+          1.6653345369377348e-16
+        ]
+      ],
+      "n": 32,
+      "tau": 1.5,
+      "steps": 32,
+      "temperature_error_K": 0.00012502372734252143,
+      "wall_flux_error_W_m2": 0.000363830560485251,
+      "max_cell_balance_J": 2.0163354611592603e-20,
+      "max_corner_balance_J": 8.599369648101276e-21,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.5283571414309884,
+        0.2900144209853392
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0005130097071444351,
+        "subsequent_flux_error_W_m2": 0.000297571143173532,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "y",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "film",
+          "temperature",
+          "flux"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            6.0417542552690384e-05,
+            6.041754255288814e-05
+          ],
+          [
+            0.0005130097071444351,
+            0.0005130097071440465
+          ],
+          [
+            1.6653345369377348e-16,
+            1.6653345369377348e-16
+          ]
+        ],
+        "n": 32,
+        "tau": 1.5,
+        "steps": 32,
+        "temperature_error_K": 0.00012556418521553203,
+        "wall_flux_error_W_m2": 0.0005130097071444351,
+        "max_cell_balance_J": 2.1612575044785507e-20,
+        "max_corner_balance_J": 1.0812904967293178e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.0060138901198519,
+      "subsequent_flux_error_W_m2": 0.0021361865054314033,
+      "peak_flux_step": 2,
+      "peak_flux_axis": "z",
+      "peak_flux_side": "lower",
+      "wall_types_xyz": [
+        "flux",
+        "film",
+        "temperature"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          1.3183898417423734e-16,
+          2.411265631607762e-16
+        ],
+        [
+          0.00035559667276689744,
+          0.00035559667276702234
+        ],
+        [
+          0.0060138901198519,
+          0.006013890119851845
+        ]
+      ],
+      "n": 8,
+      "tau": 0.75,
+      "steps": 8,
+      "temperature_error_K": 0.0006243990820937739,
+      "wall_flux_error_W_m2": 0.0060138901198519,
+      "max_cell_balance_J": 1.0130514049161432e-18,
+      "max_corner_balance_J": 4.1250504531284427e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 3.3306690738754696e-16,
+        "first_three_flux_error_W_m2": 0.004968732917829621,
+        "subsequent_flux_error_W_m2": 0.001657060117989606,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "z",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "flux",
+          "film",
+          "temperature"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            1.3183898417423734e-16,
+            2.411265631607762e-16
+          ],
+          [
+            0.00033959994460260046,
+            0.0003395999446025033
+          ],
+          [
+            0.004968732917829621,
+            0.004968732917829566
+          ]
+        ],
+        "n": 8,
+        "tau": 0.75,
+        "steps": 8,
+        "temperature_error_K": 0.0006299162663185864,
+        "wall_flux_error_W_m2": 0.004968732917829621,
+        "max_cell_balance_J": 1.2874900798265365e-18,
+        "max_corner_balance_J": 5.996993266560446e-19,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.0027501886963040567,
+      "subsequent_flux_error_W_m2": 0.0009274078401380059,
+      "peak_flux_step": 2,
+      "peak_flux_axis": "z",
+      "peak_flux_side": "lower",
+      "wall_types_xyz": [
+        "flux",
+        "film",
+        "temperature"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          2.636779683484747e-16,
+          4.85722573273506e-16
+        ],
+        [
+          9.375516649193921e-05,
+          9.375516649184901e-05
+        ],
+        [
+          0.0027501886963040567,
+          0.002750188696304029
+        ]
+      ],
+      "n": 16,
+      "tau": 0.75,
+      "steps": 32,
+      "temperature_error_K": 0.00019106915922001422,
+      "wall_flux_error_W_m2": 0.0027501886963040567,
+      "max_cell_balance_J": 1.4410148015163785e-19,
+      "max_corner_balance_J": 6.911259454003057e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.7083734870816738,
+        1.1287679001720303
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0023285224086027068,
+        "subsequent_flux_error_W_m2": 0.0007140355253609232,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "z",
+        "peak_flux_side": "lower",
+        "wall_types_xyz": [
+          "flux",
+          "film",
+          "temperature"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            2.636779683484747e-16,
+            4.85722573273506e-16
+          ],
+          [
+            8.833513222895883e-05,
+            8.833513222886169e-05
+          ],
+          [
+            0.0023285224086027068,
+            0.0023285224086026513
+          ]
+        ],
+        "n": 16,
+        "tau": 0.75,
+        "steps": 32,
+        "temperature_error_K": 0.00019127577324873357,
+        "wall_flux_error_W_m2": 0.0023285224086027068,
+        "max_cell_balance_J": 1.4981895254560437e-19,
+        "max_corner_balance_J": 7.501535539120897e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.0013022723464836683,
+      "subsequent_flux_error_W_m2": 0.00041708999820225245,
+      "peak_flux_step": 2,
+      "peak_flux_axis": "z",
+      "peak_flux_side": "lower",
+      "wall_types_xyz": [
+        "flux",
+        "film",
+        "temperature"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          4.996003610813204e-16,
+          9.71445146547012e-16
+        ],
+        [
+          2.39228869393579e-05,
+          2.3922886938781973e-05
+        ],
+        [
+          0.0013022723464836683,
+          0.001302272346482669
+        ]
+      ],
+      "n": 32,
+      "tau": 0.75,
+      "steps": 128,
+      "temperature_error_K": 5.27106437987479e-05,
+      "wall_flux_error_W_m2": 0.0013022723464836683,
+      "max_cell_balance_J": 2.160264887743487e-20,
+      "max_corner_balance_J": 8.643210220566586e-21,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.857928711265483,
+        1.0784994150296714
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0011234922471111963,
+        "subsequent_flux_error_W_m2": 0.0003208173875268172,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "z",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "flux",
+          "film",
+          "temperature"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            4.996003610813204e-16,
+            9.71445146547012e-16
+          ],
+          [
+            2.2468176131149042e-05,
+            2.2468176131523743e-05
+          ],
+          [
+            0.0011234922471102526,
+            0.0011234922471111963
+          ]
+        ],
+        "n": 32,
+        "tau": 0.75,
+        "steps": 128,
+        "temperature_error_K": 5.272027075831076e-05,
+        "wall_flux_error_W_m2": 0.0011234922471111963,
+        "max_cell_balance_J": 2.1596031432534447e-20,
+        "max_corner_balance_J": 1.1520144391026016e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.006176483875774463,
+      "subsequent_flux_error_W_m2": null,
+      "peak_flux_step": 2,
+      "peak_flux_axis": "z",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "flux",
+        "film",
+        "temperature"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          4.163336342344337e-17,
+          6.245004513516506e-17
+        ],
+        [
+          0.0001574009678643462,
+          0.0001574009678642907
+        ],
+        [
+          0.006176483875774408,
+          0.006176483875774463
+        ]
+      ],
+      "n": 8,
+      "tau": 1.5,
+      "steps": 2,
+      "temperature_error_K": 0.00196766101628032,
+      "wall_flux_error_W_m2": 0.006176483875774463,
+      "max_cell_balance_J": 9.215718466126788e-19,
+      "max_corner_balance_J": 3.2526065174565133e-19,
+      "axis_order_error_K": 0.0,
+      "orders": [],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.010855201808144477,
+        "subsequent_flux_error_W_m2": null,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "z",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "flux",
+          "film",
+          "temperature"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            4.163336342344337e-17,
+            6.245004513516506e-17
+          ],
+          [
+            0.00024127039058850818,
+            0.00024127039058848
+          ],
+          [
+            0.010855201808144421,
+            0.010855201808144477
+          ]
+        ],
+        "n": 8,
+        "tau": 1.5,
+        "steps": 2,
+        "temperature_error_K": 0.003049399815308218,
+        "wall_flux_error_W_m2": 0.010855201808144477,
+        "max_cell_balance_J": 8.334804200982315e-19,
+        "max_corner_balance_J": 4.607859233063394e-19,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.003803747610730962,
+      "subsequent_flux_error_W_m2": 0.003716685078526377,
+      "peak_flux_step": 3,
+      "peak_flux_axis": "z",
+      "peak_flux_side": "lower",
+      "wall_types_xyz": [
+        "flux",
+        "film",
+        "temperature"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          8.326672684688674e-17,
+          1.201296007113939e-16
+        ],
+        [
+          0.00021721340863272082,
+          0.00021721340863280203
+        ],
+        [
+          0.003803747610730962,
+          0.00380374761073074
+        ]
+      ],
+      "n": 16,
+      "tau": 1.5,
+      "steps": 8,
+      "temperature_error_K": 0.001444021239672466,
+      "wall_flux_error_W_m2": 0.003803747610730962,
+      "max_cell_balance_J": 1.4992483166401116e-19,
+      "max_corner_balance_J": 5.1986647137732683e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        0.44638973564286477,
+        0.69936425757304
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.005268568550397229,
+        "subsequent_flux_error_W_m2": 0.0035538829130891125,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "z",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "flux",
+          "film",
+          "temperature"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            8.326672684688674e-17,
+            1.201296007113939e-16
+          ],
+          [
+            0.00023730418955980527,
+            0.0002373041895598338
+          ],
+          [
+            0.0052685685503969515,
+            0.005268568550397229
+          ]
+        ],
+        "n": 16,
+        "tau": 1.5,
+        "steps": 8,
+        "temperature_error_K": 0.0015188888524005906,
+        "wall_flux_error_W_m2": 0.005268568550397229,
+        "max_cell_balance_J": 1.376428539288238e-19,
+        "max_corner_balance_J": 6.956258079325942e-20,
+        "axis_order_error_K": 0.0
+      }
+    },
+    {
+      "initial_temperature_error_K": 2.220446049250313e-16,
+      "first_three_flux_error_W_m2": 0.0019421333380185979,
+      "subsequent_flux_error_W_m2": 0.001871197797160301,
+      "peak_flux_step": 3,
+      "peak_flux_axis": "z",
+      "peak_flux_side": "upper",
+      "wall_types_xyz": [
+        "flux",
+        "film",
+        "temperature"
+      ],
+      "lower_upper_flux_errors_xyz_W_m2": [
+        [
+          1.3877787807814457e-16,
+          2.463307335887066e-16
+        ],
+        [
+          7.980453901484507e-05,
+          7.980453901498819e-05
+        ],
+        [
+          0.0019421333380180705,
+          0.0019421333380185979
+        ]
+      ],
+      "n": 32,
+      "tau": 1.5,
+      "steps": 32,
+      "temperature_error_K": 0.0004857856800078719,
+      "wall_flux_error_W_m2": 0.0019421333380185979,
+      "max_cell_balance_J": 2.0169972056493027e-20,
+      "max_corner_balance_J": 1.2265434122936294e-20,
+      "axis_order_error_K": 0.0,
+      "orders": [
+        1.5717000946036521,
+        0.9697792695121298
+      ],
+      "passed": true,
+      "bulk_eigenmode_start": {
+        "initial_temperature_error_K": 4.440892098500626e-16,
+        "first_three_flux_error_W_m2": 0.0025977496247020504,
+        "subsequent_flux_error_W_m2": 0.0017647683865891495,
+        "peak_flux_step": 1,
+        "peak_flux_axis": "z",
+        "peak_flux_side": "upper",
+        "wall_types_xyz": [
+          "flux",
+          "film",
+          "temperature"
+        ],
+        "lower_upper_flux_errors_xyz_W_m2": [
+          [
+            1.3877787807814457e-16,
+            2.445960101127298e-16
+          ],
+          [
+            8.00496551102872e-05,
+            8.004965511043682e-05
+          ],
+          [
+            0.002597749624701995,
+            0.0025977496247020504
+          ]
+        ],
+        "n": 32,
+        "tau": 1.5,
+        "steps": 32,
+        "temperature_error_K": 0.0004869389274652913,
+        "wall_flux_error_W_m2": 0.0025977496247020504,
+        "max_cell_balance_J": 2.1612575044785507e-20,
+        "max_corner_balance_J": 7.907846656006945e-21,
+        "axis_order_error_K": 0.0
+      }
+    }
+  ],
+  "sources": [
+    {
+      "commit": "b132963421d84381c382fb8a806b8f43b70d5a4d",
+      "file": "lbm_cube_film_corners.py",
+      "source_sha256": "35ebfbefd319ed02fc272500aea57c8d113cfe356d10241afbc6c12d2f8d6f36"
+    },
+    {
+      "commit": "8d3ad0018b088ea0d2bc51d161ac19cc088ed629",
+      "file": "thermal_common.py",
+      "source_sha256": "055a782b4fb823a4efe8899ea365a9211e5f549058f9726531c1a82ae2ef8a11"
+    },
+    {
+      "commit": "b132963421d84381c382fb8a806b8f43b70d5a4d",
+      "file": "lbm_directional_diffusion.py",
+      "source_sha256": "b008cbed452c782e7f5f21a5957063fe626272623de82153fa2348b56116fc88"
+    }
+  ]
+}
