@@ -1,0 +1,876 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 32,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.009388011803625453,
+      "exact_input_corrected_error_W_m2": 2.495070330118432e-15,
+      "solved_input_uncorrected_error_W_m2": 0.01984845068974326,
+      "solved_input_corrected_error_W_m2": 0.029234170497755497,
+      "solved_contact_errors_W_m2": [
+        0.02922503123319936,
+        0.029234170497755497
+      ],
+      "temperature_error_K": 0.000377667869508237,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.004694005901812751,
+      "exact_input_corrected_error_W_m2": 5.950836838078908e-15,
+      "solved_input_uncorrected_error_W_m2": 0.005615452743931025,
+      "solved_input_corrected_error_W_m2": 0.010309132160439662,
+      "solved_contact_errors_W_m2": [
+        0.010306767056598115,
+        0.010309132160439662
+      ],
+      "temperature_error_K": 5.990480596067756e-05,
+      "solved_flux_order": 1.5037327668859164,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0023470029509080606,
+      "exact_input_corrected_error_W_m2": 2.0414296622078328e-14,
+      "solved_input_uncorrected_error_W_m2": 0.002929973541872168,
+      "solved_input_corrected_error_W_m2": 0.005276821099546081,
+      "solved_contact_errors_W_m2": [
+        0.0052762238374731195,
+        0.005276821099546081
+      ],
+      "temperature_error_K": 1.5512644472080035e-05,
+      "solved_flux_order": 0.9661819117192189,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0011735014754631057,
+      "exact_input_corrected_error_W_m2": 4.62581121405013e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0014660960556007734,
+      "solved_input_corrected_error_W_m2": 0.0026395224609327955,
+      "solved_contact_errors_W_m2": [
+        0.002639372430670227,
+        0.0026395224609327955
+      ],
+      "temperature_error_K": 3.886036876787044e-06,
+      "solved_flux_order": 0.9993921299355009,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0005867507377416048,
+      "exact_input_corrected_error_W_m2": 8.315859492796698e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0007329973464594563,
+      "solved_input_corrected_error_W_m2": 0.0013197107437393253,
+      "solved_contact_errors_W_m2": [
+        0.0013196731434467295,
+        0.0013197107437393253
+      ],
+      "temperature_error_K": 9.721667581495325e-07,
+      "solved_flux_order": 1.0000551905468207,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0002933753688704009,
+      "exact_input_corrected_error_W_m2": 1.8549669164001824e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00036648591370302405,
+      "solved_input_corrected_error_W_m2": 0.0006598425954297435,
+      "solved_contact_errors_W_m2": [
+        0.000659833170143368,
+        0.0006598425954297435
+      ],
+      "temperature_error_K": 2.4312505966524994e-07,
+      "solved_flux_order": 1.0000279344319214,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.00014668768448416995,
+      "exact_input_corrected_error_W_m2": 3.4601370090669993e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00018323978527405666,
+      "solved_input_corrected_error_W_m2": 0.0003299181135549073,
+      "solved_contact_errors_W_m2": [
+        0.00032991569847468544,
+        0.0003299181135549073
+      ],
+      "temperature_error_K": 6.079550279880352e-08,
+      "solved_flux_order": 1.0000139239084895,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 7.334384241696728e-05,
+      "exact_input_corrected_error_W_m2": 7.400356533442516e-13,
+      "solved_input_uncorrected_error_W_m2": 9.161918873070472e-05,
+      "solved_input_corrected_error_W_m2": 0.00016495834816178506,
+      "solved_contact_errors_W_m2": [
+        0.00016495751635865782,
+        0.00016495834816178506
+      ],
+      "temperature_error_K": 1.5217017234953693e-08,
+      "solved_flux_order": 1.0000061974075671,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "beta_rad_m": 0.0,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 3.667192134807877e-05,
+      "exact_input_corrected_error_W_m2": 1.3303844847887742e-12,
+      "solved_input_uncorrected_error_W_m2": 4.580979257913311e-05,
+      "solved_input_corrected_error_W_m2": 8.247936903524844e-05,
+      "solved_contact_errors_W_m2": [
+        8.247822330657433e-05,
+        8.247936903524844e-05
+      ],
+      "temperature_error_K": 3.889337990493162e-09,
+      "solved_flux_order": 0.9999965899349357,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.009388011803625453,
+      "exact_input_corrected_error_W_m2": 2.495070330118432e-15,
+      "solved_input_uncorrected_error_W_m2": 0.029290153537777697,
+      "solved_input_corrected_error_W_m2": 0.0384403345026114,
+      "solved_contact_errors_W_m2": [
+        0.019192878181909626,
+        0.0384403345026114
+      ],
+      "temperature_error_K": 0.0018283914839162835,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.004694005901812751,
+      "exact_input_corrected_error_W_m2": 5.950836838078908e-15,
+      "solved_input_uncorrected_error_W_m2": 0.008757778914902575,
+      "solved_input_corrected_error_W_m2": 0.013405029708728554,
+      "solved_contact_errors_W_m2": [
+        0.007265269013403229,
+        0.013405029708728554
+      ],
+      "temperature_error_K": 0.000452852616038927,
+      "solved_flux_order": 1.51984647362538,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0023470029509080606,
+      "exact_input_corrected_error_W_m2": 2.0414296622078328e-14,
+      "solved_input_uncorrected_error_W_m2": 0.003756242947709571,
+      "solved_input_corrected_error_W_m2": 0.006094854489244852,
+      "solved_contact_errors_W_m2": [
+        0.004454599092517024,
+        0.006094854489244852
+      ],
+      "temperature_error_K": 0.00011324177214644027,
+      "solved_flux_order": 1.137110733731429,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0011735014754631057,
+      "exact_input_corrected_error_W_m2": 4.62581121405013e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0016770766386080894,
+      "solved_input_corrected_error_W_m2": 0.0028490473865539503,
+      "solved_contact_errors_W_m2": [
+        0.002426946318970731,
+        0.0028490473865539503
+      ],
+      "temperature_error_K": 2.832840166773937e-05,
+      "solved_flux_order": 1.09711216046291,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0005867507377416048,
+      "exact_input_corrected_error_W_m2": 8.315859492796698e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0007862385306488599,
+      "solved_input_corrected_error_W_m2": 0.001372687904757785,
+      "solved_contact_errors_W_m2": [
+        0.0012657075276075512,
+        0.001372687904757785
+      ],
+      "temperature_error_K": 7.0851696935912235e-06,
+      "solved_flux_order": 1.0534759667155125,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0002933753688704009,
+      "exact_input_corrected_error_W_m2": 1.8549669164001824e-13,
+      "solved_input_uncorrected_error_W_m2": 0.0003798538138564247,
+      "solved_input_corrected_error_W_m2": 0.0006731591552755915,
+      "solved_contact_errors_W_m2": [
+        0.0006462354656775097,
+        0.0006731591552755915
+      ],
+      "temperature_error_K": 1.7717176162837974e-06,
+      "solved_flux_order": 1.027984103440586,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.00014668768448416995,
+      "exact_input_corrected_error_W_m2": 3.4601370090669993e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00018658865451870912,
+      "solved_input_corrected_error_W_m2": 0.00033325614423966934,
+      "solved_contact_errors_W_m2": [
+        0.0003265030480866527,
+        0.00033325614423966934
+      ],
+      "temperature_error_K": 4.4297596869130017e-07,
+      "solved_flux_order": 1.0143161675918466,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 7.334384241696728e-05,
+      "exact_input_corrected_error_W_m2": 7.400356533442516e-13,
+      "solved_input_uncorrected_error_W_m2": 9.245725957504736e-05,
+      "solved_input_corrected_error_W_m2": 0.00016579397039080725,
+      "solved_contact_errors_W_m2": [
+        0.00016410270764867716,
+        0.00016579397039080725
+      ],
+      "temperature_error_K": 1.1071341984183622e-07,
+      "solved_flux_order": 1.0072399347792285,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 3.667192134807877e-05,
+      "exact_input_corrected_error_W_m2": 1.3303844847887742e-12,
+      "solved_input_uncorrected_error_W_m2": 4.6019400651080496e-05,
+      "solved_input_corrected_error_W_m2": 8.268839920342405e-05,
+      "solved_contact_errors_W_m2": [
+        8.226437407253759e-05,
+        8.268839920342405e-05
+      ],
+      "temperature_error_K": 2.7539827839324565e-08,
+      "solved_flux_order": 1.0036346944084684,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.009388011803625453,
+      "exact_input_corrected_error_W_m2": 2.495070330118432e-15,
+      "solved_input_uncorrected_error_W_m2": 0.12066895531885982,
+      "solved_input_corrected_error_W_m2": 0.11834288451403653,
+      "solved_contact_errors_W_m2": [
+        0.009649721859720978,
+        0.0500972084750066
+      ],
+      "temperature_error_K": 0.011842835325411845,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.004694005901812751,
+      "exact_input_corrected_error_W_m2": 5.950836838078908e-15,
+      "solved_input_uncorrected_error_W_m2": 0.041603573016530386,
+      "solved_input_corrected_error_W_m2": 0.04140307973201106,
+      "solved_contact_errors_W_m2": [
+        0.003796629857404349,
+        0.019570766169555547
+      ],
+      "temperature_error_K": 0.002897067086434301,
+      "solved_flux_order": 1.5151629747353361,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0023470029509080606,
+      "exact_input_corrected_error_W_m2": 2.0414296622078328e-14,
+      "solved_input_uncorrected_error_W_m2": 0.012217052239484785,
+      "solved_input_corrected_error_W_m2": 0.012202333314736264,
+      "solved_contact_errors_W_m2": [
+        0.0027387934176666935,
+        0.007908574560867429
+      ],
+      "temperature_error_K": 0.0007190606756787159,
+      "solved_flux_order": 1.7625810408420781,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0011735014754631057,
+      "exact_input_corrected_error_W_m2": 4.62581121405013e-14,
+      "solved_input_uncorrected_error_W_m2": 0.003350031570789322,
+      "solved_input_corrected_error_W_m2": 0.003349022553347691,
+      "solved_contact_errors_W_m2": [
+        0.0019312734514760894,
+        0.0033325810361309383
+      ],
+      "temperature_error_K": 0.00017920327416380923,
+      "solved_flux_order": 1.8653450477455098,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0005867507377416048,
+      "exact_input_corrected_error_W_m2": 8.315859492796698e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0009117574832242531,
+      "solved_input_corrected_error_W_m2": 0.0014968415335672519,
+      "solved_contact_errors_W_m2": [
+        0.0011347609669045443,
+        0.0014968415335672519
+      ],
+      "temperature_error_K": 4.474292511376322e-05,
+      "solved_flux_order": 1.161818596243638,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.0002933753688704009,
+      "exact_input_corrected_error_W_m2": 1.8549669164001824e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00041149597816221047,
+      "solved_input_corrected_error_W_m2": 0.0007045589492133159,
+      "solved_contact_errors_W_m2": [
+        0.0006126766011831766,
+        0.0007045589492133159
+      ],
+      "temperature_error_K": 1.1179172809404282e-05,
+      "solved_flux_order": 1.087129170920866,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 0.00014668768448416995,
+      "exact_input_corrected_error_W_m2": 3.4601370090669993e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00019452366088108667,
+      "solved_input_corrected_error_W_m2": 0.00034114747705957,
+      "solved_contact_errors_W_m2": [
+        0.0003180135669621589,
+        0.00034114747705957
+      ],
+      "temperature_error_K": 2.794003352624483e-06,
+      "solved_flux_order": 1.0463248723985656,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 7.334384241696728e-05,
+      "exact_input_corrected_error_W_m2": 7.400356533442516e-13,
+      "solved_input_uncorrected_error_W_m2": 9.444336326994344e-05,
+      "solved_input_corrected_error_W_m2": 0.00016777164352008712,
+      "solved_contact_errors_W_m2": [
+        0.0001619681112505007,
+        0.00016777164352008712
+      ],
+      "temperature_error_K": 6.983863352652617e-07,
+      "solved_flux_order": 1.0238966524512654,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": false,
+      "exact_input_uncorrected_error_W_m2": 3.667192134807877e-05,
+      "exact_input_corrected_error_W_m2": 1.3303844847887742e-12,
+      "solved_input_uncorrected_error_W_m2": 4.651593513407338e-05,
+      "solved_input_corrected_error_W_m2": 8.318316472230948e-05,
+      "solved_contact_errors_W_m2": [
+        8.172949185573197e-05,
+        8.318316472230948e-05
+      ],
+      "temperature_error_K": 1.7452196836021696e-07,
+      "solved_flux_order": 1.0121354157023383,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 0.0013141113946837748,
+      "exact_input_corrected_error_W_m2": 3.904766597855097e-15,
+      "solved_input_uncorrected_error_W_m2": 0.017435772446505494,
+      "solved_input_corrected_error_W_m2": 0.018749720383473518,
+      "solved_contact_errors_W_m2": [
+        0.018749720383473518,
+        0.010374194243130299
+      ],
+      "temperature_error_K": 0.002224968267464004,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 0.0003532514977279129,
+      "exact_input_corrected_error_W_m2": 7.625058288637365e-15,
+      "solved_input_uncorrected_error_W_m2": 0.0020659518029130432,
+      "solved_input_corrected_error_W_m2": 0.0020659518164415935,
+      "solved_contact_errors_W_m2": [
+        0.0011559298137833814,
+        0.0006380127021572793
+      ],
+      "temperature_error_K": 8.367668356312778e-05,
+      "solved_flux_order": 3.181990568532496,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 9.17658332385053e-05,
+      "exact_input_corrected_error_W_m2": 2.3737557476398174e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0033314827323105713,
+      "solved_input_corrected_error_W_m2": 0.0033314827326514735,
+      "solved_contact_errors_W_m2": [
+        0.00027964369326513426,
+        0.00015075171299907037
+      ],
+      "temperature_error_K": 1.860716306415679e-05,
+      "solved_flux_order": -0.6893578089556817,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 2.3398896862745154e-05,
+      "exact_input_corrected_error_W_m2": 4.62581121405013e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0017052006137434227,
+      "solved_input_corrected_error_W_m2": 0.0017052006137542998,
+      "solved_contact_errors_W_m2": [
+        7.213896573964866e-05,
+        3.8339911956399916e-05
+      ],
+      "temperature_error_K": 4.6967231538211805e-06,
+      "solved_flux_order": 0.9662229363335549,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 5.908631451992687e-06,
+      "exact_input_corrected_error_W_m2": 9.532207048507664e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0008547891300112958,
+      "solved_input_corrected_error_W_m2": 0.0008547891300117328,
+      "solved_contact_errors_W_m2": [
+        1.8322396934394596e-05,
+        9.665540092170743e-06
+      ],
+      "temperature_error_K": 1.1800406930655727e-06,
+      "solved_flux_order": 0.9963010125946451,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 1.4846330560312987e-06,
+      "exact_input_corrected_error_W_m2": 1.850193936272049e-13,
+      "solved_input_uncorrected_error_W_m2": 0.0004279452401205976,
+      "solved_input_corrected_error_W_m2": 0.0004279452401206902,
+      "solved_contact_errors_W_m2": [
+        4.617577353113719e-06,
+        2.4266149055527148e-06
+      ],
+      "temperature_error_K": 2.957663357319186e-07,
+      "solved_flux_order": 0.9981423608201088,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 3.7209977382012533e-07,
+      "exact_input_corrected_error_W_m2": 3.8171863629745527e-13,
+      "solved_input_uncorrected_error_W_m2": 0.0002141108513371644,
+      "solved_input_corrected_error_W_m2": 0.0002141108513372029,
+      "solved_contact_errors_W_m2": [
+        1.1590352712029548e-06,
+        6.079762132317987e-07
+      ],
+      "temperature_error_K": 7.406689378523437e-08,
+      "solved_flux_order": 0.9990682864540471,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 9.314308044547189e-08,
+      "exact_input_corrected_error_W_m2": 7.400356533442516e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00010708992748536544,
+      "solved_input_corrected_error_W_m2": 0.00010708992748530033,
+      "solved_contact_errors_W_m2": [
+        2.901408431632274e-07,
+        1.5230131164751222e-07
+      ],
+      "temperature_error_K": 1.8657713321641854e-08,
+      "solved_flux_order": 0.9995351232277447,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "beta_rad_m": 0.0,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 2.3300565285841034e-08,
+      "exact_input_corrected_error_W_m2": 1.9602859919284585e-12,
+      "solved_input_uncorrected_error_W_m2": 5.355309323313425e-05,
+      "solved_input_corrected_error_W_m2": 5.3553093233160674e-05,
+      "solved_contact_errors_W_m2": [
+        7.176191521293338e-08,
+        3.865755412970348e-08
+      ],
+      "temperature_error_K": 5.189244788225944e-09,
+      "solved_flux_order": 0.9997809787404521,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 0.0013141113946837748,
+      "exact_input_corrected_error_W_m2": 3.904766597855097e-15,
+      "solved_input_uncorrected_error_W_m2": 0.027943649183970173,
+      "solved_input_corrected_error_W_m2": 0.027808987690866295,
+      "solved_contact_errors_W_m2": [
+        0.013163269879831914,
+        0.007741519671152639
+      ],
+      "temperature_error_K": 0.0032691515607040627,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 0.0003532514977279129,
+      "exact_input_corrected_error_W_m2": 7.625058288637365e-15,
+      "solved_input_uncorrected_error_W_m2": 0.00865878927113921,
+      "solved_input_corrected_error_W_m2": 0.00864835734247171,
+      "solved_contact_errors_W_m2": [
+        0.0007096135564932617,
+        0.0007769506905053486
+      ],
+      "temperature_error_K": 0.0008004065938704131,
+      "solved_flux_order": 1.6850531880263342,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 9.17658332385053e-05,
+      "exact_input_corrected_error_W_m2": 2.3737557476398174e-14,
+      "solved_input_uncorrected_error_W_m2": 0.004288709475306544,
+      "solved_input_corrected_error_W_m2": 0.0042874177317905535,
+      "solved_contact_errors_W_m2": [
+        0.00017277592323847199,
+        0.0002055661169392258
+      ],
+      "temperature_error_K": 0.00019893123039666785,
+      "solved_flux_order": 1.012317146484444,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 2.3398896862745154e-05,
+      "exact_input_corrected_error_W_m2": 4.62581121405013e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0019402165515537465,
+      "solved_input_corrected_error_W_m2": 0.0019400704549946903,
+      "solved_contact_errors_W_m2": [
+        4.518166692087053e-05,
+        5.394222464503819e-05
+      ],
+      "temperature_error_K": 4.9598521716007515e-05,
+      "solved_flux_order": 1.1439999428742642,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 5.908631451992687e-06,
+      "exact_input_corrected_error_W_m2": 9.532207048507664e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0009130220697015282,
+      "solved_input_corrected_error_W_m2": 0.0009130048822654519,
+      "solved_contact_errors_W_m2": [
+        1.1569159445280232e-05,
+        1.3797562603271636e-05
+      ],
+      "temperature_error_K": 1.2383265007171236e-05,
+      "solved_flux_order": 1.0874145657177448,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 1.4846330560312987e-06,
+      "exact_input_corrected_error_W_m2": 1.850193936272049e-13,
+      "solved_input_uncorrected_error_W_m2": 0.0004424376257628565,
+      "solved_input_corrected_error_W_m2": 0.0004424355435655958,
+      "solved_contact_errors_W_m2": [
+        2.928609559997394e-06,
+        3.4881164415888848e-06
+      ],
+      "temperature_error_K": 3.0938625960288482e-06,
+      "solved_flux_order": 1.045155284212254,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 3.7209977382012533e-07,
+      "exact_input_corrected_error_W_m2": 3.8171863629745527e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00021772564839944348,
+      "solved_input_corrected_error_W_m2": 0.00021772539223456887,
+      "solved_contact_errors_W_m2": [
+        7.367990323189635e-07,
+        8.768916177687161e-07
+      ],
+      "temperature_error_K": 7.732048180696719e-07,
+      "solved_flux_order": 1.0229576190668495,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 9.314308044547189e-08,
+      "exact_input_corrected_error_W_m2": 7.400356533442516e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00010799260181639432,
+      "solved_input_corrected_error_W_m2": 0.00010799257005179917,
+      "solved_contact_errors_W_m2": [
+        1.8468139669812553e-07,
+        2.1996030717520368e-07
+      ],
+      "temperature_error_K": 1.9319015026887866e-07,
+      "solved_flux_order": 1.0115776141272639,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "beta_rad_m": 6.283185307179586,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 2.3300565285841034e-08,
+      "exact_input_corrected_error_W_m2": 1.9602859919284585e-12,
+      "solved_input_uncorrected_error_W_m2": 5.377873629772593e-05,
+      "solved_input_corrected_error_W_m2": 5.377873234318968e-05,
+      "solved_contact_errors_W_m2": [
+        4.5851188335305905e-08,
+        5.555139672054571e-08
+      ],
+      "temperature_error_K": 4.799549959909892e-08,
+      "solved_flux_order": 1.0058244036593198,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 0.0013141113946837748,
+      "exact_input_corrected_error_W_m2": 3.904766597855097e-15,
+      "solved_input_uncorrected_error_W_m2": 0.20454414209061825,
+      "solved_input_corrected_error_W_m2": 0.20060125424546044,
+      "solved_contact_errors_W_m2": [
+        0.02020062623437652,
+        0.011711228008543524
+      ],
+      "temperature_error_K": 0.020737855203323528,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 0.0003532514977279129,
+      "exact_input_corrected_error_W_m2": 7.625058288637365e-15,
+      "solved_input_uncorrected_error_W_m2": 0.0678539835202035,
+      "solved_input_corrected_error_W_m2": 0.06752698593232109,
+      "solved_contact_errors_W_m2": [
+        0.0029548137872849813,
+        0.0030695801365363765
+      ],
+      "temperature_error_K": 0.005104991328353234,
+      "solved_flux_order": 1.5707945569735418,
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 9.17658332385053e-05,
+      "exact_input_corrected_error_W_m2": 2.3737557476398174e-14,
+      "solved_input_uncorrected_error_W_m2": 0.01954542729988264,
+      "solved_input_corrected_error_W_m2": 0.01952187925670756,
+      "solved_contact_errors_W_m2": [
+        0.0006843086631875466,
+        0.0007046825400643969
+      ],
+      "temperature_error_K": 0.0012695190374909702,
+      "solved_flux_order": 1.7903722248753686,
+      "passed": true
+    },
+    {
+      "columns": 256,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 2.3398896862745154e-05,
+      "exact_input_corrected_error_W_m2": 4.62581121405013e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0052840073310514565,
+      "solved_input_corrected_error_W_m2": 0.00528241580707746,
+      "solved_contact_errors_W_m2": [
+        0.0001667836655818333,
+        0.00016766017504363958
+      ],
+      "temperature_error_K": 0.00031677115938712793,
+      "solved_flux_order": 1.8858221660710974,
+      "passed": true
+    },
+    {
+      "columns": 512,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 5.908631451992687e-06,
+      "exact_input_corrected_error_W_m2": 9.532207048507664e-14,
+      "solved_input_uncorrected_error_W_m2": 0.0013973447868204454,
+      "solved_input_corrected_error_W_m2": 0.001397239568009588,
+      "solved_contact_errors_W_m2": [
+        4.124997732194847e-05,
+        4.085974922415545e-05
+      ],
+      "temperature_error_K": 7.913551122848443e-05,
+      "solved_flux_order": 1.9186184645104736,
+      "passed": true
+    },
+    {
+      "columns": 1024,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 1.4846330560312987e-06,
+      "exact_input_corrected_error_W_m2": 1.850193936272049e-13,
+      "solved_input_uncorrected_error_W_m2": 0.000502318009000878,
+      "solved_input_corrected_error_W_m2": 0.0005023085529767406,
+      "solved_contact_errors_W_m2": [
+        1.0263694538415253e-05,
+        1.0083714318547746e-05
+      ],
+      "temperature_error_K": 1.9777553307238667e-05,
+      "solved_flux_order": 1.4759336580880444,
+      "passed": true
+    },
+    {
+      "columns": 2048,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 3.7209977382012533e-07,
+      "exact_input_corrected_error_W_m2": 3.8171863629745527e-13,
+      "solved_input_uncorrected_error_W_m2": 0.00023263290455024707,
+      "solved_input_corrected_error_W_m2": 0.00023263180973464833,
+      "solved_contact_errors_W_m2": [
+        2.5602871864186534e-06,
+        2.5045780214448637e-06
+      ],
+      "temperature_error_K": 4.943670848456746e-06,
+      "solved_flux_order": 1.1105254581556083,
+      "passed": true
+    },
+    {
+      "columns": 4096,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 9.314308044547189e-08,
+      "exact_input_corrected_error_W_m2": 7.400356533442516e-13,
+      "solved_input_uncorrected_error_W_m2": 0.0001117105700388817,
+      "solved_input_corrected_error_W_m2": 0.00011171043860598057,
+      "solved_contact_errors_W_m2": [
+        6.393483775057288e-07,
+        6.240536096708886e-07
+      ],
+      "temperature_error_K": 1.2357989524004495e-06,
+      "solved_flux_order": 1.0582843798312538,
+      "passed": true
+    },
+    {
+      "columns": 8192,
+      "beta_rad_m": 12.566370614359172,
+      "resistive": true,
+      "exact_input_uncorrected_error_W_m2": 2.3300565285841034e-08,
+      "exact_input_corrected_error_W_m2": 1.9602859919284585e-12,
+      "solved_input_uncorrected_error_W_m2": 5.470735203249097e-05,
+      "solved_input_corrected_error_W_m2": 5.47073359411174e-05,
+      "solved_contact_errors_W_m2": [
+        1.5958373518371298e-07,
+        1.5559270937181066e-07
+      ],
+      "temperature_error_K": 3.0882670807105634e-07,
+      "solved_flux_order": 1.0299577942230094,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "fd118caf394196c009c75c496020e7f87f594bb2",
+      "file": "sph_curved_interlayer_flux.py",
+      "source_sha256": "d2d26aee44e5d8b7fd656ed7ae6d26a4e8f8acbf4f2cfdc6eff12c01c74c8922"
+    },
+    {
+      "commit": "c0114248a690adefa13ac619f6f7078a690222b0",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "a96600626c74c4d90b524a3ddb5724edc5cace45dccf4185c349ff54d91eefce"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_curved_interlayer_flux.py"
+}
