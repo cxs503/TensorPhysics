@@ -15,7 +15,7 @@ CAPACITY = (.25, .8)
 WALLS = np.array([1., .3j])
 
 
-def continuum(omega, walls=WALLS, generation=(0., 0.), fractions=(.5, .5)):
+def continuum(omega, walls=WALLS, generation=(0., 0.), fractions=(.5, .5), *, return_wall_rates=False):
     # Exact radial resistances in K m/W, with heat rates per unit axial length.
     a, r1, _, r2, b = RADII
     surface = 2*np.pi*np.array([r1, r2])
@@ -28,10 +28,11 @@ def continuum(omega, walls=WALLS, generation=(0., 0.), fractions=(.5, .5)):
     matrix = np.array([[g0+g1, -g1], [-g1, g1+g2]]) + 1j*omega*np.diag(surface*CAPACITY)
     temp = np.linalg.solve(matrix, walls*[g0, g2] + surface*generation)
     power = -np.diff(np.r_[walls[0], temp, walls[1]])/resistance
-    return np.column_stack((temp, power[:-1]/surface, power[1:]/surface))
+    fields = np.column_stack((temp, power[:-1]/surface, power[1:]/surface))
+    return (fields, power[[0, -1]]) if return_wall_rates else fields
 
 
-def angular_reference(omega, mode, walls=WALLS, generation=(0., 0.), fractions=(.5, .5), sheet_k=(0., 0.)):
+def angular_reference(omega, mode, walls=WALLS, generation=(0., 0.), fractions=(.5, .5), sheet_k=(0., 0.), *, return_wall_rates=False):
     # In a source-free annulus T_m = A*r^m+B*r^-m. Propagate the pair
     # (T_m, r*q_m) between the two physical walls without an artificial join.
     edges = [RADII[0], RADII[1], RADII[3], RADII[4]]
@@ -50,13 +51,14 @@ def angular_reference(omega, mode, walls=WALLS, generation=(0., 0.), fractions=(
                 sheets.append([t, incoming, outgoing])
                 p = radius*outgoing
                 t -= CONTACT[i]*(1-fractions[i])*outgoing
-        return t, np.asarray(sheets)
-    offset, _ = propagate(0.)
-    unit, _ = propagate(1.)
-    end, fields = propagate((walls[1]-offset)/(unit-offset))
+        return t, np.asarray(sheets), p
+    offset, _, _ = propagate(0.)
+    unit, _, _ = propagate(1.)
+    initial = (walls[1]-offset)/(unit-offset)
+    end, fields, final = propagate(initial)
     if abs(end-walls[1]) > 1e-10:
         raise ArithmeticError("angular reference missed exterior temperature")
-    return fields
+    return (fields, 2*np.pi*np.array([initial, final])) if return_wall_rates else fields
 
 
 if __name__ == "__main__":
@@ -91,19 +93,42 @@ if __name__ == "__main__":
                 solution = response.solve(omega, walls, CAPACITY, sheet_generation=generation)
                 fields = np.column_stack((solution.sheet_temperature, solution.incoming_flux, solution.outgoing_flux))
                 imbalance = solution.join_power_residual
-                expected = (angular_reference(omega, mode, walls, generation, fractions, sheet_k) if mode
-                            else continuum(omega, walls, generation, fractions))
+                expected, wall_reference = (
+                    angular_reference(omega, mode, walls, generation, fractions, sheet_k, return_wall_rates=True)
+                    if mode else continuum(omega, walls, generation, fractions, return_wall_rates=True))
+                wall_error = float(abs(solution.wall_heat_rates/wall_reference-1).max())
+                global_residual = None
+                relative_balance = None
+                if mode == 0:
+                    net = generation - 1j*omega*np.asarray(CAPACITY)*solution.sheet_temperature
+                    sheet_rates = 2*np.pi*np.array([RADII[1], RADII[3]]) * net
+                    expected_gain = sheet_rates.sum()
+                    global_residual = float(abs(solution.wall_heat_rates[1]-solution.wall_heat_rates[0]-expected_gain))
+                    throughput = abs(solution.wall_heat_rates).sum() + abs(sheet_rates).sum()
+                    relative_balance = global_residual/throughput if throughput else 0.
                 ratio = fields/expected
                 error = float(abs(ratio-1).max())
-                order = None if omega not in previous or formulation == "circular" else math.log2(previous[omega]/error)
+                order = None if omega not in previous or formulation == "circular" else math.log2(previous[omega][0]/error)
                 sheet_balance = float(abs(generation+fields[:, 1]-fields[:, 2]-(modal_loss+1j*omega*np.asarray(CAPACITY))*fields[:, 0]).max())
                 passed = leakage < 1e-9 and imbalance < 1e-10 and sheet_balance < 1e-10 and (error < 1e-9 if formulation == "circular"
                                                 else n < (128 if mode else 64) or (order > 1.7 and error < .01))
-                runs.append(dict(formulation=formulation, panels=n, omega=omega, max_relative_phasor_error=error,
+                wall_order = None
+                if omega in previous and formulation == "polygonal":
+                    wall_order = math.log2(previous[omega][1]/wall_error)
+                finest = n == (128 if mode else 64)
+                passed &= (wall_error < 1e-9 if formulation == "circular" else
+                           not finest or (wall_error < .01 and wall_order > 1.7))
+                if mode == 0:
+                    passed &= (relative_balance < 1e-10 if formulation == "circular" else
+                               not finest or relative_balance < .01)
+                runs.append(dict(wall_rate_max_relative_error=wall_error, wall_rate_order=wall_order,
+                                 axisymmetric_balance_W_m=global_residual, relative_global_balance=relative_balance,
+                                 radial_wall_rates_W_m=[[z.real, z.imag] for z in solution.wall_heat_rates],
+                                 formulation=formulation, panels=n, omega=omega, max_relative_phasor_error=error,
                                  order=order, amplitude_ratios=abs(ratio).tolist(), phase_errors_deg=np.angle(ratio,deg=True).tolist(),
                                  reference_amplitudes=abs(expected).tolist(), reference_phases_deg=np.angle(expected,deg=True).tolist(),
-                                 unit_response_mode_leakage=leakage, join_power_residual_W_m=imbalance, sheet_balance_residual_W_m2=sheet_balance, passed=passed))
-                previous[omega] = error
+                                 unit_response_mode_leakage=leakage, join_power_residual_W_m=imbalance, sheet_balance_residual_W_m2=sheet_balance, passed=bool(passed)))
+                previous[omega] = (error, wall_error)
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, angular_cosine_mode=mode, inner_resistance_fractions=fractions,
                           sheet_conductivities_W_K=sheet_k.tolist(), wall_temperatures_K=[[z.real, z.imag] for z in walls],
