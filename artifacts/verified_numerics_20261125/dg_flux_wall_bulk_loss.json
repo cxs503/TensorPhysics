@@ -1,0 +1,190 @@
+{
+  "solver": "dg",
+  "passed": true,
+  "runs": [
+    {
+      "max_column_balance_error_J_m2": 1.442942987317508e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 8,
+      "steps": 64,
+      "method": "theta",
+      "final_mean_K": 0.4990128524791295,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.0028871201156558113,
+      "max_mean_error_K": 0.0001078271021064392,
+      "max_mean_rise_error_K": 0.00010782710210632818,
+      "max_interior_flux_error_W_m2": 0.013873651284667998,
+      "max_energy_residual_J_m2": 1.3905543383430086e-14,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "max_column_balance_error_J_m2": 1.2176024077881209e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 16,
+      "steps": 128,
+      "method": "theta",
+      "final_mean_K": 0.4990095881853338,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.0007531540259767128,
+      "max_mean_error_K": 2.694742495457092e-05,
+      "max_mean_rise_error_K": 2.6947424954459898e-05,
+      "max_interior_flux_error_W_m2": 0.004139492344585771,
+      "max_energy_residual_J_m2": 2.238487173400472e-14,
+      "orders": [
+        1.9386142878913257,
+        2.0005005184725815,
+        2.0005005184770397,
+        1.7448217721731298
+      ],
+      "passed": true
+    },
+    {
+      "max_column_balance_error_J_m2": 1.8417125463576767e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 32,
+      "steps": 256,
+      "method": "theta",
+      "final_mean_K": 0.49900877143826006,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.0001907622608513515,
+      "max_mean_error_K": 6.736268929108391e-06,
+      "max_mean_rise_error_K": 6.736268928997369e-06,
+      "max_interior_flux_error_W_m2": 0.0011393992226287342,
+      "max_energy_residual_J_m2": 3.554795346971673e-14,
+      "orders": [
+        1.981169151366636,
+        2.00012577758206,
+        2.0001257775998935,
+        1.8611805235872272
+      ],
+      "passed": true
+    },
+    {
+      "max_column_balance_error_J_m2": 1.8155859845062072e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 64,
+      "steps": 512,
+      "method": "theta",
+      "final_mean_K": 0.49900856720931386,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 4.7903812538940826e-05,
+      "max_mean_error_K": 1.6840306747978318e-06,
+      "max_mean_rise_error_K": 1.6840306746868094e-06,
+      "max_interior_flux_error_W_m2": 0.000298962787958712,
+      "max_energy_residual_J_m2": 5.619810172774464e-14,
+      "orders": [
+        1.9935634003295017,
+        2.00003131814781,
+        2.0000313182191447,
+        1.9302354992537
+      ],
+      "passed": true
+    },
+    {
+      "max_column_balance_error_J_m2": 1.1107434416679496e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 8,
+      "steps": 64,
+      "method": "sdirk2",
+      "final_mean_K": 0.4990106308760195,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.002450574580141307,
+      "max_mean_error_K": 5.275164214918471e-05,
+      "max_mean_rise_error_K": 5.2751642149073685e-05,
+      "max_interior_flux_error_W_m2": 0.009723223847106999,
+      "max_energy_residual_J_m2": 1.5737411374061594e-14,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "max_column_balance_error_J_m2": 1.2831749551800442e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 16,
+      "steps": 128,
+      "method": "sdirk2",
+      "final_mean_K": 0.49900902995225915,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.0006379794416249696,
+      "max_mean_error_K": 1.3131503752095153e-05,
+      "max_mean_rise_error_K": 1.313150375198413e-05,
+      "max_interior_flux_error_W_m2": 0.002951899440602923,
+      "max_energy_residual_J_m2": 1.5987211554602254e-14,
+      "orders": [
+        1.9415382138536745,
+        2.006183869669813,
+        2.0061838696789747,
+        1.7197911599524778
+      ],
+      "passed": true
+    },
+    {
+      "max_column_balance_error_J_m2": 1.4012012036768162e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 32,
+      "steps": 256,
+      "method": "sdirk2",
+      "final_mean_K": 0.49900863156214686,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 0.000161738176083559,
+      "max_mean_error_K": 3.2758733933824224e-06,
+      "max_mean_rise_error_K": 3.2758733932714e-06,
+      "max_interior_flux_error_W_m2": 0.0008092917195590132,
+      "max_energy_residual_J_m2": 2.9982960558783134e-14,
+      "orders": [
+        1.9798496876185179,
+        2.0030806300884167,
+        2.003080630125114,
+        1.866911835979532
+      ],
+      "passed": true
+    },
+    {
+      "max_column_balance_error_J_m2": 1.4936511229246552e-14,
+      "max_wall_heat_error_J_m2": 0.0,
+      "columns": 64,
+      "steps": 512,
+      "method": "sdirk2",
+      "final_mean_K": 0.49900853220065167,
+      "exact_final_mean_K": 0.4990084991293335,
+      "equilibrium_mean_K": 0.5,
+      "max_temperature_error_K": 4.073030864423788e-05,
+      "max_mean_error_K": 8.180940886393095e-07,
+      "max_mean_rise_error_K": 8.180940885282872e-07,
+      "max_interior_flux_error_W_m2": 0.00021233078803906125,
+      "max_energy_residual_J_m2": 9.624592789414521e-14,
+      "orders": [
+        1.9894855955491049,
+        2.0015409189461977,
+        2.001540919093089,
+        1.9303462565982101
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "ab051959e09b768429502dd03200ad2caa7d3376",
+      "file": "sph_flux_wall_bulk_loss.py",
+      "source_sha256": "93fa245cd70b468687f6d51c6276eef13065873f3204433864d22a61001ab24c"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    },
+    {
+      "commit": "2996c844c504b67353bbebdf90df683ba7dab4ee",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/sph_flux_wall_bulk_loss.py --solver dg"
+}
