@@ -1,0 +1,240 @@
+{
+  "reference": "Unit periodic cube; T=0.7+Re(exp(i*k.x-(alpha*|k|^2+i*u.k)*t)); total heat flux C*(u*T-alpha*grad(T)), averaged over the face and time step",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_periodic_advective_flux.py",
+  "runs": [
+    {
+      "n": 8,
+      "steps": 4,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.03752945726912005,
+      "total_flux_errors_xyz_W_m2": [
+        0.07624176323547616,
+        0.07147789777508318,
+        0.06790499867978737
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.07624176323547605,
+        0.07147789777508229,
+        0.06790499867978737
+      ],
+      "max_cell_energy_residual_J": 1.0299920638612292e-18,
+      "temperature_and_total_flux_orders": [],
+      "orders_above_1p7": null,
+      "passed": true
+    },
+    {
+      "n": 16,
+      "steps": 16,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.009434729168571798,
+      "total_flux_errors_xyz_W_m2": [
+        0.024004763434173126,
+        0.020715071978644417,
+        0.020540759167671174
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.024004763434172682,
+        0.020715071978644195,
+        0.020540759167670453
+      ],
+      "max_cell_energy_residual_J": 1.5924219408380846e-19,
+      "temperature_and_total_flux_orders": [
+        1.9919704170733734,
+        1.6672607663205725,
+        1.7868163708751597,
+        1.7250282759273339
+      ],
+      "orders_above_1p7": false,
+      "passed": true
+    },
+    {
+      "n": 32,
+      "steps": 64,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.00235315706801853,
+      "total_flux_errors_xyz_W_m2": [
+        0.006246864414500619,
+        0.005369595446493458,
+        0.005315489481546587
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.006246864414500314,
+        0.005369595446493458,
+        0.00531548948154581
+      ],
+      "max_cell_energy_residual_J": 2.202285662861181e-20,
+      "temperature_and_total_flux_orders": [
+        2.0033834842355236,
+        1.94211659609216,
+        1.9477955306830996,
+        1.9502150484964842
+      ],
+      "orders_above_1p7": true,
+      "passed": true
+    },
+    {
+      "n": 48,
+      "steps": 144,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0010445857951619786,
+      "total_flux_errors_xyz_W_m2": [
+        0.002796977763391606,
+        0.002402452106723185,
+        0.0023853630431009964
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.0027969777633889414,
+        0.002402452106721187,
+        0.0023853630431004413
+      ],
+      "max_cell_energy_residual_J": 8.126222337720944e-21,
+      "temperature_and_total_flux_orders": [
+        2.002977333782694,
+        1.9817739284716407,
+        1.983555740936484,
+        1.9761842728485017
+      ],
+      "orders_above_1p7": true,
+      "passed": true
+    },
+    {
+      "n": 8,
+      "steps": 4,
+      "velocity_m_s": [
+        -0.62,
+        0.38,
+        -0.2
+      ],
+      "temperature_error_K": 0.037529457269119826,
+      "total_flux_errors_xyz_W_m2": [
+        0.07624176323547704,
+        0.07147789777508295,
+        0.06790499867978772
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.07624176323547571,
+        0.07147789777508295,
+        0.06790499867978694
+      ],
+      "max_cell_energy_residual_J": 1.0842021724855044e-18,
+      "temperature_and_total_flux_orders": [],
+      "orders_above_1p7": null,
+      "passed": true
+    },
+    {
+      "n": 16,
+      "steps": 16,
+      "velocity_m_s": [
+        -0.62,
+        0.38,
+        -0.2
+      ],
+      "temperature_error_K": 0.009434729168571576,
+      "total_flux_errors_xyz_W_m2": [
+        0.02400476343417357,
+        0.020715071978644195,
+        0.02054075916766962
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.024004763434172238,
+        0.020715071978643973,
+        0.020540759167669398
+      ],
+      "max_cell_energy_residual_J": 1.4399560103323106e-19,
+      "temperature_and_total_flux_orders": [
+        1.9919704170733987,
+        1.6672607663205625,
+        1.786816370875171,
+        1.7250282759274507
+      ],
+      "orders_above_1p7": false,
+      "passed": true
+    },
+    {
+      "n": 32,
+      "steps": 64,
+      "velocity_m_s": [
+        -0.62,
+        0.38,
+        -0.2
+      ],
+      "temperature_error_K": 0.002353157068018641,
+      "total_flux_errors_xyz_W_m2": [
+        0.006246864414505074,
+        0.005369595446493125,
+        0.005315489481546365
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.006246864414501285,
+        0.005369595446492931,
+        0.005315489481545699
+      ],
+      "max_cell_energy_residual_J": 2.4246318115154347e-20,
+      "temperature_and_total_flux_orders": [
+        2.0033834842354215,
+        1.9421165960911577,
+        1.9477955306831736,
+        1.9502150484964353
+      ],
+      "orders_above_1p7": true,
+      "passed": true
+    },
+    {
+      "n": 48,
+      "steps": 144,
+      "velocity_m_s": [
+        -0.62,
+        0.38,
+        -0.2
+      ],
+      "temperature_error_K": 0.0010445857951617565,
+      "total_flux_errors_xyz_W_m2": [
+        0.0027969777633972265,
+        0.0024024521067240734,
+        0.002385363043099442
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.0027969777633910647,
+        0.0024024521067240734,
+        0.002385363043099442
+      ],
+      "max_cell_energy_residual_J": 7.782115202898884e-21,
+      "temperature_and_total_flux_orders": [
+        2.0029773337833343,
+        1.981773928468443,
+        1.9835557409354192,
+        1.9761842728500056
+      ],
+      "orders_above_1p7": true,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "da5a8cf2e415a677bc1c324567188a519e845b02",
+      "file": "lbm_periodic_advective_flux.py",
+      "source_sha256": "e820763eb4dfc873316edfa549e4c1889ebe7da922d255d3ec10e0835a512274"
+    },
+    {
+      "commit": "bd41f5fb3890e44f8e41b86da7407c908f9ac08b",
+      "file": "thermal_common.py",
+      "source_sha256": "afa893ace55b44547cbeafeaf052fb0ed790de1d1bc4b18bc5d0f91d6621f2f5"
+    }
+  ]
+}
