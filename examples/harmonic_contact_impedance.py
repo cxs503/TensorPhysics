@@ -18,7 +18,7 @@ def fem_response(n, lengths, areas, conductivity, capacity, end_capacity, resist
                         np.linspace(lengths[0], lengths.sum(), n+1)]
     starts = np.r_[np.arange(n), n+1+np.arange(n)]
     elements = torch.from_numpy(np.column_stack((starts, starts+1)))
-    loads = np.zeros_like(coordinates)
+    loads = np.zeros_like(coordinates, dtype=drive.dtype)
     loads[[0, -1]] = drive
     ends = [0, len(loads)-1]
     model = thermal.ThermalModel(
@@ -34,10 +34,26 @@ def fem_response(n, lengths, areas, conductivity, capacity, end_capacity, resist
     local = thermal.thermal_element_nodal_power(model, state, omega).numpy()
     # Element nodal powers point inward. Convert both adjacent powers to rightward.
     return (state[elements].mean(dim=1).numpy(), state[ends].numpy(),
-            (state[n]-state[n+1]).item(), -local[n-1, 1], local[n, 0])
+            state[[n, n+1]].numpy(), -local[n-1, 1], local[n, 0])
 
 
-def measure(n, omega, solver="FVM"):
+def reference_losses(lengths, areas, conductivity, capacity, omega, resistance, initial):
+    """Integrate |P|²/(kA) independently in each material, in W K (peak phasors)."""
+    nodes, weights = np.polynomial.legendre.leggauss(16)
+    components = []
+    state = initial
+    for layer, (length, area, k, c) in enumerate(zip(lengths, areas, conductivity, capacity)):
+        generator = np.array([[0., -1/(k*area)], [-1j*omega*c*area, 0.]])
+        powers = [(expm(generator*x) @ state)[1] for x in (nodes+1)*length/2]
+        components.append(length/(2*k*area)*np.dot(weights, abs(np.asarray(powers))**2))
+        if layer == 0:
+            t, power = expm(generator*length) @ state
+            components.append(resistance*abs(power)**2)
+            state = np.array([t-resistance*power, power])
+    return np.asarray(components)
+
+
+def measure(n, omega, solver="FVM", phased=False):
     lengths = np.array([.37, .63])
     areas = np.array([.8, 1.4])
     conductivity = np.array([.9, 3.7])
@@ -63,9 +79,13 @@ def measure(n, omega, solver="FVM"):
     contact[n-1] = resistance*min(areas)
     columns = []
     jump_error = power_error = continuity = balance = 0.
-    for end, drive in enumerate(np.eye(2)):
+    drives = list(np.eye(2))
+    if phased:
+        drives.append(np.array([.8+.3j, -.4+.65j]))
+    extra = {}
+    for end, drive in enumerate(drives):
         if solver == "FEM":
-            cell, ends, jump, p_left, p_right = fem_response(
+            cell, ends, traces, p_left, p_right = fem_response(
                 n, lengths, areas, conductivity, capacity, end_capacity, resistance, omega, drive)
         else:
             cell, faces, west, east, (left_t, right_t) = rod.solve_harmonic_stepped_rod(
@@ -73,10 +93,29 @@ def measure(n, omega, solver="FVM"):
                 drive, omega, end_types=("power", "power"), end_areal_heat_capacity=end_capacity,
                 contact_resistance=contact, flux_order=2, return_traces=True)
             ends = faces[[0, -1]]
-            jump, p_left, p_right = left_t[n-1]-right_t[n-1], east[n-1], west[n]
-        columns.append(ends)
-        jump_error = max(jump_error, abs(jump-resistance*contact_power[end]))
-        power_error = max(power_error, abs(p_left-contact_power[end]), abs(p_right-contact_power[end]))
+            traces = np.array([left_t[n-1], right_t[n-1]])
+            p_left, p_right = east[n-1], west[n]
+        jump = traces[0]-traces[1]
+        if end == 2:
+            # In each homogeneous layer the real part of [T*conj(P)]_east
+            # minus its west value is minus the integrated conduction loss.
+            end_power = (drive-storage*ends)*[1., -1.]
+            losses = np.real([ends[0]*end_power[0].conjugate()-traces[0]*p_left.conjugate(),
+                              jump*p_left.conjugate(),
+                              traces[1]*p_right.conjugate()-ends[1]*end_power[1].conjugate()])
+            exact = reference_losses(lengths, areas, conductivity, capacity, omega,
+                                     resistance, west_state @ drive)
+            extra = dict(drive_W=np.column_stack((drive.real, drive.imag)).tolist(),
+                         losses_W_K=losses.tolist(), exact_losses_W_K=exact.tolist(),
+                         loss_errors_W_K=abs(losses-exact).tolist(),
+                         superposition_error_K=float(max(abs(ends-np.column_stack(columns) @ drive))),
+                         phased_end_error_K=float(max(abs(ends-exact_z @ drive))),
+                         loss_balance_W_K=float(abs(np.vdot(drive, ends).real-losses.sum())))
+        else:
+            columns.append(ends)
+        target_power = contact_power @ drive
+        jump_error = max(jump_error, abs(jump-resistance*target_power))
+        power_error = max(power_error, abs(p_left-target_power), abs(p_right-target_power))
         continuity = max(continuity, abs(p_left-p_right))
         bulk_storage = 1j*omega*np.dot(widths*np.repeat(areas*capacity, n), cell)
         balance = max(balance, abs(drive.sum()-storage @ ends-bulk_storage))
@@ -85,7 +124,7 @@ def measure(n, omega, solver="FVM"):
     # For arbitrary complex drives d the real part of dᴴ Z d must be
     # nonnegative for a passive rod. The Hermitian part tests all drives.
     min_dissipation = np.linalg.eigvalsh((z+z.conj().T)/2)[0]
-    return dict(cells_per_material=n, omega_rad_s=omega,
+    return dict(**extra, cells_per_material=n, omega_rad_s=omega,
                 impedance_K_W=np.stack((z.real, z.imag), axis=-1).tolist(),
                 exact_impedance_K_W=np.stack((exact_z.real, exact_z.imag), axis=-1).tolist(),
                 impedance_error_K_W=float(abs(z-exact_z).max()), contact_jump_error_K=float(jump_error),
@@ -97,21 +136,28 @@ def measure(n, omega, solver="FVM"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--with-fem", action="store_true", help="also verify the sparse LINE2 finite-element response")
+    parser.add_argument("--phased", action="store_true", help="verify a simultaneous complex drive and left/contact/right dissipation integrals")
     args = parser.parse_args()
     rows = []
     for solver in (("FVM", "FEM") if args.with_fem else ("FVM",)):
         for omega in (.5, 4., 12.):
             previous = None
             for n in (4, 8, 16, 32, 64):
-                row = measure(n, omega, solver)
+                row = measure(n, omega, solver, args.phased)
                 errors = np.array([row[name] for name in (
                     "impedance_error_K_W", "contact_jump_error_K", "contact_power_error_W")])
+                if args.phased:
+                    errors = np.r_[errors, row["loss_errors_W_K"], row["phased_end_error_K"]]
                 orders = np.log2(previous/errors).tolist() if previous is not None else []
                 row.update(orders=orders, passed=bool(all(p > 1.8 for p in orders)
                            and (n < 64 or max(errors) < 2e-5)
                            and max(row["power_discontinuity_W"], row["energy_residual_W"],
                                    row["reciprocity_error_K_W"]) < 1e-10
                            and row["min_dissipative_impedance_K_W"] > 0.))
+                if args.phased:
+                    row["passed"] &= (min(row["losses_W_K"]) > 0
+                                      and row["superposition_error_K"] < 1e-10
+                                      and row["loss_balance_W_K"] < 1e-10)
                 if args.with_fem:
                     row["solver"] = solver
                 rows.append(row)
@@ -124,7 +170,14 @@ if __name__ == "__main__":
         paths.append(thermal.__file__)
         search_path += ":../TensorFEM/src"
         option = " --with-fem"
-    print(json.dumps(dict(reference="Layer matrix exponentials for [temperature, rightward power], contact drop R*P",
+    metadata = {}
+    if args.phased:
+        option += " --phased"
+        metadata = dict(loss_components=["west material", "contact", "east material"],
+                        loss_convention="Peak phasors. Material integral of |P|²/(kA) dx and contact R|P|², in W K.",
+                        order_metrics=["impedance", "contact jump", "contact power", "west material loss",
+                                       "contact loss", "east material loss", "phased end temperature"])
+    print(json.dumps(dict(**metadata, reference="Layer matrix exponentials for [temperature, rightward power], contact drop R*P",
                           reproduction=f"OPENBLAS_NUM_THREADS=1 PYTHONPATH={search_path} python examples/harmonic_contact_impedance.py{option}",
                           sources=[provenance(f) for f in paths],
                           runs=rows), indent=2, allow_nan=False))
