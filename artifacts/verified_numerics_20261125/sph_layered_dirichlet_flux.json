@@ -1,0 +1,17 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "4299c832aef18f91e044e05238298acfb04a2168",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=sph-layer-wall.xml",
+  "reference": "Manufactured temperature A(y)*exp(r), where r is cumulative thermal resistance across alternating equal-width columns with k=1 and 4. Inward wall fluxes -A and exp(5/8)*A. Each mesh has one lamina per column. Measures reconstruction from sampled temperature and prescribed wall means.",
+  "suite": {
+    "tests": 128,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "max_flux_error_16": 0.0002918911137499462,
+    "max_flux_error_32": 3.4739502596742816e-05,
+    "max_flux_error_64": 4.2375496171677265e-06
+  }
+}
