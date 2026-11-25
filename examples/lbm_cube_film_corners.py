@@ -1,16 +1,19 @@
 """Verify the heat budget of cells at the intersection of three convective walls."""
 import argparse
+from itertools import product
 import json
 import math
+import inspect
 
 import numpy as np
 import torch
 
 from conduction_provenance import provenance
 from tensorlbm import thermal_common as lbm
+from lbm_directional_diffusion import diffusion_eigenmode
 
 
-def measure(n, tau, kinds=("film", "film", "film")):
+def measure(n, tau, kinds=("film", "film", "film"), eigen_start=False):
     dx, alpha, capacity = 1/n, .08, 1.7
     dt = (tau-.5)*dx**2/(4*alpha)
     beta = np.array([1.1, 1.75, 2.3])
@@ -27,6 +30,18 @@ def measure(n, tau, kinds=("film", "film", "film")):
     zero = torch.zeros_like(field)
     grad = torch.stack([s-mode*b*torch.tan(b*(v-.5)) for s,b,v in zip(slope,beta,xyz)])
     g = lbm.thermal_gradient_initialization_3d(field,zero,zero,zero,grad,tau_T=tau,spacing=dx)
+    if eigen_start:
+        # Initialize each of the eight bulk plane waves in its slow discrete mode.
+        # The boundary update and the continuum wall drives stay identical.
+        ramp_grad = torch.stack([torch.full_like(field,s) for s in slope])
+        g = lbm.thermal_gradient_initialization_3d(ramp,zero,zero,zero,ramp_grad,tau_T=tau,spacing=dx)
+        amplitude = .6*np.prod(np.sinc(beta*dx/(2*np.pi)))/8
+        for signs in product((-1,1), repeat=3):
+            wave = beta*np.asarray(signs)
+            _, vector = diffusion_eigenmode(wave*dx,tau)
+            phase = torch.exp(1j*sum(k*(v-.5) for k,v in zip(wave,xyz)))
+            g += amplitude*(torch.from_numpy(vector)[:,None,None,None]*phase).real
+    initial_error = float((g.sum(dim=0)-field).abs().max())
     units = dict(dt=dt,spacing=dx,volumetric_heat_capacity=capacity)
     walls = []
     for a,b in enumerate(beta):
@@ -43,6 +58,7 @@ def measure(n, tau, kinds=("film", "film", "film")):
     corner = [(i,j,k) for i in (0,-1) for j in (0,-1) for k in (0,-1)]
     temp_error = flux_error = corner_balance = balance = sequence_error = 0.
     face_errors = np.zeros((3,2))
+    first_three_error = later_error = 0.
     peak_step = peak_axis = peak_side = 0
     steps = round(.09765625/dt)
     for step in range(steps):
@@ -66,6 +82,10 @@ def measure(n, tau, kinds=("film", "film", "film")):
             for side in (0,1):
                 error = float((flux[side]-target[side]).abs().max())
                 face_errors[a,side] = max(face_errors[a,side],error)
+                if step < 3:
+                    first_three_error = max(first_three_error,error)
+                else:
+                    later_error = max(later_error,error)
                 if error > flux_error:
                     flux_error = error
                     peak_step, peak_axis, peak_side = step+1, a, side
@@ -83,7 +103,8 @@ def measure(n, tau, kinds=("film", "film", "film")):
         corner_balance = max(corner_balance,max(abs(residual[idx].item()) for idx in corner))
         temp_error = max(temp_error,float((updated-ramp-mode*math.exp(-rate*(step+1)*dt)).abs().max()))
         field = updated
-    return dict(peak_flux_step=peak_step, peak_flux_axis="xyz"[peak_axis], peak_flux_side=("lower","upper")[peak_side],
+    return dict(initial_temperature_error_K=initial_error, first_three_flux_error_W_m2=first_three_error,
+                subsequent_flux_error_W_m2=later_error if steps>3 else None, peak_flux_step=peak_step, peak_flux_axis="xyz"[peak_axis], peak_flux_side=("lower","upper")[peak_side],
                 wall_types_xyz=kinds, lower_upper_flux_errors_xyz_W_m2=face_errors.tolist(), n=n,tau=tau,steps=steps,temperature_error_K=temp_error,wall_flux_error_W_m2=flux_error,
                 max_cell_balance_J=balance,max_corner_balance_J=corner_balance,axis_order_error_K=sequence_error)
 
@@ -92,7 +113,9 @@ if __name__ == "__main__":
     rows = []
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mixed", action="store_true", help="cycle Dirichlet, Neumann and Robin conditions among the three axes")
-    mixed = parser.parse_args().mixed
+    parser.add_argument("--compare-starts", action="store_true", help="compare gradient initialization with exact bulk diffusion eigenvectors")
+    args = parser.parse_args()
+    mixed = args.mixed
     cases = (("temperature","flux","film"),("film","temperature","flux"),("flux","film","temperature"))
     for kinds in (cases if mixed else (("film",)*3,)):
         for tau in (.75,1.5):
@@ -108,10 +131,17 @@ if __name__ == "__main__":
                     and row["max_corner_balance_J"] < 1e-14 and row["axis_order_error_K"] == 0.
                     and all(order > order_floor for order in row["orders"])
                     and (n < 32 or np.all(errors < limits)))
+                if args.compare_starts:
+                    other = measure(n,tau,kinds,eigen_start=True)
+                    row["bulk_eigenmode_start"] = other
+                    row["passed"] &= (other["initial_temperature_error_K"] < 1e-13
+                        and other["max_cell_balance_J"] < 1e-14 and other["axis_order_error_K"] == 0.
+                        and (n < 32 or (other["temperature_error_K"] < 1e-3
+                            and other["wall_flux_error_W_m2"] < .0035)))
                 rows.append(row)
                 previous = errors
     print(json.dumps(dict(reference="Unit cube: affine temperature plus separated decaying cosine mode with h_i=k*beta_i*tan(beta_i/2)",
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_cube_film_corners.py"+(" --mixed" if mixed else ""),
+        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_cube_film_corners.py"+(" --mixed" if mixed else "")+(" --compare-starts" if args.compare_starts else ""),
         order_metrics=["temperature_error_K","wall_flux_error_W_m2"],runs=rows,
-        sources=[provenance(p) for p in (__file__,lbm.__file__)]),indent=2,allow_nan=False))
+        sources=[provenance(p) for p in (__file__,lbm.__file__)]+([provenance(inspect.getfile(diffusion_eigenmode))] if args.compare_starts else [])),indent=2,allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
