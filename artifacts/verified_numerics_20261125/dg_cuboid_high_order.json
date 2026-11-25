@@ -1,0 +1,133 @@
+{
+  "repository": "cxs503/TensorDG",
+  "spatial": {
+    "commit": "e3c8ef3c946af27bd4e6d29b0d03472872d05e1d",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_1d.py tests/test_advection_2d.py tests/test_advection_3d.py -o junit_family=legacy --junitxml=results.xml",
+    "reference": "Analytically translated separable sine wave with mean 1, t=0.03, velocity (-0.5,0.25,0.375); 3 and 6 cells per axis, plus 12 for P4.",
+    "counts": {
+      "tests": 41,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "results": {
+      "test_high_order_modes_transport_a_translated_wave[4]": {
+        "absolute_l2_3": 0.00026834110303896913,
+        "mass_error_3": 1.1102230246251565e-16,
+        "absolute_l2_6": 9.657264232962871e-06,
+        "mass_error_6": 0.0,
+        "absolute_l2_12": 3.577386981488613e-07,
+        "mass_error_12": 0.0
+      },
+      "test_high_order_modes_transport_a_translated_wave[5]": {
+        "absolute_l2_3": 2.4171425663532857e-05,
+        "mass_error_3": 0.0,
+        "absolute_l2_6": 4.292301185946614e-07,
+        "mass_error_6": 0.0
+      },
+      "test_high_order_modes_transport_a_translated_wave[6]": {
+        "absolute_l2_3": 1.8554334595007133e-06,
+        "mass_error_3": 1.1102230246251565e-16,
+        "absolute_l2_6": 1.7026766394015053e-08,
+        "mass_error_6": 0.0
+      },
+      "test_high_order_modes_transport_a_translated_wave[7]": {
+        "absolute_l2_3": 1.2548961736090516e-07,
+        "mass_error_3": 2.220446049250313e-16,
+        "absolute_l2_6": 5.652601594375972e-10,
+        "mass_error_6": 0.0
+      },
+      "test_high_order_modes_transport_a_translated_wave[8]": {
+        "absolute_l2_3": 7.391004209905921e-09,
+        "mass_error_3": 0.0,
+        "absolute_l2_6": 1.6888207842422755e-11,
+        "mass_error_6": 0.0
+      }
+    }
+  },
+  "temporal": {
+    "commit": "172d9305040819334cc993c17d7da0649a7f407a",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_1d.py tests/test_advection_2d.py tests/test_advection_3d.py tests/test_runge_kutta_orders.py -o junit_family=legacy --junitxml=results.xml",
+    "reference": "Exact exponential of the P0 Fourier eigenvalue on a fixed 4x4x4 periodic mesh with mixed-sign velocities. Time refinement at 8, 16, 32, 64 steps.",
+    "counts": {
+      "tests": 71,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "results": {
+      "test_temporal_order_against_exact_semidiscrete_mode[euler-1-1]": {
+        "rms_error_8": 0.04291647554559782,
+        "rms_error_16": 0.019143509528348996,
+        "rms_error_32": 0.009119790927679235,
+        "rms_error_64": 0.0044588956838029275,
+        "final_observed_order": 1.0323143027205763
+      },
+      "test_temporal_order_against_exact_semidiscrete_mode[rk2-2-2]": {
+        "rms_error_8": 0.0048379385269644104,
+        "rms_error_16": 0.0011233227385643743,
+        "rms_error_32": 0.0002691674142905372,
+        "rms_error_64": 6.580186314991889e-05,
+        "final_observed_order": 2.03230342733002
+      },
+      "test_temporal_order_against_exact_semidiscrete_mode[rk3-3-3]": {
+        "rms_error_8": 0.00044548562979830804,
+        "rms_error_16": 5.0265109257692114e-05,
+        "rms_error_32": 5.974932839138719e-06,
+        "rms_error_64": 7.283997576078195e-07,
+        "final_observed_order": 3.036120149323868
+      },
+      "test_temporal_order_against_exact_semidiscrete_mode[ssp_rk3-3-3]": {
+        "rms_error_8": 0.00044548562979829324,
+        "rms_error_16": 5.0265109257592754e-05,
+        "rms_error_32": 5.974932838907154e-06,
+        "rms_error_64": 7.283997572137399e-07,
+        "final_observed_order": 3.0361201500484825
+      },
+      "test_temporal_order_against_exact_semidiscrete_mode[rk4-4-4]": {
+        "rms_error_8": 3.167404838472007e-05,
+        "rms_error_16": 1.7839464896878328e-06,
+        "rms_error_32": 1.058387218415603e-07,
+        "rms_error_64": 6.444881792827686e-09,
+        "final_observed_order": 4.0375698359390935
+      },
+      "test_temporal_order_against_exact_semidiscrete_mode[ssp_rk54-4-5]": {
+        "rms_error_8": 1.3964676152072468e-05,
+        "rms_error_16": 8.056677688145135e-07,
+        "rms_error_32": 4.838006135039754e-08,
+        "rms_error_64": 2.9638961425962563e-09,
+        "final_observed_order": 4.028845798390622
+      },
+      "test_temporal_order_against_exact_semidiscrete_mode[rk5-5-6]": {
+        "rms_error_8": 3.1937733251837554e-07,
+        "rms_error_16": 7.722339974859426e-09,
+        "rms_error_32": 2.1145433886073053e-10,
+        "rms_error_64": 6.181354950812004e-12,
+        "final_observed_order": 5.096279242268143
+      }
+    },
+    "P4_RK5_check": {
+      "configuration": "solve_advection_3d(n, 4, 0.03, (-0.5,0.25,0.375), time_integrator=\"rk5\"), default unit cube and trigonometric initial condition. Evaluate error_3d at identical time and velocity.",
+      "measurements": [
+        {
+          "n": 3,
+          "absolute_l2": 0.00026834110502580713,
+          "mass": 1.0,
+          "steps": 12
+        },
+        {
+          "n": 6,
+          "absolute_l2": 9.657263900671973e-06,
+          "mass": 1.0,
+          "steps": 23
+        },
+        {
+          "n": 12,
+          "absolute_l2": 3.5773868506255616e-07,
+          "mass": 1.0,
+          "steps": 46
+        }
+      ]
+    }
+  }
+}
