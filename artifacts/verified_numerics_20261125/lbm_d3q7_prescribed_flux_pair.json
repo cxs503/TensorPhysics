@@ -1,0 +1,38 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "5b033a5c0df51c105a0816a7cc838abac9ffa45a",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Cell-centered slab with unit length and area, k=C=2, inward heat fluxes q0=1.4 and q1=-0.4. T=((q0+q1)*(x*x/2+t)-q0*x)/C+0.25*cos(pi*x)*exp(-pi*pi*t). Compare at t=1/32 on three axes with 8, 16 and 32 cells, tau=1 and dt=dx^2/8. Check storage against (q0+q1)*t after every step.",
+  "suite": {
+    "tests": 75,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_halfway_prescribed_flux_slab_against_transient_solution[x]": {
+      "temperature_error_8_K": 0.0001818016737184236,
+      "max_heat_budget_error_8_J": 8.673617379884035e-17,
+      "temperature_error_16_K": 4.548521690747598e-05,
+      "max_heat_budget_error_16_J": 1.457167719820518e-16,
+      "temperature_error_32_K": 1.1373110199941472e-05,
+      "max_heat_budget_error_32_J": 3.642919299551295e-16
+    },
+    "test_halfway_prescribed_flux_slab_against_transient_solution[y]": {
+      "temperature_error_8_K": 0.0001818016737184236,
+      "max_heat_budget_error_8_J": 5.377642775528102e-17,
+      "temperature_error_16_K": 4.5485216907503734e-05,
+      "max_heat_budget_error_16_J": 2.949029909160572e-16,
+      "temperature_error_32_K": 1.1373110199941472e-05,
+      "max_heat_budget_error_32_J": 1.5265566588595902e-16
+    },
+    "test_halfway_prescribed_flux_slab_against_transient_solution[z]": {
+      "temperature_error_8_K": 0.00018180167371861788,
+      "max_heat_budget_error_8_J": 9.367506770274758e-17,
+      "temperature_error_16_K": 4.548521690747598e-05,
+      "max_heat_budget_error_16_J": 1.3444106938820255e-16,
+      "temperature_error_32_K": 1.1373110199858205e-05,
+      "max_heat_budget_error_32_J": 1.5959455978986625e-16
+    }
+  }
+}
