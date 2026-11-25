@@ -12,17 +12,17 @@ OMEGA, BETA = 3., 1.7
 HOT, FLUX = 1.+.2j, .55-.3j
 
 
-def exact_field(points,k,capacity,trace):
+def exact_field(points,k,capacity,trace,beta=BETA,flux=FLUX):
     # f(x) exp(i beta y) solves div(K grad T)=i omega c T. Remove the
     # first derivative by factoring out the phase induced by Kxy.
     x,y = points.T
     x = x-.5
-    a = -1j*BETA*k[0,1]/k[0,0]
-    gamma = np.sqrt((BETA**2*np.linalg.det(k)/k[0,0]+1j*OMEGA*capacity)/k[0,0])
-    return np.exp(a*x+1j*BETA*y)*(trace*np.cosh(gamma*x)-FLUX*np.sinh(gamma*x)/(k[0,0]*gamma))
+    a = -1j*beta*k[0,1]/k[0,0]
+    gamma = np.sqrt((beta**2*np.linalg.det(k)/k[0,0]+1j*OMEGA*capacity)/k[0,0])
+    return np.exp(a*x+1j*beta*y)*(trace*np.cosh(gamma*x)-flux*np.sinh(gamma*x)/(k[0,0]*gamma))
 
 
-def measure(n,resistance,contact):
+def measure(n,resistance,contact,variation=0.):
     ny = 2*n
     mesh = thermal_analytic.structured_quad_mesh(n,ny,lx=.5,dtype=torch.float64)
     conn = mesh.elements
@@ -31,6 +31,13 @@ def measure(n,resistance,contact):
     seam = np.column_stack((ids[:,-1],ids[:,0]+count))
     area = np.full(ny+1,1/ny)
     area[[0,-1]] *= .5
+    y_seam = np.arange(ny+1)/ny
+    conductance = (1+variation*np.cos(2.3*y_seam))/resistance
+    # Multiplying the traveling temperature jump by cos(2.3*y) adds two
+    # sidebands to the common flux, each with zero temperature at the seam.
+    modes = [(BETA,FLUX)]
+    if variation:
+        modes.extend((BETA+offset,FLUX*variation/2) for offset in (-2.3,2.3))
     nodes, data, prescribed, tensors, capacities = [],[],[],[],[]
     for layer,(angle,capacity,trace) in enumerate(((-30.,1.5,HOT),(35.,2.2,HOT-resistance*FLUX))):
         k = material(angle)[0]
@@ -39,7 +46,8 @@ def measure(n,resistance,contact):
         shift = .04*torch.sin(2*torch.pi*x)*torch.sin(torch.pi*y)
         coords += torch.stack((shift+.5*layer,-.6*shift),dim=1)
         nodes.append(coords)
-        data.append(exact_field(coords.numpy(),k,capacity,trace))
+        data.append(sum(exact_field(coords.numpy(),k,capacity,trace if j==0 else 0.,beta,flux)
+                        for j,(beta,flux) in enumerate(modes)))
         prescribed.extend((np.r_[ids[0],ids[-1],ids[:,0 if layer==0 else -1]]+layer*count).tolist())
         tensors.append(np.repeat(k[None],len(conn),axis=0))
         capacities.extend([capacity]*len(conn))
@@ -47,9 +55,10 @@ def measure(n,resistance,contact):
     fixed = np.unique(prescribed)
     if contact == "integrated":
         pairs = np.stack((seam[:-1],seam[1:]),axis=2)
-        options = dict(contact_edge_pairs=torch.from_numpy(pairs),contact_edge_conductance=1/(ny*resistance))
+        g = np.column_stack((conductance[:-1],conductance[1:]))/ny if variation else 1/(ny*resistance)
+        options = dict(contact_edge_pairs=torch.from_numpy(pairs),contact_edge_conductance=g)
     else:
-        options = dict(contact_pairs=torch.from_numpy(seam),contact_conductance=torch.from_numpy(area/resistance))
+        options = dict(contact_pairs=torch.from_numpy(seam),contact_conductance=torch.from_numpy(area*conductance))
     model = thermal.ThermalModel(torch.cat(nodes),torch.cat((conn,conn+count)),
         torch.from_numpy(np.concatenate(tensors)),1.,torch.tensor(capacities,dtype=torch.float64),
         torch.from_numpy(fixed),torch.from_numpy(exact[fixed]),element_type="q4",
@@ -64,17 +73,26 @@ def measure(n,resistance,contact):
         p = thermal.recover_q4_patch_boundary_power(model,field,patch,edge,degree=3)
         powers.append(sign*ny*p.numpy())
     phase = np.exp(1j*BETA*np.arange(ny+1)/ny)
-    q_exact = FLUX*np.diff(phase)*ny/(1j*BETA)
+    q_exact = sum(flux*np.diff(np.exp(1j*beta*y_seam))*ny/(1j*beta) for beta,flux in modes)
     hot,cold = field.numpy()[seam].T
     jump = hot-cold
-    q_jump = (jump[1:]+jump[:-1])/(2*resistance)
+    diagnostic_error = 0.
+    if contact == "integrated":
+        q_jump = ny*thermal.thermal_contact_edge_power(model,field).numpy()
+        # Independent Simpson integration of the product of two linear traces.
+        product = jump*conductance
+        exact_edge = (product[:-1]+product[1:]+(jump[:-1]+jump[1:])*(conductance[:-1]+conductance[1:]))/6
+        diagnostic_error = float(abs(q_jump-exact_edge).max())
+    else:
+        product = jump*conductance
+        q_jump = (product[:-1]+product[1:])/2
     weights = thermal.assemble_thermal(model,sparse=True).capacity @ torch.ones(len(exact),dtype=torch.float64)
     storage = (1j*OMEGA*weights*field).reshape(2,count).sum(1).numpy()
     external = np.array([result.reaction_power[fixed[fixed//count==layer]].sum().item() for layer in (0,1)])
     exchange = q_jump.mean()
     layer_balance = external+np.array([-exchange,exchange])-storage
     balance = (external-storage).sum()
-    return dict(n=n,contact=contact,contact_resistance_m2K_W=resistance,
+    return dict(n=n,contact=contact,conductance_modulation=variation,edge_integration_defect_W_m2=diagnostic_error,contact_resistance_m2K_W=resistance,
         hot_trace_error_K=float(abs(hot-HOT*phase).max()),
         cold_trace_error_K=float(abs(cold-(HOT-resistance*FLUX)*phase).max()),
         jump_error_K=float(abs(jump-resistance*FLUX*phase).max()),
@@ -89,20 +107,22 @@ if __name__ == "__main__":
     rows = []
     for resistance in (.08,.3):
         for contact in ("nodal","integrated"):
-            previous = None
-            for n in (4,8,16,32):
-                row = measure(n,resistance,contact)
-                if previous:
-                    row["orders"] = {k:float(np.log2(previous[k]/v)) for k,v in row.items()
-                                     if "_error_" in k or k=="flux_disagreement_W_m2"}
-                row["passed"] = max(row["max_layer_balance_W"],row["balance_residual_W"]) < 1e-10
-                if n == 32:
-                    row["passed"] &= (min(row["orders"].values()) > 1.8
-                                      and max(row["hot_trace_error_K"],row["cold_trace_error_K"],row["jump_error_K"]) < 5e-5
-                                      and max(row["hot_flux_error_W_m2"],row["cold_flux_error_W_m2"],
-                                              row["jump_flux_error_W_m2"],row["flux_disagreement_W_m2"]) < 7e-4)
-                previous = row
-                rows.append(row)
+            for variation in (0.,.4):
+                previous = None
+                for n in (4,8,16,32):
+                    row = measure(n,resistance,contact,variation)
+                    if previous:
+                        row["orders"] = {k:float(np.log2(previous[k]/v)) for k,v in row.items()
+                                         if "_error_" in k or k=="flux_disagreement_W_m2"}
+                    row["passed"] = max(row["max_layer_balance_W"],row["balance_residual_W"]) < 1e-10
+                    row["passed"] &= row["edge_integration_defect_W_m2"] < 1e-12
+                    if n == 32:
+                        row["passed"] &= (min(row["orders"].values()) > 1.8
+                                          and max(row["hot_trace_error_K"],row["cold_trace_error_K"],row["jump_error_K"]) < 5e-5
+                                          and max(row["hot_flux_error_W_m2"],row["cold_flux_error_W_m2"],
+                                                  row["jump_flux_error_W_m2"],row["flux_disagreement_W_m2"]) < 7e-4)
+                    previous = row
+                    rows.append(row)
     print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
         (__file__,cubic_patches.__code__.co_filename,thermal.__file__,thermal_analytic.__file__)]),
         indent=2,allow_nan=False))
