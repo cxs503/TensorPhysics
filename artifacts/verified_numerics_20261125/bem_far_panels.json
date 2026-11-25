@@ -1,0 +1,38 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "24e1e0ff2441686483798e10631f4b8c9af98289",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "32-point Gauss-Legendre quadrature of the physical-space point kernel on a unit straight panel, axial, normal and oblique probes",
+  "counts": {
+    "tests": 55,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_single_layer_distance_range_against_gaussian_quadrature[3.99]": {
+      "batch_max_relative_error": 7.771561172376096e-16,
+      "scalar_max_relative_error": 7.771561172376096e-16
+    },
+    "test_single_layer_distance_range_against_gaussian_quadrature[4.0]": {
+      "batch_max_relative_error": 2.220446049250313e-16,
+      "scalar_max_relative_error": 2.220446049250313e-16
+    },
+    "test_single_layer_distance_range_against_gaussian_quadrature[4.01]": {
+      "batch_max_relative_error": 2.220446049250313e-16,
+      "scalar_max_relative_error": 2.220446049250313e-16
+    },
+    "test_single_layer_distance_range_against_gaussian_quadrature[10000.0]": {
+      "batch_max_relative_error": 2.220446049250313e-16,
+      "scalar_max_relative_error": 2.220446049250313e-16
+    },
+    "test_single_layer_distance_range_against_gaussian_quadrature[10000000000.0]": {
+      "batch_max_relative_error": 2.220446049250313e-16,
+      "scalar_max_relative_error": 2.220446049250313e-16
+    },
+    "test_single_layer_distance_range_against_gaussian_quadrature[1e+16]": {
+      "batch_max_relative_error": 2.220446049250313e-16,
+      "scalar_max_relative_error": 2.220446049250313e-16
+    }
+  }
+}
