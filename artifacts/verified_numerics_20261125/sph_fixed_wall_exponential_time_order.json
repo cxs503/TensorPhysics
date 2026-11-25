@@ -1,0 +1,598 @@
+{
+  "runs": [
+    {
+      "steps": 32,
+      "method": "theta",
+      "theta": 0.5,
+      "temperature_error_K": 0.001658458425213949,
+      "contact_flux_error_W_m2": 0.004957327477539741,
+      "all_cut_flux_error_W_m2": 0.021658576023515064,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.959435123270523,
+      "column_energy_residual_J_m2": 4.2327252813834093e-16,
+      "temperature_contact_all_cut_orders": [],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "theta",
+      "theta": 0.5,
+      "temperature_error_K": 0.00041295724611961626,
+      "contact_flux_error_W_m2": 0.0012416636438841167,
+      "all_cut_flux_error_W_m2": 0.0054211607210307156,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.959435123270523,
+      "column_energy_residual_J_m2": 2.688821387764051e-16,
+      "temperature_contact_all_cut_orders": [
+        2.0057785158059103,
+        1.9972881526959934,
+        1.998264709635687
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "theta",
+      "theta": 0.5,
+      "temperature_error_K": 0.00010314988941195757,
+      "contact_flux_error_W_m2": 0.00031086944184122167,
+      "all_cut_flux_error_W_m2": 0.001358147673319543,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.969556635906463,
+      "column_energy_residual_J_m2": 1.444157293750692e-16,
+      "temperature_contact_all_cut_orders": [
+        2.0012501512055,
+        1.9978936994069538,
+        1.9969614247193932
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "method": "theta",
+      "theta": 0.5,
+      "temperature_error_K": 2.5795639021330974e-05,
+      "contact_flux_error_W_m2": 7.772532599825688e-05,
+      "all_cut_flux_error_W_m2": 0.00033967172048809946,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.9746240707864485,
+      "column_energy_residual_J_m2": 1.0375814790686277e-16,
+      "temperature_contact_all_cut_orders": [
+        1.9995431833520112,
+        1.9998521404593235,
+        1.9994273382386656
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "theta",
+      "theta": 1.0,
+      "temperature_error_K": 0.03700811810956828,
+      "contact_flux_error_W_m2": 0.11033776720300592,
+      "all_cut_flux_error_W_m2": 0.46592882255825335,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.15876186185589147,
+      "column_energy_residual_J_m2": 4.683753385137379e-16,
+      "temperature_contact_all_cut_orders": [],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "theta",
+      "theta": 1.0,
+      "temperature_error_K": 0.019053117090158667,
+      "contact_flux_error_W_m2": 0.05608813368477862,
+      "all_cut_flux_error_W_m2": 0.23693937594794337,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.177533530414316,
+      "column_energy_residual_J_m2": 3.2482697087665713e-16,
+      "temperature_contact_all_cut_orders": [
+        0.9578147334319737,
+        0.9761592077750886,
+        0.9755916050853839
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "theta",
+      "theta": 1.0,
+      "temperature_error_K": 0.009674803584187708,
+      "contact_flux_error_W_m2": 0.02825735004090421,
+      "all_cut_flux_error_W_m2": 0.11946736244981687,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.18678783468913512,
+      "column_energy_residual_J_m2": 1.6284716630732277e-16,
+      "temperature_contact_all_cut_orders": [
+        0.977722764573604,
+        0.9890694017390671,
+        0.9879014348420706
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "method": "theta",
+      "theta": 1.0,
+      "temperature_error_K": 0.004877069301981951,
+      "contact_flux_error_W_m2": 0.01417332230393023,
+      "all_cut_flux_error_W_m2": 0.059983220791272676,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.19138054932298146,
+      "column_energy_residual_J_m2": 1.0538445116559103e-16,
+      "temperature_contact_all_cut_orders": [
+        0.9882178993963123,
+        0.9954482033789194,
+        0.9939856442954155
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 0.0011633619386416383,
+      "contact_flux_error_W_m2": 0.001569127940447057,
+      "all_cut_flux_error_W_m2": 0.008127031343076019,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.959435123270523,
+      "column_energy_residual_J_m2": 4.588343593958655e-16,
+      "temperature_contact_all_cut_orders": [],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 0.0003064831515520172,
+      "contact_flux_error_W_m2": 0.00042034910859534147,
+      "all_cut_flux_error_W_m2": 0.0023983865844192653,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 5.447031714567174e-16,
+      "temperature_contact_all_cut_orders": [
+        1.924420338606711,
+        1.9003030699179337,
+        1.760664239651916
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 7.890098856078165e-05,
+      "contact_flux_error_W_m2": 0.00010636646709694109,
+      "all_cut_flux_error_W_m2": 0.0008862836557328446,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 2.244298497044994e-16,
+      "temperature_contact_all_cut_orders": [
+        1.9576924849377892,
+        1.9825446126360453,
+        1.4362238051806209
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 2.0775920228421896e-05,
+      "contact_flux_error_W_m2": 2.66508850799152e-05,
+      "all_cut_flux_error_W_m2": 0.0003093003199541311,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 1.3823577699190182e-16,
+      "temperature_contact_all_cut_orders": [
+        1.925130996323323,
+        1.9967880500341921,
+        1.5187601824730295
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 512,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 5.496423379436344e-06,
+      "contact_flux_error_W_m2": 6.674703839193441e-06,
+      "all_cut_flux_error_W_m2": 9.893317414022551e-05,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 8.885714429876512e-17,
+      "temperature_contact_all_cut_orders": [
+        1.918347338034845,
+        1.9974077158532912,
+        1.6444820560137738
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 1024,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 1.4170732790530494e-06,
+      "contact_flux_error_W_m2": 1.6705755137014222e-06,
+      "all_cut_flux_error_W_m2": 2.90174034212054e-05,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 5.403392577124633e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9555787724166322,
+        1.998358627786376,
+        1.7695359369101502
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 2048,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 3.600101307066339e-07,
+      "contact_flux_error_W_m2": 4.1788837579215254e-07,
+      "all_cut_flux_error_W_m2": 7.96382348111635e-06,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 4.9046595777813007e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9768049544153217,
+        1.9991556635979615,
+        1.8653852787233873
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 4096,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 9.074611762027729e-08,
+      "contact_flux_error_W_m2": 1.0450250376159431e-07,
+      "all_cut_flux_error_W_m2": 2.094834831933845e-06,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 4.824022041202691e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9881296777499369,
+        1.9995801203782433,
+        1.926624745386116
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 8192,
+      "method": "sdirk2",
+      "theta": null,
+      "temperature_error_K": 2.2781133757199257e-08,
+      "contact_flux_error_W_m2": 2.612940952495535e-08,
+      "all_cut_flux_error_W_m2": 5.378365377506356e-07,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 4.4664047308719257e-17,
+      "temperature_contact_all_cut_orders": [
+        1.993996373812338,
+        1.9997910800887315,
+        1.9615968258856877
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 0.0037237202289414073,
+      "contact_flux_error_W_m2": 0.0035241051508744237,
+      "all_cut_flux_error_W_m2": 0.019875713728789712,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 5.169475958410885e-16,
+      "temperature_contact_all_cut_orders": [],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 0.0009876626255584942,
+      "contact_flux_error_W_m2": 0.0008921374630400658,
+      "all_cut_flux_error_W_m2": 0.007333719837401498,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 3.534228031759623e-16,
+      "temperature_contact_all_cut_orders": [
+        1.9146544615299081,
+        1.9819190445920745,
+        1.438389609507106
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 0.00025107917785716083,
+      "contact_flux_error_W_m2": 0.00022340891921812656,
+      "all_cut_flux_error_W_m2": 0.0026816137009791907,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 1.4286396501569931e-16,
+      "temperature_contact_all_cut_orders": [
+        1.9758759275363273,
+        1.9975792376701418,
+        1.451443728070675
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 6.233512932618535e-05,
+      "contact_flux_error_W_m2": 5.5865554254963534e-05,
+      "all_cut_flux_error_W_m2": 0.0009333662588011382,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 1.0484235007934828e-16,
+      "temperature_contact_all_cut_orders": [
+        2.0100250532674453,
+        1.9996558628724397,
+        1.522586205310137
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 512,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 1.6165605865925414e-05,
+      "contact_flux_error_W_m2": 1.3968377046591485e-05,
+      "all_cut_flux_error_W_m2": 0.00029644832347908157,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 4.445228907190568e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9471178528330702,
+        1.99979460902645,
+        1.6546626770094985
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 1024,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 4.082468528121552e-06,
+      "contact_flux_error_W_m2": 3.492181037456632e-06,
+      "all_cut_flux_error_W_m2": 8.58723106730297e-05,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 2.883977778811442e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9854139096538537,
+        1.9999641506030008,
+        1.7875157199980696
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 2048,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 1.0232735307980079e-06,
+      "contact_flux_error_W_m2": 8.730493668007711e-07,
+      "all_cut_flux_error_W_m2": 2.3302802154012703e-05,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 2.0904773138236132e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9962499212348275,
+        1.9999932125345974,
+        1.8816895637877042
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 4096,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 2.5598576958163477e-07,
+      "contact_flux_error_W_m2": 2.1826276330738636e-07,
+      "all_cut_flux_error_W_m2": 6.083443896964802e-06,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 1.4911168003464703e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9990563256187093,
+        1.9999972132159163,
+        1.937543265107916
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 8192,
+      "method": "exponential",
+      "theta": null,
+      "temperature_error_K": 6.400690477637028e-08,
+      "contact_flux_error_W_m2": 5.456570439932307e-08,
+      "all_cut_flux_error_W_m2": 1.5550684691056915e-06,
+      "worst_cut_x_m": 0.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 1.1595881047911372e-17,
+      "temperature_contact_all_cut_orders": [
+        1.9997641620239426,
+        1.9999996411491952,
+        1.9679101755788413
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "exponential_quadratic",
+      "theta": null,
+      "temperature_error_K": 3.407578550201906e-05,
+      "contact_flux_error_W_m2": 1.295678752644136e-05,
+      "all_cut_flux_error_W_m2": 0.00019034493666580943,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 7.754213937616328e-16,
+      "temperature_contact_all_cut_orders": [],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "exponential_quadratic",
+      "theta": null,
+      "temperature_error_K": 4.586500300496343e-06,
+      "contact_flux_error_W_m2": 7.435461892857376e-07,
+      "all_cut_flux_error_W_m2": 3.826989936472902e-05,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 3.614730043066672e-16,
+      "temperature_contact_all_cut_orders": [
+        2.893281274493401,
+        4.123141888467357,
+        2.31433418113321
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "exponential_quadratic",
+      "theta": null,
+      "temperature_error_K": 4.824000395253769e-07,
+      "contact_flux_error_W_m2": 5.896328747478918e-08,
+      "all_cut_flux_error_W_m2": 7.2219523088445925e-06,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 1.9136168344369153e-16,
+      "temperature_contact_all_cut_orders": [
+        3.2490918037062966,
+        3.6565334969786867,
+        2.4057493088769744
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 256,
+      "method": "exponential_quadratic",
+      "theta": null,
+      "temperature_error_K": 4.6523236138518165e-08,
+      "contact_flux_error_W_m2": 3.652771085604911e-09,
+      "all_cut_flux_error_W_m2": 1.175185760149411e-06,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 8.944667923005412e-17,
+      "temperature_contact_all_cut_orders": [
+        3.3742066667153643,
+        4.012753713736508,
+        2.619500073459069
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 512,
+      "method": "exponential_quadratic",
+      "theta": null,
+      "temperature_error_K": 3.74919177648092e-09,
+      "contact_flux_error_W_m2": 2.3208368560290182e-10,
+      "all_cut_flux_error_W_m2": 1.4865245234751967e-07,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 5.4399844004460185e-17,
+      "temperature_contact_all_cut_orders": [
+        3.633299925091837,
+        3.9762743280692447,
+        2.9828736508573237
+      ],
+      "order_required": false,
+      "passed": true
+    },
+    {
+      "steps": 1024,
+      "method": "exponential_quadratic",
+      "theta": null,
+      "temperature_error_K": 2.548857791495607e-10,
+      "contact_flux_error_W_m2": 1.4569678796760854e-11,
+      "all_cut_flux_error_W_m2": 1.4425106553694889e-08,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 3.4958743799079484e-17,
+      "temperature_contact_all_cut_orders": [
+        3.878656835025031,
+        3.993604134335372,
+        3.3652893830996016
+      ],
+      "order_required": true,
+      "passed": true
+    },
+    {
+      "steps": 2048,
+      "method": "exponential_quadratic",
+      "theta": null,
+      "temperature_error_K": 1.6300641392241744e-11,
+      "contact_flux_error_W_m2": 9.119371924271036e-13,
+      "all_cut_flux_error_W_m2": 1.153464657122072e-09,
+      "worst_cut_x_m": 1.0,
+      "worst_interval_start_s": 0.0,
+      "column_energy_residual_J_m2": 1.810956441229694e-17,
+      "temperature_contact_all_cut_orders": [
+        3.966850245902112,
+        3.9978907963481607,
+        3.6445362709084836
+      ],
+      "order_required": true,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "5de20da08d508c33441e53836bfd1c6ab6116b92",
+      "file": "sph_fixed_wall_contact_time_order.py",
+      "source_sha256": "236fa0ac070ccf3e2b37728c86f1b77d12c0224fe1e1fd0e5b4ad6d78e60f317"
+    },
+    {
+      "commit": "99e90ae4f3198c8b414b8aad9ff2ca5e9506ceac",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "d6bdca3260c55fbcaf8c5c0bed046414552fb33998c47e9505df0fc048897e3f"
+    }
+  ],
+  "reference": "Two half-meter layers, 12 uniform columns, h/dx=0.9. The slab has sinusoidally prescribed wall temperatures, contact resistance 0.32, and distributed heating C dT/dt. Fourier flux is uniform in space. Compare every time sample and all 13 interval-mean section fluxes with the continuous piecewise-linear temperature and exact sinusoidal mean flux across one period.",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_fixed_wall_contact_time_order.py",
+  "sph_regression": {
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py",
+    "passed": 155
+  },
+  "sdirk2_acceptance": "Record all nine resolutions and require monotonically decreasing temperature, contact flux and all-cut flux errors. Require all three orders above 1.9 on both finest refinements, and column energy residual below 1e-12 J/m2 at every resolution. Early wall flux convergence is slower; worst_cut_x_m and worst_interval_start_s locate the maximum absolute error.",
+  "exponential_acceptance": "Require strictly decreasing errors and column energy residual below 1e-12 J/m2 at all levels. Require orders above 1.9 for linear load interpolation and 2.9 for quadratic interpolation on the last two refinements of each. For the quadratic method the column source energy uses the exact integral of the interpolant through both endpoints and the midpoint."
+}
