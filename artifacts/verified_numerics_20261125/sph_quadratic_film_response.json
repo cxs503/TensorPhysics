@@ -1,0 +1,44 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "51b4324b9e5a465b8b0a04837f7cc513553f1851",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "CPU float64/complex128. Integrate k*T_j_second_derivative=C*T_(j-1) about the symmetry plane with unit ambient and h=3.2, k=1.7, C=2.3 and surface capacity 0.6. Use q2=-h*Twall2-Cwall*Twall1 at each wall. Report absolute errors in coefficients of (i*omega)^2. Separately compare with direct nonzero-frequency solutions for unequal wall capacities, a traveling load and an interface resistance.",
+  "suite": {
+    "tests": 139,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_storing_film_quadratic_response_against_symmetric_slab[torch]": {
+      "field_coefficient_error_16": 0.0012226559605877374,
+      "walls_coefficient_error_16": 0.00042118261099438614,
+      "flux_coefficient_error_16": 0.001347784355189563,
+      "field_coefficient_error_32": 0.0003054338754515107,
+      "walls_coefficient_error_32": 0.00010509815812842493,
+      "flux_coefficient_error_32": 0.00033631410604717527,
+      "field_coefficient_error_64": 7.633174295329503e-05,
+      "walls_coefficient_error_64": 2.624985247584588e-05,
+      "flux_coefficient_error_64": 8.399952807724986e-05
+    },
+    "test_storing_film_quadratic_response_against_symmetric_slab[banded]": {
+      "field_coefficient_error_16": 0.001222655960588015,
+      "walls_coefficient_error_16": 0.0004211826109946082,
+      "flux_coefficient_error_16": 0.001347784355189896,
+      "field_coefficient_error_32": 0.00030543387545228784,
+      "walls_coefficient_error_32": 0.00010509815812909107,
+      "flux_coefficient_error_32": 0.00033631410604906264,
+      "field_coefficient_error_64": 7.633174294841005e-05,
+      "walls_coefficient_error_64": 2.6249852471182944e-05,
+      "flux_coefficient_error_64": 8.399952806592559e-05
+    },
+    "test_quadratic_film_response_predicts_contact_slab_at_small_frequency": {
+      "field_remainder_0.05": 1.1395626240720029e-05,
+      "walls_remainder_0.05": 8.661697163606422e-06,
+      "flux_remainder_0.05": 1.4892837130335216e-05,
+      "field_remainder_0.025": 1.4247480111871135e-06,
+      "walls_remainder_0.025": 1.0833068044941944e-06,
+      "flux_remainder_0.025": 1.8621572146250599e-06
+    }
+  }
+}
