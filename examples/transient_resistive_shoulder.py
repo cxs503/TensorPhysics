@@ -69,12 +69,14 @@ def measure(n, expanding, steps_per_cell=2, *, time_steps=None, method="theta", 
         power = first_power(1,method)
         for side in (0,1):
             total = power[side]-target[side]
+            spatial = extrapolated[side]-target[side]
+            temporal = power[side]-extrapolated[side]
             yield dict(n=n,expanding=expanding,material=("left","right")[side],interval_s=float(width),
                        continuum_W=float(target[side]),refined_FVM_W=float(extrapolated[side]),
-                       spatial_estimate_W=float(extrapolated[side]-target[side]),
-                       temporal_estimate_W=float(power[side]-extrapolated[side]),total_error_W=float(total),
+                       spatial_estimate_W=float(spatial),
+                       temporal_estimate_W=float(temporal),total_error_W=float(total),
                        reference_disagreement_W=float(uncertainty[side]),
-                       reference_resolved=bool(uncertainty[side]<max(1e-10,.01*abs(total))))
+                       reference_resolved=bool(uncertainty[side]<max(1e-10,.01*min(abs(total),abs(spatial),abs(temporal)))))
         return
     fv,faces,_,_,(up,down),step_heat,fv_mean = advance_fvm(times,method)
     traces_fv = np.column_stack((fv_mean["trace_left"][:,m-1],fv_mean["trace_right"][:,m-1]))
@@ -160,6 +162,14 @@ if __name__ == "__main__":
                                first_step_study=args.first_step_study):
                 if args.first_step_study:
                     row["passed"] = row["reference_resolved"]
+                    if args.fixed_steps is not None:
+                        side = row["material"]
+                        spatial = abs(row["spatial_estimate_W"])
+                        if side in previous:
+                            rate = float(np.log2(previous[side]/spatial)) if spatial else None
+                            row["fixed_window_spatial_order"] = rate
+                            row["passed"] &= rate is not None and rate>1.8
+                        previous[side] = spatial
                     rows.append(row)
                     continue
                 name = row["solver"]
