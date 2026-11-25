@@ -104,10 +104,7 @@ def graded_fem_model(k,c,h,slope,resistance,wall_c,ambient):
     return model,ends
 
 
-def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=False):
-    if return_response and not quasistatic:
-        raise ValueError("low-frequency responses require quasistatic=True")
-    ambient = AMBIENT.real.copy() if quasistatic else AMBIENT
+def slab_grid(n,contact):
     dx = 1/n
     edges = np.linspace(0.,1.,n+1)
     x = .5*(edges[:-1]+edges[1:])
@@ -119,6 +116,19 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=Fal
     loss = h+slope*relative_x
     contacts = np.zeros(n-1)
     contacts[m-1] = resistance
+    return dx,edges,x,m,resistance,materials,k,c,h,slope,loss,contacts
+
+
+def fvm_films(ambient,wall_c):
+    return {side:dict(type="robin",values=a,film_coefficient=h,wall_areal_heat_capacity=cw)
+            for side,a,h,cw in zip(("west","east"),ambient,FILMS,wall_c)}
+
+
+def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=False):
+    if return_response and not quasistatic:
+        raise ValueError("low-frequency responses require quasistatic=True")
+    ambient = AMBIENT.real.copy() if quasistatic else AMBIENT
+    dx,edges,x,m,resistance,materials,k,c,h,slope,loss,contacts = slab_grid(n,contact)
     analytic = reference(omega,wall_c,materials,resistance,ambient)
     z,w = np.polynomial.legendre.leggauss(8)
     mean = .5*(analytic(x[:,None]+.5*dx*z)[0] @ w)
@@ -141,8 +151,7 @@ def measure(n,omega,wall_c,contact=False,quasistatic=False,*,return_response=Fal
     volume_power = dx*((loss[:,None]+.5*dx*slope[:,None]*xi+1j*omega*c[:,None])*u_gauss).mean(1)
     rows = [("FEM",field,nodal_ref,wall,inward,cut,volume_power)]
 
-    bc = {side:dict(type="robin",values=a,film_coefficient=h,wall_areal_heat_capacity=cw)
-          for side,a,h,cw in zip(("west","east"),ambient,FILMS,wall_c)}
+    bc = fvm_films(ambient,wall_c)
     field,power,interior = energy.solve_harmonic_conduction(np.full(n,dx),[1.],k,c,bc,omega,
                                         heat_loss_coefficient=loss,contact_resistance_x=contacts[None,:],return_interior_power=True)
     inward = np.array([power["west"][0],power["east"][0]])

@@ -34,12 +34,22 @@ def direct_fem(n,capacity,contact):
             for name,u in (("FEM",nodal),("FVM",cells),("SPH",cells))}
 
 
+def direct_fvm(n,capacity,contact):
+    dx,_,_,m,_,_,k,c,_,_,loss,contacts = study.slab_grid(n,contact)
+    steady,first = study.energy.solve_low_frequency_conduction(
+        np.full(n,dx),[1.],k,c,study.fvm_films(study.AMBIENT.real,capacity),
+        heat_loss_coefficient=loss,contact_resistance_x=contacts[None,:],return_interior_power=True)
+    return (steady[0][0].real,steady[2]["x"][0,m-1].real,
+            first[0][0].real,first[2]["x"][0,m-1].real)
+
+
 def campaign(contact):
     rows = []
     for capacity in (np.zeros(2),np.array([.4,.9])):
         previous_mesh = {}
         for n in (16,32,64,128):
             direct = direct_fem(n,capacity,contact)
+            native = {"FEM":direct["FEM"],"FVM":direct_fvm(n,capacity,contact)}
             previous_response,previous_change = {},{}
             for omega in (.8,.4,.2,.1,.05,.025):
                 for report,(field,cut),reference in study.measure(n,omega,capacity,contact,True,return_response=True):
@@ -57,8 +67,8 @@ def campaign(contact):
                             if omega==.025:
                                 passed &= min(orders.values())>1.85
                         previous_change[name] = change
-                    if name=="FEM":
-                        row["direct_frequency_errors"] = differences(current,direct[name])
+                    if name in native:
+                        row["direct_frequency_errors"] = differences(current,native[name])
                     if omega==.025:
                         # DC and Im(response)/omega are both even functions of frequency.
                         limit = [(4*x-y)/3 for x,y in zip(current,previous_response[name])]
@@ -66,8 +76,14 @@ def campaign(contact):
                         row["extrapolated_space_errors"] = error
                         cross = differences(limit,direct[name])
                         row["extrapolated_vs_direct_fem"] = cross
+                        if name in native:
+                            row["direct_space_errors"] = differences(native[name],reference)
+                            match = differences(limit,native[name])
+                            row["extrapolated_vs_direct_"+name.lower()] = match
+                            passed &= max(match.values())<1e-7
+                            if n==128:
+                                passed &= max(row["direct_space_errors"].values())<1e-4
                         if name=="FEM":
-                            row["direct_space_errors"] = differences(direct[name],reference)
                             passed &= max(cross.values())<1e-7
                         elif n==128:
                             passed &= max(cross.values())<1e-4
