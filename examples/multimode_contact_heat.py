@@ -1,4 +1,5 @@
 """Two-layer slab with prescribed multimode wall temperatures and distributed heating."""
+import argparse
 import json
 
 import numpy as np
@@ -8,7 +9,7 @@ from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
 
 
-def manufactured(n, cell_means, resistance):
+def manufactured(n, cell_means, resistance, curved=False):
     # For every mode, T=A-q*r(x) and -k*dT/dx=q. The resistance coordinate
     # jumps by R at x=1/2. The source is (i*omega*c + k*beta²)*T.
     x = (np.arange(n)+.5)/n
@@ -23,21 +24,33 @@ def manufactured(n, cell_means, resistance):
     if cell_means:
         phase *= np.sinc(modes/n)
     modal_t = amp[:,None]-q[:,None]*r
-    source = phase @ ((5j*c+beta[:,None]**2*k)*modal_t)
-    walls = (phase @ amp, phase @ (amp-q*(.5+resistance+.5/3)))
-    return k, c, phase @ modal_t, source, walls, phase @ q
+    # Add a quadratic about the interface. Its derivative vanishes there,
+    # preserving both the contact flux and the temperature jump.
+    curvature = np.array([.35+.15j, -.2+.17j, .3j]) if curved else np.zeros(3)
+    shift = ((x-.5)**2+(1/(12*n**2) if cell_means else 0))/k
+    modal_t = modal_t + curvature[:,None]*shift
+    source = phase @ ((5j*c+beta[:,None]**2*k)*modal_t-2*curvature[:,None])
+    walls = (phase @ (amp+.25*curvature), phase @ (amp-q*(.5+resistance+.5/3)+.25*curvature/3))
+    cuts = np.arange(n+1)/n
+    flux = phase @ (q[:,None]-2*curvature[:,None]*(cuts-.5))
+    return k, c, phase @ modal_t, source, walls, flux
 
 
-def measure(n):
+def measure(n, curved=False):
     dx, resistance = 1/n, .2
     contact = np.zeros(n-1)
     contact[n//2-1] = resistance
     for solver in ("SPH", "FVM"):
-        k, c, exact, source, walls, flux = manufactured(n, solver == "FVM", resistance)
+        k, c, exact, source, walls, flux = manufactured(n, solver == "FVM", resistance, curved)
         if solver == "SPH":
             material = dict(conductivity=k, contact_resistance_x=contact)
-            u = sph.solve_harmonic_layered_slab(source, dx, walls, 5.,
-                        volumetric_heat_capacity=c, backend="banded", **material)
+            solution = sph.solve_harmonic_layered_slab(source, dx, walls, 5.,
+                        volumetric_heat_capacity=c, backend="banded", return_x_flux="by_row" if curved else False, **material)
+            if curved:
+                u, cut_flux = solution
+                cut_flux_density = cut_flux.numpy()
+            else:
+                u = solution
             offsets = sph.lattice_offsets(dx, 1.3*dx)
             factor = sph.lattice_diffusion_factor_2d(1.3, dx, mode="moment")
             rate, power = sph.stencil_rhs_with_wall_power_2d(u, offsets, dx, walls,
@@ -54,7 +67,7 @@ def measure(n):
             actual = np.array([sph.layered_slab_modal_cut_flux(temp_modes[j],dx,n//2,
                     (west[j],east[j]),transverse_wavenumber=2*np.pi*j,**material).item() for j in modes])
             modal_defect = float(abs(actual-np.fft.fft(measured)[modes]/n).max())
-            reference_modes = np.fft.fft(flux)[modes]/n
+            reference_modes = np.fft.fft(flux[:,n//2])[modes]/n
             modal_errors = dict(modal_cut_disagreement_W_m2=modal_defect,
                 modal_amplitude_error_W_m2=float(abs(abs(actual)-abs(reference_modes)).max()),
                 modal_phase_error_rad=float(abs(np.angle(actual*reference_modes.conj())).max()))
@@ -71,18 +84,28 @@ def measure(n):
             measured = interior["x"][:,n//2-1]/dx
             net = power["west"].sum()+power["east"].sum()
             fx = np.column_stack((power["west"],interior["x"],-power["east"]))
+            if curved:
+                cut_flux_density = fx/dx  # FVM reports face power per unit depth.
             fy = np.vstack((power["south"],interior["y"],-power["north"]))
             local = (5j*c*field-source)*dx**2+np.diff(fx,axis=1)+np.diff(fy,axis=0)
+        if curved:
+            cut_errors = abs(cut_flux_density-flux)
+            row_id, cut_id = np.unravel_index(cut_errors.argmax(), cut_errors.shape)
+            modal_errors.update(max_all_cut_flux_error_W_m2=float(cut_errors[row_id, cut_id]),
+                                worst_cut_x_m=float(cut_id*dx), worst_row_y_m=float((row_id+.5)*dx))
         yield dict(solver=solver,n=n,**modal_errors,max_temperature_error_K=float(abs(field-exact).max()),
-                   max_interface_flux_error_W_m2=float(abs(measured-flux).max()),
+                   max_interface_flux_error_W_m2=float(abs(measured-flux[:,n//2]).max()),
                    max_cell_residual_W=float(abs(local).max()),
                    total_residual_W=float(abs((5j*c*field-source).mean()-net)))
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--curved", action="store_true", help="verify varying flux on every row and cut")
+    curved = parser.parse_args().curved
     rows, previous = [], {}
     for n in (16,32,64,128,256):
-        for row in measure(n):
+        for row in measure(n, curved):
             name = row["solver"]
             errors = np.array([row["max_temperature_error_K"],row["max_interface_flux_error_W_m2"]])
             if name=="SPH":
@@ -96,8 +119,19 @@ if __name__ == "__main__":
             if n == 256:
                 limits = (.005, .004) if name == "SPH" else (.0001, .0001)
                 row["passed"] = bool(row["passed"] and (errors[:2] < limits).all())
+            if curved:
+                cut_error = row["max_all_cut_flux_error_W_m2"]
+                cut_order = float(np.log2(previous[name+"_cut"]/cut_error)) if n > 16 else None
+                row["all_cut_flux_order"] = cut_order
+                # Include the coarse-grid orders. Test the asymptotic rate on
+                # the final two refinements, where wall errors dominate SPH.
+                row["passed"] = bool(row["passed"] and
+                    (cut_order is None or cut_order > (min_order if n >= 128 else 0.)))
+                previous[name+"_cut"] = cut_error
             previous[name] = errors
             rows.append(row)
-    print(json.dumps(dict(runs=rows,sources=[provenance(f) for f in
+    print(json.dumps(dict(runs=rows,curved=curved,
+                     reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/multimode_contact_heat.py"+(" --curved" if curved else ""),
+                     sources=[provenance(f) for f in
                      (__file__, sph.__file__, energy.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in rows) else 1)
