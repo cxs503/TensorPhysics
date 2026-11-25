@@ -41,18 +41,33 @@ def fvm_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, star
     return states[:, sheet], ledger["left"][:, sheet], ledger["right"][:, sheet], -ledger["end_input"][:, 1]
 
 
-def sph_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop):
+def sph_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop, *, h_factor=.9, sheet_columns=1):
     from tensorsph import heat_conduction_2d as heat
 
     widths, conductivity, cv, generation = sheet_cell_profiles(n, resistance, capacity, h, k, sheet_shape)
-    # Compact support gives adjacent-column exchange across each half sheet.
-    # Cuts n/2 and n/2+1 are its left and right faces in the returned ledger.
-    states, cuts = heat.solve_transient_layered_slab(
-        np.zeros(n+1), grid, widths[0], (0., 0.), conductivity=conductivity,
-        volumetric_heat_capacity=cv, h_factor=.9, method=method, return_x_heat=True,
-        heat_source=lambda t: generation if start <= t < stop else 0., load_jump_times=(start, stop))
+    # A wider support can also carry heat across the entire sheet column.
     sheet = n//2
-    return states[:, sheet].numpy(), cuts[:, sheet].numpy(), cuts[:, sheet+1].numpy(), cuts[:, -1].numpy()
+    contacts = None
+    if sheet_columns == 2:
+        # Two columns span the largest x-offset at h/dx=1.3. Place half
+        # the prescribed storage in each and resolve the two contact jumps.
+        dx = widths[0]
+        # Remove the two columns' internal series resistance from the
+        # explicit contacts so total resistance R is independent of dx.
+        conductivity = np.insert(conductivity, sheet, conductivity[sheet])
+        conductivity[sheet:sheet+2] = 1/dx
+        cv = np.insert(cv, sheet, cv[sheet])
+        cv[sheet:sheet+2] *= .5
+        generation = np.insert(generation, sheet, generation[sheet])
+        generation[sheet:sheet+2] *= .5
+        contacts = np.zeros(n+1)
+        contacts[[sheet-1, sheet+1]] = resistance/2-dx**2
+    states, cuts = heat.solve_transient_layered_slab(
+        np.zeros(n+sheet_columns), grid, widths[0], (0., 0.), conductivity=conductivity,
+        volumetric_heat_capacity=cv, contact_resistance_x=contacts, h_factor=h_factor, method=method, return_x_heat=True,
+        heat_source=lambda t: generation if start <= t < stop else 0., load_jump_times=(start, stop))
+    return (states[:, sheet:sheet+sheet_columns].mean(dim=1).numpy(), cuts[:, sheet].numpy(),
+            cuts[:, sheet+sheet_columns].numpy(), cuts[:, -1].numpy())
 
 
 def fem_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop):
@@ -92,7 +107,7 @@ def fem_step_heat(n, resistance, capacity, method, h, k, sheet_shape, grid, star
             -result.nodal_reaction_heat_steps().numpy()[:, -1])
 
 
-def measure(n, resistance, capacity, width, method, solver="fvm", time_refinement=None):
+def measure(n, resistance, capacity, width, method, solver="fvm", time_refinement=None, h_factor=.9, sheet_columns=1):
     h, k, sheet_shape = analytic.contact_modes(resistance, capacity)
     rates = np.square([h, k])
     duration = 1/(16*math.pi**2)
@@ -105,7 +120,8 @@ def measure(n, resistance, capacity, width, method, solver="fvm", time_refinemen
                                  for a, b in zip(knots, knots[1:])]), knots[-1]]
     integrate = {"fem": fem_step_heat, "fvm": fvm_step_heat, "sph": sph_step_heat}[solver]
     sheet_temperature, left_steps, right_steps, wall_heat = integrate(
-        n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop)
+        n, resistance, capacity, method, h, k, sheet_shape, grid, start, stop,
+        **({"h_factor": h_factor, "sheet_columns": sheet_columns} if solver == "sph" else {}))
     steps = refinement*np.arange(knots.size)
     left, right = [np.add.reduceat(values, steps[:-1]) for values in (left_steps, right_steps)]
     active = np.clip(knots-start, 0, stop-start)
@@ -140,7 +156,12 @@ if __name__ == "__main__":
     parser.add_argument("--solver", choices=("fem", "fvm", "sph"), default="fvm")
     parser.add_argument("--time-refinement", type=int, choices=(1, 2, 4, 8),
                         help="multiplier on n/4 substeps per smooth interval (FEM defaults to 4, FVM and SPH to 1)")
+    parser.add_argument("--h-factor", type=float, help="SPH kernel length divided by column spacing")
+    parser.add_argument("--sheet-columns", type=int, choices=(1, 2), default=1, help="number of SPH storage columns")
     args = parser.parse_args()
+    if args.solver != "sph" and (args.h_factor is not None or args.sheet_columns != 1):
+        parser.error("--h-factor and --sheet-columns apply to SPH")
+    h_factor = .9 if args.h_factor is None else args.h_factor
     solver = args.solver
     factor = args.time_refinement or (4 if solver == "fem" else 1)
     if solver == "fem":
@@ -152,7 +173,7 @@ if __name__ == "__main__":
     else:
         from tensorfvm.cht import rod as implementation
         path = "../TensorFVM/src"
-    settings = {"kernel_length_over_spacing": .9, "sheet_columns": 1} if solver == "sph" else {}
+    settings = {"kernel_length_over_spacing": h_factor, "sheet_columns": args.sheet_columns} if solver == "sph" else {}
     runs = []
     for method in ("theta", "sdirk2"):
         for resistance in (.2, 1.):
@@ -160,7 +181,7 @@ if __name__ == "__main__":
                 for width in (.05, .5):
                     previous = None
                     for n in (16, 32, 64):
-                        row = measure(n, resistance, capacity, width, method, solver, factor)
+                        row = measure(n, resistance, capacity, width, method, solver, factor, h_factor, args.sheet_columns)
                         keys = ("left_error", "right_error", "sheet_energy_error", "timing_error_over_interval")
                         orders = {} if previous is None else {k: math.log2(previous[k]/row[k]) for k in keys}
                         row.update(orders=orders, passed=row["sheet_balance_error"] < 1e-10 and
@@ -170,6 +191,7 @@ if __name__ == "__main__":
     passed = all(r["passed"] for r in runs)
     print(json.dumps(dict(passed=passed, solver=solver, **settings, time_refinement=factor, runs=runs, sources=[provenance(f) for f in
                           (__file__, analytic.__file__, pulse.__file__, implementation.__file__)],
-                          reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_resistive_sheet_pulse.py --solver {solver} --time-refinement {factor}"),
+                          reproduction=f"OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH={path} python examples/fvm_resistive_sheet_pulse.py --solver {solver} --time-refinement {factor}"
+                                       + (f" --h-factor {h_factor:g} --sheet-columns {args.sheet_columns}" if solver == "sph" else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
