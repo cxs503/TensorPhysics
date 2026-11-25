@@ -1,0 +1,138 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cold_K": 0.0,
+      "drop_K": 0.000244140625,
+      "cells_per_sphere": 4,
+      "reference_current_W": 5.400259582618684e-08,
+      "max_link_relative_error": 1.2523315717771766e-13,
+      "max_contact_relative_error": 8.903988657493755e-14,
+      "max_temperature_error_K": 3.550762114890027e-18,
+      "passed": true
+    },
+    {
+      "cold_K": 0.0,
+      "drop_K": 0.000244140625,
+      "cells_per_sphere": 16,
+      "reference_current_W": 5.400259582618684e-08,
+      "max_link_relative_error": 1.2624346013012655e-12,
+      "max_contact_relative_error": 6.926681450636352e-13,
+      "max_temperature_error_K": 3.222790957713162e-17,
+      "passed": true
+    },
+    {
+      "cold_K": 0.0,
+      "drop_K": 0.000244140625,
+      "cells_per_sphere": 64,
+      "reference_current_W": 5.400259582618684e-08,
+      "max_link_relative_error": 3.621436484024798e-12,
+      "max_contact_relative_error": 1.1588507931037384e-12,
+      "max_temperature_error_K": 7.635493799729165e-17,
+      "passed": true
+    },
+    {
+      "cold_K": 0.0,
+      "drop_K": 5.960464477539063e-08,
+      "cells_per_sphere": 4,
+      "reference_current_W": 1.3184227496627647e-11,
+      "max_link_relative_error": 1.2523315717771766e-13,
+      "max_contact_relative_error": 8.903988657493755e-14,
+      "max_temperature_error_K": 8.66885281955573e-22,
+      "passed": true
+    },
+    {
+      "cold_K": 0.0,
+      "drop_K": 5.960464477539063e-08,
+      "cells_per_sphere": 16,
+      "reference_current_W": 1.3184227496627647e-11,
+      "max_link_relative_error": 1.2624346013012655e-12,
+      "max_contact_relative_error": 6.926681450636352e-13,
+      "max_temperature_error_K": 7.868141986604399e-21,
+      "passed": true
+    },
+    {
+      "cold_K": 0.0,
+      "drop_K": 5.960464477539063e-08,
+      "cells_per_sphere": 64,
+      "reference_current_W": 1.3184227496627647e-11,
+      "max_link_relative_error": 3.621436484024798e-12,
+      "max_contact_relative_error": 1.1588507931037384e-12,
+      "max_temperature_error_K": 1.8641342284495032e-20,
+      "passed": true
+    },
+    {
+      "cold_K": 305.0,
+      "drop_K": 0.000244140625,
+      "cells_per_sphere": 4,
+      "reference_current_W": 5.400259582618684e-08,
+      "max_link_relative_error": 1.2523315717771766e-13,
+      "max_contact_relative_error": 8.903988657493755e-14,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "cold_K": 305.0,
+      "drop_K": 0.000244140625,
+      "cells_per_sphere": 16,
+      "reference_current_W": 5.400259582618684e-08,
+      "max_link_relative_error": 1.2624346013012655e-12,
+      "max_contact_relative_error": 6.926681450636352e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "cold_K": 305.0,
+      "drop_K": 0.000244140625,
+      "cells_per_sphere": 64,
+      "reference_current_W": 5.400259582618684e-08,
+      "max_link_relative_error": 3.621436484024798e-12,
+      "max_contact_relative_error": 1.1588507931037384e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "cold_K": 305.0,
+      "drop_K": 5.960464477539063e-08,
+      "cells_per_sphere": 4,
+      "reference_current_W": 1.3184227496627647e-11,
+      "max_link_relative_error": 1.2523315717771766e-13,
+      "max_contact_relative_error": 8.903988657493755e-14,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "cold_K": 305.0,
+      "drop_K": 5.960464477539063e-08,
+      "cells_per_sphere": 16,
+      "reference_current_W": 1.3184227496627647e-11,
+      "max_link_relative_error": 1.2624346013012655e-12,
+      "max_contact_relative_error": 6.926681450636352e-13,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    },
+    {
+      "cold_K": 305.0,
+      "drop_K": 5.960464477539063e-08,
+      "cells_per_sphere": 64,
+      "reference_current_W": 1.3184227496627647e-11,
+      "max_link_relative_error": 3.621436484024798e-12,
+      "max_contact_relative_error": 1.1588507931037384e-12,
+      "max_temperature_error_K": 0.0,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "4b9c80eda1925a64ba0f5d4db4c8ee6146fce946",
+      "file": "dem_weak_chain_current.py",
+      "source_sha256": "d2f2c8073c1f8d0d70b1b6cdedd69d25208406fccbe33717129b00ae53b2d707"
+    },
+    {
+      "commit": "13da2fcaba297787d7c555b01e2f45a33b24a682",
+      "file": "contact_chain.py",
+      "source_sha256": "2b3c18169235cf08ca2a7c466015f75aee946d6a02690ea4ddc0ea2370d9adce"
+    }
+  ],
+  "reproduction": "PYTHONPATH=../TensorDEM/src python examples/dem_weak_chain_current.py"
+}
