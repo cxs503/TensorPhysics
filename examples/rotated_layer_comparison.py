@@ -48,8 +48,8 @@ def measure(n,transient,degree=1,time_refinement=1,rannacher=False):
         fem = thermal.solve_transient_thermal(model,time,start,theta=.5,sparse=True,
                           fixed_temperature_history=torch.exp(-rate*time[:,None])*start[fixed])
         fem_field = fem.temperature[-1]
-        _,_,states,means = transient_dg.solve_transient_diffusion_2d(exact,time,capacity=1/material[...,0],
-                                                               load_amplitude=amplitude,rannacher=rannacher,return_interval_means=True,**opts)
+        _,_,states,means,load_means = transient_dg.solve_transient_diffusion_2d(exact,time,capacity=1/material[...,0],
+                                                               load_amplitude=amplitude,rannacher=rannacher,return_interval_means=True,return_load_means=True,**opts)
         coeff = states[-1]
     else:
         fem_field = thermal.solve_steady_thermal(model,sparse=True)
@@ -121,9 +121,7 @@ def measure(n,transient,degree=1,time_refinement=1,rannacher=False):
         dg_storage = (states[...,0,0]*capacity).sum(dim=(1,2))/(n*n)
         dg_steps = []
         for i,dt in enumerate(time.diff()):
-            amp = (amplitude(float(time[i]))+amplitude(float(time[i+1])))/2
-            if rannacher and i==0:
-                amp = (amplitude(float(time[i]+dt/2))+amplitude(float(time[i+1])))/2
+            amp = load_means[i]
             px,py = dg.poisson_face_powers_2d(means[i],conductivity=material,penalty=penalty,
                              dirichlet_values=dict.fromkeys(walls,lambda x,y:amp*exact(x,y)))
             dg_steps.append(dt*(px[0].sum()-px[-1].sum()+py[:,0].sum()-py[:,-1].sum()))
