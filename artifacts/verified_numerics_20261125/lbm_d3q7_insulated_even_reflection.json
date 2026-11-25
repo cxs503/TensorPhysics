@@ -1,0 +1,34 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "8910aedb54b2c95e84d090d59706426f63e9e91f",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal_common.py tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit cube, unit diffusivity and capacity, six on-node insulating boundaries, no flow. T=1.25+cos(pi*z)cos(pi*y)cos(2pi*x) exp(-6*pi\u00b2*t). At tau=0.75 and 1.5 compare all seven populations every step to a doubled periodic even extension, verify face-normal population imbalance and trapezoidal total heat. At t=1/64 s compare the peak field error for 8/16 intervals per axis with diffusive time scaling.",
+  "suite": {
+    "tests": 70,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_insulated_box_even_reflection_and_cosine_decay[0.75]": {
+      "max_temperature_error_8_K": 0.024492546965801498,
+      "max_population_discrepancy_8": 3.3306690738754696e-16,
+      "max_normal_population_flux_8": 0.0,
+      "max_heat_drift_8_J": 0.0,
+      "max_temperature_error_16_K": 0.006079951794919269,
+      "max_population_discrepancy_16": 4.440892098500626e-16,
+      "max_normal_population_flux_16": 0.0,
+      "max_heat_drift_16_J": 0.0
+    },
+    "test_insulated_box_even_reflection_and_cosine_decay[1.5]": {
+      "max_temperature_error_8_K": 0.06209234681315068,
+      "max_population_discrepancy_8": 1.6653345369377348e-16,
+      "max_normal_population_flux_8": 0.0,
+      "max_heat_drift_8_J": 0.0,
+      "max_temperature_error_16_K": 0.015482536963318805,
+      "max_population_discrepancy_16": 2.220446049250313e-16,
+      "max_normal_population_flux_16": 0.0,
+      "max_heat_drift_16_J": 0.0
+    }
+  }
+}
