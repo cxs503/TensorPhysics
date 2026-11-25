@@ -57,12 +57,15 @@ def measure(n, shear, omega, sparse, curved=False):
     # interface flux; continuity follows from the assembled FEM equations.
     ids = np.arange(n*n).reshape(n,n)
     loads = np.zeros(len(nodes), dtype=complex)
+    exterior = np.zeros_like(temperature)
     for edge, outer in enumerate((ids[0], ids[:,-1], ids[-1], ids[:,0])):
         i, j = cells[outer,edge], cells[outer,(edge+1)%4]
         tangent = nodes[j]-nodes[i]
         area_normal = thickness*np.column_stack((tangent[:,1], -tangent[:,0]))
         for h in ((1-3**-.5)/2, (1+3**-.5)/2):
             power = -np.sum(flux(nodes[i]+h*tangent, layer[outer])*area_normal, axis=1)/2
+            exterior[outer,edge] += (1-h)*power
+            exterior[outer,(edge+1)%4] += h*power
             np.add.at(loads, i, (1-h)*power)
             np.add.at(loads, j, h*power)
     model = thermal.ThermalModel(mesh.nodes, mesh.elements, torch.from_numpy(tensors[layer]),
@@ -104,6 +107,25 @@ def measure(n, shear, omega, sparse, curved=False):
         recovery = dict(recovered_left_flux_error_W_m2=float(abs(recovered[0]-reference).max()),
                         recovered_right_flux_error_W_m2=float(abs(recovered[1]-reference).max()),
                         recovered_flux_mismatch_W_m2=float(abs(recovered[0]-recovered[1]).max()))
+    # Strip the other boundary tractions before forming one-sided interface
+    # reactions. Orient both sides towards increasing u and include both ends.
+    trace_nodes = np.r_[cells[left,1], cells[left[-1],2]]
+    weak = []
+    for side, sign in ((0,-1), (1,1)):
+        active = layer == side
+        nodal = np.zeros(len(nodes), dtype=complex)
+        np.add.at(nodal, cells[active], sign*(local-exterior)[active])
+        weak.append(nodal[trace_nodes])
+    weak = np.array(weak)
+    projected = thermal.recover_linear_edge_flux(torch.from_numpy(weak),
+                    torch.full((n,), face_area, dtype=torch.float64)).numpy()
+    face_flux = (projected[:,:-1]+projected[:,1:])/2
+    recovered_power = face_area*face_flux.sum(axis=1)
+    recovery.update(weak_left_flux_error_W_m2=float(abs(face_flux[0]-reference).max()),
+                    weak_right_flux_error_W_m2=float(abs(face_flux[1]-reference).max()),
+                    weak_face_mismatch_W_m2=float(abs(face_flux[0]-face_flux[1]).max()),
+                    weak_total_power_error_W=float(abs(recovered_power-thickness*q0).max()),
+                    projection_power_residual_W=float(abs(recovered_power-weak.sum(axis=1)).max()))
     return dict(**recovery, cells_per_axis=n, shear=shear, omega_rad_s=omega, sparse=sparse,
                 nodal_temperature_error_K=float(abs(field-temperature).max()),
                 mean_rate_error_K_s=float(abs(result.mean_heating_rate.numpy()-rate).max()),
@@ -126,14 +148,16 @@ if __name__ == "__main__":
     for row in rows:
         if curved:
             metrics = ("nodal_temperature_error_K", "interface_left_flux_error_W_m2", "interface_right_flux_error_W_m2",
-                       "recovered_left_flux_error_W_m2", "recovered_right_flux_error_W_m2")
+                       "recovered_left_flux_error_W_m2", "recovered_right_flux_error_W_m2",
+                       "weak_left_flux_error_W_m2", "weak_right_flux_error_W_m2")
             key = row["shear"], row["omega_rad_s"], row["sparse"]
             errors = np.array([row[m] for m in metrics])
             row["orders"] = {m:float(v) for m,v in zip(metrics,np.log2(previous[key]/errors))} if key in previous else {}
             row["passed"] = bool(row["mean_rate_error_K_s"] < 1e-10 and row["cell_energy_residual_W"] < 1e-12
-                                 and np.all(errors[3:] < errors[1:3]) and all(p > 0 for p in row["orders"].values()))
+                                 and np.all(errors[3:5] < errors[1:3]) and np.all(errors[5:] < errors[1:3]) and all(p > 0 for p in row["orders"].values()))
             if row["cells_per_axis"] == 32:
                 row["passed"] &= min(row["orders"].values()) > .9 and row["orders"][metrics[0]] > 1.7
+            row["passed"] &= row["weak_face_mismatch_W_m2"] < 1e-10 and row["projection_power_residual_W"] < 1e-12
             previous[key] = errors
         else:
             row["passed"] = all(v < 1e-10 for k,v in row.items() if "error_" in k or "mismatch_" in k or "residual_" in k)
