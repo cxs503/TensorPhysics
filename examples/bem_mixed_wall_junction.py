@@ -42,7 +42,30 @@ def measure(n, quadratic, grading, omega):
     wall = result.wall_temperature[insulated].reshape(n, -1)
     mean = mesh.lengths[:n] @ (wall @ panel_weights)
     probes = np.array([[-.6,.25], [-.12,.11], [.08,.09], [.55,.4], [.1,.7]])
-    return dict(panels=5*n, quadratic=quadratic, grading=grading, omega_rad_s=omega,
+    # The annular window approaches the junction while spanning more panels.
+    # Exact integral of x^(-1/2) over [a,b] is 2*(sqrt(b)-sqrt(a)).
+    panel_starts = mesh.vertices[n:2*n, 0]
+    panel_lengths = mesh.lengths[n:2*n]
+    a = .5 / np.sqrt(n)
+
+    def window_coefficient(left):
+        right = 2*left
+        start = np.clip((left-panel_starts)/panel_lengths, 0., 1.)
+        end = np.clip((right-panel_starts)/panel_lengths, 0., 1.)
+        load = result.panel_inward_power(np.arange(n, 2*n), start, end).sum()
+        return load / (2*(np.sqrt(right)-np.sqrt(left)))
+
+    coefficient = window_coefficient(a)
+    # The first correction to sqrt(x)*q is proportional to x².
+    # Doubling the window multiplies this term by four.
+    extrapolated = (4*coefficient - window_coefficient(2*a))/3
+    exact_coefficient = -.5*k*np.sqrt(2*wave/np.pi)
+    relative_error = abs(coefficient/exact_coefficient - 1)
+    return dict(window_m=[a, 2*a], extrapolation_window_m=[2*a, 4*a],
+                extrapolated_coefficient=[extrapolated.real, extrapolated.imag],
+                extrapolated_relative_error=float(abs(extrapolated/exact_coefficient - 1)), flux_coefficient=[coefficient.real, coefficient.imag],
+                exact_flux_coefficient=[exact_coefficient.real, exact_coefficient.imag],
+                flux_coefficient_relative_error=float(relative_error), panels=5*n, quadratic=quadratic, grading=grading, omega_rad_s=omega,
                 wall_power_error_W_m=float(abs(load-power)), insulated_mean_error_K=float(abs(mean-exact_mean)),
                 interior_temperature_error_K=float(max(abs(result.temperature(probes)-temperature(probes)))))
 
@@ -61,13 +84,16 @@ if __name__ == "__main__":
                     passed = np.isfinite(errors).all() and all(order > 0 for order in row["orders"])
                     if n == 32:
                         passed &= np.all(errors < [.012, .005, .007])
+                        passed &= max(row["flux_coefficient_relative_error"], row["extrapolated_relative_error"]) < .025
                         if quadratic and grading == 2:
+                            passed &= row["extrapolated_relative_error"] < 5e-4
                             passed &= min(row["orders"]) > 1.9 and np.max(errors) < 1e-4
                     row["passed"] = bool(passed)
                     runs.append(row)
                     previous = errors
     print(json.dumps(dict(reference="I_(1/2)(lambda*r) sin(theta/2), lambda^2=i omega C/k, rectangle [-1,1] x [0,1]",
         reproduction="OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src python examples/bem_mixed_wall_junction.py",
+        coefficient_units="W/m^(3/2)", complex_pair_order=["real", "imaginary"],
         order_metrics=metrics, runs=runs, sources=[provenance(p) for p in
         (__file__, geometry.__file__, harmonic_conduction.__file__)]), indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in runs) else 1)
