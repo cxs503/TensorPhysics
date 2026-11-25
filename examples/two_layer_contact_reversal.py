@@ -9,6 +9,7 @@ from scipy.optimize import brentq
 
 from conduction_provenance import provenance
 from two_layer_conduction import slab_fem_model
+from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import energy
 from tensorsph import heat_conduction_2d as sph
@@ -60,35 +61,62 @@ def measure(n):
     edges = np.linspace(0.,1.,n+1)
     centers = (edges[1:]+edges[:-1])/2
     modes_data = modes()
-    def exact(t,left,right):
-        return sum(w*math.exp(-p*p*t)*np.r_[propagate(1.,-FILMS[0],p,0,left)[0],
-                    propagate(tr,q,p,1,right-.5)[0]] for p,w,tr,q in modes_data)
+    def exact(left,right,cell_average=False):
+        columns = []
+        for p,w,tr,q in modes_data:
+            values = np.r_[propagate(1.,-FILMS[0],p,0,left)[0],propagate(tr,q,p,1,right-.5)[0]]
+            if cell_average:
+                values *= np.sinc(p*np.sqrt(c/k)*dx/(2*np.pi))
+            columns.append((w*np.exp(-p*p*time[:,None]))*values)
+        return sum(columns)
     exact_heat = sum(w*q*(-np.expm1(-p*p*time))/p**2 for p,w,_,q in modes_data)
     model,_ = slab_fem_model(k,0.,0.,CONTACT,FILMS,torch.from_numpy(c))
     nodes = (edges[:m+1],edges[m:])
     cells = (centers[:m],centers[m:])
-    start = exact(0.,*nodes)
+    nodal_exact = exact(*nodes)
+    cell_exact = exact(*cells)
+    start = nodal_exact[0]
     u = thermal.solve_transient_thermal(model,torch.from_numpy(time),torch.from_numpy(np.tile(start,2)),
                                         theta=.5).temperature.reshape(len(time),2,-1).mean(dim=1).numpy()
     power = (u[:,m]-u[:,m+1])/CONTACT
-    data = [("FEM",u,nodes,.5*(power[1:]+power[:-1])*dt)]
+    data = [("FEM",u,nodal_exact,.5*(power[1:]+power[:-1])*dt)]
 
     bc = {side:dict(type="robin",values=0.,film_coefficient=h) for side,h in zip(("west","east"),FILMS)}
     contacts = np.zeros(n-1)
     contacts[m-1] = CONTACT
-    start = exact(0.,*cells)
+    start = cell_exact[0]
     u = energy.solve_transient_conduction(np.full(n,dx),[1.],k,c,bc,time,start,
                                           contact_resistance_x=contacts[None,:])[:,0]
     power = (u[:,m-1]-u[:,m])/(CONTACT+.5*dx*sum(1./v for v in K))
-    data.append(("FVM",u,cells,.5*(power[1:]+power[:-1])*dt))
+    data.append(("FVM",u,cell_exact,.5*(power[1:]+power[:-1])*dt))
     states,heat = sph.solve_transient_layered_slab(start,time,dx,(None,None),conductivity=k,
             volumetric_heat_capacity=c,contact_resistance_x=contacts,x_wall_films=((FILMS[0],0.),(FILMS[1],0.)),
             return_x_heat=True)
-    data.append(("SPH",states.numpy(),cells,heat[:,m].numpy()))
+    data.append(("SPH",states.numpy(),cell_exact,heat[:,m].numpy()))
+
+    # Exact control-volume averages also give the layer heat used to
+    # project nodal starting values conservatively on each material.
+    average_exact = exact(*cells,cell_average=True)
+    links,capacity = contact_chain.cell_centered_slab_network(
+        np.full(n,dx),k,c,films=FILMS,contact_resistance=contacts)
+    def network(name,links,capacity,initial,reference,cut):
+        field = contact_chain.transient_contact_temperatures(
+            links,capacity,time,np.r_[0.,initial,0.],t_left=0.,t_right=0.)[:,1:-1]
+        power = (field[:,cut-1]-field[:,cut])/links[cut]
+        data.append((name,field,reference,.5*(power[:-1]+power[1:])*dt))
+    network("DEM_cell",links,capacity,average_exact[0],average_exact,m)
+    links = np.r_[1/FILMS[0],dx/k[:m],CONTACT,dx/k[m:],1/FILMS[1]]
+    mass = dx*np.repeat(C,m+1)
+    mass[[0,m,m+1,-1]] *= .5
+    initial = nodal_exact[0].reshape(2,m+1).copy()
+    nodal_mass = mass.reshape(2,m+1)
+    layer_heat = (dx*c*average_exact[0]).reshape(2,m).sum(axis=1)
+    initial += ((layer_heat-(initial*nodal_mass).sum(axis=1))/nodal_mass.sum(axis=1))[:,None]
+    network("DEM",links,np.r_[0.,mass,0.],initial.ravel(),nodal_exact,m+1)
 
     mid = .5*(time[1:]+time[:-1])
     rows = []
-    for name,fields,points,heat in data:
+    for name,fields,reference,heat in data:
         avg = heat/dt
         switches = np.flatnonzero(np.signbit(avg[1:])!=np.signbit(avg[:-1]))
         reversal = None
@@ -99,7 +127,7 @@ def measure(n):
                          direction_matches=bool(avg[0]*exact_heat[1]>0 and avg[-1]*np.diff(exact_heat)[-1]>0),
                          errors=dict(time_s=abs(reversal-REVERSAL) if reversal is not None else None,
                          cumulative_contact_heat_J_m2=float(abs(heat.cumsum()-exact_heat[1:]).max()),
-                         temperature_K=max(float(abs(field-exact(t,*points)).max()) for field,t in zip(fields,time)))))
+                         temperature_K=float(abs(fields-reference).max()))))
     return rows
 
 
@@ -118,6 +146,6 @@ if __name__=="__main__":
             row.update(orders=orders,passed=bool(passes))
             rows.append(row)
             previous[row["solver"]] = errors
-    sources = [provenance(f) for f in (__file__,inspect.getfile(slab_fem_model),thermal.__file__,energy.__file__,sph.__file__)]
+    sources = [provenance(f) for f in (__file__,inspect.getfile(slab_fem_model),thermal.__file__,energy.__file__,sph.__file__,contact_chain.__file__)]
     print(json.dumps(dict(reference_reversal_s=REVERSAL,sources=sources,runs=rows),indent=2,allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
