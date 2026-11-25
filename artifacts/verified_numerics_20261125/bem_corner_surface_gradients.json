@@ -1,0 +1,23 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "6e5fc40a406c5e127a5bb3be277f341fb7ac1704",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_solver.py tests/test_linear_density_solver.py tests/test_interior_field_domain_guard.py tests/test_exterior_solver.py tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "2 by 1 rectangle with 4/8/16 nonuniform panels per side and shifted vertex numbering. Compare the eight corner-adjacent midpoint gradients to grad(x\u00b2-y\u00b2+xy). Report maximum tangential error using one-sided and periodic slopes and the outward normal error of the constant-density Dirichlet solve. The latter increases on the tested graded meshes. A separate two-panel-per-side triangle checks secant recovery for an affine trace.",
+  "suite": {
+    "tests": 139,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "one_sided_tangent_error_4": 8.215650382226158e-15,
+    "periodic_tangent_error_4": 1.3726039287607041,
+    "normal_error_4": 1.831982696404225,
+    "one_sided_tangent_error_8": 1.0658141036401503e-14,
+    "periodic_tangent_error_8": 1.4122736517404935,
+    "normal_error_8": 2.447384970724155,
+    "one_sided_tangent_error_16": 2.1538326677728037e-14,
+    "periodic_tangent_error_16": 1.4475162642785477,
+    "normal_error_16": 3.043389727066785
+  }
+}
