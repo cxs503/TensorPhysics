@@ -56,9 +56,13 @@ def measure(n, mode, ky, periodic=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--periodic", action="store_true", help="drive a phase-shifted Fourier mode across the periodic seam")
-    periodic = parser.parse_args().periodic
+    parser.add_argument("--fine", action="store_true", help="use a power-of-two refinement through 512 intervals")
+    args = parser.parse_args()
+    periodic = args.periodic
     runs = []
     grids = (12, 24, 48, 96, 192, 384) if periodic else (8, 16, 32, 64, 128, 256)
+    if args.fine:
+        grids = (8, 16, 32, 64, 128, 256, 512)
     for mode in (1, 2):
         for ky in (.6, 2.4):
             previous = None
@@ -76,6 +80,6 @@ if __name__ == "__main__":
                 previous = errors
     passed = all(row["passed"] for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs, sources=[provenance(__file__), provenance(contact_chain.__file__)],
-                          reproduction="PYTHONPATH=../TensorDEM/src python examples/dem_lattice_thermal_modes.py" + (" --periodic" if periodic else "")),
+                          reproduction="PYTHONPATH=../TensorDEM/src python examples/dem_lattice_thermal_modes.py" + (" --periodic" if periodic else "") + (" --fine" if args.fine else "")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
