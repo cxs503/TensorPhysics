@@ -1,0 +1,157 @@
+{
+  "runs": [
+    {
+      "max_volume_mean_error_K": 0.0017894473998560922,
+      "max_interior_section_mean_flux_error_W_m2": 0.01424703631105756,
+      "expected_cycle_rises_K": [
+        0.7853981633974483,
+        1.5707963267948966,
+        2.356194490192345
+      ],
+      "measured_cycle_rises_K": [
+        0.7853981633974475,
+        1.5707963267948966,
+        2.356194490192343
+      ],
+      "max_cycle_rise_error_K": 1.7763568394002505e-15,
+      "inward_flux_offsets_W_m2": [
+        1.2,
+        0.8
+      ],
+      "columns": 8,
+      "steps": 48,
+      "max_temperature_error_K": 0.2253279801082111,
+      "max_west_east_row_flux_errors_W_m2": [
+        0.01744238857215552,
+        0.007295760588943212
+      ],
+      "max_energy_residual_J_m2": 2.275957200481571e-15,
+      "max_wall_cut_difference_J_m2": 4.163336342344337e-17,
+      "orders": [],
+      "passed": true
+    },
+    {
+      "max_volume_mean_error_K": 0.0004513918621169566,
+      "max_interior_section_mean_flux_error_W_m2": 0.003597820866681478,
+      "expected_cycle_rises_K": [
+        0.7853981633974483,
+        1.5707963267948966,
+        2.356194490192345
+      ],
+      "measured_cycle_rises_K": [
+        0.785398163397449,
+        1.570796326794894,
+        2.3561944901923364
+      ],
+      "max_cycle_rise_error_K": 8.43769498715119e-15,
+      "inward_flux_offsets_W_m2": [
+        1.2,
+        0.8
+      ],
+      "columns": 16,
+      "steps": 96,
+      "max_temperature_error_K": 0.055181452644541856,
+      "max_west_east_row_flux_errors_W_m2": [
+        0.004370290276402455,
+        0.0018129734167466882
+      ],
+      "max_energy_residual_J_m2": 3.858025010572419e-15,
+      "max_wall_cut_difference_J_m2": 2.0816681711721685e-17,
+      "orders": [
+        2.0297711303314916,
+        1.9967966048562975,
+        2.0087006168096475,
+        1.9870618225292713,
+        1.9854665764155004
+      ],
+      "passed": true
+    },
+    {
+      "max_volume_mean_error_K": 0.00011336809347195498,
+      "max_interior_section_mean_flux_error_W_m2": 0.0009032191691729086,
+      "expected_cycle_rises_K": [
+        0.7853981633974483,
+        1.5707963267948966,
+        2.356194490192345
+      ],
+      "measured_cycle_rises_K": [
+        0.7853981633974473,
+        1.5707963267948872,
+        2.356194490192319
+      ],
+      "max_cycle_rise_error_K": 2.5757174171303632e-14,
+      "inward_flux_offsets_W_m2": [
+        1.2,
+        0.8
+      ],
+      "columns": 32,
+      "steps": 192,
+      "max_temperature_error_K": 0.013747803315342422,
+      "max_west_east_row_flux_errors_W_m2": [
+        0.0010909536392038621,
+        0.00045310317031987957
+      ],
+      "max_energy_residual_J_m2": 2.095545958979983e-15,
+      "max_wall_cut_difference_J_m2": 1.3877787807814457e-17,
+      "orders": [
+        2.0049823190753244,
+        2.0021393125969222,
+        2.0004462808993657,
+        1.9933657466298147,
+        1.9939753473577186
+      ],
+      "passed": true
+    },
+    {
+      "max_volume_mean_error_K": 2.840817589100375e-05,
+      "max_interior_section_mean_flux_error_W_m2": 0.00024061064959401968,
+      "expected_cycle_rises_K": [
+        0.7853981633974483,
+        1.5707963267948966,
+        2.356194490192345
+      ],
+      "measured_cycle_rises_K": [
+        0.7853981633974448,
+        1.5707963267948686,
+        2.3561944901922987
+      ],
+      "max_cycle_rise_error_K": 4.618527782440651e-14,
+      "inward_flux_offsets_W_m2": [
+        1.2,
+        0.8
+      ],
+      "columns": 64,
+      "steps": 384,
+      "max_temperature_error_K": 0.0034321468851183368,
+      "max_west_east_row_flux_errors_W_m2": [
+        0.0002727120125303184,
+        0.00011326490735297234
+      ],
+      "max_energy_residual_J_m2": 2.6853519408120974e-15,
+      "max_wall_cut_difference_J_m2": 5.204170427930421e-18,
+      "orders": [
+        2.0020179147818653,
+        2.000139639497656,
+        2.000138642310411,
+        1.9966365594704685,
+        1.9083756063872301
+      ],
+      "passed": true
+    }
+  ],
+  "prescribed_flux_wall": "both",
+  "passed": true,
+  "sources": [
+    {
+      "commit": "aa6d7f4a3348b15b8fa520d14d71058e54fab591",
+      "file": "sph_traveling_wall_temperature.py",
+      "source_sha256": "163c0d28eea637946a2c876edf7164defe5060c3c7015b98c26a5b9e7337f552"
+    },
+    {
+      "commit": "fff373c9e630b1f24a41ad5d3d14f552a3d3bff7",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "1dfa8901bb43a884096cb302ad2055badda9718d9953683f6925d6bff9d8ef41"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_traveling_wall_temperature.py --flux-wall both --net-heating"
+}
