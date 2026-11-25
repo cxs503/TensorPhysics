@@ -1,0 +1,23 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "fa6642aa978487422c0194497cc7e03d2afe30d7",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "CPU float64 uniform homogeneous unit slab, k=C=1, unit left Dirichlet step, right wall held at zero. Fourier sine series for center temperatures and its time-integrated Fourier flux at all faces at t=0.04 s. 24 exponentially damped modes with static cosine sum evaluated analytically. Crank-Nicolson with Rannacher startup; space and time refined together.",
+  "suite": {
+    "tests": 140,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "max_section_heat_error_12_J_per_m2": 0.0031017378997883482,
+    "max_temperature_error_12_K": 0.00872122092502825,
+    "energy_balance_error_12_J_per_m2": 3.885780586188048e-16,
+    "max_section_heat_error_24_J_per_m2": 0.0007615763206894888,
+    "max_temperature_error_24_K": 0.002112591606173164,
+    "energy_balance_error_24_J_per_m2": 3.247402347028583e-15,
+    "max_section_heat_error_48_J_per_m2": 0.00018958895243367802,
+    "max_temperature_error_48_K": 0.0005253372662460953,
+    "energy_balance_error_48_J_per_m2": 1.1657341758564144e-14
+  }
+}
