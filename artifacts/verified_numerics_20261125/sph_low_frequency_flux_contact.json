@@ -1,0 +1,168 @@
+{
+  "reference": "Piecewise polynomial integration of all three coefficient equations, capacity-weighted mean zero at every order",
+  "units": "Tm: K s^m, qm: W s^m/m\u00b2, coefficients of (i omega)^m",
+  "order_metrics": [
+    "T0_error",
+    "T1_error",
+    "T2_error"
+  ],
+  "runs": [
+    {
+      "T0_error": 0.00033368034887923257,
+      "q0_error": 3.534703067126311e-14,
+      "T1_error": 0.0002460229603305741,
+      "q1_error": 8.842939023140595e-15,
+      "T2_error": 0.00010566489613771271,
+      "q2_error": 2.1571870585910585e-15,
+      "columns_per_layer": 8,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "T0_error": 8.753445875716276e-05,
+      "q0_error": 2.464738626930949e-13,
+      "T1_error": 6.174267378990772e-05,
+      "q1_error": 4.53671065569849e-14,
+      "T2_error": 2.6259974872844848e-05,
+      "q2_error": 1.0421988951968978e-14,
+      "columns_per_layer": 16,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [
+        1.9305437615007706,
+        1.9944530968823626,
+        2.0085587250543795
+      ],
+      "passed": true
+    },
+    {
+      "T0_error": 2.2486045445259783e-05,
+      "q0_error": 1.3636248202349634e-12,
+      "T1_error": 1.546282073729794e-05,
+      "q1_error": 2.599864545681706e-13,
+      "T2_error": 6.544017117547609e-06,
+      "q2_error": 6.013557015179669e-14,
+      "columns_per_layer": 32,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [
+        1.9608210982496903,
+        1.997464440172301,
+        2.00461710863786
+      ],
+      "passed": true
+    },
+    {
+      "T0_error": 5.703434642272499e-06,
+      "q0_error": 6.109554355970226e-12,
+      "T1_error": 3.868928347034218e-06,
+      "q1_error": 1.1871357308352399e-12,
+      "T2_error": 1.6332752401261006e-06,
+      "q2_error": 2.756172010873698e-13,
+      "columns_per_layer": 64,
+      "wall_capacity_J_m2K": [
+        0.0,
+        0.0
+      ],
+      "orders": [
+        1.979127075256428,
+        1.9987976053144278,
+        2.0024085871513524
+      ],
+      "passed": true
+    },
+    {
+      "T0_error": 0.00041115401499923205,
+      "q0_error": 3.534703067126311e-14,
+      "T1_error": 0.0002721573608747842,
+      "q1_error": 8.451785336588907e-05,
+      "T2_error": 0.00016696789319712132,
+      "q2_error": 3.518238611661412e-05,
+      "columns_per_layer": 8,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [],
+      "passed": true
+    },
+    {
+      "T0_error": 0.00010671087210973488,
+      "q0_error": 2.464738626930949e-13,
+      "T1_error": 6.814379771486667e-05,
+      "q1_error": 2.088349179371217e-05,
+      "T2_error": 4.16449100522878e-05,
+      "q2_error": 8.659425590965992e-06,
+      "columns_per_layer": 16,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [
+        1.945971746240838,
+        1.9977867988129752,
+        2.0033586272254063
+      ],
+      "passed": true
+    },
+    {
+      "T0_error": 2.725100456594359e-05,
+      "q0_error": 1.3636248202349634e-12,
+      "T1_error": 1.7046591687104137e-05,
+      "q1_error": 5.184336058351996e-06,
+      "T2_error": 1.0396989450463909e-05,
+      "q2_error": 2.1461791958791096e-06,
+      "columns_per_layer": 32,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [
+        1.9693258522178967,
+        1.9990990381939964,
+        2.001974334039123
+      ],
+      "passed": true
+    },
+    {
+      "T0_error": 6.890642384916642e-06,
+      "q0_error": 6.109554355970226e-12,
+      "T1_error": 4.262810966232307e-06,
+      "q1_error": 1.2910845510350426e-06,
+      "T2_error": 2.597310376971232e-06,
+      "q2_error": 5.340831572182277e-07,
+      "columns_per_layer": 64,
+      "wall_capacity_J_m2K": [
+        0.28,
+        0.63
+      ],
+      "orders": [
+        1.9835990230231246,
+        1.999606328448092,
+        2.0010755118497303
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "d32455fc7ea8d04b79f9073a450929cc33d968cc",
+      "file": "sph_low_frequency_flux_contact.py",
+      "source_sha256": "9efb384fcf84c5a3b610d83896fe67515fe79b300b2b3651e7f0ae7aa811ccc0"
+    },
+    {
+      "commit": "b487eea5898112f4201191050df93275b2672f14",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "d46926222c54e949a0fd97bcaa8701e4d066c6210f20da02eead4bbf1343a3b3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_low_frequency_flux_contact.py"
+}
