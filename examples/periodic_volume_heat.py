@@ -11,12 +11,14 @@ from tensorlbm import scalar, scalar_harmonic
 from tensorsph import heat_conduction_2d as sph
 
 
-def sph_response(modes, time, h, k, capacity):
+def sph_response(modes, time, h, k, capacity, cut):
     """Integrate the continuous-time SPH phasors over the output intervals."""
     n = len(modes[0][2])
     cells = np.zeros((len(time), n))
     heat = np.zeros((len(time)-1, 2))
     generated = np.zeros(len(time)-1)
+    left_generated = np.zeros_like(generated)
+    cut_heat = np.zeros_like(generated)
     offsets = sph.lattice_offsets(h, 1.3*h)
     factor = sph.lattice_diffusion_factor_2d(1.3, h, mode="moment")
     walls = (0., 0.)
@@ -31,7 +33,10 @@ def sph_response(modes, time, h, k, capacity):
         # One periodic particle row spans area h; the reference rod has unit area.
         heat += (duration[:, None]*power.numpy()/(factor*h)).real
         generated += (duration*amp*avg.mean()).real
-    return cells, heat, generated
+        section = sph.stencil_x_face_power_2d(field, offsets, h, cut, walls, conductivity=k)
+        cut_heat += (duration*section.item()/(factor*h)).real
+        left_generated += (duration*amp*h*avg[:cut].sum()).real
+    return cells, heat, generated, cut_heat, left_generated
 
 
 def measure(n):
@@ -45,6 +50,9 @@ def measure(n):
     exact = np.zeros_like(source)
     node_initial = np.zeros(n+1)
     end_heat = np.zeros((len(dt), 2))
+    cut = 3*n//8
+    exact_cut_heat = np.zeros_like(dt)
+    element_end_load = np.zeros_like(time)
     modes = []
     for m, strength in ((1, 1.), (2, .7+.3j)):
         b, w = m*np.pi, m*omega
@@ -61,6 +69,11 @@ def measure(n):
         node_initial += gain.real*np.sin(b*edges)
         # q=-k*T_x; inward powers have opposite normal conventions at the two ends.
         end_heat += (np.diff(phase)*gain/(1j*w)).real[:, None]*k*b*np.array([-1, (-1)**m])
+        xc = edges[cut]
+        exact_cut_heat -= (np.diff(phase)*gain/(1j*w)).real*k*b*np.cos(b*xc)
+        # Source integral against the right hat of the single element left of the cut.
+        end_hat = -np.cos(b*xc)/b + (np.sin(b*xc)-np.sin(b*(xc-h)))/(h*b*b)
+        element_end_load += forcing.real*end_hat
         modes.append((w, strength, avg))
     nodes = torch.from_numpy(edges[:, None])
     ids = torch.arange(n)
@@ -72,6 +85,13 @@ def measure(n):
     fem_cells = .5*(fem.temperature[:, :-1]+fem.temperature[:, 1:]).numpy()
     fem_heat = fem.nodal_reaction_heat_steps()[:, fixed].numpy()
 
+    # The right nodal reaction of the adjacent left element is inward. Its
+    # consistent capacity, stiffness and local load give outward section heat.
+    pair = fem.temperature[:, cut-1:cut+1].numpy()
+    element_storage = capacity*h/6*np.diff(pair[:, 0]+2*pair[:, 1])
+    conduction = k/h*(pair[:, 1]-pair[:, 0])
+    fem_cut = -element_storage+.5*dt*((element_end_load-conduction)[1:]+(element_end_load-conduction)[:-1])
+
     def heating(t):
         return sum((amp*np.exp(1j*w*t)).real*avg for w, amp, avg in modes)
 
@@ -80,6 +100,9 @@ def measure(n):
                     time, exact[0], source=heating, return_wall_power=True)
     wall = np.column_stack((powers["west"][:,0], powers["east"][:,0]))
     fvm_heat = .5*dt[:,None]*(wall[:-1]+wall[1:])
+    fvm_cut_power = -k*(history[:, 0, cut]-history[:, 0, cut-1])/h
+    fvm_cut = .5*dt*(fvm_cut_power[1:]+fvm_cut_power[:-1])
+    left_generation = .5*dt*h*(source[1:, :cut]+source[:-1, :cut]).sum(axis=1)
     generation = .5*dt*h*(source[1:]+source[:-1]).sum(axis=1)
     # Choose an integer number of lattice steps per output interval. Sum
     # the physical midpoint face powers over those steps using a geometric sum.
@@ -89,6 +112,8 @@ def measure(n):
     lbm_cells = np.zeros_like(source)
     lbm_heat = np.zeros_like(fem_heat)
     lbm_generation = np.zeros_like(dt)
+    lbm_cut = np.zeros_like(dt)
+    lbm_left_generation = np.zeros_like(dt)
     for w, amp, avg in modes:
         phase = np.exp(1j*w*time)
         slab = scalar_harmonic.solve_harmonic_scalar_slab(n, 1, tau, w*lattice_dt, 0., 0.,
@@ -99,18 +124,24 @@ def measure(n):
         duration = lattice_dt*np.diff(phase)/(2j*np.sin(w*lattice_dt/2))
         lbm_heat += (duration[:, None]*inward).real
         lbm_generation += (duration*amp*avg.mean()).real
+        lbm_left_generation += (duration*amp*h*avg[:cut].sum()).real
+        lbm_cut += (duration*slab.x_transfer.numpy()[0, cut]*capacity*h/lattice_dt).real
     reports = []
-    for name, cells, heat, generated in (("FEM", fem_cells, fem_heat, generation),
-                                         ("FVM", history[:,0], fvm_heat, generation),
-                                         ("LBM", lbm_cells, lbm_heat, lbm_generation),
-                                         ("SPH", *sph_response(modes, time, h, k, capacity))):
+    results = (("FEM", fem_cells, fem_heat, generation, fem_cut, left_generation),
+               ("FVM", history[:,0], fvm_heat, generation, fvm_cut, left_generation),
+               ("LBM", lbm_cells, lbm_heat, lbm_generation, lbm_cut, lbm_left_generation),
+               ("SPH", *sph_response(modes, time, h, k, capacity, cut)))
+    for name, cells, heat, generated, section, left_generated in results:
+        left_stored = capacity*h*np.diff(cells[:, :cut].sum(axis=1))
+        left_balance = abs(left_stored-heat[:, 0]+section-left_generated).max()
         stored = capacity*np.diff(cells.mean(axis=1))
         balance = abs(stored-heat.sum(axis=1)-generated).max()
         # Divide by interval duration to compare errors on different time grids.
         reports.append(dict(solver=name, cells=n, steps=len(dt),
                      max_cell_temperature_error_K=float(abs(cells-exact).max()),
                      max_interval_mean_power_error_W=float(abs((heat-end_heat)/dt[:,None]).max()),
-                     max_step_balance_error_J=float(balance)))
+                     max_section_mean_power_error_W=float(abs((section-exact_cut_heat)/dt).max()),
+                     max_left_balance_error_J=float(left_balance), max_step_balance_error_J=float(balance)))
     return reports
 
 
@@ -120,9 +151,10 @@ def main():
     for n in (8, 16, 32, 64, 128):
         for report in measure(n):
             name = report["solver"]
-            errors = np.array([report["max_cell_temperature_error_K"], report["max_interval_mean_power_error_W"]])
+            errors = np.array([report["max_cell_temperature_error_K"], report["max_interval_mean_power_error_W"],
+                               report["max_section_mean_power_error_W"]])
             orders = np.log2(previous[name]/errors) if name in previous else None
-            passed = np.isfinite(errors).all() and report["max_step_balance_error_J"] < 1e-12
+            passed = np.isfinite(errors).all() and max(report["max_step_balance_error_J"], report["max_left_balance_error_J"]) < 1e-12
             if orders is not None:
                 passed &= min(orders) > 1.75
             report.update(orders=None if orders is None else orders.tolist(), passed=bool(passed))
