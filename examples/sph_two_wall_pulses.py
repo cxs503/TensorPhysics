@@ -41,22 +41,43 @@ def wall(t, side):
     return sum(change for start, end, change in EVENTS if side == end and t >= start)
 
 
-def measure(n):
+def measure(n, ramps=False):
     from tensorsph import heat_conduction_2d as sph
 
     dx = 1/n
     centers = (np.arange(n)+.5)*dx
     cuts = np.arange(n+1)*dx
-    history, heat, walls = sph.solve_transient_layered_slab(
-        np.zeros(n), TIMES, dx, (lambda t: wall(t, 0), lambda t: wall(t, 1)),
-        conductivity=np.ones(n), volumetric_heat_capacity=1., method="exponential",
-        load_jump_times=[event[0] for event in EVENTS], return_x_heat=True, return_wall_temperatures=True)
-    temperature, _ = reference(centers, TIMES, 64)
-    _, cumulative = reference(cuts, TIMES, 64)
+    if ramps:
+        boundaries = tuple(lambda t, side=side: np.interp(t, RAMP_KNOTS, side) for side in RAMP_LEVELS.T)
+        events = RAMP_KNOTS
+        temperature, _, time_integral = ramp_reference(
+            centers, TIMES, RAMP_KNOTS, RAMP_LEVELS, return_point_integral=True)
+        _, cumulative = ramp_reference(cuts, TIMES, RAMP_KNOTS, RAMP_LEVELS)
+    else:
+        boundaries = (lambda t: wall(t, 0), lambda t: wall(t, 1))
+        events = [event[0] for event in EVENTS]
+        temperature, _ = reference(centers, TIMES, 64)
+        _, cumulative = reference(cuts, TIMES, 64)
+    history, heat, walls, *interval_means = sph.solve_transient_layered_slab(
+        np.zeros(n), TIMES, dx, boundaries, conductivity=np.ones(n), volumetric_heat_capacity=1.,
+        method="exponential", load_jump_times=events, return_x_heat=True, return_wall_temperatures=True,
+        return_interval_temperature=ramps, return_interval_wall_temperatures=ramps)
+    extra = {}
+    if ramps:
+        particle_mean, wall_mean = interval_means
+        durations = np.diff(TIMES)[:, None]
+        exact_mean = np.diff(time_integral, axis=0)/durations
+        # Each wall level is affine between knots, including constant extensions.
+        split = np.union1d(TIMES, RAMP_KNOTS)
+        values = np.column_stack([boundary(split) for boundary in boundaries])
+        integrals = np.diff(split)[:, None]*(values[:-1]+values[1:])/2
+        exact_walls = np.add.reduceat(integrals, np.searchsorted(split, TIMES[:-1]), axis=0)/durations
+        extra["interval_temperature_error_K"] = float(abs(particle_mean.numpy()-exact_mean).max())
+        extra["interval_wall_error_K"] = float(abs(wall_mean.numpy()-exact_walls).max())
     error = abs(heat.numpy()-np.diff(cumulative, axis=0))
     balance = dx*np.diff(history.numpy(), axis=0)+np.diff(heat.numpy(), axis=1)
-    expected_walls = [[wall(t, 0), wall(t, 1)] for t in TIMES]
-    return dict(columns=n, temperature_error_K=float(abs(history.numpy()-temperature).max()),
+    expected_walls = [[boundary(t) for boundary in boundaries] for t in TIMES]
+    return dict(**extra, columns=n, temperature_error_K=float(abs(history.numpy()-temperature).max()),
                 wall_heat_error_J_m2=float(error[:, [0, -1]].max()),
                 interior_cut_heat_error_J_m2=float(error[:, 1:-1].max()),
                 column_energy_residual_J_m2=float(abs(balance).max()),
@@ -257,12 +278,14 @@ def measure_dg(n, ramps=False, degree=1):
                 column_energy_residual_J_m2=float(abs(balance).max()))
 
 
-def ramp_reference(x, times, knots, levels, cell_width=0.):
+def ramp_reference(x, times, knots, levels, cell_width=0., *, return_point_integral=False):
     """Superpose exact ramp responses using slope changes at the wall knots."""
     slopes = np.diff(levels, axis=0)/np.diff(knots)[:, None]
     changes = np.diff(np.vstack(([0., 0.], slopes, [0., 0.])), axis=0)
     temperature = np.zeros((len(times), len(x)))
     heat = np.zeros_like(temperature)
+    if return_point_integral:
+        point_integral = np.zeros_like(temperature)
     wave = np.pi*np.arange(1, 65)
     sinc = np.sinc(wave*cell_width/(2*np.pi))
     for knot, rates in zip(knots, changes):
@@ -276,10 +299,18 @@ def ramp_reference(x, times, knots, levels, cell_width=0.):
             cubic = d*(1-d)*(2-d)/6 + (d-1)*cell_width**2/24
             temperature[active] += rate*(age*(1-d)-cubic
                 +(2*decay*sinc/wave**3)@np.sin(wave[:, None]*d))
+            if return_point_integral:
+                # Second time primitive of the step solution at a point.
+                # The stationary fifth-order sine sum vanishes at both walls.
+                fifth = d/45-d**3/18+d**4/24-d**5/120
+                point_integral[active] += rate*(age**2*(1-d)/2-age*d*(1-d)*(2-d)/6
+                    +fifth-(2*decay/wave**5)@np.sin(wave[:, None]*d))
             quartic = 1/45-d**2/6+d**3/6-d**4/24
             integral = (age**2/2+age*(d**2/2-d+1/3)-quartic
                         +(2*decay/wave**4)@np.cos(wave[:, None]*d))
             heat[active] += (1 if side == 0 else -1)*rate*integral
+    if return_point_integral:
+        return temperature, heat, point_integral
     return temperature, heat
 
 
@@ -344,6 +375,7 @@ def measure_lbm(n, off_grid=False, ramps=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
+    group.add_argument("--sph-ramps", action="store_true", help="verify particle and wall means under independent ramps")
     group.add_argument("--fem", action="store_true", help="run the consistent-capacity LINE2 slab")
     group.add_argument("--lbm", action="store_true", help="run the D2Q5 halfway-wall slab")
     group.add_argument("--lbm-ramps", action="store_true", help="drive independent off-grid wall ramps")
@@ -376,19 +408,20 @@ if __name__ == "__main__":
         run = partial(measure_fvm, ramps=args.fvm_ramps)
     else:
         from tensorsph import heat_conduction_2d as solver
-        run = measure
+        run = partial(measure, ramps=args.sph_ramps)
     minimum_order = 2.8 if args.dg_degree == 2 else 1.8
     for n in (8, 16, 32, 64):
         row = run(n)
         errors = np.array([row[k] for k in ("temperature_error_K", "wall_heat_error_J_m2",
                                             "interior_cut_heat_error_J_m2")])
-        if args.dem:
+        if args.dem or args.sph_ramps:
             errors = np.append(errors, row["interval_temperature_error_K"])
         if args.fvm_ramps:
             errors = np.append(errors, row["subcell_heat_error_J_m2"])
         orders = np.log2(previous/errors).tolist() if previous is not None else []
         row.update(orders=orders, passed=bool(np.all(np.isfinite(errors)) and
                    row["column_energy_residual_J_m2"] < 1e-12 and row.get("wall_trace_error_K", 0.) < 1e-14
+                   and row.get("interval_wall_error_K", 0.) < 1e-14
                    and row.get("reconstruction_face_mismatch_J_m2", 0.) < 1e-12
                    and row.get("interface_heat_mismatch_J_m2", 0.) < 1e-12
                    and all(order > 0 for order in orders) and (n < 64 or min(orders) > minimum_order)))
