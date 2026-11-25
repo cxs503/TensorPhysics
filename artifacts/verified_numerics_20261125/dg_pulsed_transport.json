@@ -1,0 +1,46 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "296e9f041a70fe6b56b7bafeaa5c5c10e38c20d7",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_advection_2d_var.py tests/test_advection_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "references": [
+    "Periodic x-shear sin(2*pi*y) sin(pi*m*t/T)^2 gives an x-displacement of (T/2)sin(2*pi*y) after m full pulses. P2 DG on 6x12, 12x24 and 24x48 cells.",
+    "Velocity (t,-t/2) from t=0.25 to 0.5. Intermediate restart at 0.375 reproduces the uninterrupted coefficient field and mass history bitwise."
+  ],
+  "baseline_two_cycle_24x48": {
+    "steps": 1,
+    "absolute_l2": 0.5148558816500849
+  },
+  "counts": {
+    "tests": 28,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "results": {
+    "test_pulsed_periodic_shear_against_characteristics[2]": {
+      "error_6": 0.0030995199687680994,
+      "steps_6": 40.0,
+      "mass_drift_6": 3.3306690738754696e-16,
+      "error_12": 0.0003938888819665885,
+      "steps_12": 80.0,
+      "mass_drift_12": 0.0,
+      "error_24": 4.9251607448120145e-05,
+      "steps_24": 159.0,
+      "mass_drift_24": 3.3306690738754696e-16
+    },
+    "test_pulsed_periodic_shear_against_characteristics[8]": {
+      "error_6": 0.0030995322308530245,
+      "steps_6": 96.0,
+      "mass_drift_6": 0.0,
+      "error_12": 0.0003938872600796915,
+      "steps_12": 96.0,
+      "mass_drift_12": 3.3306690738754696e-16,
+      "error_24": 4.925158147891614e-05,
+      "steps_24": 160.0,
+      "mass_drift_24": 0.0
+    },
+    "test_clocked_restart_matches_uninterrupted_translation": {
+      "restarted_field_absolute_l2": 0.00041752717016660157
+    }
+  }
+}
