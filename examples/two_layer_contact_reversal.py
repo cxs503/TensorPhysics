@@ -56,6 +56,19 @@ def modes(reversals):
     return [(p,w,*traces(p)) for p,w in zip(roots,weights)]
 
 
+def contact_traces(fields, middle, sampling):
+    """Reconstruct independent one-sided traces on the uniform slab mesh."""
+    if sampling=="node":
+        return fields[:,middle:middle+2]
+    # Evaluate a quadratic at the face from three point samples or three
+    # cell integrals. Each stencil lies entirely within one material.
+    weights = (np.array([11.,-7.,2.])/6 if sampling=="cell_average"
+               else np.array([15.,-10.,3.])/8)
+    left = fields[:,middle-3:middle][:,::-1] @ weights
+    right = fields[:,middle:middle+3] @ weights
+    return np.column_stack((left,right))
+
+
 def measure(n,reversals=(REVERSAL,)):
     dx,m = 1/n,n//2
     # Resolve the flux zero between interval midpoints on every mesh.
@@ -81,9 +94,10 @@ def measure(n,reversals=(REVERSAL,)):
     cells = (centers[:m],centers[m:])
     nodal_exact = exact(*nodes)
     cell_exact = exact(*cells)
+    trace_reference = nodal_exact[:,m:m+2]
     start = nodal_exact[0]
     u = thermal.solve_transient_thermal(model,torch.from_numpy(time),torch.from_numpy(np.tile(start,2)),
-                                        theta=.5).temperature.reshape(len(time),2,-1).mean(dim=1).numpy()
+                                        theta=.5,sparse=True).temperature.reshape(len(time),2,-1).mean(dim=1).numpy()
     power = (u[:,m]-u[:,m+1])/CONTACT
     data = [("FEM",u,nodal_exact,.5*(power[1:]+power[:-1])*dt)]
 
@@ -136,6 +150,17 @@ def measure(n,reversals=(REVERSAL,)):
                          errors=dict(time_s=float(np.max(abs(np.array(crossings)-reversals))) if matched else None,
                          cumulative_contact_heat_J_m2=float(abs(heat.cumsum()-exact_heat[1:]).max()),
                          temperature_K=float(abs(fields-reference).max()))))
+        sampling = {"FEM":"node","FVM":"point","SPH":"point","DEM_cell":"cell_average","DEM":"node"}[name]
+        trace = contact_traces(fields,m,sampling)
+        jump = trace[:,0]-trace[:,1]
+        trace_heat = np.cumsum(.5*dt*(jump[1:]+jump[:-1])/CONTACT)
+        rows[-1]["interface_sampling"] = sampling
+        rows[-1]["errors"].update(
+            left_trace_K=float(abs(trace[:,0]-trace_reference[:,0]).max()),
+            right_trace_K=float(abs(trace[:,1]-trace_reference[:,1]).max()),
+            contact_jump_K=float(abs(jump-(trace_reference[:,0]-trace_reference[:,1])).max()),
+            trace_contact_heat_J_m2=float(abs(trace_heat-exact_heat[1:]).max()))
+        rows[-1]["trace_vs_section_heat_J_m2"] = float(abs(trace_heat-heat.cumsum()).max())
         if len(reversals)>1 and matched:
             between = float(np.diff(np.interp(crossings,time,np.r_[0.,heat.cumsum()]))[0])
             target = float(np.diff(cumulative_heat(np.array(reversals)))[0])
@@ -148,24 +173,33 @@ def measure(n,reversals=(REVERSAL,)):
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--double",action="store_true",help="prescribe two reversals using three decay modes")
+    parser.add_argument("--interface-traces",action="store_true",help="extend refinement to 512 cells and gate one-sided contact temperatures and heat")
     args = parser.parse_args()
     reversals = (.02,.065) if args.double else (REVERSAL,)
     rows,previous = [],{}
     meshes = (16,32,64,128,256) if args.double else (16,32,64,128)
+    original_finest = meshes[-1]
+    if args.interface_traces:
+        meshes = (16,32,64,128,256,512)
     for n in meshes:
         for row in measure(n,reversals):
             errors = row["errors"]
             last = previous.get(row["solver"])
             orders = {k:math.log2(last[k]/v) for k,v in errors.items() if last and last.get(k) and v}
             passes = row["direction_matches"] and errors["time_s"] is not None
-            if n==meshes[-1] and passes:
+            trace_keys = ("left_trace_K","right_trace_K","contact_jump_K","trace_contact_heat_J_m2")
+            if n>=original_finest and passes:
                 passes = (errors["time_s"]<1e-5 and errors["temperature_K"]<2e-4
                           and errors["cumulative_contact_heat_J_m2"]<2e-5
                           and errors.get("heat_between_reversals_J_m2",0.)<2e-5
-                          and all(v>1.7 for v in orders.values()))
+                          and all(v>1.7 for k,v in orders.items() if k not in trace_keys))
+            if args.interface_traces and n==meshes[-1]:
+                passes = (passes and max(errors[k] for k in trace_keys[:3])<2e-4
+                          and errors["trace_contact_heat_J_m2"]<2e-5
+                          and all(orders[k]>1.7 for k in trace_keys))
             row.update(orders=orders,passed=bool(passes))
             rows.append(row)
             previous[row["solver"]] = errors
     sources = [provenance(f) for f in (__file__,inspect.getfile(slab_fem_model),thermal.__file__,energy.__file__,sph.__file__,contact_chain.__file__)]
-    print(json.dumps(dict(**({"reference_reversals_s":reversals} if args.double else {"reference_reversal_s":REVERSAL}),sources=sources,runs=rows),indent=2,allow_nan=False))
+    print(json.dumps(dict(**({"reference_reversals_s":reversals} if args.double else {"reference_reversal_s":REVERSAL}),interface_trace_gate=args.interface_traces,sources=sources,runs=rows),indent=2,allow_nan=False))
     raise SystemExit(0 if all(r["passed"] for r in rows) else 1)
