@@ -1,0 +1,19 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "f53ecafc32bbeb55b4d19d717257869c79210a29",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal*.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Postprocess sampled exact temperature histories of two isolated well-mixed bodies (initial 400/280 K, capacities 3/5 J/K, contact 1.5 W/K). The temperature difference decays at G*(1/C1+1/C2), and total entropy gain is C1 log(T1/400)+C2 log(T2/280). Compare cumulative interface generation at every output through 3 s using 12,24,48 nonuniform intervals and linear time interpolation. CPU float64. This verifies the diagnostic on prescribed histories.",
+  "suite": {
+    "tests": 179,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_contact_entropy_history_against_isolated_reservoirs": {
+      "max_cumulative_entropy_error_12_J_per_K": 0.0005826733416140067,
+      "max_cumulative_entropy_error_24_J_per_K": 0.00014626680344870246,
+      "max_cumulative_entropy_error_48_J_per_K": 3.662945116933436e-05
+    }
+  }
+}
