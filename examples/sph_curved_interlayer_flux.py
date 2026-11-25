@@ -35,11 +35,23 @@ def measure(n, beta, resistive):
         contact_resistance_x=contacts, h_factor=1.6, transverse_wavenumber=beta,
         backend="banded", split_interface_links=True,
     )
-    def error(values, slope):
+    def recover(values, slope):
         flux = sph.recover_layered_interior_flux(values, dx, k, axial_flux_gradient=slope,
                                                  contact_resistance_x=contacts)
-        return np.abs(flux.numpy()-q[1:-1])
-    corrected = error(field, source-loss*field.numpy())
+        return flux.numpy()
+    net_source = source - loss*field.numpy()
+    solved_flux = recover(field, net_source)
+    corrected = np.abs(solved_flux - q[1:-1])
+    contact_errors = {}
+    if n >= 128:
+        # Integrate the solved local energy balance from a material-interior
+        # face 1/128 m away, independently on each side of each contact.
+        gap = n//128
+        for label, contact in (("first", first), ("last", last)):
+            lo, hi = contact-gap, contact+gap
+            from_left = solved_flux[lo-1] + dx*net_source[lo:contact].sum()
+            from_right = solved_flux[hi-1] - dx*net_source[contact:hi].sum()
+            contact_errors[label] = [float(abs(v-q[contact])) for v in (from_left, from_right)]
     face = np.arange(1, n)
     worst = int(face[corrected.argmax()])
     # Use the same physical regions on every grid. A fixed count of cells
@@ -57,10 +69,11 @@ def measure(n, beta, resistive):
         "interior_rms_error_W_m2": rms,
         "region_inset_m": 1/128,
         "region_max_error_W_m2": region_errors,
+        "extrapolated_contact_errors_left_right_W_m2": contact_errors,
         "columns": n, "beta_rad_m": beta, "resistive": resistive,
-        "exact_input_uncorrected_error_W_m2": float(error(target, 0.).max()),
-        "exact_input_corrected_error_W_m2": float(error(target, gradient).max()),
-        "solved_input_uncorrected_error_W_m2": float(error(field, 0.).max()),
+        "exact_input_uncorrected_error_W_m2": float(np.abs(recover(target, 0.)-q[1:-1]).max()),
+        "exact_input_corrected_error_W_m2": float(np.abs(recover(target, gradient)-q[1:-1]).max()),
+        "solved_input_uncorrected_error_W_m2": float(np.abs(recover(field, 0.)-q[1:-1]).max()),
         "solved_input_corrected_error_W_m2": float(corrected.max()),
         "solved_contact_errors_W_m2": corrected[[first-1, last-1]].tolist(),
         "temperature_error_K": float(np.abs(field.numpy()-target).max()),
@@ -84,7 +97,20 @@ def main():
                         for name, value in row["region_max_error_W_m2"].items()
                         if name in previous["region_max_error_W_m2"]
                     }
+                if n >= 128:
+                    row["extrapolated_max_error_W_m2"] = max(
+                        max(pair) for pair in row["extrapolated_contact_errors_left_right_W_m2"].values()
+                    )
+                    if n > 128:
+                        row["extrapolated_order"] = math.log2(
+                            previous["extrapolated_max_error_W_m2"]/row["extrapolated_max_error_W_m2"]
+                        )
                 if n == 8192:
+                    passed &= row["extrapolated_max_error_W_m2"] < 2e-6
+                    if beta:
+                        passed &= row["extrapolated_order"] > 1.9
+                    if not resistive:
+                        passed &= row["extrapolated_max_error_W_m2"] < max(row["solved_contact_errors_W_m2"])/50
                     passed &= error < 2e-4 and row["solved_flux_order"] > 0.9
                     passed &= row["worst_face_distance_to_contact_cells"] <= 1
                     passed &= max(row["region_max_error_W_m2"].values()) < 1e-5
