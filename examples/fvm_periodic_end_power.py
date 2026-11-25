@@ -58,10 +58,16 @@ def measure(steps, method, alternating=False):
     power_error = abs(heats["end_input"]-np.diff(exact_heat, axis=0))/dt[:, None]
     mean_wave = -np.diff(np.cos(omega*times))/(omega*dt)
     mean_wall = .3*ends + amplitude(ends)*mean_wave[:, None]
+    film_heat = area*film*(ambient-mean_wall)*dt[:, None]
+    applied_heat = np.diff(exact_heat, axis=0)-film_heat
+    split_residual = heats["end_input"]-heats["end_applied"]-heats["end_film"]
     wall_energy = area*capacity*np.diff(faces[:, [0,-1]], axis=0)
     conduction = np.column_stack((heats["left"][:, 0], -heats["right"][:, -1]))
     residual = heats["end_input"]-conduction-wall_energy
     return dict(min_dt_s=float(dt.min()), max_dt_s=float(dt.max()),
+                interval_heater_power_error_W=float((abs(heats["end_applied"]-applied_heat)/dt[:, None]).max()),
+                interval_film_power_error_W=float((abs(heats["end_film"]-film_heat)/dt[:, None]).max()),
+                max_input_split_residual_J=float(abs(split_residual).max()),
                 max_wall_energy_residual_J=float(abs(residual).max()),
                 interval_end_power_error_W=float(power_error.max()),
                 interval_wall_mean_error_K=float(abs(means["face"][:, [0,-1]]-mean_wall).max()), steps=steps, method=method, columns=n,
@@ -80,10 +86,11 @@ if __name__ == "__main__":
         previous = None
         for steps in (32, 64, 128):
             row = measure(steps, method, args.alternating)
-            row["passed"] = row["max_wall_energy_residual_J"] < 1e-11
+            row["passed"] = max(row["max_wall_energy_residual_J"], row["max_input_split_residual_J"]) < 1e-11
             for key in ("max_cell_error_K", "max_wall_error_K", "max_section_error_W",
                         "west_cumulative_error_J", "east_cumulative_error_J",
-                        "interval_end_power_error_W", "interval_wall_mean_error_K"):
+                        "interval_end_power_error_W", "interval_wall_mean_error_K",
+                        "interval_heater_power_error_W", "interval_film_power_error_W"):
                 if previous:
                     order = math.log2(previous[key]/row[key])
                     row[key+"_order"] = order
