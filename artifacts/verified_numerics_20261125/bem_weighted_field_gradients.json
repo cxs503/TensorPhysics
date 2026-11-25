@@ -1,0 +1,91 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py tests/test_solver.py tests/test_mixed_boundary.py tests/test_linear_density_solver.py -o junit_family=legacy --junitxml=results.xml",
+  "moment": {
+    "commit": "1d4760c77e7b6232c91631c7ab3773013791b8a2",
+    "reference": "40-point Gauss-Legendre quadrature of the s-weighted point kernels and their spatial derivatives, plus exact endpoint potential and midpoint normal gradients under geometric scaling.",
+    "counts": {
+      "tests": 105,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_weighted_panel_potential_and_gradients_over_distance[3.99]": {
+        "potential_relative_error": 4.382732912890374e-15,
+        "single_gradient_relative_error": 3.5300719912392084e-15,
+        "double_gradient_relative_error": 1.7334961688909588e-15
+      },
+      "test_weighted_panel_potential_and_gradients_over_distance[4.0]": {
+        "potential_relative_error": 4.032323825493974e-16,
+        "single_gradient_relative_error": 3.4355910216624283e-16,
+        "double_gradient_relative_error": 7.921245805586271e-16
+      },
+      "test_weighted_panel_potential_and_gradients_over_distance[4.01]": {
+        "potential_relative_error": 4.016135883512246e-16,
+        "single_gradient_relative_error": 3.339032248727582e-16,
+        "double_gradient_relative_error": 1.1148301657814805e-15
+      },
+      "test_weighted_panel_potential_and_gradients_over_distance[10000.0]": {
+        "potential_relative_error": 1.638039142614267e-16,
+        "single_gradient_relative_error": 1.0643988014914503e-16,
+        "double_gradient_relative_error": 3.897997489423444e-16
+      },
+      "test_weighted_panel_potential_and_gradients_over_distance[10000000000.0]": {
+        "potential_relative_error": 0.0,
+        "single_gradient_relative_error": 2.0302066683946768e-16,
+        "double_gradient_relative_error": 2.363471626802945e-16
+      },
+      "test_weighted_panel_potential_and_gradients_over_distance[1e+16]": {
+        "potential_relative_error": 0.0,
+        "single_gradient_relative_error": 9.680779783384863e-17,
+        "double_gradient_relative_error": 1.0747824611839608e-16
+      },
+      "test_weighted_panel_endpoint_and_normal_gradients_under_scaling[1e-120]": {
+        "endpoint_potential_relative_error": 2.220446049250313e-16
+      },
+      "test_weighted_panel_endpoint_and_normal_gradients_under_scaling[1.0]": {
+        "endpoint_potential_relative_error": 0.0
+      },
+      "test_weighted_panel_endpoint_and_normal_gradients_under_scaling[1e+120]": {
+        "endpoint_potential_relative_error": 0.0
+      }
+    }
+  },
+  "field": {
+    "commit": "ea69f88996d1b1bb954a8b9b5b292e865b5ea41d",
+    "reference": "Direct integration over a unit-radius octagon with specified single- or double-layer trace and constant or linear density, tested through evaluate_exterior_field.",
+    "counts": {
+      "tests": 109,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "test_exterior_far_field_gradient_against_direct_panel_quadrature[single-False]": {
+        "gradient_relative_error_at_5": 3.711819026625884e-16,
+        "gradient_relative_error_at_10000": 2.7811962636055387e-16,
+        "gradient_relative_error_at_1e+10": 2.652592843776349e-16,
+        "gradient_relative_error_at_1e+16": 2.8283013896199407e-16
+      },
+      "test_exterior_far_field_gradient_against_direct_panel_quadrature[single-True]": {
+        "gradient_relative_error_at_5": 2.3212143533297005e-16,
+        "gradient_relative_error_at_10000": 2.7811841111218197e-16,
+        "gradient_relative_error_at_1e+10": 2.965688957643742e-16,
+        "gradient_relative_error_at_1e+16": 2.8283013896199407e-16
+      },
+      "test_exterior_far_field_gradient_against_direct_panel_quadrature[double-False]": {
+        "gradient_relative_error_at_5": 6.060891075400659e-17,
+        "gradient_relative_error_at_10000": 2.4004232593115625e-16,
+        "gradient_relative_error_at_1e+10": 1.5440122477820543e-16,
+        "gradient_relative_error_at_1e+16": 1.9859390355799375e-16
+      },
+      "test_exterior_far_field_gradient_against_direct_panel_quadrature[double-True]": {
+        "gradient_relative_error_at_5": 0.0,
+        "gradient_relative_error_at_10000": 1.8976777620734322e-16,
+        "gradient_relative_error_at_1e+10": 0.0,
+        "gradient_relative_error_at_1e+16": 3.971878071159875e-16
+      }
+    }
+  }
+}
