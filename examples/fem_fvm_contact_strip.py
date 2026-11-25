@@ -12,17 +12,21 @@ from conduction_provenance import provenance
 import fvm_strip_heater_across_contact as strip
 
 
-def measure(n, mirrored, omega, storing=False, heated=False):
+def measure(n, mirrored, omega, storing=False, heated=False, balanced=False):
     trace_capacity = np.array([0.18, 0.42]) if storing else np.zeros(2)
     trace_power = np.array([0.8j, -0.35+0.2j]) if heated else np.zeros(2)
+    generation = 12.
+    if balanced:
+        trace_power = np.array([1j, -1j])
+        generation = 0.
     if mirrored:
         trace_power = trace_power[::-1]
         trace_capacity = trace_capacity[::-1]
-    fvm = strip.measure(n, mirrored, omega, trace_capacity, trace_power)
+    fvm = strip.measure(n, mirrored, omega, trace_capacity, trace_power, generation)
     start, end = fvm["strip_bounds_m"]
     conductivity = (4., 1.) if mirrored else (1., 4.)
     capacity = (2.5, 1.25) if mirrored else (1.25, 2.5)
-    resistance, generation = 0.35, 12.
+    resistance = 0.35
     faces = np.linspace(0., 1., n+1)
     mid = n // 2
     nodes = np.insert(faces, mid, faces[mid])
@@ -54,6 +58,17 @@ def measure(n, mirrored, omega, storing=False, heated=False):
     jump = t[mid]-t[mid+1]
     actual = np.r_[outward, jump]
     exact = strip.harmonic_reference(start, end, conductivity, capacity, generation, resistance, omega, trace_capacity, trace_power)
+    if balanced:
+        # Each source-free half rod presents admittance k*z*coth(z*L)
+        # to its interface trace, with the outer wall held at zero phasor.
+        k = np.asarray(conductivity)
+        z = np.sqrt(1j*omega*np.asarray(capacity)/k)
+        diagonal = k*z/np.tanh(z/2) + 1j*omega*trace_capacity
+        contact_matrix = np.array([[1., -1.], [-1., 1.]])/resistance
+        traces = np.linalg.solve(np.diag(diagonal) + contact_matrix, trace_power)
+        reference = np.r_[k*z*traces/np.sinh(z/2), traces[0]-traces[1]]
+        np.testing.assert_allclose(exact, reference, rtol=1e-11, atol=1e-13)
+        exact = reference
     element_load = np.column_stack((power*(1-right_fraction), power*right_fraction))
     local = thermal.thermal_element_nodal_power(
         model, state.temperature, omega, element_nodal_heat=torch.from_numpy(element_load)).numpy()
@@ -62,7 +77,7 @@ def measure(n, mirrored, omega, storing=False, heated=False):
     storage = 1j*omega*np.sum(np.diff(faces)*np.repeat(capacity, mid)*t[elements].mean(axis=1))
     return {
         "cells": n, "omega_rad_s": omega, "strip_bounds_m": [start, end],
-        "trace_capacity_J_K": trace_capacity.tolist(),
+        "trace_capacity_J_K": trace_capacity.tolist(), "strip_generation_W_m3": generation,
         "trace_power_real_W": trace_power.real.tolist(), "trace_power_imag_W": trace_power.imag.tolist(),
         "fem_trace_storage_amplitude_W": abs(trace_storage).tolist(),
         "fem_max_trace_balance_error_W": max(abs(trace_net+trace_power-trace_storage)),
@@ -79,14 +94,16 @@ def measure(n, mirrored, omega, storing=False, heated=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--storing", action="store_true", help="put unequal heat capacities on the two contact traces")
-    parser.add_argument("--heated", action="store_true", help="apply independent phased heat loads at the two contact traces")
+    heating = parser.add_mutually_exclusive_group()
+    heating.add_argument("--balanced", action="store_true", help="drive only the two contact traces with opposite powers")
+    heating.add_argument("--heated", action="store_true", help="apply independent phased heat loads at the two contact traces")
     args = parser.parse_args()
     runs = []
     for omega in (2., 20.):
         for mirrored in (False, True):
             previous = None
             for n in (16, 32, 64, 128, 256):
-                row = measure(n, mirrored, omega, args.storing, args.heated)
+                row = measure(n, mirrored, omega, args.storing, args.heated, args.balanced)
                 fvm = row["fvm"]
                 passed = max(row["fem_energy_residual_W"], fvm["max_cell_balance_error_W"]) < 1e-9
                 passed &= max(row["fem_max_trace_balance_error_W"], fvm["max_trace_balance_error_W"]) < 1e-9
@@ -110,7 +127,8 @@ def main():
         "passed": passed, "runs": runs,
         "sources": [provenance(path) for path in (__file__, strip.__file__, thermal.__file__, rod.__file__)],
         "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/fem_fvm_contact_strip.py"
-                        + (" --storing" if args.storing else "") + (" --heated" if args.heated else ""),
+                        + (" --storing" if args.storing else "") + (" --heated" if args.heated else "")
+                        + (" --balanced" if args.balanced else ""),
     }, indent=2, allow_nan=False))
     return 0 if passed else 1
 

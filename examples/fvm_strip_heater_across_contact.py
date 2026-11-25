@@ -36,8 +36,8 @@ def harmonic_reference(start, end, conductivities, capacities, generation, resis
                      resistance*(left_store @ at_contact @ initial)[1]])
 
 
-def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0., 0.)):
-    interface, resistance, generation = 0.5, 0.35, 12.
+def measure(cells, mirrored, omega=0., trace_capacity=(0., 0.), trace_power=(0., 0.), generation=12.):
+    interface, resistance = 0.5, 0.35
     start, end = (3/8, 5/6) if mirrored else (1/6, 5/8)
     k_left, k_right = (4., 1.) if mirrored else (1., 4.)
     faces = np.linspace(0., 1., cells+1)
