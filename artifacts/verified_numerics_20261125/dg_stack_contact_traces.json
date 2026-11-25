@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "75cf9cc8f7b848638a3e9f43ad0ad1c63ea73821",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q tests/test_heat_1d.py tests/test_advection_diffusion_1d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Three source-free layers with (L,k,C)=(0.5,1.4,2.1),(0.2,2.6,1.2),(0.3,1.8,1.4); interface R=0.23 then 0 m\u00b2 K/W, omega=2.7 rad/s. Propagate the known left state T=1.2+0.4i and rightward flux 0.8-0.15i using exact per-layer hyperbolic functions and interface jumps. Feed only the two exterior temperatures to the DG composition; compare all six temperature traces and all six inward fluxes. Check each contact jump and flux balance to 1e-12 absolute. SIPG degree 2, 4/8/16 cells per layer, CPU complex128.",
+  "suite": {
+    "tests": 121,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_harmonic_stack_internal_states_against_propagated_traces": {
+      "max_trace_error_4_K": 2.3385660971754456e-06,
+      "max_flux_error_4_W_per_m2": 5.945336108916198e-06,
+      "max_trace_error_8_K": 1.4677964490607125e-07,
+      "max_flux_error_8_W_per_m2": 3.7098375360831647e-07,
+      "max_trace_error_16_K": 9.192706772405328e-09,
+      "max_flux_error_16_W_per_m2": 2.3192556741406842e-08
+    }
+  }
+}
