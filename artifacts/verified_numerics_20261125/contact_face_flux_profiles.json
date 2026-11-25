@@ -1,0 +1,3082 @@
+[
+  {
+    "passed": true,
+    "runs": [
+      {
+        "sph_face_flux_error_W_m2": 0.0010524226959747684,
+        "fvm_face_flux_error_W_m2": 0.0007909775806020126,
+        "fem_face_flux_error_W_m2": 0.00038076944610087747,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00026162090205785,
+        "fvm_face_flux_error_W_m2": 0.00019791908624326517,
+        "fem_face_flux_error_W_m2": 9.516805014625184e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.00816455244868,
+        "fvm_face_flux_error_W_m2_order": 1.9987260588786022,
+        "fem_face_flux_error_W_m2_order": 2.000368500002247
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.520084770483197e-05,
+        "fvm_face_flux_error_W_m2": 4.9490702699662864e-05,
+        "fem_face_flux_error_W_m2": 2.3790494144272614e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.004515181964015,
+        "fvm_face_flux_error_W_m2_order": 1.9996813130383142,
+        "fem_face_flux_error_W_m2_order": 2.0000920748897424
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0011707708262310135,
+        "fvm_face_flux_error_W_m2": 0.0008773648070823697,
+        "fem_face_flux_error_W_m2": 0.0004090586940739935,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002896581055418217,
+        "fvm_face_flux_error_W_m2": 0.0002195418629510057,
+        "fem_face_flux_error_W_m2": 0.00010224113629693184,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0150357597970743,
+        "fvm_face_flux_error_W_m2_order": 1.9986807742958292,
+        "fem_face_flux_error_W_m2_order": 2.0003320886874647
+      },
+      {
+        "sph_face_flux_error_W_m2": 7.199250303678932e-05,
+        "fvm_face_flux_error_W_m2": 5.489802249343583e-05,
+        "fem_face_flux_error_W_m2": 2.5558814039245745e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.00843245274214,
+        "fvm_face_flux_error_W_m2_order": 1.9996699764322228,
+        "fem_face_flux_error_W_m2_order": 2.0000829753366096
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.005472898383832075,
+        "fvm_face_flux_error_W_m2": 0.004178644440604149,
+        "fem_face_flux_error_W_m2": 0.0020210696588829832,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0013692269485891166,
+        "fvm_face_flux_error_W_m2": 0.0010470086632754757,
+        "fem_face_flux_error_W_m2": 0.0005037366698616299,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9989434777484074,
+        "fvm_face_flux_error_W_m2_order": 1.996761625839868,
+        "fem_face_flux_error_W_m2_order": 2.0043773850772326
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.000342158474427159,
+        "fvm_face_flux_error_W_m2": 0.00026189593045560736,
+        "fem_face_flux_error_W_m2": 0.00012583850728212573,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0006250073511245,
+        "fvm_face_flux_error_W_m2_order": 1.9992078323776425,
+        "fem_face_flux_error_W_m2_order": 2.0010962943362336
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.005275575565019209,
+        "fvm_face_flux_error_W_m2": 0.004058283958658492,
+        "fem_face_flux_error_W_m2": 0.0018037983818013964,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00131330084981544,
+        "fvm_face_flux_error_W_m2": 0.0010165051110652317,
+        "fem_face_flux_error_W_m2": 0.00044964966302391235,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.00613105494527,
+        "fvm_face_flux_error_W_m2_order": 1.997252345005124,
+        "fem_face_flux_error_W_m2_order": 2.0041647988267592
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00032715962195210564,
+        "fvm_face_flux_error_W_m2": 0.0002542443215111264,
+        "fem_face_flux_error_W_m2": 0.00011233127127317273,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.005130838490056,
+        "fvm_face_flux_error_W_m2_order": 1.999330011890694,
+        "fem_face_flux_error_W_m2_order": 2.0010417800791043
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0010873828515085135,
+        "fvm_face_flux_error_W_m2": 0.000829276616225542,
+        "fem_face_flux_error_W_m2": 0.0003796343683788939,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00027058806348317764,
+        "fvm_face_flux_error_W_m2": 0.00020750606009851144,
+        "fem_face_flux_error_W_m2": 9.488962228467306e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0066898776369593,
+        "fvm_face_flux_error_W_m2_order": 1.9986999419074192,
+        "fem_face_flux_error_W_m2_order": 2.0002883868119303
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.747116256609411e-05,
+        "fvm_face_flux_error_W_m2": 5.188821106922308e-05,
+        "fem_face_flux_error_W_m2": 2.3721220829095063e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0037552731511696,
+        "fvm_face_flux_error_W_m2_order": 1.9996747675970012,
+        "fem_face_flux_error_W_m2_order": 2.0000720527347413
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0011333537877408944,
+        "fvm_face_flux_error_W_m2": 0.0008478495919995899,
+        "fem_face_flux_error_W_m2": 0.0003956083478414601,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002801966201660279,
+        "fvm_face_flux_error_W_m2": 0.00021215408960023266,
+        "fem_face_flux_error_W_m2": 9.887947899261808e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.016086824504774,
+        "fvm_face_flux_error_W_m2_order": 1.9986958651780773,
+        "fem_face_flux_error_W_m2_order": 2.000329822478025
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.960234894283283e-05,
+        "fvm_face_flux_error_W_m2": 5.305051778810483e-05,
+        "fem_face_flux_error_W_m2": 2.4718457781235333e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.009231653421483,
+        "fvm_face_flux_error_W_m2_order": 1.9996737516544307,
+        "fem_face_flux_error_W_m2_order": 2.000082407224296
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00344230249678106,
+        "fvm_face_flux_error_W_m2": 0.002796207034089526,
+        "fem_face_flux_error_W_m2": 0.001008836379753472,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0008609754064587273,
+        "fvm_face_flux_error_W_m2": 0.0006999864699020523,
+        "fem_face_flux_error_W_m2": 0.00025185559290462253,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9993299485300984,
+        "fvm_face_flux_error_W_m2_order": 1.998072241851066,
+        "fem_face_flux_error_W_m2_order": 2.002023532800208
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00021520923301496735,
+        "fvm_face_flux_error_W_m2": 0.00017505368210405666,
+        "fem_face_flux_error_W_m2": 6.294189593091166e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.000232053545539,
+        "fvm_face_flux_error_W_m2_order": 1.9995296284137556,
+        "fem_face_flux_error_W_m2_order": 2.000504227827993
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0019441688236943586,
+        "fvm_face_flux_error_W_m2": 0.0014238990292700668,
+        "fem_face_flux_error_W_m2": 0.0007727730198895231,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0004827785155451899,
+        "fvm_face_flux_error_W_m2": 0.0003560165694402622,
+        "fem_face_flux_error_W_m2": 0.00019303896567089094,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.009720121857225,
+        "fvm_face_flux_error_W_m2_order": 1.9998305537162144,
+        "fem_face_flux_error_W_m2_order": 2.001152635176792
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00012045344803995233,
+        "fvm_face_flux_error_W_m2": 8.900696419301255e-05,
+        "fem_face_flux_error_W_m2": 4.825012922836595e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.002885783137313,
+        "fvm_face_flux_error_W_m2_order": 1.99995426078206,
+        "fem_face_flux_error_W_m2_order": 2.0002873790601963
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0010259016038598472,
+        "fvm_face_flux_error_W_m2": 0.0007856750315430614,
+        "fem_face_flux_error_W_m2": 0.0003665593059098056,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002565259123995488,
+        "fvm_face_flux_error_W_m2": 0.00019662779595355537,
+        "fem_face_flux_error_W_m2": 9.16166165757277e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9997158970375948,
+        "fvm_face_flux_error_W_m2_order": 1.9984654326097198,
+        "fem_face_flux_error_W_m2_order": 2.0003654421065633
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.411635452529941e-05,
+        "fvm_face_flux_error_W_m2": 4.917003280845642e-05,
+        "fem_face_flux_error_W_m2": 2.290270474991373e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0003402584778676,
+        "fvm_face_flux_error_W_m2_order": 1.9996160573203035,
+        "fem_face_flux_error_W_m2_order": 2.0000912978367666
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0008037935073730827,
+        "fvm_face_flux_error_W_m2": 0.0005995609206906296,
+        "fem_face_flux_error_W_m2": 0.00027966813706975806,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00019884052820772562,
+        "fvm_face_flux_error_W_m2": 0.00015003356665773673,
+        "fem_face_flux_error_W_m2": 6.990284488940491e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.015213083272141,
+        "fvm_face_flux_error_W_m2_order": 1.9986210440509804,
+        "fem_face_flux_error_W_m2_order": 2.0002928188111384
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.934812664293095e-05,
+        "fvm_face_flux_error_W_m2": 3.7517362079247505e-05,
+        "fem_face_flux_error_W_m2": 1.7474825178011403e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.010544617686768,
+        "fvm_face_flux_error_W_m2_order": 1.9996550098497703,
+        "fem_face_flux_error_W_m2_order": 2.00007314862128
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.003938822035519322,
+        "fvm_face_flux_error_W_m2": 0.0031951778666729916,
+        "fem_face_flux_error_W_m2": 0.0011673891490903386,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0009845105895903673,
+        "fvm_face_flux_error_W_m2": 0.0007991710693105085,
+        "fem_face_flux_error_W_m2": 0.0002913868054960255,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.000285605113038,
+        "fvm_face_flux_error_W_m2_order": 1.9993199818616845,
+        "fem_face_flux_error_W_m2_order": 2.0022781072702664
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002460590362903532,
+        "fvm_face_flux_error_W_m2": 0.00019981479196672767,
+        "fem_face_flux_error_W_m2": 7.281802140968622e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0004022250421833,
+        "fvm_face_flux_error_W_m2_order": 1.9998409697869781,
+        "fem_face_flux_error_W_m2_order": 2.00056810519447
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.002079507235561628,
+        "fvm_face_flux_error_W_m2": 0.0016279209389326629,
+        "fem_face_flux_error_W_m2": 0.0006720430440000976,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005122471692398038,
+        "fvm_face_flux_error_W_m2": 0.0004073056395835586,
+        "fem_face_flux_error_W_m2": 0.0001678432456905864,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.021329692985768,
+        "fvm_face_flux_error_W_m2_order": 1.9988469406046685,
+        "fem_face_flux_error_W_m2_order": 2.001439158214138
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00012682747990844223,
+        "fvm_face_flux_error_W_m2": 0.00010184618433832507,
+        "fem_face_flux_error_W_m2": 4.193792345593211e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.013972736355828,
+        "fvm_face_flux_error_W_m2_order": 1.999719859314064,
+        "fem_face_flux_error_W_m2_order": 2.0007871479097266
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0010524226959749826,
+        "fvm_face_flux_error_W_m2": 0.0007909775806020126,
+        "fem_face_flux_error_W_m2": 0.00038076944610087747,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002616209020578568,
+        "fvm_face_flux_error_W_m2": 0.00019791908624326517,
+        "fem_face_flux_error_W_m2": 9.516805014625184e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.008164552448936,
+        "fvm_face_flux_error_W_m2_order": 1.9987260588786022,
+        "fem_face_flux_error_W_m2_order": 2.000368500002247
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.520084770493301e-05,
+        "fvm_face_flux_error_W_m2": 4.9490702699662864e-05,
+        "fem_face_flux_error_W_m2": 2.3790494144272614e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0045151819618168,
+        "fvm_face_flux_error_W_m2_order": 1.9996813130383142,
+        "fem_face_flux_error_W_m2_order": 2.0000920748897424
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0011707708262315016,
+        "fvm_face_flux_error_W_m2": 0.0008773648070823697,
+        "fem_face_flux_error_W_m2": 0.0004090586940739935,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00028965810554181133,
+        "fvm_face_flux_error_W_m2": 0.0002195418629510057,
+        "fem_face_flux_error_W_m2": 0.00010224113629693184,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0150357597977275,
+        "fvm_face_flux_error_W_m2_order": 1.9986807742958292,
+        "fem_face_flux_error_W_m2_order": 2.0003320886874647
+      },
+      {
+        "sph_face_flux_error_W_m2": 7.199250303686718e-05,
+        "fvm_face_flux_error_W_m2": 5.489802249343583e-05,
+        "fem_face_flux_error_W_m2": 2.5558814039245745e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0084324527405286,
+        "fvm_face_flux_error_W_m2_order": 1.9996699764322228,
+        "fem_face_flux_error_W_m2_order": 2.0000829753366096
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.005472898383832128,
+        "fvm_face_flux_error_W_m2": 0.004178644440604149,
+        "fem_face_flux_error_W_m2": 0.0020210696588829832,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0013692269485888972,
+        "fvm_face_flux_error_W_m2": 0.0010470086632754757,
+        "fem_face_flux_error_W_m2": 0.0005037366698616299,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9989434777486528,
+        "fvm_face_flux_error_W_m2_order": 1.996761625839868,
+        "fem_face_flux_error_W_m2_order": 2.0043773850772326
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0003421584744272511,
+        "fvm_face_flux_error_W_m2": 0.00026189593045560736,
+        "fem_face_flux_error_W_m2": 0.00012583850728212573,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.000625007350505,
+        "fvm_face_flux_error_W_m2_order": 1.9992078323776425,
+        "fem_face_flux_error_W_m2_order": 2.0010962943362336
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.005275575565019278,
+        "fvm_face_flux_error_W_m2": 0.004058283958658492,
+        "fem_face_flux_error_W_m2": 0.0018037983818013964,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0013133008498154375,
+        "fvm_face_flux_error_W_m2": 0.0010165051110652317,
+        "fem_face_flux_error_W_m2": 0.00044964966302391235,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0061310549452918,
+        "fvm_face_flux_error_W_m2_order": 1.997252345005124,
+        "fem_face_flux_error_W_m2_order": 2.0041647988267592
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00032715962195197917,
+        "fvm_face_flux_error_W_m2": 0.0002542443215111264,
+        "fem_face_flux_error_W_m2": 0.00011233127127317273,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "zero_temperature_phasor",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.005130838490611,
+        "fvm_face_flux_error_W_m2_order": 1.999330011890694,
+        "fem_face_flux_error_W_m2_order": 2.0010417800791043
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0010873828515085473,
+        "fvm_face_flux_error_W_m2": 0.000829276616225542,
+        "fem_face_flux_error_W_m2": 0.0003796343683788939,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00027058806348317764,
+        "fvm_face_flux_error_W_m2": 0.00020750606009851144,
+        "fem_face_flux_error_W_m2": 9.488962228467306e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.006689877637004,
+        "fvm_face_flux_error_W_m2_order": 1.9986999419074192,
+        "fem_face_flux_error_W_m2_order": 2.0002883868119303
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.747116256634063e-05,
+        "fvm_face_flux_error_W_m2": 5.188821106922308e-05,
+        "fem_face_flux_error_W_m2": 2.3721220829095063e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0037552731458987,
+        "fvm_face_flux_error_W_m2_order": 1.9996747675970012,
+        "fem_face_flux_error_W_m2_order": 2.0000720527347413
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0011333537877412266,
+        "fvm_face_flux_error_W_m2": 0.0008478495919995899,
+        "fem_face_flux_error_W_m2": 0.0003956083478414601,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002801966201734126,
+        "fvm_face_flux_error_W_m2": 0.00021215408960023266,
+        "fem_face_flux_error_W_m2": 9.887947899261808e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0160868244671737,
+        "fvm_face_flux_error_W_m2_order": 1.9986958651780773,
+        "fem_face_flux_error_W_m2_order": 2.000329822478025
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.960234894294287e-05,
+        "fvm_face_flux_error_W_m2": 5.305051778810483e-05,
+        "fem_face_flux_error_W_m2": 2.4718457781235333e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.009231653457225,
+        "fvm_face_flux_error_W_m2_order": 1.9996737516544307,
+        "fem_face_flux_error_W_m2_order": 2.000082407224296
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0034423024967810668,
+        "fvm_face_flux_error_W_m2": 0.002796207034089526,
+        "fem_face_flux_error_W_m2": 0.001008836379753472,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0008609754064580805,
+        "fvm_face_flux_error_W_m2": 0.0006999864699020523,
+        "fem_face_flux_error_W_m2": 0.00025185559290462253,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.999329948531185,
+        "fvm_face_flux_error_W_m2_order": 1.998072241851066,
+        "fem_face_flux_error_W_m2_order": 2.002023532800208
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00021520923301605532,
+        "fvm_face_flux_error_W_m2": 0.00017505368210405666,
+        "fem_face_flux_error_W_m2": 6.294189593091166e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.000232053537162,
+        "fvm_face_flux_error_W_m2_order": 1.9995296284137556,
+        "fem_face_flux_error_W_m2_order": 2.000504227827993
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0019441688236944484,
+        "fvm_face_flux_error_W_m2": 0.0014238990292700668,
+        "fem_face_flux_error_W_m2": 0.0007727730198895231,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00048277851554576597,
+        "fvm_face_flux_error_W_m2": 0.0003560165694402622,
+        "fem_face_flux_error_W_m2": 0.00019303896567089094,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0097201218555703,
+        "fvm_face_flux_error_W_m2_order": 1.9998305537162144,
+        "fem_face_flux_error_W_m2_order": 2.001152635176792
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00012045344803988318,
+        "fvm_face_flux_error_W_m2": 8.900696419301255e-05,
+        "fem_face_flux_error_W_m2": 4.825012922836595e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "zero_temperature_phasor"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0028857831398628,
+        "fvm_face_flux_error_W_m2_order": 1.99995426078206,
+        "fem_face_flux_error_W_m2_order": 2.0002873790601963
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0010259016038598472,
+        "fvm_face_flux_error_W_m2": 0.0007856750315430614,
+        "fem_face_flux_error_W_m2": 0.0003665593059098056,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002565259123981525,
+        "fvm_face_flux_error_W_m2": 0.00019662779595355537,
+        "fem_face_flux_error_W_m2": 9.16166165757277e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9997158970454474,
+        "fvm_face_flux_error_W_m2_order": 1.9984654326097198,
+        "fem_face_flux_error_W_m2_order": 2.0003654421065633
+      },
+      {
+        "sph_face_flux_error_W_m2": 6.411635452514116e-05,
+        "fvm_face_flux_error_W_m2": 4.917003280845642e-05,
+        "fem_face_flux_error_W_m2": 2.290270474991373e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0003402584735763,
+        "fvm_face_flux_error_W_m2_order": 1.9996160573203035,
+        "fem_face_flux_error_W_m2_order": 2.0000912978367666
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0008037935073731479,
+        "fvm_face_flux_error_W_m2": 0.0005995609206906296,
+        "fem_face_flux_error_W_m2": 0.00027966813706975806,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00019884052821328752,
+        "fvm_face_flux_error_W_m2": 0.00015003356665773673,
+        "fem_face_flux_error_W_m2": 6.990284488940491e-05,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0152130832319033,
+        "fvm_face_flux_error_W_m2_order": 1.9986210440509804,
+        "fem_face_flux_error_W_m2_order": 2.0002928188111384
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.934812664296353e-05,
+        "fvm_face_flux_error_W_m2": 3.7517362079247505e-05,
+        "fem_face_flux_error_W_m2": 1.7474825178011403e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.01054461772617,
+        "fvm_face_flux_error_W_m2_order": 1.9996550098497703,
+        "fem_face_flux_error_W_m2_order": 2.00007314862128
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.003938822035520226,
+        "fvm_face_flux_error_W_m2": 0.0031951778666729916,
+        "fem_face_flux_error_W_m2": 0.0011673891490903386,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0009845105895903746,
+        "fvm_face_flux_error_W_m2": 0.0007991710693105085,
+        "fem_face_flux_error_W_m2": 0.0002913868054960255,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.000285605113359,
+        "fvm_face_flux_error_W_m2_order": 1.9993199818616845,
+        "fem_face_flux_error_W_m2_order": 2.0022781072702664
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002460590363033689,
+        "fvm_face_flux_error_W_m2": 0.00019981479196672767,
+        "fem_face_flux_error_W_m2": 7.281802140968622e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0004022249658804,
+        "fvm_face_flux_error_W_m2_order": 1.9998409697869781,
+        "fem_face_flux_error_W_m2_order": 2.00056810519447
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0020795072355618647,
+        "fvm_face_flux_error_W_m2": 0.0016279209389326629,
+        "fem_face_flux_error_W_m2": 0.0006720430440000976,
+        "columns": 16,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005122471692378312,
+        "fvm_face_flux_error_W_m2": 0.0004073056395835586,
+        "fem_face_flux_error_W_m2": 0.0001678432456905864,
+        "columns": 32,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.021329692991488,
+        "fvm_face_flux_error_W_m2_order": 1.9988469406046685,
+        "fem_face_flux_error_W_m2_order": 2.001439158214138
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00012682747990576553,
+        "fvm_face_flux_error_W_m2": 0.00010184618433832507,
+        "fem_face_flux_error_W_m2": 4.193792345593211e-05,
+        "columns": 64,
+        "left_thickness_m": 0.5,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0139727363807207,
+        "fvm_face_flux_error_W_m2_order": 1.999719859314064,
+        "fem_face_flux_error_W_m2_order": 2.0007871479097266
+      }
+    ],
+    "sources": [
+      {
+        "commit": "911a7b452c8db96cb94577d71001a54a2c19d44a",
+        "file": "sph_ambient_driven_contact.py",
+        "source_sha256": "d3a1314a46a447c9c6f12583e778478097a072410db4a4a6a59e8b313097234b"
+      },
+      {
+        "commit": "4d1bd5933ee17b4c5bcb32ae6e9765acd827d463",
+        "file": "heat_conduction_2d.py",
+        "source_sha256": "3126a6f83b0d3757b39315a6ca1816fe2ca3429b8246a6fb3b657eae01d2bcdc"
+      },
+      {
+        "commit": "b1cf09bbf4c86fca7237be79758f2989160e2db1",
+        "file": "rod.py",
+        "source_sha256": "52b03d7134d7117d4b73bcb7697c27295b2112835f81a82942a43e7bdb952403"
+      },
+      {
+        "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+        "file": "thermal.py",
+        "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+      }
+    ],
+    "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src:../TensorFEM/src python examples/sph_ambient_driven_contact.py --compare-fvm --compare-fem --left-thickness 0.5"
+  },
+  {
+    "passed": true,
+    "runs": [
+      {
+        "sph_face_flux_error_W_m2": 0.0007046365036853989,
+        "fvm_face_flux_error_W_m2": 0.0005805908447152984,
+        "fem_face_flux_error_W_m2": 0.0002021908528518538,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00017605017811543288,
+        "fvm_face_flux_error_W_m2": 0.0001452993985510309,
+        "fem_face_flux_error_W_m2": 5.0541458218494374e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0008925287465353,
+        "fvm_face_flux_error_W_m2_order": 1.9984930912912364,
+        "fem_face_flux_error_W_m2_order": 2.0001785364225477
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.39865439356906e-05,
+        "fvm_face_flux_error_W_m2": 3.6334343990644815e-05,
+        "fem_face_flux_error_W_m2": 1.2634974576565531e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0008525299197792,
+        "fvm_face_flux_error_W_m2_order": 1.9996229670267285,
+        "fem_face_flux_error_W_m2_order": 2.0000445280459074
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005777353938910604,
+        "fvm_face_flux_error_W_m2": 0.00047112142024694626,
+        "fem_face_flux_error_W_m2": 0.00016147114548926606,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00014396707300720691,
+        "fvm_face_flux_error_W_m2": 0.00011786588474971672,
+        "fem_face_flux_error_W_m2": 4.0370771537929195e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0046699936596855,
+        "fvm_face_flux_error_W_m2_order": 1.998952724539844,
+        "fem_face_flux_error_W_m2_order": 1.9998933177966247
+      },
+      {
+        "sph_face_flux_error_W_m2": 3.592160885907793e-05,
+        "fvm_face_flux_error_W_m2": 2.9471822393751266e-05,
+        "fem_face_flux_error_W_m2": 1.0092879699491497e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0028150156239257,
+        "fvm_face_flux_error_W_m2_order": 1.9997380257087278,
+        "fem_face_flux_error_W_m2_order": 1.9999732960671568
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.005690976187421385,
+        "fvm_face_flux_error_W_m2": 0.004509931805855431,
+        "fem_face_flux_error_W_m2": 0.002129251289815298,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.001427528579849899,
+        "fvm_face_flux_error_W_m2": 0.0011300999695802807,
+        "fem_face_flux_error_W_m2": 0.0005323802147214787,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9951565134907492,
+        "fvm_face_flux_error_W_m2_order": 1.9966552185397466,
+        "fem_face_flux_error_W_m2_order": 1.999817362400102
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0003572764032874642,
+        "fvm_face_flux_error_W_m2": 0.0002826864418058705,
+        "fem_face_flux_error_W_m2": 0.00013309888900846296,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9984070915639973,
+        "fvm_face_flux_error_W_m2_order": 1.999175804817253,
+        "fem_face_flux_error_W_m2_order": 1.9999584272371878
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.006473097502875989,
+        "fvm_face_flux_error_W_m2": 0.004706566921162412,
+        "fem_face_flux_error_W_m2": 0.0023418310718852516,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0015950725590611384,
+        "fvm_face_flux_error_W_m2": 0.0011789303168774701,
+        "fem_face_flux_error_W_m2": 0.0005850230317984466,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0208341820762876,
+        "fvm_face_flux_error_W_m2_order": 1.9971966609449612,
+        "fem_face_flux_error_W_m2_order": 2.0010716822516916
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0003948333419738895,
+        "fvm_face_flux_error_W_m2": 0.0002948733339269125,
+        "fem_face_flux_error_W_m2": 0.00014622826506411596,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0143063235371237,
+        "fvm_face_flux_error_W_m2_order": 1.9993111801700532,
+        "fem_face_flux_error_W_m2_order": 2.0002712206244464
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0007624903718443898,
+        "fvm_face_flux_error_W_m2": 0.0005995422658671565,
+        "fem_face_flux_error_W_m2": 0.00024307123736861535,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00019017480252927054,
+        "fvm_face_flux_error_W_m2": 0.00015003473678933625,
+        "fem_face_flux_error_W_m2": 6.076105846187092e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.003393013401778,
+        "fvm_face_flux_error_W_m2_order": 1.9985649034093682,
+        "fem_face_flux_error_W_m2_order": 2.0001602822718882
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.7473826508462654e-05,
+        "fvm_face_flux_error_W_m2": 3.751802069772275e-05,
+        "fem_face_flux_error_W_m2": 1.5189843282554044e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0021218626326567,
+        "fvm_face_flux_error_W_m2_order": 1.9996409352403686,
+        "fem_face_flux_error_W_m2_order": 2.000040016638994
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005178452424306214,
+        "fvm_face_flux_error_W_m2": 0.00039184261157498195,
+        "fem_face_flux_error_W_m2": 0.00016298314901735128,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00012747821741982427,
+        "fvm_face_flux_error_W_m2": 9.805015690604855e-05,
+        "fem_face_flux_error_W_m2": 4.0741151383980745e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0222702636778287,
+        "fvm_face_flux_error_W_m2_order": 1.9986824501791927,
+        "fem_face_flux_error_W_m2_order": 2.0001641526186487
+      },
+      {
+        "sph_face_flux_error_W_m2": 3.154022591137754e-05,
+        "fvm_face_flux_error_W_m2": 2.451814084614657e-05,
+        "fem_face_flux_error_W_m2": 1.0184998557840496e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0149858517856734,
+        "fvm_face_flux_error_W_m2_order": 1.9996703521594754,
+        "fem_face_flux_error_W_m2_order": 2.000040976801005
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.004746212965626134,
+        "fvm_face_flux_error_W_m2": 0.0036031969505312083,
+        "fem_face_flux_error_W_m2": 0.0018527259196852387,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0011893556275213595,
+        "fvm_face_flux_error_W_m2": 0.000903040339134315,
+        "fem_face_flux_error_W_m2": 0.00046190514059485957,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9965966788724188,
+        "fvm_face_flux_error_W_m2_order": 1.9964151715844585,
+        "fem_face_flux_error_W_m2_order": 2.003980966850699
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.000297497965049525,
+        "fvm_face_flux_error_W_m2": 0.00022589850070916698,
+        "fem_face_flux_error_W_m2": 0.00011539630437809414,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9992284525449104,
+        "fvm_face_flux_error_W_m2_order": 1.999115739268147,
+        "fem_face_flux_error_W_m2_order": 2.000999580469847
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.005888894809244227,
+        "fvm_face_flux_error_W_m2": 0.0043672794365090415,
+        "fem_face_flux_error_W_m2": 0.0020237227354965386,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0014525327414504404,
+        "fvm_face_flux_error_W_m2": 0.001093849512587991,
+        "fem_face_flux_error_W_m2": 0.0005055632862272919,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.019426219828272,
+        "fvm_face_flux_error_W_m2_order": 1.9973205720296958,
+        "fem_face_flux_error_W_m2_order": 2.001048039438912
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00035983308260850364,
+        "fvm_face_flux_error_W_m2": 0.0002735870880854455,
+        "fem_face_flux_error_W_m2": 0.0001263675780190327,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.013170946298543,
+        "fvm_face_flux_error_W_m2_order": 1.999342222508308,
+        "fem_face_flux_error_W_m2_order": 2.0002653390498875
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0007866959987295834,
+        "fvm_face_flux_error_W_m2": 0.000599781882569273,
+        "fem_face_flux_error_W_m2": 0.0002863638373302989,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00019679667168422439,
+        "fvm_face_flux_error_W_m2": 0.00015011260260350045,
+        "fem_face_flux_error_W_m2": 7.156900107617527e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9991004244671486,
+        "fvm_face_flux_error_W_m2_order": 1.9983928412663654,
+        "fem_face_flux_error_W_m2_order": 2.0004425688268146
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.9198623428452754e-05,
+        "fvm_face_flux_error_W_m2": 3.753861216546349e-05,
+        "fem_face_flux_error_W_m2": 1.7890879200152856e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0000159665530677,
+        "fvm_face_flux_error_W_m2_order": 1.9995978839436177,
+        "fem_face_flux_error_W_m2_order": 2.000110556808195
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0007313835711860334,
+        "fvm_face_flux_error_W_m2": 0.0005623244841174077,
+        "fem_face_flux_error_W_m2": 0.00023958661414503742,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00018151654291323547,
+        "fvm_face_flux_error_W_m2": 0.00014068209996354479,
+        "fem_face_flux_error_W_m2": 5.9894644120204154e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0105271828586573,
+        "fvm_face_flux_error_W_m2_order": 1.9989640891308915,
+        "fem_face_flux_error_W_m2_order": 2.000048400420313
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.51680372751896e-05,
+        "fvm_face_flux_error_W_m2": 3.5176842793910503e-05,
+        "fem_face_flux_error_W_m2": 1.4973535719247914e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.00672690782329,
+        "fvm_face_flux_error_W_m2_order": 1.9997408669747283,
+        "fem_face_flux_error_W_m2_order": 2.0000120736024645
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.004671118464196185,
+        "fvm_face_flux_error_W_m2": 0.003916094506840598,
+        "fem_face_flux_error_W_m2": 0.0012379681822031296,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.001170192918427755,
+        "fvm_face_flux_error_W_m2": 0.0009803893635285587,
+        "fem_face_flux_error_W_m2": 0.0003087886336872472,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.997021641136385,
+        "fvm_face_flux_error_W_m2_order": 1.9979888445529592,
+        "fem_face_flux_error_W_m2_order": 2.003282681407128
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0002927595315589939,
+        "fvm_face_flux_error_W_m2": 0.0002451806335774267,
+        "fem_face_flux_error_W_m2": 7.715307585899038e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.998958345295145,
+        "fvm_face_flux_error_W_m2_order": 1.9995098047807618,
+        "fem_face_flux_error_W_m2_order": 2.000824069970449
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0022666867244334186,
+        "fvm_face_flux_error_W_m2": 0.0017646063721048202,
+        "fem_face_flux_error_W_m2": 0.0010249908591380696,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005541786355711818,
+        "fvm_face_flux_error_W_m2": 0.00044183028842381537,
+        "fem_face_flux_error_W_m2": 0.0002557403542596534,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0321620130978952,
+        "fvm_face_flux_error_W_m2_order": 1.9977821726633198,
+        "fem_face_flux_error_W_m2_order": 2.0028593117575144
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00013632647411576722,
+        "fvm_face_flux_error_W_m2": 0.00011049930025756484,
+        "fem_face_flux_error_W_m2": 6.39032322466826e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "torch",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0232853382152016,
+        "fvm_face_flux_error_W_m2_order": 1.9994550882489746,
+        "fem_face_flux_error_W_m2_order": 2.0007190168486573
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0007046365036849026,
+        "fvm_face_flux_error_W_m2": 0.0005805908447152984,
+        "fem_face_flux_error_W_m2": 0.0002021908528518538,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00017605017811513334,
+        "fvm_face_flux_error_W_m2": 0.0001452993985510309,
+        "fem_face_flux_error_W_m2": 5.0541458218494374e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.000892528747974,
+        "fvm_face_flux_error_W_m2_order": 1.9984930912912364,
+        "fem_face_flux_error_W_m2_order": 2.0001785364225477
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.398654393567952e-05,
+        "fvm_face_flux_error_W_m2": 3.6334343990644815e-05,
+        "fem_face_flux_error_W_m2": 1.2634974576565531e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0008525299176876,
+        "fvm_face_flux_error_W_m2_order": 1.9996229670267285,
+        "fem_face_flux_error_W_m2_order": 2.0000445280459074
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005777353938910903,
+        "fvm_face_flux_error_W_m2": 0.00047112142024694626,
+        "fem_face_flux_error_W_m2": 0.00016147114548926606,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00014396707300701463,
+        "fvm_face_flux_error_W_m2": 0.00011786588474971672,
+        "fem_face_flux_error_W_m2": 4.0370771537929195e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.004669993661687,
+        "fvm_face_flux_error_W_m2_order": 1.998952724539844,
+        "fem_face_flux_error_W_m2_order": 1.9998933177966247
+      },
+      {
+        "sph_face_flux_error_W_m2": 3.592160885902252e-05,
+        "fvm_face_flux_error_W_m2": 2.9471822393751266e-05,
+        "fem_face_flux_error_W_m2": 1.0092879699491497e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.002815015624224,
+        "fvm_face_flux_error_W_m2_order": 1.9997380257087278,
+        "fem_face_flux_error_W_m2_order": 1.9999732960671568
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0056909761874211085,
+        "fvm_face_flux_error_W_m2": 0.004509931805855431,
+        "fem_face_flux_error_W_m2": 0.002129251289815298,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0014275285798433467,
+        "fvm_face_flux_error_W_m2": 0.0011300999695802807,
+        "fem_face_flux_error_W_m2": 0.0005323802147214787,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9951565134973008,
+        "fvm_face_flux_error_W_m2_order": 1.9966552185397466,
+        "fem_face_flux_error_W_m2_order": 1.999817362400102
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00035727640329288657,
+        "fvm_face_flux_error_W_m2": 0.0002826864418058705,
+        "fem_face_flux_error_W_m2": 0.00013309888900846296,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9984070915354797,
+        "fvm_face_flux_error_W_m2_order": 1.999175804817253,
+        "fem_face_flux_error_W_m2_order": 1.9999584272371878
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.006473097502873742,
+        "fvm_face_flux_error_W_m2": 0.004706566921162412,
+        "fem_face_flux_error_W_m2": 0.0023418310718852516,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0015950725590619277,
+        "fvm_face_flux_error_W_m2": 0.0011789303168774701,
+        "fem_face_flux_error_W_m2": 0.0005850230317984466,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.020834182075073,
+        "fvm_face_flux_error_W_m2_order": 1.9971966609449612,
+        "fem_face_flux_error_W_m2_order": 2.0010716822516916
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0003948333419768899,
+        "fvm_face_flux_error_W_m2": 0.0002948733339269125,
+        "fem_face_flux_error_W_m2": 0.00014622826506411596,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0143063235268746,
+        "fvm_face_flux_error_W_m2_order": 1.9993111801700532,
+        "fem_face_flux_error_W_m2_order": 2.0002712206244464
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0007624903718440931,
+        "fvm_face_flux_error_W_m2": 0.0005995422658671565,
+        "fem_face_flux_error_W_m2": 0.00024307123736861535,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0001901748025287597,
+        "fvm_face_flux_error_W_m2": 0.00015003473678933625,
+        "fem_face_flux_error_W_m2": 6.076105846187092e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.003393013405092,
+        "fvm_face_flux_error_W_m2_order": 1.9985649034093682,
+        "fem_face_flux_error_W_m2_order": 2.0001602822718882
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.7473826507466746e-05,
+        "fvm_face_flux_error_W_m2": 3.751802069772275e-05,
+        "fem_face_flux_error_W_m2": 1.5189843282554044e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.002121862659046,
+        "fvm_face_flux_error_W_m2_order": 1.9996409352403686,
+        "fem_face_flux_error_W_m2_order": 2.000040016638994
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005178452424307486,
+        "fvm_face_flux_error_W_m2": 0.00039184261157498195,
+        "fem_face_flux_error_W_m2": 0.00016298314901735128,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00012747821741974843,
+        "fvm_face_flux_error_W_m2": 9.805015690604855e-05,
+        "fem_face_flux_error_W_m2": 4.0741151383980745e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.022270263679041,
+        "fvm_face_flux_error_W_m2_order": 1.9986824501791927,
+        "fem_face_flux_error_W_m2_order": 2.0001641526186487
+      },
+      {
+        "sph_face_flux_error_W_m2": 3.154022591115338e-05,
+        "fvm_face_flux_error_W_m2": 2.451814084614657e-05,
+        "fem_face_flux_error_W_m2": 1.0184998557840496e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0149858517950685,
+        "fvm_face_flux_error_W_m2_order": 1.9996703521594754,
+        "fem_face_flux_error_W_m2_order": 2.000040976801005
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.004746212965625832,
+        "fvm_face_flux_error_W_m2": 0.0036031969505312083,
+        "fem_face_flux_error_W_m2": 0.0018527259196852387,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0011893556275166886,
+        "fvm_face_flux_error_W_m2": 0.000903040339134315,
+        "fem_face_flux_error_W_m2": 0.00046190514059485957,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9965966788779927,
+        "fvm_face_flux_error_W_m2_order": 1.9964151715844585,
+        "fem_face_flux_error_W_m2_order": 2.003980966850699
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00029749796505376815,
+        "fvm_face_flux_error_W_m2": 0.00022589850070916698,
+        "fem_face_flux_error_W_m2": 0.00011539630437809414,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9992284525186677,
+        "fvm_face_flux_error_W_m2_order": 1.999115739268147,
+        "fem_face_flux_error_W_m2_order": 2.000999580469847
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.005888894809242474,
+        "fvm_face_flux_error_W_m2": 0.0043672794365090415,
+        "fem_face_flux_error_W_m2": 0.0020237227354965386,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0014525327414505144,
+        "fvm_face_flux_error_W_m2": 0.001093849512587991,
+        "fem_face_flux_error_W_m2": 0.0005055632862272919,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0194262198277695,
+        "fvm_face_flux_error_W_m2_order": 1.9973205720296958,
+        "fem_face_flux_error_W_m2_order": 2.001048039438912
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00035983308261168284,
+        "fvm_face_flux_error_W_m2": 0.0002735870880854455,
+        "fem_face_flux_error_W_m2": 0.0001263675780190327,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          3.0,
+          0.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "film",
+          "insulated"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.01317094628587,
+        "fvm_face_flux_error_W_m2_order": 1.999342222508308,
+        "fem_face_flux_error_W_m2_order": 2.0002653390498875
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0007866959987284922,
+        "fvm_face_flux_error_W_m2": 0.000599781882569273,
+        "fem_face_flux_error_W_m2": 0.0002863638373302989,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00019679667168447101,
+        "fvm_face_flux_error_W_m2": 0.00015011260260350045,
+        "fem_face_flux_error_W_m2": 7.156900107617527e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9991004244633392,
+        "fvm_face_flux_error_W_m2_order": 1.9983928412663654,
+        "fem_face_flux_error_W_m2_order": 2.0004425688268146
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.91986234328338e-05,
+        "fvm_face_flux_error_W_m2": 3.753861216546349e-05,
+        "fem_face_flux_error_W_m2": 1.7890879200152856e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.000015966426406,
+        "fvm_face_flux_error_W_m2_order": 1.9995978839436177,
+        "fem_face_flux_error_W_m2_order": 2.000110556808195
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0007313835711859363,
+        "fvm_face_flux_error_W_m2": 0.0005623244841174077,
+        "fem_face_flux_error_W_m2": 0.00023958661414503742,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00018151654291284747,
+        "fvm_face_flux_error_W_m2": 0.00014068209996354479,
+        "fem_face_flux_error_W_m2": 5.9894644120204154e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0105271828615496,
+        "fvm_face_flux_error_W_m2_order": 1.9989640891308915,
+        "fem_face_flux_error_W_m2_order": 2.000048400420313
+      },
+      {
+        "sph_face_flux_error_W_m2": 4.5168037275263746e-05,
+        "fvm_face_flux_error_W_m2": 3.5176842793910503e-05,
+        "fem_face_flux_error_W_m2": 1.4973535719247914e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 0.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.006726907817838,
+        "fvm_face_flux_error_W_m2_order": 1.9997408669747283,
+        "fem_face_flux_error_W_m2_order": 2.0000120736024645
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0046711184641961764,
+        "fvm_face_flux_error_W_m2": 0.003916094506840598,
+        "fem_face_flux_error_W_m2": 0.0012379681822031296,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0011701929184233845,
+        "fvm_face_flux_error_W_m2": 0.0009803893635285587,
+        "fem_face_flux_error_W_m2": 0.0003087886336872472,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9970216411417705,
+        "fvm_face_flux_error_W_m2_order": 1.9979888445529592,
+        "fem_face_flux_error_W_m2_order": 2.003282681407128
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00029275953156290385,
+        "fvm_face_flux_error_W_m2": 0.0002451806335774267,
+        "fem_face_flux_error_W_m2": 7.715307585899038e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.0,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 1.9989583452704884,
+        "fvm_face_flux_error_W_m2_order": 1.9995098047807618,
+        "fem_face_flux_error_W_m2_order": 2.000824069970449
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0022666867244328964,
+        "fvm_face_flux_error_W_m2": 0.0017646063721048202,
+        "fem_face_flux_error_W_m2": 0.0010249908591380696,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 16,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.0005541786355720902,
+        "fvm_face_flux_error_W_m2": 0.00044183028842381537,
+        "fem_face_flux_error_W_m2": 0.0002557403542596534,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 32,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.0321620130951983,
+        "fvm_face_flux_error_W_m2_order": 1.9977821726633198,
+        "fem_face_flux_error_W_m2_order": 2.0028593117575144
+      },
+      {
+        "sph_face_flux_error_W_m2": 0.00013632647411681916,
+        "fvm_face_flux_error_W_m2": 0.00011049930025756484,
+        "fem_face_flux_error_W_m2": 6.39032322466826e-05,
+        "wall_areal_heat_capacity_J_m2_K": [
+          0.35,
+          0.8
+        ],
+        "wall_film_W_m2_K": [
+          0.0,
+          7.0
+        ],
+        "columns": 64,
+        "left_thickness_m": 0.25,
+        "omega_rad_s": 12.0,
+        "contact_resistance_m2_K_W": 0.25,
+        "backend": "banded",
+        "wall_conditions": [
+          "insulated",
+          "film"
+        ],
+        "passed": true,
+        "sph_face_flux_error_W_m2_order": 2.023285338206434,
+        "fvm_face_flux_error_W_m2_order": 1.9994550882489746,
+        "fem_face_flux_error_W_m2_order": 2.0007190168486573
+      }
+    ],
+    "sources": [
+      {
+        "commit": "911a7b452c8db96cb94577d71001a54a2c19d44a",
+        "file": "sph_ambient_driven_contact.py",
+        "source_sha256": "d3a1314a46a447c9c6f12583e778478097a072410db4a4a6a59e8b313097234b"
+      },
+      {
+        "commit": "4d1bd5933ee17b4c5bcb32ae6e9765acd827d463",
+        "file": "heat_conduction_2d.py",
+        "source_sha256": "3126a6f83b0d3757b39315a6ca1816fe2ca3429b8246a6fb3b657eae01d2bcdc"
+      },
+      {
+        "commit": "b1cf09bbf4c86fca7237be79758f2989160e2db1",
+        "file": "rod.py",
+        "source_sha256": "52b03d7134d7117d4b73bcb7697c27295b2112835f81a82942a43e7bdb952403"
+      },
+      {
+        "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+        "file": "thermal.py",
+        "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+      }
+    ],
+    "reproduction": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src:../TensorFEM/src python examples/sph_ambient_driven_contact.py --compare-fvm --compare-fem --left-thickness 0.25 --wall-storage"
+  }
+]
