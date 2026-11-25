@@ -11,7 +11,7 @@ import fvm_strip_heater_across_contact as strip
 
 
 def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0, h_factor=0.9,
-            homogeneous=False, contact_resistance=0.35):
+            homogeneous=False, contact_resistance=0.35, varying_property=None):
     mid = n // 2
     bounds = (5/8, 5/6) if mirrored else (1/6, 3/8)
     conductivities = (4., 1.) if mirrored else (1., 4.)
@@ -19,8 +19,9 @@ def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0
     if swap_materials:
         conductivities = conductivities[::-1]
         capacities = capacities[::-1]
-    if homogeneous:
+    if homogeneous or varying_property == "capacity":
         conductivities = (1., 1.)
+    if homogeneous or varying_property == "conductivity":
         capacities = (1.25, 1.25)
     faces = np.linspace(0., 1., n+1)
     dx = 1/n
@@ -56,6 +57,7 @@ def measure(n, omega, mirrored, backend, swap_materials=False, transverse_mode=0
         "wall_and_contact_phases_rad": np.angle(actual).tolist(),
         "contact_amplitude_W_m2": abs(actual[2]),
         "far_wall_relative_phasor_error": abs(ratio[far_wall]-1),
+        "wall_and_contact_relative_errors": abs(ratio-1).tolist(),
         "max_relative_phasor_error": max(abs(ratio-1)),
         "max_phase_error_rad": max(abs(np.angle(ratio))),
     }
@@ -70,10 +72,12 @@ def main():
     parser.add_argument("--transverse-mode", type=int, choices=(0, 1, 2), default=0,
                         help="number of sinusoidal heat-source periods across the one-metre slab width")
     parser.add_argument("--axial-stencil", action="store_true", help="restrict the kernel support to axial neighbours")
-    parser.add_argument("--homogeneous", action="store_true", help="use identical bulk properties on both sides")
+    materials = parser.add_mutually_exclusive_group()
+    materials.add_argument("--vary-only", choices=("capacity", "conductivity"), help="vary just one bulk material property across the interface")
+    materials.add_argument("--homogeneous", action="store_true", help="use identical bulk properties on both sides")
     parser.add_argument("--perfect-contact", action="store_true", help="set contact resistance to zero")
     args = parser.parse_args()
-    material_options = dict(homogeneous=args.homogeneous, contact_resistance=0. if args.perfect_contact else 0.35)
+    material_options = dict(homogeneous=args.homogeneous, varying_property=args.vary_only, contact_resistance=0. if args.perfect_contact else 0.35)
     h_factor = 0.7 if args.axial_stencil else 0.9
     swap_materials, transverse_mode = args.swap_materials, args.transverse_mode
     oblique_mode = transverse_mode != 0 and not args.axial_stencil
@@ -125,7 +129,8 @@ def main():
         "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/sph_detached_strip_transmission.py"
                         + (" --swap-materials" if swap_materials else "") + (" --axial-stencil" if args.axial_stencil else "")
                         + (f" --transverse-mode {transverse_mode}" if transverse_mode else "")
-                        + (" --homogeneous" if args.homogeneous else "") + (" --perfect-contact" if args.perfect_contact else ""),
+                        + (" --homogeneous" if args.homogeneous else "") + (" --perfect-contact" if args.perfect_contact else "")
+                        + (f" --vary-only {args.vary_only}" if args.vary_only else ""),
     }, indent=2, allow_nan=False))
     return 0 if passed else 1
 
