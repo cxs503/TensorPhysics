@@ -1,0 +1,30 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "f3ca5aaddd17d9ed603b7e861c337103b962cd5a",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src:. python -m pytest -q tests/test_conduction_2d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit square periodic in y, k=C=1. T=1-x+sin(pi*x)*cos(2*pi*y)*exp(-5*pi\u00b2*t); Dirichlet walls 1 and 0. Compare rowwise cumulative inward Fourier heat on both walls at every output through 0.025 s, for square grids of 12,24,48 with the same number of time steps as rows. Check intervalwise means against conservative section heat. CPU float64.",
+  "suite": {
+    "tests": 148,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_transient_rowwise_wall_heat_against_slab_mode[theta]": {
+      "max_row_heat_error_12_J_per_m2": 0.0011762199519277372,
+      "max_interval_mean_error_12_J_per_m2": 4.336808689942018e-19,
+      "max_row_heat_error_24_J_per_m2": 0.00027248435549961925,
+      "max_interval_mean_error_24_J_per_m2": 4.336808689942018e-19,
+      "max_row_heat_error_48_J_per_m2": 6.668749435917443e-05,
+      "max_interval_mean_error_48_J_per_m2": 2.168404344971009e-19
+    },
+    "test_transient_rowwise_wall_heat_against_slab_mode[sdirk2]": {
+      "max_row_heat_error_12_J_per_m2": 0.0011665994985995964,
+      "max_interval_mean_error_12_J_per_m2": 4.336808689942018e-19,
+      "max_row_heat_error_24_J_per_m2": 0.0002699468853556014,
+      "max_interval_mean_error_24_J_per_m2": 4.336808689942018e-19,
+      "max_row_heat_error_48_J_per_m2": 6.604360351973593e-05,
+      "max_interval_mean_error_48_J_per_m2": 2.168404344971009e-19
+    }
+  }
+}
