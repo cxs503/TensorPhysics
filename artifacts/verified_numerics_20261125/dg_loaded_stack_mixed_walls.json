@@ -1,0 +1,22 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "4fddbb0d8b426614838967f837cf6282832194dc",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q tests/test_heat_1d.py tests/test_advection_diffusion_1d.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Two uniform layers with (L,k,C,S)=(0.6,1.5,1.2,0.5-0.2i),(0.35,0.9,1.9,-0.3i); R=0.18, omega=2.7. From a known inlet state propagate [T,q,1] independently by matrix exponentials and the contact drop. Generate all nine combinations of Dirichlet, inward Neumann and Robin data with h=(1.8,3.5). Compare recovered wall temperatures and inward fluxes against both exact states. CPU complex128, degree 2 SIPG, 4/8/16 cells per layer.",
+  "suite": {
+    "tests": 132,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_loaded_stack_mixed_wall_conditions_against_transfer_solution": {
+      "max_wall_temperature_error_4_K": 3.1490523372962937e-06,
+      "max_wall_flux_error_4_W_per_m2": 6.677347088386904e-06,
+      "max_wall_temperature_error_8_K": 1.974477409316373e-07,
+      "max_wall_flux_error_8_W_per_m2": 4.195476017078347e-07,
+      "max_wall_temperature_error_16_K": 1.2360863658765591e-08,
+      "max_wall_flux_error_16_W_per_m2": 2.6282409545663473e-08
+    }
+  }
+}
