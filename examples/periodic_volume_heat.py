@@ -52,7 +52,7 @@ def measure(n):
     end_heat = np.zeros((len(dt), 2))
     cut = 3*n//8
     exact_cut_heat = np.zeros_like(dt)
-    element_end_load = np.zeros_like(time)
+    local_load = np.zeros((len(time), n, 2))
     modes = []
     for m, strength in ((1, 1.), (2, .7+.3j)):
         b, w = m*np.pi, m*omega
@@ -60,10 +60,9 @@ def measure(n):
         forcing = strength*phase
         gain = strength/(k*b*b+1j*w*capacity)
         # Source integrations against a LINE2 hat and over an FVM cell.
-        hat = h*np.sinc(m*h/2)**2*np.sin(b*edges)
-        hat[[0,-1]] = (1-np.sinc(m*h))/b*np.array([1, (-1)**(m+1)])
         avg = np.sinc(m*h/2)*np.sin(b*centers)
-        load += forcing.real[:, None]*hat
+        right_hat = -np.cos(b*edges[1:])/b + np.diff(np.sin(b*edges))/(h*b*b)
+        local_load += forcing.real[:, None, None]*np.stack((h*avg-right_hat, right_hat), axis=1)
         source += forcing.real[:, None]*avg
         exact += (gain*phase).real[:, None]*avg
         node_initial += gain.real*np.sin(b*edges)
@@ -71,10 +70,9 @@ def measure(n):
         end_heat += (np.diff(phase)*gain/(1j*w)).real[:, None]*k*b*np.array([-1, (-1)**m])
         xc = edges[cut]
         exact_cut_heat -= (np.diff(phase)*gain/(1j*w)).real*k*b*np.cos(b*xc)
-        # Source integral against the right hat of the single element left of the cut.
-        end_hat = -np.cos(b*xc)/b + (np.sin(b*xc)-np.sin(b*(xc-h)))/(h*b*b)
-        element_end_load += forcing.real*end_hat
         modes.append((w, strength, avg))
+    load[:, :-1] += local_load[:, :, 0]
+    load[:, 1:] += local_load[:, :, 1]
     nodes = torch.from_numpy(edges[:, None])
     ids = torch.arange(n)
     fixed = torch.tensor([0,n])
@@ -85,12 +83,10 @@ def measure(n):
     fem_cells = .5*(fem.temperature[:, :-1]+fem.temperature[:, 1:]).numpy()
     fem_heat = fem.nodal_reaction_heat_steps()[:, fixed].numpy()
 
-    # The right nodal reaction of the adjacent left element is inward. Its
-    # consistent capacity, stiffness and local load give outward section heat.
-    pair = fem.temperature[:, cut-1:cut+1].numpy()
-    element_storage = capacity*h/6*np.diff(pair[:, 0]+2*pair[:, 1])
-    conduction = k/h*(pair[:, 1]-pair[:, 0])
-    fem_cut = -element_storage+.5*dt*((element_end_load-conduction)[1:]+(element_end_load-conduction)[:-1])
+    element_heat = thermal.thermal_element_nodal_heat_steps(model, fem,
+                         element_nodal_heat_history=torch.from_numpy(local_load)).numpy()
+    fem_cut = -element_heat[:, cut-1, 1]
+    np.testing.assert_allclose(element_heat[:, :-1, 1], -element_heat[:, 1:, 0], rtol=0, atol=1e-13)
 
     def heating(t):
         return sum((amp*np.exp(1j*w*t)).real*avg for w, amp, avg in modes)
