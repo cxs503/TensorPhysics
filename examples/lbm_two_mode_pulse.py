@@ -11,11 +11,15 @@ from conduction_provenance import provenance
 from tensorlbm import thermal_common as lbm
 
 
-def lattice_decay_rates(n, tau, dt):
-    """Fourier symbol for x-dependent D3Q7 BGK diffusion on the odd slab extension."""
+def lattice_decay_rates(n, tau, dt, tau_even=None):
+    """Fourier symbol for x-dependent D3Q7 thermal diffusion on the odd slab extension."""
     # Combine the five populations stationary along x into one component.
     weights = np.array([.75, .125, .125])
-    collision = (1-1/tau)*np.eye(3) + np.outer(weights, np.ones(3))/tau
+    eye = np.eye(3)
+    reverse = eye[[0, 2, 1]]
+    even_time = tau if tau_even is None else tau_even
+    relaxation = (eye+reverse)/(2*even_time) + (eye-reverse)/(2*tau)
+    collision = eye + relaxation @ (np.outer(weights, np.ones(3))-eye)
     speeds = np.array([0, 1, -1])
     rates = []
     for k in (1, 2):
@@ -28,7 +32,7 @@ def lattice_decay_rates(n, tau, dt):
     return np.asarray(rates)
 
 
-def measure(n, width, tau=1.):
+def measure(n, width, tau=1., tau_even=None):
     rate = math.pi**2
     start, stop = 1.2/(16*rate), (1.2+width)/(16*rate)
     dx = 1/n
@@ -49,10 +53,12 @@ def measure(n, width, tau=1.):
     max_projection_residual = 0.
     deposited = max_balance = max_temp = 0.
     peak = -math.expm1(-rate*(stop-start))
+    collide = lbm.thermal_collide_bgk_3d if tau_even is None else lbm.thermal_collide_trt_3d
+    options = {} if tau_even is None else {"tau_even": tau_even}
     for step in range(steps):
         t = step*dt
         early, late = lbm.thermal_pulse_increments_3d(source, time=t, dt=dt, start=start, stop=stop)
-        post = lbm.thermal_collide_bgk_3d(g, field, zero, zero, zero, tau) + early
+        post = collide(g, field, zero, zero, zero, tau, **options) + early
         streamed, inward = lbm.thermal_temperature_wall_pair_3d(
             lbm.thermal_stream_3d(post), "x", (0., 0.), dt=dt, spacing=dx, volumetric_heat_capacity=1.)
         g = streamed + late
@@ -105,7 +111,7 @@ def measure(n, width, tau=1.):
     # Freeze each measured amplitude pair and continue it with the exact
     # source-free decay rates. The first endpoint already includes the
     # fraction of one lattice step between the switch and this endpoint.
-    discrete_rates = lattice_decay_rates(n, tau, dt)
+    discrete_rates = lattice_decay_rates(n, tau, dt, tau_even)
     # Measure attenuation over the final quarter of the run, well past both switches.
     fit_start = 3*steps//4
     measured_rates = np.log(coefficients[fit_start]/coefficients[-1])/((steps-fit_start)*dt)
@@ -158,12 +164,15 @@ def measure(n, width, tau=1.):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--tau", type=float, choices=(.75, 1., 1.5), default=1.)
-    tau = parser.parse_args().tau
+    parser.add_argument("--tau-even", type=float, help=(
+        "enable TRT; at tau=1.5 choose 35/36 (0.9722222222222222) to cancel the leading axial decay-rate error"))
+    args = parser.parse_args()
+    tau = args.tau
     runs = []
     for width in (.05, .5):
         previous = None
         for n in (16, 32, 64):
-            row = measure(n, width, tau)
+            row = measure(n, width, tau, args.tau_even)
             row["orders"] = {} if previous is None else {
                 k: math.log2(previous[k]/row[k]) for k in ("max_temperature_error_over_peak", "reversal_error_over_interval",
                                                               "max_cumulative_wall_heat_error_over_peak")}
@@ -173,12 +182,21 @@ if __name__ == "__main__":
                                  and all(c["analytic_midpoint_root_bracketed"] for c in row["free_decay_controls"])
                                  and (n < 64 or (min(row["orders"].values()) > 1.7 and
                                       abs(row["free_decay_controls"][-1]["remaining_shift_over_interval"]) < 1e-6)))
+            if tau == 1.5 and args.tau_even == 35/36 and previous is not None:
+                # For this odd relaxation time det(exp(-q²/4) I - S(q) C)*tau_even
+                # has q^4 coefficient 35/288 - tau_even/8. Its zero leaves a
+                # fourth-order physical rate error as dt scales with dx².
+                row["modal_rate_orders"] = [
+                    math.log2(abs(old/new)) for old, new in
+                    zip(previous["relative_decay_rate_errors"], row["relative_decay_rate_errors"])]
+                row["passed"] &= min(row["modal_rate_orders"]) > 3.8
             runs.append(row)
             previous = row
     passed = all(r["passed"] for r in runs)
-    print(json.dumps(dict(passed=passed, runs=runs, diffusivity=1., relaxation_time=tau,
+    print(json.dumps(dict(passed=passed, runs=runs, diffusivity=1., relaxation_time=tau, even_relaxation_time=args.tau_even,
                           timing_shifts="Signed in output intervals: analytic root to sampled analytic root, then to the temperature-mode root, then to the D3Q7 wall-exchange root.",
                           sources=[provenance(f) for f in (__file__, pulse.__file__, lbm.__file__)],
-                          reproduction=f"OMP_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_two_mode_pulse.py --tau {tau:g}"),
+                          reproduction=f"OMP_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_two_mode_pulse.py --tau {tau:g}"
+                                       + ("" if args.tau_even is None else f" --tau-even {args.tau_even!r}")),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
