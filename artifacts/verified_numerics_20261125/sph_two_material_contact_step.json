@@ -1,0 +1,163 @@
+{
+  "reference": "Two finite layers, matched diffusion times, perfect contact; half-slab Fourier series for flux and stored heat",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_two_material_contact_step.py",
+  "runs": [
+    {
+      "cells": 48,
+      "west_temperature": 1.0,
+      "east_temperature": 0.0,
+      "exact_interface_temperature": 0.4,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": 0.02264510878882475,
+      "reference_first_interface_heat_J_m2": 0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 0.005900877069619597,
+      "max_left_storage_error_J_m2": 0.005900877069619521,
+      "max_right_storage_error_J_m2": 0.005900877069619559,
+      "max_layer_balance_error_J_m2": 3.8663516832571077e-14,
+      "interface_left_right_orders": [],
+      "passed": true
+    },
+    {
+      "cells": 96,
+      "west_temperature": 1.0,
+      "east_temperature": 0.0,
+      "exact_interface_temperature": 0.4,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": 0.02720313393582696,
+      "reference_first_interface_heat_J_m2": 0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 0.0013428519226173878,
+      "max_left_storage_error_J_m2": 0.001342851922617301,
+      "max_right_storage_error_J_m2": 0.0013428519226173462,
+      "max_layer_balance_error_J_m2": 1.5881740367262864e-13,
+      "interface_left_right_orders": [
+        2.135629177247569,
+        2.1356291772476435,
+        2.1356291772476044
+      ],
+      "passed": true
+    },
+    {
+      "cells": 192,
+      "west_temperature": 1.0,
+      "east_temperature": 0.0,
+      "exact_interface_temperature": 0.4,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": 0.028235373183472676,
+      "reference_first_interface_heat_J_m2": 0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 0.0003106126749716706,
+      "max_left_storage_error_J_m2": 0.0003106126749715492,
+      "max_right_storage_error_J_m2": 0.00031061267497165673,
+      "max_layer_balance_error_J_m2": 6.412648190234904e-13,
+      "interface_left_right_orders": [
+        2.112111619203144,
+        2.1121116192036147,
+        2.1121116192031635
+      ],
+      "passed": true
+    },
+    {
+      "cells": 384,
+      "west_temperature": 1.0,
+      "east_temperature": 0.0,
+      "exact_interface_temperature": 0.4,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": 0.028469421192357878,
+      "reference_first_interface_heat_J_m2": 0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 7.656466608646842e-05,
+      "max_left_storage_error_J_m2": 7.656466608664883e-05,
+      "max_right_storage_error_J_m2": 7.656466608654475e-05,
+      "max_layer_balance_error_J_m2": 2.3947510641164627e-12,
+      "interface_left_right_orders": [
+        2.020366042161951,
+        2.020366042157987,
+        2.020366042160448
+      ],
+      "passed": true
+    },
+    {
+      "cells": 48,
+      "west_temperature": 0.0,
+      "east_temperature": 1.0,
+      "exact_interface_temperature": 0.6,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": -0.02264510878882475,
+      "reference_first_interface_heat_J_m2": -0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 0.005900877069619597,
+      "max_left_storage_error_J_m2": 0.005900877069619531,
+      "max_right_storage_error_J_m2": 0.005900877069620388,
+      "max_layer_balance_error_J_m2": 1.79134485023269e-13,
+      "interface_left_right_orders": [],
+      "passed": true
+    },
+    {
+      "cells": 96,
+      "west_temperature": 0.0,
+      "east_temperature": 1.0,
+      "exact_interface_temperature": 0.6,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": -0.027203133935826976,
+      "reference_first_interface_heat_J_m2": -0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 0.0013428519226173705,
+      "max_left_storage_error_J_m2": 0.0013428519226172664,
+      "max_right_storage_error_J_m2": 0.0013428519226204236,
+      "max_layer_balance_error_J_m2": 7.097378240672469e-13,
+      "interface_left_right_orders": [
+        2.1356291772475875,
+        2.1356291772476834,
+        2.135629177244501
+      ],
+      "passed": true
+    },
+    {
+      "cells": 192,
+      "west_temperature": 0.0,
+      "east_temperature": 1.0,
+      "exact_interface_temperature": 0.6,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": -0.028235373183472773,
+      "reference_first_interface_heat_J_m2": -0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 0.00031061267497157347,
+      "max_left_storage_error_J_m2": 0.0003106126749714312,
+      "max_right_storage_error_J_m2": 0.0003106126749841398,
+      "max_layer_balance_error_J_m2": 2.7340352204419105e-12,
+      "interface_left_right_orders": [
+        2.112111619203576,
+        2.112111619204125,
+        2.11211161914849
+      ],
+      "passed": true
+    },
+    {
+      "cells": 384,
+      "west_temperature": 0.0,
+      "east_temperature": 1.0,
+      "exact_interface_temperature": 0.6,
+      "first_interval_s": 0.0004444444444444444,
+      "first_interface_heat_J_m2": -0.028469421192358308,
+      "reference_first_interface_heat_J_m2": -0.028545985858444346,
+      "max_interval_interface_heat_error_J_m2": 7.656466608603821e-05,
+      "max_left_storage_error_J_m2": 7.656466608615964e-05,
+      "max_right_storage_error_J_m2": 7.656466613665744e-05,
+      "max_layer_balance_error_J_m2": 1.0733441913046704e-11,
+      "interface_left_right_orders": [
+        2.020366042169606,
+        2.0203660421666574,
+        2.020366041274163
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "sources": [
+    {
+      "commit": "4a293e8a79e9d9ff75b75d5ed8182bc9e3b8703a",
+      "file": "sph_two_material_contact_step.py",
+      "source_sha256": "772df6558a07984fb1117f9eb3d0b9c063dfbbb31cee926ea2226d3db214a6d6"
+    },
+    {
+      "commit": "6b8dc454005b84c400215bbf53c44f879a558a8f",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "cb8f74386b6ef0b6ceee5c6052e4f9f8282827b5f2a523c61f801bf1f9c6fdd6"
+    }
+  ]
+}
