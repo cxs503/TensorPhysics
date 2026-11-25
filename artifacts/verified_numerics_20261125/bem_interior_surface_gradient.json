@@ -1,0 +1,36 @@
+{
+  "repository": "cxs503/TensorBEM",
+  "commit": "1af2dd654bb1d629dd4b70ffa01f5df193fa872d",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_solver.py tests/test_linear_density_solver.py tests/test_interior_field_domain_guard.py tests/test_exterior_solver.py tests/test_kernels.py tests/test_kernels_batch.py tests/test_kernels_first_moment.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Polygonal ellipse meshes with 24/48/96 panels. Interior Dirichlet data u=x\u00b2-y\u00b2+xy at midpoints; compare normal, tangent and full vector at every midpoint to grad u=(2x+y,x-2y). Constant and linear density solves. Uniform potential offset leaves reconstructed gradients invariant.",
+  "suite": {
+    "tests": 137,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "measurements": {
+    "test_interior_surface_gradient_tracks_harmonic_quadratic[False]": {
+      "max_normal_error_24": 0.13594723679216375,
+      "max_tangential_error_24": 0.2641763276050918,
+      "max_gradient_error_24": 0.28049016468352944,
+      "max_normal_error_48": 0.035664613232762245,
+      "max_tangential_error_48": 0.07607754300131822,
+      "max_gradient_error_48": 0.07802580262968635,
+      "max_normal_error_96": 0.009013743342858496,
+      "max_tangential_error_96": 0.019141469566517934,
+      "max_gradient_error_96": 0.019812820902388305
+    },
+    "test_interior_surface_gradient_tracks_harmonic_quadratic[True]": {
+      "max_normal_error_24": 0.029077077079280304,
+      "max_tangential_error_24": 0.26417632760509197,
+      "max_gradient_error_24": 0.2652736998722534,
+      "max_normal_error_48": 0.015295481309577941,
+      "max_tangential_error_48": 0.07607754300131825,
+      "max_gradient_error_48": 0.07636481308240589,
+      "max_normal_error_96": 0.004863180172899727,
+      "max_tangential_error_96": 0.01914146956651792,
+      "max_gradient_error_96": 0.019263304651058195
+    }
+  }
+}
