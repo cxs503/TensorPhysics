@@ -1,0 +1,329 @@
+{
+  "passed": true,
+  "wall_penalty": 40.0,
+  "interior_penalty": 20.0,
+  "heat_scale": "pi * peak continuum center temperature * output interval duration",
+  "runs": [
+    {
+      "cells": 8,
+      "degree": 1,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 0.00464880269029908,
+      "max_cell_mean_error_over_peak": 0.004651596848486305,
+      "max_section_heat_error_over_scale": 0.011529343822177171,
+      "max_wall_heat_error_over_scale": 0.011529343822177171,
+      "max_interior_face_heat_error_over_scale": 0.01065172478058913,
+      "crossing_section_error_over_scale": 0.011529343822177171,
+      "max_cell_balance_error_over_scale": 6.255228150144873e-14,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "degree": 1,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 0.0011780796574825413,
+      "max_cell_mean_error_over_peak": 0.0011784691293943714,
+      "max_section_heat_error_over_scale": 0.002730834944597657,
+      "max_wall_heat_error_over_scale": 0.002730834944597657,
+      "max_interior_face_heat_error_over_scale": 0.0026783627168775375,
+      "crossing_section_error_over_scale": 0.0025009048504860652,
+      "max_cell_balance_error_over_scale": 1.3072662669805383e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 1.98042210239076,
+        "max_cell_mean_error_over_peak": 1.9808120976462218,
+        "max_section_heat_error_over_scale": 2.077896382799747,
+        "max_wall_heat_error_over_scale": 2.077896382799747,
+        "max_interior_face_heat_error_over_scale": 1.9916638019989896,
+        "crossing_section_error_over_scale": 2.2047883313381123
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "degree": 1,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 0.00029551718600907595,
+      "max_cell_mean_error_over_peak": 0.0002955867094849421,
+      "max_section_heat_error_over_scale": 0.0006836723862157746,
+      "max_wall_heat_error_over_scale": 0.0006836723862157746,
+      "max_interior_face_heat_error_over_scale": 0.0006803803168076803,
+      "crossing_section_error_over_scale": 0.000601750639779818,
+      "max_cell_balance_error_over_scale": 2.426493607458031e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 1.995123153387068,
+        "max_cell_mean_error_over_peak": 1.9952606590290183,
+        "max_section_heat_error_over_scale": 1.9979650576553896,
+        "max_wall_heat_error_over_scale": 1.9979650576553896,
+        "max_interior_face_heat_error_over_scale": 1.9769380406609471,
+        "crossing_section_error_over_scale": 2.0552124940536345
+      },
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "degree": 1,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 7.394157390515912e-05,
+      "max_cell_mean_error_over_peak": 7.395720374844338e-05,
+      "max_section_heat_error_over_scale": 0.00017097753957265926,
+      "max_wall_heat_error_over_scale": 0.00017097753957265926,
+      "max_interior_face_heat_error_over_scale": 0.00017077158963230452,
+      "crossing_section_error_over_scale": 0.00014897608475725557,
+      "max_cell_balance_error_over_scale": 5.750197622577548e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 1.9987843759087975,
+        "max_cell_mean_error_over_peak": 1.998818818843885,
+        "max_section_heat_error_over_scale": 1.999498337269512,
+        "max_wall_heat_error_over_scale": 1.999498337269512,
+        "max_interior_face_heat_error_over_scale": 1.9942734235187376,
+        "crossing_section_error_over_scale": 2.014085018213946
+      },
+      "passed": true
+    },
+    {
+      "cells": 8,
+      "degree": 1,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 0.00471545633002634,
+      "max_cell_mean_error_over_peak": 0.004716772964021524,
+      "max_section_heat_error_over_scale": 0.011343919110920772,
+      "max_wall_heat_error_over_scale": 0.011343919110920772,
+      "max_interior_face_heat_error_over_scale": 0.010480414685030342,
+      "crossing_section_error_over_scale": 0.008993395218509255,
+      "max_cell_balance_error_over_scale": 3.666643042010018e-14,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "degree": 1,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 0.001194899011147582,
+      "max_cell_mean_error_over_peak": 0.0011947678920288317,
+      "max_section_heat_error_over_scale": 0.0028521366801144087,
+      "max_wall_heat_error_over_scale": 0.0028521366801144087,
+      "max_interior_face_heat_error_over_scale": 0.002797333673538109,
+      "crossing_section_error_over_scale": 0.001858029905002498,
+      "max_cell_balance_error_over_scale": 1.137190740565426e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 1.9805087003241906,
+        "max_cell_mean_error_over_peak": 1.9810697876510832,
+        "max_section_heat_error_over_scale": 1.9918041250358407,
+        "max_wall_heat_error_over_scale": 1.9918041250358407,
+        "max_interior_face_heat_error_over_scale": 1.9055715442453574,
+        "crossing_section_error_over_scale": 2.2750921478387505
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "degree": 1,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 0.00029972341297432634,
+      "max_cell_mean_error_over_peak": 0.0002996614623993853,
+      "max_section_heat_error_over_scale": 0.00071399204908948,
+      "max_wall_heat_error_over_scale": 0.00071399204908948,
+      "max_interior_face_heat_error_over_scale": 0.0007105539821733233,
+      "crossing_section_error_over_scale": 0.00044049365433589653,
+      "max_cell_balance_error_over_scale": 2.355862437619963e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 1.9951850017436847,
+        "max_cell_mean_error_over_peak": 1.9953249077234785,
+        "max_section_heat_error_over_scale": 1.9980632064639945,
+        "max_wall_heat_error_over_scale": 1.9980632064639945,
+        "max_interior_face_heat_error_over_scale": 1.9770361895476924,
+        "crossing_section_error_over_scale": 2.076580580863013
+      },
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "degree": 1,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 7.49932137871061e-05,
+      "max_cell_mean_error_over_peak": 7.497589199097343e-05,
+      "max_section_heat_error_over_scale": 0.00017855706915683467,
+      "max_wall_heat_error_over_scale": 0.00017855706915683467,
+      "max_interior_face_heat_error_over_scale": 0.00017834198932423223,
+      "crossing_section_error_over_scale": 0.00010862845879278412,
+      "max_cell_balance_error_over_scale": 6.485042757091269e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 1.9987998290886808,
+        "max_cell_mean_error_over_peak": 1.9988348736214296,
+        "max_section_heat_error_over_scale": 1.9995227566862601,
+        "max_wall_heat_error_over_scale": 1.9995227566862601,
+        "max_interior_face_heat_error_over_scale": 1.9942978429807843,
+        "crossing_section_error_over_scale": 2.0197191221038953
+      },
+      "passed": true
+    },
+    {
+      "cells": 8,
+      "degree": 2,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 2.645808348952081e-05,
+      "max_cell_mean_error_over_peak": 2.821014495196397e-05,
+      "max_section_heat_error_over_scale": 0.00046317544235495065,
+      "max_wall_heat_error_over_scale": 0.00046317544235495065,
+      "max_interior_face_heat_error_over_scale": 0.0004279183112923372,
+      "crossing_section_error_over_scale": 0.00046317544235495065,
+      "max_cell_balance_error_over_scale": 1.897855870685316e-13,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "degree": 2,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 1.69488938281798e-06,
+      "max_cell_mean_error_over_peak": 1.8071348603592206e-06,
+      "max_section_heat_error_over_scale": 2.9100786426064704e-05,
+      "max_wall_heat_error_over_scale": 2.9100786426064704e-05,
+      "max_interior_face_heat_error_over_scale": 2.8541622990991595e-05,
+      "crossing_section_error_over_scale": 2.9100786426064704e-05,
+      "max_cell_balance_error_over_scale": 3.4163588998042546e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 3.964445538876834,
+        "max_cell_mean_error_over_peak": 3.964438000149611,
+        "max_section_heat_error_over_scale": 3.992428716923299,
+        "max_wall_heat_error_over_scale": 3.992428716923299,
+        "max_interior_face_heat_error_over_scale": 3.906196135777675,
+        "crossing_section_error_over_scale": 3.992428716923299
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "degree": 2,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 1.0658849617818507e-07,
+      "max_cell_mean_error_over_peak": 1.1364382753732594e-07,
+      "max_section_heat_error_over_scale": 1.8212280699970949e-06,
+      "max_wall_heat_error_over_scale": 1.8212280699970949e-06,
+      "max_interior_face_heat_error_over_scale": 1.8124583026828733e-06,
+      "crossing_section_error_over_scale": 1.8212280699970949e-06,
+      "max_cell_balance_error_over_scale": 7.236905971090384e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 3.9910674734971834,
+        "max_cell_mean_error_over_peak": 3.9911129409610204,
+        "max_section_heat_error_over_scale": 3.998074635824926,
+        "max_wall_heat_error_over_scale": 3.998074635824926,
+        "max_interior_face_heat_error_over_scale": 3.977047664505872,
+        "crossing_section_error_over_scale": 3.998074635824926
+      },
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "degree": 2,
+      "width_over_interval": 0.05,
+      "max_interval_mean_error_over_peak": 6.685828889161578e-09,
+      "max_cell_mean_error_over_peak": 7.109528223819993e-09,
+      "max_section_heat_error_over_scale": 1.1380251078075263e-07,
+      "max_wall_heat_error_over_scale": 1.1380251078075263e-07,
+      "max_interior_face_heat_error_over_scale": 1.1366537631143752e-07,
+      "crossing_section_error_over_scale": 1.1380251078075263e-07,
+      "max_cell_balance_error_over_scale": 1.6712812454562464e-12,
+      "orders": {
+        "max_interval_mean_error_over_peak": 3.994801497471341,
+        "max_cell_mean_error_over_peak": 3.9986216891337882,
+        "max_section_heat_error_over_scale": 4.000307307700883,
+        "max_wall_heat_error_over_scale": 4.000307307700883,
+        "max_interior_face_heat_error_over_scale": 3.9950830390143777,
+        "crossing_section_error_over_scale": 4.000307307700883
+      },
+      "passed": true
+    },
+    {
+      "cells": 8,
+      "degree": 2,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 2.763075000312478e-05,
+      "max_cell_mean_error_over_peak": 2.9445867078795838e-05,
+      "max_section_heat_error_over_scale": 0.0004834644611947854,
+      "max_wall_heat_error_over_scale": 0.0004834644611947854,
+      "max_interior_face_heat_error_over_scale": 0.0004466629204140755,
+      "crossing_section_error_over_scale": 0.0004834644611947854,
+      "max_cell_balance_error_over_scale": 1.833764352290276e-13,
+      "orders": {},
+      "passed": true
+    },
+    {
+      "cells": 16,
+      "degree": 2,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 1.7700142740697122e-06,
+      "max_cell_mean_error_over_peak": 1.8863070670438182e-06,
+      "max_section_heat_error_over_scale": 3.0375717743789393e-05,
+      "max_wall_heat_error_over_scale": 3.0375717743789393e-05,
+      "max_interior_face_heat_error_over_scale": 2.979205680999635e-05,
+      "crossing_section_error_over_scale": 3.0375717743789393e-05,
+      "max_cell_balance_error_over_scale": 4.268893589973016e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 3.9644418229747527,
+        "max_cell_mean_error_over_peak": 3.964428703688891,
+        "max_section_heat_error_over_scale": 3.9924194395958374,
+        "max_wall_heat_error_over_scale": 3.9924194395958374,
+        "max_interior_face_heat_error_over_scale": 3.9061868605471157,
+        "crossing_section_error_over_scale": 3.9924194395958374
+      },
+      "passed": true
+    },
+    {
+      "cells": 32,
+      "degree": 2,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 1.1131353459941907e-07,
+      "max_cell_mean_error_over_peak": 1.1862331415497069e-07,
+      "max_section_heat_error_over_scale": 1.901028021454067e-06,
+      "max_wall_heat_error_over_scale": 1.901028021454067e-06,
+      "max_interior_face_heat_error_over_scale": 1.8918739864491944e-06,
+      "crossing_section_error_over_scale": 1.901028021454067e-06,
+      "max_cell_balance_error_over_scale": 8.077021227625811e-13,
+      "orders": {
+        "max_interval_mean_error_over_peak": 3.991060069221746,
+        "max_cell_mean_error_over_peak": 3.9911050584394823,
+        "max_section_heat_error_over_scale": 3.9980667955609768,
+        "max_wall_heat_error_over_scale": 3.9980667955609768,
+        "max_interior_face_heat_error_over_scale": 3.977039826806515,
+        "crossing_section_error_over_scale": 3.9980667955609768
+      },
+      "passed": true
+    },
+    {
+      "cells": 64,
+      "degree": 2,
+      "width_over_interval": 0.5,
+      "max_interval_mean_error_over_peak": 6.984115231511842e-09,
+      "max_cell_mean_error_over_peak": 7.423368357540833e-09,
+      "max_section_heat_error_over_scale": 1.1882548055143855e-07,
+      "max_wall_heat_error_over_scale": 1.1882548055143855e-07,
+      "max_interior_face_heat_error_over_scale": 1.1868227723901139e-07,
+      "crossing_section_error_over_scale": 1.1882548055143855e-07,
+      "max_cell_balance_error_over_scale": 1.458819103054783e-12,
+      "orders": {
+        "max_interval_mean_error_over_peak": 3.994407847926158,
+        "max_cell_mean_error_over_peak": 3.998169814853784,
+        "max_section_heat_error_over_scale": 3.9998636564157843,
+        "max_wall_heat_error_over_scale": 3.9998636564157843,
+        "max_interior_face_heat_error_over_scale": 3.9946395778474066,
+        "crossing_section_error_over_scale": 3.9998636564157843
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "82b1437fdf72eed083f887b5d53d9615ab28cdc2",
+      "file": "dg_subinterval_heat_pulse.py",
+      "source_sha256": "55c19a716866f895052c316549b6369a3a44ad5f7b019c38e4b95cd208427d4d"
+    },
+    {
+      "commit": "427538a535bd750eadaea8a23d149244bebae2ee",
+      "file": "heat_1d.py",
+      "source_sha256": "40b60bc52d6424adcb28ed2773b85d5e813398e3528695f990c80b1c310ea460"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG python examples/dg_subinterval_heat_pulse.py --wall-penalty 40"
+}
