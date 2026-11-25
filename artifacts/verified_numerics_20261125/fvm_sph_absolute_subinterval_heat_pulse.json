@@ -1,0 +1,436 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "fvm": {
+        "crossing_field_error_over_peak": 0.00015515695030384277,
+        "decay_field_error_over_peak": 0.0012926810378452096,
+        "crossing_wall_heat_error_over_scale": 0.0024985346796839577,
+        "decay_wall_heat_error_over_scale": 0.0030261306522487833,
+        "source_heat_relative_error": 2.1799178112553949e-16,
+        "energy_residual_over_peak": 2.5192813200375864e-16
+      },
+      "sph": {
+        "columns": 16,
+        "method": "theta",
+        "transverse_mode": 0,
+        "width_over_interval": 0.05,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.007915717472057639,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 0.0002359580782379661,
+        "decay_field_error_over_peak": 0.0018283902149815205,
+        "crossing_wall_heat_error_over_scale": 0.002581162170478377,
+        "decay_wall_heat_error_over_scale": 0.0027432235099160494,
+        "energy_residual_over_peak": 1.7157174507152528e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "fvm": {
+        "crossing_field_error_over_peak": 2.9484109635526024e-05,
+        "decay_field_error_over_peak": 0.0012805212754308161,
+        "crossing_wall_heat_error_over_scale": 0.00047479065733118834,
+        "decay_wall_heat_error_over_scale": 0.0032398152418349575,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 2.748672732232674e-16
+      },
+      "sph": {
+        "columns": 16,
+        "method": "theta",
+        "transverse_mode": 0,
+        "width_over_interval": 0.5,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.010765375761998389,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 0.000254035815770982,
+        "decay_field_error_over_peak": 0.0018850080306580344,
+        "crossing_wall_heat_error_over_scale": 0.003208704949617863,
+        "decay_wall_heat_error_over_scale": 0.0028104542891300233,
+        "energy_residual_over_peak": 1.4976742451267774e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "fvm": {
+        "crossing_field_error_over_peak": 0.00015134251411981993,
+        "decay_field_error_over_peak": 0.0012327741545688279,
+        "crossing_wall_heat_error_over_scale": 0.002437109773664067,
+        "decay_wall_heat_error_over_scale": 0.002878963577187481,
+        "source_heat_relative_error": 2.1799178112553949e-16,
+        "energy_residual_over_peak": 3.9092296345410824e-16
+      },
+      "sph": {
+        "columns": 16,
+        "method": "sdirk2",
+        "transverse_mode": 0,
+        "width_over_interval": 0.05,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.007915717472057639,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 0.00023968061755592866,
+        "decay_field_error_over_peak": 0.0018873737999835652,
+        "crossing_wall_heat_error_over_scale": 0.0026411072361818655,
+        "decay_wall_heat_error_over_scale": 0.0028870858175009803,
+        "energy_residual_over_peak": 6.319921242508083e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "fvm": {
+        "crossing_field_error_over_peak": 6.956966763456376e-05,
+        "decay_field_error_over_peak": 0.0012350164162372175,
+        "crossing_wall_heat_error_over_scale": 0.0011202993284973983,
+        "decay_wall_heat_error_over_scale": 0.003045352018999927,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 6.131654556519042e-16
+      },
+      "sph": {
+        "columns": 16,
+        "method": "sdirk2",
+        "transverse_mode": 0,
+        "width_over_interval": 0.5,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.010765375761998389,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 0.00021454368366036224,
+        "decay_field_error_over_peak": 0.0019286282760444626,
+        "crossing_wall_heat_error_over_scale": 0.0025727523773492363,
+        "decay_wall_heat_error_over_scale": 0.0030004776403682602,
+        "energy_residual_over_peak": 5.268289403445959e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "fvm": {
+        "crossing_field_error_over_peak": 4.449757955063896e-05,
+        "decay_field_error_over_peak": 0.00041240282691192487,
+        "crossing_wall_heat_error_over_scale": 0.0007131062411773569,
+        "decay_wall_heat_error_over_scale": 0.0009695890290881589,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 1.020743293463505e-15
+      },
+      "sph": {
+        "columns": 32,
+        "method": "theta",
+        "transverse_mode": 0,
+        "width_over_interval": 0.05,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.007915717472057639,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 5.37931923535937e-05,
+        "decay_field_error_over_peak": 0.0003713783735204894,
+        "crossing_wall_heat_error_over_scale": 0.0005576984056390955,
+        "decay_wall_heat_error_over_scale": 0.0004736184000880955,
+        "energy_residual_over_peak": 2.0632045293411268e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "fvm": {
+        "crossing_field_error_over_peak": 5.1098198680291604e-05,
+        "decay_field_error_over_peak": 0.0003883006288051337,
+        "crossing_wall_heat_error_over_scale": 0.0008188859879058226,
+        "decay_wall_heat_error_over_scale": 0.0010913999083462054,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 8.739369712739783e-16
+      },
+      "sph": {
+        "columns": 32,
+        "method": "theta",
+        "transverse_mode": 0,
+        "width_over_interval": 0.5,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.010765375761998389,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 0.0001223496568070666,
+        "decay_field_error_over_peak": 0.0004089894265484235,
+        "crossing_wall_heat_error_over_scale": 0.0017404029327141247,
+        "decay_wall_heat_error_over_scale": 0.00042211605142820284,
+        "energy_residual_over_peak": 4.581121220387789e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "fvm": {
+        "crossing_field_error_over_peak": 4.069276777989245e-05,
+        "decay_field_error_over_peak": 0.0003524968434002374,
+        "crossing_wall_heat_error_over_scale": 0.0006521313511510439,
+        "decay_wall_heat_error_over_scale": 0.0008234309166456974,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 1.57237903078208e-15
+      },
+      "sph": {
+        "columns": 32,
+        "method": "sdirk2",
+        "transverse_mode": 0,
+        "width_over_interval": 0.05,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.007915717472057639,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 5.757486869651156e-05,
+        "decay_field_error_over_peak": 0.0004310521796925211,
+        "crossing_wall_heat_error_over_scale": 0.0006183025335417458,
+        "decay_wall_heat_error_over_scale": 0.000618948649413105,
+        "energy_residual_over_peak": 2.931922225905812e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "fvm": {
+        "crossing_field_error_over_peak": 1.100651305041593e-05,
+        "decay_field_error_over_peak": 0.00034282706931780023,
+        "crossing_wall_heat_error_over_scale": 0.00017638741768021433,
+        "decay_wall_heat_error_over_scale": 0.0008982909681453238,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 1.3320490933127573e-15
+      },
+      "sph": {
+        "columns": 32,
+        "method": "sdirk2",
+        "transverse_mode": 0,
+        "width_over_interval": 0.5,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.010765375761998389,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 8.240724743390233e-05,
+        "decay_field_error_over_peak": 0.0004524389289840583,
+        "crossing_wall_heat_error_over_scale": 0.0011002966235829437,
+        "decay_wall_heat_error_over_scale": 0.0006141127250584446,
+        "energy_residual_over_peak": 4.052530310343045e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "method": "theta",
+      "width_over_interval": 0.05,
+      "fvm": {
+        "crossing_field_error_over_peak": 1.6696503297483426e-05,
+        "decay_field_error_over_peak": 0.0001909357930551594,
+        "crossing_wall_heat_error_over_scale": 0.0002672513668321168,
+        "decay_wall_heat_error_over_scale": 0.0004559423732988877,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 4.452178194894011e-15
+      },
+      "sph": {
+        "columns": 64,
+        "method": "theta",
+        "transverse_mode": 0,
+        "width_over_interval": 0.05,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.007915717472057639,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 7.908260233885947e-06,
+        "decay_field_error_over_peak": 7.770132711975524e-06,
+        "crossing_wall_heat_error_over_scale": 5.0504830340176624e-05,
+        "decay_wall_heat_error_over_scale": 9.50862871760419e-05,
+        "energy_residual_over_peak": 3.6703322679857943e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "method": "theta",
+      "width_over_interval": 0.5,
+      "fvm": {
+        "crossing_field_error_over_peak": 7.134247168854168e-05,
+        "decay_field_error_over_peak": 0.00016381274804302119,
+        "crossing_wall_heat_error_over_scale": 0.0011419380885978642,
+        "decay_wall_heat_error_over_scale": 0.0005548319347692855,
+        "source_heat_relative_error": 1.743934249004316e-16,
+        "energy_residual_over_peak": 3.862237582726937e-15
+      },
+      "sph": {
+        "columns": 64,
+        "method": "theta",
+        "transverse_mode": 0,
+        "width_over_interval": 0.5,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.010765375761998389,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 8.917860430449516e-05,
+        "decay_field_error_over_peak": 8.412631156798117e-05,
+        "crossing_wall_heat_error_over_scale": 0.0013723575240514924,
+        "decay_wall_heat_error_over_scale": 0.00017639371478776525,
+        "energy_residual_over_peak": 2.8367712172401314e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "method": "sdirk2",
+      "width_over_interval": 0.05,
+      "fvm": {
+        "crossing_field_error_over_peak": 1.2894102106732031e-05,
+        "decay_field_error_over_peak": 0.00013103019813604804,
+        "crossing_wall_heat_error_over_scale": 0.00020638850838857235,
+        "decay_wall_heat_error_over_scale": 0.0003100355153581253,
+        "source_heat_relative_error": 0.0,
+        "energy_residual_over_peak": 5.338270245389989e-15
+      },
+      "sph": {
+        "columns": 64,
+        "method": "sdirk2",
+        "transverse_mode": 0,
+        "width_over_interval": 0.05,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.007915717472057639,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 1.1704867438153848e-05,
+        "decay_field_error_over_peak": 6.507670094977446e-05,
+        "crossing_wall_heat_error_over_scale": 0.00011127494766553093,
+        "decay_wall_heat_error_over_scale": 5.0613499639892134e-05,
+        "energy_residual_over_peak": 4.669357619035182e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "method": "sdirk2",
+      "width_over_interval": 0.5,
+      "fvm": {
+        "crossing_field_error_over_peak": 3.1249328983360226e-05,
+        "decay_field_error_over_peak": 0.00011834715670613186,
+        "crossing_wall_heat_error_over_scale": 0.0005001901135661301,
+        "decay_wall_heat_error_over_scale": 0.0003620602097496925,
+        "source_heat_relative_error": 1.743934249004316e-16,
+        "energy_residual_over_peak": 5.384579403655802e-15
+      },
+      "sph": {
+        "columns": 64,
+        "method": "sdirk2",
+        "transverse_mode": 0,
+        "width_over_interval": 0.5,
+        "start_s": 0.007599088773175333,
+        "stop_s": 0.010765375761998389,
+        "crossing_interval_s": [
+          0.006332573977646111,
+          0.012665147955292222
+        ],
+        "crossing_field_error_over_peak": 4.912283837950137e-05,
+        "decay_field_error_over_peak": 8.328758777908508e-05,
+        "crossing_wall_heat_error_over_scale": 0.0007312078176111795,
+        "decay_wall_heat_error_over_scale": 5.402571700922783e-05,
+        "energy_residual_over_peak": 4.898275766414637e-16,
+        "split_field_difference_over_peak": 0.0,
+        "split_section_heat_difference_over_scale": 0.0,
+        "split_wall_heat_difference_over_scale": 0.0
+      },
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "416cd34c05f81bf144c62e5fbba7c2aa852802fd",
+      "file": "fvm_sph_subinterval_heat_pulse.py",
+      "source_sha256": "2a19702001705edab1e01bdeecfbb4f881543e4004b0c72c3393e6932f792a8c"
+    },
+    {
+      "commit": "ad21cf32fd2e55e9f140b54f544e81e37bbd7384",
+      "file": "rod.py",
+      "source_sha256": "c969a10aa786a71c7a1fc906cd0ad4ed88b81e7cd1006351ae2f699e08f4dfe1"
+    },
+    {
+      "commit": "416cd34c05f81bf144c62e5fbba7c2aa852802fd",
+      "file": "sph_subinterval_heat_pulse.py",
+      "source_sha256": "bfa3268dbfe88ab42cfc390669acce3dc05db08eb9ed92baa3bf9d962bc52f22"
+    },
+    {
+      "commit": "31e57774aa70d249c5ee9741992cb70c931c49a3",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "bae8ef30454c2d2f9ee18069b5e30576c5d686b64cc86b07e42b1d2d2e62a58b"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/fvm_sph_subinterval_heat_pulse.py"
+}
