@@ -19,6 +19,21 @@ def interval_reference(times, resistance, method, include_traces=False, surface_
             arguments = [length*root for length, root in zip(lengths, roots)]
             left = mp.tanh(arguments[0])/roots[0]
             right = mp.tanh(arguments[1])/(3*roots[1])
+            if resistance == 0 and sum(surface_capacities):
+                # Perfect contact enforces one temperature. Equilibrate the
+                # initially hot and cold surface masses at conserved energy.
+                hot, cold = surface_capacities
+                initial_trace = hot/(hot+cold)
+                temperature = (1/(s*left) + hot)/((hot+cold)*s + 1/left + 1/right)
+                west_flux = (1/s-temperature)/left
+                east_flux = temperature/right
+                if cut == 0:
+                    return west_flux/(s*mp.cosh(arguments[0]))
+                if cut == 2:
+                    return east_flux/(s*mp.cosh(arguments[1]))
+                if cut == 1:
+                    return west_flux/s-hot*(temperature-initial_trace/s)
+                return temperature/s if cut in (3, 4) else temperature
             # A trace initially at its adjoining material temperature stores
             # heat in parallel with the finite layer's thermal admittance.
             factors = (1+s*surface_capacities[0]*left, 1+s*surface_capacities[1]*right)
@@ -44,7 +59,10 @@ def interval_reference(times, resistance, method, include_traces=False, surface_
                        for cut in range(channels)] for t in times[1:]]
     initial = np.zeros(channels)
     if return_trace_changes:
-        initial[5] = 1.
+        if resistance == 0 and sum(surface_capacities):
+            initial[5:7] = surface_capacities[0]/sum(surface_capacities)
+        else:
+            initial[5] = 1.
     return np.diff(np.vstack((initial, cumulative)), axis=0)
 
 
@@ -79,10 +97,13 @@ def measure(n, times, resistance, reference, solver="SPH", surface_capacities=(0
         surface = np.zeros(n-1)
         total = sum(surface_capacities)
         surface[face] = total
+        initial_traces = (1., 0.) if total else (None, None)
+        if total and resistance == 0:
+            initial_traces = (surface_capacities[0]/total,)*2
         temperature, _, _, _, endpoints, heat, means = rod.solve_transient_stepped_rod(
             np.full(n, 1./n), 1., conductivity, capacity, (1., 0.), subtime, initial,
             interface_heat_capacity=surface, interface_capacity_left_fraction=surface_capacities[0]/total if total else .5,
-            initial_trace_temperatures=(1., 0.) if total else (None, None), return_traces=True,
+            initial_trace_temperatures=initial_traces, return_traces=True,
             contact_resistance=contacts, method="sdirk2", return_step_heat=True, return_interval_temperatures=True)
         cuts = np.column_stack((heat["left"][:, 0], heat["contact"][:, left-1], heat["right"][:, -1]))
         measured = cuts.reshape(len(times)-1, count, 3).sum(axis=1)
