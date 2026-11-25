@@ -1,0 +1,259 @@
+{
+  "reference": "Exact space and time integrals of a moving Fourier mode; equal physical diffusivity and end time across grids and relaxation times",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src python examples/lbm_gradient_startup.py --periodic-gradient",
+  "runs": [
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.07557885777543571,
+        0.09208077499489531,
+        0.10445721290948784
+      ],
+      "n": 8,
+      "steps": 8,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.011405148436085755,
+      "total_flux_errors_xyz_W_m2": [
+        0.07557885777543571,
+        0.09208077499489531,
+        0.10445721290948784
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.07557885777543571,
+        0.09208077499489531,
+        0.10445721290948784
+      ],
+      "max_cell_energy_residual_J": 1.3010426069826053e-18,
+      "tau": 0.75,
+      "gradient_source": "periodic cell samples",
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.7333405368930179,
+        0.7498424541124773,
+        0.7622188920270697
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.021321210467757284,
+        0.02586661270214413,
+        0.029275664377930832
+      ],
+      "n": 16,
+      "steps": 32,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.0013621661390970097,
+      "total_flux_errors_xyz_W_m2": [
+        0.021321210467757284,
+        0.02586661270214413,
+        0.029275664377930832
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.021321210467756313,
+        0.025866612702140912,
+        0.029275664377928834
+      ],
+      "max_cell_energy_residual_J": 1.8295911660692887e-19,
+      "tau": 0.75,
+      "gradient_source": "periodic cell samples",
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.8224272346372197,
+        0.8269726368716057,
+        0.8303816885473926
+      ],
+      "temperature_and_total_flux_orders": [
+        3.0657106430584444,
+        1.8256933688297887,
+        1.8318088340628482,
+        1.8351382993211551
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.005492594977385301,
+        0.006656699909575403,
+        0.007675482607088613
+      ],
+      "n": 32,
+      "steps": 128,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.00038414843614398286,
+      "total_flux_errors_xyz_W_m2": [
+        0.005492594977385301,
+        0.006656699909575403,
+        0.007675482607088613
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.005492594977380971,
+        0.006656699909568908,
+        0.00767548260708395
+      ],
+      "max_cell_energy_residual_J": 2.8852059765849605e-20,
+      "tau": 0.75,
+      "gradient_source": "periodic cell samples",
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.8463739337292057,
+        0.8475380386613955,
+        0.8484111173605361
+      ],
+      "temperature_and_total_flux_orders": [
+        1.8261668894184118,
+        1.9567295295475404,
+        1.9582121050982781,
+        1.9313725414341534
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.22500549949777238,
+        0.1801913312385668,
+        0.14658070504416174
+      ],
+      "n": 8,
+      "steps": 2,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.18793402687290495,
+      "total_flux_errors_xyz_W_m2": [
+        0.22500549949777238,
+        0.19568401771401822,
+        0.19737481660298786
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.22500549949777238,
+        0.19568401771401778,
+        0.19737481660298786
+      ],
+      "max_cell_energy_residual_J": 1.81603863891322e-18,
+      "tau": 1.5,
+      "gradient_source": "periodic cell samples",
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.4321591176941754,
+        0.36359075493007165,
+        0.3121644828569926
+      ],
+      "temperature_and_total_flux_orders": [],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.0721944407318389,
+        0.05598779158278111,
+        0.04648625909351989
+      ],
+      "n": 16,
+      "steps": 8,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.05278776930799911,
+      "total_flux_errors_xyz_W_m2": [
+        0.09215899687548768,
+        0.08439504817546299,
+        0.08530501096862175
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.09215899687548768,
+        0.08439504817546206,
+        0.08530501096862175
+      ],
+      "max_cell_energy_residual_J": 1.8295911660692887e-19,
+      "tau": 1.5,
+      "gradient_source": "periodic cell samples",
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.4234547199134284,
+        0.4062998856937227,
+        0.3934337600289439
+      ],
+      "temperature_and_total_flux_orders": [
+        1.831950693852751,
+        1.287763345017415,
+        1.2132956728432156,
+        1.2102355299332814
+      ],
+      "passed": true
+    },
+    {
+      "first_step_flux_errors_xyz_W_m2": [
+        0.019086449258131744,
+        0.014827823921550376,
+        0.012402913364720491
+      ],
+      "n": 32,
+      "steps": 32,
+      "velocity_m_s": [
+        0.62,
+        -0.38,
+        0.2
+      ],
+      "temperature_error_K": 0.012999775857183149,
+      "total_flux_errors_xyz_W_m2": [
+        0.02722914678598018,
+        0.02646908856639818,
+        0.028050362612215718
+      ],
+      "wrap_flux_errors_xyz_W_m2": [
+        0.02722914678597954,
+        0.026469088566397403,
+        0.028050362612215607
+      ],
+      "max_cell_energy_residual_J": 2.7316812548951186e-20,
+      "tau": 1.5,
+      "gradient_source": "periodic cell samples",
+      "periodic_axes": "xyz",
+      "equilibrium_first_step_errors_xyz_W_m2": [
+        0.426838263121774,
+        0.42224876795604144,
+        0.4188066465817396
+      ],
+      "temperature_and_total_flux_orders": [
+        2.02171695381539,
+        1.758973236700542,
+        1.6728498341322178,
+        1.6046110695750537
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "0e8184b12d0f896ffc2a2eabcb3df5d1258be013",
+      "file": "lbm_gradient_startup.py",
+      "source_sha256": "7c6153102fc7394518ec4aaad8452c69076e237c7458f451199c0557c7216187"
+    },
+    {
+      "commit": "0e8184b12d0f896ffc2a2eabcb3df5d1258be013",
+      "file": "lbm_periodic_advective_flux.py",
+      "source_sha256": "96dd8844dcbdcdb79b1f4b31377fef471f8c017d5f9c28a5a1cc6d21d3509fac"
+    },
+    {
+      "commit": "330916f9837d21341675a5187cbd401064e0433a",
+      "file": "thermal_common.py",
+      "source_sha256": "9f2350a58004ea0881ddeea3518308398dcc28fd6fb1adb0597771a088aa4b55"
+    }
+  ]
+}
