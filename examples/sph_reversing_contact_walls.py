@@ -13,7 +13,11 @@ def contact_reversal_time(times, heat):
     crossings = np.flatnonzero((mean_flux[:-1] > 0) & (mean_flux[1:] <= 0))
     if len(crossings) != 1 or len(heat) < 3:
         raise ValueError("expected a single positive-to-negative crossing and at least three intervals")
-    i = crossings[0]
+    return decreasing_root(times, mean_flux, crossings[0])
+
+
+def decreasing_root(times, mean_flux, i):
+    """Fit a decreasing zero across the adjacent means at i and i+1."""
     start = max(0, i-1)
     # Fit the interval averages of 1, u and u² in local time coordinates.
     # This preserves each measured heat even when a step straddles the zero.
@@ -31,7 +35,7 @@ def contact_reversal_time(times, heat):
     return float(origin+scale*candidates[0])
 
 
-def measure(n, steps, method, solver="sph", *, grading=0.):
+def slab_geometry(n):
     cut = 2*n//5
     k = np.repeat([1., 3.], [cut, n-cut])
     capacity = np.repeat([4., 2.], [cut, n-cut])
@@ -42,6 +46,11 @@ def measure(n, steps, method, solver="sph", *, grading=0.):
     path = np.r_[0., np.cumsum(2*halves[:-1]+resistance)] + halves
     total = path[-1]+halves[-1]
     weight = path/total
+    return cut, k, capacity, resistance, total, weight
+
+
+def measure(n, steps, method, solver="sph", *, grading=0.):
+    cut, k, capacity, resistance, total, weight = slab_geometry(n)
     # A linear temperature in resistance coordinates gives the same flux
     # across both materials and the finite jump. Generation supplies storage.
     def west(t):
