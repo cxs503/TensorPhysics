@@ -1,0 +1,33 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "2f545753664836faebe090b67280966c3973d4be",
+  "passed": 187,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Analytical two-cell energy equations with unequal widths, conductivity, heat capacity and bulk exchange. Contact conductance g=0.5/(0.125+0.25+0.375/3) W/K. Diagonal terms are g+H*V+i*omega*C*V, cross terms -g, and loads V*(source+H*Ta). Invert the two-by-two system and compare cell temperatures, individual powers, contact transfer and local balance at three frequencies. A separate floating case checks uniform storage contributions at 1e-16 rad/s.",
+  "runs": {
+    "test_harmonic_cell_power_with_independent_bulk_ambient[0.0625]": {
+      "temperature_K": 4.742874840267547e-16,
+      "source_W": 0.0,
+      "bulk_W": 1.7554167342883506e-16,
+      "storage_W": 1.5515838457795457e-17,
+      "interface_W": 2.2887833992611187e-16,
+      "balance_W": 1.430489624538199e-16
+    },
+    "test_harmonic_cell_power_with_independent_bulk_ambient[1.0]": {
+      "temperature_K": 1.2412670766236366e-16,
+      "source_W": 0.0,
+      "bulk_W": 1.2412670766236366e-16,
+      "storage_W": 1.2412670766236366e-16,
+      "interface_W": 0.0,
+      "balance_W": 5.551115123125783e-17
+    },
+    "test_harmonic_cell_power_with_independent_bulk_ambient[16.0]": {
+      "temperature_K": 1.0408340855860843e-17,
+      "source_W": 0.0,
+      "bulk_W": 0.0,
+      "storage_W": 1.6653345369377348e-16,
+      "interface_W": 1.0408340855860843e-17,
+      "balance_W": 9.71445146547012e-17
+    }
+  }
+}
