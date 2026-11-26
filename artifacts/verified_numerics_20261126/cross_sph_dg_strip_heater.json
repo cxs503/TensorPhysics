@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "wall_errors_W_m2": {
+        "sph": 0.0003192595017328218,
+        "dg": 1.2319772376148782e-07,
+        "cross": 0.0003191450306414473
+      },
+      "orders": {},
+      "global_balance_W_m2": {
+        "sph": 1.2412670766236366e-16,
+        "dg": 6.10780345318845e-16
+      }
+    },
+    {
+      "columns": 32,
+      "wall_errors_W_m2": {
+        "sph": 8.40906564528658e-05,
+        "dg": 6.999907948917417e-09,
+        "cross": 8.408439190958336e-05
+      },
+      "orders": {
+        "sph": 1.9247121451148395,
+        "dg": 4.137495840112661,
+        "cross": 1.9243022525224136
+      },
+      "global_balance_W_m2": {
+        "sph": 1.3092278833360675e-16,
+        "dg": 1.3947004136484323e-16
+      }
+    },
+    {
+      "columns": 64,
+      "wall_errors_W_m2": {
+        "sph": 2.0470992224487356e-05,
+        "dg": 4.54701342318566e-10,
+        "cross": 2.047057230642077e-05
+      },
+      "orders": {
+        "sph": 2.0383644763527413,
+        "dg": 3.944344782105259,
+        "cross": 2.038286589249655
+      },
+      "global_balance_W_m2": {
+        "sph": 1.4488835837920476e-16,
+        "dg": 1.5268720305515944e-15
+      }
+    },
+    {
+      "columns": 128,
+      "wall_errors_W_m2": {
+        "sph": 5.18579093504032e-06,
+        "dg": 2.7569866370187692e-11,
+        "cross": 5.185765565013586e-06
+      },
+      "orders": {
+        "sph": 1.9809450808853388,
+        "dg": 4.043755083247638,
+        "cross": 1.980922544815686
+      },
+      "global_balance_W_m2": {
+        "sph": 7.05040792186059e-16,
+        "dg": 5.896018613962273e-16
+      }
+    }
+  ],
+  "sources": [
+    {
+      "commit": "5a56c18a2d62efb34c8c8b2a27d531ccd78baa03",
+      "file": "cross_sph_dg_strip_heater.py",
+      "source_sha256": "fdb15c9a34e9eb5657f34413329217fc733253d2d8b1226a144fa7b3e596fb7f"
+    },
+    {
+      "commit": "564df76c90278bab3bb70ec33091b2ddfb1649e8",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "692ac6cd1c428e493c24ef7b410053d10be86d237c191abf9c1e5ecd32b8a1e6"
+    },
+    {
+      "commit": "8815056d3798b4332625f7446aa6153a077401b4",
+      "file": "heat_1d.py",
+      "source_sha256": "e2914610af33ca17bcfdba227d8d564a45d798c4165057af47a4b3d5b4f29de6"
+    }
+  ],
+  "reference": "Unit slab with zero wall phasors. Integrate the affine complex source against each Dirichlet wall Green function. Errors are the larger absolute phasor error of the two walls.",
+  "reference_outward_W_m2": [
+    [
+      0.10852713597826275,
+      -0.028124947861587576
+    ],
+    [
+      0.04933501876772316,
+      0.015561527554803625
+    ]
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorDG python examples/cross_sph_dg_strip_heater.py"
+}
