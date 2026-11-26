@@ -89,7 +89,7 @@ def continuum(mode, omega, films=(None, None), fractions=FRACTIONS, sheet_h=(0.,
     return (*outputs, angular_rate)
 
 
-def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flux_wall=None):
+def wall_inputs(flux_wall):
     wall_data = list(WALLS)
     fluxes = [None, None]
     if flux_wall == "both":
@@ -98,6 +98,11 @@ def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flu
         side = ("bore", "exterior").index(flux_wall)
         wall_data[side] = None
         fluxes[side] = INWARD_FLUX
+    return wall_data, fluxes
+
+
+def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flux_wall=None):
+    wall_data, fluxes = wall_inputs(flux_wall)
     rows = []
     previous = {}
     levels = (4, 8, 16, 32, 64) if flux_wall is not None else (4, 8, 16, 32)
