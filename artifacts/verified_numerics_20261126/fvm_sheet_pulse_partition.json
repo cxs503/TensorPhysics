@@ -1,0 +1,424 @@
+{
+  "solver": "FVM",
+  "runs": [
+    {
+      "reference_wall_heats_J_m2": [
+        0.049479166666666664,
+        0.013020833333333334
+      ],
+      "reference_mean_s": [
+        0.31895559210526314,
+        0.8092187499999999
+      ],
+      "reference_std_s": [
+        0.3709026610477362,
+        0.5330047841576055
+      ],
+      "elements": 16,
+      "heated_sheet": 0,
+      "method": "theta",
+      "wall_heats_J_m2": [
+        0.04947916666666664,
+        0.013020833333333367
+      ],
+      "wall_mean_exit_times_s": [
+        0.31899092824838643,
+        0.8090844726563852
+      ],
+      "wall_exit_time_std_s": [
+        0.3699734118374351,
+        0.5299872996654647
+      ],
+      "mean_error_s": 0.00013427734361470822,
+      "std_error_s": 0.0030174844921408983,
+      "wall_heat_error_J_m2": 3.2959746043559335e-17,
+      "sheet_balance_J_m2": 7.643625316022806e-18
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.049479166666666664,
+        0.013020833333333334
+      ],
+      "reference_mean_s": [
+        0.31895559210526314,
+        0.8092187499999999
+      ],
+      "reference_std_s": [
+        0.3709026610477362,
+        0.5330047841576055
+      ],
+      "elements": 32,
+      "heated_sheet": 0,
+      "method": "theta",
+      "wall_heats_J_m2": [
+        0.04947916666666672,
+        0.013020833333333284
+      ],
+      "wall_mean_exit_times_s": [
+        0.3189644261410356,
+        0.8091851806640608
+      ],
+      "wall_exit_time_std_s": [
+        0.37062957873547575,
+        0.5321334643695664
+      ],
+      "mean_error_s": 3.3569335939120926e-05,
+      "std_error_s": 0.0008713197880391155,
+      "wall_heat_error_J_m2": 5.551115123125783e-17,
+      "sheet_balance_J_m2": 1.0625181290357943e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.04947916666666667,
+        0.013020833333333332
+      ],
+      "reference_mean_s": [
+        0.31895559210526314,
+        0.8092187499999999
+      ],
+      "reference_std_s": [
+        0.3709026610477362,
+        0.5330047841576055
+      ],
+      "elements": 64,
+      "heated_sheet": 0,
+      "method": "theta",
+      "wall_heats_J_m2": [
+        0.049479166666666505,
+        0.013020833333333271
+      ],
+      "wall_mean_exit_times_s": [
+        0.31895780061420687,
+        0.8092103576660171
+      ],
+      "wall_exit_time_std_s": [
+        0.3708237215336401,
+        0.5327562628563053
+      ],
+      "mean_error_s": 8.392333982754074e-06,
+      "std_error_s": 0.00024852130130026406,
+      "wall_heat_error_J_m2": 1.6653345369377348e-16,
+      "sheet_balance_J_m2": 1.2061749168901237e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.049479166666666664,
+        0.013020833333333334
+      ],
+      "reference_mean_s": [
+        0.31895559210526314,
+        0.8092187499999999
+      ],
+      "reference_std_s": [
+        0.3709026610477362,
+        0.5330047841576055
+      ],
+      "elements": 16,
+      "heated_sheet": 0,
+      "method": "sdirk2",
+      "wall_heats_J_m2": [
+        0.04947916666666662,
+        0.01302083333333331
+      ],
+      "wall_mean_exit_times_s": [
+        0.3193481491995945,
+        0.8101255281386808
+      ],
+      "wall_exit_time_std_s": [
+        0.37123416912683693,
+        0.5328776837505912
+      ],
+      "mean_error_s": 0.0009067781386808971,
+      "std_error_s": 0.00033150807910070634,
+      "wall_heat_error_J_m2": 4.163336342344337e-17,
+      "sheet_balance_J_m2": 1.2305694657710475e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.049479166666666664,
+        0.013020833333333334
+      ],
+      "reference_mean_s": [
+        0.31895559210526314,
+        0.8092187499999999
+      ],
+      "reference_std_s": [
+        0.3709026610477362,
+        0.5330047841576055
+      ],
+      "elements": 32,
+      "heated_sheet": 0,
+      "method": "sdirk2",
+      "wall_heats_J_m2": [
+        0.04947916666666651,
+        0.013020833333333204
+      ],
+      "wall_mean_exit_times_s": [
+        0.31906776870342124,
+        0.8094861809893754
+      ],
+      "wall_exit_time_std_s": [
+        0.37099716447960823,
+        0.5329775579654497
+      ],
+      "mean_error_s": 0.0002674309893755389,
+      "std_error_s": 9.450343187200616e-05,
+      "wall_heat_error_J_m2": 1.5265566588595902e-16,
+      "sheet_balance_J_m2": 1.1655173354219173e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.04947916666666667,
+        0.013020833333333332
+      ],
+      "reference_mean_s": [
+        0.31895559210526314,
+        0.8092187499999999
+      ],
+      "reference_std_s": [
+        0.3709026610477362,
+        0.5330047841576055
+      ],
+      "elements": 64,
+      "heated_sheet": 0,
+      "method": "sdirk2",
+      "wall_heats_J_m2": [
+        0.04947916666666672,
+        0.013020833333333386
+      ],
+      "wall_mean_exit_times_s": [
+        0.3189872398575983,
+        0.8092960512532393
+      ],
+      "wall_exit_time_std_s": [
+        0.37092874294114764,
+        0.5329976125993097
+      ],
+      "mean_error_s": 7.730125323945902e-05,
+      "std_error_s": 2.608189341141154e-05,
+      "wall_heat_error_J_m2": 5.377642775528102e-17,
+      "sheet_balance_J_m2": 1.5070410197548512e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.014322916666666664,
+        0.048177083333333336
+      ],
+      "reference_mean_s": [
+        0.8322301136363629,
+        0.4663978040540539
+      ],
+      "reference_std_s": [
+        0.5334682461891505,
+        0.46833812297884975
+      ],
+      "elements": 16,
+      "heated_sheet": 1,
+      "method": "theta",
+      "wall_heats_J_m2": [
+        0.014322916666666704,
+        0.04817708333333334
+      ],
+      "wall_mean_exit_times_s": [
+        0.8323222212359361,
+        0.4663704207137425
+      ],
+      "wall_exit_time_std_s": [
+        0.5303472424611856,
+        0.4666635391706376
+      ],
+      "mean_error_s": 9.210759957323233e-05,
+      "std_error_s": 0.003121003727964866,
+      "wall_heat_error_J_m2": 3.9898639947466563e-17,
+      "sheet_balance_J_m2": 1.3864235280658388e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.014322916666666671,
+        0.04817708333333333
+      ],
+      "reference_mean_s": [
+        0.8322301136363629,
+        0.4663978040540539
+      ],
+      "reference_std_s": [
+        0.5334682461891505,
+        0.46833812297884975
+      ],
+      "elements": 32,
+      "heated_sheet": 1,
+      "method": "theta",
+      "wall_heats_J_m2": [
+        0.014322916666666635,
+        0.04817708333333321
+      ],
+      "wall_mean_exit_times_s": [
+        0.8322531405362199,
+        0.4663909582189599
+      ],
+      "wall_exit_time_std_s": [
+        0.532566473816697,
+        0.46785872601650325
+      ],
+      "mean_error_s": 2.302689985700379e-05,
+      "std_error_s": 0.0009017723724534799,
+      "wall_heat_error_J_m2": 1.1796119636642288e-16,
+      "sheet_balance_J_m2": 1.1201163694490868e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.014322916666666671,
+        0.04817708333333333
+      ],
+      "reference_mean_s": [
+        0.8322301136363629,
+        0.4663978040540539
+      ],
+      "reference_std_s": [
+        0.5334682461891505,
+        0.46833812297884975
+      ],
+      "elements": 64,
+      "heated_sheet": 1,
+      "method": "theta",
+      "wall_heats_J_m2": [
+        0.014322916666666744,
+        0.04817708333333349
+      ],
+      "wall_mean_exit_times_s": [
+        0.8322358703613297,
+        0.4663960925952813
+      ],
+      "wall_exit_time_std_s": [
+        0.5332108673970111,
+        0.46820237944825005
+      ],
+      "mean_error_s": 5.756724966832216e-06,
+      "std_error_s": 0.0002573787921393844,
+      "wall_heat_error_J_m2": 1.5959455978986625e-16,
+      "sheet_balance_J_m2": 1.691355389077387e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.014322916666666664,
+        0.048177083333333336
+      ],
+      "reference_mean_s": [
+        0.8322301136363629,
+        0.4663978040540539
+      ],
+      "reference_std_s": [
+        0.5334682461891505,
+        0.46833812297884975
+      ],
+      "elements": 16,
+      "heated_sheet": 1,
+      "method": "sdirk2",
+      "wall_heats_J_m2": [
+        0.014322916666666649,
+        0.04817708333333331
+      ],
+      "wall_mean_exit_times_s": [
+        0.8333956842180277,
+        0.4669338083146894
+      ],
+      "wall_exit_time_std_s": [
+        0.5333278807780407,
+        0.4684243717824908
+      ],
+      "mean_error_s": 0.0011655705816647766,
+      "std_error_s": 0.000140365411109733,
+      "wall_heat_error_J_m2": 2.7755575615628914e-17,
+      "sheet_balance_J_m2": 1.2685165418080402e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.014322916666666671,
+        0.04817708333333333
+      ],
+      "reference_mean_s": [
+        0.8322301136363629,
+        0.4663978040540539
+      ],
+      "reference_std_s": [
+        0.5334682461891505,
+        0.46833812297884975
+      ],
+      "elements": 32,
+      "heated_sheet": 1,
+      "method": "sdirk2",
+      "wall_heats_J_m2": [
+        0.01432291666666657,
+        0.04817708333333317
+      ],
+      "wall_mean_exit_times_s": [
+        0.8325634408824044,
+        0.4665538953811281
+      ],
+      "wall_exit_time_std_s": [
+        0.5334367460625952,
+        0.4683724832665086
+      ],
+      "mean_error_s": 0.00033332724604151487,
+      "std_error_s": 3.436028765885224e-05,
+      "wall_heat_error_J_m2": 1.5959455978986625e-16,
+      "sheet_balance_J_m2": 1.411495703304566e-17
+    },
+    {
+      "reference_wall_heats_J_m2": [
+        0.014322916666666671,
+        0.04817708333333333
+      ],
+      "reference_mean_s": [
+        0.8322301136363629,
+        0.4663978040540539
+      ],
+      "reference_std_s": [
+        0.5334682461891505,
+        0.46833812297884975
+      ],
+      "elements": 64,
+      "heated_sheet": 1,
+      "method": "sdirk2",
+      "wall_heats_J_m2": [
+        0.01432291666666677,
+        0.048177083333333474
+      ],
+      "wall_mean_exit_times_s": [
+        0.832324206620067,
+        0.46644249214977623
+      ],
+      "wall_exit_time_std_s": [
+        0.5334596930144526,
+        0.4683492032575307
+      ],
+      "mean_error_s": 9.409298370410824e-05,
+      "std_error_s": 1.108027868096384e-05,
+      "wall_heat_error_J_m2": 1.457167719820518e-16,
+      "sheet_balance_J_m2": 1.98544522836408e-17
+    }
+  ],
+  "sources": [
+    {
+      "commit": "4aa9636e244cdfcad51f7d84a5490051c32756aa",
+      "file": "fem_sheet_pulse_partition.py",
+      "source_sha256": "2a3585ae7cd2d1dd2d8b98efe4cd9f74c9187d7e5ec8b87102acab0eab693e0d"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "4aa9636e244cdfcad51f7d84a5490051c32756aa",
+      "file": "sph_sheet_pulse_partition.py",
+      "source_sha256": "d2d92fa760a583104f8a2df6036098dd22dd5bd4e187f3cac8094f19e3468e4f"
+    },
+    {
+      "commit": "4aa9636e244cdfcad51f7d84a5490051c32756aa",
+      "file": "sph_layered_storing_contacts.py",
+      "source_sha256": "8a2b0a4383ef1b51d483ed9df1762d773603e7d8dc000f2260ffb3e20fb80957"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/fem_sheet_pulse_partition.py --fvm"
+}
