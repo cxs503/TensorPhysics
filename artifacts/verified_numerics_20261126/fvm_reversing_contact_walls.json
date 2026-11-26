@@ -2,6 +2,9 @@
   "passed": true,
   "runs": [
     {
+      "contact_reversal_s": 0.6499421277689648,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 0.0014456910970325199,
       "endpoint_trace_errors_left_right_K": [
         1.1102230246251565e-14,
         9.353628982466944e-15
@@ -30,6 +33,9 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.651026613554414,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 0.00036120531158323477,
       "endpoint_trace_errors_left_right_K": [
         1.0547118733938987e-14,
         8.076872504148014e-15
@@ -60,6 +66,7 @@
         1.999999999991074,
         1.9999999999919735
       ],
+      "reversal_order": 2.000868309267983,
       "orders": [
         null,
         1.999999999958013,
@@ -69,6 +76,9 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6512975311090943,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 9.028775690300694e-05,
       "endpoint_trace_errors_left_right_K": [
         1.5654144647214707e-14,
         2.67841304690819e-14
@@ -99,6 +109,7 @@
         1.9999999999114317,
         1.9999999999054532
       ],
+      "reversal_order": 2.000216832640507,
       "orders": [
         null,
         1.9999999998926108,
@@ -108,6 +119,9 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513652477746481,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 2.257109134917723e-05,
       "endpoint_trace_errors_left_right_K": [
         2.3370194668359545e-14,
         3.81084053202585e-14
@@ -138,6 +152,7 @@
         1.9999999995593725,
         1.9999999995474158
       ],
+      "reversal_order": 2.0000541934076597,
       "orders": [
         null,
         1.9999999997466944,
@@ -147,6 +162,9 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6511999166201694,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 0.00018790224582787562,
       "endpoint_trace_errors_left_right_K": [
         0.001046682878009464,
         0.00041821315856488406
@@ -175,6 +193,9 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.651340438155996,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 4.738071000132127e-05,
       "endpoint_trace_errors_left_right_K": [
         0.0002618370095304745,
         0.00010450510238171895
@@ -205,6 +226,7 @@
         1.8525325593419024,
         1.8525325593410755
       ],
+      "reversal_order": 1.9876105874274672,
       "orders": [
         1.9054407721513043,
         1.8820728023932185,
@@ -214,6 +236,9 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513759494991911,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 1.1869366806194215e-05,
       "endpoint_trace_errors_left_right_K": [
         6.544957983251054e-05,
         2.6119398027768526e-05
@@ -244,6 +269,7 @@
         1.958323932412966,
         1.9583239324070516
       ],
+      "reversal_order": 1.9970568438284666,
       "orders": [
         1.9292809174175252,
         1.9152810581024136,
@@ -253,6 +279,9 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.651384849241913,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 2.969624084303568e-06,
       "endpoint_trace_errors_left_right_K": [
         1.636125697634938e-05,
         6.5292063396726885e-06
@@ -283,6 +312,7 @@
         1.9946489510710823,
         1.9946489510419037
       ],
+      "reversal_order": 1.9988907524270627,
       "orders": [
         1.9469464026281185,
         1.9394411924480093,
@@ -294,9 +324,9 @@
   ],
   "sources": [
     {
-      "commit": "4096ee06326ba17b0015e0cd05aa092100372088",
+      "commit": "99f2696c5ab8e66504abe4f51fe8115638b663c3",
       "file": "sph_reversing_contact_walls.py",
-      "source_sha256": "aafd4ca8c1548d35ced2f77b7c86b1385d6b4448db2415af498048df060ffa15"
+      "source_sha256": "5af225384a7ee9a835ba36c4c1a7e1d0402b3a1d42c274fc0f5aee7807d3ffac"
     },
     {
       "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",

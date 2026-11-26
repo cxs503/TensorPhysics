@@ -2,6 +2,10 @@
   "passed": true,
   "runs": [
     {
+      "contact_reversal_s": 0.6499421277689583,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 0.0014456910970389591,
+      "solver": "sph",
       "columns": 40,
       "steps": 8,
       "method": "theta",
@@ -17,6 +21,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6510266135544056,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 0.00036120531159167246,
+      "solver": "sph",
       "columns": 40,
       "steps": 16,
       "method": "theta",
@@ -28,6 +36,7 @@
       ],
       "max_step_heat_error_J_m2": 9.042245371707058e-05,
       "reversed_flow": true,
+      "reversal_order": 2.0008683092407074,
       "orders": [
         null,
         2.000000000037918,
@@ -37,6 +46,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6512975311090783,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 9.028775691899416e-05,
+      "solver": "sph",
       "columns": 40,
       "steps": 32,
       "method": "theta",
@@ -48,6 +61,7 @@
       ],
       "max_step_heat_error_J_m2": 1.1302806719765135e-05,
       "reversed_flow": true,
+      "reversal_order": 2.0002168324187513,
       "orders": [
         null,
         2.000000000119678,
@@ -57,6 +71,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513652477746301,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 2.2571091367162843e-05,
+      "solver": "sph",
       "columns": 40,
       "steps": 64,
       "method": "theta",
@@ -68,6 +86,7 @@
       ],
       "max_step_heat_error_J_m2": 1.4128508426004827e-06,
       "reversed_flow": true,
+      "reversal_order": 2.000054192513516,
       "orders": [
         null,
         2.000000000481369,
@@ -77,6 +96,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6511998179942098,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 0.00018800087178749703,
+      "solver": "sph",
       "columns": 40,
       "steps": 8,
       "method": "sdirk2",
@@ -92,6 +115,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513404145467021,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 4.7404319295174524e-05,
+      "solver": "sph",
       "columns": 40,
       "steps": 16,
       "method": "sdirk2",
@@ -103,6 +130,7 @@
       ],
       "max_step_heat_error_J_m2": 0.0001784715119861613,
       "reversed_flow": true,
+      "reversal_order": 1.9876489289814787,
       "orders": [
         1.9071570724260645,
         1.8797293805206539,
@@ -112,6 +140,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513759435400961,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 1.1875325901189449e-05,
+      "solver": "sph",
       "columns": 40,
       "steps": 32,
       "method": "sdirk2",
@@ -123,6 +155,7 @@
       ],
       "max_step_heat_error_J_m2": 3.435031679706324e-05,
       "reversed_flow": true,
+      "reversal_order": 1.9970514111406779,
       "orders": [
         1.932041932230504,
         1.9130515914836006,
@@ -132,6 +165,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513848477447668,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 2.9711212304883716e-06,
+      "solver": "sph",
       "columns": 40,
       "steps": 64,
       "method": "sdirk2",
@@ -143,6 +180,7 @@
       ],
       "max_step_heat_error_J_m2": 6.502414321388206e-06,
       "reversed_flow": true,
+      "reversal_order": 1.9988877289816371,
       "orders": [
         1.9529010098227286,
         1.9376495633574335,
@@ -152,6 +190,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513878188660134,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 1.609823385706477e-14,
+      "solver": "sph",
       "columns": 40,
       "steps": 8,
       "method": "exponential_quadratic",
@@ -167,6 +209,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513878188660025,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 5.218048215738236e-15,
+      "solver": "sph",
       "columns": 40,
       "steps": 16,
       "method": "exponential_quadratic",
@@ -182,6 +228,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513878188659965,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 7.771561172376096e-16,
+      "solver": "sph",
       "columns": 40,
       "steps": 32,
       "method": "exponential_quadratic",
@@ -197,6 +247,10 @@
       "passed": true
     },
     {
+      "contact_reversal_s": 0.6513878188659934,
+      "exact_reversal_s": 0.6513878188659973,
+      "contact_reversal_error_s": 3.885780586188048e-15,
+      "solver": "sph",
       "columns": 40,
       "steps": 64,
       "method": "exponential_quadratic",
@@ -214,9 +268,9 @@
   ],
   "sources": [
     {
-      "commit": "2f872fac0a05dbd7e290ebbd8c2cd8bb7f8f0b43",
+      "commit": "99f2696c5ab8e66504abe4f51fe8115638b663c3",
       "file": "sph_reversing_contact_walls.py",
-      "source_sha256": "bb3941954edbd5d8b2c2edd25f103810e70037323085b229c76e671de3d4fbe7"
+      "source_sha256": "5af225384a7ee9a835ba36c4c1a7e1d0402b3a1d42c274fc0f5aee7807d3ffac"
     },
     {
       "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
@@ -224,5 +278,5 @@
       "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
     }
   ],
-  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_reversing_contact_walls.py"
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_reversing_contact_walls.py --solver sph"
 }
