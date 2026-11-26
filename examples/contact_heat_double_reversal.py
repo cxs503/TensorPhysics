@@ -1,9 +1,9 @@
 """Run python examples/contact_heat_double_reversal.py in the three-solver environment.
 
-Three decaying contact eigenmodes drive two reversals on a uniform output grid.
+Three decaying contact eigenmodes drive two reversals on a shared output grid.
 Positive interval heat denotes transfer from the west material to the east.
 Pass --with-dg for the TensorDG SIPG strip, or --with-dem for the fixed TensorDEM
-thermal chain. Both options may be used together.
+thermal chain. Both options may be used together. Add --alternating-steps for a 1:3 step ratio.
 """
 import argparse
 import json
@@ -16,14 +16,27 @@ import resistive_decay_interface_comparison as case
 from conduction_provenance import provenance
 
 
-def detect_phases(times, heat):
+def detect_phases(times, heat, *, higher_order=False):
     widths = np.diff(times)
     flux = heat/widths
     cumulative = np.r_[0., np.cumsum(heat)]
     hits = np.flatnonzero(np.diff(np.signbit(flux)))
     if hits.size != 2 or flux[0] <= 0:
         raise ValueError("expected eastward, westward, then eastward transfer")
-    turns, amounts = zip(*(events.extremum(times, cumulative, widths, flux, i) for i in hits))
+    if higher_order:
+        # Interpolate cumulative heat on both sides of each turning point.
+        # Scaling the local time avoids ill conditioning on fine grids.
+        extrema = []
+        for i in hits:
+            start = max(0, min(i-1, len(times)-5))
+            section = slice(start, start+5)
+            fit = np.polynomial.Polynomial.fit(times[section], cumulative[section], 4)
+            low, high = times[i], times[i+2]
+            turn = brentq(fit.deriv(), low, high)
+            extrema.append((turn, fit(turn)))
+    else:
+        extrema = [events.extremum(times, cumulative, widths, flux, i) for i in hits]
+    turns, amounts = zip(*extrema)
     return np.asarray(turns), np.diff([0., *amounts, cumulative[-1]])
 
 
@@ -71,7 +84,7 @@ def dem(n, times, modes):
     return balance, heats[:, cut]
 
 
-def run(with_dg=False, with_dem=False):
+def run(with_dg=False, with_dem=False, alternating_steps=False):
     exact_times = np.array([.005, .018])
     end = .053
     waves = np.array([case.WAVE]+[brentq(case.contact_condition, i*np.pi, (i+1)*np.pi)
@@ -98,8 +111,12 @@ def run(with_dg=False, with_dem=False):
         previous = None
         for n in (24, 48, 96, 192):
             times = np.linspace(0., end, 2*n+1)
+            if alternating_steps:
+                # Keep every pair's endpoints fixed, but make the first step
+                # half the uniform width and the second one and a half times it.
+                times[1::2] = times[:-1:2]+.25*(times[2::2]-times[:-1:2])
             diagnostic, heat = solve(n, times, modes)
-            turns, phases = detect_phases(times, heat)
+            turns, phases = detect_phases(times, heat, higher_order=alternating_steps)
             timing_error = abs(turns-exact_times)
             heat_error = abs(phases-exact_heat)
             errors = np.array([max(timing_error), max(heat_error)])
@@ -108,12 +125,22 @@ def run(with_dg=False, with_dem=False):
             rows.append(dict(solver=name, resolution=n, steps=2*n, reversal_times_s=turns.tolist(),
                              phase_heat_J_m2=phases.tolist(), time_errors_s=timing_error.tolist(),
                              heat_errors_J_m2=heat_error.tolist(), passed=bool(passed)))
+            if alternating_steps:
+                # Replay the event detector on exact interval heats to measure
+                # interpolation error independently of the spatial discretization.
+                cumulative = (-np.expm1(-times[:, None]*waves**2)/waves**2) @ flux_weights
+                sampled_turns, sampled_heats = detect_phases(times, np.diff(cumulative), higher_order=True)
+                rows[-1].update(min_step_s=np.diff(times).min(), max_step_s=np.diff(times).max(),
+                                interpolation_time_errors_s=abs(sampled_turns-exact_times).tolist(),
+                                interpolation_heat_errors_J_m2=abs(sampled_heats-exact_heat).tolist())
             if solve is dem:
                 rows[-1]["max_node_balance_J"] = diagnostic
                 rows[-1]["passed"] &= diagnostic < 1e-12
             previous = errors
     return dict(reference_reversals_s=exact_times.tolist(), reference_phase_heat_J_m2=exact_heat.tolist(),
-                end_s=end, modes_wave_amplitude=modes, contact_resistance_m2K_W=case.RESISTANCE,
+                end_s=end, time_grid="alternating_1_to_3" if alternating_steps else "uniform",
+                turn_interpolation_degree=4 if alternating_steps else 2,
+                modes_wave_amplitude=modes, contact_resistance_m2K_W=case.RESISTANCE,
                 runs=rows, sources=[provenance(p) for p in sources])
 
 
@@ -121,6 +148,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--with-dg", action="store_true")
     parser.add_argument("--with-dem", action="store_true")
+    parser.add_argument("--alternating-steps", action="store_true")
     report = run(**vars(parser.parse_args()))
     print(json.dumps(report, indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in report["runs"]) else 1)
