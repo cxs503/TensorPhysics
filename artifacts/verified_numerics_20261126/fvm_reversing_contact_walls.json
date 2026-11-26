@@ -1,0 +1,184 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cell_balance_J_m2": 1.025525150910589e-14,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 8,
+      "method": "theta",
+      "temperature_error_K": 1.1546319456101628e-14,
+      "west_contact_east_heat_errors_J_m2": [
+        0.0057870370370073365,
+        0.0057870370370424196,
+        0.005787037037046416
+      ],
+      "max_step_heat_error_J_m2": 0.0007233796296348682,
+      "reversed_flow": true,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "cell_balance_J_m2": 5.2262881522491256e-15,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 16,
+      "method": "theta",
+      "temperature_error_K": 1.099120794378905e-14,
+      "west_contact_east_heat_errors_J_m2": [
+        0.0014467592592939393,
+        0.00144675925925003,
+        0.0014467592592339873
+      ],
+      "max_step_heat_error_J_m2": 9.042245370988189e-05,
+      "reversed_flow": true,
+      "orders": [
+        null,
+        1.999999999958013,
+        2.000000000010545,
+        2.0000000000275393
+      ],
+      "passed": true
+    },
+    {
+      "cell_balance_J_m2": 2.744766219864303e-15,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 32,
+      "method": "theta",
+      "temperature_error_K": 2.7172708527700706e-14,
+      "west_contact_east_heat_errors_J_m2": [
+        0.00036168981485040774,
+        0.0003616898147958958,
+        0.0003616898148348646
+      ],
+      "max_step_heat_error_J_m2": 1.130280672456685e-05,
+      "reversed_flow": true,
+      "orders": [
+        null,
+        1.9999999998926108,
+        2.0000000000662603,
+        1.999999999894825
+      ],
+      "passed": true
+    },
+    {
+      "cell_balance_J_m2": 2.1658022597570437e-15,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 64,
+      "method": "theta",
+      "temperature_error_K": 3.932965064734617e-14,
+      "west_contact_east_heat_errors_J_m2": [
+        9.042245372847812e-05,
+        9.042245368218182e-05,
+        9.04224537373044e-05
+      ],
+      "max_step_heat_error_J_m2": 1.4128508474819945e-06,
+      "reversed_flow": true,
+      "orders": [
+        null,
+        1.9999999997466944,
+        2.000000000267919,
+        1.999999999543873
+      ],
+      "passed": true
+    },
+    {
+      "cell_balance_J_m2": 1.9551200935996604e-14,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 8,
+      "method": "sdirk2",
+      "temperature_error_K": 0.0014717894892986028,
+      "west_contact_east_heat_errors_J_m2": [
+        0.0011425121113869396,
+        0.0011152505694829729,
+        0.001366019288799869
+      ],
+      "max_step_heat_error_J_m2": 0.0008878025014357749,
+      "reversed_flow": true,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "cell_balance_J_m2": 8.876146345704328e-15,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 16,
+      "method": "sdirk2",
+      "temperature_error_K": 0.0003928718118386687,
+      "west_contact_east_heat_errors_J_m2": [
+        0.00030995628360352967,
+        0.00028158371152492423,
+        0.000344226131375136
+      ],
+      "max_step_heat_error_J_m2": 0.0001762250908292906,
+      "reversed_flow": true,
+      "orders": [
+        1.9054407721513043,
+        1.8820728023932185,
+        1.9857320973506976,
+        1.9885493287373535
+      ],
+      "passed": true
+    },
+    {
+      "cell_balance_J_m2": 3.6786979712433165e-15,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 32,
+      "method": "sdirk2",
+      "temperature_error_K": 0.00010315242531200308,
+      "west_contact_east_heat_errors_J_m2": [
+        8.21756970069698e-05,
+        7.07454069175939e-05,
+        8.640122717717968e-05
+      ],
+      "max_step_heat_error_J_m2": 3.363285816289363e-05,
+      "reversed_flow": true,
+      "orders": [
+        1.9292809174175252,
+        1.9152810581024136,
+        1.9928554919254036,
+        1.9942329128297245
+      ],
+      "passed": true
+    },
+    {
+      "cell_balance_J_m2": 2.476317761956892e-15,
+      "solver": "fvm",
+      "columns": 40,
+      "steps": 64,
+      "method": "sdirk2",
+      "temperature_error_K": 2.6754089550107274e-05,
+      "west_contact_east_heat_errors_J_m2": [
+        2.142463454846144e-05,
+        1.7730161179507764e-05,
+        2.1643681494265543e-05
+      ],
+      "max_step_heat_error_J_m2": 6.2962386426397565e-06,
+      "reversed_flow": true,
+      "orders": [
+        1.9469464026281185,
+        1.9394411924480093,
+        1.9964308338985473,
+        1.9971058874072751
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "edd2f7a853ff6b842045280cc09ff8500c9d120a",
+      "file": "sph_reversing_contact_walls.py",
+      "source_sha256": "1424babf101bb65e785b16ce84e3d57b226109d4741454b6e7ef5a5c5399456b"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/sph_reversing_contact_walls.py --solver fvm"
+}
