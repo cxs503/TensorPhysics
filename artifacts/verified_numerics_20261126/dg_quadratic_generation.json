@@ -1,0 +1,13 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "52dfa0d3cf89471995ffd69018ab38426a4c4474",
+  "passed": 76,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Two homogeneous layers, six P4 SIPG cells per layer. Prescribe independent quartic relative temperature polynomials, conductive flux from their derivatives, source from flux divergence plus capacity times 0.35 K/s. Match transmitted flux and contact temperature jump and remove the capacity-weighted mean. Compare reconstructed temperature and flux at four fractions of every cell, layer end traces, and uniform drift rate.",
+  "metrics": {
+    "rate_K_s": 0.0,
+    "trace_K": 6.050715484207103e-15,
+    "temperature_K": 8.104628079763643e-15,
+    "flux_W_m2": 1.2934098236883074e-13
+  }
+}
