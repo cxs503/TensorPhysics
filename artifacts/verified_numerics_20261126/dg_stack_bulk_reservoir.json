@@ -1,0 +1,11 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "bc82e5fe62867f0208ceca52413a013a3d44284d",
+  "passed": 86,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Two layers of thickness 0.43 and 1.25 m with distinct quadratic complex temperature fields at 2.3 rad/s, joined by contact resistance 0.24 m\u00b2 K/W. Compute local bulk ambient profiles from the analytic heat equation with an independent volumetric source only in the second layer. Verify both surface temperatures and inward fluxes of each layer after composing the loaded P2 admittances, seven cells per layer.",
+  "metrics": {
+    "max_temperature_K": 8.71383633168729e-15,
+    "max_inward_flux_W_m2": 7.316908819198988e-14
+  }
+}
