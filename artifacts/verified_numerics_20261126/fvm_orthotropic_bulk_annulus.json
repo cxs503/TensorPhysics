@@ -1,0 +1,36 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "f7c8d0ddd9e59357302dc1e09fbf5aeba8feb9c4",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_annular_conduction.py --junitxml=results.xml",
+  "passed": 66,
+  "reference": "Two concentric materials with different positive radial, angular and axial conductivities. Continuum harmonic reference uses modified Bessel functions of order m*sqrt(k_theta/k_r) and squared radial wavenumber (k_z*q^2+i*omega*C)/k_r in each material. Transient reference checks time integration using exact exponential decay of the semidiscrete mixed mode for matched shell-integrated loss/capacity ratios.",
+  "runs": {
+    "test_harmonic_two_material_sheet_traces_against_bessel_modes[-1.25-0.35-1.2-True]": {
+      "max_error_12_field_K": 0.0001151697065662223,
+      "max_error_12_radial_rate_W_per_m": 0.012411262715856823,
+      "max_error_12_trace_K": 0.000122090656916507,
+      "max_error_12_sheet_K": 5.9925273233800785e-05,
+      "balance_12_W_per_m": 1.6117196017925294e-13,
+      "max_error_24_field_K": 2.9656596697490648e-05,
+      "max_error_24_radial_rate_W_per_m": 0.0031045099129281186,
+      "max_error_24_trace_K": 3.053211716493242e-05,
+      "max_error_24_sheet_K": 1.4979094192243918e-05,
+      "balance_24_W_per_m": 6.849692781353401e-13,
+      "max_error_48_field_K": 7.523490810555231e-06,
+      "max_error_48_radial_rate_W_per_m": 0.0007762334235734889,
+      "max_error_48_trace_K": 7.633621640546959e-06,
+      "max_error_48_sheet_K": 3.7446355312127378e-06,
+      "balance_48_W_per_m": 1.6510723209179762e-12
+    },
+    "test_transient_orthotropic_annulus_mixed_mode_decay[theta]": {
+      "steps10_max_temperature_error_K": 0.0006905921693131645,
+      "steps20_max_temperature_error_K": 0.0001724948379958069,
+      "steps40_max_temperature_error_K": 4.311406880724844e-05
+    },
+    "test_transient_orthotropic_annulus_mixed_mode_decay[sdirk2]": {
+      "steps10_max_temperature_error_K": 0.0003393613323702249,
+      "steps20_max_temperature_error_K": 8.425749171075969e-05,
+      "steps40_max_temperature_error_K": 2.099247398645865e-05
+    }
+  }
+}
