@@ -1,0 +1,37 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "4a2b1bec6cc4918f4bd76a93b6f64436325baf4a",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal_contact_chain.py --junitxml=heat.xml",
+  "reference": "Analytic single-store solution with a 305 K common wall phasor, compensated storage and a 2^-44 K differential drive. Absolute link moment errors divided by the differential power scale (epsilon/1 K/W) and duration^(order+1).",
+  "tests_passed": 91,
+  "runs": [
+    {
+      "case": "test_fixed_wall_weak_harmonic_heat_is_invariant_to_uniform_drive[False-0.0]",
+      "errors": {
+        "scaled_order_0_error": 3.802133645976563e-17
+      }
+    },
+    {
+      "case": "test_fixed_wall_weak_harmonic_heat_is_invariant_to_uniform_drive[False-0.75]",
+      "errors": {
+        "scaled_order_0_error": 7.604267291953127e-17
+      }
+    },
+    {
+      "case": "test_fixed_wall_weak_harmonic_heat_is_invariant_to_uniform_drive[True-0.0]",
+      "errors": {
+        "scaled_order_0_error": 3.802133645976563e-17,
+        "scaled_order_1_error": 2.6042011273812082e-17,
+        "scaled_order_2_error": 5.351098206947688e-17
+      }
+    },
+    {
+      "case": "test_fixed_wall_weak_harmonic_heat_is_invariant_to_uniform_drive[True-0.75]",
+      "errors": {
+        "scaled_order_0_error": 7.604267291953127e-17,
+        "scaled_order_1_error": 5.2084022547624165e-17,
+        "scaled_order_2_error": 1.4269595218527169e-16
+      }
+    }
+  ]
+}
