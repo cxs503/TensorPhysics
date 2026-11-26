@@ -28,6 +28,27 @@ def benchmark():
 
     reference = torch.from_numpy(quad_vec(integrand, west, east, epsabs=1e-14)[0])
     generation = (east-west)*(left+right)/2
+    # These two internal faces coincide on every mesh. The volume includes
+    # the east heater edge, hence only part of the source contributes.
+    a, b = .25, .75
+    local_generation = (east-a)*source((a+east)/2)
+
+    def interior_reference(y):
+        # G(x,y) = sinh(z min(x,y))*sinh(z(1-max(x,y))) / (k*z*sinh(z)).
+        # Differentiate in x for flux, and integrate in x for stored energy.
+        def flux_kernel(x):
+            if x < y:
+                return -cmath.cosh(z*x)*cmath.sinh(z*(1-y))/cmath.sinh(z)
+            return cmath.sinh(z*y)*cmath.cosh(z*(1-x))/cmath.sinh(z)
+
+        pivot = min(max(y, a), b)
+        integral = (cmath.sinh(z*(1-y))*(cmath.cosh(z*pivot)-cmath.cosh(z*a))
+                    + cmath.sinh(z*y)*(cmath.cosh(z*(1-pivot))-cmath.cosh(z*(1-b))))
+        energy_kernel = capacity*integral/(k*z*z*cmath.sinh(z))
+        return source(y)*np.array([flux_kernel(a), flux_kernel(b), energy_kernel])
+
+    exact_west, exact_east, exact_energy = quad_vec(interior_reference, west, east, points=[a])[0]
+    reference_balance = abs(exact_west-exact_east+local_generation-1j*omega*exact_energy)
     runs = []
     for n in (16, 32, 64, 128):
         dx = 1/n
@@ -38,7 +59,7 @@ def benchmark():
             column_source.repeat(8, 1), dx, (0., 0.), omega, conductivity=k,
             volumetric_heat_capacity=capacity, return_x_flux=True)
         modal_source = dg.project_linear_strip_source(left, right, 1., west, east, ncells=n, degree=2)
-        _, _, dg_faces, cell_power = dg.solve_harmonic_heat_layer_1d(
+        _, dg_modes, dg_faces, cell_power = dg.solve_harmonic_heat_layer_1d(
             omega, (0., 0.), conductivity=k, capacity=capacity, ncells=n, degree=2,
             source_modes=modal_source, return_cell_power=True)
         sph_out = torch.stack((-sph_faces[0], sph_faces[-1]))
@@ -51,16 +72,37 @@ def benchmark():
             "sph": abs(sph_out.sum().item()+1j*omega*capacity*temperature.mean().item()-generation),
             "dg": abs(dg_out.sum().item()+cell_power["storage"].sum().item()-generation),
         }
+        lo_idx, hi_idx = n//4, 3*n//4
+        storage = {"sph": capacity*dx*temperature[:, lo_idx:hi_idx].mean(dim=0).sum().item(),
+                   "dg": dg.integrate_heat_stack_energy(dg_modes[None], [1.], capacity, a, b).item()}
+        local = {}
+        for name, faces in (("sph", sph_faces), ("dg", dg_faces)):
+            q_west, q_east = faces[lo_idx].item(), faces[hi_idx].item()
+            local[name] = dict(flux_error_W_m2=max(abs(q_west-exact_west), abs(q_east-exact_east)),
+                               energy_error_J_m2=abs(storage[name]-exact_energy),
+                               balance_W_m2=abs(q_west-q_east+local_generation-1j*omega*storage[name]))
+            if runs:
+                for key in ("flux_error_W_m2", "energy_error_J_m2"):
+                    local[name][key+"_order"] = math.log2(runs[-1]["control_volume"][name][key]/local[name][key])
         runs.append(dict(columns=n, wall_errors_W_m2=errors, orders=orders,
-                         global_balance_W_m2=balance))
+                         global_balance_W_m2=balance, control_volume=local))
     passed = (all(max(run["global_balance_W_m2"].values()) < 1e-10 for run in runs)
               and all(min(run["orders"].values()) > 1.5 for run in runs[1:])
               and runs[-1]["wall_errors_W_m2"]["sph"] < 1e-4
               and runs[-1]["wall_errors_W_m2"]["dg"] < 1e-8)
-    return dict(passed=passed, runs=runs, sources=[provenance(path) for path in
+    passed &= reference_balance < 1e-12
+    for row in runs:
+        for data in row["control_volume"].values():
+            passed &= data["balance_W_m2"] < 1e-10
+            if "flux_error_W_m2_order" in data:
+                passed &= min(data["flux_error_W_m2_order"], data["energy_error_J_m2_order"]) > 1.5
+    return dict(passed=bool(passed), runs=runs, sources=[provenance(path) for path in
                 (__file__, sph.__file__, dg.__file__)],
                 reference="Unit slab with zero wall phasors. Integrate the affine complex source against each "
                           "Dirichlet wall Green function. Errors are the larger absolute phasor error of the two walls.",
+                control_volume_m=[a,b],
+                reference_energy_J_m2=[exact_energy.real, exact_energy.imag],
+                reference_balance_W_m2=reference_balance,
                 reference_outward_W_m2=[[v.real, v.imag] for v in reference.tolist()],
                 reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorDG "
                              "python examples/cross_sph_dg_strip_heater.py")
