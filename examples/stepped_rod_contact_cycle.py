@@ -6,6 +6,7 @@ import math
 import numpy as np
 import torch
 from scipy.integrate import quad
+from scipy.optimize import brentq
 
 from conduction_provenance import provenance
 from tensorfem import thermal
@@ -21,8 +22,9 @@ def phase_integrals(bias, phasor, omega):
         roots = [(sign*angle-phase)%(2*math.pi) for sign in (-1,1)]
     def power(t):
         return bias+(phasor*np.exp(1j*t)).real
-    return np.array([quad(lambda t: max(sign*power(t),0.),0.,2*math.pi,points=roots)[0]/omega
+    heat = np.array([quad(lambda t: max(sign*power(t),0.),0.,2*math.pi,points=roots)[0]/omega
                      for sign in (1,-1)])
+    return heat,np.sort(roots)/omega
 
 
 def measure(n):
@@ -68,14 +70,27 @@ def measure(n):
         contact_resistance=resistance,flux_order=2)
     fvm_bias = steady_east[n-1]
     fvm_cycle = np.asarray(rod.harmonic_face_cycle_heat(fvm_power,omega,steady_power=fvm_bias))
-    expected = phase_integrals(bias,contact,omega)
+    expected,exact_events = phase_integrals(bias,contact,omega)
+    exact_duration = exact_events[1]-exact_events[0]
+    period = 2*np.pi/omega
     rows = []
     for solver,power,dc_power,cycle in (("FEM",fem_power,fem_bias,fem_cycle),
                                         ("FVM",fvm_power,fvm_bias,fvm_cycle)):
         errors = abs(cycle-expected)
+        def instantaneous_power(t):
+            return dc_power+(power*np.exp(1j*omega*t)).real
+        # This drive is forward at phase zero and reverse at half a cycle.
+        # Locate each sign change from the solver's own DC and AC results.
+        assert instantaneous_power(0)>0 and instantaneous_power(period/2)<0
+        enter = brentq(instantaneous_power,0.,period/2,xtol=1e-14)
+        leave = brentq(instantaneous_power,period/2,period,xtol=1e-14)
         rows.append(dict(solver=solver,elements_per_layer=n,power_error_W=float(abs(power-contact)),
                          steady_contact_power_W=float(dc_power),steady_power_error_W=float(abs(dc_power-bias)),
                          net_cycle_error_J=float(abs(cycle[0]-cycle[1]-2*np.pi*bias/omega)),
+                         enter_reverse_s=enter,leave_reverse_s=leave,reverse_duration_s=leave-enter,
+                         exact_reversal_times_s=exact_events.tolist(),exact_reverse_duration_s=exact_duration,
+                         enter_error_s=abs(enter-exact_events[0]),leave_error_s=abs(leave-exact_events[1]),
+                         duration_error_s=abs(leave-enter-exact_duration),
                          forward_error_J=float(errors[0]),reverse_error_J=float(errors[1]),
                          contact_power_W=[float(power.real),float(power.imag)]))
     return rows,float(abs(fvm_power-west[n]))
@@ -93,7 +108,7 @@ if __name__ == "__main__":
                 row["interface_power_mismatch_W"] = mismatch
                 assert mismatch < 1e-11
             if solver in previous:
-                for metric in ("power_error_W","forward_error_J","reverse_error_J"):
+                for metric in ("power_error_W","forward_error_J","reverse_error_J","enter_error_s","leave_error_s","duration_error_s"):
                     order = math.log2(previous[solver][metric]/row[metric])
                     row[metric+"_order"] = order
                     assert 1.8 < order < 2.2, (n,solver,metric,order)
