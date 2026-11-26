@@ -33,19 +33,17 @@ def benchmark():
     a, b = .25, .75
     local_generation = (east-a)*source((a+east)/2)
 
-    def interior_reference(y):
-        # G(x,y) = sinh(z min(x,y))*sinh(z(1-max(x,y))) / (k*z*sinh(z)).
-        # Differentiate in x for flux, and integrate in x for stored energy.
-        def flux_kernel(x):
-            if x < y:
-                return -cmath.cosh(z*x)*cmath.sinh(z*(1-y))/cmath.sinh(z)
-            return cmath.sinh(z*y)*cmath.cosh(z*(1-x))/cmath.sinh(z)
+    def flux_kernel(x, y):
+        return np.where(x < y, -np.cosh(z*x)*cmath.sinh(z*(1-y)),
+                        cmath.sinh(z*y)*np.cosh(z*(1-x)))/cmath.sinh(z)
 
+    def interior_reference(y):
+        # Integrate the temperature Green function in x for stored energy.
         pivot = min(max(y, a), b)
         integral = (cmath.sinh(z*(1-y))*(cmath.cosh(z*pivot)-cmath.cosh(z*a))
                     + cmath.sinh(z*y)*(cmath.cosh(z*(1-pivot))-cmath.cosh(z*(1-b))))
         energy_kernel = capacity*integral/(k*z*z*cmath.sinh(z))
-        return source(y)*np.array([flux_kernel(a), flux_kernel(b), energy_kernel])
+        return source(y)*np.array([flux_kernel(a, y), flux_kernel(b, y), energy_kernel])
 
     exact_west, exact_east, exact_energy = quad_vec(interior_reference, west, east, points=[a])[0]
     reference_balance = abs(exact_west-exact_east+local_generation-1j*omega*exact_energy)
@@ -57,6 +55,8 @@ def benchmark():
 
     exact_temperature = quad_vec(temperature_kernel, west, east,
                                  points=probes[(probes > west) & (probes < east)], epsabs=1e-14)[0]
+    exact_probe_flux = quad_vec(lambda y: source(y)*flux_kernel(probes, y), west, east,
+                                points=probes[(probes > west) & (probes < east)], epsabs=1e-14)[0]
     runs = []
     for n in (16, 32, 64, 128):
         dx = 1/n
@@ -105,15 +105,34 @@ def benchmark():
         maximum = {name: max(values) for name, values in probe_errors.items()}
         probe_orders = {name: math.log2(runs[-1]["max_probe_error_K"][name]/value)
                         for name, value in maximum.items()} if runs else {}
+        # Recover q(x) from the left face and the partial-cell energy balance.
+        # Keep the physical heater edge inside each cut cell when integrating generation.
+        cell_left = cells*dx
+        covered_left = np.clip(cell_left, west, east)
+        covered_right = np.clip(probes, west, east)
+        generated = (covered_right-covered_left)*source((covered_left+covered_right)/2)
+        sph_energy = capacity*(probes-cell_left)*temperature.mean(dim=0).numpy()[cells]
+        dg_energy = np.array([dg.integrate_heat_stack_energy(dg_modes[None], [1.], capacity, x0, x).item()
+                              for x0, x in zip(cell_left, probes)])
+        sph_probe_flux = sph_faces.numpy()[cells] + generated - 1j*omega*sph_energy
+        dg_probe_flux = dg_faces.numpy()[cells] + generated - 1j*omega*dg_energy
+        flux_errors = {name: np.abs(diff).tolist() for name, diff in (
+            ("sph", sph_probe_flux-exact_probe_flux), ("dg", dg_probe_flux-exact_probe_flux),
+            ("cross", sph_probe_flux-dg_probe_flux))}
+        flux_max = {name: max(values) for name, values in flux_errors.items()}
+        flux_orders = {name: math.log2(runs[-1]["max_probe_flux_error_W_m2"][name]/value)
+                       for name, value in flux_max.items()} if runs else {}
         runs.append(dict(columns=n, wall_errors_W_m2=errors, orders=orders,
                          global_balance_W_m2=balance, control_volume=local, probe_errors_K=probe_errors,
-                         max_probe_error_K=maximum, probe_orders=probe_orders))
+                         max_probe_error_K=maximum, probe_orders=probe_orders, probe_flux_errors_W_m2=flux_errors,
+                         max_probe_flux_error_W_m2=flux_max, probe_flux_orders=flux_orders))
     passed = (all(max(run["global_balance_W_m2"].values()) < 1e-10 for run in runs)
               and all(min(run["orders"].values()) > 1.5 for run in runs[1:])
               and runs[-1]["wall_errors_W_m2"]["sph"] < 1e-4
               and runs[-1]["wall_errors_W_m2"]["dg"] < 1e-8)
     passed &= reference_balance < 1e-12
     passed &= all(min(row["probe_orders"].values()) > 1 for row in runs[1:])
+    passed &= all(min(row["probe_flux_orders"].values()) > 1 for row in runs[1:])
     for row in runs:
         for data in row["control_volume"].values():
             passed &= data["balance_W_m2"] < 1e-10
@@ -125,6 +144,7 @@ def benchmark():
                           "Dirichlet wall Green function. Errors are the larger absolute phasor error of the two walls.",
                 probe_positions_m=probes.tolist(),
                 reference_probe_temperature_K=[[v.real, v.imag] for v in exact_temperature],
+                reference_probe_flux_W_m2=[[v.real, v.imag] for v in exact_probe_flux],
                 control_volume_m=[a,b],
                 reference_energy_J_m2=[exact_energy.real, exact_energy.imag],
                 reference_balance_W_m2=reference_balance,
