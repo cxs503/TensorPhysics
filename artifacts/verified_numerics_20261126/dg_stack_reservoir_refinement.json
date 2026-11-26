@@ -1,0 +1,31 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "05090be8401a5cead0409f90474b1e1167d208b7",
+  "passed": 87,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Two homogeneous layers of thickness 0.65 and 0.85 m with different affine complex reservoir profiles. At 3.2 rad/s propagate [T,q,1,x] by a continuum matrix exponential per layer and impose the 0.27 m\u00b2 K/W contact jump. Use resulting exterior Dirichlet values in the composed P2 SIPG model. Errors are maxima over the two material-side contact traces or fluxes.",
+  "metrics": {
+    "n4_flux_balance_W_m2": 3.1401849173675503e-16,
+    "n4_jump_residual_K": 2.2887833992611187e-16,
+    "n4_temperature_K": 2.5455233417570685e-05,
+    "n4_flux_W_m2": 4.510115591978383e-05,
+    "n8_flux_balance_W_m2": 3.1401849173675503e-16,
+    "n8_jump_residual_K": 5.551115123125783e-17,
+    "n8_temperature_K": 1.5977660482470489e-06,
+    "n8_temperature_K_order": 3.9938342115323744,
+    "n8_flux_W_m2": 2.8301570965452993e-06,
+    "n8_flux_W_m2_order": 3.9942103678945298,
+    "n16_flux_balance_W_m2": 9.155133597044475e-16,
+    "n16_jump_residual_K": 3.1401849173675503e-16,
+    "n16_temperature_K": 1.0007225609152016e-07,
+    "n16_temperature_K_order": 3.996942214407071,
+    "n16_flux_W_m2": 1.7724644935399035e-07,
+    "n16_flux_W_m2_order": 3.997053504058094,
+    "n32_flux_balance_W_m2": 8.005932084973442e-16,
+    "n32_jump_residual_K": 1.7554167342883506e-16,
+    "n32_temperature_K": 6.2609268042126485e-09,
+    "n32_temperature_K_order": 3.9985220134608372,
+    "n32_flux_W_m2": 1.1089674004171056e-08,
+    "n32_flux_W_m2_order": 3.998467866038341
+  }
+}
