@@ -1,0 +1,45 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "fac158a90b2370744047787ed72ceb33b0a43b84",
+  "passed": 166,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Cell and wall capacities per area 1 and 2 with conductance 2; area 0.5 m\u00b2. At s=i*omega the wall satisfies [h+2s+s/(1+s/2)]Tw=P+h*Ta+S/(1+s/2). For h=3 or 1e9 and S=0 this gives Tw0=Ta+P/h, Tw1=-3Tw0/h. For h=0 and S=-P the zero-total-energy solution gives Tw0=P/6 and Tw1=-P/18. Compare DC and s coefficients of wall temperature, heater, film, conduction and wall storage power. Absolute errors: K, W at DC; K s, W s at first order.",
+  "runs": {
+    "test_low_frequency_storing_wall_surface_coefficients[0.0]": {
+      "order_0_temperature_error": 2.7755575615628914e-17,
+      "order_0_heater_error": 0.0,
+      "order_0_ambient_error": 0.0,
+      "order_0_material_error": 0.0,
+      "order_0_storage_error": 0.0,
+      "order_1_temperature_error": 6.938893903907228e-18,
+      "order_1_heater_error": 0.0,
+      "order_1_ambient_error": 0.0,
+      "order_1_material_error": 0.0,
+      "order_1_storage_error": 2.7755575615628914e-17
+    },
+    "test_low_frequency_storing_wall_surface_coefficients[3.0]": {
+      "order_0_temperature_error": 0.0,
+      "order_0_heater_error": 0.0,
+      "order_0_ambient_error": 0.0,
+      "order_0_material_error": 0.0,
+      "order_0_storage_error": 0.0,
+      "order_1_temperature_error": 2.7755575615628914e-17,
+      "order_1_heater_error": 0.0,
+      "order_1_ambient_error": 0.0,
+      "order_1_material_error": 0.0,
+      "order_1_storage_error": 0.0
+    },
+    "test_low_frequency_storing_wall_surface_coefficients[1000000000.0]": {
+      "order_0_temperature_error": 0.0,
+      "order_0_heater_error": 0.0,
+      "order_0_ambient_error": 5.551115123125783e-17,
+      "order_0_material_error": 2.9029179273940096e-17,
+      "order_0_storage_error": 0.0,
+      "order_1_temperature_error": 1.0339757656912846e-25,
+      "order_1_heater_error": 0.0,
+      "order_1_ambient_error": 5.551115123125783e-17,
+      "order_1_material_error": 0.0,
+      "order_1_storage_error": 0.0
+    }
+  }
+}
