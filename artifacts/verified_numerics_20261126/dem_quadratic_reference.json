@@ -1,0 +1,45 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "c026996570c2a6595d2766d662a12b58e824611d",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal_contact_chain.py --junitxml=results.xml",
+  "passed": 111,
+  "reference": "Unit link resistance, insulated stores C=(1,2). Reference rate 1-2t on [0,1] s. Nodal powers C*(1-2t+b). Relative field b*t + A*(2,-1)*exp(-1.5t). Compare final and mean fields, stored energy and flux moments of orders 0 to 2 using quadrature of 3*A*t^j*exp(-1.5t). b=0 with A=spacing(305 K)/16, or b=A=0.125 in SI units. Temperature and heat errors divided by numerical amplitude A, energy error by A*sum(C).",
+  "runs": {
+    "test_insulated_pair_under_quadratic_reference[0.0-1]": {
+      "end_scaled_error": 1.1102230246251565e-16,
+      "mean_scaled_error": 2.220446049250313e-16,
+      "energy_scaled_error": 1.850371707708594e-17,
+      "heat_moments_scaled_error": 2.220446049250313e-16
+    },
+    "test_insulated_pair_under_quadratic_reference[0.0-4]": {
+      "end_scaled_error": 8.326672684688674e-16,
+      "mean_scaled_error": 6.661338147750939e-16,
+      "energy_scaled_error": 2.4054832200211723e-16,
+      "heat_moments_scaled_error": 6.661338147750939e-16
+    },
+    "test_insulated_pair_under_quadratic_reference[0.0-16]": {
+      "end_scaled_error": 2.4424906541753444e-15,
+      "mean_scaled_error": 2.4424906541753444e-15,
+      "energy_scaled_error": 3.3306690738754696e-16,
+      "heat_moments_scaled_error": 3.552713678800501e-15
+    },
+    "test_insulated_pair_under_quadratic_reference[0.125-1]": {
+      "end_scaled_error": 2.220446049250313e-16,
+      "mean_scaled_error": 2.220446049250313e-16,
+      "energy_scaled_error": 0.0,
+      "heat_moments_scaled_error": 2.220446049250313e-16
+    },
+    "test_insulated_pair_under_quadratic_reference[0.125-4]": {
+      "end_scaled_error": 1.1102230246251565e-15,
+      "mean_scaled_error": 6.661338147750939e-16,
+      "energy_scaled_error": 4.440892098500626e-16,
+      "heat_moments_scaled_error": 6.661338147750939e-16
+    },
+    "test_insulated_pair_under_quadratic_reference[0.125-16]": {
+      "end_scaled_error": 3.1086244689504383e-15,
+      "mean_scaled_error": 2.6645352591003757e-15,
+      "energy_scaled_error": 5.921189464667501e-16,
+      "heat_moments_scaled_error": 3.552713678800501e-15
+    }
+  }
+}
