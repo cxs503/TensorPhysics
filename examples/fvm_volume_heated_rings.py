@@ -39,12 +39,14 @@ def measure(n, mode, omega):
     density = (stored+lateral)/area - np.repeat(4*k*b, n)
     walls = a[[0,-1]]+b[[0,-1]]*edges[[0,-1]]**2
     expected_wall = -4*np.pi*(k*b)[[0,-1]]*edges[[0,-1]]**2
-    temp, qi, qo, rates, storage, angular = storing_rings.solve_storing_rings(
+    temp, qi, qo, rates, storage, angular, field = storing_rings.solve_storing_rings(
         mesh, np.repeat(k, n), [n, 2*n], walls, omega, contact_resistances=resistance,
         sheet_capacities=sheet_cv, sheet_generation=generation, source=density,
         inner_resistance_fractions=fraction, sheet_conductivities=sheet_k, azimuthal_mode=mode,
         volumetric_heat_capacity=np.repeat(cv, n), return_wall_rates=True,
-        return_bulk_storage=True, return_angular_conduction=True)
+        return_bulk_storage=True, return_angular_conduction=True, return_cell_temperatures=True)
+    centroid = (2/3)*(hi**2+hi*lo+lo**2)/(hi+lo)
+    field_error = float(max(abs(field - np.repeat(a, n) - np.repeat(b, n)*centroid**2)))
     reference = np.r_[sheet, incoming, outgoing, expected_wall]
     error = float(max(abs(np.r_[temp, qi, qo, rates]/reference-1)))
     storage_error = float(max(abs(storage/stored.reshape(3, n).sum(axis=1)-1)))
@@ -52,7 +54,7 @@ def measure(n, mode, omega):
     sheet_net = 2*np.pi*radius @ (generation-admittance*temp)
     balance = abs(rates[0]-rates[1]+sheet_net+area@density-sum(storage)-sum(angular))
     return dict(cells_per_layer=n, mode=mode, omega=omega, max_relative_error=error,
-                storage_relative_error=storage_error, angular_error=angular_error, modal_balance_W_m=float(balance))
+                cell_temperature_max_error_K=field_error, storage_relative_error=storage_error, angular_error=angular_error, modal_balance_W_m=float(balance))
 
 
 if __name__ == "__main__":
@@ -60,12 +62,17 @@ if __name__ == "__main__":
     for mode in (0, 1, 3):
         for omega in (1., 8., 24.):
             previous = None
+            previous_field_error = None
             for n in (4, 8, 16, 32):
                 row = measure(n, mode, omega)
                 error = row["max_relative_error"]
                 order = None if previous is None else float(np.log2(previous/error))
-                row.update(order=order, passed=row["modal_balance_W_m"] < 1e-9 and
-                           (n < 32 or (max(error, row["storage_relative_error"], row["angular_error"]) < .001 and order > 1.8)))
+                field_error = row["cell_temperature_max_error_K"]
+                field_order = None if previous_field_error is None else float(np.log2(previous_field_error/field_error))
+                previous_field_error = field_error
+                row.update(cell_temperature_order=field_order, order=order, passed=row["modal_balance_W_m"] < 1e-9 and
+                           (n < 32 or (max(error, row["storage_relative_error"], row["angular_error"]) < .001 and order > 1.8
+                                       and field_error < .001 and field_order > 1.8)))
                 rows.append(row)
                 previous = error
     passed = all(row["passed"] for row in rows)
