@@ -1,0 +1,39 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "da4e1ce420d44826084415f20c3b574d7c0d7e9d",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_conduction_2d.py --junitxml=results.xml",
+  "passed": 224,
+  "reference": "2 by 8 homogeneous slab with T=305+x+t, C=2, unit conductivity and H=4. Two row patterns +x and -x switch to -2x and +2x at t=0.125 s, giving ambient heat -0.625 times the initial pattern through 0.5 s. Prescribed source energy is 1 J/m\u00b3 minus this exchange. Compute the energy residual from solver-reported storage, exchange, source heat and section heat. Options 0,1,2 denote Crank-Nicolson, Rannacher and SDIRK2. A separate two-interval scalar source 2^-50*(1-4t) W/m\u00b3 with zero ambient is checked against its signed analytical integral. The reusable callback buffer test uses a unit power ramp on an insulated slab.",
+  "runs": {
+    "test_fixed_wall_bulk_exchange_across_load_switch[options0]": {
+      "bulk_J_m3": 2.498001805406602e-16,
+      "source_J_m3": 0.0,
+      "final_K": 3.3306690738754696e-16,
+      "mean_K": 1.1102230246251565e-16,
+      "section_J_m2": 4.440892098500626e-16,
+      "budget_J_m3": 7.549516567451064e-15
+    },
+    "test_fixed_wall_bulk_exchange_across_load_switch[options1]": {
+      "bulk_J_m3": 2.914335439641036e-16,
+      "source_J_m3": 0.0,
+      "final_K": 2.220446049250313e-16,
+      "mean_K": 1.1102230246251565e-16,
+      "section_J_m2": 4.440892098500626e-16,
+      "budget_J_m3": 7.438494264988549e-15
+    },
+    "test_fixed_wall_bulk_exchange_across_load_switch[options2]": {
+      "bulk_J_m3": 5.329070518200751e-15,
+      "source_J_m3": 0.0,
+      "final_K": 7.882583474838611e-15,
+      "mean_K": 3.1086244689504383e-15,
+      "section_J_m2": 5.329070518200751e-15,
+      "budget_J_m3": 1.0658141036401503e-14
+    },
+    "test_weak_source_heat_with_implicit_zero_ambient[theta]": {
+      "source_error_divided_by_power_s": 0.0
+    },
+    "test_weak_source_heat_with_implicit_zero_ambient[sdirk2]": {
+      "source_error_divided_by_power_s": 1.1102230246251565e-16
+    }
+  }
+}
