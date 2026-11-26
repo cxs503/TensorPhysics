@@ -1,0 +1,1059 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "mode": 0,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        2.150833263276849e-15,
+        4.951395542680038e-15
+      ],
+      "fvm_errors": [
+        8.045527044939628e-16,
+        1.0637883344175332e-14
+      ],
+      "solver_difference": [
+        2.4650951625709315e-15,
+        9.264875997516714e-15
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        8.93798490114984e-16,
+        4.100410761679928e-15
+      ],
+      "fvm_errors": [
+        8.455206652451151e-16,
+        1.0282007938688807e-14
+      ],
+      "solver_difference": [
+        8.333897564733125e-16,
+        6.328819024068409e-15
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        3.855927796350635e-16,
+        1.7342238036525468e-15
+      ],
+      "fvm_errors": [
+        6.50333926369705e-16,
+        8.379058453350832e-15
+      ],
+      "solver_difference": [
+        4.859207869415293e-16,
+        6.66503786375278e-15
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        2.1960256329892053e-15,
+        5.117875266520903e-15
+      ],
+      "fvm_errors": [
+        2.542022845965011e-15,
+        2.4746769112035348e-14
+      ],
+      "solver_difference": [
+        4.606171364522552e-15,
+        2.8554323233166224e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        8.93798490114984e-16,
+        4.119810118670014e-15
+      ],
+      "fvm_errors": [
+        1.2479403436383202e-15,
+        2.4017796254920326e-14
+      ],
+      "solver_difference": [
+        1.96673274755553e-15,
+        2.8121973320443008e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        5.978733960281817e-16,
+        1.7702748954631059e-15
+      ],
+      "fvm_errors": [
+        4.518280359883027e-16,
+        2.0888205231302068e-14
+      ],
+      "solver_difference": [
+        6.938893903907228e-16,
+        2.255502166272611e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        2.2570932388568084e-15,
+        5.117875266520903e-15
+      ],
+      "fvm_errors": [
+        1.2523886564118043e-15,
+        3.032352210163328e-14
+      ],
+      "solver_difference": [
+        2.8263027150927232e-15,
+        3.329928842935363e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        9.062365455747892e-16,
+        4.3292470300040426e-15
+      ],
+      "fvm_errors": [
+        1.0366856115605575e-15,
+        2.9633233514338895e-14
+      ],
+      "solver_difference": [
+        1.6014269617894046e-15,
+        3.348353313391504e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        4.965068306494546e-16,
+        2.124706989126661e-15
+      ],
+      "fvm_errors": [
+        6.206335383118183e-16,
+        2.6144750417129757e-14
+      ],
+      "solver_difference": [
+        1.0057327710640516e-15,
+        2.7791080044106723e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        2.26509985913372e-15,
+        5.20267141095764e-15
+      ],
+      "fvm_errors": [
+        1.3633074258035988e-14,
+        9.470228431037317e-14
+      ],
+      "solver_difference": [
+        1.5341704550132754e-14,
+        9.797100159157776e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        9.020562075079397e-16,
+        4.3292470300040426e-15
+      ],
+      "fvm_errors": [
+        8.689323916896622e-15,
+        9.034501257500243e-14
+      ],
+      "solver_difference": [
+        9.267871502130806e-15,
+        9.383125278844302e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        5.978733960281817e-16,
+        2.124706989126661e-15
+      ],
+      "fvm_errors": [
+        3.2639660047819794e-15,
+        6.725535077760443e-14
+      ],
+      "solver_difference": [
+        3.1145123063088644e-15,
+        6.552801614596315e-14
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        2.2570932388568084e-15,
+        5.347542221830668e-15
+      ],
+      "fvm_errors": [
+        2.0101246288040005e-14,
+        2.3218657659603023e-13
+      ],
+      "solver_difference": [
+        2.2247318842146355e-14,
+        2.355252778647532e-13
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        9.020562075079397e-16,
+        4.335559509131368e-15
+      ],
+      "fvm_errors": [
+        1.1964198544602106e-14,
+        2.254088260098117e-13
+      ],
+      "solver_difference": [
+        1.192278865011126e-14,
+        2.2971609015070554e-13
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 0,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        4.965068306494546e-16,
+        2.507851037520163e-15
+      ],
+      "fvm_errors": [
+        9.782885644861952e-15,
+        2.0323154060709477e-13
+      ],
+      "solver_difference": [
+        9.690989497266077e-15,
+        2.053192999971104e-13
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        5.558049685633556e-16,
+        3.3472809927562375e-15
+      ],
+      "fvm_errors": [
+        0.0002287545684621399,
+        0.0014803399262270397
+      ],
+      "solver_difference": [
+        0.0002287545684617931,
+        0.0014803399262303023
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        4.47545209131181e-16,
+        3.671605679984963e-15
+      ],
+      "fvm_errors": [
+        0.0001702908438264421,
+        0.00141394458489046
+      ],
+      "solver_difference": [
+        0.0001702908438267392,
+        0.0014139445848941083
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        5.715222817774257e-16,
+        2.5517021683543648e-15
+      ],
+      "fvm_errors": [
+        0.00015038984534912275,
+        0.0018460249047479566
+      ],
+      "solver_difference": [
+        0.00015038984534855457,
+        0.0018460249047495946
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        4.9592464538299565e-16,
+        3.3472809927562375e-15
+      ],
+      "fvm_errors": [
+        5.978051285363301e-05,
+        0.00041094401461098495
+      ],
+      "solver_difference": [
+        5.978051285324499e-05,
+        0.00041094401461357256
+      ],
+      "fvm_orders": [
+        1.9360533767956374,
+        1.8489147305011753
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        4.47545209131181e-16,
+        3.671605679984963e-15
+      ],
+      "fvm_errors": [
+        4.5627138434823347e-05,
+        0.00039352770745258226
+      ],
+      "solver_difference": [
+        4.562713843513066e-05,
+        0.00039352770745597446
+      ],
+      "fvm_orders": [
+        1.9000367852403042,
+        1.8451884578376765
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        5.23691153334427e-16,
+        2.5918417478740242e-15
+      ],
+      "fvm_errors": [
+        4.053029899685824e-05,
+        0.000520562513210925
+      ],
+      "solver_difference": [
+        4.0530298996341744e-05,
+        0.000520562513212582
+      ],
+      "fvm_orders": [
+        1.8916344329132073,
+        1.8262786874088135
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        5.79553433516819e-16,
+        3.568292035180542e-15
+      ],
+      "fvm_errors": [
+        1.5321080801908727e-05,
+        0.00010812157552593723
+      ],
+      "solver_difference": [
+        1.5321080801439576e-05,
+        0.00010812157552929781
+      ],
+      "fvm_orders": [
+        1.964157200328843,
+        1.9262874204199734
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        5.613217783960923e-16,
+        4.422122842208123e-15
+      ],
+      "fvm_errors": [
+        1.1795566172063545e-05,
+        0.0001036655994106805
+      ],
+      "solver_difference": [
+        1.1795566172400512e-05,
+        0.00010366559941504019
+      ],
+      "fvm_orders": [
+        1.9516475083768474,
+        1.9245279895054308
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        5.855045090355223e-16,
+        2.987304636342383e-15
+      ],
+      "fvm_errors": [
+        1.0505570395962325e-05,
+        0.0001379253511388734
+      ],
+      "solver_difference": [
+        1.0505570395497394e-05,
+        0.00013792535114095063
+      ],
+      "fvm_orders": [
+        1.9478463236398338,
+        1.9161837706348392
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        5.266250202865052e-16,
+        3.789423922623494e-15
+      ],
+      "fvm_errors": [
+        3.88078117187074e-06,
+        2.7721560957917444e-05
+      ],
+      "solver_difference": [
+        3.88078117145039e-06,
+        2.7721560960403496e-05
+      ],
+      "fvm_orders": [
+        1.981099083192373,
+        1.9635740390159757
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        4.518280359883027e-16,
+        4.534364091501738e-15
+      ],
+      "fvm_errors": [
+        2.9977107351924618e-06,
+        2.659492161186908e-05
+      ],
+      "solver_difference": [
+        2.997710735506777e-06,
+        2.659492161511575e-05
+      ],
+      "fvm_orders": [
+        1.9763115858379336,
+        1.962714537151562
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        5.715222817774257e-16,
+        2.987304636342383e-15
+      ],
+      "fvm_errors": [
+        2.673427583678022e-06,
+        3.5480505777521155e-05
+      ],
+      "solver_difference": [
+        2.6734275831513376e-06,
+        3.548050577827242e-05
+      ],
+      "fvm_orders": [
+        1.9743919912616505,
+        1.9587891727433937
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        5.266250202865052e-16,
+        4.010656666373001e-15
+      ],
+      "fvm_errors": [
+        9.767379478017713e-07,
+        7.017927925702547e-06
+      ],
+      "solver_difference": [
+        9.767379473796743e-07,
+        7.01792792769507e-06
+      ],
+      "fvm_orders": [
+        1.9903036313547495,
+        1.981891459258697
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        5.661048867003677e-16,
+        4.534364091501738e-15
+      ],
+      "fvm_errors": [
+        7.555377669600699e-07,
+        6.734695328666449e-06
+      ],
+      "solver_difference": [
+        7.555377672463523e-07,
+        6.734695330985087e-06
+      ],
+      "fvm_orders": [
+        1.9882853987030291,
+        1.981466198543348
+      ],
+      "passed": true
+    },
+    {
+      "mode": 1,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        5.855045090355223e-16,
+        2.987304636342383e-15
+      ],
+      "fvm_errors": [
+        6.742623160793988e-07,
+        8.996681285162101e-06
+      ],
+      "solver_difference": [
+        6.742623156765586e-07,
+        8.996681285482253e-06
+      ],
+      "fvm_orders": [
+        1.9873087242533503,
+        1.9795617552350562
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        3.9739936517281115e-16,
+        3.800791407964896e-15
+      ],
+      "fvm_errors": [
+        0.0005203371444561728,
+        0.006780765728756016
+      ],
+      "solver_difference": [
+        0.0005203371444557879,
+        0.006780765728759394
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        5.4672143489065705e-16,
+        3.202853923578809e-15
+      ],
+      "fvm_errors": [
+        0.0005181465231753062,
+        0.006927040350999577
+      ],
+      "solver_difference": [
+        0.000518146523174762,
+        0.006927040351002358
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 4,
+      "temperature_samples": 12,
+      "flux_samples": 9,
+      "bem_errors": [
+        3.387999773988765e-16,
+        2.67701276801719e-15
+      ],
+      "fvm_errors": [
+        0.0005197308342801097,
+        0.0084095593743971
+      ],
+      "solver_difference": [
+        0.000519730834279776,
+        0.008409559374398905
+      ],
+      "fvm_orders": null,
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        4.742874840267547e-16,
+        4.002966042486721e-15
+      ],
+      "fvm_errors": [
+        0.00013988159588190503,
+        0.001977289710083739
+      ],
+      "solver_difference": [
+        0.00013988159588152033,
+        0.0019772897100875687
+      ],
+      "fvm_orders": [
+        1.8952405376313957,
+        1.7779239327163334
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        5.266250202865052e-16,
+        3.3225316899006702e-15
+      ],
+      "fvm_errors": [
+        0.0001393069084854786,
+        0.0020179734174121727
+      ],
+      "solver_difference": [
+        0.00013930690848503992,
+        0.0020179734174154205
+      ],
+      "fvm_orders": [
+        1.8950933200370532,
+        1.7793319076888703
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 8,
+      "temperature_samples": 24,
+      "flux_samples": 21,
+      "bem_errors": [
+        3.855927796350635e-16,
+        2.7433125689005183e-15
+      ],
+      "fvm_errors": [
+        0.00014014344313568496,
+        0.0024393611403041833
+      ],
+      "solver_difference": [
+        0.00014014344313530115,
+        0.0024393611403064476
+      ],
+      "fvm_orders": [
+        1.8908604060394103,
+        1.7855268505574953
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        5.613217783960923e-16,
+        4.886242762550761e-15
+      ],
+      "fvm_errors": [
+        3.618145929308747e-05,
+        0.0005322220741643866
+      ],
+      "solver_difference": [
+        3.61814592925366e-05,
+        0.0005322220741690972
+      ],
+      "fvm_orders": [
+        1.950883658751458,
+        1.8934240152986348
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        6.497413668604471e-16,
+        3.794299872214038e-15
+      ],
+      "fvm_errors": [
+        3.603437787233602e-05,
+        0.0005429406747589775
+      ],
+      "solver_difference": [
+        3.603437787168657e-05,
+        0.0005429406747627011
+      ],
+      "fvm_orders": [
+        1.950820962831645,
+        1.8940406965938656
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 16,
+      "temperature_samples": 48,
+      "flux_samples": 45,
+      "bem_errors": [
+        4.47545209131181e-16,
+        3.0571478266715166e-15
+      ],
+      "fvm_errors": [
+        3.630044974288063e-05,
+        0.0006550542996675016
+      ],
+      "solver_difference": [
+        3.630044974243488e-05,
+        0.0006550542996702288
+      ],
+      "fvm_orders": [
+        1.9488449192007027,
+        1.896816954146932
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        5.613217783960923e-16,
+        4.886242762550761e-15
+      ],
+      "fvm_errors": [
+        9.195990254249196e-06,
+        0.00013796526001754006
+      ],
+      "solver_difference": [
+        9.195990253807572e-06,
+        0.00013796526001920898
+      ],
+      "fvm_orders": [
+        1.9761737545786358,
+        1.9477233093955515
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        6.087272963323594e-16,
+        3.794299872214038e-15
+      ],
+      "fvm_errors": [
+        9.158791644476199e-06,
+        0.00014071559924334296
+      ],
+      "solver_difference": [
+        9.158791643870809e-06,
+        0.0001407155992438913
+      ],
+      "fvm_orders": [
+        1.9761447621260173,
+        1.9480122987580322
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 32,
+      "temperature_samples": 96,
+      "flux_samples": 93,
+      "bem_errors": [
+        4.47545209131181e-16,
+        3.1202810206551578e-15
+      ],
+      "fvm_errors": [
+        9.232565629096325e-06,
+        0.0001696174799684375
+      ],
+      "solver_difference": [
+        9.232565628650604e-06,
+        0.000169617479968473
+      ],
+      "fvm_orders": [
+        1.9751839046562272,
+        1.9493296466486474
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 1.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        6.162737906427329e-16,
+        4.905125646631375e-15
+      ],
+      "fvm_errors": [
+        2.317781495924478e-06,
+        3.511604087341498e-05
+      ],
+      "solver_difference": [
+        2.317781495439884e-06,
+        3.511604087773085e-05
+      ],
+      "fvm_orders": [
+        1.9882603714616651,
+        1.9741029348765953
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 8.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        6.597425008528065e-16,
+        4.137070730575015e-15
+      ],
+      "fvm_errors": [
+        2.3084282034042652e-06,
+        3.581260559607702e-05
+      ],
+      "solver_difference": [
+        2.3084282028602973e-06,
+        3.581260559932693e-05
+      ],
+      "fvm_orders": [
+        1.9882464079571494,
+        1.9742428767290598
+      ],
+      "passed": true
+    },
+    {
+      "mode": 2,
+      "omega_rad_s": 24.0,
+      "cells_per_layer": 64,
+      "temperature_samples": 192,
+      "flux_samples": 189,
+      "bem_errors": [
+        4.965068306494546e-16,
+        3.824331575279093e-15
+      ],
+      "fvm_errors": [
+        2.327788142424813e-06,
+        4.314902801943358e-05
+      ],
+      "solver_difference": [
+        2.3277881420411357e-06,
+        4.314902802171642e-05
+      ],
+      "fvm_orders": [
+        1.987771851682621,
+        1.974884888283654
+      ],
+      "passed": true
+    }
+  ],
+  "error_columns": [
+    "temperature_K",
+    "radial_flux_W_m2"
+  ],
+  "sources": [
+    {
+      "commit": "23c5a2ec392e11848cd4fcd5fbf4da3d89ab40e1",
+      "file": "cross_annular_interior_fields.py",
+      "source_sha256": "47e398f950fb3f87cace16afc689439f9185a06a891594f4fb3fe8826d764375"
+    },
+    {
+      "commit": "23c5a2ec392e11848cd4fcd5fbf4da3d89ab40e1",
+      "file": "cross_volume_heated_rings.py",
+      "source_sha256": "b60bf884b7bcbcb365057de78c53faebd064edd54cc347605ef75dbf2f49d716"
+    },
+    {
+      "commit": "68fe49175915c496b2ce5b22233e79421a0194cc",
+      "file": "harmonic_rings.py",
+      "source_sha256": "89391f08feca118af84f96d12383a1ad6f009af90d42daa6508834e0ae829f47"
+    },
+    {
+      "commit": "68fe49175915c496b2ce5b22233e79421a0194cc",
+      "file": "layered_annulus.py",
+      "source_sha256": "57cb202673b461536f39e1ea5856ff1360c8990ff75a7209a5b0530f5fc2c3f1"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "storing_rings.py",
+      "source_sha256": "9348aef40b21c9ed54a7da6ba8414d79a9644e215b785f675be5acfb551f1bbb"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "annulus.py",
+      "source_sha256": "e440247d48fe6a1242b1f5cb133a52a8972875ed48b2057f893cd086cb261a19"
+    }
+  ],
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorBEM/src:../TensorFVM/src python examples/cross_annular_interior_fields.py"
+}
