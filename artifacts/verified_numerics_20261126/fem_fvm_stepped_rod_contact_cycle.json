@@ -2,9 +2,9 @@
   "reference": "Two unit-length layers with independent constant complex sources; continuum interface power 0.8-0.4i W, DC end temperatures 0.49 and 0 K in relative coordinates give 0.35 W through the series resistance 1.4 K/W, omega=2.3 rad/s. Integrate the signed halves of the biased sinusoid independently.",
   "reproduce": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/stepped_rod_contact_cycle.py",
   "benchmark": {
-    "commit": "7fca5543d4139d6ca4d3957d3c37a684e759357f",
+    "commit": "71fa4d40f26bd49b1e3972c21b80ac762ecb0245",
     "file": "stepped_rod_contact_cycle.py",
-    "source_sha256": "7bc43f500b004e0e0ff9690442b45d69ba502cb6d3b8d0ad4a7dd35a154c8f39"
+    "source_sha256": "97e47cb031a4375e2e30633d6affcc1f07a633e545f068eec6d8b608a09f3f9d"
   },
   "FEM": {
     "commit": "81cab937c50abae09e46fb217fe1ef5be88d0e92",
@@ -93,7 +93,7 @@
         -0.400422331725126
       ],
       "transient_refinement": {
-        "reference": "At 16 elements per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and nodes for temperature).",
+        "reference": "At 16 elements or cells per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and all spatial temperature degrees of freedom).",
         "runs": [
           {
             "method": "Crank-Nicolson",
@@ -113,15 +113,15 @@
             "method": "Crank-Nicolson",
             "steps": 128,
             "cumulative_heat_J": 0.00018786242957657961,
-            "temperature_K": 0.00021044655703139625,
+            "temperature_K": 0.00021044655703150728,
             "cumulative_heat_J_order": 2.0001924433972986,
-            "temperature_K_order": 2.000255417070916
+            "temperature_K_order": 2.000255417070155
           },
           {
             "method": "SDIRK2",
             "steps": 32,
             "cumulative_heat_J": 0.0008098675577350445,
-            "temperature_K": 0.0013291306126076846
+            "temperature_K": 0.0013291306126077401
           },
           {
             "method": "SDIRK2",
@@ -129,15 +129,15 @@
             "cumulative_heat_J": 0.00020066192471501765,
             "temperature_K": 0.0003499995997453542,
             "cumulative_heat_J_order": 2.0129191015795795,
-            "temperature_K_order": 1.9250577067488455
+            "temperature_K_order": 1.9250577067489059
           },
           {
             "method": "SDIRK2",
             "steps": 128,
             "cumulative_heat_J": 4.987592057947854e-05,
-            "temperature_K": 9.788360743834268e-05,
+            "temperature_K": 9.788360743856472e-05,
             "cumulative_heat_J_order": 2.008351518468347,
-            "temperature_K_order": 1.8382140950911696
+            "temperature_K_order": 1.8382140950878971
           }
         ]
       },
@@ -172,6 +172,55 @@
         0.800777486770059,
         -0.4006883626383675
       ],
+      "transient_refinement": {
+        "reference": "At 16 elements or cells per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and all spatial temperature degrees of freedom).",
+        "runs": [
+          {
+            "method": "Crank-Nicolson",
+            "steps": 32,
+            "cumulative_heat_J": 0.0030079266147583494,
+            "temperature_K": 0.0033686638062062624
+          },
+          {
+            "method": "Crank-Nicolson",
+            "steps": 64,
+            "cumulative_heat_J": 0.0007515812627808538,
+            "temperature_K": 0.0008426609476102631,
+            "cumulative_heat_J_order": 2.000768364244387,
+            "temperature_K_order": 1.999152282789354
+          },
+          {
+            "method": "Crank-Nicolson",
+            "steps": 128,
+            "cumulative_heat_J": 0.00018787026552602448,
+            "temperature_K": 0.00021058998326928258,
+            "cumulative_heat_J_order": 2.000192352661989,
+            "temperature_K_order": 2.0005154502045444
+          },
+          {
+            "method": "SDIRK2",
+            "steps": 32,
+            "cumulative_heat_J": 0.0008100024329386057,
+            "temperature_K": 0.0013299827189045405
+          },
+          {
+            "method": "SDIRK2",
+            "steps": 64,
+            "cumulative_heat_J": 0.00020068999711353452,
+            "temperature_K": 0.0003435151754020982,
+            "cumulative_heat_J_order": 2.0129575303110245,
+            "temperature_K_order": 1.9529617610103194
+          },
+          {
+            "method": "SDIRK2",
+            "steps": 128,
+            "cumulative_heat_J": 4.9883021123409144e-05,
+            "temperature_K": 9.728169656031405e-05,
+            "cumulative_heat_J_order": 2.008347962455338,
+            "temperature_K_order": 1.8201335398717908
+          }
+        ]
+      },
       "interface_power_mismatch_W": 7.444291678311382e-15,
       "power_error_W_order": 2.0005800951537926,
       "forward_error_J_order": 2.0023940098050548,
