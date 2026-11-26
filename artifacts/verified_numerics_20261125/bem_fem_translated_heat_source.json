@@ -1,0 +1,72 @@
+{
+  "command": "python examples/bem_fem_translated_heat_source.py",
+  "runs": [
+    {
+      "solver": "TensorBEM",
+      "origin_m": [
+        0.0,
+        0.0
+      ],
+      "temperature_error_K": 0.0,
+      "mean_flux_error_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "origin_m": [
+        0.0,
+        0.0
+      ],
+      "temperature_error_K": 8.026113927665386e-15,
+      "mean_flux_error_W_m2": 2.5121479338940403e-15,
+      "passed": true
+    },
+    {
+      "solver": "TensorBEM",
+      "origin_m": [
+        8796093022208.0,
+        -8796093022208.0
+      ],
+      "temperature_error_K": 0.0,
+      "mean_flux_error_W_m2": 0.0,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "origin_m": [
+        8796093022208.0,
+        -8796093022208.0
+      ],
+      "temperature_error_K": 8.026113927665386e-15,
+      "mean_flux_error_W_m2": 2.5121479338940403e-15,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "61aea518d73338bd86a5df80fe86dd65409cfe02",
+      "file": "bem_fem_translated_heat_source.py",
+      "source_sha256": "e8bf71dd23ceb0ea6861e8d55be25850db443a0c6a53925894ab350cb50f53e3"
+    },
+    {
+      "commit": "68106bab4dad7f7652ae454fba418d41838f4902",
+      "file": "geometry.py",
+      "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+    },
+    {
+      "commit": "68106bab4dad7f7652ae454fba418d41838f4902",
+      "file": "harmonic_conduction.py",
+      "source_sha256": "a9c5f9e2ce3fbd0813c7dae39369ec4f9eab61f74acfdd960b4ad4ef471cf874"
+    },
+    {
+      "commit": "33aca7ac164382f996ec587179474ddf4d37a9e0",
+      "file": "thermal.py",
+      "source_sha256": "2976d78a1683fc8ea1b0a2f5b7b23b86debb48ae3a0223afcff6a87078e0a418"
+    },
+    {
+      "commit": "33aca7ac164382f996ec587179474ddf4d37a9e0",
+      "file": "thermal_analytic.py",
+      "source_sha256": "f0729ba4a97aff1cd4eb6cccc8da1980eeb80944c04afcbc61f84aa2181d5669"
+    }
+  ]
+}
