@@ -1,4 +1,6 @@
 """Verify cylindrical material orientation with Cartesian Q4 FEM and radial FVM."""
+from dataclasses import replace
+from functools import partial
 import json
 
 import numpy as np
@@ -68,20 +70,38 @@ def measure(n):
                 fvm_modal_rate_error_W_per_m=float(np.max(abs(rates-exact_rate))))
 
 
-def measure_interface(n):
+def measure_interface(n, resistance=0.):
     mode, interface, temperature, rate = 3, .7, .8, 4.5
     radii = np.linspace(.4, 1., n+1)
     j = n//2
     kr = np.array([2., .85])
     kt = np.array([.7, 2.2])
     # Within a homogeneous ring T is a combination of r^p and r^-p.
-    # Extend the prescribed continuous temperature and radial rate from the
+    # Extend each material-side temperature and the common radial rate from the
     # interface to obtain the two independent Dirichlet boundary amplitudes.
     power = mode*np.sqrt(kt/kr)
     argument = power*np.log(radii[[0, -1]]/interface)
-    walls = temperature*np.cosh(argument) - rate*np.sinh(argument)/(2*np.pi*kr*power)
+    jump = resistance*rate/(2*np.pi*interface)
+    exact_traces = np.array([temperature+jump, temperature])
+    walls = exact_traces*np.cosh(argument) - rate*np.sinh(argument)/(2*np.pi*kr*power)
     radial, circumferential = np.repeat(kr, j), np.repeat(kt, j)
     model, ids, angular = fem_model(radii, radial, circumferential, mode, walls)
+    inner_nodes = torch.from_numpy(ids[j])
+    outer_nodes = inner_nodes
+    if resistance:
+        # Give the outer material its own coincident interface nodes and use
+        # the actual polygon edge length for the unit-depth contact area.
+        outer_nodes = torch.arange(len(model.nodes), len(model.nodes)+len(angular))
+        elements = model.elements.clone().reshape(n, len(angular), 4)
+        elements[j, :, 0] = outer_nodes
+        elements[j, :, 3] = outer_nodes.roll(-1)
+        inner_edges = torch.stack((inner_nodes, inner_nodes.roll(-1)), dim=1)
+        outer_edges = torch.stack((outer_nodes, outer_nodes.roll(-1)), dim=1)
+        length = (model.nodes[inner_edges[:, 1]]-model.nodes[inner_edges[:, 0]]).norm(dim=1)
+        model = replace(model, nodes=torch.cat((model.nodes, model.nodes[inner_nodes])),
+                        elements=elements.reshape(-1, 4),
+                        contact_edge_pairs=torch.stack((inner_edges, outer_edges), dim=1),
+                        contact_edge_conductance=length/resistance)
     state = thermal.solve_steady_thermal(model, sparse=True)
     nodal = thermal.thermal_element_nodal_power(model, state).numpy().reshape(n, len(angular), 4)
     # On a sector, local nodes 0 and 1 have its starting angle, 2 and 3
@@ -89,16 +109,21 @@ def measure_interface(n):
     following = np.roll(angular, -1)
     fem_rates = np.array([-2*(nodal[j-1, :, 1] @ angular + nodal[j-1, :, 2] @ following),
                            2*(nodal[j, :, 0] @ angular + nodal[j, :, 3] @ following)])
-    _, inner, outer, fv_temperature = annulus.solve_annular_sheet(
+    _, inner, outer, _, fv_traces = annulus.solve_annular_sheet(
         radii, radial, 1., walls, 0., j, circumferential_conductivity=circumferential,
-        azimuthal_mode=mode, distributed_source=True)
+        azimuthal_mode=mode, distributed_source=True, resistance=resistance, return_contact_temperatures=True)
     fv_rates = np.array([inner[-1], outer[0]])
     balance = max(abs(np.diff(fem_rates)).item(), abs(np.diff(fv_rates)).item())
     if balance > 1e-9:
         raise RuntimeError(f"Interface rate imbalance {balance}")
-    return dict(radial_cells=n, sectors=len(angular), max_imbalance=float(balance),
-                fem_interface_error_K=float(np.max(abs(state.numpy()[ids[j]]-temperature*angular))),
-                fvm_interface_error_K=float(abs(fv_temperature-temperature)),
+    fem_traces = state[torch.stack((inner_nodes, outer_nodes))].numpy()
+    jump_errors = {}
+    if resistance:
+        jump_errors = dict(fem_jump_error_K=float(np.max(abs(fem_traces[0]-fem_traces[1]-jump*angular))),
+                           fvm_jump_error_K=float(abs(fv_traces[0]-fv_traces[1]-jump)))
+    return dict(**jump_errors, radial_cells=n, sectors=len(angular), max_imbalance=float(balance),
+                fem_interface_error_K=float(np.max(abs(fem_traces-exact_traces[:, None]*angular))),
+                fvm_interface_error_K=float(np.max(abs(fv_traces-exact_traces))),
                 fem_interface_rate_error_W_per_m=float(np.max(abs(fem_rates-rate))),
                 fvm_interface_rate_error_W_per_m=float(np.max(abs(fv_rates-rate))),
                 interface_rate_difference_W_per_m=float(np.max(abs(fem_rates-fv_rates))))
@@ -121,4 +146,6 @@ if __name__ == "__main__":
         reproduce="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/cross_orthotropic_annulus.py",
         benchmark=provenance(__file__), FEM=provenance(thermal.__file__), FVM=provenance(annulus.__file__),
         interface_reference="Perfect contact at r=0.7 m, T amplitude 0.8 K and outward radial rate amplitude 4.5 W/m. Inner (radial, circumferential) conductivity (2, 0.7), outer (0.85, 2.2) W/(m K). Set wall temperatures from the two independent power-law solutions. max_imbalance is the largest inner/outer rate discrepancy in W/m.",
+        contact_reference="Same two materials with areal resistance 0.25 m² K/W. The outer trace amplitude is 0.8 K, inner minus outer equals R*4.5/(2*pi*0.7) K. FEM contact edges use their chord lengths; FVM uses the circular interface.",
+        contact_runs=refinement(partial(measure_interface, resistance=.25)),
         runs=refinement(measure), interface_runs=refinement(measure_interface)), indent=2, allow_nan=False))
