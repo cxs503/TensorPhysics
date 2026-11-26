@@ -1,0 +1,105 @@
+{
+  "command": "python examples/particle_rod_heat_partition.py",
+  "end_s": 2.0,
+  "reference_reversal_s": 0.3054302439580517,
+  "reference_final_temperature_offsets_K": [
+    1.5272001298022766,
+    0.2021293037244979
+  ],
+  "reference_contact_J": 1.5583097246407402,
+  "reference_ambient_J": [
+    2.085509854443017,
+    -0.3561804209162427
+  ],
+  "runs": [
+    {
+      "solver": "TensorDEM_backward_Euler",
+      "steps": 16,
+      "temperature_error_K": 0.022643642124638763,
+      "contact_error_J": 0.004052181573492408,
+      "max_ambient_error_J": 0.018591460551147243,
+      "max_nodal_balance_J": 2.7755575615628914e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorDEM_backward_Euler",
+      "steps": 32,
+      "temperature_error_K": 0.011055832905876972,
+      "contact_error_J": 0.001790284844772616,
+      "max_ambient_error_J": 0.009265548061104134,
+      "max_nodal_balance_J": 3.0531133177191805e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorDEM_backward_Euler",
+      "steps": 64,
+      "temperature_error_K": 0.00545979526655338,
+      "contact_error_J": 0.000835060712686797,
+      "max_ambient_error_J": 0.004624734553865917,
+      "max_nodal_balance_J": 3.0531133177191805e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorDEM_backward_Euler",
+      "steps": 128,
+      "temperature_error_K": 0.00271275211082167,
+      "contact_error_J": 0.0004024299162304068,
+      "max_ambient_error_J": 0.0023103221945910413,
+      "max_nodal_balance_J": 2.498001805406602e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM_Crank_Nicolson",
+      "steps": 16,
+      "temperature_error_K": 0.0006391593929075956,
+      "contact_error_J": 0.00019090405733601656,
+      "max_ambient_error_J": 0.00044825533557313335,
+      "max_nodal_balance_J": 3.608224830031759e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM_Crank_Nicolson",
+      "steps": 32,
+      "temperature_error_K": 0.00016049566255738057,
+      "contact_error_J": 4.8242533693843015e-05,
+      "max_ambient_error_J": 0.00011225312886153915,
+      "max_nodal_balance_J": 2.636779683484747e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM_Crank_Nicolson",
+      "steps": 64,
+      "temperature_error_K": 4.016761879621633e-05,
+      "contact_error_J": 1.2092638338012662e-05,
+      "max_ambient_error_J": 2.807498045775958e-05,
+      "max_nodal_balance_J": 2.42861286636753e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM_Crank_Nicolson",
+      "steps": 128,
+      "temperature_error_K": 1.0044629769723201e-05,
+      "contact_error_J": 3.025155580704819e-06,
+      "max_ambient_error_J": 7.019474197900166e-06,
+      "max_nodal_balance_J": 3.0531133177191805e-16,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "e024730314c2a256ba94e61737f0e33e2b1a7284",
+      "file": "particle_rod_heat_partition.py",
+      "source_sha256": "cc644fc11dcfcf4dcd97b3e7b63ce5cad959ca90cb552a2329a2aa6dbd56396d"
+    },
+    {
+      "commit": "58524df75597598fbe438a74273f6943d13e1a87",
+      "file": "conduction.py",
+      "source_sha256": "733dda3adf019c7abd461e63e6ddd1858bb99308437f03dc5d334dc647f13a7e"
+    },
+    {
+      "commit": "8cf72be78f995c32fe2603bd8ff7c1ef2a0f28fa",
+      "file": "rod.py",
+      "source_sha256": "9adb370a331a8011a7cf041f821ce5ea934b03e241b7621c2365b4137b009e2a"
+    }
+  ]
+}
