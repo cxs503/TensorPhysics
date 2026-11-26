@@ -27,6 +27,40 @@ def phase_integrals(bias, phasor, omega):
     return heat,np.sort(roots)/omega
 
 
+def transient_contact_refinement(model,dc_model,dc,state,omega):
+    """Time integration against the exact-in-time solution on this FEM mesh."""
+    source = thermal.assemble_thermal(model,complex_loads=True).heat
+    ac_power = thermal.thermal_contact_pair_power(model,state).item()
+    dc_power = thermal.thermal_contact_pair_power(model,dc).item()
+    initial = dc+state.real
+    def ends(t):
+        return dc_model.fixed_temperatures+(model.fixed_temperatures*torch.exp(1j*omega*t)).real
+    def load(t):
+        return (source*torch.exp(1j*omega*t)).real
+    runs = []
+    for method in ("theta","sdirk2"):
+        previous = None
+        for steps in (32,64,128):
+            time = torch.linspace(0.,2*math.pi/omega,steps+1,dtype=dc.dtype)
+            history = thermal.solve_transient_thermal(dc_model,time,initial,theta=.5,method=method,
+                sparse=True,fixed_temperature_history=ends,nodal_heat_history=load)
+            heat = thermal.thermal_contact_pair_heat_steps(dc_model,history)[:,0].cumsum(0)
+            # Integrate the frequency-domain contact power from phase zero.
+            exact_heat = dc_power*time+(ac_power*torch.expm1(1j*omega*time)/(1j*omega)).real
+            exact_state = dc+(torch.exp(1j*omega*time[:,None])*state).real
+            errors = dict(cumulative_heat_J=float((heat-exact_heat[1:]).abs().max()),
+                          temperature_K=float((history.temperature-exact_state).abs().max()))
+            row = dict(method="Crank-Nicolson" if method=="theta" else "SDIRK2",steps=steps,**errors)
+            if previous is not None:
+                for name,error in errors.items():
+                    order = math.log2(previous[name]/error)
+                    row[name+"_order"] = order
+                    assert 1.8 < order < 2.2,(method,steps,name,order)
+            runs.append(row)
+            previous = errors
+    return dict(reference="At 16 elements per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and nodes for temperature).",runs=runs)
+
+
 def measure(n):
     omega, conductance = 2.3, 2.5
     contact, cold = .8-.4j, .7+.2j
@@ -93,6 +127,8 @@ def measure(n):
                          duration_error_s=abs(leave-enter-exact_duration),
                          forward_error_J=float(errors[0]),reverse_error_J=float(errors[1]),
                          contact_power_W=[float(power.real),float(power.imag)]))
+    if n==16:
+        rows[0]["transient_refinement"] = transient_contact_refinement(model,dc_model,dc,state,omega)
     return rows,float(abs(fvm_power-west[n]))
 
 
