@@ -1,0 +1,30 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "6ea7db93d77c31e2267dc949c901de36c946986d",
+  "passed": 10,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal3d.py tests/test_thermal3d_budget.py --junitxml=results.xml",
+  "reference": "Periodic rectangular box 1 by 0.75 by 0.5, constant velocity (0.4,-0.25,0.3), D3Q7 BGK tau=0.8 and diffusivity 0.075. Initialize equilibrium with T=1.25+cos(k.x), k=2*pi*(1,-4/3,2). At t=1/32 compare the pointwise field, phase and finite-time effective decay rate to the continuum solution for three meshes under diffusive scaling. Separately verify the full finite-time discrete modal coefficient against independent 7x7 propagation.",
+  "metrics": {
+    "n16_discrete_error": 1.2412670766236366e-16,
+    "n16_mean_error": 0.0,
+    "n16_decay_rate_error": 1.6715632297342076,
+    "n16_phase_rad_error": 0.0018778699591308562,
+    "n16_field_error": 0.02718528712371182,
+    "n32_discrete_error": 4.47545209131181e-16,
+    "n32_mean_error": 6.661338147750939e-16,
+    "n32_decay_rate_error": 0.4032122034003116,
+    "n32_decay_rate_order": 2.051586719960212,
+    "n32_phase_rad_error": 0.00024084670168094928,
+    "n32_phase_rad_order": 2.9629100891453146,
+    "n32_field_error": 0.006687931803757596,
+    "n32_field_order": 2.0231940240004436,
+    "n64_discrete_error": 4.39205126597841e-15,
+    "n64_mean_error": 3.3306690738754696e-15,
+    "n64_decay_rate_error": 0.09993099395222416,
+    "n64_decay_rate_order": 2.0125351937997342,
+    "n64_phase_rad_error": 4.701718921258167e-05,
+    "n64_phase_rad_order": 2.3568549675018065,
+    "n64_field_error": 0.0016653781411944957,
+    "n64_field_order": 2.005710343257545
+  }
+}
