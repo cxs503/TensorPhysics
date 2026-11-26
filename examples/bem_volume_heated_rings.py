@@ -46,7 +46,9 @@ def measure(mode, formulation):
             inner_resistance_fractions=fractions, formulation=formulation, include_volume_sources=True)
         for omega in (1., 8., 24.):
             source = qo-qi + 1j*omega*capacity*t
-            result = response.solve(omega, walls, capacity, sheet_generation=source, volume_generation=density)
+            radii = [lo + (hi-lo)*np.array([.1, .5, .9]) for lo, hi in zip(edges, edges[1:])]
+            samples = np.concatenate(radii) if formulation == "circular" else None
+            result = response.solve(omega, walls, capacity, sheet_generation=source, volume_generation=density, sample_radii=samples)
             observed = np.r_[result.sheet_temperature, result.incoming_flux, result.outgoing_flux, result.wall_heat_rates]
             error = float(max(abs(observed/target-1)))
             order = np.log2(previous[omega]/error) if omega in previous and formulation == "polygonal" else None
@@ -55,6 +57,14 @@ def measure(mode, formulation):
                       and (error < 1e-9 if formulation == "circular" else n < 128 or (error < .01 and order > 1.7)))
             rows.append(dict(formulation=formulation, mode=mode, panels=n, omega=omega, max_relative_error=error,
                              order=order, sheet_balance_W_m2=balance, join_balance_W_m=result.join_power_residual, passed=bool(passed)))
+            if samples is not None:
+                exact_t = np.concatenate([field(i, r) for i, r in enumerate(radii)])
+                exact_q = np.concatenate([flux(i, r) for i, r in enumerate(radii)])
+                t_error = float(max(abs(result.sample_temperature-exact_t)))
+                q_error = float(max(abs(result.sample_radial_flux-exact_q)))
+                rows[-1].update(interior_temperature_max_error_K=t_error,
+                                interior_radial_flux_max_error_W_m2=q_error,
+                                passed=bool(passed and max(t_error, q_error) < 1e-9))
             previous[omega] = error
     return rows
 
