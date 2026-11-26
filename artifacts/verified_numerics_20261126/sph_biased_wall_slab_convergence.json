@@ -1,0 +1,14 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "7260e49895ab43a557d1eaf690c11e0650aaa184",
+  "passed": 235,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_conduction_2d.py --junitxml=results.xml",
+  "reference": "Solve T_dc=-x*(0.2+1.4*cos(2*pi*y)) and T_ac=-x*exp(i*2*pi*y) on the periodic unit slab, with unit conductivity and heat capacity, omega=3 rad/s. Compare heat integrated in each direction from recovered wall fluxes against independent quadrature of the exact wall flux over a full cycle. Report the maximum absolute error over both walls, all rows, and both directions.",
+  "metrics": {
+    "n16_max_directional_error_J_m2": 0.34314959619527885,
+    "n32_max_directional_error_J_m2": 0.0855524783759356,
+    "n32_order": 2.003956103006957,
+    "n64_max_directional_error_J_m2": 0.021052979290835605,
+    "n64_order": 2.022785239604773
+  }
+}
