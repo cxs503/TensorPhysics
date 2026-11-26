@@ -1,0 +1,65 @@
+{
+  "reference": "Steady source-free unit-depth annulus, T=r^p*cos(3*theta+0.37), p=3*sqrt(k_theta/k_r), k_r=2 and k_theta=0.7 W/(m K). Dirichlet walls at 0.4 and 1 m. Maximum temperature errors at shared radial-edge midpoints. FVM modal rate is 2*pi*r times outward radial flux amplitude.",
+  "reproduce": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/cross_orthotropic_annulus.py",
+  "benchmark": {
+    "commit": "3038b2edff2fe724e67f9e1219a528fdfd4e1e47",
+    "file": "cross_orthotropic_annulus.py",
+    "source_sha256": "0b8e5e0521107b5a704a2d6dfc72dcbea69ddfbe18549db07b0f41f474e8ed2b"
+  },
+  "FEM": {
+    "commit": "81cab937c50abae09e46fb217fe1ef5be88d0e92",
+    "file": "thermal.py",
+    "source_sha256": "4524af3c0238c9e073349bda54d2a7d98a214df818eb139a12f4f02fbba32251"
+  },
+  "FVM": {
+    "commit": "f7c8d0ddd9e59357302dc1e09fbf5aeba8feb9c4",
+    "file": "annulus.py",
+    "source_sha256": "a330d6ba1c058fbe8184588da0b7ca1db98ea399961912852332b029072d0cc4"
+  },
+  "runs": [
+    {
+      "radial_cells": 8,
+      "sectors": 64,
+      "fem_error_K": 0.000861711224537598,
+      "fvm_error_K": 0.00015166145147937904,
+      "solver_difference_K": 0.0009190256257231577,
+      "fvm_modal_rate_error_W_per_m": 0.012739534235404193
+    },
+    {
+      "radial_cells": 16,
+      "sectors": 128,
+      "fem_error_K": 0.00025142875848141455,
+      "fvm_error_K": 3.821606280879353e-05,
+      "solver_difference_K": 0.00025925665358994543,
+      "fvm_modal_rate_error_W_per_m": 0.0031766734281539755,
+      "fem_error_K_order": 1.7770548013595162,
+      "fvm_error_K_order": 1.9886033773097043,
+      "solver_difference_K_order": 1.8257240745851115,
+      "fvm_modal_rate_error_W_per_m_order": 2.003723843531432
+    },
+    {
+      "radial_cells": 32,
+      "sectors": 256,
+      "fem_error_K": 6.823481259829456e-05,
+      "fvm_error_K": 9.574315558813495e-06,
+      "solver_difference_K": 6.925980086860961e-05,
+      "fvm_modal_rate_error_W_per_m": 0.0007936472478853318,
+      "fem_error_K_order": 1.8815697967826097,
+      "fvm_error_K_order": 1.996937891438168,
+      "solver_difference_K_order": 1.9042908702820582,
+      "fvm_modal_rate_error_W_per_m_order": 2.0009469633825105
+    },
+    {
+      "radial_cells": 64,
+      "sectors": 512,
+      "fem_error_K": 1.7791498740205025e-05,
+      "fvm_error_K": 2.3945521130941394e-06,
+      "solver_difference_K": 1.7922699392880492e-05,
+      "fvm_modal_rate_error_W_per_m": 0.0001983791115911515,
+      "fem_error_K_order": 1.9393199260188319,
+      "fvm_error_K_order": 1.9994135229056806,
+      "solver_difference_K_order": 1.950230297097913,
+      "fvm_modal_rate_error_W_per_m_order": 2.000237791106743
+    }
+  ]
+}
