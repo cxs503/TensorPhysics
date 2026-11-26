@@ -16,12 +16,15 @@ MODES = {
 }
 
 
-def reference(x, y, omega):
+def reference(x, y, omega, *, x_width=0., y_width=0.):
+    """Evaluate point values or exact averages over centered rectangular samples."""
     temperature, right_flux, source = np.zeros((3, len(y), len(x)), dtype=complex)
     for mode, coeff in MODES.items():
         wave = 2*np.pi*mode
-        phase = np.exp(1j*wave*y[:, None])
+        phase = np.exp(1j*wave*y[:, None])*np.sinc(mode*y_width)
         poly = np.polynomial.Polynomial(coeff)
+        # For a cubic the centered average terminates after the second derivative.
+        poly = poly + poly.deriv(2)*(x_width**2/24)
         temperature += phase*poly(x)
         right_flux -= K*phase*poly.deriv()(x)
         source += phase*((LOSS+1j*omega*CAPACITY+K*wave**2)*poly(x)-K*poly.deriv(2)(x))
