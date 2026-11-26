@@ -1,0 +1,105 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "cd5c3df154ecdaa99392c33798413ef572f14352",
+  "passed": 183,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Area 0.5 m\u00b2, cell and wall capacities per area 1 and 2, conductance per area 2. For s=i*omega the exact uniform heating rate is (S+P)/3 and the wall-cell temperature difference is (P/2-S)/(3+s). Capacity-weighted relative temperatures sum to zero. Compare fields and physical powers for omega from 1e-16 through 32 rad/s under wall-only, body-only, or proportional heating. An additional multi-cell periodic test checks every local energy balance with an applied boundary flux.",
+  "runs": {
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.0-(1+0.5j)-1e-16]": {
+      "rate_K_s": 0.0,
+      "cell_K": 1.5515838457795457e-17,
+      "surface_K": 1.3877787807814457e-17,
+      "material_W": 3.1031676915590914e-17,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 7.757919228897728e-18
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.0-(1+0.5j)-1e-08]": {
+      "rate_K_s": 0.0,
+      "cell_K": 2.8609792490763984e-17,
+      "surface_K": 3.469446951953614e-18,
+      "material_W": 5.721958498152797e-17,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 1.3877787807814457e-17
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.0-(1+0.5j)-1.0]": {
+      "rate_K_s": 0.0,
+      "cell_K": 1.4304896245381992e-17,
+      "surface_K": 7.152448122690996e-18,
+      "material_W": 2.8609792490763984e-17,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 1.3877787807814457e-17
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.0-(1+0.5j)-32.0]": {
+      "rate_K_s": 0.0,
+      "cell_K": 8.673617379884035e-19,
+      "surface_K": 4.336808689942018e-19,
+      "material_W": 1.734723475976807e-18,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 0.0
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[(0.25-0.5j)-0.0-1e-16]": {
+      "rate_K_s": 0.0,
+      "cell_K": 6.938893903907228e-18,
+      "surface_K": 0.0,
+      "material_W": 0.0,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 3.469446951953614e-18
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[(0.25-0.5j)-0.0-1e-08]": {
+      "rate_K_s": 0.0,
+      "cell_K": 1.3877787807814457e-17,
+      "surface_K": 1.4304896245381992e-17,
+      "material_W": 2.7755575615628914e-17,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 2.110382192020081e-17
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[(0.25-0.5j)-0.0-1.0]": {
+      "rate_K_s": 0.0,
+      "cell_K": 1.4304896245381992e-17,
+      "surface_K": 2.0888836804026048e-17,
+      "material_W": 2.7755575615628914e-17,
+      "storage_W": 2.0816681711721685e-17,
+      "total_excess_energy_J": 1.4304896245381992e-17
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[(0.25-0.5j)-0.0-32.0]": {
+      "rate_K_s": 0.0,
+      "cell_K": 0.0,
+      "surface_K": 8.673617379884035e-19,
+      "material_W": 0.0,
+      "storage_W": 2.7755575615628914e-17,
+      "total_excess_energy_J": 8.673617379884035e-19
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.25j-0.5j-1e-16]": {
+      "rate_K_s": 0.0,
+      "cell_K": 0.0,
+      "surface_K": 0.0,
+      "material_W": 0.0,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 0.0
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.25j-0.5j-1e-08]": {
+      "rate_K_s": 0.0,
+      "cell_K": 0.0,
+      "surface_K": 0.0,
+      "material_W": 0.0,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 0.0
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.25j-0.5j-1.0]": {
+      "rate_K_s": 0.0,
+      "cell_K": 0.0,
+      "surface_K": 0.0,
+      "material_W": 0.0,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 0.0
+    },
+    "test_floating_harmonic_plate_resolves_relative_temperature[0.25j-0.5j-32.0]": {
+      "rate_K_s": 0.0,
+      "cell_K": 0.0,
+      "surface_K": 0.0,
+      "material_W": 0.0,
+      "storage_W": 0.0,
+      "total_excess_energy_J": 0.0
+    }
+  }
+}
