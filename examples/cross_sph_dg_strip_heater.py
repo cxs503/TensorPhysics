@@ -49,6 +49,14 @@ def benchmark():
 
     exact_west, exact_east, exact_energy = quad_vec(interior_reference, west, east, points=[a])[0]
     reference_balance = abs(exact_west-exact_east+local_generation-1j*omega*exact_energy)
+    # Fixed probes include both source discontinuities and points on either side.
+    probes = np.array([.09, west, .31, .53, east, .83])
+    def temperature_kernel(y):
+        return (source(y)*np.sinh(z*np.minimum(probes,y))*np.sinh(z*(1-np.maximum(probes,y)))
+                / (k*z*cmath.sinh(z)))
+
+    exact_temperature = quad_vec(temperature_kernel, west, east,
+                                 points=probes[(probes > west) & (probes < east)], epsabs=1e-14)[0]
     runs = []
     for n in (16, 32, 64, 128):
         dx = 1/n
@@ -84,13 +92,28 @@ def benchmark():
             if runs:
                 for key in ("flux_error_W_m2", "energy_error_J_m2"):
                     local[name][key+"_order"] = math.log2(runs[-1]["control_volume"][name][key]/local[name][key])
+        # SPH returns centre values; interpolate linearly between adjacent
+        # centres. Evaluate the DG polynomial at each probe's cell coordinate.
+        centres = (np.arange(n)+.5)*dx
+        sph_temperature = np.interp(probes, centres, temperature.mean(dim=0).numpy())
+        cells = np.floor(probes*n).astype(int)
+        samples, _ = dg.sample_heat_stack_fields(dg_modes[None], [1.], k, probes*n-cells)
+        dg_temperature = samples[0, cells, np.arange(len(probes))].numpy()
+        probe_errors = {name: np.abs(diff).tolist() for name, diff in (
+            ("sph", sph_temperature-exact_temperature), ("dg", dg_temperature-exact_temperature),
+            ("cross", sph_temperature-dg_temperature))}
+        maximum = {name: max(values) for name, values in probe_errors.items()}
+        probe_orders = {name: math.log2(runs[-1]["max_probe_error_K"][name]/value)
+                        for name, value in maximum.items()} if runs else {}
         runs.append(dict(columns=n, wall_errors_W_m2=errors, orders=orders,
-                         global_balance_W_m2=balance, control_volume=local))
+                         global_balance_W_m2=balance, control_volume=local, probe_errors_K=probe_errors,
+                         max_probe_error_K=maximum, probe_orders=probe_orders))
     passed = (all(max(run["global_balance_W_m2"].values()) < 1e-10 for run in runs)
               and all(min(run["orders"].values()) > 1.5 for run in runs[1:])
               and runs[-1]["wall_errors_W_m2"]["sph"] < 1e-4
               and runs[-1]["wall_errors_W_m2"]["dg"] < 1e-8)
     passed &= reference_balance < 1e-12
+    passed &= all(min(row["probe_orders"].values()) > 1 for row in runs[1:])
     for row in runs:
         for data in row["control_volume"].values():
             passed &= data["balance_W_m2"] < 1e-10
@@ -100,6 +123,8 @@ def benchmark():
                 (__file__, sph.__file__, dg.__file__)],
                 reference="Unit slab with zero wall phasors. Integrate the affine complex source against each "
                           "Dirichlet wall Green function. Errors are the larger absolute phasor error of the two walls.",
+                probe_positions_m=probes.tolist(),
+                reference_probe_temperature_K=[[v.real, v.imag] for v in exact_temperature],
                 control_volume_m=[a,b],
                 reference_energy_J_m2=[exact_energy.real, exact_energy.imag],
                 reference_balance_W_m2=reference_balance,
