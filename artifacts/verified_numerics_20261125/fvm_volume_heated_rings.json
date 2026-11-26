@@ -3,6 +3,21 @@
   "runs": [
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0007488416748485903,
+        0.000817983491473529,
+        0.0007680682656968157
+      ],
+      "sheet_residuals_W_m": [
+        3.202372833989377e-15,
+        5.0242958677880805e-15
+      ],
       "mode": 0,
       "omega": 1.0,
       "max_relative_error": 0.0009033076715043683,
@@ -13,6 +28,7 @@
       "storage_relative_error": 0.0005918921558878473,
       "angular_error": 0.0,
       "modal_balance_W_m": 6.798518476474478e-14,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -20,6 +36,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.00018818344137769635,
+        0.0002057775267761555,
+        0.00019314840249893848
+      ],
+      "sheet_residuals_W_m": [
+        0.0,
+        1.1234667099445444e-14
+      ],
       "mode": 0,
       "omega": 1.0,
       "max_relative_error": 0.0002270006490771225,
@@ -27,9 +58,14 @@
       "sheet_balance_max_W_m": 1.1234667099445444e-14,
       "cell_balance_max_W_m": 1.7230984140795291e-13,
       "cell_temperature_max_error_K": 3.913824545160211e-05,
-      "storage_relative_error": 0.00014882435695336393,
+      "storage_relative_error": 0.00014882435695353448,
       "angular_error": 0.0,
       "modal_balance_W_m": 1.5678063097713342e-13,
+      "layer_face_orders": [
+        1.9925210384757748,
+        1.990986294732803,
+        1.991524797676789
+      ],
       "face_rate_order": 1.990986294732803,
       "cell_temperature_order": 1.9905905598907176,
       "order": 1.992521038475233,
@@ -37,6 +73,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        4.7106996916382324e-05,
+        5.152504024514849e-05,
+        4.835828239119524e-05
+      ],
+      "sheet_residuals_W_m": [
+        2.6645352591003757e-15,
+        1.7763568394002505e-15
+      ],
       "mode": 0,
       "omega": 1.0,
       "max_relative_error": 5.682390967988047e-05,
@@ -44,9 +95,14 @@
       "sheet_balance_max_W_m": 2.6645352591003757e-15,
       "cell_balance_max_W_m": 3.149694980481666e-13,
       "cell_temperature_max_error_K": 9.798098734646454e-06,
-      "storage_relative_error": 3.725962701829793e-05,
+      "storage_relative_error": 3.725962701802408e-05,
       "angular_error": 0.0,
       "modal_balance_W_m": 2.9147556023343344e-13,
+      "layer_face_orders": [
+        1.9981264202883826,
+        1.997739800548546,
+        1.9978748369174157
+      ],
       "face_rate_order": 1.997739800548546,
       "cell_temperature_order": 1.9980053473738169,
       "order": 1.9981264202880449,
@@ -54,6 +110,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        1.1780575776764197e-05,
+        1.288630995595663e-05,
+        1.20940272713677e-05
+      ],
+      "sheet_residuals_W_m": [
+        2.808666774861361e-15,
+        1.517719948885615e-14
+      ],
       "mode": 0,
       "omega": 1.0,
       "max_relative_error": 1.4210593282054645e-05,
@@ -64,6 +135,11 @@
       "storage_relative_error": 9.31825805912077e-06,
       "angular_error": 0.0,
       "modal_balance_W_m": 1.0297198552851973e-12,
+      "layer_face_orders": [
+        1.9995313099944567,
+        1.9994345250184549,
+        1.9994682659739658
+      ],
       "face_rate_order": 1.9994345250184549,
       "cell_temperature_order": 1.9993692441505118,
       "order": 1.9995313099904155,
@@ -71,6 +147,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0019170832530136445,
+        0.0032404194472547675,
+        0.0026427178765376104
+      ],
+      "sheet_residuals_W_m": [
+        1.9860273225978185e-15,
+        7.32410687763558e-15
+      ],
       "mode": 0,
       "omega": 8.0,
       "max_relative_error": 0.002312526222194663,
@@ -81,6 +172,7 @@
       "storage_relative_error": 0.0002529069797316139,
       "angular_error": 0.0,
       "modal_balance_W_m": 8.439097257607176e-14,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -88,6 +180,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.0004816654394136247,
+        0.00081575306165422,
+        0.0006629305639502169
+      ],
+      "sheet_residuals_W_m": [
+        1.2560739669470201e-15,
+        7.944109290391274e-15
+      ],
       "mode": 0,
       "omega": 8.0,
       "max_relative_error": 0.0005810201289995874,
@@ -95,9 +202,14 @@
       "sheet_balance_max_W_m": 7.944109290391274e-15,
       "cell_balance_max_W_m": 1.7669422666016297e-13,
       "cell_temperature_max_error_K": 0.00010088683979877059,
-      "storage_relative_error": 6.362200420861694e-05,
+      "storage_relative_error": 6.36220042086408e-05,
       "angular_error": 0.0,
       "modal_balance_W_m": 2.348287306071589e-13,
+      "layer_face_orders": [
+        1.9928096740491692,
+        1.9899761688113076,
+        1.995092744271498
+      ],
       "face_rate_order": 1.9899761688113076,
       "cell_temperature_order": 1.9918793802290378,
       "order": 1.9928096740491503,
@@ -105,6 +217,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.00012056671710907532,
+        0.00020429391064354064,
+        0.00016587389124270169
+      ],
+      "sheet_residuals_W_m": [
+        5.617333549722722e-15,
+        2.1316282072803006e-14
+      ],
       "mode": 0,
       "omega": 8.0,
       "max_relative_error": 0.00014543640418349584,
@@ -112,9 +239,14 @@
       "sheet_balance_max_W_m": 2.1316282072803006e-14,
       "cell_balance_max_W_m": 2.987704017226437e-13,
       "cell_temperature_max_error_K": 2.5270568112179943e-05,
-      "storage_relative_error": 1.5930360022714306e-05,
+      "storage_relative_error": 1.5930360022375e-05,
       "angular_error": 0.0,
       "modal_balance_W_m": 3.1271953680324865e-13,
+      "layer_face_orders": [
+        1.9981997101373412,
+        1.9974862944691116,
+        1.9987709466784043
+      ],
       "face_rate_order": 1.9974862944691116,
       "cell_temperature_order": 1.9972079908678073,
       "order": 1.9981997101371487,
@@ -122,6 +254,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        3.0151087324054068e-05,
+        5.1095746200825385e-05,
+        4.1477310543524194e-05
+      ],
+      "sheet_residuals_W_m": [
+        1.7763568394002505e-15,
+        9.565974336450906e-15
+      ],
       "mode": 0,
       "omega": 8.0,
       "max_relative_error": 3.6370449720934116e-05,
@@ -132,6 +279,11 @@
       "storage_relative_error": 3.984146090287078e-06,
       "angular_error": 0.0,
       "modal_balance_W_m": 2.1352489002551614e-12,
+      "layer_face_orders": [
+        1.9995497654754701,
+        1.9993711078261334,
+        1.9996925665685155
+      ],
       "face_rate_order": 1.9993711078261334,
       "cell_temperature_order": 1.9994426462479447,
       "order": 1.9995497654752379,
@@ -139,6 +291,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0017163382324732609,
+        0.004425080538342637,
+        0.005090447467970894
+      ],
+      "sheet_residuals_W_m": [
+        4.440892098500626e-15,
+        3.499017183300205e-14
+      ],
       "mode": 0,
       "omega": 24.0,
       "max_relative_error": 0.002070372876352833,
@@ -146,9 +313,10 @@
       "sheet_balance_max_W_m": 3.499017183300205e-14,
       "cell_balance_max_W_m": 5.1958437552457326e-14,
       "cell_temperature_max_error_K": 0.00045874817172008073,
-      "storage_relative_error": 0.00011064234726580047,
+      "storage_relative_error": 0.00011064234726591888,
       "angular_error": 0.0,
       "modal_balance_W_m": 6.99803436660041e-14,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -156,6 +324,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.0004306620893499816,
+        0.0011082470767480774,
+        0.00127523273627284
+      ],
+      "sheet_residuals_W_m": [
+        1.2560739669470201e-15,
+        4.3944641265813476e-14
+      ],
       "mode": 0,
       "omega": 24.0,
       "max_relative_error": 0.0005194961527942326,
@@ -166,6 +349,11 @@
       "storage_relative_error": 2.785675916800841e-05,
       "angular_error": 0.0,
       "modal_balance_W_m": 2.481819080425819e-13,
+      "layer_face_orders": [
+        1.994705651843765,
+        1.997424156021987,
+        1.997031909683933
+      ],
       "face_rate_order": 1.997031909683933,
       "cell_temperature_order": 1.9829070459193332,
       "order": 1.9947056518439752,
@@ -173,6 +361,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.0001077649952139665,
+        0.00027717799683181905,
+        0.000318969497396365
+      ],
+      "sheet_residuals_W_m": [
+        8.926082647349967e-15,
+        8.881784197001252e-15
+      ],
       "mode": 0,
       "omega": 24.0,
       "max_relative_error": 0.00012999402966727588,
@@ -180,9 +383,14 @@
       "sheet_balance_max_W_m": 8.926082647349967e-15,
       "cell_balance_max_W_m": 4.2519902565799803e-13,
       "cell_temperature_max_error_K": 2.9093872993736854e-05,
-      "storage_relative_error": 6.976538220114435e-06,
+      "storage_relative_error": 6.976538220122032e-06,
       "angular_error": 0.0,
       "modal_balance_W_m": 7.201763374878885e-13,
+      "layer_face_orders": [
+        1.9986677000323092,
+        1.9993949151269703,
+        1.9992701972794444
+      ],
       "face_rate_order": 1.9992701972794444,
       "cell_temperature_order": 1.9960080956185338,
       "order": 1.9986677000326176,
@@ -190,6 +398,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        2.6947479455609964e-05,
+        6.946408139962487e-05,
+        7.97524185578273e-05
+      ],
+      "sheet_residuals_W_m": [
+        6.936895214610187e-15,
+        3.019806626980426e-14
+      ],
       "mode": 0,
       "omega": 24.0,
       "max_relative_error": 3.250602328574335e-05,
@@ -200,6 +423,11 @@
       "storage_relative_error": 1.7449076102417115e-06,
       "angular_error": 0.0,
       "modal_balance_W_m": 1.9858620782501273e-12,
+      "layer_face_orders": [
+        1.9996663891970332,
+        1.9964736521852275,
+        1.9998182921224172
+      ],
       "face_rate_order": 1.9998182921224172,
       "cell_temperature_order": 1.999233827453381,
       "order": 1.9996663891960667,
@@ -207,6 +435,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0024536063633870796,
+        0.003052608973027765,
+        0.0023811334515264323
+      ],
+      "sheet_residuals_W_m": [
+        2.808666774861361e-15,
+        0.0
+      ],
       "mode": 1,
       "omega": 1.0,
       "max_relative_error": 0.0028866308676127115,
@@ -217,6 +460,7 @@
       "storage_relative_error": 0.0013735002581663006,
       "angular_error": 0.001189659623781362,
       "modal_balance_W_m": 1.5415717553777047e-13,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -224,6 +468,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.0006136604279417072,
+        0.000764189665206228,
+        0.0005960766911163646
+      ],
+      "sheet_residuals_W_m": [
+        8.881784197001252e-16,
+        7.105427357601002e-15
+      ],
       "mode": 1,
       "omega": 1.0,
       "max_relative_error": 0.0007222318363730958,
@@ -231,9 +490,14 @@
       "sheet_balance_max_W_m": 7.105427357601002e-15,
       "cell_balance_max_W_m": 1.3112429554392133e-13,
       "cell_temperature_max_error_K": 0.00013728974977174476,
-      "storage_relative_error": 0.00034427467391092705,
+      "storage_relative_error": 0.00034427467391116325,
       "angular_error": 0.00029768174827374917,
       "modal_balance_W_m": 1.6357922210689449e-13,
+      "layer_face_orders": [
+        1.9993913543193662,
+        1.9980401457939168,
+        1.9980786146464946
+      ],
       "face_rate_order": 1.9980401457939168,
       "cell_temperature_order": 1.9980418413720762,
       "order": 1.9988527109239071,
@@ -241,6 +505,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.0001534314941782729,
+        0.0001911125986838666,
+        0.00014906902008054594
+      ],
+      "sheet_residuals_W_m": [
+        1.2560739669470201e-15,
+        5.0242958677880805e-15
+      ],
       "mode": 1,
       "omega": 1.0,
       "max_relative_error": 0.0001805941276842544,
@@ -248,9 +527,14 @@
       "sheet_balance_max_W_m": 5.0242958677880805e-15,
       "cell_balance_max_W_m": 3.3047100432419e-13,
       "cell_temperature_max_error_K": 3.432818698493455e-05,
-      "storage_relative_error": 8.612517002392493e-05,
+      "storage_relative_error": 8.612517002367512e-05,
       "angular_error": 7.44371690000142e-05,
       "modal_balance_W_m": 7.812588227960395e-13,
+      "layer_face_orders": [
+        1.9998459052713247,
+        1.9995078590279682,
+        1.9995174954459554
+      ],
       "face_rate_order": 1.9995078590279682,
       "cell_temperature_order": 1.9997583463860107,
       "order": 1.9997110344980507,
@@ -258,6 +542,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        3.83589006834506e-05,
+        4.778222898260498e-05,
+        3.727037489524816e-05
+      ],
+      "sheet_residuals_W_m": [
+        2.808666774861361e-15,
+        1.7763568394002505e-15
+      ],
       "mode": 1,
       "omega": 1.0,
       "max_relative_error": 4.515079709424905e-05,
@@ -266,8 +565,13 @@
       "cell_balance_max_W_m": 1.0642022581427986e-12,
       "cell_temperature_max_error_K": 8.583358214939904e-06,
       "storage_relative_error": 2.1534828115754637e-05,
-      "angular_error": 1.861033883277747e-05,
+      "angular_error": 1.861033883286443e-05,
       "modal_balance_W_m": 5.144199981485969e-12,
+      "layer_face_orders": [
+        1.9999613683399253,
+        1.9998768275564127,
+        1.99987922802591
+      ],
       "face_rate_order": 1.9998768275564127,
       "cell_temperature_order": 1.9997795508574632,
       "order": 1.9999276195259095,
@@ -275,6 +579,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0020582065319985124,
+        0.003711444742132905,
+        0.002645514268521984
+      ],
+      "sheet_residuals_W_m": [
+        2.6645352591003757e-15,
+        1.7763568394002505e-14
+      ],
       "mode": 1,
       "omega": 8.0,
       "max_relative_error": 0.002482759456824161,
@@ -285,6 +604,7 @@
       "storage_relative_error": 0.0007297790481045712,
       "angular_error": 0.0021466647707796137,
       "modal_balance_W_m": 8.101920508338772e-14,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -292,6 +612,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.0005158484598482341,
+        0.000933805735374081,
+        0.0006638175445777083
+      ],
+      "sheet_residuals_W_m": [
+        3.972054645195637e-15,
+        1.7852165294699933e-14
+      ],
       "mode": 1,
       "omega": 8.0,
       "max_relative_error": 0.0006222541917272009,
@@ -299,9 +634,14 @@
       "sheet_balance_max_W_m": 1.7852165294699933e-14,
       "cell_balance_max_W_m": 1.7676902698524307e-13,
       "cell_temperature_max_error_K": 0.00011491654450604294,
-      "storage_relative_error": 0.00018298112572407978,
+      "storage_relative_error": 0.00018298112572410908,
       "angular_error": 0.00053741125616693,
       "modal_balance_W_m": 2.1640226148896907e-13,
+      "layer_face_orders": [
+        1.9963685433178728,
+        1.9907865347690148,
+        1.9946895337077541
+      ],
       "face_rate_order": 1.9907865347690148,
       "cell_temperature_order": 1.9882088762734995,
       "order": 1.9963685433178753,
@@ -309,6 +649,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.0001290444553875503,
+        0.00023382770509589054,
+        0.0001661077457223263
+      ],
+      "sheet_residuals_W_m": [
+        6.2803698347351005e-15,
+        1.7763568394002505e-15
+      ],
       "mode": 1,
       "omega": 8.0,
       "max_relative_error": 0.00015566287298338208,
@@ -316,9 +671,14 @@
       "sheet_balance_max_W_m": 6.2803698347351005e-15,
       "cell_balance_max_W_m": 4.408802866933544e-13,
       "cell_temperature_max_error_K": 2.8795270692029404e-05,
-      "storage_relative_error": 4.577894865784774e-05,
+      "storage_relative_error": 4.577894865750864e-05,
       "angular_error": 0.00013439939650643885,
       "modal_balance_W_m": 1.0562992094043335e-12,
+      "layer_face_orders": [
+        1.9990791542448416,
+        1.9976765717023688,
+        1.9986674113245317
+      ],
       "face_rate_order": 1.9976765717023688,
       "cell_temperature_order": 1.9966827280099242,
       "order": 1.999079154245345,
@@ -326,6 +686,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        3.226627890788546e-05,
+        5.848051739868741e-05,
+        4.1536537445424736e-05
+      ],
+      "sheet_residuals_W_m": [
+        1.2560739669470201e-15,
+        2.5121479338940402e-14
+      ],
       "mode": 1,
       "omega": 8.0,
       "max_relative_error": 3.892194872077256e-05,
@@ -334,8 +709,13 @@
       "cell_balance_max_W_m": 6.767180279671162e-13,
       "cell_temperature_max_error_K": 7.2023306340530145e-06,
       "storage_relative_error": 1.1446843554041755e-05,
-      "angular_error": 3.360276063748545e-05,
+      "angular_error": 3.36027606375681e-05,
       "modal_balance_W_m": 5.22956195246059e-12,
+      "layer_face_orders": [
+        1.9997690404776844,
+        1.9994178973299264,
+        1.999666487905765
+      ],
       "face_rate_order": 1.9994178973299264,
       "cell_temperature_order": 1.9992961489636967,
       "order": 1.9997690404748982,
@@ -343,6 +723,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0016053790880573271,
+        0.004569908484065606,
+        0.005135393422319831
+      ],
+      "sheet_residuals_W_m": [
+        3.66205343881779e-15,
+        1.2434497875801753e-14
+      ],
       "mode": 1,
       "omega": 24.0,
       "max_relative_error": 0.0019365258299865178,
@@ -350,9 +745,10 @@
       "sheet_balance_max_W_m": 1.2434497875801753e-14,
       "cell_balance_max_W_m": 6.66526902781645e-14,
       "cell_temperature_max_error_K": 0.00047486617156431446,
-      "storage_relative_error": 0.00031252347414486187,
+      "storage_relative_error": 0.00031252347414497213,
       "angular_error": 0.002429992095376041,
       "modal_balance_W_m": 1.3796244387938543e-13,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -360,6 +756,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.00040232182846055664,
+        0.00114365204483646,
+        0.0012867517791707956
+      ],
+      "sheet_residuals_W_m": [
+        5.617333549722722e-15,
+        1.5888218580782548e-14
+      ],
       "mode": 1,
       "omega": 24.0,
       "max_relative_error": 0.0004853100545392531,
@@ -370,6 +781,11 @@
       "storage_relative_error": 7.839450483576814e-05,
       "angular_error": 0.0006084044400374026,
       "modal_balance_W_m": 1.8565478591143743e-13,
+      "layer_face_orders": [
+        1.9964920896717968,
+        1.998517094359166,
+        1.9967410282597526
+      ],
       "face_rate_order": 1.9967410282597526,
       "cell_temperature_order": 1.9850041521634882,
       "order": 1.9964920896717877,
@@ -377,6 +793,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.00010064346008034125,
+        0.0002863220939279852,
+        0.0003218670158805514
+      ],
+      "sheet_residuals_W_m": [
+        3.7682219008410606e-15,
+        4.9864712706047246e-14
+      ],
       "mode": 1,
       "omega": 24.0,
       "max_relative_error": 0.00012140351242561564,
@@ -384,9 +815,14 @@
       "sheet_balance_max_W_m": 4.9864712706047246e-14,
       "cell_balance_max_W_m": 3.563685191722865e-13,
       "cell_temperature_max_error_K": 3.0055041518345774e-05,
-      "storage_relative_error": 1.9615159984013817e-05,
+      "storage_relative_error": 1.9615159984023907e-05,
       "angular_error": 0.00015215766611632262,
       "modal_balance_W_m": 7.651155761392749e-13,
+      "layer_face_orders": [
+        1.999096587824198,
+        1.9979372754133085,
+        1.999197131580468
+      ],
       "face_rate_order": 1.999197131580468,
       "cell_temperature_order": 1.9968379151015627,
       "order": 1.9990965878242557,
@@ -394,6 +830,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        2.5164832343622155e-05,
+        7.175381427010069e-05,
+        8.047790810701352e-05
+      ],
+      "sheet_residuals_W_m": [
+        5.0242958677880805e-15,
+        3.375077994860476e-14
+      ],
       "mode": 1,
       "omega": 24.0,
       "max_relative_error": 3.035566378259859e-05,
@@ -402,8 +853,13 @@
       "cell_balance_max_W_m": 6.268066206812637e-13,
       "cell_temperature_max_error_K": 7.518037677930004e-06,
       "storage_relative_error": 4.9048240994015575e-06,
-      "angular_error": 3.804294957739832e-05,
+      "angular_error": 3.80429495775137e-05,
       "modal_balance_W_m": 4.2474104511148975e-12,
+      "layer_face_orders": [
+        1.999772536167251,
+        1.9965115702718577,
+        1.9998000304232026
+      ],
       "face_rate_order": 1.9998000304232026,
       "cell_temperature_order": 1.9991789621904719,
       "order": 1.9997725361678387,
@@ -411,6 +867,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.003379680419401684,
+        0.008978126817685995,
+        0.0032310148622395466
+      ],
+      "sheet_residuals_W_m": [
+        7.588599744428075e-15,
+        1.432144669219779e-14
+      ],
       "mode": 3,
       "omega": 1.0,
       "max_relative_error": 0.003107251507994878,
@@ -421,6 +892,7 @@
       "storage_relative_error": 0.0021935252630570917,
       "angular_error": 0.0003241956152014204,
       "modal_balance_W_m": 1.139086659085919e-13,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -428,6 +900,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.0008442820493196207,
+        0.002265683002676128,
+        0.0008113150194131185
+      ],
+      "sheet_residuals_W_m": [
+        4.782987168225453e-15,
+        8.881784197001252e-15
+      ],
       "mode": 3,
       "omega": 1.0,
       "max_relative_error": 0.000778730928112771,
@@ -435,9 +922,14 @@
       "sheet_balance_max_W_m": 8.881784197001252e-15,
       "cell_balance_max_W_m": 1.334936892297496e-13,
       "cell_temperature_max_error_K": 0.00029056306202543153,
-      "storage_relative_error": 0.0005496031715193847,
-      "angular_error": 8.121433986146037e-05,
+      "storage_relative_error": 0.0005496031715195503,
+      "angular_error": 8.121433986145118e-05,
       "modal_balance_W_m": 1.0658141036401503e-13,
+      "layer_face_orders": [
+        2.0010898868339755,
+        1.9864684504898247,
+        1.9936532852703637
+      ],
       "face_rate_order": 1.9864684504898247,
       "cell_temperature_order": 1.993635906037883,
       "order": 1.9964421905397793,
@@ -445,6 +937,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.00021103309596072833,
+        0.0005685357383198732,
+        0.00020305336109230557
+      ],
+      "sheet_residuals_W_m": [
+        6.764165321960921e-15,
+        2.5433559371059913e-14
+      ],
       "mode": 3,
       "omega": 1.0,
       "max_relative_error": 0.00019480502248312933,
@@ -452,9 +959,14 @@
       "sheet_balance_max_W_m": 2.5433559371059913e-14,
       "cell_balance_max_W_m": 3.544468380964845e-13,
       "cell_temperature_max_error_K": 7.272350566850604e-05,
-      "storage_relative_error": 0.00013747724696701338,
-      "angular_error": 2.0314113743044547e-05,
+      "storage_relative_error": 0.00013747724696680627,
+      "angular_error": 2.031411374292786e-05,
       "modal_balance_W_m": 7.650470092422689e-13,
+      "layer_face_orders": [
+        2.00025576853332,
+        1.99462307893386,
+        1.9984032884054672
+      ],
       "face_rate_order": 1.99462307893386,
       "cell_temperature_order": 1.9983576592302945,
       "order": 1.9990940519354508,
@@ -462,6 +974,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        5.2755973942352845e-05,
+        0.00014216346697088666,
+        5.077741050380751e-05
+      ],
+      "sheet_residuals_W_m": [
+        8.747542958250513e-15,
+        6.404745667978754e-15
+      ],
       "mode": 3,
       "omega": 1.0,
       "max_relative_error": 4.870893667197238e-05,
@@ -472,6 +999,11 @@
       "storage_relative_error": 3.437409138848458e-05,
       "angular_error": 5.079189447624731e-06,
       "modal_balance_W_m": 2.271715249900922e-12,
+      "layer_face_orders": [
+        2.0000628970525325,
+        1.9997002699719075,
+        1.9996001791975229
+      ],
       "face_rate_order": 1.9997002699719075,
       "cell_temperature_order": 1.9998036136305204,
       "order": 1.999772479363343,
@@ -479,6 +1011,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0030817064051469807,
+        0.008635020737404405,
+        0.0044487251042655464
+      ],
+      "sheet_residuals_W_m": [
+        6.2803698347351005e-15,
+        8.881784197001252e-15
+      ],
       "mode": 3,
       "omega": 8.0,
       "max_relative_error": 0.0037173799624011317,
@@ -489,6 +1036,7 @@
       "storage_relative_error": 0.00204322784576463,
       "angular_error": 0.0009083130197930091,
       "modal_balance_W_m": 9.664426065637204e-14,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -496,6 +1044,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.0007723406303376337,
+        0.002200658860869381,
+        0.0011149079757596084
+      ],
+      "sheet_residuals_W_m": [
+        3.66205343881779e-15,
+        1.0805156823142814e-14
+      ],
       "mode": 3,
       "omega": 8.0,
       "max_relative_error": 0.0009316538326202029,
@@ -503,9 +1066,14 @@
       "sheet_balance_max_W_m": 1.0805156823142814e-14,
       "cell_balance_max_W_m": 1.6113559125162005e-13,
       "cell_temperature_max_error_K": 0.00027312756109824286,
-      "storage_relative_error": 0.0005118794164801592,
-      "angular_error": 0.00022749954324187004,
+      "storage_relative_error": 0.0005118794164802525,
+      "angular_error": 0.00022749954324188264,
       "modal_balance_W_m": 2.150492541435022e-13,
+      "layer_face_orders": [
+        1.9964202485248614,
+        1.9722641218881591,
+        1.9964673188667608
+      ],
       "face_rate_order": 1.9722641218881591,
       "cell_temperature_order": 1.9926598435809775,
       "order": 1.9964202485248448,
@@ -513,6 +1081,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.00019320741927938352,
+        0.0005495180190167496,
+        0.0002788985339706312
+      ],
+      "sheet_residuals_W_m": [
+        5.178925639311149e-15,
+        1.5072887603364242e-14
+      ],
       "mode": 3,
       "omega": 8.0,
       "max_relative_error": 0.00023306093916565377,
@@ -520,9 +1103,14 @@
       "sheet_balance_max_W_m": 1.5072887603364242e-14,
       "cell_balance_max_W_m": 2.7237794234979443e-13,
       "cell_temperature_max_error_K": 6.835095441190127e-05,
-      "storage_relative_error": 0.0001280369188738978,
-      "angular_error": 5.690123227159097e-05,
+      "storage_relative_error": 0.00012803691887361998,
+      "angular_error": 5.690123227150926e-05,
       "modal_balance_W_m": 7.948556746654624e-13,
+      "layer_face_orders": [
+        1.9990867733035256,
+        2.001696826693861,
+        1.9991123793762426
+      ],
       "face_rate_order": 2.001696826693861,
       "cell_temperature_order": 1.9985415147117942,
       "order": 1.9990867733036395,
@@ -530,6 +1118,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        4.8309537716237714e-05,
+        0.00013772380207081457,
+        6.97353726118921e-05
+      ],
+      "sheet_residuals_W_m": [
+        3.552713678800501e-15,
+        3.972054645195637e-15
+      ],
       "mode": 3,
       "omega": 8.0,
       "max_relative_error": 5.827450246370821e-05,
@@ -540,6 +1143,11 @@
       "storage_relative_error": 3.201342167103581e-05,
       "angular_error": 1.4226954960092014e-05,
       "modal_balance_W_m": 1.909615824370269e-12,
+      "layer_face_orders": [
+        1.999770543074547,
+        1.9963888744460532,
+        1.999777810506019
+      ],
       "face_rate_order": 1.9963888744460532,
       "cell_temperature_order": 1.9996578198047605,
       "order": 1.999770543074777,
@@ -547,6 +1155,21 @@
     },
     {
       "cells_per_layer": 4,
+      "base_resolution": 4,
+      "layer_cell_counts": [
+        4,
+        4,
+        4
+      ],
+      "layer_face_errors_W_m": [
+        0.0029463546025426048,
+        0.008936827020372988,
+        0.006185544492372567
+      ],
+      "sheet_residuals_W_m": [
+        1.7763568394002505e-15,
+        2.8916994303251375e-14
+      ],
       "mode": 3,
       "omega": 24.0,
       "max_relative_error": 0.003554108705270339,
@@ -554,9 +1177,10 @@
       "sheet_balance_max_W_m": 2.8916994303251375e-14,
       "cell_balance_max_W_m": 1.2289000435166012e-13,
       "cell_temperature_max_error_K": 0.0008669511269555285,
-      "storage_relative_error": 0.001475966843647063,
+      "storage_relative_error": 0.0014759668436472434,
       "angular_error": 0.0018266645929967348,
       "modal_balance_W_m": 1.4157463713481829e-13,
+      "layer_face_orders": null,
       "face_rate_order": null,
       "cell_temperature_order": null,
       "order": null,
@@ -564,6 +1188,21 @@
     },
     {
       "cells_per_layer": 8,
+      "base_resolution": 8,
+      "layer_cell_counts": [
+        8,
+        8,
+        8
+      ],
+      "layer_face_errors_W_m": [
+        0.0007382439820332692,
+        0.0022380899212039447,
+        0.0015509061379623
+      ],
+      "sheet_residuals_W_m": [
+        6.404745667978754e-15,
+        4.608268174547749e-14
+      ],
       "mode": 3,
       "omega": 24.0,
       "max_relative_error": 0.0008905239582817509,
@@ -572,8 +1211,13 @@
       "cell_balance_max_W_m": 1.0706747021287057e-13,
       "cell_temperature_max_error_K": 0.0002175210678665018,
       "storage_relative_error": 0.00036968645756111273,
-      "angular_error": 0.00045736132413052503,
+      "angular_error": 0.0004573613241304207,
       "modal_balance_W_m": 1.3043830727131805e-13,
+      "layer_face_orders": [
+        1.9967614774065994,
+        1.9974946984495134,
+        1.9957892203149792
+      ],
       "face_rate_order": 1.9974946984495134,
       "cell_temperature_order": 1.9947955269606854,
       "order": 1.9967614774065923,
@@ -581,6 +1225,21 @@
     },
     {
       "cells_per_layer": 16,
+      "base_resolution": 16,
+      "layer_cell_counts": [
+        16,
+        16,
+        16
+      ],
+      "layer_face_errors_W_m": [
+        0.00018466776644564739,
+        0.0005644227724191518,
+        0.00038800701422768267
+      ],
+      "sheet_residuals_W_m": [
+        8.188600426433447e-15,
+        7.69595197256282e-14
+      ],
       "mode": 3,
       "omega": 24.0,
       "max_relative_error": 0.00022275978449472924,
@@ -589,8 +1248,13 @@
       "cell_balance_max_W_m": 4.0721058870748657e-13,
       "cell_temperature_max_error_K": 5.45469488510346e-05,
       "storage_relative_error": 9.246500940238472e-05,
-      "angular_error": 0.00011438360064488182,
+      "angular_error": 0.00011438360064477742,
       "modal_balance_W_m": 5.783398860650275e-13,
+      "layer_face_orders": [
+        1.9991656234726916,
+        1.9874198998285408,
+        1.9989567378023112
+      ],
       "face_rate_order": 1.9874198998285408,
       "cell_temperature_order": 1.9955847340092145,
       "order": 1.9991656234723931,
@@ -598,6 +1262,21 @@
     },
     {
       "cells_per_layer": 32,
+      "base_resolution": 32,
+      "layer_cell_counts": [
+        32,
+        32,
+        32
+      ],
+      "layer_face_errors_W_m": [
+        4.617366767441091e-05,
+        0.00014106381828251206,
+        9.701925383125178e-05
+      ],
+      "sheet_residuals_W_m": [
+        2.6645352591003757e-15,
+        1.2809491335957509e-14
+      ],
       "mode": 3,
       "omega": 24.0,
       "max_relative_error": 5.569805959357737e-05,
@@ -608,6 +1287,11 @@
       "storage_relative_error": 2.3118963791224605e-05,
       "angular_error": 2.8598601515719215e-05,
       "modal_balance_W_m": 4.124735771468968e-12,
+      "layer_face_orders": [
+        1.9997898290291636,
+        2.0004282007548015,
+        1.999739744067923
+      ],
       "face_rate_order": 2.0004282007548015,
       "cell_temperature_order": 1.998876829583108,
       "order": 1.999789829026432,
@@ -616,9 +1300,9 @@
   ],
   "sources": [
     {
-      "commit": "0fc913b7f6ed9ab1b571e8431c36539789cdfc3b",
+      "commit": "57a1d4bd6e6431f42780788c8ee6db343c3d764a",
       "file": "fvm_volume_heated_rings.py",
-      "source_sha256": "3b4f1879191fff7d4e7bc274020af69530df30307c1f1904d1db2b463e4c4add"
+      "source_sha256": "6bd75502a009ec25fd7b1db35f2de124f7fd52023dc3620ad90ca5908b63785e"
     },
     {
       "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
@@ -631,5 +1315,5 @@
       "source_sha256": "9348aef40b21c9ed54a7da6ba8414d79a9644e215b785f675be5acfb551f1bbb"
     }
   ],
-  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_volume_heated_rings.py"
+  "reproduction": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src python examples/fvm_volume_heated_rings.py --layer-ratios 1 1 1"
 }
