@@ -1,0 +1,939 @@
+{
+  "runs": [
+    {
+      "method": "theta",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 16,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0005153667603802203,
+          "section_heat_error_J_m2": 0.00038381599783293696,
+          "storage_change_error_J_m2": 4.668415646655322e-05,
+          "storage_balance_J_m2": 9.006684287271582e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.001120361451068641,
+          "section_heat_error_J_m2": 0.00026251950319444717,
+          "storage_change_error_J_m2": 0.0001605253176348853,
+          "storage_balance_J_m2": 1.1046719095020308e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00020827263335915225,
+          "section_heat_error_J_m2": 0.0006744058098505645,
+          "storage_change_error_J_m2": 3.454151152815221e-05,
+          "storage_balance_J_m2": 1.0547118733938987e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0013224895892988697,
+          "section_heat_error_J_m2": 0.0003869908126621219,
+          "storage_change_error_J_m2": 0.00012979866449572275,
+          "storage_balance_J_m2": 8.992806499463768e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "trace_heat_storage_orders": [
+        1.9689072191865518,
+        2.0145924399150457,
+        2.0340368248587253
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.00012512620909022054,
+          "section_heat_error_J_m2": 9.503675488681251e-05,
+          "storage_change_error_J_m2": 1.146211046409995e-05,
+          "storage_balance_J_m2": 7.538414337204813e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0002876459363043149,
+          "section_heat_error_J_m2": 6.459402529368496e-05,
+          "storage_change_error_J_m2": 3.9195611229503324e-05,
+          "storage_balance_J_m2": 4.757305660518796e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 5.080330939943867e-05,
+          "section_heat_error_J_m2": 0.00016690469348124015,
+          "storage_change_error_J_m2": 8.702341345229181e-06,
+          "storage_balance_J_m2": 1.1868284133242923e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.00033782526824271963,
+          "section_heat_error_J_m2": 9.646760986890823e-05,
+          "storage_change_error_J_m2": 3.165076359801233e-05,
+          "storage_balance_J_m2": 8.490430580820885e-14
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 64,
+      "trace_heat_storage_orders": [
+        1.9805740137992882,
+        2.009394289898239,
+        2.0211025050779523
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 3.071547256117135e-05,
+          "section_heat_error_J_m2": 2.3604506428132055e-05,
+          "storage_change_error_J_m2": 2.8341827177785772e-06,
+          "storage_balance_J_m2": 3.159972283839352e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 7.312390502514643e-05,
+          "section_heat_error_J_m2": 1.5973516649836483e-05,
+          "storage_change_error_J_m2": 9.656616026920695e-06,
+          "storage_balance_J_m2": 3.375077994860476e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 1.2503240299888141e-05,
+          "section_heat_error_J_m2": 4.145535085775531e-05,
+          "storage_change_error_J_m2": 2.18637204793537e-06,
+          "storage_balance_J_m2": 5.3179682879545e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 8.560121786121977e-05,
+          "section_heat_error_J_m2": 2.4043262101564045e-05,
+          "storage_change_error_J_m2": 7.790647168826048e-06,
+          "storage_balance_J_m2": 1.233457780358549e-13
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 16,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.001990000893346444,
+          "section_heat_error_J_m2": 0.00037643155758133873,
+          "storage_change_error_J_m2": 0.0001970241820441268,
+          "storage_balance_J_m2": 4.163336342344337e-17
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.005718639839496033,
+          "section_heat_error_J_m2": 0.0009270478419812021,
+          "storage_change_error_J_m2": 0.0003069921251237992,
+          "storage_balance_J_m2": 2.1510571102112408e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0019557676079132447,
+          "section_heat_error_J_m2": 0.00035178678323075085,
+          "storage_change_error_J_m2": 0.00032089726933908977,
+          "storage_balance_J_m2": 3.0531133177191805e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.006620883742612771,
+          "section_heat_error_J_m2": 0.0008330400865511345,
+          "storage_change_error_J_m2": 0.00020727900318909254,
+          "storage_balance_J_m2": 1.8041124150158794e-16
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "trace_heat_storage_orders": [
+        1.9717355307373263,
+        2.013394521788582,
+        2.0677016162262203
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0005306895901527608,
+          "section_heat_error_J_m2": 9.004370124723882e-05,
+          "storage_change_error_J_m2": 4.730668597761195e-05,
+          "storage_balance_J_m2": 3.3029134982598407e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.001455512473427116,
+          "section_heat_error_J_m2": 0.0002296201535948398,
+          "storage_change_error_J_m2": 7.374864721282348e-05,
+          "storage_balance_J_m2": 7.605027718682322e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0004974825302285768,
+          "section_heat_error_J_m2": 8.117752695011027e-05,
+          "storage_change_error_J_m2": 7.654658373139334e-05,
+          "storage_balance_J_m2": 7.837480664463214e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0016879688343856558,
+          "section_heat_error_J_m2": 0.00020473240612828292,
+          "storage_change_error_J_m2": 4.9211031141749295e-05,
+          "storage_balance_J_m2": 2.0261570199409107e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 64,
+      "trace_heat_storage_orders": [
+        1.9800311788237288,
+        2.012878814581268,
+        2.048736738894377
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.00013737555116619116,
+          "section_heat_error_J_m2": 2.185883509027431e-05,
+          "storage_change_error_J_m2": 1.1469712374111152e-05,
+          "storage_balance_J_m2": 3.497202527569243e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00036869870612535327,
+          "section_heat_error_J_m2": 5.689486906367176e-05,
+          "storage_change_error_J_m2": 1.7882741487826315e-05,
+          "storage_balance_J_m2": 4.163336342344337e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00012540010215891795,
+          "section_heat_error_J_m2": 1.9297823878022813e-05,
+          "storage_change_error_J_m2": 1.85009743616793e-05,
+          "storage_balance_J_m2": 7.830541770559307e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.00042787375320443854,
+          "section_heat_error_J_m2": 5.0426019183841264e-05,
+          "storage_change_error_J_m2": 1.1838916873114017e-05,
+          "storage_balance_J_m2": 1.915134717478395e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 16,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.012053009945324156,
+          "section_heat_error_J_m2": 0.0006377427082511697,
+          "storage_change_error_J_m2": 0.00037305530848984886,
+          "storage_balance_J_m2": 1.214306433183765e-17
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00794213116127046,
+          "section_heat_error_J_m2": 0.0005403587512661252,
+          "storage_change_error_J_m2": 0.00023046904929563752,
+          "storage_balance_J_m2": 2.0816681711721685e-17
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.006972329322260273,
+          "section_heat_error_J_m2": 0.001255207872406891,
+          "storage_change_error_J_m2": 0.0006861905136336319,
+          "storage_balance_J_m2": 1.3183898417423734e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.012688645550713924,
+          "section_heat_error_J_m2": 7.788444815721648e-05,
+          "storage_change_error_J_m2": 0.00010892204123957167,
+          "storage_balance_J_m2": 4.163336342344337e-17
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "trace_heat_storage_orders": [
+        1.9601838882639036,
+        2.042742833235842,
+        2.07021234895798
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0030504825947851866,
+          "section_heat_error_J_m2": 0.00015689979162500367,
+          "storage_change_error_J_m2": 9.017236074294194e-05,
+          "storage_balance_J_m2": 2.3592239273284576e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0020568936680532557,
+          "section_heat_error_J_m2": 0.00011910886800275446,
+          "storage_change_error_J_m2": 4.8316444528292285e-05,
+          "storage_balance_J_m2": 1.5959455978986625e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0017418782305032021,
+          "section_heat_error_J_m2": 0.0003046413057399139,
+          "storage_change_error_J_m2": 0.00016339873701607527,
+          "storage_balance_J_m2": 8.743006318923108e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.003260927313450235,
+          "section_heat_error_J_m2": 2.8968546060291478e-05,
+          "storage_change_error_J_m2": 3.1566201384197745e-05,
+          "storage_balance_J_m2": 1.2559397966072083e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 64,
+      "trace_heat_storage_orders": [
+        1.9787361893205175,
+        2.0373131528719144,
+        2.0550232085325377
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0007664112391657096,
+          "section_heat_error_J_m2": 3.844106234078548e-05,
+          "storage_change_error_J_m2": 2.184826213594976e-05,
+          "storage_balance_J_m2": 5.2909066017292616e-17
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0005243787369058062,
+          "section_heat_error_J_m2": 2.7739849468055508e-05,
+          "storage_change_error_J_m2": 1.094044983060774e-05,
+          "storage_balance_J_m2": 2.1545265571631944e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0004341400332030232,
+          "section_heat_error_J_m2": 7.421580775004988e-05,
+          "storage_change_error_J_m2": 3.9321046505412516e-05,
+          "storage_balance_J_m2": 4.2327252813834093e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0008273364756296239,
+          "section_heat_error_J_m2": 8.127594000720273e-06,
+          "storage_change_error_J_m2": 8.20182611695891e-06,
+          "storage_balance_J_m2": 5.689893001203927e-16
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 16,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.00017163081788384993,
+          "section_heat_error_J_m2": 0.0001866601737852136,
+          "storage_change_error_J_m2": 5.620864989312746e-05,
+          "storage_balance_J_m2": 3.594347042223944e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0009451293293628593,
+          "section_heat_error_J_m2": 0.00017498373049143479,
+          "storage_change_error_J_m2": 9.061056109321841e-05,
+          "storage_balance_J_m2": 4.884981308350689e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0005895016498990158,
+          "section_heat_error_J_m2": 0.0002652318445569013,
+          "storage_change_error_J_m2": 9.917979565790547e-05,
+          "storage_balance_J_m2": 2.6645352591003757e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0009319019875886347,
+          "section_heat_error_J_m2": 0.0002328249138645183,
+          "storage_change_error_J_m2": 0.00010488606137823431,
+          "storage_balance_J_m2": 7.521760991835436e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "trace_heat_storage_orders": [
+        1.9561638010102158,
+        2.051937351923669,
+        2.03297799114288
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 4.4871994480111255e-05,
+          "section_heat_error_J_m2": 4.541519087619683e-05,
+          "storage_change_error_J_m2": 1.4056056779121473e-05,
+          "storage_balance_J_m2": 8.243405957841787e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00024357194264224002,
+          "section_heat_error_J_m2": 4.40465147986957e-05,
+          "storage_change_error_J_m2": 2.192566376740812e-05,
+          "storage_balance_J_m2": 3.9745984281580604e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00015248135994694323,
+          "section_heat_error_J_m2": 6.396331644270559e-05,
+          "storage_change_error_J_m2": 2.494117436896426e-05,
+          "storage_balance_J_m2": 1.3272716259393746e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.000239926662658263,
+          "section_heat_error_J_m2": 5.771706415345912e-05,
+          "storage_change_error_J_m2": 2.5628926847459654e-05,
+          "storage_balance_J_m2": 1.0241807402167069e-13
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 64,
+      "trace_heat_storage_orders": [
+        1.9722199490391643,
+        2.0341936828131524,
+        2.023077725083427
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 1.1571735293425256e-05,
+          "section_heat_error_J_m2": 1.1144293293352536e-05,
+          "storage_change_error_J_m2": 3.5049458645131093e-06,
+          "storage_balance_J_m2": 1.812439087700568e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 6.207688231013586e-05,
+          "section_heat_error_J_m2": 1.1034674895854524e-05,
+          "storage_change_error_J_m2": 5.360149235689171e-06,
+          "storage_balance_J_m2": 4.424238753131249e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 3.8977081012525616e-05,
+          "section_heat_error_J_m2": 1.561628254004299e-05,
+          "storage_change_error_J_m2": 6.247271221448969e-06,
+          "storage_balance_J_m2": 3.1585845050585704e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 6.109889762995202e-05,
+          "section_heat_error_J_m2": 1.4330328155842675e-05,
+          "storage_change_error_J_m2": 6.305555355828885e-06,
+          "storage_balance_J_m2": 6.086797732507421e-14
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 16,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0018818549163262255,
+          "section_heat_error_J_m2": 0.0003078635362683685,
+          "storage_change_error_J_m2": 0.000166372955043341,
+          "storage_balance_J_m2": 3.885780586188048e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.005683060958147537,
+          "section_heat_error_J_m2": 0.000891135620436254,
+          "storage_change_error_J_m2": 0.0003170784484053668,
+          "storage_balance_J_m2": 2.220446049250313e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00167977759390614,
+          "section_heat_error_J_m2": 0.0002969197353084596,
+          "storage_change_error_J_m2": 0.0003365927341391177,
+          "storage_balance_J_m2": 9.020562075079397e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.006440163677561228,
+          "section_heat_error_J_m2": 0.0007274962398946053,
+          "storage_change_error_J_m2": 0.00020906144553450856,
+          "storage_balance_J_m2": 4.718447854656915e-16
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "trace_heat_storage_orders": [
+        1.9713758728526714,
+        2.0146195836388188,
+        2.0635812598634997
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0005036128303291809,
+          "section_heat_error_J_m2": 7.293184091251848e-05,
+          "storage_change_error_J_m2": 3.9667170509759264e-05,
+          "storage_balance_J_m2": 5.564992910933597e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0014461101093486625,
+          "section_heat_error_J_m2": 0.00022053771935156598,
+          "storage_change_error_J_m2": 7.623018956882943e-05,
+          "storage_balance_J_m2": 9.048317650695026e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0004282317172566441,
+          "section_heat_error_J_m2": 6.756542702385238e-05,
+          "storage_change_error_J_m2": 8.052020633936285e-05,
+          "storage_balance_J_m2": 9.780370957557238e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0016423043177939411,
+          "section_heat_error_J_m2": 0.00017873583079346111,
+          "storage_change_error_J_m2": 4.9608991263215205e-05,
+          "storage_balance_J_m2": 1.7017637299332478e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 64,
+      "trace_heat_storage_orders": [
+        1.9796129263527942,
+        2.013648903535777,
+        2.0457473393022587
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.00013061066475655858,
+          "section_heat_error_J_m2": 1.758522588539424e-05,
+          "storage_change_error_J_m2": 9.562465144913324e-06,
+          "storage_balance_J_m2": 3.2404634531246757e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00036630688761316726,
+          "section_heat_error_J_m2": 5.46152792284902e-05,
+          "storage_change_error_J_m2": 1.8499418623696418e-05,
+          "storage_balance_J_m2": 5.856426454897701e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0001080665510073131,
+          "section_heat_error_J_m2": 1.5904614889095114e-05,
+          "storage_change_error_J_m2": 1.950174917791231e-05,
+          "storage_balance_J_m2": 1.2299189444675562e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0004164192178080506,
+          "section_heat_error_J_m2": 4.410348331569669e-05,
+          "storage_change_error_J_m2": 1.1933200894662446e-05,
+          "storage_balance_J_m2": 1.3340023530261647e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 16,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.011819688693892605,
+          "section_heat_error_J_m2": 0.0006137537152915915,
+          "storage_change_error_J_m2": 0.0003555491658132695,
+          "storage_balance_J_m2": 2.7755575615628914e-17
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.007993287308928204,
+          "section_heat_error_J_m2": 0.0005634999682835162,
+          "storage_change_error_J_m2": 0.0002662272729663101,
+          "storage_balance_J_m2": 1.734723475976807e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.006591064543834124,
+          "section_heat_error_J_m2": 0.0012031756562565915,
+          "storage_change_error_J_m2": 0.0006673886191123635,
+          "storage_balance_J_m2": 6.245004513516506e-17
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.012650971977302881,
+          "section_heat_error_J_m2": 3.467953788705361e-05,
+          "storage_change_error_J_m2": 6.089622648904752e-05,
+          "storage_balance_J_m2": 1.6653345369377348e-16
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "trace_heat_storage_orders": [
+        1.9608144438981103,
+        2.0447643304157244,
+        2.0719692651102983
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0029912854646252374,
+          "section_heat_error_J_m2": 0.00015090481066849099,
+          "storage_change_error_J_m2": 8.580982096306755e-05,
+          "storage_balance_J_m2": 1.5265566588595902e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0020685660056940502,
+          "section_heat_error_J_m2": 0.00012497205219875844,
+          "storage_change_error_J_m2": 5.729367812075045e-05,
+          "storage_balance_J_m2": 1.1483869410966463e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0016467496699522632,
+          "section_heat_error_J_m2": 0.00029160410862036357,
+          "storage_change_error_J_m2": 0.00015872812917099716,
+          "storage_balance_J_m2": 6.869504964868156e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0032498246628143365,
+          "section_heat_error_J_m2": 1.803735811278101e-05,
+          "storage_change_error_J_m2": 1.9500001483499507e-05,
+          "storage_balance_J_m2": 1.0755285551056204e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 64,
+      "trace_heat_storage_orders": [
+        1.97885228353868,
+        2.0390529814762064,
+        2.0566041871727254
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0007515685134036887,
+          "section_heat_error_J_m2": 3.694322747532092e-05,
+          "storage_change_error_J_m2": 2.07588499482117e-05,
+          "storage_balance_J_m2": 2.0816681711721685e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0005272207651662586,
+          "section_heat_error_J_m2": 2.921196243120712e-05,
+          "storage_change_error_J_m2": 1.3188411034450315e-05,
+          "storage_balance_J_m2": 4.038436252074007e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0004103632376911137,
+          "section_heat_error_J_m2": 7.095410537272251e-05,
+          "storage_change_error_J_m2": 3.815525390985647e-05,
+          "storage_balance_J_m2": 1.4432899320127035e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.000824453252905824,
+          "section_heat_error_J_m2": 5.38494885150495e-06,
+          "storage_change_error_J_m2": 5.179415750324046e-06,
+          "storage_balance_J_m2": 1.824929096727601e-15
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "commit": "6fd2e430897ca24db2c199ae0e136385b5ddae82",
+      "file": "sph_storing_contact_intervals.py",
+      "source_sha256": "57a484b096f9c304e397c6cee68533e07c7117589c7d7e5bbdce798132a76df7"
+    },
+    {
+      "commit": "6fd2e430897ca24db2c199ae0e136385b5ddae82",
+      "file": "sph_harmonic_storing_contacts.py",
+      "source_sha256": "9b483cca19b23500779eab180a5de3384ab2acc89bb0972cfc45de824cd16470"
+    },
+    {
+      "commit": "6fd2e430897ca24db2c199ae0e136385b5ddae82",
+      "file": "sph_layered_storing_contacts.py",
+      "source_sha256": "8a2b0a4383ef1b51d483ed9df1762d773603e7d8dc000f2260ffb3e20fb80957"
+    },
+    {
+      "commit": "75e1989a1cb166a655e143916718d8a865a37369",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "230bbe08478e53bd8d6bf3b32cee9dcab193b17f8bb530d4f9192a5ccf55a3e1"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_storing_contact_intervals.py"
+}
