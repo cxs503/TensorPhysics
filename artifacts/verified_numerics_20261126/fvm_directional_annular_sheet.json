@@ -1,0 +1,53 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "4f0cefe2fec3a543b309b5b08f1249287b2e875f",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_annular_conduction.py --junitxml=results.xml",
+  "passed": 63,
+  "reference": "Mixed circumferential order 2 and axial wavenumber -1.25 rad/m in a two-material annulus. Use independent Bessel solutions with manufactured interface loads for circumferential sheet conductivity times thickness 0.35 W/K and axial values 1.2 or 0 W/K. For the transient axial-only mode compare both time integrators with exp(-2.4 t) using circumferential 1.8 and axial 0.3 W/K.",
+  "runs": {
+    "test_harmonic_two_material_sheet_traces_against_bessel_modes[-1.25-0.35-1.2]": {
+      "max_error_12_field_K": 0.0002116814553374941,
+      "max_error_12_radial_rate_W_per_m": 0.022989199841158315,
+      "max_error_12_trace_K": 0.00022208245632800855,
+      "max_error_12_sheet_K": 0.00012881826477140085,
+      "balance_12_W_per_m": 1.1153271992751784e-13,
+      "max_error_24_field_K": 5.42523267440445e-05,
+      "max_error_24_radial_rate_W_per_m": 0.0057515745661813455,
+      "max_error_24_trace_K": 5.5560823684570674e-05,
+      "max_error_24_sheet_K": 3.222661704089678e-05,
+      "balance_24_W_per_m": 3.2033210886271384e-13,
+      "max_error_48_field_K": 1.3728573020745303e-05,
+      "max_error_48_radial_rate_W_per_m": 0.0014381610330634345,
+      "max_error_48_trace_K": 1.3892722344273445e-05,
+      "max_error_48_sheet_K": 8.058034494555502e-06,
+      "balance_48_W_per_m": 3.4272755600960053e-13
+    },
+    "test_harmonic_two_material_sheet_traces_against_bessel_modes[-1.25-0.35-0.0]": {
+      "max_error_12_field_K": 0.00022878047479675369,
+      "max_error_12_radial_rate_W_per_m": 0.022746212663907025,
+      "max_error_12_trace_K": 0.00024017928020736301,
+      "max_error_12_sheet_K": 0.00015405462108019114,
+      "balance_12_W_per_m": 1.1137700720795298e-13,
+      "max_error_24_field_K": 5.8651555608787756e-05,
+      "max_error_24_radial_rate_W_per_m": 0.0056907693723357465,
+      "max_error_24_trace_K": 6.008739668006791e-05,
+      "max_error_24_sheet_K": 3.8539283325852815e-05,
+      "balance_24_W_per_m": 3.3200769871848216e-13,
+      "max_error_48_field_K": 1.4844280339367416e-05,
+      "max_error_48_radial_rate_W_per_m": 0.0014229560791865425,
+      "max_error_48_trace_K": 1.5024513765684322e-05,
+      "max_error_48_sheet_K": 9.636424987676782e-06,
+      "balance_48_W_per_m": 3.3802278380771404e-13
+    },
+    "test_axial_decay_across_storing_sheet[1.8-0.3-theta]": {
+      "steps10_temperature_K": 0.0004417927487317397,
+      "steps20_temperature_K": 0.00011038477587332896,
+      "steps40_temperature_K": 2.759226998499953e-05
+    },
+    "test_axial_decay_across_storing_sheet[1.8-0.3-sdirk2]": {
+      "steps10_temperature_K": 0.00021658773205995852,
+      "steps20_temperature_K": 5.3851177182040466e-05,
+      "steps40_temperature_K": 1.3425998081184609e-05
+    }
+  }
+}
