@@ -46,9 +46,9 @@ def measure(n, sign, resistance, balanced=False, *, fvm=False):
     if fvm:
         from tensorfvm.cht import rod
 
-        field, _, west, east = rod.solve_steady_stepped_rod(
+        field, _, west, east, (left_trace, right_trace) = rod.solve_steady_stepped_rod(
             np.full(n, 1/n), 1., k, 1., (0., 0.), source=source,
-            contact_resistance=contacts, flux_order=2, source_derivative_breaks=[cut])
+            contact_resistance=contacts, flux_order=2, source_derivative_breaks=[cut], return_traces=True)
         np.testing.assert_allclose(east[:-1], west[1:], rtol=0., atol=1e-10)
         q = np.r_[west, east[-1]]
         # The exact average of a cubic adds T''(center)*dx²/24.
@@ -57,8 +57,17 @@ def measure(n, sign, resistance, balanced=False, *, fvm=False):
         field, flux = sph.solve_harmonic_layered_slab(
             source, 1/n, (0., 0.), 0., conductivity=k, volumetric_heat_capacity=1.,
             contact_resistance_x=contacts, return_x_flux=True, backend="banded")
+        left_trace, right_trace = sph.layered_slab_contact_temperatures(
+            field, flux, 1/n, k, axial_flux_curvature=np.repeat(slopes, [cut, n-cut]))
+        left_trace, right_trace = left_trace.numpy(), right_trace.numpy()
         field, q = field.numpy(), flux.numpy()
+    traces = np.array([left_trace[cut-1], right_trace[cut-1]])
+    left_exact = temperatures[0](lengths[0])-correction*lengths[0]/conductivities[0]
+    right_exact = temperatures[1](0.)-correction*(lengths[0]/conductivities[0]+resistance)
+    jump_error = abs(traces[0]-traces[1]-resistance*q[cut])
     row = dict(columns=n, gradient_sign=sign, resistance_m2_K_W=resistance,
+                max_contact_trace_error_K=float(abs(traces-[left_exact, right_exact]).max()),
+                contact_jump_residual_K=float(jump_error),
                 west_outward_W_m2=float(-q[0].real), east_outward_W_m2=float(q[-1].real),
                 temperature_error_K=float(abs(field-exact_t).max()),
                 wall_flux_error_W_m2=float(abs((q-exact_q)[[0,-1]]).max()),
@@ -161,6 +170,8 @@ if __name__ == "__main__":
                         assert row["max_reversal_error_m"] < 2e-4
                 if n == 128:
                     np.testing.assert_array_less(1.7, orders)
+                    assert row["max_contact_trace_error_K"] < 2e-5
+                    assert row["contact_jump_residual_K"] < 2.5e-5
                     assert row["all_face_flux_error_W_m2"] < 1e-5
                     assert row["temperature_error_K"] < 2e-5
                 previous = errors
@@ -168,7 +179,8 @@ if __name__ == "__main__":
                 if args.compare_fvm:
                     fv = measure(n, sign, resistance, balanced, fvm=True)
                     row["solver"], fv["solver"] = "SPH", "FVM"
-                    for metric in ("temperature_error_K", "all_face_flux_error_W_m2", "max_cell_balance_W_m2"):
+                    for metric in ("temperature_error_K", "all_face_flux_error_W_m2", "max_cell_balance_W_m2",
+                                   "max_contact_trace_error_K", "contact_jump_residual_K"):
                         assert fv[metric] < 1e-10
                     if balanced:
                         assert fv["wall_balance_W_m2"] < 1e-10
