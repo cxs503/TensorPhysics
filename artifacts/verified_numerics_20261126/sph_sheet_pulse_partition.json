@@ -8,20 +8,95 @@
       "final_time_s": 32.0625,
       "injected_J_m2": 0.0625,
       "outward_wall_heats_J_m2": [
-        0.04947916666666641,
-        0.013020833333333346
+        0.049479166666666435,
+        0.013020833333333388
       ],
       "reference_J_m2": [
         0.049479166666666664,
         0.013020833333333334
       ],
-      "max_partition_error_J_m2": 2.5673907444456745e-16,
-      "post_pulse_sheet_release_J_m2": [
-        0.03543299009417867,
-        0.00011010408225097662
+      "wall_mean_exit_times_s": [
+        0.3187984865029548,
+        0.8088911274996209
       ],
-      "remaining_energy_bound_J_m2": 1.2466602290052376e-18,
-      "max_sheet_balance_error_J_m2": 2.3418766925686896e-17
+      "reference_mean_exit_times_s": [
+        0.3189555921052632,
+        0.8092187499999999
+      ],
+      "max_mean_exit_time_error_s": 0.0003276225003789879,
+      "max_partition_error_J_m2": 2.2898349882893854e-16,
+      "post_pulse_sheet_release_J_m2": [
+        0.03543788933307928,
+        0.00011050285898724782
+      ],
+      "remaining_energy_bound_J_m2": 1.0295074579665876e-16,
+      "max_sheet_balance_error_J_m2": 2.949029909160572e-17
+    },
+    {
+      "bulk_columns": 32,
+      "heated_sheet": 0,
+      "method": "theta",
+      "pulse_end_s": 0.0625,
+      "final_time_s": 32.0625,
+      "injected_J_m2": 0.0625,
+      "outward_wall_heats_J_m2": [
+        0.0494791666666685,
+        0.013020833333333919
+      ],
+      "reference_J_m2": [
+        0.049479166666666664,
+        0.013020833333333334
+      ],
+      "wall_mean_exit_times_s": [
+        0.3189165466413783,
+        0.8091372446968359
+      ],
+      "reference_mean_exit_times_s": [
+        0.3189555921052632,
+        0.80921875
+      ],
+      "max_mean_exit_time_error_s": 8.150530316408666e-05,
+      "max_partition_error_J_m2": 1.8388068845354155e-15,
+      "post_pulse_sheet_release_J_m2": [
+        0.03537517385724013,
+        0.00010044895549136262
+      ],
+      "remaining_energy_bound_J_m2": 8.186018788399095e-18,
+      "max_sheet_balance_error_J_m2": 9.855397747893235e-17,
+      "mean_exit_time_order": 2.007068604598796
+    },
+    {
+      "bulk_columns": 64,
+      "heated_sheet": 0,
+      "method": "theta",
+      "pulse_end_s": 0.0625,
+      "final_time_s": 32.0625,
+      "injected_J_m2": 0.0625,
+      "outward_wall_heats_J_m2": [
+        0.049479166666663965,
+        0.01302083333333821
+      ],
+      "reference_J_m2": [
+        0.04947916666666667,
+        0.013020833333333332
+      ],
+      "wall_mean_exit_times_s": [
+        0.31894584753918287,
+        0.8091984010618789
+      ],
+      "reference_mean_exit_times_s": [
+        0.31895559210526336,
+        0.8092187500000004
+      ],
+      "max_mean_exit_time_error_s": 2.034893812152827e-05,
+      "max_partition_error_J_m2": 4.8780424144467815e-15,
+      "post_pulse_sheet_release_J_m2": [
+        0.03536015219284233,
+        9.801921081263251e-05
+      ],
+      "remaining_energy_bound_J_m2": 5.507229427466156e-18,
+      "max_sheet_balance_error_J_m2": 2.154038666185576e-16,
+      "mean_exit_time_order": 2.0019404201284474
     },
     {
       "bulk_columns": 16,
@@ -31,20 +106,95 @@
       "final_time_s": 32.0625,
       "injected_J_m2": 0.0625,
       "outward_wall_heats_J_m2": [
-        0.04947916666666636,
-        0.013020833333333344
+        0.04947916666666649,
+        0.013020833333333395
       ],
       "reference_J_m2": [
         0.049479166666666664,
         0.013020833333333334
       ],
-      "max_partition_error_J_m2": 3.0531133177191805e-16,
-      "post_pulse_sheet_release_J_m2": [
-        0.03543215423601139,
-        0.00011003588864778868
+      "wall_mean_exit_times_s": [
+        0.31915547896618857,
+        0.8099319133078408
       ],
-      "remaining_energy_bound_J_m2": 1.0971145061741823e-31,
-      "max_sheet_balance_error_J_m2": 2.0166160408230382e-17
+      "reference_mean_exit_times_s": [
+        0.3189555921052632,
+        0.8092187499999999
+      ],
+      "max_mean_exit_time_error_s": 0.0007131633078408806,
+      "max_partition_error_J_m2": 1.734723475976807e-16,
+      "post_pulse_sheet_release_J_m2": [
+        0.035434561490756133,
+        0.00011023063495990346
+      ],
+      "remaining_energy_bound_J_m2": 3.409563000659055e-21,
+      "max_sheet_balance_error_J_m2": 3.61039323437673e-17
+    },
+    {
+      "bulk_columns": 32,
+      "heated_sheet": 0,
+      "method": "sdirk2",
+      "pulse_end_s": 0.0625,
+      "final_time_s": 32.0625,
+      "injected_J_m2": 0.0625,
+      "outward_wall_heats_J_m2": [
+        0.04947916666666807,
+        0.013020833333333877
+      ],
+      "reference_J_m2": [
+        0.049479166666666664,
+        0.013020833333333334
+      ],
+      "wall_mean_exit_times_s": [
+        0.31901987274332677,
+        0.8094382256961112
+      ],
+      "reference_mean_exit_times_s": [
+        0.3189555921052632,
+        0.80921875
+      ],
+      "max_mean_exit_time_error_s": 0.00021947569611124873,
+      "max_partition_error_J_m2": 1.4085954624931674e-15,
+      "post_pulse_sheet_release_J_m2": [
+        0.03537434894561667,
+        0.00010037885836662944
+      ],
+      "remaining_energy_bound_J_m2": 3.4889578732288156e-30,
+      "max_sheet_balance_error_J_m2": 8.304988641238964e-17,
+      "mean_exit_time_order": 1.700171288257777
+    },
+    {
+      "bulk_columns": 64,
+      "heated_sheet": 0,
+      "method": "sdirk2",
+      "pulse_end_s": 0.0625,
+      "final_time_s": 32.0625,
+      "injected_J_m2": 0.0625,
+      "outward_wall_heats_J_m2": [
+        0.04947916666666169,
+        0.013020833333338025
+      ],
+      "reference_J_m2": [
+        0.04947916666666667,
+        0.013020833333333332
+      ],
+      "wall_mean_exit_times_s": [
+        0.31897528560695215,
+        0.8092840932768878
+      ],
+      "reference_mean_exit_times_s": [
+        0.31895559210526336,
+        0.8092187500000004
+      ],
+      "max_mean_exit_time_error_s": 6.534327688734187e-05,
+      "max_partition_error_J_m2": 4.98212582300539e-15,
+      "post_pulse_sheet_release_J_m2": [
+        0.03535994611363374,
+        9.80015516947215e-05
+      ],
+      "remaining_energy_bound_J_m2": 2.3767959388635233e-34,
+      "max_sheet_balance_error_J_m2": 1.7859520286267472e-16,
+      "mean_exit_time_order": 1.7479504790058702
     },
     {
       "bulk_columns": 16,
@@ -54,89 +204,29 @@
       "final_time_s": 32.0625,
       "injected_J_m2": 0.0625,
       "outward_wall_heats_J_m2": [
-        0.014322916666666631,
-        0.048177083333333315
-      ],
-      "reference_J_m2": [
-        0.014322916666666664,
-        0.048177083333333336
-      ],
-      "max_partition_error_J_m2": 3.2959746043559335e-17,
-      "post_pulse_sheet_release_J_m2": [
-        3.440752570339767e-05,
-        0.05452992842697604
-      ],
-      "remaining_energy_bound_J_m2": 1.4150514958206233e-18,
-      "max_sheet_balance_error_J_m2": 3.5561831257524545e-17
-    },
-    {
-      "bulk_columns": 16,
-      "heated_sheet": 1,
-      "method": "sdirk2",
-      "pulse_end_s": 0.0625,
-      "final_time_s": 32.0625,
-      "injected_J_m2": 0.0625,
-      "outward_wall_heats_J_m2": [
-        0.014322916666666635,
+        0.014322916666666661,
         0.04817708333333327
       ],
       "reference_J_m2": [
         0.014322916666666664,
         0.048177083333333336
       ],
+      "wall_mean_exit_times_s": [
+        0.8317102554745653,
+        0.465757020914425
+      ],
+      "reference_mean_exit_times_s": [
+        0.8322301136363637,
+        0.4663978040540539
+      ],
+      "max_mean_exit_time_error_s": 0.0006407831396288977,
       "max_partition_error_J_m2": 6.245004513516506e-17,
       "post_pulse_sheet_release_J_m2": [
-        3.4386215202433096e-05,
-        0.054529740784303206
+        3.4532143433496296e-05,
+        0.054531024782915764
       ],
-      "remaining_energy_bound_J_m2": 1.6729114152608596e-31,
-      "max_sheet_balance_error_J_m2": 2.878556767949014e-17
-    },
-    {
-      "bulk_columns": 32,
-      "heated_sheet": 0,
-      "method": "theta",
-      "pulse_end_s": 0.0625,
-      "final_time_s": 32.0625,
-      "injected_J_m2": 0.0625,
-      "outward_wall_heats_J_m2": [
-        0.049479166666668725,
-        0.013020833333334057
-      ],
-      "reference_J_m2": [
-        0.049479166666666664,
-        0.013020833333333334
-      ],
-      "max_partition_error_J_m2": 2.060851489460447e-15,
-      "post_pulse_sheet_release_J_m2": [
-        0.03537517385724037,
-        0.00010044895549141813
-      ],
-      "remaining_energy_bound_J_m2": 3.2176486660785974e-18,
-      "max_sheet_balance_error_J_m2": 9.459663954936026e-17
-    },
-    {
-      "bulk_columns": 32,
-      "heated_sheet": 0,
-      "method": "sdirk2",
-      "pulse_end_s": 0.0625,
-      "final_time_s": 32.0625,
-      "injected_J_m2": 0.0625,
-      "outward_wall_heats_J_m2": [
-        0.049479166666668475,
-        0.01302083333333398
-      ],
-      "reference_J_m2": [
-        0.049479166666666664,
-        0.013020833333333334
-      ],
-      "max_partition_error_J_m2": 1.8110513089197866e-15,
-      "post_pulse_sheet_release_J_m2": [
-        0.035374348945617126,
-        0.00010037885836663984
-      ],
-      "remaining_energy_bound_J_m2": 1.108049791920913e-31,
-      "max_sheet_balance_error_J_m2": 1.0614339268633088e-16
+      "remaining_energy_bound_J_m2": 1.5333470449602483e-16,
+      "max_sheet_balance_error_J_m2": 6.895525817007808e-17
     },
     {
       "bulk_columns": 32,
@@ -146,20 +236,95 @@
       "final_time_s": 32.0625,
       "injected_J_m2": 0.0625,
       "outward_wall_heats_J_m2": [
-        0.014322916666667185,
-        0.048177083333332676
+        0.014322916666667029,
+        0.04817708333333223
       ],
       "reference_J_m2": [
         0.014322916666666671,
         0.04817708333333333
       ],
-      "max_partition_error_J_m2": 6.522560269672795e-16,
-      "post_pulse_sheet_release_J_m2": [
-        3.139029859220571e-05,
-        0.054537572355934746
+      "wall_mean_exit_times_s": [
+        0.8321002006130623,
+        0.4662379286691514
       ],
-      "remaining_energy_bound_J_m2": 3.831868393865343e-18,
-      "max_sheet_balance_error_J_m2": 1.3595895242968226e-16
+      "reference_mean_exit_times_s": [
+        0.8322301136363637,
+        0.4663978040540543
+      ],
+      "max_mean_exit_time_error_s": 0.00015987538490286335,
+      "max_partition_error_J_m2": 1.096345236817342e-15,
+      "post_pulse_sheet_release_J_m2": [
+        3.1390298592165813e-05,
+        0.054537572355934164
+      ],
+      "remaining_energy_bound_J_m2": 5.891492456262388e-18,
+      "max_sheet_balance_error_J_m2": 1.8474805019152996e-16,
+      "mean_exit_time_order": 2.0028883554370953
+    },
+    {
+      "bulk_columns": 64,
+      "heated_sheet": 1,
+      "method": "theta",
+      "pulse_end_s": 0.0625,
+      "final_time_s": 32.0625,
+      "injected_J_m2": 0.0625,
+      "outward_wall_heats_J_m2": [
+        0.014322916666671133,
+        0.04817708333334497
+      ],
+      "reference_J_m2": [
+        0.014322916666666671,
+        0.04817708333333333
+      ],
+      "wall_mean_exit_times_s": [
+        0.832197638959666,
+        0.4663578555919512
+      ],
+      "reference_mean_exit_times_s": [
+        0.8322301136363641,
+        0.46639780405405434
+      ],
+      "max_mean_exit_time_error_s": 3.99484621031454e-05,
+      "max_partition_error_J_m2": 1.164346397075633e-14,
+      "post_pulse_sheet_release_J_m2": [
+        3.0631003378498584e-05,
+        0.05453926441562694
+      ],
+      "remaining_energy_bound_J_m2": 4.6271429780058835e-18,
+      "max_sheet_balance_error_J_m2": 2.1109416298292771e-16,
+      "mean_exit_time_order": 2.0007359625542436
+    },
+    {
+      "bulk_columns": 16,
+      "heated_sheet": 1,
+      "method": "sdirk2",
+      "pulse_end_s": 0.0625,
+      "final_time_s": 32.0625,
+      "injected_J_m2": 0.0625,
+      "outward_wall_heats_J_m2": [
+        0.014322916666666756,
+        0.04817708333333348
+      ],
+      "reference_J_m2": [
+        0.014322916666666664,
+        0.048177083333333336
+      ],
+      "wall_mean_exit_times_s": [
+        0.8327828649343408,
+        0.4663195564860723
+      ],
+      "reference_mean_exit_times_s": [
+        0.8322301136363637,
+        0.4663978040540539
+      ],
+      "max_mean_exit_time_error_s": 0.0005527512979771609,
+      "max_partition_error_J_m2": 1.457167719820518e-16,
+      "post_pulse_sheet_release_J_m2": [
+        3.4447073425029895e-05,
+        0.054530275606603104
+      ],
+      "remaining_energy_bound_J_m2": 5.1989962574439815e-21,
+      "max_sheet_balance_error_J_m2": 4.336808689942018e-17
     },
     {
       "bulk_columns": 32,
@@ -169,89 +334,30 @@
       "final_time_s": 32.0625,
       "injected_J_m2": 0.0625,
       "outward_wall_heats_J_m2": [
-        0.014322916666667216,
-        0.04817708333333241
+        0.014322916666667039,
+        0.048177083333332045
       ],
       "reference_J_m2": [
         0.014322916666666671,
         0.04817708333333333
       ],
-      "max_partition_error_J_m2": 9.159339953157541e-16,
+      "wall_mean_exit_times_s": [
+        0.832410439297004,
+        0.466400804393128
+      ],
+      "reference_mean_exit_times_s": [
+        0.8322301136363637,
+        0.4663978040540543
+      ],
+      "max_mean_exit_time_error_s": 0.00018032566064030142,
+      "max_partition_error_J_m2": 1.2836953722228372e-15,
       "post_pulse_sheet_release_J_m2": [
-        3.136839324088467e-05,
-        0.05453738520157042
+        3.136839324076324e-05,
+        0.05453738520156993
       ],
-      "remaining_energy_bound_J_m2": 1.6924756655742888e-31,
-      "max_sheet_balance_error_J_m2": 1.6436504934880247e-16
-    },
-    {
-      "bulk_columns": 64,
-      "heated_sheet": 0,
-      "method": "theta",
-      "pulse_end_s": 0.0625,
-      "final_time_s": 32.0625,
-      "injected_J_m2": 0.0625,
-      "outward_wall_heats_J_m2": [
-        0.049479166666663375,
-        0.013020833333339015
-      ],
-      "reference_J_m2": [
-        0.04947916666666667,
-        0.013020833333333332
-      ],
-      "max_partition_error_J_m2": 5.68295410730002e-15,
-      "post_pulse_sheet_release_J_m2": [
-        0.03536135652923717,
-        9.812229048059007e-05
-      ],
-      "remaining_energy_bound_J_m2": 6.4082760087127216e-18,
-      "max_sheet_balance_error_J_m2": 2.2415879916137804e-16
-    },
-    {
-      "bulk_columns": 64,
-      "heated_sheet": 0,
-      "method": "sdirk2",
-      "pulse_end_s": 0.0625,
-      "final_time_s": 32.0625,
-      "injected_J_m2": 0.0625,
-      "outward_wall_heats_J_m2": [
-        0.049479166666663,
-        0.013020833333337837
-      ],
-      "reference_J_m2": [
-        0.04947916666666667,
-        0.013020833333333332
-      ],
-      "max_partition_error_J_m2": 4.505076867111768e-15,
-      "post_pulse_sheet_release_J_m2": [
-        0.03536053422779162,
-        9.805173605018092e-05
-      ],
-      "remaining_energy_bound_J_m2": 1.1120386152248057e-31,
-      "max_sheet_balance_error_J_m2": 2.1651517384535524e-16
-    },
-    {
-      "bulk_columns": 64,
-      "heated_sheet": 1,
-      "method": "theta",
-      "pulse_end_s": 0.0625,
-      "final_time_s": 32.0625,
-      "injected_J_m2": 0.0625,
-      "outward_wall_heats_J_m2": [
-        0.014322916666670616,
-        0.04817708333334376
-      ],
-      "reference_J_m2": [
-        0.014322916666666671,
-        0.04817708333333333
-      ],
-      "max_partition_error_J_m2": 1.0429157537572564e-14,
-      "post_pulse_sheet_release_J_m2": [
-        3.0663215774310096e-05,
-        0.05453953753124384
-      ],
-      "remaining_energy_bound_J_m2": 1.5041385387504593e-17,
-      "max_sheet_balance_error_J_m2": 2.5977484052752686e-16
+      "remaining_energy_bound_J_m2": 5.329172414876215e-30,
+      "max_sheet_balance_error_J_m2": 2.0664893407573715e-16,
+      "mean_exit_time_order": 1.6160257985255422
     },
     {
       "bulk_columns": 64,
@@ -261,30 +367,40 @@
       "final_time_s": 32.0625,
       "injected_J_m2": 0.0625,
       "outward_wall_heats_J_m2": [
-        0.014322916666670873,
-        0.04817708333334498
+        0.014322916666671138,
+        0.048177083333345534
       ],
       "reference_J_m2": [
         0.014322916666666671,
         0.04817708333333333
       ],
-      "max_partition_error_J_m2": 1.1650402864660236e-14,
-      "post_pulse_sheet_release_J_m2": [
-        3.0641167515195813e-05,
-        0.054539350500233806
+      "wall_mean_exit_times_s": [
+        0.8322859708303872,
+        0.46640425077713255
       ],
-      "remaining_energy_bound_J_m2": 1.6993108461719654e-31,
-      "max_sheet_balance_error_J_m2": 3.480288973678469e-16
+      "reference_mean_exit_times_s": [
+        0.8322301136363641,
+        0.46639780405405434
+      ],
+      "max_mean_exit_time_error_s": 5.585719402312339e-05,
+      "max_partition_error_J_m2": 1.2205514376972815e-14,
+      "post_pulse_sheet_release_J_m2": [
+        3.062548490389248e-05,
+        0.054539217610444196
+      ],
+      "remaining_energy_bound_J_m2": 3.631935709648465e-34,
+      "max_sheet_balance_error_J_m2": 2.0025214125807267e-16,
+      "mean_exit_time_order": 1.69078970226885
     }
   ],
   "sources": [
     {
-      "commit": "3875e195a3006895de35a07ec8e084692cd49b7e",
+      "commit": "b489d4764ddb96e8392a22f8fa7ea699bea9618e",
       "file": "sph_sheet_pulse_partition.py",
-      "source_sha256": "e84fcabb966abfff18fc2b7a5d7fb32e53252c2bf47547a2ed0d5859ec256e95"
+      "source_sha256": "ebd81cafbc2f9d28213c37464d0b49c808294e1eef6364bf4f2e8424fae1f709"
     },
     {
-      "commit": "3875e195a3006895de35a07ec8e084692cd49b7e",
+      "commit": "b489d4764ddb96e8392a22f8fa7ea699bea9618e",
       "file": "sph_layered_storing_contacts.py",
       "source_sha256": "8a2b0a4383ef1b51d483ed9df1762d773603e7d8dc000f2260ffb3e20fb80957"
     },
