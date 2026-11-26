@@ -33,27 +33,33 @@ def directional_heat(times, heat, roots):
     return np.array([east_before+east_after, -west_signed])
 
 
-def fit_flux_phasor(times, heat, omega):
-    """Fit interval integrals of offset + Re(Q exp(i omega t)) to signed heat."""
+def fit_flux_phasors(times, heat, frequencies):
+    """Fit DC and complex amplitudes using exact basis integrals over each step."""
     dt = np.diff(times)
-    angles = omega*(times[1:]+times[:-1])/2
-    scale = dt*np.sinc(omega*dt/(2*np.pi))
-    basis = np.column_stack((dt, scale*np.cos(angles), -scale*np.sin(angles)))
-    _, real, imag = np.linalg.lstsq(basis, heat, rcond=None)[0]
-    return complex(real, imag)
+    midpoints = (times[1:]+times[:-1])/2
+    columns = [dt]
+    for omega in frequencies:
+        scale = dt*np.sinc(omega*dt/(2*np.pi))
+        columns.extend((scale*np.cos(omega*midpoints), -scale*np.sin(omega*midpoints)))
+    coefficients, _, rank, _ = np.linalg.lstsq(np.column_stack(columns), heat, rcond=None)
+    if rank != len(columns):
+        raise ValueError("time intervals do not resolve the requested frequencies")
+    return coefficients[1::2]+1j*coefficients[2::2]
 
 
-def measure(steps, method, solver):
+def solve_contact_heat(times, method, solver, *, second_harmonic=False):
     n = 40
     cut, k, cv, resistance, total, weight = case.slab_geometry(n)
     frequency = 2*np.pi
+    west_second, east_second = (.25, -.18) if second_harmonic else (0., 0.)
     def west(t):
-        return .2+np.cos(frequency*t)
+        return .2+np.cos(frequency*t)+west_second*np.sin(2*frequency*t)
     def east(t):
-        return .15*np.sin(frequency*t)
+        return .15*np.sin(frequency*t)+east_second*np.cos(2*frequency*t)
     def source(t):
-        return cv*frequency*(-(1-weight)*np.sin(frequency*t)+.15*weight*np.cos(frequency*t))
-    times = np.linspace(0., 1., steps+1)
+        west_rate = -np.sin(frequency*t)+2*west_second*np.cos(2*frequency*t)
+        east_rate = .15*np.cos(frequency*t)-2*east_second*np.sin(2*frequency*t)
+        return cv*frequency*((1-weight)*west_rate+weight*east_rate)
     initial = (1-weight)*west(0.)+weight*east(0.)
     if solver == "fvm":
         _, _, _, _, ledger = rod.solve_transient_stepped_rod(
@@ -65,6 +71,13 @@ def measure(steps, method, solver):
             initial, times, 1/n, (west, east), conductivity=k, volumetric_heat_capacity=cv,
             heat_source=source, contact_resistance_x=resistance, h_factor=.9, method=method, return_x_heat=True)
         heat = cuts[:, cut].numpy()
+    return heat, total
+
+
+def measure(steps, method, solver):
+    frequency = 2*np.pi
+    times = np.linspace(0., 1., steps+1)
+    heat, total = solve_contact_heat(times, method, solver)
     # Solve cos(wt+phase)=-0.2/amplitude for both directions.
     angle = np.arccos(-.2/np.hypot(1., .15))
     expected = (np.array([angle, frequency-angle])-np.arctan(.15))/frequency
@@ -78,8 +91,8 @@ def measure(steps, method, solver):
     target = np.array([parts[0]+parts[2], -parts[1]])
     exact_intervals = np.diff(exact_heat(times))
     exact_phasor = (1+.15j)/total
-    measured_phasor = fit_flux_phasor(times, heat, frequency)
-    control_phasor = fit_flux_phasor(times, exact_intervals, frequency)
+    measured_phasor = fit_flux_phasors(times, heat, [frequency])[0]
+    control_phasor = fit_flux_phasors(times, exact_intervals, [frequency])[0]
     control_events = events(times, exact_intervals)
     control = directional_heat(times, exact_intervals, [t for _, t in control_events])
     diagnostics = dict(reconstruction_only_errors_J_m2=abs(control-target).tolist(),
