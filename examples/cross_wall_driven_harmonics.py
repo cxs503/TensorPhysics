@@ -8,11 +8,15 @@ import periodic_contact_reference as continuum
 from conduction_provenance import provenance
 
 
-def measure(n, solver):
+def measure(n, solver, *, reverse=False):
     omegas = 2*np.pi*np.array([1., 2.])
     drive = np.array([1., .25-.15j])
-    k = np.repeat([1., 4.], n//2)
-    cv = np.repeat([1., 2.], n//2)
+    # Measure distance from the driven wall. Mirroring the material order
+    # drives the other physical wall while retaining outward cold-wall flux.
+    materials = (4., 1.) if reverse else (1., 4.)
+    capacities = (2., 1.) if reverse else (1., 2.)
+    k = np.repeat(materials, n//2)
+    cv = np.repeat(capacities, n//2)
     resistance = np.zeros(n-1)
     resistance[n//2-1] = .3
     initial = np.zeros(n)
@@ -20,7 +24,7 @@ def measure(n, solver):
     cold_reference = []
     storage_reference = []
     for omega, amplitude in zip(omegas, drive):
-        _, means, q, inward_walls = continuum.reference(n, .3, omega)
+        _, means, q, inward_walls = continuum.reference(n, .3, omega, conductivity=materials, capacity=capacities)
         cold_reference.append(-inward_walls[1])  # positive out through the cold wall
         energy = (cv*means/n).reshape(2, n//2).sum(axis=1)
         storage_reference.append(1j*omega*energy)
@@ -54,6 +58,9 @@ def measure(n, solver):
     gain = cut_gains[:, 1]
     exact_gain = np.array(expected)/drive
     return dict(columns=n, steps=len(times)-1, solver=solver,
+                physical_drive_wall="east" if reverse else "west",
+                cold_phase_rad=np.angle(cut_gains[:, 2]).tolist(),
+                exact_cold_phase_rad=np.angle(cold_reference).tolist(),
                 cold_gain_W_m2_K=abs(cut_gains[:, 2]).tolist(),
                 exact_cold_gain_W_m2_K=np.abs(cold_reference).tolist(),
                 cold_relative_gain_errors=abs(abs(cold_ratio)-1).tolist(),

@@ -2,13 +2,14 @@
 import numpy as np
 
 
-def reference(n, resistance, omega, transverse_wavenumber=0.):
+def reference(n, resistance, omega, transverse_wavenumber=0., *,
+              conductivity=(1., 4.), capacity=(1., 2.)):
     """Propagate the continuum (temperature, rightward flux) from the cold wall."""
-    waves = np.sqrt(transverse_wavenumber**2 + 1j*omega*np.array([1., 2.])/np.array([1., 4.]))
+    waves = np.sqrt(transverse_wavenumber**2 + 1j*omega*np.asarray(capacity)/np.asarray(conductivity))
 
     def propagate(length, layer, temperature, flux):
         z = length*waves[layer]
-        admittance = (1., 4.)[layer]*waves[layer]
+        admittance = conductivity[layer]*waves[layer]
         return (np.cosh(z)*temperature + np.sinh(z)*flux/admittance,
                 admittance*np.sinh(z)*temperature + np.cosh(z)*flux)
 
