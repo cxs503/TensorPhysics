@@ -1,19 +1,18 @@
-"""Verify wall heat partition and exit-time moments for two capacitive FEM contacts."""
+"""Verify wall heat partition and exit-time moments for two capacitive contacts using FEM or FVM."""
+import argparse
 import json
 
 import numpy as np
 import torch
-from tensorfem import thermal
 
 from conduction_provenance import provenance
 import sph_sheet_pulse_partition as pulse
 
 
-def measure(n, heater, method):
+def fem_history(n, heater, method, faces, k, cv, resistances, capacities, times, injected):
+    from tensorfem import thermal
+
     dx = 1/n
-    _, _, k, cv, faces, contacts, sheet_r, capacities = pulse.slab.layered_materials(n)
-    resistances = contacts[faces-1].copy()
-    resistances[::2] += sheet_r
     # Duplicate the bulk traces at every contact. A storing sheet has an
     # independent node between two half resistances at the same location.
     x, elements, links, conductance, sheets = [0.], [], [], [], []
@@ -37,14 +36,54 @@ def measure(n, heater, method):
         1., torch.from_numpy(cv), torch.tensor([0, len(x)-1]), coords.new_zeros(2),
         contact_pairs=torch.tensor(links), contact_conductance=coords.new_tensor(conductance),
         nodal_heat_capacity=sheet_mass)
-    stop = .0625
-    times = np.r_[np.linspace(0., stop, n+1), stop+np.geomspace(.016/n, 32., 5*n+1)]
-    injected = np.diff(np.minimum(times, stop))
     loads = coords.new_zeros((len(injected), len(x)))
     loads[:, sheets[heater]] = torch.from_numpy(injected)
     result = thermal.solve_transient_thermal(model, torch.from_numpy(times), torch.zeros_like(coords),
         method=method, theta=.5, sparse=True, nodal_step_heat=loads)
     outward = -result.nodal_reaction_heat_steps().numpy()[:, [0, -1]]
+    sheet_errors = []
+    mean_t = result.interval_temperature.numpy()
+    for i, s in enumerate(sheets):
+        incoming = np.diff(times)*(mean_t[:, s-1]+mean_t[:, s+1]-2*mean_t[:, s])*2/resistances[2*i]
+        stored = capacities[i]*np.diff(result.temperature[:, s].numpy())
+        sheet_errors.append(abs(stored-incoming-(injected if i == heater else 0.)).max())
+    return outward, sheet_errors
+
+
+def fvm_history(n, heater, method, faces, k, cv, resistances, capacities, times, injected):
+    from tensorfvm.cht import rod
+
+    # Each extra volume stores C and contributes R/2 on either side of
+    # its center in the two-point flux scheme. The bookkeeping width is dx.
+    dx = 1/n
+    sheets = faces[::2]+[0, 1]
+    conductivity = np.insert(k, faces[::2], dx/resistances[::2])
+    density = np.insert(cv, faces[::2], np.asarray(capacities)/dx)
+    contacts = np.zeros(n+1)
+    contacts[faces[1]] = resistances[1]
+    source = np.zeros(n+2)
+    source[sheets[heater]] = 1/dx
+    stop = times[np.count_nonzero(injected)]
+    state, _, _, _, ledger = rod.solve_transient_stepped_rod(
+        np.full(n+2, dx), 1., conductivity, density, (0., 0.), times, np.zeros(n+2),
+        method=method, flux_order=1, contact_resistance=contacts, return_step_heat=True,
+        source=lambda t: source if t < stop else 0., load_jump_times=[stop])
+    stored = np.diff(state[:, sheets], axis=0)*capacities
+    incoming = ledger["left"][:, sheets]-ledger["right"][:, sheets]
+    incoming[:, heater] += injected
+    return -ledger["end_input"], abs(stored-incoming).max(axis=0)
+
+
+def measure(n, heater, method, *, fvm=False):
+    dx = 1/n
+    _, _, k, cv, faces, contacts, sheet_r, capacities = pulse.slab.layered_materials(n)
+    resistances = contacts[faces-1].copy()
+    resistances[::2] += sheet_r
+    stop = .0625
+    times = np.r_[np.linspace(0., stop, n+1), stop+np.geomspace(.016/n, 32., 5*n+1)]
+    injected = np.diff(np.minimum(times, stop))
+    history = fvm_history if fvm else fem_history
+    outward, sheet_errors = history(n, heater, method, faces, k, cv, resistances, capacities, times, injected)
     total = outward.sum(axis=0)
     mid = (times[:-1]+times[1:])/2
     centroid = mid@outward/total
@@ -54,12 +93,6 @@ def measure(n, heater, method):
     west_r = (dx/k[:faces[j]]).sum()+resistances[:j].sum()+resistances[j]/2
     expected = stop*np.array([1-west_r/total_r, west_r/total_r])
     ref_mean, ref_std = pulse.exit_time_spread(dx, k, cv, faces, resistances, capacities, heater, stop)
-    sheet_errors = []
-    mean_t = result.interval_temperature.numpy()
-    for i, s in enumerate(sheets):
-        incoming = np.diff(times)*(mean_t[:, s-1]+mean_t[:, s+1]-2*mean_t[:, s])*2/resistances[2*i]
-        stored = capacities[i]*np.diff(result.temperature[:, s].numpy())
-        sheet_errors.append(abs(stored-incoming-(injected if i == heater else 0.)).max())
     np.testing.assert_allclose(total, expected, rtol=0., atol=1e-10)
     np.testing.assert_array_less(sheet_errors, 1e-10)
     if n == 64:
@@ -73,9 +106,20 @@ def measure(n, heater, method):
 
 
 if __name__ == "__main__":
-    runs = [measure(n, heater, method) for heater in (0, 1) for method in ("theta", "sdirk2")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--fvm", action="store_true", help="use the finite-volume rod with lumped sheet cells")
+    fvm = parser.parse_args().fvm
+    if fvm:
+        from tensorfvm.cht import rod
+        solver = rod
+        pythonpath = "../TensorFVM/src:../TensorSPH/src"
+    else:
+        from tensorfem import thermal
+        solver = thermal
+        pythonpath = "../TensorFEM/src:../TensorSPH/src"
+    runs = [measure(n, heater, method, fvm=fvm) for heater in (0, 1) for method in ("theta", "sdirk2")
             for n in (16, 32, 64)]
-    print(json.dumps(dict(runs=runs, sources=[provenance(p) for p in
-                          (__file__, thermal.__file__, pulse.__file__, pulse.slab.__file__)],
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorSPH/src python examples/fem_sheet_pulse_partition.py"),
+    print(json.dumps(dict(solver="FVM" if fvm else "FEM", runs=runs, sources=[provenance(p) for p in
+                          (__file__, solver.__file__, pulse.__file__, pulse.slab.__file__)],
+        reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={pythonpath} python examples/fem_sheet_pulse_partition.py"+(" --fvm" if fvm else "")),
         indent=2, allow_nan=False))
