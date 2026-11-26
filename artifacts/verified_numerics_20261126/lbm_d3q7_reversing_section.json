@@ -1,0 +1,27 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "450471b31e3f663af425aeea60cfb0a479d05699",
+  "passed": 126,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal3d.py tests/test_thermal3d_budget.py tests/test_thermal_common.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "At x=0.25 m in a unit slab, the exact flux is a positive constant minus an exponentially decaying term. Wall temperatures 1.2 and 0.4, initial sine perturbation amplitude 0.43, diffusivity 0.075, volumetric capacity 2.3. Integrate each sign of measured postcollision link transport over 0.5 s and interpolate the zero between consecutive step midpoints. For 18, 34 and 66 x intervals the same physical section lies exactly at a link midpoint. Compare against the analytic zero and time integral on either side.",
+  "metrics": {
+    "n18_forward_J_m2_error": 5.337998850450448e-05,
+    "n18_reverse_J_m2_error": 0.00011049700398107348,
+    "n18_reversal_s_error": 0.002416385188351383,
+    "n34_forward_J_m2_error": 1.3813512537988286e-05,
+    "n34_forward_J_m2_order": 2.125491387350971,
+    "n34_reverse_J_m2_error": 3.027758002861541e-05,
+    "n34_reverse_J_m2_order": 2.035540514956902,
+    "n34_reversal_s_error": 0.0006314262826545014,
+    "n34_reversal_s_order": 2.110173713095922,
+    "n66_forward_J_m2_error": 3.4984032490944887e-06,
+    "n66_forward_J_m2_order": 2.070484856656097,
+    "n66_reverse_J_m2_error": 7.941482749942476e-06,
+    "n66_reverse_J_m2_order": 2.017667979462026,
+    "n66_reversal_s_error": 0.00016102007520318873,
+    "n66_reversal_s_order": 2.0600996020670905,
+    "reference_forward_J_m2": 0.0032519991128468,
+    "reference_reverse_J_m2": 0.0031124676073098004,
+    "reference_reversal_s": 0.2395635047871969
+  }
+}
