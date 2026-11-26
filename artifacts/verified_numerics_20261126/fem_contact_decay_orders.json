@@ -1,0 +1,170 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "study": "space",
+      "method": null,
+      "elements": 20,
+      "sample_intervals": 128,
+      "temperature_error_K": 0.0023037764103187586,
+      "contact_heat_error_J_m2": 0.0009291223380147318,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "study": "space",
+      "method": null,
+      "elements": 40,
+      "sample_intervals": 128,
+      "temperature_error_K": 0.0005757563945710809,
+      "contact_heat_error_J_m2": 0.00023198128802159879,
+      "orders": [
+        2.000470270554233,
+        2.0018601295339105
+      ],
+      "passed": true
+    },
+    {
+      "study": "space",
+      "method": null,
+      "elements": 80,
+      "sample_intervals": 128,
+      "temperature_error_K": 0.0001439313556680366,
+      "contact_heat_error_J_m2": 5.7976601531173344e-05,
+      "orders": [
+        2.000077609571148,
+        2.0004657667949353
+      ],
+      "passed": true
+    },
+    {
+      "study": "space",
+      "method": null,
+      "elements": 160,
+      "sample_intervals": 128,
+      "temperature_error_K": 3.599285138811137e-05,
+      "contact_heat_error_J_m2": 1.449298035621771e-05,
+      "orders": [
+        1.999598616076118,
+        2.000116464892954
+      ],
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "theta",
+      "elements": 80,
+      "sample_intervals": 16,
+      "temperature_error_K": 0.0009600170931670648,
+      "contact_heat_error_J_m2": 0.00022210218772783508,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "theta",
+      "elements": 80,
+      "sample_intervals": 32,
+      "temperature_error_K": 0.00023969922881406092,
+      "contact_heat_error_J_m2": 5.5454984943026364e-05,
+      "orders": [
+        2.0018348259398713,
+        2.001834545996592
+      ],
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "theta",
+      "elements": 80,
+      "sample_intervals": 64,
+      "temperature_error_K": 5.9905781106039946e-05,
+      "contact_heat_error_J_m2": 1.3859344737798818e-05,
+      "orders": [
+        2.0004581277133484,
+        2.0004581032710655
+      ],
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "theta",
+      "elements": 80,
+      "sample_intervals": 128,
+      "temperature_error_K": 1.497525627547347e-05,
+      "contact_heat_error_J_m2": 3.464561200317018e-06,
+      "orders": [
+        2.000114542133569,
+        2.000114502956817
+      ],
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "sdirk2",
+      "elements": 80,
+      "sample_intervals": 16,
+      "temperature_error_K": 0.000470838071798263,
+      "contact_heat_error_J_m2": 0.00010892950435198445,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "sdirk2",
+      "elements": 80,
+      "sample_intervals": 32,
+      "temperature_error_K": 0.00011696194425503403,
+      "contact_heat_error_J_m2": 2.7059423237218994e-05,
+      "orders": [
+        2.0091917824180707,
+        2.009191777295274
+      ],
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "sdirk2",
+      "elements": 80,
+      "sample_intervals": 64,
+      "temperature_error_K": 2.915250820390014e-05,
+      "contact_heat_error_J_m2": 6.744502039912614e-06,
+      "orders": [
+        2.004347278976104,
+        2.0043472539127163
+      ],
+      "passed": true
+    },
+    {
+      "study": "time",
+      "method": "sdirk2",
+      "elements": 80,
+      "sample_intervals": 128,
+      "temperature_error_K": 7.277463594301814e-06,
+      "contact_heat_error_J_m2": 1.6836585631785361e-06,
+      "orders": [
+        2.0021123920319224,
+        2.002112332702922
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "0954d48fce596866d16c2ae6564e10b09a806b70",
+      "file": "fem_contact_decay_orders.py",
+      "source_sha256": "808355df695fd760a23919ab7e0e580af84003d6055c26a5af0aed448b11d696"
+    },
+    {
+      "commit": "0954d48fce596866d16c2ae6564e10b09a806b70",
+      "file": "fem_contact_decay_mode.py",
+      "source_sha256": "e0f5b6d7d1a25f27905187b1944761d5af8e58849fd01b8ed4b53f2ff2363d84"
+    },
+    {
+      "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_contact_decay_orders.py"
+}
