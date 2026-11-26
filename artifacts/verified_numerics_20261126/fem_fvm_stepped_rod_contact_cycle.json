@@ -1,10 +1,10 @@
 {
-  "reference": "Two unit-length layers with independent constant complex sources; continuum interface power 0.8-0.4i W, prescribed DC bias 0.35 W, omega=2.3 rad/s. Integrate the signed halves of the biased sinusoid independently.",
+  "reference": "Two unit-length layers with independent constant complex sources; continuum interface power 0.8-0.4i W, DC end temperatures 0.49 and 0 K in relative coordinates give 0.35 W through the series resistance 1.4 K/W, omega=2.3 rad/s. Integrate the signed halves of the biased sinusoid independently.",
   "reproduce": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/stepped_rod_contact_cycle.py",
   "benchmark": {
-    "commit": "b117cf839592e78142e172c481e93726c112a8e6",
+    "commit": "b8fa8f868522742f396c7aafd0929c6bd7f73f57",
     "file": "stepped_rod_contact_cycle.py",
-    "source_sha256": "2f58b86626c57a821ba2d0ae138353d6d30566807feedd189abc2f816e2833c6"
+    "source_sha256": "27513fc5d035c66bfd3eb6cc747b0a95f30232afea267e47072ae7de022cc94d"
   },
   "FEM": {
     "commit": "81cab937c50abae09e46fb217fe1ef5be88d0e92",
@@ -21,8 +21,11 @@
       "solver": "FEM",
       "elements_per_layer": 8,
       "power_error_W": 0.004470687446929335,
+      "steady_contact_power_W": 0.3500000000000002,
+      "steady_power_error_W": 1.6653345369377348e-16,
+      "net_cycle_error_J": 6.661338147750939e-16,
       "forward_error_J": 0.0035681025602862793,
-      "reverse_error_J": 0.0035681025602855576,
+      "reverse_error_J": 0.003568102560285169,
       "contact_power_W": [
         0.8041436977075456,
         -0.40167833714033074
@@ -32,8 +35,11 @@
       "solver": "FVM",
       "elements_per_layer": 8,
       "power_error_W": 0.004155374970506936,
-      "forward_error_J": 0.0032170897765202433,
-      "reverse_error_J": 0.0032170897765195217,
+      "steady_contact_power_W": 0.349999999999997,
+      "steady_power_error_W": 3.0531133177191805e-15,
+      "net_cycle_error_J": 8.215650382226158e-15,
+      "forward_error_J": 0.0032170897765151363,
+      "reverse_error_J": 0.003217089776522908,
       "contact_power_W": [
         0.8031198878204222,
         -0.4027447114845639
@@ -44,88 +50,106 @@
       "solver": "FEM",
       "elements_per_layer": 16,
       "power_error_W": 0.001115072945591935,
-      "forward_error_J": 0.0008898895144004992,
-      "reverse_error_J": 0.0008898895143997776,
+      "steady_contact_power_W": 0.35000000000000087,
+      "steady_power_error_W": 8.326672684688674e-16,
+      "net_cycle_error_J": 2.4424906541753444e-15,
+      "forward_error_J": 0.0008898895144020535,
+      "reverse_error_J": 0.0008898895143991115,
       "contact_power_W": [
         0.8010319998003601,
         -0.400422331725126
       ],
       "power_error_W_order": 2.003358597103002,
-      "forward_error_J_order": 2.0034589518820636,
-      "reverse_error_J_order": 2.003458951882942
+      "forward_error_J_order": 2.003458951879544,
+      "reverse_error_J_order": 2.003458951883865
     },
     {
       "solver": "FVM",
       "elements_per_layer": 16,
       "power_error_W": 0.0010384261165422063,
-      "forward_error_J": 0.0008029389402250953,
-      "reverse_error_J": 0.0008029389402244846,
+      "steady_contact_power_W": 0.3500000000000014,
+      "steady_power_error_W": 1.3877787807814457e-15,
+      "net_cycle_error_J": 3.9968028886505635e-15,
+      "forward_error_J": 0.0008029389402277598,
+      "reverse_error_J": 0.0008029389402232634,
       "contact_power_W": [
         0.800777486770059,
         -0.4006883626383675
       ],
       "interface_power_mismatch_W": 7.444291678311382e-15,
       "power_error_W_order": 2.0005800951537926,
-      "forward_error_J_order": 2.0023940098121327,
-      "reverse_error_J_order": 2.0023940098129063
+      "forward_error_J_order": 2.0023940098050548,
+      "reverse_error_J_order": 2.002394009816619
     },
     {
       "solver": "FEM",
       "elements_per_layer": 32,
       "power_error_W": 0.00027860560753632666,
-      "forward_error_J": 0.0002223382723434142,
-      "reverse_error_J": 0.00022233827234269254,
+      "steady_contact_power_W": 0.3499999999999947,
+      "steady_power_error_W": 5.329070518200751e-15,
+      "net_cycle_error_J": 1.4432899320127035e-14,
+      "forward_error_J": 0.00022233827233431036,
+      "reverse_error_J": 0.00022233827234824366,
       "contact_power_W": [
         0.8002577543713424,
         -0.40010575333850334
       ],
       "power_error_W_order": 2.0008418904526275,
-      "forward_error_J_order": 2.0008699181863574,
-      "reverse_error_J_order": 2.00086991818987
+      "forward_error_J_order": 2.00086991824795,
+      "reverse_error_J_order": 2.0008699181527705
     },
     {
       "solver": "FVM",
       "elements_per_layer": 32,
       "power_error_W": 0.00025957994752731303,
-      "forward_error_J": 0.00020065062904595088,
-      "reverse_error_J": 0.00020065062904517372,
+      "steady_contact_power_W": 0.3500000000000085,
+      "steady_power_error_W": 8.493206138382448e-15,
+      "net_cycle_error_J": 2.3314683517128287e-14,
+      "forward_error_J": 0.00020065062906038378,
+      "reverse_error_J": 0.000200650629036625,
       "contact_power_W": [
         0.8001942161359921,
         -0.4001722261352949
       ],
       "interface_power_mismatch_W": 7.283063041541027e-14,
       "power_error_W_order": 2.00014772786327,
-      "forward_error_J_order": 2.000604602641898,
-      "reverse_error_J_order": 2.000604602646389
+      "forward_error_J_order": 2.000604602542912,
+      "reverse_error_J_order": 2.0006046027056605
     },
     {
       "solver": "FEM",
       "elements_per_layer": 64,
       "power_error_W": 6.964123452921489e-05,
-      "forward_error_J": 5.5576177126592796e-05,
-      "reverse_error_J": 5.557617712592666e-05,
+      "steady_contact_power_W": 0.3500000000000031,
+      "steady_power_error_W": 3.0531133177191805e-15,
+      "net_cycle_error_J": 8.43769498715119e-15,
+      "forward_error_J": 5.557617713192187e-05,
+      "reverse_error_J": 5.557617712298457e-05,
       "contact_power_W": [
         0.8000644232397203,
         -0.40002644896464334
       ],
       "power_error_W_order": 2.0002106126044996,
-      "forward_error_J_order": 2.0002178034217684,
-      "reverse_error_J_order": 2.0002178034343774
+      "forward_error_J_order": 2.0002178032243587,
+      "reverse_error_J_order": 2.0002178035467706
     },
     {
       "solver": "FVM",
       "elements_per_layer": 64,
       "power_error_W": 6.489331827939629e-05,
-      "forward_error_J": 5.015738890867816e-05,
-      "reverse_error_J": 5.0157388908123046e-05,
+      "steady_contact_power_W": 0.35000000000006537,
+      "steady_power_error_W": 6.533662499919046e-14,
+      "net_cycle_error_J": 1.7852386235972517e-13,
+      "forward_error_J": 5.015738902058864e-05,
+      "reverse_error_J": 5.0157388841509665e-05,
       "contact_power_W": [
         0.800048544308197,
         -0.4000430649846045
       ],
       "interface_power_mismatch_W": 3.351623381340333e-14,
       "power_error_W_order": 2.0000370955526536,
-      "forward_error_J_order": 2.0001515275713913,
-      "reverse_error_J_order": 2.00015152758177
+      "forward_error_J_order": 2.000151524456243,
+      "reverse_error_J_order": 2.000151529436329
     }
   ]
 }
