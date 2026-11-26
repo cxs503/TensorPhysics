@@ -1,0 +1,271 @@
+{
+  "windows_s": [
+    0.0,
+    0.025,
+    0.05
+  ],
+  "contact_resistance_m2K_W": 0.2829421210522584,
+  "reference_mean_west_east_K": [
+    [
+      0.5426194582451442,
+      -0.1808731527483814
+    ],
+    [
+      0.3114513085421853,
+      -0.10381710284739509
+    ]
+  ],
+  "reference_rightward_heat_J_m2": [
+    0.06392584888941819,
+    0.03669199285751464
+  ],
+  "runs": [
+    {
+      "solver": "TensorFEM",
+      "resolution": 12,
+      "steps_per_window": 24,
+      "mean_west_east_K": [
+        [
+          0.5408382180415,
+          -0.1802794060138333
+        ],
+        [
+          0.3081950009928492,
+          -0.10273166699761623
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06371600147174142,
+        0.03630836816220876
+      ],
+      "max_trace_errors_K": [
+        0.0032563075493360905,
+        0.001085435849778868
+      ],
+      "max_heat_error_J_m2": 0.0003836246953058814,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "resolution": 24,
+      "steps_per_window": 48,
+      "mean_west_east_K": [
+        [
+          0.5421802578903158,
+          -0.1807267526301054
+        ],
+        [
+          0.3106422632419523,
+          -0.10354742108065156
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06387410681661132,
+        0.03659667945357846
+      ],
+      "max_trace_errors_K": [
+        0.0008090453002329578,
+        0.0002696817667435375
+      ],
+      "max_heat_error_J_m2": 9.531340393618276e-05,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "resolution": 48,
+      "steps_per_window": 192,
+      "mean_west_east_K": [
+        [
+          0.5425096267622841,
+          -0.18083654225409565
+        ],
+        [
+          0.3112493006568808,
+          -0.10374976688562816
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06391290967268007,
+        0.03666819436419827
+      ],
+      "max_trace_errors_K": [
+        0.00020200788530450042,
+        6.733596176693168e-05
+      ],
+      "max_heat_error_J_m2": 2.379849331637235e-05,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 12,
+      "steps_per_window": 24,
+      "mean_west_east_K": [
+        [
+          0.5435326518490566,
+          -0.18117755061635257
+        ],
+        [
+          0.310876607284952,
+          -0.10362553576165108
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06403343197631908,
+        0.036624287460724686
+      ],
+      "max_trace_errors_K": [
+        0.0009131936039123989,
+        0.00030439786797117896
+      ],
+      "max_heat_error_J_m2": 0.00010758308690089757,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 24,
+      "steps_per_window": 48,
+      "mean_west_east_K": [
+        [
+          0.5428525093518876,
+          -0.1809508364506297
+        ],
+        [
+          0.3113125926049801,
+          -0.1037708642016592
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06395330457610034,
+        0.036675650771167335
+      ],
+      "max_trace_errors_K": [
+        0.00023305110674332052,
+        7.768370224831012e-05
+      ],
+      "max_heat_error_J_m2": 2.745568668215126e-05,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 48,
+      "steps_per_window": 192,
+      "mean_west_east_K": [
+        [
+          0.5426775997590186,
+          -0.18089253325300694
+        ],
+        [
+          0.3114168771380682,
+          -0.10380562571269118
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.0639326985251504,
+        0.036687936503281296
+      ],
+      "max_trace_errors_K": [
+        5.814151387439903e-05,
+        1.9380504625549078e-05
+      ],
+      "max_heat_error_J_m2": 6.849635732220083e-06,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 12,
+      "steps_per_window": 1,
+      "mean_west_east_K": [
+        [
+          0.5532456234235152,
+          -0.18468114771075803
+        ],
+        [
+          0.32319651492038676,
+          -0.10800740385094709
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06271606678068546,
+        0.036623641354869556
+      ],
+      "max_trace_errors_K": [
+        0.011745206378201478,
+        0.004190301003551999
+      ],
+      "max_heat_error_J_m2": 0.0012097821087327237,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 24,
+      "steps_per_window": 1,
+      "mean_west_east_K": [
+        [
+          0.5452731651898359,
+          -0.18181332488660382
+        ],
+        [
+          0.3143005424518052,
+          -0.10480884406846644
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06363190864315316,
+        0.036676788372728274
+      ],
+      "max_trace_errors_K": [
+        0.0028492339096199415,
+        0.000991741221071346
+      ],
+      "max_heat_error_J_m2": 0.0002939402462650287,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 48,
+      "steps_per_window": 1,
+      "mean_west_east_K": [
+        [
+          0.5432845109140516,
+          -0.18110368075470676
+        ],
+        [
+          0.31215019051087894,
+          -0.1040558490862829
+        ]
+      ],
+      "rightward_heat_J_m2": [
+        0.06385417638881614,
+        0.03668804121462882
+      ],
+      "max_trace_errors_K": [
+        0.0006988819686936654,
+        0.00023874623888781032
+      ],
+      "max_heat_error_J_m2": 7.167250060204078e-05,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "de0105a9244d77d3de9e6330563e4705da47828c",
+      "file": "resistive_decay_interface_comparison.py",
+      "source_sha256": "dd5b2ba8c68a3fcd1e2e37d32a1629d0042ab34720533246622120c80930ce76"
+    },
+    {
+      "commit": "833974519364dec3644153e9b2d03dc34901de2e",
+      "file": "thermal.py",
+      "source_sha256": "68aacf922b93a8c8fcf92952f7749a4d8d509efd96325725c9ef0b4dac9bc97d"
+    },
+    {
+      "commit": "86ed5776ea273f05ac98630607fbeffff17ecacb",
+      "file": "rod.py",
+      "source_sha256": "c06d7899faf606a036b330f0ce0b906bb163a9706277e4bfbd3c08ec26182ed8"
+    },
+    {
+      "commit": "d2dad6c7caff2551f26a57d3617f8bcad17c92f0",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "692ac6cd1c428e493c24ef7b410053d10be86d237c191abf9c1e5ecd32b8a1e6"
+    }
+  ]
+}
