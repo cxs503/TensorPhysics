@@ -1,0 +1,324 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "steps": 64,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 4.0245584642661925e-15,
+      "step_heat_superposition_error_J_m2": 1.1934897514720433e-15,
+      "contact_flux_W_m2": [
+        [
+          0.417335388887257,
+          -0.732343499973134
+        ],
+        [
+          0.23781433645618055,
+          -0.44978007324134245
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        0.001409529577624468,
+        0.0035917020853610893
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "steps": 128,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 8.382183835919932e-15,
+      "step_heat_superposition_error_J_m2": 1.654926196081874e-15,
+      "contact_flux_W_m2": [
+        [
+          0.41762272725239474,
+          -0.731501021789914
+        ],
+        [
+          0.23897033117911903,
+          -0.44904296944709804
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        0.0003525229883654307,
+        0.0008962499529634256
+      ],
+      "orders": [
+        1.9994245065634968,
+        2.0026946471237994
+      ],
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "steps": 256,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 2.19824158875781e-14,
+      "step_heat_superposition_error_J_m2": 2.0365653607967715e-15,
+      "contact_flux_W_m2": [
+        [
+          0.41769499811727656,
+          -0.7312904308401581
+        ],
+        [
+          0.23925849251259246,
+          -0.4488587953388494
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        8.813564723760038e-05,
+        0.0002238821874694742
+      ],
+      "orders": [
+        1.9999197871300118,
+        2.001161389148678
+      ],
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "steps": 512,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 5.295763827461997e-14,
+      "step_heat_superposition_error_J_m2": 2.912167035296065e-15,
+      "contact_flux_W_m2": [
+        [
+          0.41771310384874416,
+          -0.7312377916685509
+        ],
+        [
+          0.2393304357355774,
+          -0.44881275075189697
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        2.2033759680184465e-05,
+        5.5949956126765193e-05
+      ],
+      "orders": [
+        2.0000099608650763,
+        2.0005308439275584
+      ],
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "steps": 64,
+      "solver": "sph",
+      "temperature_superposition_error_K": 1.0009354456386177e-15,
+      "step_heat_superposition_error_J_m2": 2.706168622523819e-16,
+      "contact_flux_W_m2": [
+        [
+          0.41636776120717417,
+          -0.731004061777483
+        ],
+        [
+          0.238063470986105,
+          -0.44832536236866444
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        0.0016251367979656182,
+        0.0027023772001619198
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "steps": 128,
+      "solver": "sph",
+      "temperature_superposition_error_K": 3.608224830031759e-15,
+      "step_heat_superposition_error_J_m2": 5.754945131553058e-16,
+      "contact_flux_W_m2": [
+        [
+          0.4173801006259249,
+          -0.7311668037509238
+        ],
+        [
+          0.239031153135506,
+          -0.4486802922629036
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        0.00040757714585594376,
+        0.000675937905393014
+      ],
+      "orders": [
+        1.9954161015554337,
+        1.9992664359061352
+      ],
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "steps": 256,
+      "solver": "sph",
+      "temperature_superposition_error_K": 1.3877787807814457e-14,
+      "step_heat_superposition_error_J_m2": 5.273559366969494e-16,
+      "contact_flux_W_m2": [
+        [
+          0.41763429664036145,
+          -0.7312069166722265
+        ],
+        [
+          0.23927360752279853,
+          -0.4487681895343741
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        0.00010199079504767978,
+        0.00016890361779275736
+      ],
+      "orders": [
+        1.998634206441543,
+        2.000690490379965
+      ],
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "steps": 512,
+      "solver": "sph",
+      "temperature_superposition_error_K": 5.4817261840867104e-14,
+      "step_heat_superposition_error_J_m2": 1.0067901373700394e-15,
+      "contact_flux_W_m2": [
+        [
+          0.4176979256829292,
+          -0.7312169156516741
+        ],
+        [
+          0.23933420886024231,
+          -0.4487901032894865
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "relative_flux_errors": [
+        2.550571917360242e-05,
+        4.2208233367757295e-05
+      ],
+      "orders": [
+        1.9995462653789124,
+        2.000603878505499
+      ],
+      "passed": true
+    }
+  ],
+  "frequencies_Hz": [
+    1,
+    2
+  ],
+  "sources": [
+    {
+      "commit": "a404d56fa9e88597fa026fc86255f81b96388ec5",
+      "file": "cross_dual_wall_harmonics.py",
+      "source_sha256": "0cc35ca4a07262ac225e334b7963886e1fef4cf67e5ef44d75094e1576d8b336"
+    },
+    {
+      "commit": "a404d56fa9e88597fa026fc86255f81b96388ec5",
+      "file": "cross_wall_driven_harmonics.py",
+      "source_sha256": "8bbfed6dfa5bc863cdc41c720f0c71da2feca0d4fed0f1b9f577a905faa80c97"
+    },
+    {
+      "commit": "a404d56fa9e88597fa026fc86255f81b96388ec5",
+      "file": "periodic_contact_reference.py",
+      "source_sha256": "e7e59f4710c693e3dbfa00a28b5e5ee1c1ed9bcf3f474c96cc07c22537319c62"
+    },
+    {
+      "commit": "a404d56fa9e88597fa026fc86255f81b96388ec5",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "35b17bea96024065ca93c2ac8157082003a689bd63e04f44d1caf3ba80f68a9c"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_dual_wall_harmonics.py"
+}
