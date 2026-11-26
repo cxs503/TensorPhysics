@@ -24,7 +24,7 @@ RESERVOIRS = np.array([-.5+.3j, .4+.8j])
 
 
 def continuum(mode, omega, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flux_wall=None, *,
-              return_angular_rate=False):
+              return_angular_rate=False, sample_radii=None):
     # Six integration constants, two per layer. Last column is the particular
     # solution of the Poisson equation with source V_i*(r/R)^m.
     def traces(layer, r):
@@ -67,8 +67,16 @@ def continuum(mode, omega, films=(None, None), fractions=FRACTIONS, sheet_h=(0.,
     t, qi, qo = (np.array(samples) @ coeff).T
     rates = 2*np.pi*EDGES[[0,-1]]*([q_bore, q_ext] @ coeff)
     fields = np.r_[t, qi, qo, rates, bore @ coeff, exterior @ coeff, np.array(material_traces) @ coeff]
+    outputs = [fields]
+    if sample_radii is not None:
+        points = np.asarray(sample_radii)
+        if (points.ndim != 1 or points.dtype.kind not in "iuf" or not np.isfinite(points).all()
+                or np.any((points <= EDGES[0]) | (points >= EDGES[-1])) or np.isin(points, EDGES).any()):
+            raise ValueError("sample radii must lie strictly inside a material")
+        interior = [np.asarray(traces(np.searchsorted(EDGES, r)-1, r)) @ coeff for r in points]
+        outputs.append(np.asarray(interior, dtype=complex).reshape(-1, 2))
     if not return_angular_rate:
-        return fields
+        return fields if sample_radii is None else tuple(outputs)
     angular_rate = 0j
     if mode:
         # Integral of the azimuthal divergence amplitude: 2π k m² ∫ T(r)/r dr.
@@ -78,7 +86,7 @@ def continuum(mode, omega, films=(None, None), fractions=FRACTIONS, sheet_h=(0.,
                         + coeff[2*i+1]*(lo**(-mode)-hi**(-mode))/mode
                         + particular*(hi**(mode+2)-lo**(mode+2))/(mode+2))
             angular_rate += 2*np.pi*K[i]*mode**2*integral
-    return fields, angular_rate
+    return (*outputs, angular_rate)
 
 
 def measure(mode, films=(None, None), fractions=FRACTIONS, sheet_h=(0., 0.), flux_wall=None):
