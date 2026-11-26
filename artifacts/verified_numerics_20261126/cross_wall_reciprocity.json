@@ -1,0 +1,252 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 16,
+      "steps": 64,
+      "solver": "fvm",
+      "relative_reciprocity_errors": [
+        0.00019470352125529783,
+        0.0007168436327482919
+      ],
+      "reverse_relative_complex_errors": [
+        0.0020185669974799327,
+        0.006728463071644678
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9685157743496436,
+        0.7440830907474939
+      ],
+      "reverse_phase_rad": [
+        -0.8344750253894438,
+        -1.5517895457225412
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "steps": 128,
+      "solver": "fvm",
+      "relative_reciprocity_errors": [
+        4.859836633443464e-05,
+        0.00017847717744086836
+      ],
+      "reverse_relative_complex_errors": [
+        0.0005044354235545998,
+        0.001682445672285789
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9679390533868456,
+        0.742972725459441
+      ],
+      "reverse_phase_rad": [
+        -0.8330837921772158,
+        -1.5469761323675337
+      ],
+      "orders": [
+        2.000589975163042,
+        1.9997170796757815
+      ],
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "steps": 256,
+      "solver": "fvm",
+      "relative_reciprocity_errors": [
+        1.2144756031025796e-05,
+        4.4573622108099425e-05
+      ],
+      "reverse_relative_complex_errors": [
+        0.0001260847246670052,
+        0.00042076112305068967
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9677954990460528,
+        0.742695961414492
+      ],
+      "reverse_phase_rad": [
+        -0.8327357763883092,
+        -1.5457711240584917
+      ],
+      "orders": [
+        2.0002760894534037,
+        1.9994866040359704
+      ],
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "steps": 512,
+      "solver": "fvm",
+      "relative_reciprocity_errors": [
+        3.03588706370092e-06,
+        1.1140555997437477e-05
+      ],
+      "reverse_relative_complex_errors": [
+        3.151827441912104e-05,
+        0.00010521599731869475
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9677596596241578,
+        0.742626689574352
+      ],
+      "reverse_phase_rad": [
+        -0.8326487658116251,
+        -1.545469705751729
+      ],
+      "orders": [
+        2.0001330452604735,
+        1.9996473380132453
+      ],
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "steps": 64,
+      "solver": "sph",
+      "relative_reciprocity_errors": [
+        0.00020918800357955412,
+        0.0007498414240382563
+      ],
+      "reverse_relative_complex_errors": [
+        0.001488203539492436,
+        0.005501775864129974
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9666444143801961,
+        0.7385231774512617
+      ],
+      "reverse_phase_rad": [
+        -0.8335768537140549,
+        -1.5456488285761545
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "steps": 128,
+      "solver": "sph",
+      "relative_reciprocity_errors": [
+        5.225603757122037e-05,
+        0.00018754032117650595
+      ],
+      "reverse_relative_complex_errors": [
+        0.0003724976485719555,
+        0.0013756735566912732
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9674718705100694,
+        0.7415836431827312
+      ],
+      "reverse_phase_rad": [
+        -0.8328595999353924,
+        -1.5454476188609183
+      ],
+      "orders": [
+        1.9982686317380818,
+        1.9997592038123497
+      ],
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "steps": 256,
+      "solver": "sph",
+      "relative_reciprocity_errors": [
+        1.306141039053003e-05,
+        4.688963261755724e-05
+      ],
+      "reverse_relative_complex_errors": [
+        9.315678703792616e-05,
+        0.00034372869356757237
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9676787444706499,
+        0.7423487517457853
+      ],
+      "reverse_phase_rad": [
+        -0.832679750329481,
+        -1.545389411212577
+      ],
+      "orders": [
+        1.9994985312414675,
+        2.000795969103274
+      ],
+      "passed": true
+    },
+    {
+      "columns": 128,
+      "steps": 512,
+      "solver": "sph",
+      "relative_reciprocity_errors": [
+        3.265189365351106e-06,
+        1.1722683004824361e-05
+      ],
+      "reverse_relative_complex_errors": [
+        2.329178234599517e-05,
+        8.589507760514122e-05
+      ],
+      "exact_relative_defect": 3.738158451893181e-16,
+      "reverse_gain_W_m2_K": [
+        0.9677304735513681,
+        0.7425398910904829
+      ],
+      "reverse_phase_rad": [
+        -0.8326347606732374,
+        -1.5453743034539176
+      ],
+      "orders": [
+        1.9998398396548775,
+        2.0006229269001947
+      ],
+      "passed": true
+    }
+  ],
+  "frequencies_Hz": [
+    1,
+    2
+  ],
+  "sources": [
+    {
+      "commit": "7a80153fa74aeede1c60c7f1f668aca976fbb5c1",
+      "file": "cross_wall_reciprocity.py",
+      "source_sha256": "7fcbc411f9b6ba656e0583d9e6e77b7ac68922f9f0f8eac85c990243af98c252"
+    },
+    {
+      "commit": "7a80153fa74aeede1c60c7f1f668aca976fbb5c1",
+      "file": "cross_wall_driven_harmonics.py",
+      "source_sha256": "710e6bc25afcc7231d39966d93bfc8ebc2e2a7830741c40d8afe18026af4c783"
+    },
+    {
+      "commit": "7a80153fa74aeede1c60c7f1f668aca976fbb5c1",
+      "file": "periodic_contact_reference.py",
+      "source_sha256": "e7e59f4710c693e3dbfa00a28b5e5ee1c1ed9bcf3f474c96cc07c22537319c62"
+    },
+    {
+      "commit": "7a80153fa74aeede1c60c7f1f668aca976fbb5c1",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "35b17bea96024065ca93c2ac8157082003a689bd63e04f44d1caf3ba80f68a9c"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_wall_reciprocity.py"
+}
