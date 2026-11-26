@@ -1,0 +1,57 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "528bd2b71269a82e01e2f1647d4c016f9a74b442",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal_contact_chain.py --junitxml=heat.xml",
+  "reference": "Unit store and two unit resistances. Both walls start at 305 K, ramp by -1, 0 or +1 K in 0.5 s with compensating storage power. The east wall also ramps by +/- one ULP. Link moments are normalized by the differential power amplitude times duration^(order+1).",
+  "tests_passed": 97,
+  "runs": [
+    {
+      "case": "test_affine_wall_moments_resolve_one_ulp_differential_ramp[-1.0--1.0]",
+      "errors": {
+        "scaled_order_0_error": 0.0,
+        "scaled_order_1_error": 7.632783294297951e-17,
+        "scaled_order_2_error": 2.7755575615628914e-17
+      }
+    },
+    {
+      "case": "test_affine_wall_moments_resolve_one_ulp_differential_ramp[-1.0-0.0]",
+      "errors": {
+        "scaled_order_0_error": 0.0,
+        "scaled_order_1_error": 7.632783294297951e-17,
+        "scaled_order_2_error": 2.7755575615628914e-17
+      }
+    },
+    {
+      "case": "test_affine_wall_moments_resolve_one_ulp_differential_ramp[-1.0-1.0]",
+      "errors": {
+        "scaled_order_0_error": 0.0,
+        "scaled_order_1_error": 7.632783294297951e-17,
+        "scaled_order_2_error": 2.7755575615628914e-17
+      }
+    },
+    {
+      "case": "test_affine_wall_moments_resolve_one_ulp_differential_ramp[1.0--1.0]",
+      "errors": {
+        "scaled_order_0_error": 0.0,
+        "scaled_order_1_error": 7.632783294297951e-17,
+        "scaled_order_2_error": 2.7755575615628914e-17
+      }
+    },
+    {
+      "case": "test_affine_wall_moments_resolve_one_ulp_differential_ramp[1.0-0.0]",
+      "errors": {
+        "scaled_order_0_error": 0.0,
+        "scaled_order_1_error": 7.632783294297951e-17,
+        "scaled_order_2_error": 2.7755575615628914e-17
+      }
+    },
+    {
+      "case": "test_affine_wall_moments_resolve_one_ulp_differential_ramp[1.0-1.0]",
+      "errors": {
+        "scaled_order_0_error": 0.0,
+        "scaled_order_1_error": 7.632783294297951e-17,
+        "scaled_order_2_error": 2.7755575615628914e-17
+      }
+    }
+  ]
+}
