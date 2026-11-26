@@ -1,0 +1,27 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "bc4d42ea400d5fe022be53d7d3c7f41e586c6a36",
+  "passed": 11,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal3d.py tests/test_thermal3d_budget.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Transient D3Q7 diffusion at t=1/32, diffusivity 0.075, on-node Dirichlet x faces and half-link insulated transverse faces. Add a decaying sin(pi*x)*cos(2*pi*y)*cos(4*pi*z/3) perturbation to the linear 1.2-to-0.4 wall profile. Compare pointwise temperatures and three-point one-sided Fourier flux estimates on each x face, unit volumetric capacity. n counts x intervals.",
+  "metrics": {
+    "n16_wall_temperature_error": 5.551115123125783e-17,
+    "n16_field_error": 0.002789702793102089,
+    "n16_left_flux_error": 0.0001818978956543843,
+    "n16_right_flux_error": 0.00018189789565443157,
+    "n32_wall_temperature_error": 5.551115123125783e-17,
+    "n32_field_error": 0.0007087675325870291,
+    "n32_field_order": 1.9767270065099647,
+    "n32_left_flux_error": 6.896852200270753e-05,
+    "n32_left_flux_order": 1.3991188975665896,
+    "n32_right_flux_error": 6.896852200137527e-05,
+    "n32_right_flux_order": 1.3991188975948332,
+    "n64_wall_temperature_error": 5.551115123125783e-17,
+    "n64_field_error": 0.0001779047966150582,
+    "n64_field_order": 1.9942071094110227,
+    "n64_left_flux_error": 2.0745175002931382e-05,
+    "n64_left_flux_order": 1.7331622225125103,
+    "n64_right_flux_error": 2.0745175001474214e-05,
+    "n64_right_flux_order": 1.7331622225859784
+  }
+}
