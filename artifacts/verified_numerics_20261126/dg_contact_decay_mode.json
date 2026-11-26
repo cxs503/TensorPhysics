@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 20,
+      "time_steps": 20,
+      "method": "theta",
+      "temperature_error_K": 0.0030036345612936,
+      "contact_heat_error_J_m2": 0.0007088787274419084,
+      "layer_balance_J_m2": 2.2037927038809357e-14,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 40,
+      "time_steps": 40,
+      "method": "theta",
+      "temperature_error_K": 0.000751055593525285,
+      "contact_heat_error_J_m2": 0.00017695021289038104,
+      "layer_balance_J_m2": 4.113376306236205e-14,
+      "orders": [
+        1.9997176914716066,
+        2.00219533973728
+      ],
+      "passed": true
+    },
+    {
+      "columns": 80,
+      "time_steps": 80,
+      "method": "theta",
+      "temperature_error_K": 0.00018765725901037644,
+      "contact_heat_error_J_m2": 4.421866734355406e-05,
+      "layer_balance_J_m2": 7.51620987671231e-14,
+      "orders": [
+        2.0008196026927854,
+        2.000616046317041
+      ],
+      "passed": true
+    },
+    {
+      "columns": 160,
+      "time_steps": 160,
+      "method": "theta",
+      "temperature_error_K": 4.6905543281350326e-05,
+      "contact_heat_error_J_m2": 1.1053427239560154e-05,
+      "layer_balance_J_m2": 6.816769371198461e-14,
+      "orders": [
+        2.000269762891711,
+        2.0001617832339056
+      ],
+      "passed": true
+    },
+    {
+      "columns": 20,
+      "time_steps": 20,
+      "method": "sdirk2",
+      "temperature_error_K": 0.0026791318008501097,
+      "contact_heat_error_J_m2": 0.0006361981866168653,
+      "layer_balance_J_m2": 1.637578961322106e-14,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 40,
+      "time_steps": 40,
+      "method": "sdirk2",
+      "temperature_error_K": 0.0006715817270814828,
+      "contact_heat_error_J_m2": 0.00015874485392924909,
+      "layer_balance_J_m2": 1.1318723736053471e-13,
+      "orders": [
+        1.9961306748746042,
+        2.0027664352624956
+      ],
+      "passed": true
+    },
+    {
+      "columns": 80,
+      "time_steps": 80,
+      "method": "sdirk2",
+      "temperature_error_K": 0.00016792513240948548,
+      "contact_heat_error_J_m2": 3.9662281393126886e-05,
+      "layer_balance_J_m2": 2.831623824306462e-13,
+      "orders": [
+        1.9997448103574091,
+        2.0008702548797426
+      ],
+      "passed": true
+    },
+    {
+      "columns": 160,
+      "time_steps": 160,
+      "method": "sdirk2",
+      "temperature_error_K": 4.197930383853521e-05,
+      "contact_heat_error_J_m2": 9.913464001531924e-06,
+      "layer_balance_J_m2": 2.38448150113868e-12,
+      "orders": [
+        2.0000680193939946,
+        2.0003065016649977
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "e16b0ab1895e232b50324077f61ab879e1bbd10b",
+      "file": "dg_contact_decay_mode.py",
+      "source_sha256": "5c4e59e65cb1178162c47e768ee345aa412e5023225d73e189ff9827ecc2787d"
+    },
+    {
+      "commit": "e16b0ab1895e232b50324077f61ab879e1bbd10b",
+      "file": "fem_contact_decay_mode.py",
+      "source_sha256": "e0f5b6d7d1a25f27905187b1944761d5af8e58849fd01b8ed4b53f2ff2363d84"
+    },
+    {
+      "commit": "3b852a1bea23b25c2f17005fa41d09e947ff4cbf",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
+    },
+    {
+      "commit": "3b852a1bea23b25c2f17005fa41d09e947ff4cbf",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "c4ee434ae755221e14528809b38d51b72e8452f9c72253e85119f96f52e391b2"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorDG:../TensorFEM/src python examples/dg_contact_decay_mode.py"
+}
