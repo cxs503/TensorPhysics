@@ -168,23 +168,103 @@
       "net_balance_J": 0.0,
       "mixed_intervals": 2,
       "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 24,
+      "intervals": 48,
+      "right_left_heat_J": [
+        0.016234148783010615,
+        0.0034336851360666112
+      ],
+      "total_errors_J": [
+        7.871391156500859e-05,
+        0.00036174784176389073
+      ],
+      "max_interval_errors_J": [
+        9.910896248688694e-05,
+        8.364985169866877e-05
+      ],
+      "net_balance_J": 1.0842021724855044e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 48,
+      "intervals": 96,
+      "right_left_heat_J": [
+        0.016291812011972134,
+        0.003161895925372407
+      ],
+      "total_errors_J": [
+        2.1050682603489246e-05,
+        8.995863106968632e-05
+      ],
+      "max_interval_errors_J": [
+        1.2273748499509914e-05,
+        1.1376355254985017e-05
+      ],
+      "net_balance_J": 2.168404344971009e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 96,
+      "intervals": 192,
+      "right_left_heat_J": [
+        0.016307447162135766,
+        0.003094328909055171
+      ],
+      "total_errors_J": [
+        5.415532439857762e-06,
+        2.239161475245041e-05
+      ],
+      "max_interval_errors_J": [
+        1.5340172884403217e-06,
+        1.4165436006628538e-06
+      ],
+      "net_balance_J": 1.0842021724855044e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 192,
+      "intervals": 384,
+      "right_left_heat_J": [
+        0.016311500526151563,
+        0.0030775303228983497
+      ],
+      "total_errors_J": [
+        1.3621684240607002e-06,
+        5.593028595629254e-06
+      ],
+      "max_interval_errors_J": [
+        1.9169617910360146e-07,
+        1.8053997690009233e-07
+      ],
+      "net_balance_J": 5.421010862427522e-20,
+      "mixed_intervals": 2,
+      "passed": true
     }
   ],
   "sources": [
     {
-      "commit": "348d89ec0cacd96a7627f903f48660330b84b993",
+      "commit": "5551029916145cc850d15074af2c71f2596e2c60",
       "file": "native_directional_contact_heat.py",
-      "source_sha256": "4b09323f325ed7e45d10ea5cab96cdb266ed927b13c02096a4654c41c1db4e1c"
+      "source_sha256": "dde0492e1718f1d7dbf1de08d7a528bde1113ae42df653f71633c87a2c5563ab"
     },
     {
-      "commit": "348d89ec0cacd96a7627f903f48660330b84b993",
+      "commit": "5551029916145cc850d15074af2c71f2596e2c60",
       "file": "contact_heat_double_reversal.py",
       "source_sha256": "adb13dd2d68c812d90948949c08317bbb142d70734d98a5d652b032d1f4942f7"
     },
     {
-      "commit": "348d89ec0cacd96a7627f903f48660330b84b993",
+      "commit": "5551029916145cc850d15074af2c71f2596e2c60",
       "file": "resistive_decay_interface_comparison.py",
-      "source_sha256": "b20a8fa6882681dff28855816bdc1ec6eee69ac17c054d29b56e48d749d71f1d"
+      "source_sha256": "528e09a6c91d23e019098549cae439861edf495bdb89cadd83db6c09a75ec4a8"
     },
     {
       "commit": "2622358c1efa051b80059de99d25264fec6cd115",
@@ -195,6 +275,11 @@
       "commit": "9a51948a44f6f95e0bdbe81b57b43e3aec38f242",
       "file": "contact_chain.py",
       "source_sha256": "6f9fcd7d8a5155c27dc9319dc18b0838553726baf498bb733ce8bf056e7e45ec"
+    },
+    {
+      "commit": "833974519364dec3644153e9b2d03dc34901de2e",
+      "file": "thermal.py",
+      "source_sha256": "68aacf922b93a8c8fcf92952f7749a4d8d509efd96325725c9ef0b4dac9bc97d"
     }
   ]
 }
