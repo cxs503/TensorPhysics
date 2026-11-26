@@ -47,9 +47,22 @@ def measure(n, omega, backend):
         torch.zeros(n+4), 1/n, walls, omega, **material, return_x_flux=True, backend=backend)
     measured = np.array([(complex(field[p:p+2].mean()), complex(cuts[p]), complex(cuts[p+2]))
                          for p in positions])
+    # Remove sheet particles, retaining both material fluxes at each contact.
+    bulk = torch.ones(n+4, dtype=torch.bool)
+    for p in positions:
+        bulk[p:p+2] = False
+    bulk_flux = torch.stack((cuts[:-1], cuts[1:]), dim=-1)[bulk]
+    left, right = slab.heat.layered_slab_contact_temperatures(
+        field[bulk], bulk_flux, 1/n, material["conductivity"][bulk])
+    contacts = [n//4-1, 3*n//4-1]
+    recovered = np.column_stack((left[contacts].numpy(), right[contacts].numpy()))
+    half_r = np.array([.5, .9])/2
+    exact_traces = np.column_stack((expected[:, 0]+half_r*expected[:, 1],
+                                    expected[:, 0]-half_r*expected[:, 2]))
     ratio = measured/expected
     balance = measured[:, 1]-measured[:, 2]-1j*omega*np.asarray(capacities)*measured[:, 0]
     return dict(bulk_columns=n, omega=omega, backend=backend,
+                max_material_trace_error_K=float(abs(recovered-exact_traces).max()),
                 relative_sheet_temperature_error=float(abs(ratio[:, 0]-1).max()),
                 relative_face_power_error=float(abs(ratio[:, 1:]-1).max()),
                 reference_amplitudes=np.abs(expected).tolist(),
@@ -68,7 +81,7 @@ if __name__ == "__main__":
             previous = None
             for n in (16, 32, 64):
                 row = measure(n, omega, backend)
-                keys = ("relative_sheet_temperature_error", "relative_face_power_error")
+                keys = ("relative_sheet_temperature_error", "relative_face_power_error", "max_material_trace_error_K")
                 orders = {} if previous is None else {k: math.log2(previous[k]/row[k]) for k in keys}
                 row.update(orders=orders, passed=row["max_storage_balance_error"] < 1e-10 and
                            (n < 64 or (min(orders.values()) > 1.75 and max(row[k] for k in keys) < .02)))
