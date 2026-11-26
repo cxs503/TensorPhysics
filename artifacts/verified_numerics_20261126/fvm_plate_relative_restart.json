@@ -1,0 +1,34 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "8d7e5b3d823afbd832c02f869e92856b61b4fb72",
+  "passed": 136,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Unit heat capacity, wall and ambient conductances 2 and 3 W/K, both at 305 K, P=2^-50 W. At t=0.5 s compare temperature excess / P to (1-exp(-5t))/5 and to (1-r^n)/5, r=(1-2.5dt)/(1+2.5dt). Compare wall and ambient heat to their discrete analytical integrals, and chained steps with a single call on the same grid. End fields are also required to match bit-for-bit. Applies to cell-only restart; dynamic walls have independent state.",
+  "runs": {
+    "4": {
+      "restart_error_divided_by_power": 0.0,
+      "discrete_error_divided_by_power": 2.7755575615628914e-17,
+      "continuum_end_error_divided_by_power": 0.0013605160579948372
+    },
+    "8": {
+      "restart_error_divided_by_power": 2.7755575615628914e-17,
+      "discrete_error_divided_by_power": 2.7755575615628914e-17,
+      "continuum_end_error_divided_by_power": 0.0003355085624202059
+    },
+    "16": {
+      "restart_error_divided_by_power": 2.7755575615628914e-17,
+      "discrete_error_divided_by_power": 2.7755575615628914e-17,
+      "continuum_end_error_divided_by_power": 8.359475262162408e-05
+    },
+    "32": {
+      "restart_error_divided_by_power": 2.7755575615628914e-17,
+      "discrete_error_divided_by_power": 5.551115123125783e-17,
+      "continuum_end_error_divided_by_power": 2.0881136556016866e-05
+    }
+  },
+  "orders": [
+    2.019732494006159,
+    2.004865295561613,
+    2.0012121451950984
+  ]
+}
