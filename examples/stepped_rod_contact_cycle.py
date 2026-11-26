@@ -57,10 +57,11 @@ def measure(n):
     _,_,west,east = rod.solve_harmonic_stepped_rod(np.full(2*n,1/n),areas,k,c,endpoints,omega,
         source=sources,contact_resistance=resistance,flux_order=2)
     fvm_power = east[n-1]
+    fvm_cycle = np.asarray(rod.harmonic_face_cycle_heat(fvm_power,omega,steady_power=bias))
     expected = phase_integrals(bias,contact,omega)
     rows = []
     for solver,power,cycle in (("FEM",fem_power,fem_cycle),
-                               ("FVM",fvm_power,phase_integrals(bias,fvm_power,omega))):
+                               ("FVM",fvm_power,fvm_cycle)):
         errors = abs(cycle-expected)
         rows.append(dict(solver=solver,elements_per_layer=n,power_error_W=float(abs(power-contact)),
                          forward_error_J=float(errors[0]),reverse_error_J=float(errors[1]),
