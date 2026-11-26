@@ -1,0 +1,37 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "81cab937c50abae09e46fb217fe1ef5be88d0e92",
+  "passed": 148,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal.py --junitxml=results.xml",
+  "reference": "Physical power q=b+0.6*cos(omega*t)-0.8*sin(omega*t) W at omega=1.75 rad/s. Independently integrate max(q,0) and max(-q,0) over the period using adaptive quadrature split at analytical zeros. Seven DC biases spanning both signs and the tangency thresholds, swapped pair order and a quarter-cycle phase rotation. Additional test uses the near-tangent asymptotic 4*sqrt(2)/3*gap^(3/2) J at omega=1, gap=2^-50, and a static-only load.",
+  "runs": {
+    "test_biased_contact_cycle_heat_against_time_quadrature[-2.0]": {
+      "directional_error_J": 0.0,
+      "net_residual_J": 0.0
+    },
+    "test_biased_contact_cycle_heat_against_time_quadrature[-1.0]": {
+      "directional_error_J": 0.0,
+      "net_residual_J": 0.0
+    },
+    "test_biased_contact_cycle_heat_against_time_quadrature[-0.375]": {
+      "directional_error_J": 2.220446049250313e-16,
+      "net_residual_J": 0.0
+    },
+    "test_biased_contact_cycle_heat_against_time_quadrature[0.0]": {
+      "directional_error_J": 2.220446049250313e-16,
+      "net_residual_J": 0.0
+    },
+    "test_biased_contact_cycle_heat_against_time_quadrature[0.375]": {
+      "directional_error_J": 4.440892098500626e-16,
+      "net_residual_J": 0.0
+    },
+    "test_biased_contact_cycle_heat_against_time_quadrature[1.0]": {
+      "directional_error_J": 0.0,
+      "net_residual_J": 0.0
+    },
+    "test_biased_contact_cycle_heat_against_time_quadrature[2.0]": {
+      "directional_error_J": 0.0,
+      "net_residual_J": 0.0
+    }
+  }
+}
