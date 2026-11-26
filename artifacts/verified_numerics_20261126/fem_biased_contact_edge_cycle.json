@@ -1,0 +1,11 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "9c6642fbd67840b942e027c13367ca17d59ba8ca",
+  "passed": 149,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal.py --junitxml=results.xml",
+  "reference": "One Q4 contact edge, affine DC and complex peak AC jumps and linearly varying conductance. Integrate on edge fractions [0.12,0.93] over a full period at 2.5 rad/s. Independent SciPy quadrature integrates positive and negative instantaneous flux first over time then across space. Check two phasor rotations and net energy against steady power times period.",
+  "metrics": {
+    "max_directional_error_J": 1.1102230246251565e-15,
+    "max_balance_error_J": 2.8449465006019636e-15
+  }
+}
