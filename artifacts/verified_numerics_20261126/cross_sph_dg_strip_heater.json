@@ -12,6 +12,18 @@
       "global_balance_W_m2": {
         "sph": 1.2412670766236366e-16,
         "dg": 6.10780345318845e-16
+      },
+      "control_volume": {
+        "sph": {
+          "flux_error_W_m2": 0.00023613484962696604,
+          "energy_error_J_m2": 4.818758771785364e-05,
+          "balance_W_m2": 1.6711069443220838e-16
+        },
+        "dg": {
+          "flux_error_W_m2": 1.1075628825782606e-07,
+          "energy_error_J_m2": 2.793018240354682e-08,
+          "balance_W_m2": 6.6848871808540754e-15
+        }
       }
     },
     {
@@ -29,6 +41,22 @@
       "global_balance_W_m2": {
         "sph": 1.3092278833360675e-16,
         "dg": 1.3947004136484323e-16
+      },
+      "control_volume": {
+        "sph": {
+          "flux_error_W_m2": 5.678443637387536e-05,
+          "energy_error_J_m2": 1.1807540643814748e-05,
+          "balance_W_m2": 9.047210765559601e-17,
+          "flux_error_W_m2_order": 2.0560435039724534,
+          "energy_error_J_m2_order": 2.028953079697881
+        },
+        "dg": {
+          "flux_error_W_m2": 7.095006656555391e-09,
+          "energy_error_J_m2": 1.6687548277840792e-09,
+          "balance_W_m2": 3.9982638287697284e-14,
+          "flux_error_W_m2_order": 3.964440762970332,
+          "energy_error_J_m2_order": 4.0649810797505666
+        }
       }
     },
     {
@@ -46,6 +74,22 @@
       "global_balance_W_m2": {
         "sph": 1.4488835837920476e-16,
         "dg": 1.5268720305515944e-15
+      },
+      "control_volume": {
+        "sph": {
+          "flux_error_W_m2": 1.4492452196864287e-05,
+          "energy_error_J_m2": 2.9804624614748486e-06,
+          "balance_W_m2": 3.7367087251761354e-16,
+          "flux_error_W_m2_order": 1.9701938393842597,
+          "energy_error_J_m2_order": 1.9861003935443076
+        },
+        "dg": {
+          "flux_error_W_m2": 4.3748554972219474e-10,
+          "energy_error_J_m2": 1.060391201041567e-10,
+          "balance_W_m2": 1.4549098490798133e-14,
+          "flux_error_W_m2_order": 4.019496767628692,
+          "energy_error_J_m2_order": 3.9761035013641015
+        }
       }
     },
     {
@@ -63,14 +107,30 @@
       "global_balance_W_m2": {
         "sph": 7.05040792186059e-16,
         "dg": 5.896018613962273e-16
+      },
+      "control_volume": {
+        "sph": {
+          "flux_error_W_m2": 3.5869750469692632e-06,
+          "energy_error_J_m2": 7.416077653683109e-07,
+          "balance_W_m2": 7.23595977581076e-16,
+          "flux_error_W_m2_order": 2.0144621126734914,
+          "energy_error_J_m2_order": 2.006807947270424
+        },
+        "dg": {
+          "flux_error_W_m2": 2.7575968260582458e-11,
+          "energy_error_J_m2": 6.562157986612988e-12,
+          "balance_W_m2": 1.716458739189977e-14,
+          "flux_error_W_m2_order": 3.9877519166689885,
+          "energy_error_J_m2_order": 4.014282466144741
+        }
       }
     }
   ],
   "sources": [
     {
-      "commit": "5a56c18a2d62efb34c8c8b2a27d531ccd78baa03",
+      "commit": "55ea2b8f5f3bb4270dee499454f75cdf0b180f78",
       "file": "cross_sph_dg_strip_heater.py",
-      "source_sha256": "fdb15c9a34e9eb5657f34413329217fc733253d2d8b1226a144fa7b3e596fb7f"
+      "source_sha256": "b96e5b0a1a03c873b3bbfb3b49f39a20284a8bf854f0ceb2b43050842dde17c5"
     },
     {
       "commit": "564df76c90278bab3bb70ec33091b2ddfb1649e8",
@@ -84,6 +144,15 @@
     }
   ],
   "reference": "Unit slab with zero wall phasors. Integrate the affine complex source against each Dirichlet wall Green function. Errors are the larger absolute phasor error of the two walls.",
+  "control_volume_m": [
+    0.25,
+    0.75
+  ],
+  "reference_energy_J_m2": [
+    0.017887673209943056,
+    0.002663507189488497
+  ],
+  "reference_balance_W_m2": 5.690316088760835e-17,
   "reference_outward_W_m2": [
     [
       0.10852713597826275,
