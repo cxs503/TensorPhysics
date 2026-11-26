@@ -1,0 +1,1276 @@
+{
+  "reference": "discrete harmonic",
+  "runs": [
+    {
+      "method": "theta",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 32,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0026109475171745,
+          "section_heat_error_J_m2": 0.0012497799939474863,
+          "storage_change_error_J_m2": 0.00014742890833939482,
+          "storage_balance_J_m2": 3.7664316110408436e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0009273956936689531,
+          "section_heat_error_J_m2": 0.00035164070047455365,
+          "storage_change_error_J_m2": 5.599686408336302e-05,
+          "storage_balance_J_m2": 4.574118861455645e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0018829661915107376,
+          "section_heat_error_J_m2": 0.002468383302999144,
+          "storage_change_error_J_m2": 0.0005390958681734115,
+          "storage_balance_J_m2": 1.2051470932306074e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0019263522311178116,
+          "section_heat_error_J_m2": 0.0011129835792693388,
+          "storage_change_error_J_m2": 0.00013270733067868856,
+          "storage_balance_J_m2": 4.4103609653234344e-14
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 64,
+      "trace_heat_storage_orders": [
+        2.0005451646804646,
+        2.001592080269387,
+        2.0036518463263606
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0006524902700958402,
+          "section_heat_error_J_m2": 0.00031251745940741316,
+          "storage_change_error_J_m2": 3.6998884227090745e-05,
+          "storage_balance_J_m2": 4.499178807293447e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00023178344095661774,
+          "section_heat_error_J_m2": 8.744961035345167e-05,
+          "storage_change_error_J_m2": 1.3651239602952003e-05,
+          "storage_balance_J_m2": 4.674038933671909e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.000470452689170342,
+          "section_heat_error_J_m2": 0.0006164152077662299,
+          "storage_change_error_J_m2": 0.00013443324955553226,
+          "storage_balance_J_m2": 9.470202400052585e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0004813657005421357,
+          "section_heat_error_J_m2": 0.00027821321534177157,
+          "storage_change_error_J_m2": 3.325234911114028e-05,
+          "storage_balance_J_m2": 6.927791673660977e-14
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 128,
+      "trace_heat_storage_orders": [
+        2.000135143062174,
+        2.0003961820781044,
+        2.0009062769052135
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.000163107287890929,
+          "section_heat_error_J_m2": 7.813355250063658e-05,
+          "storage_change_error_J_m2": 9.258065355344236e-06,
+          "storage_balance_J_m2": 7.538414337204813e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 5.794180529372639e-05,
+          "section_heat_error_J_m2": 2.1834190905400952e-05,
+          "storage_change_error_J_m2": 3.391821719489485e-06,
+          "storage_balance_J_m2": 4.757305660518796e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00011759514529319226,
+          "section_heat_error_J_m2": 0.00015406148892282978,
+          "storage_change_error_J_m2": 3.3587206838686656e-05,
+          "storage_balance_J_m2": 1.1868284133242923e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.00012032753391977291,
+          "section_heat_error_J_m2": 6.955116899699798e-05,
+          "storage_change_error_J_m2": 8.317715586014796e-06,
+          "storage_balance_J_m2": 8.490430580820885e-14
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 256,
+      "trace_heat_storage_orders": [
+        2.000033801310496,
+        2.0000990119429503,
+        2.000226529455317
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 4.0775866612219325e-05,
+          "section_heat_error_J_m2": 1.953369189255927e-05,
+          "storage_change_error_J_m2": 2.3150797883175755e-06,
+          "storage_balance_J_m2": 7.954747971439247e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 1.4485197658398175e-05,
+          "section_heat_error_J_m2": 5.456787429025667e-06,
+          "storage_change_error_J_m2": 8.466020111619343e-07,
+          "storage_balance_J_m2": 4.0745185003743245e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 2.939766004239619e-05,
+          "section_heat_error_J_m2": 3.851272901722602e-05,
+          "storage_change_error_J_m2": 8.395483362039213e-06,
+          "storage_balance_J_m2": 1.1307621505807219e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 3.008101537110841e-05,
+          "section_heat_error_J_m2": 1.7387658291567742e-05,
+          "storage_change_error_J_m2": 2.0797176421283314e-06,
+          "storage_balance_J_m2": 7.210898544940392e-14
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 32,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0021048298809113186,
+          "section_heat_error_J_m2": 0.00031312853478702996,
+          "storage_change_error_J_m2": 8.706374320737592e-05,
+          "storage_balance_J_m2": 1.429412144204889e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0006059587281491974,
+          "section_heat_error_J_m2": 0.0006474664200385727,
+          "storage_change_error_J_m2": 0.0003492642273711932,
+          "storage_balance_J_m2": 1.2795320358804929e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0021118656293784843,
+          "section_heat_error_J_m2": 0.00028219239782109606,
+          "storage_change_error_J_m2": 0.00018395244714128692,
+          "storage_balance_J_m2": 1.0880185641326534e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0010596753882605447,
+          "section_heat_error_J_m2": 0.00072905646862087,
+          "storage_change_error_J_m2": 0.0002950725794221565,
+          "storage_balance_J_m2": 2.942091015256665e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 64,
+      "trace_heat_storage_orders": [
+        2.000485189426121,
+        2.0013992301234533,
+        2.0035697018453082
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0005263497359652147,
+          "section_heat_error_J_m2": 7.814852982709897e-05,
+          "storage_change_error_J_m2": 2.1616293385644247e-05,
+          "storage_balance_J_m2": 4.2049697057677804e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00015140609347824574,
+          "section_heat_error_J_m2": 0.0001617210327205798,
+          "storage_change_error_J_m2": 8.71002752786676e-05,
+          "storage_balance_J_m2": 6.217248937900877e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0005277888780395035,
+          "section_heat_error_J_m2": 7.040217688378259e-05,
+          "storage_change_error_J_m2": 4.59718390826043e-05,
+          "storage_balance_J_m2": 7.147060721024445e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.00026492504136368944,
+          "section_heat_error_J_m2": 0.00018208742991163152,
+          "storage_change_error_J_m2": 7.364299600345903e-05,
+          "storage_balance_J_m2": 1.1449174941446927e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 128,
+      "trace_heat_storage_orders": [
+        2.0001212737602843,
+        2.000349676758849,
+        2.0008846933376487
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.00013159613232660572,
+          "section_heat_error_J_m2": 1.952882098706088e-05,
+          "storage_change_error_J_m2": 5.394848927066376e-06,
+          "storage_balance_J_m2": 3.3029134982598407e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 3.784614618559945e-05,
+          "section_heat_error_J_m2": 4.042119082528495e-05,
+          "storage_change_error_J_m2": 2.176171994666687e-05,
+          "storage_balance_J_m2": 7.605027718682322e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00013193612841821967,
+          "section_heat_error_J_m2": 1.7591447607295807e-05,
+          "storage_change_error_J_m2": 1.1491942980987324e-05,
+          "storage_balance_J_m2": 7.837480664463214e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 6.623164098920609e-05,
+          "section_heat_error_J_m2": 4.551082534276496e-05,
+          "storage_change_error_J_m2": 1.8402945356404965e-05,
+          "storage_balance_J_m2": 2.0261570199409107e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 256,
+      "trace_heat_storage_orders": [
+        2.000030317070614,
+        2.00008741074314,
+        2.000220575963998
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 3.289957501972918e-05,
+          "section_heat_error_J_m2": 4.881686835100929e-06,
+          "storage_change_error_J_m2": 1.3481381323857122e-06,
+          "storage_balance_J_m2": 4.8155923693116165e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 9.461203058364065e-06,
+          "section_heat_error_J_m2": 1.0104731936799727e-05,
+          "storage_change_error_J_m2": 5.439598254164402e-06,
+          "storage_balance_J_m2": 6.5503158452884236e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 3.298333897905348e-05,
+          "section_heat_error_J_m2": 4.3972937332492634e-06,
+          "storage_change_error_J_m2": 2.8729221994011622e-06,
+          "storage_balance_J_m2": 9.530570777016578e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 1.6557933933153413e-05,
+          "section_heat_error_J_m2": 1.1377016998298517e-05,
+          "storage_change_error_J_m2": 4.60024889586963e-06,
+          "storage_balance_J_m2": 1.942890293094024e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 32,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0015102023368814832,
+          "section_heat_error_J_m2": 0.00014811487470401535,
+          "storage_change_error_J_m2": 0.00010187747867103358,
+          "storage_balance_J_m2": 2.914335439641036e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0006150019438239951,
+          "section_heat_error_J_m2": 0.00019676390006888485,
+          "storage_change_error_J_m2": 0.00024790792672245085,
+          "storage_balance_J_m2": 1.6306400674181987e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.001995229345471916,
+          "section_heat_error_J_m2": 0.00022638621543118187,
+          "storage_change_error_J_m2": 0.00011155034107710946,
+          "storage_balance_J_m2": 7.494005416219807e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0006078683132684365,
+          "section_heat_error_J_m2": 0.00028020695289453224,
+          "storage_change_error_J_m2": 0.00027921233741937806,
+          "storage_balance_J_m2": 8.257283745649602e-16
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 64,
+      "trace_heat_storage_orders": [
+        2.000532541426559,
+        2.0002211268653323,
+        2.0015841085689723
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0003780571175197034,
+          "section_heat_error_J_m2": 3.705372110465038e-05,
+          "storage_change_error_J_m2": 2.5458718335528985e-05,
+          "storage_balance_J_m2": 2.220446049250313e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.0001536608929737504,
+          "section_heat_error_J_m2": 4.926414067551663e-05,
+          "storage_change_error_J_m2": 6.198238317601384e-05,
+          "storage_balance_J_m2": 2.1094237467877974e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0004986232457999673,
+          "section_heat_error_J_m2": 5.6497084444773193e-05,
+          "storage_change_error_J_m2": 2.7869811272025063e-05,
+          "storage_balance_J_m2": 8.187894806610529e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.00015200183461298866,
+          "section_heat_error_J_m2": 7.004100197392088e-05,
+          "storage_change_error_J_m2": 6.972648120866232e-05,
+          "storage_balance_J_m2": 1.6653345369377348e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 128,
+      "trace_heat_storage_orders": [
+        2.0001331805947884,
+        2.0000559592914806,
+        2.000396283627645
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 9.454561347294055e-05,
+          "section_heat_error_J_m2": 9.264941816890249e-06,
+          "storage_change_error_J_m2": 6.36396210750706e-06,
+          "storage_balance_J_m2": 2.3592239273284576e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 3.840975835686655e-05,
+          "section_heat_error_J_m2": 1.232054431478391e-05,
+          "storage_change_error_J_m2": 1.5495867280761882e-05,
+          "storage_balance_J_m2": 1.5959455978986625e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00012464430453523745,
+          "section_heat_error_J_m2": 1.411806887259559e-05,
+          "storage_change_error_J_m2": 6.9663391268695585e-06,
+          "storage_balance_J_m2": 8.743006318923108e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 3.800260940732547e-05,
+          "section_heat_error_J_m2": 1.75095713186163e-05,
+          "storage_change_error_J_m2": 1.7426832792065416e-05,
+          "storage_balance_J_m2": 1.2559397966072083e-15
+        }
+      ]
+    },
+    {
+      "method": "theta",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 256,
+      "trace_heat_storage_orders": [
+        2.0000332979371995,
+        2.000014032015583,
+        2.0000990867141
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 2.3638356167143826e-05,
+          "section_heat_error_J_m2": 2.31632907057161e-06,
+          "storage_change_error_J_m2": 1.5909448196765874e-06,
+          "storage_balance_J_m2": 2.1510571102112408e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 9.602096638555713e-06,
+          "section_heat_error_J_m2": 3.080416849012696e-06,
+          "storage_change_error_J_m2": 3.873982700682704e-06,
+          "storage_balance_J_m2": 1.842276331487369e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 3.11603569329022e-05,
+          "section_heat_error_J_m2": 3.529129805640574e-06,
+          "storage_change_error_J_m2": 1.7415151250706196e-06,
+          "storage_balance_J_m2": 9.71445146547012e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 9.500786438701447e-06,
+          "section_heat_error_J_m2": 4.3773502542351905e-06,
+          "storage_change_error_J_m2": 4.356408982268689e-06,
+          "storage_balance_J_m2": 1.1657341758564144e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 32,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.000533239465357882,
+          "section_heat_error_J_m2": 0.0004031810264705227,
+          "storage_change_error_J_m2": 0.00019722172435587826,
+          "storage_balance_J_m2": 9.547918011776346e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00031739719190365667,
+          "section_heat_error_J_m2": 0.0005798568993405917,
+          "storage_change_error_J_m2": 0.00036870864133864423,
+          "storage_balance_J_m2": 8.287814878826794e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00017886182282944585,
+          "section_heat_error_J_m2": 0.00021285497857548297,
+          "storage_change_error_J_m2": 4.728303502996023e-05,
+          "storage_balance_J_m2": 1.4932499681208355e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.00046138455785560417,
+          "section_heat_error_J_m2": 0.0006100639219491499,
+          "storage_change_error_J_m2": 0.00029559477541130086,
+          "storage_balance_J_m2": 9.703349235223868e-14
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 64,
+      "trace_heat_storage_orders": [
+        1.983275180556442,
+        2.031446964154852,
+        1.96789355915113
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.00013486428843167975,
+          "section_heat_error_J_m2": 9.962302231747433e-05,
+          "storage_change_error_J_m2": 4.9532463991017184e-05,
+          "storage_balance_J_m2": 9.502121312010559e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 7.80103078792671e-05,
+          "section_heat_error_J_m2": 0.00014922750282897468,
+          "storage_change_error_J_m2": 9.425151213898753e-05,
+          "storage_balance_J_m2": 4.7628567756419216e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 4.574454308570175e-05,
+          "section_heat_error_J_m2": 5.540518486440993e-05,
+          "storage_change_error_J_m2": 1.4928321513840714e-05,
+          "storage_balance_J_m2": 1.626199175319698e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0001138160300707125,
+          "section_heat_error_J_m2": 0.00014892366288719872,
+          "storage_change_error_J_m2": 7.448411230132068e-05,
+          "storage_balance_J_m2": 1.0169642905566434e-13
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 128,
+      "trace_heat_storage_orders": [
+        1.990866099220393,
+        1.9859603864660442,
+        1.9919289223985597
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 3.39302103529171e-05,
+          "section_heat_error_J_m2": 2.4792062666256776e-05,
+          "storage_change_error_J_m2": 1.2369496477149244e-05,
+          "storage_balance_J_m2": 8.243405957841787e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 1.9343096103879853e-05,
+          "section_heat_error_J_m2": 3.767170053037283e-05,
+          "storage_change_error_J_m2": 2.369506867433424e-05,
+          "storage_balance_J_m2": 3.9745984281580604e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 1.1545053096861935e-05,
+          "section_heat_error_J_m2": 1.4375892275486635e-05,
+          "storage_change_error_J_m2": 4.016200437245709e-06,
+          "storage_balance_J_m2": 1.3272716259393746e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 2.827289199658356e-05,
+          "section_heat_error_J_m2": 3.682246003107459e-05,
+          "storage_change_error_J_m2": 1.8628365763162513e-05,
+          "storage_balance_J_m2": 1.0241807402167069e-13
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 1.0,
+      "bulk_columns": 32,
+      "time_steps": 256,
+      "trace_heat_storage_orders": [
+        1.9952519393655093,
+        1.9952603724799867,
+        1.9991097511642129
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 8.510515547399677e-06,
+          "section_heat_error_J_m2": 6.18812162322957e-06,
+          "storage_change_error_J_m2": 3.085925825527247e-06,
+          "storage_balance_J_m2": 1.219996326184969e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 4.816266731072494e-06,
+          "section_heat_error_J_m2": 9.448916339360736e-06,
+          "storage_change_error_J_m2": 5.9274236962059135e-06,
+          "storage_balance_J_m2": 6.089573290068984e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 2.898627598946213e-06,
+          "section_heat_error_J_m2": 3.6492216347605577e-06,
+          "storage_change_error_J_m2": 1.0303496938146584e-06,
+          "storage_balance_J_m2": 1.9922952176898434e-13
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 7.046176594804887e-06,
+          "section_heat_error_J_m2": 9.160309008063305e-06,
+          "storage_change_error_J_m2": 4.6509840621322684e-06,
+          "storage_balance_J_m2": 1.395827897709978e-13
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 32,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0005778022812981121,
+          "section_heat_error_J_m2": 7.383072460810658e-05,
+          "storage_change_error_J_m2": 3.669109379245833e-05,
+          "storage_balance_J_m2": 7.618905506490137e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00018658702215370443,
+          "section_heat_error_J_m2": 0.00017568964623565497,
+          "storage_change_error_J_m2": 4.868705662611911e-05,
+          "storage_balance_J_m2": 1.2573275753879898e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0005237581947505066,
+          "section_heat_error_J_m2": 0.00012265992376017665,
+          "storage_change_error_J_m2": 0.00012371499815381354,
+          "storage_balance_J_m2": 1.7669893326299757e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.00033483182366220166,
+          "section_heat_error_J_m2": 0.00015207789378451908,
+          "storage_change_error_J_m2": 2.9781018230959702e-05,
+          "storage_balance_J_m2": 2.55351295663786e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 64,
+      "trace_heat_storage_orders": [
+        1.979870784532663,
+        2.0263124851706182,
+        2.0271362045578196
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0001464801440975716,
+          "section_heat_error_J_m2": 1.8576142274615015e-05,
+          "storage_change_error_J_m2": 9.047860461429413e-06,
+          "storage_balance_J_m2": 7.119305145408816e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 4.548155453219099e-05,
+          "section_heat_error_J_m2": 4.312859692259807e-05,
+          "storage_change_error_J_m2": 1.1945010555541868e-05,
+          "storage_balance_J_m2": 9.880984919163893e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00013015745085068198,
+          "section_heat_error_J_m2": 3.0257649173109913e-05,
+          "storage_change_error_J_m2": 3.035243586533773e-05,
+          "storage_balance_J_m2": 1.2746748101477579e-14
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 8.273694238394858e-05,
+          "section_heat_error_J_m2": 3.756978097387009e-05,
+          "storage_change_error_J_m2": 7.0746042058894565e-06,
+          "storage_balance_J_m2": 2.9698465908722937e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 128,
+      "trace_heat_storage_orders": [
+        1.989545354155336,
+        2.012402020795097,
+        2.013330002943269
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 3.688637092791325e-05,
+          "section_heat_error_J_m2": 4.6616271969779355e-06,
+          "storage_change_error_J_m2": 2.244666540786311e-06,
+          "storage_balance_J_m2": 5.564992910933597e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 1.1227642044545072e-05,
+          "section_heat_error_J_m2": 1.068985853877602e-05,
+          "storage_change_error_J_m2": 2.962097718280099e-06,
+          "storage_balance_J_m2": 9.048317650695026e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 3.244520280615282e-05,
+          "section_heat_error_J_m2": 7.512595312675341e-06,
+          "storage_change_error_J_m2": 7.518320373017806e-06,
+          "storage_balance_J_m2": 9.780370957557238e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 2.056712439749142e-05,
+          "section_heat_error_J_m2": 9.338695666216701e-06,
+          "storage_change_error_J_m2": 1.7273581672822697e-06,
+          "storage_balance_J_m2": 1.7017637299332478e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 8.0,
+      "bulk_columns": 32,
+      "time_steps": 256,
+      "trace_heat_storage_orders": [
+        1.9946798467092888,
+        2.006035221954477,
+        2.00663937116137
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 9.255661509777191e-06,
+          "section_heat_error_J_m2": 1.1677837617601883e-06,
+          "storage_change_error_J_m2": 5.589212750886641e-07,
+          "storage_balance_J_m2": 4.621303340002214e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 2.789216244240833e-06,
+          "section_heat_error_J_m2": 2.661308272644547e-06,
+          "storage_change_error_J_m2": 7.377051503623666e-07,
+          "storage_balance_J_m2": 6.772360450213455e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 8.099761834218233e-06,
+          "section_heat_error_J_m2": 1.8715745222497304e-06,
+          "storage_change_error_J_m2": 1.8709500235435106e-06,
+          "storage_balance_J_m2": 9.693634783758398e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 5.127396223048031e-06,
+          "section_heat_error_J_m2": 2.3281102136535337e-06,
+          "storage_change_error_J_m2": 4.269332454613639e-07,
+          "storage_balance_J_m2": 2.7478019859472624e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 32,
+      "trace_heat_storage_orders": null,
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.0005567790306317266,
+          "section_heat_error_J_m2": 5.183079956583986e-05,
+          "storage_change_error_J_m2": 3.190451655817744e-05,
+          "storage_balance_J_m2": 1.0842021724855044e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 0.00015154084531467105,
+          "section_heat_error_J_m2": 0.0001044433992206141,
+          "storage_change_error_J_m2": 0.00010551686775083988,
+          "storage_balance_J_m2": 8.847089727481716e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.0004790735374402555,
+          "section_heat_error_J_m2": 6.648967372418005e-05,
+          "storage_change_error_J_m2": 4.8327802261181885e-05,
+          "storage_balance_J_m2": 7.771561172376096e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 0.0002876056189780249,
+          "section_heat_error_J_m2": 0.00010679059079110598,
+          "storage_change_error_J_m2": 8.773358691599453e-05,
+          "storage_balance_J_m2": 8.881784197001252e-16
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 64,
+      "trace_heat_storage_orders": [
+        1.9849778112040763,
+        2.0140904920206584,
+        2.011508330425156
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 0.00014065170743970956,
+          "section_heat_error_J_m2": 1.3035553236076525e-05,
+          "storage_change_error_J_m2": 7.990544604860594e-06,
+          "storage_balance_J_m2": 1.6653345369377348e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 3.806916990221898e-05,
+          "section_heat_error_J_m2": 2.5920900399711844e-05,
+          "storage_change_error_J_m2": 2.616962785428542e-05,
+          "storage_balance_J_m2": 1.1310397063368782e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 0.00011860360684529114,
+          "section_heat_error_J_m2": 1.650598043825488e-05,
+          "storage_change_error_J_m2": 1.2116294003272632e-05,
+          "storage_balance_J_m2": 6.453171330633722e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 7.172832862238632e-05,
+          "section_heat_error_J_m2": 2.6438166727652673e-05,
+          "storage_change_error_J_m2": 2.1600087461853823e-05,
+          "storage_balance_J_m2": 1.0685896612017132e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 128,
+      "trace_heat_storage_orders": [
+        1.9924068461558304,
+        2.006817148860845,
+        2.0052518976281606
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 3.534848331299134e-05,
+          "section_heat_error_J_m2": 3.269960860377563e-06,
+          "storage_change_error_J_m2": 2.0014223276326737e-06,
+          "storage_balance_J_m2": 1.5265566588595902e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 9.54095889224571e-06,
+          "section_heat_error_J_m2": 6.457360118779926e-06,
+          "storage_change_error_J_m2": 6.5186336883037155e-06,
+          "storage_balance_J_m2": 1.1483869410966463e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 2.951574398429857e-05,
+          "section_heat_error_J_m2": 4.112821618267037e-06,
+          "storage_change_error_J_m2": 3.031949865624217e-06,
+          "storage_balance_J_m2": 6.869504964868156e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 1.7909590611896176e-05,
+          "section_heat_error_J_m2": 6.578383371105834e-06,
+          "storage_change_error_J_m2": 5.3606328913671786e-06,
+          "storage_balance_J_m2": 1.0755285551056204e-15
+        }
+      ]
+    },
+    {
+      "method": "sdirk2",
+      "omega_rad_s": 24.0,
+      "bulk_columns": 32,
+      "time_steps": 256,
+      "trace_heat_storage_orders": [
+        1.9961759703385495,
+        2.003348820168209,
+        2.002494328990756
+      ],
+      "windows": [
+        {
+          "phase_interval_cycles": [
+            0.0,
+            0.125
+          ],
+          "material_trace_error_K": 8.860575707814178e-06,
+          "section_heat_error_J_m2": 8.189626243063075e-07,
+          "storage_change_error_J_m2": 5.009557781585072e-07,
+          "storage_balance_J_m2": 1.1622647289044608e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.125,
+            0.5
+          ],
+          "material_trace_error_K": 2.3882446932715906e-06,
+          "section_heat_error_J_m2": 1.6115434523684968e-06,
+          "storage_change_error_J_m2": 1.6268432794612486e-06,
+          "storage_balance_J_m2": 1.0581813203458523e-15
+        },
+        {
+          "phase_interval_cycles": [
+            0.5,
+            0.75
+          ],
+          "material_trace_error_K": 7.362683957345961e-06,
+          "section_heat_error_J_m2": 1.026552226973676e-06,
+          "storage_change_error_J_m2": 7.582639657069401e-07,
+          "storage_balance_J_m2": 2.220446049250313e-16
+        },
+        {
+          "phase_interval_cycles": [
+            0.75,
+            1.0
+          ],
+          "material_trace_error_K": 4.474553101013745e-06,
+          "section_heat_error_J_m2": 1.6407827925536689e-06,
+          "storage_change_error_J_m2": 1.3353757447598369e-06,
+          "storage_balance_J_m2": 3.885780586188048e-16
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "commit": "b43af715b436fd65478f5d58ad8144438a51c277",
+      "file": "sph_storing_contact_intervals.py",
+      "source_sha256": "2be7f2bc41d87200f404e2ff4ef9c8f031efcf6560a34022fa985f0362e3cb02"
+    },
+    {
+      "commit": "b43af715b436fd65478f5d58ad8144438a51c277",
+      "file": "sph_harmonic_storing_contacts.py",
+      "source_sha256": "9b483cca19b23500779eab180a5de3384ab2acc89bb0972cfc45de824cd16470"
+    },
+    {
+      "commit": "b43af715b436fd65478f5d58ad8144438a51c277",
+      "file": "sph_layered_storing_contacts.py",
+      "source_sha256": "8a2b0a4383ef1b51d483ed9df1762d773603e7d8dc000f2260ffb3e20fb80957"
+    },
+    {
+      "commit": "75e1989a1cb166a655e143916718d8a865a37369",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "230bbe08478e53bd8d6bf3b32cee9dcab193b17f8bb530d4f9192a5ccf55a3e1"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_storing_contact_intervals.py --time-only"
+}
