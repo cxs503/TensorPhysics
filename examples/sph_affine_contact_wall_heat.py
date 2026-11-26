@@ -70,6 +70,7 @@ def measure(n, sign, resistance, balanced=False, *, fvm=False):
         roots = []
         quadratic_roots = []
         exact_roots = []
+        extrema, exact_extrema = [], []
         for i, (width, polynomial, face_x) in enumerate(zip(lengths, fluxes, local_faces)):
             origin = 0. if i == 0 else lengths[0]
             indices = slice(0, cut+1) if i == 0 else slice(cut, None)
@@ -92,7 +93,21 @@ def measure(n, sign, resistance, balanced=False, *, fvm=False):
             valid = [v.real for v in (polynomial+correction).roots() if v.imag == 0 and 0 < v.real < width]
             assert len(valid) == 1
             exact_roots.append(origin+valid[0])
+
+            # Integrate Fourier's law in this cell. Anchor the primitive at
+            # its mean for an FVM cell or its midpoint for an SPH particle.
+            primitive = Polynomial([left, right-left-curvature, curvature]).integ()
+            anchor = primitive.integ()(1.) if fvm else primitive(.5)
+            index = cell if i == 0 else cut+cell
+            cond = conductivities[i]
+            extrema.append(float(field[index].real-dx*(primitive(fraction)-anchor)/cond))
+            reference_path = valid[0]/cond
+            if i == 1:
+                reference_path += lengths[0]/conductivities[0]+resistance
+            exact_extrema.append(temperatures[i](valid[0])-correction*reference_path)
         row.update(wall_balance_W_m2=float(abs(q[-1]-q[0])),
+                   hot_and_cold_temperatures_K=extrema, analytical_hot_and_cold_K=exact_extrema,
+                   max_extremum_temperature_error_K=float(np.max(np.abs(np.subtract(extrema, exact_extrema)))),
                    flux_reversals_m=roots, analytical_flux_reversals_m=exact_roots,
                    quadratic_flux_reversals_m=quadratic_roots,
                    max_quadratic_reversal_error_m=float(np.max(np.abs(np.subtract(quadratic_roots, exact_roots)))),
@@ -118,6 +133,7 @@ if __name__ == "__main__":
         for resistance in (0., .25):
             previous = None
             previous_root_error = None
+            previous_extremum_error = None
             for n in (16, 32, 64, 128):
                 row = measure(n, sign, resistance, balanced)
                 errors = np.array([row["temperature_error_K"], row["wall_flux_error_W_m2"]])
@@ -127,12 +143,20 @@ if __name__ == "__main__":
                 if balanced:
                     assert row["wall_balance_W_m2"] < 1e-10
                     assert row["west_outward_W_m2"] > 0 > row["east_outward_W_m2"]
+                    hot, cold = row["hot_and_cold_temperatures_K"]
+                    assert hot > 0 > cold
+                    extremum_error = row["max_extremum_temperature_error_K"]
+                    if previous_extremum_error is not None:
+                        row["extremum_temperature_order"] = float(np.log2(previous_extremum_error/extremum_error))
+                    previous_extremum_error = extremum_error
                     root_error = row["max_quadratic_reversal_error_m"]
                     if previous_root_error is not None:
                         row["quadratic_reversal_order"] = float(np.log2(previous_root_error/root_error))
                     previous_root_error = root_error
                     if n == 128:
                         assert row["quadratic_reversal_order"] > 1.8
+                        assert row["extremum_temperature_order"] > 1.8
+                        assert extremum_error < 1.5e-5
                         assert root_error < 1.1e-5
                         assert row["max_reversal_error_m"] < 2e-4
                 if n == 128:
@@ -149,6 +173,7 @@ if __name__ == "__main__":
                     if balanced:
                         assert fv["wall_balance_W_m2"] < 1e-10
                         assert fv["west_outward_W_m2"] > 0 > fv["east_outward_W_m2"]
+                        assert fv["max_extremum_temperature_error_K"] < 1e-10
                         assert fv["max_quadratic_reversal_error_m"] < 1e-10
                         if n == 128:
                             assert fv["max_reversal_error_m"] < 2e-4
