@@ -1,12 +1,12 @@
 {
   "sources": [
     {
-      "commit": "8e88bd8b355546bf73ddc212e9aa3f5ded73d150",
+      "commit": "ad0b7cbfeadca9aa06122d36f19d1a2d33ee189a",
       "file": "fvm_contact_dc_limit.py",
-      "source_sha256": "b5bcfc7f74dfd929347dda621e757e621adf19fd1f7e6d6727ceaead6d31c747"
+      "source_sha256": "5130d216ef62e3c3c9f1211d1525700ec351c4449416826560ec1ee5d1a502c0"
     },
     {
-      "commit": "8e88bd8b355546bf73ddc212e9aa3f5ded73d150",
+      "commit": "ad0b7cbfeadca9aa06122d36f19d1a2d33ee189a",
       "file": "periodic_contact_reference.py",
       "source_sha256": "49f710a8b75a7f5e41a535e1953dd03f136376b769baac29eb4837aa0b900de6"
     },
@@ -37,21 +37,75 @@
     },
     {
       "cells": 16,
+      "omega_rad_s": 1e-12,
+      "temperature_error_K": 4.746205464426579e-15,
+      "heat_flux_error_W_m2": 4.796163509910549e-14,
+      "temperature_slope_error_K_s": 8.500145032286355e-16,
+      "heat_flux_slope_error_W_s_m2": 8.909539772616881e-15
+    },
+    {
+      "cells": 32,
+      "omega_rad_s": 1e-12,
+      "temperature_error_K": 1.2214888941567068e-15,
+      "heat_flux_error_W_m2": 2.975397776162976e-14,
+      "temperature_slope_error_K_s": 1.1102230246251565e-16,
+      "heat_flux_slope_error_W_s_m2": 4.371503159461554e-15
+    },
+    {
+      "cells": 64,
+      "omega_rad_s": 1e-12,
+      "temperature_error_K": 7.754907834971785e-14,
+      "heat_flux_error_W_m2": 6.601386104737442e-13,
+      "temperature_slope_error_K_s": 1.3038181645441682e-14,
+      "heat_flux_slope_error_W_s_m2": 1.2273515537231106e-13
+    },
+    {
+      "cells": 16,
       "omega_rad_s": 1e-10,
       "temperature_error_K": 4.8017328662367685e-15,
-      "heat_flux_error_W_m2": 4.7961689246903035e-14
+      "heat_flux_error_W_m2": 4.7961689246903035e-14,
+      "temperature_slope_error_K_s": 8.291978215169138e-16,
+      "heat_flux_slope_error_W_s_m2": 8.93729534823251e-15
     },
     {
       "cells": 32,
       "omega_rad_s": 1e-10,
       "temperature_error_K": 1.1104138213003113e-15,
-      "heat_flux_error_W_m2": 2.9754065044564084e-14
+      "heat_flux_error_W_m2": 2.9754065044564084e-14,
+      "temperature_slope_error_K_s": 9.367506770274758e-17,
+      "heat_flux_slope_error_W_s_m2": 4.385380947269368e-15
     },
     {
       "cells": 64,
       "omega_rad_s": 1e-10,
       "temperature_error_K": 7.76323452713113e-14,
-      "heat_flux_error_W_m2": 6.601386144077956e-13
+      "heat_flux_error_W_m2": 6.601386144077956e-13,
+      "temperature_slope_error_K_s": 1.3000017728970192e-14,
+      "heat_flux_slope_error_W_s_m2": 1.2270739979669543e-13
+    },
+    {
+      "cells": 16,
+      "omega_rad_s": 1e-06,
+      "temperature_error_K": 4.996048669799344e-15,
+      "heat_flux_error_W_m2": 4.685151757679236e-14,
+      "temperature_slope_error_K_s": 7.28583859910259e-16,
+      "heat_flux_slope_error_W_s_m2": 7.438494264988549e-15
+    },
+    {
+      "cells": 32,
+      "omega_rad_s": 1e-06,
+      "temperature_error_K": 1.332938870786466e-15,
+      "heat_flux_error_W_m2": 3.308479612068918e-14,
+      "temperature_slope_error_K_s": 1.6653345369377348e-16,
+      "heat_flux_slope_error_W_s_m2": 4.926614671774132e-15
+    },
+    {
+      "cells": 64,
+      "omega_rad_s": 1e-06,
+      "temperature_error_K": 7.763234551853897e-14,
+      "heat_flux_error_W_m2": 6.64357465423772e-13,
+      "temperature_slope_error_K_s": 1.2947976024690888e-14,
+      "heat_flux_slope_error_W_s_m2": 1.2212453270876722e-13
     },
     {
       "cells": 16,
