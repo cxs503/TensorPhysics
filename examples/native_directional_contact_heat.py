@@ -2,7 +2,9 @@
 
 Compare native directional contact heat from finite-volume and finite-element
 rods, a fixed DEM thermal chain and an SPH slab against the two-reversal continuum solution.
+Pass --with-dg to include the unit-width SIPG strip.
 """
+import argparse
 import json
 
 import numpy as np
@@ -57,7 +59,7 @@ def particles(n, times, modes):
     return parts["rightward"][:, cut].numpy(), parts["leftward"][:, cut].numpy(), net[:, cut].numpy()
 
 
-def run():
+def run(with_dg=False):
     roots, end, waves, weights, modes = double.reference_modes()
 
     def integral(t):
@@ -66,8 +68,16 @@ def run():
     phases = np.diff(integral(np.r_[0., roots, end]))
     reference = np.array([phases[0]+phases[2], -phases[1]])
     rows = []
-    for solver, solve in (("TensorFVM_SDIRK2", fvm), ("TensorDEM_Crank_Nicolson", dem),
-                          ("TensorFEM_Crank_Nicolson", fem), ("TensorSPH_exponential", particles)):
+    solvers = [("TensorFVM_SDIRK2", fvm), ("TensorDEM_Crank_Nicolson", dem),
+               ("TensorFEM_Crank_Nicolson", fem), ("TensorSPH_exponential", particles)]
+    sources = [__file__, double.__file__, case.__file__, rod.__file__, contact_chain.__file__,
+               thermal.__file__, sph.__file__]
+    if with_dg:
+        from functools import partial
+        from tensordg import poisson_2d_bc, transient_diffusion_2d
+        solvers.append(("TensorDG_SDIRK2", partial(double.dg, directional=True)))
+        sources.extend([poisson_2d_bc.__file__, transient_diffusion_2d.__file__])
+    for solver, solve in solvers:
         previous = None
         for n in (24, 48, 96, 192):
             times = np.linspace(0., end, 2*n+1)
@@ -90,11 +100,12 @@ def run():
                              net_balance_J=balance, mixed_intervals=int(mixed.sum()), passed=bool(passed)))
             previous = total_error
     return dict(reference_right_left_heat_J=reference.tolist(), analytic_reversals_s=roots.tolist(),
-                end_s=end, runs=rows, sources=[provenance(p) for p in
-                (__file__, double.__file__, case.__file__, rod.__file__, contact_chain.__file__, thermal.__file__, sph.__file__)])
+                end_s=end, runs=rows, sources=[provenance(p) for p in sources])
 
 
 if __name__ == "__main__":
-    report = run()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--with-dg", action="store_true")
+    report = run(with_dg=parser.parse_args().with_dg)
     print(json.dumps(report, indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in report["runs"]) else 1)

@@ -40,7 +40,7 @@ def detect_phases(times, heat, *, higher_order=False):
     return np.asarray(turns), np.diff([0., *amounts, cumulative[-1]])
 
 
-def dg(n, times, modes):
+def dg(n, times, modes, *, directional=False):
     from tensordg import poisson_2d_bc as poisson
     from tensordg import transient_diffusion_2d as diffusion
     import torch
@@ -56,13 +56,21 @@ def dg(n, times, modes):
         return sum(a*torch.where(x < .5, torch.sin(w*x), -torch.sin(w*(1-x))/3)
                    for w, a in modes)
 
-    _, _, _, means = diffusion.solve_transient_diffusion_2d(
+    extra = {"return_directional_contact_heat": True} if directional else {}
+    result = diffusion.solve_transient_diffusion_2d(
         initial, times, ncells=(n, 2), degree=1, capacity=k, method="sdirk2",
-        return_interval_means=True, **options)
+        return_interval_means=True, **extra, **options)
+    means = result[3]
     # Two transverse faces span the unit cross section. Use the integrator's
     # interval-average field in the same numerical face flux as the solve.
     powers = [poisson.poisson_face_powers_2d(field, **options)[0][mid].sum().item() for field in means]
-    return means, np.diff(times)*powers
+    net = np.diff(times)*powers
+    if directional:
+        parts = result[4]["x"]
+        np.testing.assert_array_equal(parts["indices"], [[mid-1, 0], [mid-1, 1]])
+        # The native face quantities already include face length and unit depth.
+        return parts["forward"].sum(dim=1).numpy(), parts["reverse"].sum(dim=1).numpy(), net
+    return means, net
 
 
 def dem_chain(n, modes):
