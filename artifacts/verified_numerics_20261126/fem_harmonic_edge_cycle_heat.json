@@ -1,0 +1,18 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "1f14cfb7b28b71bc2a54797ba4f449a0ad87ad31",
+  "passed": 140,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal.py --junitxml=results.xml",
+  "reference": "On a unit contact edge use y=s-1/2, linear area-scaled conductance 2+2y and peak temperature-jump phasor y+i*b for b=0,0.25,1. Per-direction energy in a zero-mean cycle is (2/omega) times the integral of (2+2y)*sqrt(y\u00b2+b\u00b2). Compare a closed antiderivative on full, clipped and zero-width segments, with a common phase rotation and zero field control. omega=2.5 rad/s; default order 16 Gauss-Legendre on each side of the minimum amplitude.",
+  "runs": {
+    "test_harmonic_contact_edge_cycle_heat_against_local_magnitude[0.0]": {
+      "max_per_direction_cycle_heat_error_J": 5.551115123125783e-17
+    },
+    "test_harmonic_contact_edge_cycle_heat_against_local_magnitude[0.25]": {
+      "max_per_direction_cycle_heat_error_J": 2.220446049250313e-16
+    },
+    "test_harmonic_contact_edge_cycle_heat_against_local_magnitude[1.0]": {
+      "max_per_direction_cycle_heat_error_J": 1.1102230246251565e-16
+    }
+  }
+}
