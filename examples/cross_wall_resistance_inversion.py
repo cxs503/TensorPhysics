@@ -13,7 +13,8 @@ def estimates(gain, position):
     bulk, weight = reciprocal.impedance_terms(position)
     projection = np.real(weight.conj()*(1/gain-bulk))
     norm = abs(weight)**2
-    return np.r_[projection/norm, projection.sum()/norm.sum()]
+    joint = projection.sum(axis=-1, keepdims=True)/norm.sum()
+    return np.concatenate((projection/norm, joint), axis=-1)
 
 
 def study(solver, target, position=.25):
