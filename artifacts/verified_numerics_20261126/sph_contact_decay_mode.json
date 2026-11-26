@@ -1,0 +1,198 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "columns": 20,
+      "h_over_dx": 0.9,
+      "layer_temperature_errors_K": [
+        0.0008435748495336792,
+        0.003107949641679153
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        0.0005165769187018276,
+        0.0005588805484592063,
+        0.0005263106602548806
+      ],
+      "max_layer_balance_J_m2": 4.496403249731884e-15,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 40,
+      "h_over_dx": 0.9,
+      "layer_temperature_errors_K": [
+        0.00021808463632555508,
+        0.0007790571329315821
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        0.00012923071293829969,
+        0.0001397402000763437,
+        0.00013178887567266706
+      ],
+      "max_layer_balance_J_m2": 1.607047828144914e-14,
+      "orders": [
+        1.9516279447869331,
+        1.9961620890899483,
+        1.9990342021728533,
+        1.999792852642611,
+        1.997686019168693
+      ],
+      "passed": true
+    },
+    {
+      "columns": 80,
+      "h_over_dx": 0.9,
+      "layer_temperature_errors_K": [
+        5.5383591381241715e-05,
+        0.0001948961667537219
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        3.2313007533868454e-05,
+        3.4936213765518476e-05,
+        3.296042333811311e-05
+      ],
+      "max_layer_balance_J_m2": 6.131206653492427e-14,
+      "orders": [
+        1.977357624009755,
+        1.999023417907858,
+        1.9997620404801282,
+        1.9999519421542902,
+        1.9994219198024044
+      ],
+      "passed": true
+    },
+    {
+      "columns": 160,
+      "h_over_dx": 0.9,
+      "layer_temperature_errors_K": [
+        1.395177572427464e-05,
+        4.873236442903828e-05
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        8.07858407864126e-06,
+        8.734124816417443e-06,
+        8.240930786551637e-06
+      ],
+      "max_layer_balance_J_m2": 2.4741320103771614e-13,
+      "orders": [
+        1.9890098551435738,
+        1.999753588766321,
+        1.9999406744821153,
+        1.9999882102859734,
+        1.9998555728961196
+      ],
+      "passed": true
+    },
+    {
+      "columns": 20,
+      "h_over_dx": 1.6,
+      "layer_temperature_errors_K": [
+        0.0016742259024426498,
+        0.007786969301808111
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        0.0014080385201325485,
+        0.0013932687279402112,
+        0.001189580788236333
+      ],
+      "max_layer_balance_J_m2": 5.273559366969494e-16,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "columns": 40,
+      "h_over_dx": 1.6,
+      "layer_temperature_errors_K": [
+        0.000453242518148933,
+        0.0021348475394145083
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        0.0003445781357132027,
+        0.00034197530018434397,
+        0.00029620282154585453
+      ],
+      "max_layer_balance_J_m2": 1.887379141862766e-15,
+      "orders": [
+        1.8851390929757075,
+        1.8669288956570755,
+        2.0307837355437486,
+        2.0265095132647546,
+        2.0057959646077106
+      ],
+      "passed": true
+    },
+    {
+      "columns": 80,
+      "h_over_dx": 1.6,
+      "layer_temperature_errors_K": [
+        0.00011632711644860017,
+        0.0005830813385807598
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        8.459070851496442e-05,
+        8.41858872851764e-05,
+        7.379932443435377e-05
+      ],
+      "max_layer_balance_J_m2": 7.41073868937292e-15,
+      "orders": [
+        1.9620957693948848,
+        1.872363987752408,
+        2.026260051272852,
+        2.0222418186544524,
+        2.004905868505959
+      ],
+      "passed": true
+    },
+    {
+      "columns": 160,
+      "h_over_dx": 1.6,
+      "layer_temperature_errors_K": [
+        2.9360202497996646e-05,
+        0.00015323320583737754
+      ],
+      "west_contact_east_heat_errors_J_m2": [
+        2.089664134918845e-05,
+        2.0835193154516984e-05,
+        1.8409832364341128e-05
+      ],
+      "max_layer_balance_J_m2": 3.477773624638303e-14,
+      "orders": [
+        1.986253612012053,
+        1.927968185234134,
+        2.0172281245687693,
+        2.014555928981623,
+        2.0031311198845265
+      ],
+      "passed": true
+    }
+  ],
+  "observation_times_s": [
+    0.0,
+    0.08333333333333333,
+    0.16666666666666666,
+    0.25,
+    0.3333333333333333,
+    0.41666666666666663,
+    0.5,
+    0.5833333333333333,
+    0.6666666666666666
+  ],
+  "sources": [
+    {
+      "commit": "980d0ca278726f360fe4cddb6eea11f4b24f06df",
+      "file": "sph_contact_decay_mode.py",
+      "source_sha256": "3b8f34d9ba753ed3baa1299a6b76165218aaa0a57a58c9137296b65607df70c9"
+    },
+    {
+      "commit": "980d0ca278726f360fe4cddb6eea11f4b24f06df",
+      "file": "contact_decay_reference.py",
+      "source_sha256": "91bcc8a53d2848bc27b8b0702f1a44d82bea769d35bb61d38361b4701239edba"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_contact_decay_mode.py"
+}
