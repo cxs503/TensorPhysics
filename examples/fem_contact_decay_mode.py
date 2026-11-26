@@ -5,18 +5,13 @@ import numpy as np
 import torch
 from tensorfem import thermal
 
+import contact_decay_reference as reference
 from conduction_provenance import provenance
 
 
 def build_problem(n):
-    # The first layer spans a quarter of pi in phase, the second three quarters.
-    # The outer Dirichlet values vanish. Choose material properties so both
-    # pieces decay at the same rate and transmit the same rightward flux.
-    interface, decay = .4, 3.
-    wl, wr = np.pi/(4*interface), 3*np.pi/(4*(1-interface))
-    conductivity = np.array([1., wl/(2*wr)])
-    capacity = conductivity*np.array([wl, wr])**2/decay
-    resistance = 1/wl
+    interface, decay, conductivity, capacity, resistance = reference.material_properties()
+    wl, wr = np.sqrt(decay*capacity/conductivity)
     nl = 2*n//5
     x = np.r_[np.linspace(0, interface, nl+1), np.linspace(interface, 1, n-nl+1)]
     shape = np.r_[np.sin(wl*x[:nl+1]), 2*np.sin(wr*(1-x[nl+1:]))]
@@ -63,7 +58,7 @@ if __name__ == "__main__":
             rows.append(row)
             previous = errors
     passed = all(row["passed"] for row in rows)
-    print(json.dumps(dict(passed=passed, runs=rows, sources=[provenance(p) for p in (__file__, thermal.__file__)],
+    print(json.dumps(dict(passed=passed, runs=rows, sources=[provenance(p) for p in (__file__, reference.__file__, thermal.__file__)],
                           reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_contact_decay_mode.py"),
                      indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
