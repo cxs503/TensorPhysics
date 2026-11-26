@@ -3,6 +3,7 @@ import json
 
 import numpy as np
 import torch
+from numpy.polynomial import Polynomial
 
 from conduction_provenance import provenance
 import sph_layered_storing_contacts as slab
@@ -29,6 +30,51 @@ def mean_exit_times(dx, k, cv, contacts, faces, combined_r, capacities, heater_r
     return pulse_end/2+moments/np.array([1-heater_r/total_r, heater_r/total_r])
 
 
+def exit_time_spread(dx, k, cv, faces, combined_r, capacities, heater, pulse_end):
+    """Wall-conditional exit-time standard deviations from backward moment equations."""
+    # In resistance coordinates the bulk capacity density is k*cv. Contact
+    # gaps carry zero distributed capacity; the storing sheet sits at mid-gap.
+    segments = []
+    sheet_indices = []
+    start = 0
+    for i, end in enumerate([*faces, len(k)]):
+        segments.append(((end-start)*dx/k[start], k[start]*cv[start], 0.))
+        if i < len(faces):
+            sheet_mass = capacities[i//2] if i % 2 == 0 else 0.
+            segments.append((combined_r[i]/2, 0., sheet_mass))
+            if sheet_mass:
+                sheet_indices.append(len(segments)-1)
+            segments.append((combined_r[i]/2, 0., 0.))
+        start = end
+    total_r = sum(h for h, _, _ in segments)
+    starts = np.cumsum([0.]+[h for h, _, _ in segments[:-1]])
+    site = sheet_indices[heater]
+    spread = []
+    centroids = []
+    for west in (True, False):
+        slope = (-1. if west else 1.)/total_r
+        previous = [Polynomial([float(west)+slope*r, slope]) for r in starts]
+        moments = [previous[site](segments[site][0])]
+        for order in (1, 2):
+            # -u_m'' = m*C*u_(m-1), with a derivative jump at each sheet.
+            # Restore the zero boundary condition at the east wall by adding
+            # a linear homogeneous solution after propagation from the west.
+            value = derivative = 0.
+            current = []
+            for (h, density, sheet_mass), prev in zip(segments, previous):
+                local = (-order*density*prev).integ(2, k=[derivative, value])
+                current.append(local)
+                value = local(h)
+                derivative = local.deriv()(h)-order*sheet_mass*prev(h)
+            correction = -value/total_r
+            previous = [poly+Polynomial([correction*r, correction]) for poly, r in zip(current, starts)]
+            moments.append(previous[site](segments[site][0]))
+        # Convolution with a rectangular pulse adds its variance.
+        centroids.append(moments[1]/moments[0]+pulse_end/2)
+        spread.append(np.sqrt(moments[2]/moments[0]-(moments[1]/moments[0])**2+pulse_end**2/12))
+    return np.array(centroids), np.array(spread)
+
+
 def measure(n, heater, method):
     dx = 1/n
     material, sheets, k, cv, faces, contacts, sheet_r, capacities = slab.layered_materials(n)
@@ -52,8 +98,12 @@ def measure(n, heater, method):
     expected = stop*np.array([1-west_r/total_r, west_r/total_r])
     wall_heat = np.array([-heat[:, 0].sum().item(), heat[:, -1].sum().item()])
     wall_increments = np.column_stack((-heat[:, 0].numpy(), heat[:, -1].numpy()))
-    centroid = ((times[1:]+times[:-1])/2) @ wall_increments/wall_heat
+    midpoints = (times[1:]+times[:-1])/2
+    centroid = midpoints @ wall_increments/wall_heat
+    spread = np.sqrt((((midpoints[:, None]-centroid)**2)*wall_increments).sum(axis=0)/wall_heat)
+    moment_centroid, expected_spread = exit_time_spread(dx, k, cv, faces, combined_r, capacities, heater, stop)
     expected_time = mean_exit_times(dx, k, cv, contacts, faces, combined_r, capacities, west_r, total_r, stop)
+    np.testing.assert_allclose(moment_centroid, expected_time, rtol=0., atol=1e-12)
     residuals, release = [], []
     for i, (position, capacity) in enumerate(zip(sheets, capacities)):
         stored = capacity*state[:, position:position+2].mean(dim=1).numpy()
@@ -70,6 +120,8 @@ def measure(n, heater, method):
     return dict(bulk_columns=n, heated_sheet=heater, method=method, pulse_end_s=stop, final_time_s=times[-1], injected_J_m2=stop,
                 outward_wall_heats_J_m2=wall_heat.tolist(), reference_J_m2=expected.tolist(),
                 wall_mean_exit_times_s=centroid.tolist(), reference_mean_exit_times_s=expected_time.tolist(),
+                wall_exit_time_std_s=spread.tolist(), reference_exit_time_std_s=expected_spread.tolist(),
+                max_exit_time_std_error_s=float(abs(spread-expected_spread).max()),
                 max_mean_exit_time_error_s=float(abs(centroid-expected_time).max()),
                 max_partition_error_J_m2=float(abs(wall_heat-expected).max()),
                 post_pulse_sheet_release_J_m2=release, remaining_energy_bound_J_m2=remaining,
@@ -81,14 +133,21 @@ if __name__ == "__main__":
     for heater in (0, 1):
         for method in ("theta", "sdirk2"):
             previous = None
+            previous_std_error = None
             for n in (16, 32, 64):
                 row = measure(n, heater, method)
                 error = row["max_mean_exit_time_error_s"]
+                std_error = row["max_exit_time_std_error_s"]
+                if previous_std_error is not None:
+                    row["exit_time_std_order"] = float(np.log2(previous_std_error/std_error))
+                    assert row["exit_time_std_order"] > 1.7
+                previous_std_error = std_error
                 if previous is not None:
                     row["mean_exit_time_order"] = float(np.log2(previous/error))
                     assert row["mean_exit_time_order"] > 1.5
                 if n == 64:
                     assert error < 8e-5
+                    assert std_error < 3e-4
                 runs.append(row)
                 previous = error
     print(json.dumps(dict(runs=runs, sources=[provenance(p) for p in
