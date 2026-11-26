@@ -1,0 +1,630 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.6375,
+        0.72109375
+      ],
+      "reversal_s": 0.6507662996124618,
+      "error_s": 0.0006215192535354852,
+      "order": null,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.6375,
+        0.6787109375
+      ],
+      "reversal_s": 0.6512322830121257,
+      "error_s": 0.0001555358538716245,
+      "order": 1.9985518976335455,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.6375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513489251483862,
+      "error_s": 3.889371761112148e-05,
+      "order": 1.9996381415870603,
+      "reconstruction_only_error_s": 1.3322676295501878e-15,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.64769287109375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513780948269303,
+      "error_s": 9.724039066960621e-06,
+      "order": 1.9999095450915771,
+      "reconstruction_only_error_s": 9.992007221626409e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.65,
+        0.71015625
+      ],
+      "reversal_s": 0.6510280129557089,
+      "error_s": 0.00035980591028839104,
+      "order": null,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.65,
+        0.6806640625
+      ],
+      "reversal_s": 0.6512978440971401,
+      "error_s": 8.99747688571928e-05,
+      "order": 1.9996264889380277,
+      "reconstruction_only_error_s": 3.3306690738754696e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.65,
+        0.665478515625
+      ],
+      "reversal_s": 0.6513653237198124,
+      "error_s": 2.2495146184908776e-05,
+      "order": 1.999906748595214,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.65,
+        0.65777587890625
+      ],
+      "reversal_s": 0.6513821949886006,
+      "error_s": 5.623877396665478e-06,
+      "order": 1.9999766939201877,
+      "reconstruction_only_error_s": 1.5543122344752192e-15,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.6375,
+        0.72109375
+      ],
+      "reversal_s": 0.6512508641380512,
+      "error_s": 0.00013695472794605923,
+      "order": null,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.6375,
+        0.6787109375
+      ],
+      "reversal_s": 0.6513531956436945,
+      "error_s": 3.462322230274317e-05,
+      "order": 1.9838871672315124,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.6375,
+        0.657958984375
+      ],
+      "reversal_s": 0.651379117350719,
+      "error_s": 8.70151527831986e-06,
+      "order": 1.9924014409469122,
+      "reconstruction_only_error_s": 1.3322676295501878e-15,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.64769287109375,
+        0.657958984375
+      ],
+      "reversal_s": 0.651385637935453,
+      "error_s": 2.1809305442710425e-06,
+      "order": 1.9963228277207452,
+      "reconstruction_only_error_s": 9.992007221626409e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.65,
+        0.71015625
+      ],
+      "reversal_s": 0.6513964496152457,
+      "error_s": 8.63074924839502e-06,
+      "order": null,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.65,
+        0.6806640625
+      ],
+      "reversal_s": 0.6513901890581588,
+      "error_s": 2.3701921615382204e-06,
+      "order": 1.8644817781038072,
+      "reconstruction_only_error_s": 3.3306690738754696e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.65,
+        0.665478515625
+      ],
+      "reversal_s": 0.6513884446315545,
+      "error_s": 6.257655572605714e-07,
+      "order": 1.9213098707242546,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.65,
+        0.65777587890625
+      ],
+      "reversal_s": 0.6513879798378186,
+      "error_s": 1.6097182131691312e-07,
+      "order": 1.958814091833894,
+      "reconstruction_only_error_s": 1.5543122344752192e-15,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.6375,
+        0.72109375
+      ],
+      "reversal_s": 0.650766299612457,
+      "error_s": 0.0006215192535402592,
+      "order": null,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.6375,
+        0.6787109375
+      ],
+      "reversal_s": 0.651232283012114,
+      "error_s": 0.00015553585388328184,
+      "order": 1.9985518975364978,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.6375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513489251483731,
+      "error_s": 3.889371762422211e-05,
+      "order": 1.9996381412092445,
+      "reconstruction_only_error_s": 1.3322676295501878e-15,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": -0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.64769287109375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513780948269265,
+      "error_s": 9.72403907073538e-06,
+      "order": 1.9999095450174849,
+      "reconstruction_only_error_s": 9.992007221626409e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.65,
+        0.71015625
+      ],
+      "reversal_s": 0.6510280129557059,
+      "error_s": 0.00035980591029138864,
+      "order": null,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.65,
+        0.6806640625
+      ],
+      "reversal_s": 0.6512978440971274,
+      "error_s": 8.997476886984934e-05,
+      "order": 1.9996264887471065,
+      "reconstruction_only_error_s": 3.3306690738754696e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.65,
+        0.665478515625
+      ],
+      "reversal_s": 0.6513653237197963,
+      "error_s": 2.249514620100701e-05,
+      "order": 1.9999067477657166,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "theta",
+      "grading": 0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.65,
+        0.65777587890625
+      ],
+      "reversal_s": 0.6513821949885951,
+      "error_s": 5.623877402216593e-06,
+      "order": 1.9999766935285963,
+      "reconstruction_only_error_s": 1.5543122344752192e-15,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.6375,
+        0.72109375
+      ],
+      "reversal_s": 0.6512508729996926,
+      "error_s": 0.00013694586630463856,
+      "order": null,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.6375,
+        0.6787109375
+      ],
+      "reversal_s": 0.6513531981032356,
+      "error_s": 3.4620762761727875e-05,
+      "order": 1.9838963036122736,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.6375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513791179719848,
+      "error_s": 8.70089401250329e-06,
+      "order": 1.9924019605070522,
+      "reconstruction_only_error_s": 1.3322676295501878e-15,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": -0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.64769287109375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513856380912918,
+      "error_s": 2.1807747054847226e-06,
+      "order": 1.9963229110453589,
+      "reconstruction_only_error_s": 9.992007221626409e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.65,
+        0.71015625
+      ],
+      "reversal_s": 0.6513963772067147,
+      "error_s": 8.5583407174461e-06,
+      "order": null,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.65,
+        0.6806640625
+      ],
+      "reversal_s": 0.6513901705560141,
+      "error_s": 2.351690016832997e-06,
+      "order": 1.8636332086270824,
+      "reconstruction_only_error_s": 3.3306690738754696e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.65,
+        0.665478515625
+      ],
+      "reversal_s": 0.6513884399597427,
+      "error_s": 6.210937454342869e-07,
+      "order": 1.9208149621574524,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "sdirk2",
+      "grading": 0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.65,
+        0.65777587890625
+      ],
+      "reversal_s": 0.6513879786640905,
+      "error_s": 1.597980932022125e-07,
+      "order": 1.9585608462198825,
+      "reconstruction_only_error_s": 1.5543122344752192e-15,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": -0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.6375,
+        0.72109375
+      ],
+      "reversal_s": 0.6513878188659948,
+      "error_s": 2.4424906541753444e-15,
+      "order": null,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": -0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.6375,
+        0.6787109375
+      ],
+      "reversal_s": 0.6513878188659886,
+      "error_s": 8.659739592076221e-15,
+      "order": null,
+      "reconstruction_only_error_s": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": -0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.6375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513878188659895,
+      "error_s": 7.771561172376096e-15,
+      "order": null,
+      "reconstruction_only_error_s": 1.3322676295501878e-15,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": -0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.64769287109375,
+        0.657958984375
+      ],
+      "reversal_s": 0.6513878188659896,
+      "error_s": 7.66053886991358e-15,
+      "order": null,
+      "reconstruction_only_error_s": 9.992007221626409e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": 0.6,
+      "steps": 16,
+      "crossing_interval_s": [
+        0.65,
+        0.71015625
+      ],
+      "reversal_s": 0.651387818865992,
+      "error_s": 5.329070518200751e-15,
+      "order": null,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": 0.6,
+      "steps": 32,
+      "crossing_interval_s": [
+        0.65,
+        0.6806640625
+      ],
+      "reversal_s": 0.6513878188659878,
+      "error_s": 9.43689570931383e-15,
+      "order": null,
+      "reconstruction_only_error_s": 3.3306690738754696e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": 0.6,
+      "steps": 64,
+      "crossing_interval_s": [
+        0.65,
+        0.665478515625
+      ],
+      "reversal_s": 0.6513878188659895,
+      "error_s": 7.771561172376096e-15,
+      "order": null,
+      "reconstruction_only_error_s": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "method": "exponential_quadratic",
+      "grading": 0.6,
+      "steps": 128,
+      "crossing_interval_s": [
+        0.65,
+        0.65777587890625
+      ],
+      "reversal_s": 0.6513878188659897,
+      "error_s": 7.549516567451064e-15,
+      "order": null,
+      "reconstruction_only_error_s": 1.5543122344752192e-15,
+      "passed": true
+    }
+  ],
+  "exact_reversal_s": 0.6513878188659973,
+  "time_grid": "t = s + grading*s*(1-s), s uniformly spaced on [0,1] seconds",
+  "sources": [
+    {
+      "commit": "cdd712ef97afd7ababba9bb0ddd3d1791ea9816d",
+      "file": "cross_graded_contact_reversal.py",
+      "source_sha256": "a101a26024acdb9e642512b3ae3a5f7d769b34627bdad11e038f895f08bcd5d2"
+    },
+    {
+      "commit": "cdd712ef97afd7ababba9bb0ddd3d1791ea9816d",
+      "file": "sph_reversing_contact_walls.py",
+      "source_sha256": "2f200572a78840dd43d1f8d92ad1e0c5f748924fbcc1455afc72665f8e31609c"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_graded_contact_reversal.py"
+}
