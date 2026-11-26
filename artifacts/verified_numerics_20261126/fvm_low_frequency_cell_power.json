@@ -1,0 +1,45 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "8d947aced8e0700e276a5dc5c2c06db14d7be926",
+  "passed": 191,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Two graded cells with widths 0.25 and 0.75 m, area 0.5 m\u00b2, k=(1,3), C=(2,3), H=(0.75,2) in SI units. Different complex source and ambient phasors in each cell. Invert the two-cell energy equations and differentiate the numerator and determinant analytically at s=i*omega=0 for R=0,0.25,8 m\u00b2 K/W. Report maximum modulus errors of temperature (K), powers and balance (W) at order 0, and corresponding first-order coefficients (K s, W s). Separate unanchored case verifies storage from total heating and the relative cell field.",
+  "runs": {
+    "test_low_frequency_cell_power_from_two_material_response[0.0]": {
+      "order_0_temperature": 0.0,
+      "order_0_bulk": 0.0,
+      "order_0_source": 0.0,
+      "order_0_storage": 0.0,
+      "order_0_balance": 2.1677797545656835e-16,
+      "order_1_temperature": 2.482534153247273e-16,
+      "order_1_bulk": 2.220446049250313e-16,
+      "order_1_source": 0.0,
+      "order_1_storage": 0.0,
+      "order_1_balance": 2.482534153247273e-16
+    },
+    "test_low_frequency_cell_power_from_two_material_response[0.25]": {
+      "order_0_temperature": 2.482534153247273e-16,
+      "order_0_bulk": 1.8619006149354548e-16,
+      "order_0_source": 0.0,
+      "order_0_storage": 0.0,
+      "order_0_balance": 6.206335383118183e-17,
+      "order_1_temperature": 5.551115123125783e-16,
+      "order_1_bulk": 4.965068306494546e-16,
+      "order_1_source": 0.0,
+      "order_1_storage": 2.482534153247273e-16,
+      "order_1_balance": 2.220446049250313e-16
+    },
+    "test_low_frequency_cell_power_from_two_material_response[8.0]": {
+      "order_0_temperature": 2.220446049250313e-16,
+      "order_0_bulk": 1.0007415106216804e-16,
+      "order_0_source": 0.0,
+      "order_0_storage": 0.0,
+      "order_0_balance": 7.152448122690996e-17,
+      "order_1_temperature": 1.3368855554576669e-15,
+      "order_1_bulk": 5.551115123125783e-16,
+      "order_1_source": 0.0,
+      "order_1_storage": 1.1102230246251565e-16,
+      "order_1_balance": 9.106885210113025e-17
+    }
+  }
+}
