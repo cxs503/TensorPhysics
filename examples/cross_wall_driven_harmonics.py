@@ -27,7 +27,7 @@ def solve_wall_histories(solver, k, cv, resistance, initial, times, west, east, 
     return field, cuts if all_faces else cuts[:, [0, cut, n]]
 
 
-def measure(n, solver, *, reverse=False, interface_position=.5):
+def measure(n, solver, *, reverse=False, interface_position=.5, contact_resistance=.3):
     omegas = 2*np.pi*np.array([1., 2.])
     drive = np.array([1., .25-.15j])
     # Measure distance from the driven wall. Mirroring the material order
@@ -42,7 +42,7 @@ def measure(n, solver, *, reverse=False, interface_position=.5):
     k = np.repeat(materials, [cut, n-cut])
     cv = np.repeat(capacities, [cut, n-cut])
     resistance = np.zeros(n-1)
-    resistance[cut-1] = .3
+    resistance[cut-1] = contact_resistance
     initial = np.zeros(n)
     expected = []
     cold_reference = []
@@ -51,7 +51,7 @@ def measure(n, solver, *, reverse=False, interface_position=.5):
     flux_reference = []
     for omega, amplitude in zip(omegas, drive):
         _, means, q, inward_walls, face_flux = continuum.reference(
-            n, .3, omega, conductivity=materials, capacity=capacities, return_face_flux=True, contact_face=cut)
+            n, contact_resistance, omega, conductivity=materials, capacity=capacities, return_face_flux=True, contact_face=cut)
         flux_reference.append(face_flux)
         cold_reference.append(-inward_walls[1])  # positive out through the cold wall
         energy = np.add.reduceat(cv*means/n, [0, cut])
