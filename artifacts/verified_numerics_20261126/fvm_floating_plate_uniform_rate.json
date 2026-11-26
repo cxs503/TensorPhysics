@@ -1,0 +1,48 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "619e6ea761a9f82d2afc72c4a879f7188cd16f4c",
+  "passed": 170,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Area 0.5 m\u00b2, capacities per unit area 1 and 2, contact conductance per area 2. With s=i*omega, isolated cell and wall satisfy T+2Tw=(S+P)/s and Tw-T=(P/2-S)/(3+s). The common temperature pole coefficient is (S+P)/3. Compare it and both regular coefficients for cell temperature, surface temperature, conductive power, wall storage and wall energy balance for wall-only, body-only and proportional uniform heating. Additional checks cover a graded-capacity body and zero pole in an anchored plate.",
+  "runs": {
+    "test_floating_plate_uniform_rate_and_regular_surface[0.0-(1+0.5j)]": {
+      "rate_K_per_s": 0.0,
+      "order_0_cell": 1.5515838457795457e-17,
+      "order_0_surface": 1.5515838457795457e-17,
+      "order_0_material": 3.1031676915590914e-17,
+      "order_0_storage": 0.0,
+      "order_0_balance": 0.0,
+      "order_1_cell": 7.757919228897728e-18,
+      "order_1_surface": 7.757919228897728e-18,
+      "order_1_material": 1.5515838457795457e-17,
+      "order_1_storage": 1.5515838457795457e-17,
+      "order_1_balance": 0.0
+    },
+    "test_floating_plate_uniform_rate_and_regular_surface[(0.25-0.5j)-0.0]": {
+      "rate_K_per_s": 0.0,
+      "order_0_cell": 0.0,
+      "order_0_surface": 0.0,
+      "order_0_material": 0.0,
+      "order_0_storage": 0.0,
+      "order_0_balance": 0.0,
+      "order_1_cell": 0.0,
+      "order_1_surface": 0.0,
+      "order_1_material": 0.0,
+      "order_1_storage": 0.0,
+      "order_1_balance": 0.0
+    },
+    "test_floating_plate_uniform_rate_and_regular_surface[0.25j-0.5j]": {
+      "rate_K_per_s": 0.0,
+      "order_0_cell": 0.0,
+      "order_0_surface": 0.0,
+      "order_0_material": 0.0,
+      "order_0_storage": 0.0,
+      "order_0_balance": 0.0,
+      "order_1_cell": 0.0,
+      "order_1_surface": 0.0,
+      "order_1_material": 0.0,
+      "order_1_storage": 0.0,
+      "order_1_balance": 0.0
+    }
+  }
+}
