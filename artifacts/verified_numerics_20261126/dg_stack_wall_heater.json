@@ -1,0 +1,39 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "17526b309f210fa4a6b301969318701bd8e574c4",
+  "passed": 85,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Single-layer mixed Robin/Neumann case at 2.5 rad/s: compare reduced and direct P2 solutions to an independent quadratic profile. Two-layer case at 2.7 rad/s: compare independent exterior heaters on all non-Dirichlet ends, uniform complex volume sources and a finite thermal contact to continuous transfer matrices. Test all nine boundary pairs with and without external wall capacity, refining 4, 8, 16 cells per layer.",
+  "runs": {
+    "test_loaded_stack_mixed_wall_conditions_against_transfer_solution[False]": {
+      "max_external_supply_error_4_W_per_m2": 6.677347088386904e-06,
+      "max_wall_temperature_error_4_K": 3.1490523372962937e-06,
+      "max_wall_flux_error_4_W_per_m2": 6.677347088386904e-06,
+      "max_external_supply_error_8_W_per_m2": 4.195476017078347e-07,
+      "max_wall_temperature_error_8_K": 1.974477409316373e-07,
+      "max_wall_flux_error_8_W_per_m2": 4.195476017078347e-07,
+      "max_external_supply_error_16_W_per_m2": 2.6282409545663473e-08,
+      "max_wall_temperature_error_16_K": 1.2360863658765591e-08,
+      "max_wall_flux_error_16_W_per_m2": 2.6282409545663473e-08
+    },
+    "test_loaded_stack_mixed_wall_conditions_against_transfer_solution[True]": {
+      "max_external_supply_error_4_W_per_m2": 6.6628147699686055e-06,
+      "max_wall_temperature_error_4_K": 2.1433670006740115e-06,
+      "max_wall_flux_error_4_W_per_m2": 6.662814769113236e-06,
+      "max_external_supply_error_8_W_per_m2": 4.1832157640053107e-07,
+      "max_wall_temperature_error_8_K": 1.3438049039119523e-07,
+      "max_wall_flux_error_8_W_per_m2": 4.183215772564848e-07,
+      "max_external_supply_error_16_W_per_m2": 2.6199422247250473e-08,
+      "max_wall_temperature_error_16_K": 8.412791709641239e-09,
+      "max_wall_flux_error_16_W_per_m2": 2.6199422247250473e-08
+    },
+    "test_loaded_wall_admittance_recovers_direct_polynomial_solution": {
+      "direct_temperature_K": 1.7763655129964547e-14,
+      "analytic_temperature_K": 1.7814842209004498e-14,
+      "direct_material_W_m2": 3.0823638310186554e-14,
+      "analytic_material_W_m2": 3.0967262776373e-14,
+      "direct_external_W_m2": 1.3745708885033045e-14,
+      "analytic_external_W_m2": 1.3615969986695103e-14
+    }
+  }
+}
