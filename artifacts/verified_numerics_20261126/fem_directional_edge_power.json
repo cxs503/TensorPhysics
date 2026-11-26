@@ -1,0 +1,17 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "bee3430fbcc2b3b74f6657691a1249d97f849d76",
+  "passed": 137,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal.py --junitxml=results.xml",
+  "reference": "Prescribed Q4 contact traces on a unit edge. For uniform conductance use q(s)=s-1/2; for graded conductance use q(s)=(1+s)*(s-5/9). Integrate the polynomial analytically on each side of its zero. Both full-edge signed integrals vanish while directional powers are finite. Check forward, reversed and zero fields, clipped subedges and zero width. Errors are maximum absolute power errors in W.",
+  "runs": {
+    "test_directional_contact_edge_power_cancelling_traces[False]": {
+      "max_directional_error_W": 0.0,
+      "max_signed_residual_W": 0.0
+    },
+    "test_directional_contact_edge_power_cancelling_traces[True]": {
+      "max_directional_error_W": 5.551115123125783e-17,
+      "max_signed_residual_W": 2.7755575615628914e-17
+    }
+  }
+}
