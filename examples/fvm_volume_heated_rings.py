@@ -60,7 +60,9 @@ def measure(n, mode, omega, layer_ratios=(1, 1, 1)):
     flow_change = np.concatenate([np.diff(rate) for rate in layer_rates])
     cell_balance = np.max(abs(flow_change - (density*area - cell_storage - cell_angular)))
     centroid = (2/3)*(hi**2+hi*lo+lo**2)/(hi+lo)
-    field_error = float(max(abs(field - np.repeat(a, counts) - np.repeat(b, counts)*centroid**2)))
+    temperature_errors = abs(field - np.repeat(a, counts) - np.repeat(b, counts)*centroid**2)
+    layer_temperature_errors = np.maximum.reduceat(temperature_errors, ends[:-1])
+    field_error = float(max(layer_temperature_errors))
     reference = np.r_[sheet, incoming, outgoing, expected_wall]
     error = float(max(abs(np.r_[temp, qi, qo, rates]/reference-1)))
     storage_error = float(max(abs(storage/np.add.reduceat(stored, ends[:-1])-1)))
@@ -68,7 +70,7 @@ def measure(n, mode, omega, layer_ratios=(1, 1, 1)):
     sheet_net = 2*np.pi*radius @ (generation-admittance*temp)
     balance = abs(rates[0]-rates[1]+sheet_net+area@density-sum(storage)-sum(angular))
     return dict(**({"cells_per_layer": int(counts[0])} if np.all(counts == counts[0]) else {}),
-                base_resolution=n,
+                base_resolution=n, layer_temperature_errors_K=layer_temperature_errors.tolist(),
                 layer_cell_counts=counts.tolist(), layer_face_errors_W_m=layer_face_errors,
                 sheet_residuals_W_m=sheet_residuals.tolist(), mode=mode, omega=omega, max_relative_error=error,
                 face_rate_max_error_W_m=float(face_error), sheet_balance_max_W_m=float(max(sheet_residuals)),
