@@ -2,9 +2,9 @@
   "reference": "Two unit-length layers with independent constant complex sources; continuum interface power 0.8-0.4i W, DC end temperatures 0.49 and 0 K in relative coordinates give 0.35 W through the series resistance 1.4 K/W, omega=2.3 rad/s. Integrate the signed halves of the biased sinusoid independently.",
   "reproduce": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/stepped_rod_contact_cycle.py",
   "benchmark": {
-    "commit": "0ba3366574987ad97975605ed2ede4f60750794a",
+    "commit": "7fca5543d4139d6ca4d3957d3c37a684e759357f",
     "file": "stepped_rod_contact_cycle.py",
-    "source_sha256": "6787ad10c8b2fd92243a1b366d3990ff5ab65f7586abe6987f13307f05823a67"
+    "source_sha256": "7bc43f500b004e0e0ff9690442b45d69ba502cb6d3b8d0ad4a7dd35a154c8f39"
   },
   "FEM": {
     "commit": "81cab937c50abae09e46fb217fe1ef5be88d0e92",
@@ -92,6 +92,55 @@
         0.8010319998003601,
         -0.400422331725126
       ],
+      "transient_refinement": {
+        "reference": "At 16 elements per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and nodes for temperature).",
+        "runs": [
+          {
+            "method": "Crank-Nicolson",
+            "steps": 32,
+            "cumulative_heat_J": 0.003007802105109869,
+            "temperature_K": 0.0033670973665546056
+          },
+          {
+            "method": "Crank-Nicolson",
+            "steps": 64,
+            "cumulative_heat_J": 0.0007515499620709409,
+            "temperature_K": 0.0008419352725184126,
+            "cumulative_heat_J_order": 2.000768728726681,
+            "temperature_K_order": 1.9997242111336633
+          },
+          {
+            "method": "Crank-Nicolson",
+            "steps": 128,
+            "cumulative_heat_J": 0.00018786242957657961,
+            "temperature_K": 0.00021044655703139625,
+            "cumulative_heat_J_order": 2.0001924433972986,
+            "temperature_K_order": 2.000255417070916
+          },
+          {
+            "method": "SDIRK2",
+            "steps": 32,
+            "cumulative_heat_J": 0.0008098675577350445,
+            "temperature_K": 0.0013291306126076846
+          },
+          {
+            "method": "SDIRK2",
+            "steps": 64,
+            "cumulative_heat_J": 0.00020066192471501765,
+            "temperature_K": 0.0003499995997453542,
+            "cumulative_heat_J_order": 2.0129191015795795,
+            "temperature_K_order": 1.9250577067488455
+          },
+          {
+            "method": "SDIRK2",
+            "steps": 128,
+            "cumulative_heat_J": 4.987592057947854e-05,
+            "temperature_K": 9.788360743834268e-05,
+            "cumulative_heat_J_order": 2.008351518468347,
+            "temperature_K_order": 1.8382140950911696
+          }
+        ]
+      },
       "power_error_W_order": 2.003358597103002,
       "forward_error_J_order": 2.003458951879544,
       "reverse_error_J_order": 2.003458951883865,
