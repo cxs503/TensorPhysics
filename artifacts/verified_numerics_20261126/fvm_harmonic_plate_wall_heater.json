@@ -1,0 +1,33 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "5309a8ab770f5a7558bef3269b96a52e41abc9fd",
+  "passed": 156,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Area 0.5 m\u00b2, cell and wall capacities per area 1 and 2, conductance per area 2. For s=i*omega, heater P and ambient Ta, exact cell phasor=(P+h*Ta)/(s+(2*s+h)*(1+s/2)); material power=area*s*T. Absolute complex errors at omega=0.03125,1,32 rad/s, h=0 and 3 W/(m\u00b2 K). An independent balanced case (unit area, h=0, volumetric sink -P) checks the DC and first-order coefficients of T=-P/(3+s) and Q=P+s*T.",
+  "runs": {
+    "test_wall_heater_phasor_matches_two_capacity_balance[0.0-0.03125]": {
+      "cell_phasor_K": 0.0,
+      "material_power_phasor_W": 6.938893903907228e-17
+    },
+    "test_wall_heater_phasor_matches_two_capacity_balance[0.0-1.0]": {
+      "cell_phasor_K": 0.0,
+      "material_power_phasor_W": 0.0
+    },
+    "test_wall_heater_phasor_matches_two_capacity_balance[0.0-32.0]": {
+      "cell_phasor_K": 1.5332934166833742e-19,
+      "material_power_phasor_W": 0.0
+    },
+    "test_wall_heater_phasor_matches_two_capacity_balance[3.0-0.03125]": {
+      "cell_phasor_K": 5.551115123125783e-17,
+      "material_power_phasor_W": 3.17061944866176e-17
+    },
+    "test_wall_heater_phasor_matches_two_capacity_balance[3.0-1.0]": {
+      "cell_phasor_K": 1.1102230246251565e-16,
+      "material_power_phasor_W": 5.551115123125783e-17
+    },
+    "test_wall_heater_phasor_matches_two_capacity_balance[3.0-32.0]": {
+      "cell_phasor_K": 4.4702800766818725e-19,
+      "material_power_phasor_W": 3.469446951953614e-18
+    }
+  }
+}
