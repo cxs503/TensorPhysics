@@ -2,7 +2,8 @@
 
 Three decaying contact eigenmodes drive two reversals on a uniform output grid.
 Positive interval heat denotes transfer from the west material to the east.
-Pass --with-dg to include the TensorDG SIPG strip with insulated transverse walls.
+Pass --with-dg for the TensorDG SIPG strip, or --with-dem for the fixed TensorDEM
+thermal chain. Both options may be used together.
 """
 import argparse
 import json
@@ -51,7 +52,26 @@ def dg(n, times, modes):
     return means, np.diff(times)*powers
 
 
-def run(with_dg=False):
+def dem(n, times, modes):
+    from tensordem.thermal import contact_chain
+
+    # Unit area, cell heat stores and half-cell conduction resistances.
+    # Resolve the contact as a separate link between two massless surfaces.
+    k, averages, contacts = case.cell_data(n, modes, cell_averages=True)
+    links, capacity = contact_chain.cell_centered_slab_network(
+        np.full(n, 1/n), k, k, contact_resistance=contacts, resolve_contacts=True)
+    initial = np.zeros_like(capacity)
+    initial[capacity > 0] = averages
+    states, heats = contact_chain.transient_contact_temperatures(
+        links, capacity, times, initial, t_left=0., t_right=0., theta=.5,
+        allow_massless=True, return_link_heat=True)
+    cut = n//2+1
+    stored = np.diff(states[:, 1:-1], axis=0)*capacity[1:-1]
+    balance = float(np.max(abs(stored+np.diff(heats, axis=1))))
+    return balance, heats[:, cut]
+
+
+def run(with_dg=False, with_dem=False):
     exact_times = np.array([.005, .018])
     end = .053
     waves = np.array([case.WAVE]+[brentq(case.contact_condition, i*np.pi, (i+1)*np.pi)
@@ -70,11 +90,15 @@ def run(with_dg=False):
         from tensordg import poisson_2d_bc, transient_diffusion_2d
         sources.extend([poisson_2d_bc.__file__, transient_diffusion_2d.__file__])
         solvers.append(("TensorDG", dg))
+    if with_dem:
+        from tensordem.thermal import contact_chain
+        sources.append(contact_chain.__file__)
+        solvers.append(("TensorDEM", dem))
     for name, solve in solvers:
         previous = None
         for n in (24, 48, 96, 192):
             times = np.linspace(0., end, 2*n+1)
-            _, heat = solve(n, times, modes)
+            diagnostic, heat = solve(n, times, modes)
             turns, phases = detect_phases(times, heat)
             timing_error = abs(turns-exact_times)
             heat_error = abs(phases-exact_heat)
@@ -84,6 +108,9 @@ def run(with_dg=False):
             rows.append(dict(solver=name, resolution=n, steps=2*n, reversal_times_s=turns.tolist(),
                              phase_heat_J_m2=phases.tolist(), time_errors_s=timing_error.tolist(),
                              heat_errors_J_m2=heat_error.tolist(), passed=bool(passed)))
+            if solve is dem:
+                rows[-1]["max_node_balance_J"] = diagnostic
+                rows[-1]["passed"] &= diagnostic < 1e-12
             previous = errors
     return dict(reference_reversals_s=exact_times.tolist(), reference_phase_heat_J_m2=exact_heat.tolist(),
                 end_s=end, modes_wave_amplitude=modes, contact_resistance_m2K_W=case.RESISTANCE,
@@ -93,6 +120,7 @@ def run(with_dg=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--with-dg", action="store_true")
-    report = run(with_dg=parser.parse_args().with_dg)
+    parser.add_argument("--with-dem", action="store_true")
+    report = run(**vars(parser.parse_args()))
     print(json.dumps(report, indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in report["runs"]) else 1)
