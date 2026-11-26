@@ -1,0 +1,23 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "364403eee522d4015868dc2796d93cfe74d5d5a3",
+  "passed": 232,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_conduction_2d.py --junitxml=results.xml",
+  "reference": "Unit periodic-y slab with T=x*exp(i*(2*pi*y+phi)), k=C=1 and angular frequency 3 rad/s. Volumetric source (i*omega+4*pi\u00b2)*T and fixed wall phasors 0 and exp(i*(2*pi*y+phi)). The analytical inward wall fluxes are oppositely signed unit-amplitude phasors: mean along either wall is zero and local heat per direction is 2/3 J/m\u00b2 per cycle. Compare maximum row error on both walls for 16\u00b2, 32\u00b2 and 64\u00b2 lattices at two phases.",
+  "runs": {
+    "test_travelling_fixed_wall_cycle_heat_refinement[0.0]": {
+      "n16_max_cycle_heat_error_J_m2": 0.07941930656493301,
+      "n32_max_cycle_heat_error_J_m2": 0.01951710840111398,
+      "n32_order": 2.0247504411233406,
+      "n64_max_cycle_heat_error_J_m2": 0.004785502848989709,
+      "n64_order": 2.027996890495694
+    },
+    "test_travelling_fixed_wall_cycle_heat_refinement[0.7]": {
+      "n16_max_cycle_heat_error_J_m2": 0.07941930656493013,
+      "n32_max_cycle_heat_error_J_m2": 0.019517108401138628,
+      "n32_order": 2.024750441121466,
+      "n64_max_cycle_heat_error_J_m2": 0.004785502848979051,
+      "n64_order": 2.027996890500729
+    }
+  }
+}
