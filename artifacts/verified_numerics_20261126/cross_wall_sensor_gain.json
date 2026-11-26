@@ -1,0 +1,1215 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.09928153003375492,
+        0.8489394006861355,
+        -0.37985753198447636
+      ],
+      "absolute_errors": [
+        0.0007184699662450833,
+        0.0010605993138644854,
+        0.00014246801552364463
+      ],
+      "continuum_control_errors": [
+        1.1518563880486e-15,
+        1.7763568394002505e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.09928153003375438,
+        0.8489394006861344,
+        0.012142468015523607
+      ],
+      "absolute_errors": [
+        0.0007184699662456245,
+        0.0010605993138655956,
+        0.00014246801552360647
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.3322676295501878e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.09928153003375492,
+        1.1485650715165363,
+        -0.37985753198447636
+      ],
+      "absolute_errors": [
+        0.0007184699662450833,
+        0.0014349284834636045,
+        0.00014246801552364463
+      ],
+      "continuum_control_errors": [
+        7.771561172376096e-16,
+        1.3322676295501878e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.09928153003375438,
+        1.148565071516535,
+        0.012142468015523603
+      ],
+      "absolute_errors": [
+        0.0007184699662456245,
+        0.0014349284834649367,
+        0.000142468015523603
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.7763568394002505e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.09981915296635056,
+        0.8497327645310998,
+        -0.3799643149530994
+      ],
+      "absolute_errors": [
+        0.0001808470336494422,
+        0.00026723546890017325,
+        3.5685046900602035e-05
+      ],
+      "continuum_control_errors": [
+        1.1518563880486e-15,
+        1.7763568394002505e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.09981915296634894,
+        0.8497327645310971,
+        0.012035685046900632
+      ],
+      "absolute_errors": [
+        0.00018084703365106591,
+        0.0002672354689028378,
+        3.5685046900631526e-05
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.3322676295501878e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.09981915296635056,
+        1.1496384461303113,
+        -0.3799643149530994
+      ],
+      "absolute_errors": [
+        0.0001808470336494422,
+        0.00036155386968861336,
+        3.5685046900602035e-05
+      ],
+      "continuum_control_errors": [
+        7.771561172376096e-16,
+        1.3322676295501878e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.09981915296635056,
+        1.1496384461303115,
+        0.012035685046900533
+      ],
+      "absolute_errors": [
+        0.0001808470336494422,
+        0.0003615538696883913,
+        3.5685046900532646e-05
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.7763568394002505e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.09995460618374852,
+        0.8499328820034071,
+        -0.3799910678965511
+      ],
+      "absolute_errors": [
+        4.539381625148775e-05,
+        6.711799659286921e-05,
+        8.932103448877626e-06
+      ],
+      "continuum_control_errors": [
+        1.1518563880486e-15,
+        1.7763568394002505e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.09995460618374703,
+        0.8499328820034044,
+        0.012008932103448874
+      ],
+      "absolute_errors": [
+        4.5393816252972674e-05,
+        6.711799659553375e-05,
+        8.932103448874157e-06
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.3322676295501878e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.09995460618374852,
+        1.1499091932987273,
+        -0.3799910678965511
+      ],
+      "absolute_errors": [
+        4.539381625148775e-05,
+        9.080670127259438e-05,
+        8.932103448877626e-06
+      ],
+      "continuum_control_errors": [
+        7.771561172376096e-16,
+        1.3322676295501878e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.09995460618374703,
+        1.1499091932987235,
+        0.012008932103448876
+      ],
+      "absolute_errors": [
+        4.5393816252972674e-05,
+        9.080670127636914e-05,
+        8.932103448875892e-06
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.7763568394002505e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.5982025022033057,
+        0.8485933788990223,
+        -0.37989245528094256
+      ],
+      "absolute_errors": [
+        0.0017974977966942474,
+        0.0014066211009776675,
+        0.00010754471905743967
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        3.9968028886505635e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.5982025022033042,
+        0.848593378899021,
+        0.012107544719057391
+      ],
+      "absolute_errors": [
+        0.0017974977966958017,
+        0.0014066211009789997,
+        0.0001075447190573911
+      ],
+      "continuum_control_errors": [
+        2.55351295663786e-15,
+        2.1094237467877974e-15,
+        1.9081958235744878e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.5982025022033057,
+        1.148096924392795,
+        -0.37989245528094256
+      ],
+      "absolute_errors": [
+        0.0017974977966942474,
+        0.0019030756072049293,
+        0.00010754471905743967
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        5.329070518200751e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.5982025022033057,
+        1.1480969243927948,
+        0.012107544719057372
+      ],
+      "absolute_errors": [
+        0.0017974977966942474,
+        0.0019030756072051513,
+        0.00010754471905737202
+      ],
+      "continuum_control_errors": [
+        6.661338147750939e-16,
+        8.881784197001252e-16,
+        2.0816681711721685e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.5995460662510698,
+        0.8496444441936997,
+        -0.3799730493867553
+      ],
+      "absolute_errors": [
+        0.0004539337489302131,
+        0.0003555558063003117,
+        2.6950613244702826e-05
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        3.9968028886505635e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.5995460662510681,
+        0.8496444441936983,
+        0.012026950613244667
+      ],
+      "absolute_errors": [
+        0.00045393374893187843,
+        0.00035555580630164396,
+        2.6950613244666397e-05
+      ],
+      "continuum_control_errors": [
+        2.55351295663786e-15,
+        2.1094237467877974e-15,
+        1.9081958235744878e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.5995460662510698,
+        1.1495189539091233,
+        -0.3799730493867553
+      ],
+      "absolute_errors": [
+        0.0004539337489302131,
+        0.00048104609087662453,
+        2.6950613244702826e-05
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        5.329070518200751e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.5995460662510681,
+        1.149518953909121,
+        0.012026950613244668
+      ],
+      "absolute_errors": [
+        0.00045393374893187843,
+        0.000481046090878845,
+        2.695061324466813e-05
+      ],
+      "continuum_control_errors": [
+        6.661338147750939e-16,
+        8.881784197001252e-16,
+        2.0816681711721685e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.5998858598768547,
+        0.8499105476778808,
+        -0.3799932527002888
+      ],
+      "absolute_errors": [
+        0.00011414012314525657,
+        8.945232211921006e-05,
+        6.747299711229449e-06
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        3.9968028886505635e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.5998858598768547,
+        0.8499105476778807,
+        0.012006747299711214
+      ],
+      "absolute_errors": [
+        0.00011414012314525657,
+        8.945232211932108e-05,
+        6.747299711213836e-06
+      ],
+      "continuum_control_errors": [
+        2.55351295663786e-15,
+        2.1094237467877974e-15,
+        1.9081958235744878e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.5998858598768566,
+        1.149878976270076,
+        -0.3799932527002888
+      ],
+      "absolute_errors": [
+        0.00011414012314336919,
+        0.00012102372992384147,
+        6.747299711229449e-06
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        5.329070518200751e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.5998858598768547,
+        1.1498789762700738,
+        0.012006747299711214
+      ],
+      "absolute_errors": [
+        0.00011414012314525657,
+        0.00012102372992606192,
+        6.747299711213836e-06
+      ],
+      "continuum_control_errors": [
+        6.661338147750939e-16,
+        8.881784197001252e-16,
+        2.0816681711721685e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.1032748464463589,
+        0.8554085932051934,
+        -0.3801557928582938
+      ],
+      "absolute_errors": [
+        0.003274846446358892,
+        0.005408593205193379,
+        0.00015579285829381284
+      ],
+      "continuum_control_errors": [
+        1.1518563880486e-15,
+        1.7763568394002505e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.10327484644635741,
+        0.8554085932051904,
+        0.011844207141706182
+      ],
+      "absolute_errors": [
+        0.0032748464463574073,
+        0.005408593205190382,
+        0.00015579285829381805
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.3322676295501878e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.10327484644636056,
+        1.1573175084540885,
+        -0.380155792858294
+      ],
+      "absolute_errors": [
+        0.0032748464463605576,
+        0.007317508454088628,
+        0.00015579285829397937
+      ],
+      "continuum_control_errors": [
+        7.771561172376096e-16,
+        1.3322676295501878e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.10327484644636001,
+        1.1573175084540877,
+        0.011844207141706033
+      ],
+      "absolute_errors": [
+        0.0032748464463600024,
+        0.00731750845408774,
+        0.00015579285829396723
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.7763568394002505e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.10081396366099389,
+        0.8513441137427091,
+        -0.38003889760039383
+      ],
+      "absolute_errors": [
+        0.0008139636609938855,
+        0.001344113742709152,
+        3.889760039382795e-05
+      ],
+      "continuum_control_errors": [
+        1.1518563880486e-15,
+        1.7763568394002505e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.10081396366099075,
+        0.8513441137427038,
+        0.011961102399606344
+      ],
+      "absolute_errors": [
+        0.0008139636609907491,
+        0.001344113742703823,
+        3.889760039365621e-05
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.3322676295501878e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.10081396366099482,
+        1.1518185068283735,
+        -0.38003889760039383
+      ],
+      "absolute_errors": [
+        0.0008139636609948153,
+        0.0018185068283735895,
+        3.889760039382795e-05
+      ],
+      "continuum_control_errors": [
+        7.771561172376096e-16,
+        1.3322676295501878e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.10081396366099146,
+        1.1518185068283655,
+        0.011961102399606302
+      ],
+      "absolute_errors": [
+        0.0008139636609914569,
+        0.0018185068283655959,
+        3.889760039369784e-05
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.7763568394002505e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.10020309070047692,
+        0.8503353504488527,
+        -0.38000971462024247
+      ],
+      "absolute_errors": [
+        0.00020309070047691558,
+        0.0003353504488526893,
+        9.714620242462502e-06
+      ],
+      "continuum_control_errors": [
+        1.1518563880486e-15,
+        1.7763568394002505e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.10020309070047399,
+        0.8503353504488473,
+        0.011990285379757664
+      ],
+      "absolute_errors": [
+        0.00020309070047398736,
+        0.0003353504488473602,
+        9.714620242335867e-06
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.3322676295501878e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.10020309070047584,
+        1.1504537094307978,
+        -0.38000971462024236
+      ],
+      "absolute_errors": [
+        0.0002030907004758331,
+        0.0004537094307979217,
+        9.71462024235148e-06
+      ],
+      "continuum_control_errors": [
+        7.771561172376096e-16,
+        1.3322676295501878e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.10020309070047399,
+        1.1504537094307934,
+        0.011990285379757664
+      ],
+      "absolute_errors": [
+        0.00020309070047398736,
+        0.0004537094307934808,
+        9.714620242335867e-06
+      ],
+      "continuum_control_errors": [
+        6.800116025829084e-16,
+        1.7763568394002505e-15,
+        2.7755575615628914e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.6127500264032055,
+        0.8607461531868188,
+        -0.3801611959572534
+      ],
+      "absolute_errors": [
+        0.01275002640320555,
+        0.010746153186818819,
+        0.00016119595725339053
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        3.9968028886505635e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.6127500264032022,
+        0.8607461531868159,
+        0.011838804042746575
+      ],
+      "absolute_errors": [
+        0.01275002640320222,
+        0.010746153186815932,
+        0.00016119595725342523
+      ],
+      "continuum_control_errors": [
+        2.55351295663786e-15,
+        2.1094237467877974e-15,
+        1.9081958235744878e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.612750026403204,
+        1.1645389131351058,
+        -0.38016119595725334
+      ],
+      "absolute_errors": [
+        0.012750026403203996,
+        0.014538913135105913,
+        0.00016119595725333502
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        5.329070518200751e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.6127500264032055,
+        1.1645389131351078,
+        0.011838804042746526
+      ],
+      "absolute_errors": [
+        0.01275002640320555,
+        0.014538913135107912,
+        0.0001611959572534738
+      ],
+      "continuum_control_errors": [
+        6.661338147750939e-16,
+        8.881784197001252e-16,
+        2.0816681711721685e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.6031532150152701,
+        0.8526574176903524,
+        -0.38004023884115395
+      ],
+      "absolute_errors": [
+        0.0031532150152701055,
+        0.002657417690352437,
+        4.0238841153950045e-05
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        3.9968028886505635e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.603153215015265,
+        0.852657417690348,
+        0.011959761158846038
+      ],
+      "absolute_errors": [
+        0.0031532150152649985,
+        0.0026574176903479962,
+        4.023884115396219e-05
+      ],
+      "continuum_control_errors": [
+        2.55351295663786e-15,
+        2.1094237467877974e-15,
+        1.9081958235744878e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.6031532150152701,
+        1.1535953298163593,
+        -0.38004023884115395
+      ],
+      "absolute_errors": [
+        0.0031532150152701055,
+        0.0035953298163593495,
+        4.0238841153950045e-05
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        5.329070518200751e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.6031532150152683,
+        1.153595329816357,
+        0.011959761158845998
+      ],
+      "absolute_errors": [
+        0.003153215015268329,
+        0.003595329816357129,
+        4.0238841154002086e-05
+      ],
+      "continuum_control_errors": [
+        6.661338147750939e-16,
+        8.881784197001252e-16,
+        2.0816681711721685e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": -0.38,
+      "estimates": [
+        0.600785816041992,
+        0.8506622379049908,
+        -0.38001005031094526
+      ],
+      "absolute_errors": [
+        0.0007858160419920157,
+        0.00066223790499087,
+        1.0050310945253216e-05
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        3.9968028886505635e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 0.85,
+      "delay_s": 0.012,
+      "estimates": [
+        0.6007858160419862,
+        0.8506622379049862,
+        0.011989949689054763
+      ],
+      "absolute_errors": [
+        0.0007858160419862426,
+        0.000662237904986207,
+        1.0050310945237603e-05
+      ],
+      "continuum_control_errors": [
+        2.55351295663786e-15,
+        2.1094237467877974e-15,
+        1.9081958235744878e-17
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": -0.38,
+      "estimates": [
+        0.6007858160419901,
+        1.1508959689302798,
+        -0.38001005031094526
+      ],
+      "absolute_errors": [
+        0.0007858160419901283,
+        0.0008959689302798779,
+        1.0050310945253216e-05
+      ],
+      "continuum_control_errors": [
+        4.440892098500626e-15,
+        5.329070518200751e-15,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "sensor_gain": 1.15,
+      "delay_s": 0.012,
+      "estimates": [
+        0.6007858160419862,
+        1.1508959689302751,
+        0.011989949689054763
+      ],
+      "absolute_errors": [
+        0.0007858160419862426,
+        0.000895968930275215,
+        1.0050310945237603e-05
+      ],
+      "continuum_control_errors": [
+        6.661338147750939e-16,
+        8.881784197001252e-16,
+        2.0816681711721685e-17
+      ],
+      "passed": true
+    }
+  ],
+  "interface_position_m": 0.25,
+  "frequencies_Hz": [
+    1,
+    2
+  ],
+  "estimate_columns": [
+    "resistance_m2_K_W",
+    "sensor_gain",
+    "delay_s"
+  ],
+  "sources": [
+    {
+      "commit": "5f43b353b2feb94b8ca88d1aba07652bf8638e96",
+      "file": "cross_wall_sensor_gain.py",
+      "source_sha256": "8fc03ade0eb7b77434bf1fde6e6337232e370ea2a4b776df0ef040dd59b04cf1"
+    },
+    {
+      "commit": "5f43b353b2feb94b8ca88d1aba07652bf8638e96",
+      "file": "cross_wall_clock_offset.py",
+      "source_sha256": "09686369694e095ff7d0c68649cda5c4e7c2a7ae492281a53ca967cd9a45c3e4"
+    },
+    {
+      "commit": "5f43b353b2feb94b8ca88d1aba07652bf8638e96",
+      "file": "cross_wall_resistance_inversion.py",
+      "source_sha256": "d243b0050dac82c2ce4c7bc03b4b954a3a8b84abc2dd946e2f7bd229c9baaba5"
+    },
+    {
+      "commit": "5f43b353b2feb94b8ca88d1aba07652bf8638e96",
+      "file": "cross_wall_reciprocity.py",
+      "source_sha256": "7b6cedd083b2d14eb19676957b7283f5aa9260e21d05646cb159424c83c0de5b"
+    },
+    {
+      "commit": "5f43b353b2feb94b8ca88d1aba07652bf8638e96",
+      "file": "cross_wall_driven_harmonics.py",
+      "source_sha256": "61ff3c3bb0acdb17c96cc7ed77c1ec9c6951ff20c852f2d68bcabbe1d0f7617c"
+    },
+    {
+      "commit": "5f43b353b2feb94b8ca88d1aba07652bf8638e96",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "35b17bea96024065ca93c2ac8157082003a689bd63e04f44d1caf3ba80f68a9c"
+    },
+    {
+      "commit": "5f43b353b2feb94b8ca88d1aba07652bf8638e96",
+      "file": "periodic_contact_reference.py",
+      "source_sha256": "c137848ae4d852048cae7839d1effe3b4cab738f917576794ec0288c69c99e1d"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_wall_sensor_gain.py"
+}
