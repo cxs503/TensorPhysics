@@ -1,0 +1,25 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "f5a22b9cdf6c413a6a6b4e277aa582d8b8597a57",
+  "passed": 149,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "Manufactured wall and material rise at 1 K/s up to 0.125 s and fall at 2 K/s thereafter. The wall is 0.5 K warmer, driving a constant 1 W/m\u00b2 into the material. Two faces have areas 0.25 and 0.75 m\u00b2 and independent film fluxes 0.5 and -0.75 W/m\u00b2. With areal capacity 3 J/(m\u00b2 K), the independent heater flux is 3*dT/dt+1-film_flux. Integrate each physical channel on [0,0.25] and [0.25,0.5] s under CN and Rannacher and compare the temperature trajectory. A separate north-wall mixed-face test checks static heating and cooling with zero film coefficient.",
+  "runs": {
+    "test_applied_wall_heater_switches_independently_of_film[False]": {
+      "heater_J": 0.0,
+      "ambient_J": 0.0,
+      "storage_J": 0.0,
+      "material_J": 0.0,
+      "wall_balance_J": 0.0,
+      "temperature_K": 1.3877787807814457e-17
+    },
+    "test_applied_wall_heater_switches_independently_of_film[True]": {
+      "heater_J": 0.0,
+      "ambient_J": 0.0,
+      "storage_J": 0.0,
+      "material_J": 0.0,
+      "wall_balance_J": 0.0,
+      "temperature_K": 1.3877787807814457e-17
+    }
+  }
+}
