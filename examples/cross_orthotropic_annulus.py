@@ -5,11 +5,12 @@ import json
 
 import numpy as np
 import torch
+from scipy.integrate import quad
 from scipy.special import iv, ivp, kv, kvp
 
 from conduction_provenance import provenance
 from tensorfem import thermal
-from tensorfvm.cht import annulus
+from tensorfvm.cht import annulus, rod
 
 
 def fem_model(radii, radial, circumferential, mode, wall_values):
@@ -104,6 +105,51 @@ def contact_cycle_heat(model, state, fv_rates, exact_rate, omega):
                 fvm_cycle_error_J_per_m=float(np.max(abs(fv_heat-reference))))
 
 
+def biased_contact_cycle(model, state, radii, j, radial, resistance, fv_rate, exact_rate, omega):
+    # Choose the DC wall temperatures from the continuum series resistance.
+    bias = 1.5
+    radius = radii[j]
+    total_resistance = (np.log(radius/radii[0])/radial[0] + resistance/radius
+                        + np.log(radii[-1]/radius)/radial[-1])/(2*np.pi)
+    walls = np.array([bias*total_resistance, 0.])
+    boundary = np.repeat(walls, len(model.fixed_nodes)//2)
+    steady_model = replace(model, fixed_temperatures=torch.from_numpy(boundary))
+    dc = thermal.solve_steady_thermal(steady_model, sparse=True)
+    fem = np.array([heat.sum().item() for heat in thermal.thermal_contact_edge_biased_cycle_heat(
+        model, state, omega, steady_temperature=dc)])
+    _, inner, _, _ = annulus.solve_annular_sheet(radii, radial, 1., walls, 0., j, resistance=resistance)
+    fv_bias = inner[-1].real
+    # Spatial periodicity and time phase invariance reduce the angular mean to
+    # a quadrant. Split where a local flux first ceases to reverse in time.
+    limit = np.pi/2
+    cutoff = np.arccos(np.clip(fv_bias/abs(fv_rate), 0., 1.))
+    fv = np.array([quad(lambda a: rod.harmonic_face_cycle_heat(
+        fv_rate*np.cos(a), omega, steady_power=fv_bias)[side], 0., limit,
+        points=[cutoff], epsabs=1e-12, epsrel=1e-12)[0]/limit for side in (0, 1)])
+
+    # Independent continuum reference: integrate instantaneous positive power
+    # first around the circumference, then over time. Cosine symmetries apply
+    # for every nonzero integer angular mode and any fixed phase shift.
+    amplitude = abs(exact_rate)
+    def spatial_mean(t, sign):
+        peak = amplitude*np.cos(t)
+        cuts = [np.arccos(-bias/peak)] if peak > bias else []
+        return quad(lambda a: max(sign*(bias+peak*np.cos(a)), 0.), 0., np.pi,
+                    points=cuts)[0]/np.pi
+    exact = np.array([4/omega*quad(spatial_mean, 0., limit, args=(sign,),
+        points=[np.arccos(bias/amplitude)], epsabs=1e-12, epsrel=1e-12)[0] for sign in (1, -1)])
+    results = dict(biased_exact_outward_J_per_m=exact[0], biased_exact_inward_J_per_m=exact[1])
+    for solver, measured, steady in (("fem", fem, thermal.thermal_contact_edge_power(model, dc).sum().item()),
+                                      ("fvm", fv, fv_bias)):
+        residual = abs(measured[0]-measured[1]-2*np.pi*steady/omega)
+        if residual > 1e-10:
+            raise RuntimeError(f"{solver} biased cycle energy residual {residual}")
+        results[f"{solver}_biased_balance_J_per_m"] = residual
+        for direction, value, reference in zip(("outward", "inward"), measured, exact):
+            results[f"{solver}_biased_{direction}_error_J_per_m"] = abs(value-reference)
+    return results
+
+
 def measure_interface(n, resistance=0., omega=0.):
     mode, interface, temperature, rate = 3, .7, .8, 4.5
     radii = np.linspace(.4, 1., n+1)
@@ -165,6 +211,7 @@ def measure_interface(n, resistance=0., omega=0.):
                            fvm_jump_error_K=float(abs(fv_traces[0]-fv_traces[1]-jump)))
     if omega and resistance:
         jump_errors.update(contact_cycle_heat(model, state, fv_rates, rate, omega))
+        jump_errors.update(biased_contact_cycle(model, state, radii, j, radial, resistance, fv_rates[0], rate, omega))
         fem_jump = (fem_traces[0]-fem_traces[1]) @ angular / (angular @ angular)
         for solver, measured_jump, measured_rates in (
                 ("fem", fem_jump, fem_rates), ("fvm", fv_traces[0]-fv_traces[1], fv_rates)):
@@ -194,10 +241,11 @@ if __name__ == "__main__":
     print(json.dumps(dict(
         reference="Steady source-free unit-depth annulus, T=r^p*cos(3*theta+0.37), p=3*sqrt(k_theta/k_r), k_r=2 and k_theta=0.7 W/(m K). Dirichlet walls at 0.4 and 1 m. Maximum temperature errors at shared radial-edge midpoints. Wall rates are 2*pi*r times increasing-radius flux amplitude, recovered from FEM nodal reaction powers by cosine projection and from FVM boundary faces directly.",
         reproduce="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/cross_orthotropic_annulus.py",
-        benchmark=provenance(__file__), FEM=provenance(thermal.__file__), FVM=provenance(annulus.__file__),
+        benchmark=provenance(__file__), FEM=provenance(thermal.__file__), FVM=provenance(annulus.__file__), FVM_cycle=provenance(rod.__file__),
         interface_reference="Perfect contact at r=0.7 m, T amplitude 0.8 K and outward radial rate amplitude 4.5 W/m. Inner (radial, circumferential) conductivity (2, 0.7), outer (0.85, 2.2) W/(m K). Set wall temperatures from the two independent power-law solutions. max_imbalance is the largest inner/outer rate discrepancy in W/m.",
         contact_reference="Same two materials with areal resistance 0.25 m² K/W. The outer trace amplitude is 0.8 K, inner minus outer equals R*4.5/(2*pi*0.7) K. FEM contact edges use their chord lengths; FVM uses the circular interface.",
         harmonic_reference="Same annulus and contact, unit volumetric heat capacity, omega=6 rad/s, exp(+i*omega*t). Outer trace 0.8-0.2i K, transmitted rate 4.5+1.5i W/m. Derive exterior Dirichlet phasors from independent modified Bessel solutions in each material. Errors in K and W/m are complex absolute errors; phase errors are wrapped differences in radians. For unit axial depth, local forward and reverse heat per period each integrate to 4*abs(rate)/(pi*omega) J/m around the ring. The circumferentially integrated signed power vanishes at every instant.",
+        biased_reference="Superpose an axisymmetric DC rate of 1.5 W/m using the two log radial resistances and finite contact resistance. Integrate instantaneous continuum flux over angle then phase; compare to FEM edge cycles and FVM angular integration of local periodic heat.",
         harmonic_runs=refinement(partial(measure_interface, resistance=.25, omega=6.)),
         contact_runs=refinement(partial(measure_interface, resistance=.25)),
         runs=refinement(measure), interface_runs=refinement(measure_interface)), indent=2, allow_nan=False))
