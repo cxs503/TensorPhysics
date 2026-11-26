@@ -9,7 +9,7 @@ from tensorsph import heat_conduction_2d as sph
 from conduction_provenance import provenance
 
 
-def measure(n, sign, resistance, balanced=False):
+def measure(n, sign, resistance, balanced=False, *, fvm=False):
     cut = 3*n//8
     lengths = (cut/n, 1-cut/n)
     conductivities = (1.3, 3.7)
@@ -41,13 +41,25 @@ def measure(n, sign, resistance, balanced=False):
     source = np.concatenate([s(x) for s, x in zip(sources, centers)])
     contacts = np.zeros(n-1)
     contacts[cut-1] = resistance
-    field, flux = sph.solve_harmonic_layered_slab(
-        source, 1/n, (0., 0.), 0., conductivity=np.repeat(conductivities, [cut, n-cut]),
-        volumetric_heat_capacity=1., contact_resistance_x=contacts, return_x_flux=True, backend="banded")
-    q = flux.numpy()
+    k = np.repeat(conductivities, [cut, n-cut])
+    if fvm:
+        from tensorfvm.cht import rod
+
+        field, _, west, east = rod.solve_steady_stepped_rod(
+            np.full(n, 1/n), 1., k, 1., (0., 0.), source=source,
+            contact_resistance=contacts, flux_order=2, source_derivative_breaks=[cut])
+        np.testing.assert_allclose(east[:-1], west[1:], rtol=0., atol=1e-10)
+        q = np.r_[west, east[-1]]
+        # The exact average of a cubic adds T''(center)*dx²/24.
+        exact_t -= source/(24*k*n**2)
+    else:
+        field, flux = sph.solve_harmonic_layered_slab(
+            source, 1/n, (0., 0.), 0., conductivity=k, volumetric_heat_capacity=1.,
+            contact_resistance_x=contacts, return_x_flux=True, backend="banded")
+        field, q = field.numpy(), flux.numpy()
     row = dict(columns=n, gradient_sign=sign, resistance_m2_K_W=resistance,
                 west_outward_W_m2=float(-q[0].real), east_outward_W_m2=float(q[-1].real),
-                temperature_error_K=float(abs(field.numpy()-exact_t).max()),
+                temperature_error_K=float(abs(field-exact_t).max()),
                 wall_flux_error_W_m2=float(abs((q-exact_q)[[0,-1]]).max()),
                 all_face_flux_error_W_m2=float(abs(q-exact_q).max()),
                 max_cell_balance_W_m2=float(abs(np.diff(q)-source/n).max()))
@@ -76,7 +88,16 @@ def measure(n, sign, resistance, balanced=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--balanced", action="store_true", help="balance layer heating with cooling and locate both flux reversals")
-    balanced = parser.parse_args().balanced
+    parser.add_argument("--compare-fvm", action="store_true", help="also verify FVM cell means and numerical face powers for unit area")
+    args = parser.parse_args()
+    balanced = args.balanced
+    paths = [__file__, sph.__file__]
+    pythonpath = "../TensorSPH/src"
+    if args.compare_fvm:
+        from tensorfvm.cht import rod
+
+        paths.append(rod.__file__)
+        pythonpath += ":../TensorFVM/src"
     runs = []
     for sign in (-1., 1.):
         for resistance in (0., .25):
@@ -98,7 +119,20 @@ if __name__ == "__main__":
                     assert row["temperature_error_K"] < 2e-5
                 previous = errors
                 runs.append(row)
+                if args.compare_fvm:
+                    fv = measure(n, sign, resistance, balanced, fvm=True)
+                    row["solver"], fv["solver"] = "SPH", "FVM"
+                    for metric in ("temperature_error_K", "all_face_flux_error_W_m2", "max_cell_balance_W_m2"):
+                        assert fv[metric] < 1e-10
+                    if balanced:
+                        assert fv["wall_balance_W_m2"] < 1e-10
+                        assert fv["west_outward_W_m2"] > 0 > fv["east_outward_W_m2"]
+                        if n == 128:
+                            assert fv["max_reversal_error_m"] < 2e-4
+                        fv["max_reversal_difference_from_SPH_m"] = float(np.max(np.abs(
+                            np.subtract(row["flux_reversals_m"], fv["flux_reversals_m"]))))
+                    runs.append(fv)
     print(json.dumps(dict(reference="Piecewise cubic Fourier temperatures with two zero-temperature walls",
-                          reproduction="OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_affine_contact_wall_heat.py"+(" --balanced" if balanced else ""),
-                          sources=[provenance(p) for p in (__file__, sph.__file__)], runs=runs),
+                          reproduction=f"OMP_NUM_THREADS=1 PYTHONPATH={pythonpath} python examples/sph_affine_contact_wall_heat.py"+(" --balanced" if balanced else "")+(" --compare-fvm" if args.compare_fvm else ""),
+                          sources=[provenance(p) for p in paths], runs=runs),
                      indent=2, allow_nan=False))
