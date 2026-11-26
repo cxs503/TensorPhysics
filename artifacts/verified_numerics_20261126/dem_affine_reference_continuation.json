@@ -1,0 +1,49 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "af3fdb281252dc78ad0318b51063b86f68c2ac6e",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal_contact_chain.py --junitxml=results.xml",
+  "passed": 105,
+  "reference": "Two unit resistances and a unit-capacity store. Reference slope +/-2 K/s is supplied by physical nodal power. Relative walls 0 and A*t, A=spacing(305 K)/16 per second. On [0,1] s the exact store deviation divided by the terminal wall amplitude is t/2 + expm1(-2*t)/4. Integrate both link fluxes against 1,t,t^2 by quadrature. Compare accumulated moments, final and mean store, after division by the terminal wall amplitude.",
+  "runs": {
+    "test_affine_reference_continuation[-2.0-1]": {
+      "heat_moments_scaled_error": 5.551115123125783e-17,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 0.0
+    },
+    "test_affine_reference_continuation[-2.0-2]": {
+      "heat_moments_scaled_error": 5.551115123125783e-17,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 1.3877787807814457e-17
+    },
+    "test_affine_reference_continuation[-2.0-8]": {
+      "heat_moments_scaled_error": 1.1102230246251565e-16,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 1.3877787807814457e-17
+    },
+    "test_affine_reference_continuation[-2.0-16]": {
+      "heat_moments_scaled_error": 1.1102230246251565e-16,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 2.7755575615628914e-17
+    },
+    "test_affine_reference_continuation[2.0-1]": {
+      "heat_moments_scaled_error": 5.551115123125783e-17,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 0.0
+    },
+    "test_affine_reference_continuation[2.0-2]": {
+      "heat_moments_scaled_error": 5.551115123125783e-17,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 1.3877787807814457e-17
+    },
+    "test_affine_reference_continuation[2.0-8]": {
+      "heat_moments_scaled_error": 1.1102230246251565e-16,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 1.3877787807814457e-17
+    },
+    "test_affine_reference_continuation[2.0-16]": {
+      "heat_moments_scaled_error": 1.1102230246251565e-16,
+      "final_store_scaled_error": 0.0,
+      "mean_store_scaled_error": 2.7755575615628914e-17
+    }
+  }
+}
