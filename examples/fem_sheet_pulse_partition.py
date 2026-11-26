@@ -1,4 +1,4 @@
-"""Verify wall heat partition and exit-time moments for two capacitive contacts using FEM or FVM."""
+"""Verify wall heat partition and exit-time moments for two capacitive contacts using FEM, FVM or a DEM thermal contact chain."""
 import argparse
 import json
 
@@ -74,16 +74,50 @@ def fvm_history(n, heater, method, faces, k, cv, resistances, capacities, times,
     return -ledger["end_input"], abs(stored-incoming).max(axis=0)
 
 
-def measure(n, heater, method, *, fvm=False):
+def dem_history(n, heater, faces, k, cv, resistances, capacities, times, injected):
+    from tensordem.thermal import contact_chain
+
+    contacts = np.zeros(n-1)
+    contacts[faces-1] = resistances
+    sheets = faces[::2]
+    sheet_capacity = np.zeros_like(contacts)
+    sheet_capacity[sheets-1] = capacities
+    links, capacity = contact_chain.cell_centered_slab_network(
+        np.full(n, 1/n), k, cv, contact_resistance=contacts, interface_heat_capacity=sheet_capacity)
+    # One west boundary node plus one extra node per preceding storing contact.
+    nodes = sheets+1+np.arange(len(sheets))
+    np.testing.assert_array_equal(capacity[nodes], capacities)
+    state = np.zeros_like(capacity)
+    power = np.zeros_like(capacity)
+    outward, residuals = [], []
+    for duration, energy in zip(np.diff(times), injected):
+        power[nodes[heater]] = energy/duration
+        end, heat = contact_chain.constant_contact_interval(
+            links, capacity, duration, state, nodal_power=power, t_left=0., t_right=0.)
+        outward.append([-heat[0], heat[-1]])
+        residuals.append(capacity[nodes]*(end[nodes]-state[nodes])
+                         -heat[nodes-1]+heat[nodes]-duration*power[nodes])
+        state = end
+    return np.asarray(outward), np.abs(residuals).max(axis=0)
+
+
+def measure(n, heater, method, *, fvm=False, dem=False):
     dx = 1/n
     _, _, k, cv, faces, contacts, sheet_r, capacities = pulse.slab.layered_materials(n)
     resistances = contacts[faces-1].copy()
     resistances[::2] += sheet_r
     stop = .0625
     times = np.r_[np.linspace(0., stop, n+1), stop+np.geomspace(.016/n, 32., 5*n+1)]
+    if dem:
+        # Additional exact interval endpoints reduce midpoint quadrature error
+        # in the wall time moments without changing the contact-chain model.
+        times = np.sort(np.r_[times, (times[:-1]+times[1:])/2])
     injected = np.diff(np.minimum(times, stop))
-    history = fvm_history if fvm else fem_history
-    outward, sheet_errors = history(n, heater, method, faces, k, cv, resistances, capacities, times, injected)
+    if dem:
+        outward, sheet_errors = dem_history(n, heater, faces, k, cv, resistances, capacities, times, injected)
+    else:
+        history = fvm_history if fvm else fem_history
+        outward, sheet_errors = history(n, heater, method, faces, k, cv, resistances, capacities, times, injected)
     total = outward.sum(axis=0)
     mid = (times[:-1]+times[1:])/2
     centroid = mid@outward/total
@@ -99,7 +133,7 @@ def measure(n, heater, method, *, fvm=False):
         np.testing.assert_allclose(centroid, ref_mean, rtol=0., atol=1e-4)
         np.testing.assert_allclose(spread, ref_std, rtol=0., atol=3e-4)
     return dict(reference_wall_heats_J_m2=expected.tolist(), reference_mean_s=ref_mean.tolist(),
-                reference_std_s=ref_std.tolist(), elements=n, heated_sheet=heater, method=method, wall_heats_J_m2=total.tolist(),
+                reference_std_s=ref_std.tolist(), output_intervals=len(injected), elements=n, heated_sheet=heater, method=method, wall_heats_J_m2=total.tolist(),
                 wall_mean_exit_times_s=centroid.tolist(), wall_exit_time_std_s=spread.tolist(),
                 mean_error_s=float(abs(centroid-ref_mean).max()), std_error_s=float(abs(spread-ref_std).max()),
                 wall_heat_error_J_m2=float(abs(total-expected).max()), sheet_balance_J_m2=float(max(sheet_errors)))
@@ -107,19 +141,27 @@ def measure(n, heater, method, *, fvm=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--fvm", action="store_true", help="use the finite-volume rod with lumped sheet cells")
-    fvm = parser.parse_args().fvm
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--fvm", action="store_true", help="use the finite-volume rod with lumped sheet cells")
+    group.add_argument("--dem", action="store_true", help="use the lumped thermal contact chain")
+    args = parser.parse_args()
+    fvm, dem = args.fvm, args.dem
     if fvm:
         from tensorfvm.cht import rod
         solver = rod
         pythonpath = "../TensorFVM/src:../TensorSPH/src"
+    elif dem:
+        from tensordem.thermal import contact_chain
+        solver = contact_chain
+        pythonpath = "../TensorDEM/src:../TensorSPH/src"
     else:
         from tensorfem import thermal
         solver = thermal
         pythonpath = "../TensorFEM/src:../TensorSPH/src"
-    runs = [measure(n, heater, method, fvm=fvm) for heater in (0, 1) for method in ("theta", "sdirk2")
+    methods = ("constant_interval",) if dem else ("theta", "sdirk2")
+    runs = [measure(n, heater, method, fvm=fvm, dem=dem) for heater in (0, 1) for method in methods
             for n in (16, 32, 64)]
-    print(json.dumps(dict(solver="FVM" if fvm else "FEM", runs=runs, sources=[provenance(p) for p in
+    print(json.dumps(dict(solver="DEM" if dem else "FVM" if fvm else "FEM", runs=runs, sources=[provenance(p) for p in
                           (__file__, solver.__file__, pulse.__file__, pulse.slab.__file__)],
-        reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={pythonpath} python examples/fem_sheet_pulse_partition.py"+(" --fvm" if fvm else "")),
+        reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH={pythonpath} python examples/fem_sheet_pulse_partition.py"+(" --dem" if dem else " --fvm" if fvm else "")),
         indent=2, allow_nan=False))
