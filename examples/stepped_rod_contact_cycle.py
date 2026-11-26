@@ -42,7 +42,17 @@ def transient_contact_refinement(model,dc_model,dc,state,omega):
         history = thermal.solve_transient_thermal(dc_model,time,initial,theta=.5,method=method,
             sparse=True,fixed_temperature_history=ends,nodal_heat_history=load)
         step_heat = thermal.thermal_contact_pair_heat_steps(dc_model,history)[:,0]
-        return history.temperature.numpy(),step_heat.numpy()
+        # For LINE2 the integral of temperature is length times the mean
+        # of the two endpoint values. The duplicated contact nodes keep the
+        # two material contributions to the nodal source distinct.
+        conn = model.elements
+        lengths = (model.nodes[conn[:,1],0]-model.nodes[conn[:,0],0])
+        capacity = lengths*model.thickness*model.density*model.specific_heat
+        delta = history.temperature.diff(dim=0)[:,conn].mean(dim=2)
+        stored = (delta*capacity).reshape(len(times)-1,2,-1).sum(dim=2)
+        supplied = (time.diff()[:,None]*history.additional_stage_power).reshape(len(times)-1,2,-1).sum(dim=2)
+        ends_in = history.nodal_reaction_heat_steps()[:,model.fixed_nodes]
+        return history.temperature.numpy(),step_heat.numpy(),stored.numpy(),supplied.numpy(),ends_in.numpy()
     return temporal_refinement(advance,dc.numpy(),state.numpy(),dc_power,ac_power,omega)
 
 
@@ -53,12 +63,18 @@ def temporal_refinement(advance,dc,phasor,dc_power,ac_power,omega):
         previous = None
         for steps in (32,64,128):
             time = np.linspace(0.,2*math.pi/omega,steps+1)
-            temperature,step_heat = advance(time,method)
+            temperature,step_heat,stored,supplied,ends_in = advance(time,method)
+            # Each layer has one external end. Positive contact heat leaves
+            # the left layer and enters the right layer over the same step.
+            residual = stored-supplied-ends_in-np.column_stack((-step_heat,step_heat))
+            max_balance = np.max(abs(residual),axis=0)
+            assert np.all(max_balance < 1e-11),(method,steps,max_balance)
             exact_heat = dc_power*time+(ac_power*np.expm1(1j*omega*time)/(1j*omega)).real
             exact_state = dc+(np.exp(1j*omega*time[:,None])*phasor).real
             errors = dict(cumulative_heat_J=float(np.max(abs(step_heat.cumsum()-exact_heat[1:]))),
                           temperature_K=float(np.max(abs(temperature-exact_state))))
-            row = dict(method="Crank-Nicolson" if method=="theta" else "SDIRK2",steps=steps,**errors)
+            row = dict(method="Crank-Nicolson" if method=="theta" else "SDIRK2",steps=steps,left_step_balance_J=float(max_balance[0]),
+                       right_step_balance_J=float(max_balance[1]),**errors)
             if previous is not None:
                 for name,error in errors.items():
                     order = math.log2(previous[name]/error)
@@ -66,7 +82,7 @@ def temporal_refinement(advance,dc,phasor,dc_power,ac_power,omega):
                     assert 1.8 < order < 2.2,(method,steps,name,order)
             runs.append(row)
             previous = errors
-    return dict(reference="At 16 elements or cells per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and all spatial temperature degrees of freedom).",runs=runs)
+    return dict(reference="At 16 elements or cells per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and all spatial temperature degrees of freedom). Left/right balance values are maximum absolute single-step residuals of storage minus volume heating, inward end heat and inward contact heat for each layer.",runs=runs)
 
 
 def measure(n):
@@ -145,7 +161,11 @@ def measure(n):
             cell,_,_,_,ledger = rod.solve_transient_stepped_rod(widths,areas,k,c,ends,time,
                 cell_dc+cell_ac.real,source=load,contact_resistance=resistance,flux_order=2,
                 method=method,return_step_heat=True)
-            return cell,ledger["contact"][:,n-1]
+            change = np.diff(cell,axis=0)*(widths*areas*c)
+            stored = change.reshape(len(time)-1,2,n).sum(axis=2)
+            supplied = ledger["source"].reshape(len(time)-1,2,n).sum(axis=2)
+            ends_in = np.column_stack((ledger["left"][:,0],-ledger["right"][:,-1]))
+            return cell,ledger["contact"][:,n-1],stored,supplied,ends_in
         rows[1]["transient_refinement"] = temporal_refinement(
             advance_fvm,cell_dc,cell_ac,fvm_bias,fvm_power,omega)
     return rows,float(abs(fvm_power-west[n]))
