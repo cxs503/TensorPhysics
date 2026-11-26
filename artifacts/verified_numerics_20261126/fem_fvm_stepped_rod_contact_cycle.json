@@ -1,0 +1,131 @@
+{
+  "reference": "Two unit-length layers with independent constant complex sources; continuum interface power 0.8-0.4i W, prescribed DC bias 0.35 W, omega=2.3 rad/s. Integrate the signed halves of the biased sinusoid independently.",
+  "reproduce": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/stepped_rod_contact_cycle.py",
+  "benchmark": {
+    "commit": "087a629acadcec37516c1d8a1bfbf7043ab03fff",
+    "file": "stepped_rod_contact_cycle.py",
+    "source_sha256": "f901d7c3af02183e0742bdf7bc724c57930e6c18f987c2a0703741f0661cc82e"
+  },
+  "FEM": {
+    "commit": "81cab937c50abae09e46fb217fe1ef5be88d0e92",
+    "file": "thermal.py",
+    "source_sha256": "4524af3c0238c9e073349bda54d2a7d98a214df818eb139a12f4f02fbba32251"
+  },
+  "FVM": {
+    "commit": "8d947aced8e0700e276a5dc5c2c06db14d7be926",
+    "file": "rod.py",
+    "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+  },
+  "runs": [
+    {
+      "solver": "FEM",
+      "elements_per_layer": 8,
+      "power_error_W": 0.004470687446929335,
+      "forward_error_J": 0.0035681025602862793,
+      "reverse_error_J": 0.0035681025602855576,
+      "contact_power_W": [
+        0.8041436977075456,
+        -0.40167833714033074
+      ]
+    },
+    {
+      "solver": "FVM",
+      "elements_per_layer": 8,
+      "power_error_W": 0.004155374970506936,
+      "forward_error_J": 0.003217089776519799,
+      "reverse_error_J": 0.003217089776519577,
+      "contact_power_W": [
+        0.8031198878204222,
+        -0.4027447114845639
+      ],
+      "interface_power_mismatch_W": 3.66205343881779e-15
+    },
+    {
+      "solver": "FEM",
+      "elements_per_layer": 16,
+      "power_error_W": 0.001115072945591935,
+      "forward_error_J": 0.0008898895144004992,
+      "reverse_error_J": 0.0008898895143997776,
+      "contact_power_W": [
+        0.8010319998003601,
+        -0.400422331725126
+      ],
+      "power_error_W_order": 2.003358597103002,
+      "forward_error_J_order": 2.0034589518820636,
+      "reverse_error_J_order": 2.003458951882942
+    },
+    {
+      "solver": "FVM",
+      "elements_per_layer": 16,
+      "power_error_W": 0.0010384261165422063,
+      "forward_error_J": 0.0008029389402250953,
+      "reverse_error_J": 0.0008029389402245957,
+      "contact_power_W": [
+        0.800777486770059,
+        -0.4006883626383675
+      ],
+      "interface_power_mismatch_W": 7.444291678311382e-15,
+      "power_error_W_order": 2.0005800951537926,
+      "forward_error_J_order": 2.0023940098119333,
+      "reverse_error_J_order": 2.0023940098127317
+    },
+    {
+      "solver": "FEM",
+      "elements_per_layer": 32,
+      "power_error_W": 0.00027860560753632666,
+      "forward_error_J": 0.0002223382723434142,
+      "reverse_error_J": 0.00022233827234269254,
+      "contact_power_W": [
+        0.8002577543713424,
+        -0.40010575333850334
+      ],
+      "power_error_W_order": 2.0008418904526275,
+      "forward_error_J_order": 2.0008699181863574,
+      "reverse_error_J_order": 2.00086991818987
+    },
+    {
+      "solver": "FVM",
+      "elements_per_layer": 32,
+      "power_error_W": 0.00025957994752731303,
+      "forward_error_J": 0.00020065062904595088,
+      "reverse_error_J": 0.00020065062904517372,
+      "contact_power_W": [
+        0.8001942161359921,
+        -0.4001722261352949
+      ],
+      "interface_power_mismatch_W": 7.283063041541027e-14,
+      "power_error_W_order": 2.00014772786327,
+      "forward_error_J_order": 2.000604602641898,
+      "reverse_error_J_order": 2.0006046026465882
+    },
+    {
+      "solver": "FEM",
+      "elements_per_layer": 64,
+      "power_error_W": 6.964123452921489e-05,
+      "forward_error_J": 5.5576177126592796e-05,
+      "reverse_error_J": 5.557617712592666e-05,
+      "contact_power_W": [
+        0.8000644232397203,
+        -0.40002644896464334
+      ],
+      "power_error_W_order": 2.0002106126044996,
+      "forward_error_J_order": 2.0002178034217684,
+      "reverse_error_J_order": 2.0002178034343774
+    },
+    {
+      "solver": "FVM",
+      "elements_per_layer": 64,
+      "power_error_W": 6.489331827939629e-05,
+      "forward_error_J": 5.015738890823407e-05,
+      "reverse_error_J": 5.015738890778998e-05,
+      "contact_power_W": [
+        0.800048544308197,
+        -0.4000430649846045
+      ],
+      "interface_power_mismatch_W": 3.351623381340333e-14,
+      "power_error_W_order": 2.0000370955526536,
+      "forward_error_J_order": 2.000151527584164,
+      "reverse_error_J_order": 2.00015152759135
+    }
+  ]
+}
