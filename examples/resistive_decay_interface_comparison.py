@@ -75,22 +75,26 @@ def particles(n, times, modes):
     return np.column_stack([side[:, n//2-1] for side in traces]), heat[:, n//2].numpy()
 
 
+def reversing_modes(crossing):
+    # For each mode the contact jump equals R times the rightward flux.
+    # The next root of this continuous equation is in (3*pi, 4*pi).
+    def contact_condition(w):
+        return 4*np.sin(w/2)/3+RESISTANCE*w*np.cos(w/2)
+
+    fast = brentq(contact_condition, 3*np.pi, 4*np.pi)
+    slow_flux = -WAVE*np.cos(WAVE/2)
+    fast_flux = -fast*np.cos(fast/2)
+    amplitude = -slow_flux/fast_flux*np.exp((fast**2-WAVE**2)*crossing)
+    return [(WAVE, 1.), (fast, amplitude)]
+
+
 def run(reversal=False):
     modes = [(WAVE, 1.)]
     windows = WINDOWS
     levels = ((12, 24), (24, 48), (48, 192))
     if reversal:
-        # For each mode the contact jump equals R times the rightward flux.
-        # The next root of this continuous equation is in (3*pi, 4*pi).
-        def contact_condition(w):
-            return 4*np.sin(w/2)/3+RESISTANCE*w*np.cos(w/2)
-
-        fast = brentq(contact_condition, 3*np.pi, 4*np.pi)
         crossing = .01
-        slow_flux = -WAVE*np.cos(WAVE/2)
-        fast_flux = -fast*np.cos(fast/2)
-        amplitude = -slow_flux/fast_flux*np.exp((fast**2-WAVE**2)*crossing)
-        modes.append((fast, amplitude))
+        modes = reversing_modes(crossing)
         windows = np.array([0., crossing, 2*crossing])
         levels = ((24, 48), (48, 96), (96, 192), (192, 384))
 
