@@ -1,0 +1,24 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "6878eab5fe2edf06c3e5019674886414465512b6",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "passed": 131,
+  "reference": "Two-by-two graded plate, T=305+x+t, unit conductivity and unit depth. Row-dependent ambient excess switches from pattern to -2*pattern at 0.125 s. Exact bulk heat through 0.5 s is -0.625*pattern*H*volume. Independent heater plus bulk exchange supplies C*volume/2. Compare cell heat, field and budgets under CN and Rannacher. For the unit single-cell weak-heater test the discrete CN mean temperature excess is dt*P/(2+5*dt), P=2^-50 W. Heat diagnostics retain this response although absolute temperature rounds at 305 K. Mixed storing-Robin and Neumann boundaries also checked under a 305 K reference shift.",
+  "runs": {
+    "test_switched_bulk_ambient_keeps_plate_heater_separate[False]": {
+      "final_K": 0.0,
+      "bulk_J": 5.551115123125783e-17,
+      "source_J": 0.0,
+      "budget_J": 1.6653345369377348e-16
+    },
+    "test_switched_bulk_ambient_keeps_plate_heater_separate[True]": {
+      "final_K": 0.0,
+      "bulk_J": 1.1102230246251565e-16,
+      "source_J": 0.0,
+      "budget_J": 3.3306690738754696e-16
+    },
+    "test_sub_ulp_heater_drives_wall_and_bulk_heat": {
+      "heat_error_divided_by_heater_power_s": 0.0
+    }
+  }
+}
