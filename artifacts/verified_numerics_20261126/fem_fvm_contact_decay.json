@@ -1,0 +1,262 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "elements": 20,
+      "steps": 20,
+      "method": "theta",
+      "fem": [
+        0.006543171450930307,
+        0.0008246888556502907
+      ],
+      "fvm": [
+        0.0023136284145434116,
+        0.00026703037137723595
+      ],
+      "difference": [
+        0.006388421885181073,
+        0.0008488557941693786
+      ],
+      "initial_cell_mean_difference_K": 0.006388421885181073,
+      "final_cell_mean_difference_K": 0.0013689053396137574,
+      "fvm_cell_balance_J_m2": 1.061650767297806e-15,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "elements": 40,
+      "steps": 40,
+      "method": "theta",
+      "fem": [
+        0.0016428400051871073,
+        0.0002058812491745332
+      ],
+      "fvm": [
+        0.0005820989261077214,
+        6.68388929658259e-05
+      ],
+      "difference": [
+        0.0016040593990398477,
+        0.00021213393695912464
+      ],
+      "initial_cell_mean_difference_K": 0.0016040593990398477,
+      "final_cell_mean_difference_K": 0.00034387333204755066,
+      "fvm_cell_balance_J_m2": 8.326672684688674e-16,
+      "orders": [
+        [
+          1.9937980899123833,
+          2.0020374708236544
+        ],
+        [
+          1.9908209146651068,
+          1.9982440960792671
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "elements": 80,
+      "steps": 80,
+      "method": "theta",
+      "fem": [
+        0.0004111301394220668,
+        5.1452128557283316e-05
+      ],
+      "fvm": [
+        0.00014576090142182085,
+        1.672153157028511e-05
+      ],
+      "difference": [
+        0.00040145009418557365,
+        5.30284882838683e-05
+      ],
+      "initial_cell_mean_difference_K": 0.00040145009418557365,
+      "final_cell_mean_difference_K": 8.60658605656428e-05,
+      "fvm_cell_balance_J_m2": 9.298117831235686e-16,
+      "orders": [
+        [
+          1.9985249412565402,
+          2.000509773890184
+        ],
+        [
+          1.997660569748142,
+          1.998980844826397
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "elements": 160,
+      "steps": 160,
+      "method": "theta",
+      "fem": [
+        0.00010280663756057073,
+        1.2861895646032462e-05
+      ],
+      "fvm": [
+        3.6454624192328033e-05,
+        4.180544681375853e-06
+      ],
+      "difference": [
+        0.00010038973607939816,
+        1.3256810366069072e-05
+      ],
+      "initial_cell_mean_difference_K": 0.00010038973607939816,
+      "final_cell_mean_difference_K": 2.152057024029652e-05,
+      "fvm_cell_balance_J_m2": 1.334869714764153e-15,
+      "orders": [
+        [
+          1.9996617248583266,
+          2.0001274727179705
+        ],
+        [
+          1.99943005216555,
+          1.9999441660260784
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "elements": 20,
+      "steps": 20,
+      "method": "sdirk2",
+      "fem": [
+        0.0064304363837421885,
+        0.0008779928728657738
+      ],
+      "fvm": [
+        0.002014559598086607,
+        0.00019830508325849316
+      ],
+      "difference": [
+        0.006388421885181073,
+        0.0008487664380149584
+      ],
+      "initial_cell_mean_difference_K": 0.006388421885181073,
+      "final_cell_mean_difference_K": 0.0013687390500597973,
+      "fvm_cell_balance_J_m2": 9.506284648352903e-16,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "elements": 40,
+      "steps": 40,
+      "method": "sdirk2",
+      "fem": [
+        0.0016147127870669298,
+        0.0002192585601290542
+      ],
+      "fvm": [
+        0.0005060619007524192,
+        4.960713690280172e-05
+      ],
+      "difference": [
+        0.0016040593990398477,
+        0.00021212849653429178
+      ],
+      "initial_cell_mean_difference_K": 0.0016040593990398477,
+      "final_cell_mean_difference_K": 0.0003439052616600047,
+      "fvm_cell_balance_J_m2": 7.632783294297951e-16,
+      "orders": [
+        [
+          1.9936390733504072,
+          2.0015760602941577
+        ],
+        [
+          1.9930787171707354,
+          1.9991020604189953
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "elements": 80,
+      "steps": 80,
+      "method": "sdirk2",
+      "fem": [
+        0.0004041140886430483,
+        5.480324288670291e-05
+      ],
+      "fvm": [
+        0.00012660800799080274,
+        1.2402701130981297e-05
+      ],
+      "difference": [
+        0.00040145009418557365,
+        5.302815283919626e-05
+      ],
+      "initial_cell_mean_difference_K": 0.00040145009418557365,
+      "final_cell_mean_difference_K": 8.606794610144242e-05,
+      "fvm_cell_balance_J_m2": 1.3999218451132833e-15,
+      "orders": [
+        [
+          1.9984430177888062,
+          2.000299998595157
+        ],
+        [
+          1.9989452055586308,
+          1.9998933406855048
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "elements": 160,
+      "steps": 160,
+      "method": "sdirk2",
+      "fem": [
+        0.00010105649050062837,
+        1.37005480427832e-05
+      ],
+      "fvm": [
+        3.164907290331698e-05,
+        3.100194260530209e-06
+      ],
+      "difference": [
+        0.00010038973607939816,
+        1.3256789655635703e-05
+      ],
+      "initial_cell_mean_difference_K": 0.00010038973607939816,
+      "final_cell_mean_difference_K": 2.1520701019794863e-05,
+      "fvm_cell_balance_J_m2": 1.2212453270876722e-15,
+      "orders": [
+        [
+          1.999600665235356,
+          2.0000276603462526
+        ],
+        [
+          2.000133514002765,
+          2.0002238293713015
+        ]
+      ],
+      "passed": true
+    }
+  ],
+  "error_columns": [
+    "cell_mean_temperature_K",
+    "contact_heat_J_m2"
+  ],
+  "sources": [
+    {
+      "commit": "ff9b47af212382e869f1497b56d9a0f6fcee569d",
+      "file": "fem_fvm_contact_decay.py",
+      "source_sha256": "9c96789f32d788e9fda996d2458deb61f3b74c9c87afa610c8108776737ead2f"
+    },
+    {
+      "commit": "ff9b47af212382e869f1497b56d9a0f6fcee569d",
+      "file": "fem_contact_decay_mode.py",
+      "source_sha256": "e0f5b6d7d1a25f27905187b1944761d5af8e58849fd01b8ed4b53f2ff2363d84"
+    },
+    {
+      "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/fem_fvm_contact_decay.py"
+}
