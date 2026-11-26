@@ -1,0 +1,11 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "6254482da1ba493cad06ad93c27198ac5c07e455",
+  "passed": 234,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_conduction_2d.py --junitxml=results.xml",
+  "reference": "Recover steady and harmonic inward fluxes on both walls of prescribed linear temperature profiles. Seven rows span opposite biases, grazing, and flux reversal. Compare local absorption and release against independent SciPy quadrature and net heat against period times steady flux. A separate near-grazing case compares the smaller lobe with the leading analytic asymptote at a relative flux gap of 2^-50.",
+  "metrics": {
+    "max_directional_error_J_m2": 1.7763568394002505e-15,
+    "max_net_error_J_m2": 1.1102230246251565e-16
+  }
+}
