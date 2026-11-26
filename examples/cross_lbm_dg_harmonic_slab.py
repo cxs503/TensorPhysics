@@ -22,7 +22,7 @@ def measure(n):
     exact_t = (walls[0]*torch.sinh(wave*(1-x))+walls[1]*torch.sinh(wave*x))/cmath.sinh(wave)
     exact_q = conductivity*wave*(walls[0]*torch.cosh(wave*(1-face))-walls[1]*torch.cosh(wave*face))/cmath.sinh(wave)
 
-    _, modes, _ = dg.solve_harmonic_heat_layer_1d(
+    _, modes, dg_faces = dg.solve_harmonic_heat_layer_1d(
         omega, walls, ncells=n//2, degree=2, conductivity=conductivity, capacity=capacity)
     # Each DG cell spans two lattice intervals. Its center is a lattice node;
     # the two lattice links sit one quarter and three quarters across the cell.
@@ -35,14 +35,29 @@ def measure(n):
     g = thermal3d.equilibrium_thermal_3d(initial, zero, zero, zero)
     steps = round(period/dt)
     lbm_t, lbm_q = torch.zeros_like(dg_t), torch.zeros_like(dg_q)
+    # The middle third has boundaries coincident with DG faces and LBM nodes.
+    # Half-weight LBM endpoint nodes require the average of their two link fluxes.
+    lo, hi = n//3, 2*n//3
+    lbm_heat = 0.
     for step in range(1, 2*steps+1):
         post = thermal3d.collide_thermal_bgk_3d(g, g.sum(dim=0), zero, zero, zero, tau)
         phase = cmath.exp(1j*omega*step*dt)
         g = thermal3d.apply_temperature_boundaries_3d(
             thermal3d.stream_thermal_3d(post), *(1+(wall*phase).real for wall in walls))
+        if step == steps or step == steps+steps//4:
+            section = g.sum(dim=0).mean((0, 1))[lo:hi+1]
+            energy = capacity*dx*torch.trapezoid(section).item()
+            if step == steps:
+                initial_energy = energy
+            else:
+                lbm_storage = energy-initial_energy
         if step > steps:
             qx, _, _ = thermal_common.thermal_link_fluxes_3d(post, dt=dt, spacing=dx,
                                                             volumetric_heat_capacity=capacity)
+            if step <= steps+steps//4:
+                left_flux = qx[..., lo-1:lo+1].mean()
+                right_flux = qx[..., hi-1:hi+1].mean()
+                lbm_heat += dt*(left_flux-right_flux).item()
             lbm_t += (g.sum(dim=0)[..., 1::2].mean((0, 1))-1)*phase.conjugate()*(2/steps)
             lbm_q += qx.mean((0, 1))*cmath.exp(-1j*omega*(step-.5)*dt)*(2/steps)
     # Link transport is a step average; integrate the DG and continuum
@@ -55,19 +70,35 @@ def measure(n):
         for label, difference in (("lbm", first-reference), ("dg", second-reference),
                                   ("cross", first-second)):
             errors[f"{label}_{name}"] = difference.abs().max().item()
-    return errors
+    # From the start of cycle two to its first quarter the phasor changes
+    # by i-1. Integrate the analytical temperature in space for the reference.
+    phase_change = 1j-1
+    a, b = lo*dx, hi*dx
+    integral = (walls[0]*(cmath.cosh(wave*(1-a))-cmath.cosh(wave*(1-b)))
+                + walls[1]*(cmath.cosh(wave*b)-cmath.cosh(wave*a)))/(wave*cmath.sinh(wave))
+    exact_storage = capacity*(phase_change*integral).real
+    dg_storage = capacity*(2*dx)*(phase_change*modes[lo//2:hi//2, 0].sum()).real.item()
+    dg_heat = ((dg_faces[lo//2]-dg_faces[hi//2])*phase_change/(1j*omega)).real.item()
+    budget = dict(reference_J_m2=exact_storage, lbm_storage_J_m2=lbm_storage, lbm_inward_J_m2=lbm_heat,
+                  dg_storage_J_m2=dg_storage, dg_inward_J_m2=dg_heat,
+                  lbm_balance_J_m2=abs(lbm_heat-lbm_storage), dg_balance_J_m2=abs(dg_heat-dg_storage))
+    errors.update(lbm_energy_J_m2=abs(lbm_storage-exact_storage),
+                  dg_energy_J_m2=abs(dg_storage-exact_storage),
+                  cross_energy_J_m2=abs(lbm_storage-dg_storage))
+    return errors, budget
 
 
 if __name__ == "__main__":
     runs = []
     for n in (12, 24, 48, 96):
-        errors = measure(n)
+        errors, budget = measure(n)
         orders = {key: math.log2(runs[-1]["errors"][key]/value)
                   for key, value in errors.items()} if runs else {}
-        runs.append(dict(lbm_intervals=n, dg_cells=n//2, errors=errors, orders=orders))
+        runs.append(dict(lbm_intervals=n, dg_cells=n//2, errors=errors, orders=orders, control_volume=budget))
     passed = all(min(row["orders"].values()) > 0 for row in runs[1:]) and min(runs[-1]["orders"].values()) > 1.5
+    passed &= all(max(row["control_volume"][key] for key in ("lbm_balance_J_m2", "dg_balance_J_m2")) < 1e-11 for row in runs)
     print(json.dumps(dict(passed=passed, runs=runs,
-        reference="Unit slab, period 0.5 s, alpha=0.075, capacity=2.3, wall phasors 0.4+0.15i and -0.2+0.3i about 1 K. Project the second LBM period, compare DG center temperatures and quarter-cell Fourier fluxes to the exact sinh solution. Errors are maxima over shared samples.",
+        reference="Unit slab, period 0.5 s, alpha=0.075, capacity=2.3, wall phasors 0.4+0.15i and -0.2+0.3i about 1 K. Project the second LBM period, compare DG center temperatures and quarter-cell Fourier fluxes to the exact sinh solution. Field errors are maxima over shared samples. For the middle third of the slab, compare stored energy change and net inward heat from t=0.5 to 0.625 s. Each end cuts a DG face and bisects an LBM nodal volume.",
         reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src:../TensorDG python examples/cross_lbm_dg_harmonic_slab.py",
         sources=[provenance(p) for p in (__file__, thermal3d.__file__, thermal_common.__file__, dg.__file__)]),
         indent=2, allow_nan=False))
