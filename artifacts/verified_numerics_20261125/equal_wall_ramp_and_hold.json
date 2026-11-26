@@ -1,0 +1,232 @@
+{
+  "times_s": [
+    0.0,
+    0.04,
+    0.09
+  ],
+  "phases": [
+    "ramp",
+    "hold"
+  ],
+  "walls": [
+    "west",
+    "east"
+  ],
+  "reference_per_wall_J_m2": [
+    0.15044437694765547,
+    0.14498519287946607
+  ],
+  "runs": [
+    {
+      "solver": "TensorFEM",
+      "resolution": 12,
+      "steps_per_phase": 32,
+      "wall_inputs_J_m2": [
+        [
+          0.15207400363889892,
+          0.15207400363889892
+        ],
+        [
+          0.14419319020829532,
+          0.14419319020829535
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.0016296266912434465,
+        0.000792002671170744
+      ],
+      "max_balance_J_m2": 1.6653345369377348e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "resolution": 24,
+      "steps_per_phase": 64,
+      "wall_inputs_J_m2": [
+        [
+          0.1508524527703413,
+          0.1508524527703414
+        ],
+        [
+          0.14478550470903517,
+          0.14478550470903545
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.0004080758226859271,
+        0.00019968817043089504
+      ],
+      "max_balance_J_m2": 5.551115123125783e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "resolution": 48,
+      "steps_per_phase": 256,
+      "wall_inputs_J_m2": [
+        [
+          0.1505466611417789,
+          0.15054666114177914
+        ],
+        [
+          0.14493490169455572,
+          0.1449349016945549
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.00010228419412366963,
+        5.029118491117757e-05
+      ],
+      "max_balance_J_m2": 1.2212453270876722e-15,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 12,
+      "steps_per_phase": 32,
+      "wall_inputs_J_m2": [
+        [
+          0.14561822294092977,
+          0.14561822294092983
+        ],
+        [
+          0.14779000743234452,
+          0.14779000743234472
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.0048261540067257025,
+        0.0028048145528786483
+      ],
+      "max_balance_J_m2": 1.6653345369377348e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 24,
+      "steps_per_phase": 64,
+      "wall_inputs_J_m2": [
+        [
+          0.14922262219042373,
+          0.1492226221904238
+        ],
+        [
+          0.1457046205834531,
+          0.1457046205834526
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.001221754757231741,
+        0.00071942770398703
+      ],
+      "max_balance_J_m2": 6.106226635438361e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 48,
+      "steps_per_phase": 256,
+      "wall_inputs_J_m2": [
+        [
+          0.15013822978120317,
+          0.15013822978120345
+        ],
+        [
+          0.14516589569409127,
+          0.14516589569409133
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.000306147166452303,
+        0.00018070281462526094
+      ],
+      "max_balance_J_m2": 3.6637359812630166e-15,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 12,
+      "steps_per_phase": 1,
+      "wall_inputs_J_m2": [
+        [
+          0.14451456331741738,
+          0.1445145633174174
+        ],
+        [
+          0.1483421073181417,
+          0.14834210731814185
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.00592981363023809,
+        0.0033569144386757788
+      ],
+      "max_balance_J_m2": 9.43689570931383e-16,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 24,
+      "steps_per_phase": 1,
+      "wall_inputs_J_m2": [
+        [
+          0.14894845132564938,
+          0.14894845132564932
+        ],
+        [
+          0.14584270557912113,
+          0.14584270557912166
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.00149592562200615,
+        0.0008575126996555882
+      ],
+      "max_balance_J_m2": 3.2751579226442118e-15,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 48,
+      "steps_per_phase": 1,
+      "wall_inputs_J_m2": [
+        [
+          0.15007034572594477,
+          0.1500703457259454
+        ],
+        [
+          0.14519990161740132,
+          0.14519990161740182
+        ]
+      ],
+      "max_wall_errors_J_m2": [
+        0.00037403122171070224,
+        0.00021470873793574818
+      ],
+      "max_balance_J_m2": 7.716050021144838e-15,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "53dcc2f66316710f989626f9ac57a9153a0c5fe6",
+      "file": "equal_wall_ramp_and_hold.py",
+      "source_sha256": "a887f498c66844060714a78a234aa5806480363847699a42f1ab883a209d2d4c"
+    },
+    {
+      "commit": "200a76515c676f6fa48643a05ef0e1717db2e424",
+      "file": "thermal.py",
+      "source_sha256": "68aacf922b93a8c8fcf92952f7749a4d8d509efd96325725c9ef0b4dac9bc97d"
+    },
+    {
+      "commit": "fbb0cedcaf01742fc5625f007083de98ac7b19b5",
+      "file": "energy.py",
+      "source_sha256": "8ee2f14373d828170e26ac198cefa5cfcd449173776fb5cf937cdf69980db715"
+    },
+    {
+      "commit": "ea5b2dd933832779161accb6adfde69519f3225a",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "692ac6cd1c428e493c24ef7b410053d10be86d237c191abf9c1e5ecd32b8a1e6"
+    }
+  ]
+}
