@@ -1,0 +1,21 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "a3679dc175f0d80249a69fc3c4c23a5c492028ed",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "passed": 144,
+  "reference": "Wall areas 0.25 and 0.75 m\u00b2, areal capacity 3 J/(m\u00b2 K), cell-wall conductance 2 and film coefficient 4 in W/(m\u00b2 K). Cell temperatures start at 305 K and rise at 1 K/s through 0.125 s, then fall at 2 K/s. Walls remain 0.5 K warmer; material heat equals area times interval duration, storage equals 3 times area times temperature change, and the specified ambient imposes their sum. Compare each channel separately over [0,0.25] and [0.25,0.5] s under CN and Rannacher. Secondary mixed-face test verifies storage closure with second-order wall flux.",
+  "runs": {
+    "test_storing_wall_heat_with_switched_reservoir[False]": {
+      "ambient_J": 0.0,
+      "material_J": 0.0,
+      "storage_J": 0.0,
+      "wall_balance_J": 0.0
+    },
+    "test_storing_wall_heat_with_switched_reservoir[True]": {
+      "ambient_J": 0.0,
+      "material_J": 0.0,
+      "storage_J": 0.0,
+      "wall_balance_J": 0.0
+    }
+  }
+}
