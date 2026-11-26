@@ -8,7 +8,7 @@ from tensorfem import thermal
 from conduction_provenance import provenance
 
 
-def measure(n, method):
+def build_problem(n):
     # The first layer spans a quarter of pi in phase, the second three quarters.
     # The outer Dirichlet values vanish. Choose material properties so both
     # pieces decay at the same rate and transmit the same rightward flux.
@@ -27,13 +27,20 @@ def measure(n, method):
         torch.from_numpy(np.repeat(conductivity, counts)), 1., torch.from_numpy(np.repeat(capacity, counts)),
         torch.tensor([0, n+1]), torch.zeros(2, dtype=torch.float64),
         contact_pairs=torch.tensor([[nl, nl+1]]), contact_conductance=1/resistance)
+    initial_flux = -wl*np.cos(wl*interface)
+    return model, shape, decay, initial_flux
+
+
+def measure(n, method):
+    model, shape, decay, initial_flux = build_problem(n)
+    nl = int(model.contact_pairs[0, 0])
     times = np.linspace(0, 2/decay, n+1)
     result = thermal.solve_transient_thermal(model, torch.from_numpy(times), torch.from_numpy(shape),
                                              theta=.5, method=method, sparse=True)
     errors = abs(result.temperature.numpy() - np.exp(-decay*times[:, None])*shape)
     local = thermal.thermal_element_nodal_heat_steps(model, result).numpy()
     from_left, into_right = -local[:, nl-1, 1], local[:, nl, 0]
-    exact_heat = -wl*np.cos(wl*interface)*(-np.expm1(-decay*times[1:]))/decay
+    exact_heat = initial_flux*(-np.expm1(-decay*times[1:]))/decay
     contact_heat_error = float(max(abs(np.cumsum(from_left)-exact_heat)))
     return dict(method=method, elements=n, time_steps=n,
                 layer_temperature_errors_K=[float(errors[:, :nl+1].max()), float(errors[:, nl+1:].max())],
