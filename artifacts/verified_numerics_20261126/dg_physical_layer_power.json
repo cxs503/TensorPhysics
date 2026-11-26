@@ -1,0 +1,20 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "d9873866a6c414888a9c644be107caaa9872e1d5",
+  "passed": 87,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Two unequal layers (0.43 and 1.25 m), finite contact resistance, seven P2 cells per layer. Recover the layer fields with the computed interface temperatures and compare storage, source and bulk exchange to exact polynomial integrals over each physical cell. Check local balance against face divergence and compare total net volume storage to the external inward fluxes.",
+  "metrics": {
+    "max_temperature_K": 8.71383633168729e-15,
+    "max_inward_flux_W_m2": 7.316908819198988e-14,
+    "layer1_source_error_W_m2": 0.0,
+    "layer1_bulk_error_W_m2": 9.148820436704901e-16,
+    "layer1_storage_error_W_m2": 1.0136724192653166e-15,
+    "layer1_cell_balance_W_m2": 6.839683737468619e-13,
+    "layer2_source_error_W_m2": 2.8609792490763984e-17,
+    "layer2_bulk_error_W_m2": 1.793620188084545e-15,
+    "layer2_storage_error_W_m2": 9.70747041236231e-15,
+    "layer2_cell_balance_W_m2": 4.4944937061145386e-13,
+    "stack_balance_W_m2": 5.001785760352927e-14
+  }
+}
