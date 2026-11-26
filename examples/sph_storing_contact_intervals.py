@@ -10,6 +10,33 @@ import sph_harmonic_storing_contacts as harmonic
 import sph_layered_storing_contacts as slab
 
 
+def sheet_peaks(state, sheets, reference, omega, times):
+    """Locate each maximum between samples by fitting its three neighboring states."""
+    result = []
+    period = 2*np.pi/omega
+    dt = times[1]-times[0]
+    for p, exact in zip(sheets, reference):
+        samples = state[:, p:p+2].mean(dim=1).numpy()
+        # Select the peak nearest the middle of the two-cycle run, leaving
+        # measured neighbors on either side even for peaks near phase zero.
+        candidates = np.flatnonzero((samples[1:-1] >= samples[:-2]) &
+                                    (samples[1:-1] > samples[2:]))+1
+        peak = candidates[np.argmin(abs(times[candidates]-period))]
+        left, center, right = samples[peak-1:peak+2]
+        curvature = left+right-2*center
+        offset = (left-right)/(2*curvature)
+        assert curvature < 0 and abs(offset) <= .5
+        temperature = center+(right-left)*offset/4
+        peak_time = (times[peak]+offset*dt) % period
+        exact_time = (-np.angle(exact) % (2*np.pi))/omega
+        time_error = (peak_time-exact_time+period/2) % period-period/2
+        result.append(dict(peak_K=temperature, reference_peak_K=abs(exact),
+                           time_s=peak_time, reference_time_s=exact_time,
+                           amplitude_error_K=abs(temperature-abs(exact)),
+                           phase_error_rad=abs(time_error)*omega))
+    return result
+
+
 def measure(n, omega, method, *, time_steps=None):
     material, sheets, _, _, _, _, _, capacity = slab.layered_materials(n)
     walls = (1., .3j)
@@ -18,7 +45,7 @@ def measure(n, omega, method, *, time_steps=None):
         torch.zeros(n+4), 1/n, walls, omega, **material, backend="banded", return_x_flux=True)
     drive = tuple(lambda t, a=a: float((a*np.exp(1j*omega*t)).real) for a in walls)
     steps = 4*n if time_steps is None else time_steps
-    times = np.linspace(0., 2*np.pi/omega, steps+1)
+    times = np.linspace(0., 4*np.pi/omega, 2*steps+1)
     state, heat, mean = slab.heat.solve_transient_layered_slab(
         phasor.real, times, 1/n, drive, **material, method=method,
         return_x_heat=True, return_interval_temperature=True)
@@ -62,7 +89,7 @@ def measure(n, omega, method, *, time_steps=None):
                          storage_change_error_J_m2=float(abs(stored-
                              (1j*omega*np.asarray(capacity)*reference[:, 0]*factor).real).max()),
                          storage_balance_J_m2=float(abs(energies[:, 0]-energies[:, 1]-stored).max())))
-    return rows
+    return rows, sheet_peaks(state, sheets, reference[:, 0], omega, times)
 
 
 if __name__ == "__main__":
@@ -73,16 +100,26 @@ if __name__ == "__main__":
     for method in ("theta", "sdirk2"):
         for omega in (1., 8., 24.):
             previous = None
+            previous_peak = None
             grids = [(32, s) for s in (32, 64, 128, 256)] if time_only else [(n, 4*n) for n in (16, 32, 64)]
             for n, steps in grids:
-                windows = measure(n, omega, method, time_steps=steps if time_only else None)
+                windows, peaks = measure(n, omega, method, time_steps=steps if time_only else None)
                 errors = np.array([max(row[key] for row in windows) for key in
                                    ("material_trace_error_K", "section_heat_error_J_m2", "storage_change_error_J_m2")])
                 assert max(row["storage_balance_J_m2"] for row in windows) < 1e-9
                 orders = np.log2(previous/errors) if previous is not None else None
                 if (n, steps) == grids[-1]:
                     np.testing.assert_array_less(1.7, orders)
-                runs.append(dict(method=method, omega_rad_s=omega, bulk_columns=n, time_steps=steps,
+                peak_errors = np.array([max(p[key] for p in peaks) for key in
+                                       ("amplitude_error_K", "phase_error_rad")])
+                peak_orders = np.log2(previous_peak/peak_errors) if previous_peak is not None else None
+                if time_only and (n, steps) == grids[-1]:
+                    np.testing.assert_array_less(1.8, peak_orders)
+                    np.testing.assert_array_less(peak_errors, [2e-5, 6e-5])
+                previous_peak = peak_errors
+                runs.append(dict(sheet_peaks=peaks, steps_per_cycle=steps, simulated_cycles=2,
+                                 peak_amplitude_phase_orders=peak_orders.tolist() if peak_orders is not None else None,
+                                 method=method, omega_rad_s=omega, bulk_columns=n, time_steps=steps,
                                  trace_heat_storage_orders=orders.tolist() if orders is not None else None, windows=windows))
                 previous = errors
     print(json.dumps(dict(reference="discrete harmonic" if time_only else "continuum transfer", runs=runs, sources=[provenance(p) for p in
