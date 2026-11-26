@@ -2,6 +2,23 @@
   "passed": true,
   "runs": [
     {
+      "reconstruction_only_errors_J_m2": [
+        8.848823109530723e-05,
+        8.848823109525172e-05
+      ],
+      "east_west_heat_J_m2": [
+        0.4694264705313519,
+        0.24557711574722865
+      ],
+      "east_west_errors_J_m2": [
+        0.006337403294651822,
+        0.007964535856552685
+      ],
+      "partition_residual_J_m2": 2.7755575615628914e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 16,
       "method": "theta",
       "solver": "fvm",
@@ -25,6 +42,23 @@
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        8.804472295786958e-06,
+        8.804472295786958e-06
+      ],
+      "east_west_heat_J_m2": [
+        0.47418986357666815,
+        0.25156496644715426
+      ],
+      "east_west_errors_J_m2": [
+        0.0015740102493355668,
+        0.0019766851566270782
+      ],
+      "partition_residual_J_m2": 5.551115123125783e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 32,
       "method": "theta",
       "solver": "fvm",
@@ -45,9 +79,30 @@
         0.00017489597267739132
       ],
       "cycle_heat_error_J_m2": 0.0004026749072915392,
+      "east_west_orders": [
+        2.0094468923989917,
+        2.010507190196294
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        7.597074670462334e-07,
+        7.597074670462334e-07
+      ],
+      "east_west_heat_J_m2": [
+        0.47537156945824965,
+        0.25304893314020954
+      ],
+      "east_west_errors_J_m2": [
+        0.0003923043677540594,
+        0.0004927184635717952
+      ],
+      "partition_residual_J_m2": 5.551115123125783e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 64,
       "method": "theta",
       "solver": "fvm",
@@ -68,9 +123,30 @@
         2.6275895910088387e-05
       ],
       "cycle_heat_error_J_m2": 0.0001004140958177635,
+      "east_west_orders": [
+        2.004399632153512,
+        2.004247659427069
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        9.071781215119756e-09,
+        9.071781215119756e-09
+      ],
+      "east_west_heat_J_m2": [
+        0.47566596008939976,
+        0.25341865022466875
+      ],
+      "east_west_errors_J_m2": [
+        9.791373660394953e-05,
+        0.00012300137911258613
+      ],
+      "partition_residual_J_m2": 8.326672684688674e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 128,
       "method": "theta",
       "solver": "fvm",
@@ -91,9 +167,30 @@
         5.98849578248295e-06
       ],
       "cycle_heat_error_J_m2": 2.508764250869211e-05,
+      "east_west_orders": [
+        2.0023902188328764,
+        2.002089043177825
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        8.848823109530723e-05,
+        8.848823109525172e-05
+      ],
+      "east_west_heat_J_m2": [
+        0.47340291263447937,
+        0.25142305109092283
+      ],
+      "east_west_errors_J_m2": [
+        0.0023609611915243467,
+        0.002118600512858504
+      ],
+      "partition_residual_J_m2": 0.0,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 16,
       "method": "sdirk2",
       "solver": "fvm",
@@ -117,6 +214,23 @@
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        8.804472295786958e-06,
+        8.804472295786958e-06
+      ],
+      "east_west_heat_J_m2": [
+        0.47518938704542457,
+        0.2530345779171141
+      ],
+      "east_west_errors_J_m2": [
+        0.000574486780579142,
+        0.0005070736866672476
+      ],
+      "partition_residual_J_m2": 2.7755575615628914e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 32,
       "method": "sdirk2",
       "solver": "fvm",
@@ -137,9 +251,30 @@
         0.00017853144578627855
       ],
       "cycle_heat_error_J_m2": 6.741309391189443e-05,
+      "east_west_orders": [
+        2.039028726606557,
+        2.06284425979603
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        7.597074670462334e-07,
+        7.597074670462334e-07
+      ],
+      "east_west_heat_J_m2": [
+        0.4756218315281893,
+        0.2534172766528423
+      ],
+      "east_west_errors_J_m2": [
+        0.00014204229781439315,
+        0.0001243749509390324
+      ],
+      "partition_residual_J_m2": 5.551115123125783e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 64,
       "method": "sdirk2",
       "solver": "fvm",
@@ -160,9 +295,30 @@
         2.719180969823487e-05
       ],
       "cycle_heat_error_J_m2": 1.7667346875444023e-05,
+      "east_west_orders": [
+        2.015953091536157,
+        2.0274994546912866
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        9.071781215119756e-09,
+        9.071781215119756e-09
+      ],
+      "east_west_heat_J_m2": [
+        0.4757285528341716,
+        0.2535108475211777
+      ],
+      "east_west_errors_J_m2": [
+        3.5320991832121784e-05,
+        3.0804082603641536e-05
+      ],
+      "partition_residual_J_m2": 0.0,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 128,
       "method": "sdirk2",
       "solver": "fvm",
@@ -183,9 +339,30 @@
         6.222933392030505e-06
       ],
       "cycle_heat_error_J_m2": 4.516909228508004e-06,
+      "east_west_orders": [
+        2.0077228437915853,
+        2.0135024810021203
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        8.848823109530723e-05,
+        8.848823109525172e-05
+      ],
+      "east_west_heat_J_m2": [
+        0.4694304114059231,
+        0.24557722071442356
+      ],
+      "east_west_errors_J_m2": [
+        0.006333462420080593,
+        0.007964430889357776
+      ],
+      "partition_residual_J_m2": 0.0,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 16,
       "method": "theta",
       "solver": "sph",
@@ -209,6 +386,23 @@
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        8.804472295786958e-06,
+        8.804472295786958e-06
+      ],
+      "east_west_heat_J_m2": [
+        0.4741908344052671,
+        0.251564980031577
+      ],
+      "east_west_errors_J_m2": [
+        0.0015730394207366105,
+        0.001976671572204325
+      ],
+      "partition_residual_J_m2": 0.0,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 32,
       "method": "theta",
       "solver": "sph",
@@ -229,9 +423,30 @@
         0.00017402558388035505
       ],
       "cycle_heat_error_J_m2": 0.0004036321514676866,
+      "east_west_orders": [
+        2.0094395921207853,
+        2.010498091029501
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        7.597074670462334e-07,
+        7.597074670462334e-07
+      ],
+      "east_west_heat_J_m2": [
+        0.47537181150147634,
+        0.25304893598734834
+      ],
+      "east_west_errors_J_m2": [
+        0.00039206232452737577,
+        0.0004927156164329927
+      ],
+      "partition_residual_J_m2": 5.551115123125783e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 64,
       "method": "theta",
       "solver": "sph",
@@ -252,9 +467,30 @@
         2.6059147327894827e-05
       ],
       "cycle_heat_error_J_m2": 0.00010065329190553363,
+      "east_west_orders": [
+        2.0043999085307758,
+        2.004246081259221
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        9.071781215119756e-09,
+        9.071781215119756e-09
+      ],
+      "east_west_heat_J_m2": [
+        0.47566602056729645,
+        0.25341865091081966
+      ],
+      "east_west_errors_J_m2": [
+        9.785325870725892e-05,
+        0.00012300069296167226
+      ],
+      "partition_residual_J_m2": 2.7755575615628914e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 128,
       "method": "theta",
       "solver": "sph",
@@ -275,9 +511,30 @@
         5.934217664926855e-06
       ],
       "cycle_heat_error_J_m2": 2.5147434254413348e-05,
+      "east_west_orders": [
+        2.0023912104730677,
+        2.0020887545951607
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        8.848823109530723e-05,
+        8.848823109525172e-05
+      ],
+      "east_west_heat_J_m2": [
+        0.4734057505673895,
+        0.2514239853306932
+      ],
+      "east_west_errors_J_m2": [
+        0.002358123258614231,
+        0.0021176662730881257
+      ],
+      "partition_residual_J_m2": 5.551115123125783e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 16,
       "method": "sdirk2",
       "solver": "sph",
@@ -301,6 +558,23 @@
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        8.804472295786958e-06,
+        8.804472295786958e-06
+      ],
+      "east_west_heat_J_m2": [
+        0.475190076715092,
+        0.25303479169736404
+      ],
+      "east_west_errors_J_m2": [
+        0.0005737971109117113,
+        0.0005068599064173007
+      ],
+      "partition_residual_J_m2": 5.551115123125783e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 32,
       "method": "sdirk2",
       "solver": "sph",
@@ -321,9 +595,30 @@
         0.00017814210029287736
       ],
       "cycle_heat_error_J_m2": 6.693720449438278e-05,
+      "east_west_orders": [
+        2.0390265204413867,
+        2.062816296654258
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        7.597074670462334e-07,
+        7.597074670462334e-07
+      ],
+      "east_west_heat_J_m2": [
+        0.4756220021010834,
+        0.25341732819875223
+      ],
+      "east_west_errors_J_m2": [
+        0.00014187172492030609,
+        0.0001243234050291031
+      ],
+      "partition_residual_J_m2": 5.551115123125783e-17,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 64,
       "method": "sdirk2",
       "solver": "sph",
@@ -344,9 +639,30 @@
         2.7094302886498944e-05
       ],
       "cycle_heat_error_J_m2": 1.7548319891175224e-05,
+      "east_west_orders": [
+        2.0159536156368496,
+        2.027489125895034
+      ],
       "passed": true
     },
     {
+      "reconstruction_only_errors_J_m2": [
+        9.071781215119756e-09,
+        9.071781215119756e-09
+      ],
+      "east_west_heat_J_m2": [
+        0.4757285952783459,
+        0.25351086019635344
+      ],
+      "east_west_errors_J_m2": [
+        3.5278547657835446e-05,
+        3.079140742789921e-05
+      ],
+      "partition_residual_J_m2": 0.0,
+      "exact_east_west_heat_J_m2": [
+        0.4757638738260037,
+        0.25354165160378134
+      ],
       "steps": 128,
       "method": "sdirk2",
       "solver": "sph",
@@ -367,17 +683,21 @@
         6.1984611502419185e-06
       ],
       "cycle_heat_error_J_m2": 4.487140229963993e-06,
+      "east_west_orders": [
+        2.0077240138995185,
+        2.0134982052487502
+      ],
       "passed": true
     }
   ],
   "sources": [
     {
-      "commit": "c9e5c50c55023a7185b6b69e9586f444d179d355",
+      "commit": "0910a69f16a8f91ec261dd2c77e1d90683315ed1",
       "file": "cross_periodic_contact_reversals.py",
-      "source_sha256": "99a56abe64d28c41762aae15484bbe647c4b8e2b12e692105620514e76a41ba1"
+      "source_sha256": "c4d85ce9e4aaa9c4c2cefe71ca0e742265d090418e513ac956270a49660695d0"
     },
     {
-      "commit": "c9e5c50c55023a7185b6b69e9586f444d179d355",
+      "commit": "0910a69f16a8f91ec261dd2c77e1d90683315ed1",
       "file": "sph_reversing_contact_walls.py",
       "source_sha256": "a0698cb34da30e21068945bfeff9b3ece5309f56357ac6b7b6f8455ebe2d6f88"
     },
