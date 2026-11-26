@@ -1,0 +1,262 @@
+{
+  "reference": "Cubic polynomials in x times periodic modes 0, 1 and -2; unit square",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_harmonic_mixed_wall_modes.py",
+  "runs": [
+    {
+      "columns": 8,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 1.1523362276724465,
+      "temperature_error_K": 0.11725213428129223,
+      "section_flux_error_W_m2": 0.0006213564687569488,
+      "prescribed_mean_flux_error_W_m2": 2.220446049250313e-16,
+      "column_balance_residual_W_m2": 3.7055512587877174e-15,
+      "temperature_and_flux_orders": [],
+      "fixed_wall_row_flux_order": null,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 0.3493676513776474,
+      "temperature_error_K": 0.027529981130777204,
+      "section_flux_error_W_m2": 0.00015515634402737935,
+      "prescribed_mean_flux_error_W_m2": 2.2887833992611187e-16,
+      "column_balance_residual_W_m2": 1.56543907053484e-14,
+      "temperature_and_flux_orders": [
+        2.090538657413584,
+        2.001698485147855
+      ],
+      "fixed_wall_row_flux_order": 1.7217437888767109,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 0.0914856954750479,
+      "temperature_error_K": 0.006858106981778376,
+      "section_flux_error_W_m2": 3.8764496952924636e-05,
+      "prescribed_mean_flux_error_W_m2": 2.220446049250313e-16,
+      "column_balance_residual_W_m2": 1.7841287460060172e-14,
+      "temperature_and_flux_orders": [
+        2.0051213064838898,
+        2.000914838644088
+      ],
+      "fixed_wall_row_flux_order": 1.933127943372331,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 0.023299327043858963,
+      "temperature_error_K": 0.0017114707801383115,
+      "section_flux_error_W_m2": 9.687942724207103e-06,
+      "prescribed_mean_flux_error_W_m2": 4.518280359883027e-16,
+      "column_balance_residual_W_m2": 1.065459204839548e-13,
+      "temperature_and_flux_orders": [
+        2.002573748012879,
+        2.00047370232583
+      ],
+      "fixed_wall_row_flux_order": 1.9732578980302726,
+      "passed": true
+    },
+    {
+      "columns": 8,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 1.5267169179947226,
+      "temperature_error_K": 0.09759254039007761,
+      "section_flux_error_W_m2": 0.0011769126925847918,
+      "prescribed_mean_flux_error_W_m2": 5.551115123125783e-17,
+      "column_balance_residual_W_m2": 3.5405497909262118e-15,
+      "temperature_and_flux_orders": [],
+      "fixed_wall_row_flux_order": null,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 0.44910942539959603,
+      "temperature_error_K": 0.02257707501245207,
+      "section_flux_error_W_m2": 0.0002935623864003329,
+      "prescribed_mean_flux_error_W_m2": 1.1102230246251565e-16,
+      "column_balance_residual_W_m2": 8.282330733990693e-15,
+      "temperature_and_flux_orders": [
+        2.1119122888436466,
+        2.003268264968646
+      ],
+      "fixed_wall_row_flux_order": 1.7652936789651201,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 0.11302799681993235,
+      "temperature_error_K": 0.005638962006571229,
+      "section_flux_error_W_m2": 7.329088703159755e-05,
+      "prescribed_mean_flux_error_W_m2": 1.1102230246251565e-16,
+      "column_balance_residual_W_m2": 5.0631215966805626e-14,
+      "temperature_and_flux_orders": [
+        2.0013570612259315,
+        2.0019613998792347
+      ],
+      "fixed_wall_row_flux_order": 1.9903868303590933,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 1e-06,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 0.028087381849191476,
+      "temperature_error_K": 0.001406649415596547,
+      "section_flux_error_W_m2": 1.8309231241178397e-05,
+      "prescribed_mean_flux_error_W_m2": 5.551115123125783e-17,
+      "column_balance_residual_W_m2": 3.4462798089866605e-14,
+      "temperature_and_flux_orders": [
+        2.003166817402104,
+        2.001062607961566
+      ],
+      "fixed_wall_row_flux_order": 2.0086861139541012,
+      "passed": true
+    },
+    {
+      "columns": 8,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 1.1556695585751955,
+      "temperature_error_K": 0.11783082053004063,
+      "section_flux_error_W_m2": 0.005494703868753427,
+      "prescribed_mean_flux_error_W_m2": 2.220446049250313e-16,
+      "column_balance_residual_W_m2": 4.976227170553342e-15,
+      "temperature_and_flux_orders": [],
+      "fixed_wall_row_flux_order": null,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 0.34951633626128753,
+      "temperature_error_K": 0.02734856274996643,
+      "section_flux_error_W_m2": 0.0013726282516438014,
+      "prescribed_mean_flux_error_W_m2": 2.2887833992611187e-16,
+      "column_balance_residual_W_m2": 7.207530338191146e-15,
+      "temperature_and_flux_orders": [
+        2.1071800263058122,
+        2.001100776879239
+      ],
+      "fixed_wall_row_flux_order": 1.7252971526660301,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 0.09170506007945152,
+      "temperature_error_K": 0.006854796915767206,
+      "section_flux_error_W_m2": 0.0003430190528473223,
+      "prescribed_mean_flux_error_W_m2": 2.220446049250313e-16,
+      "column_balance_residual_W_m2": 1.853096834477913e-14,
+      "temperature_and_flux_orders": [
+        1.9962791873828882,
+        2.000580336250421
+      ],
+      "fixed_wall_row_flux_order": 1.9302866423923013,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "left",
+      "fixed_wall_row_flux_error_W_m2": 0.023432676300073035,
+      "temperature_error_K": 0.001709032518183389,
+      "section_flux_error_W_m2": 8.573727481135921e-05,
+      "prescribed_mean_flux_error_W_m2": 4.518280359883027e-16,
+      "column_balance_residual_W_m2": 3.5790581351541954e-14,
+      "temperature_and_flux_orders": [
+        2.0039340767187177,
+        2.000294246065432
+      ],
+      "fixed_wall_row_flux_order": 1.9684796035483503,
+      "passed": true
+    },
+    {
+      "columns": 8,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 1.5352071010272483,
+      "temperature_error_K": 0.09623387336795457,
+      "section_flux_error_W_m2": 0.012368816872506159,
+      "prescribed_mean_flux_error_W_m2": 5.551115123125783e-17,
+      "column_balance_residual_W_m2": 2.0014830212433605e-15,
+      "temperature_and_flux_orders": [],
+      "fixed_wall_row_flux_order": null,
+      "passed": true
+    },
+    {
+      "columns": 16,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 0.4496156633944482,
+      "temperature_error_K": 0.02244716354909789,
+      "section_flux_error_W_m2": 0.0030869012281555287,
+      "prescribed_mean_flux_error_W_m2": 1.1102230246251565e-16,
+      "column_balance_residual_W_m2": 9.250771381290452e-15,
+      "temperature_and_flux_orders": [
+        2.100011641937164,
+        2.002476280515965
+      ],
+      "fixed_wall_row_flux_order": 1.7716690886357682,
+      "passed": true
+    },
+    {
+      "columns": 32,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 0.11316707196447276,
+      "temperature_error_K": 0.005534433255614258,
+      "section_flux_error_W_m2": 0.0007705809941557993,
+      "prescribed_mean_flux_error_W_m2": 1.1102230246251565e-16,
+      "column_balance_residual_W_m2": 1.2573347076469528e-14,
+      "temperature_and_flux_orders": [
+        2.020025662872954,
+        2.002140813174793
+      ],
+      "fixed_wall_row_flux_order": 1.9902380553879668,
+      "passed": true
+    },
+    {
+      "columns": 64,
+      "omega_rad_s": 3.0,
+      "fixed_wall": "right",
+      "fixed_wall_row_flux_error_W_m2": 0.028061238606266005,
+      "temperature_error_K": 0.0013802666327030928,
+      "section_flux_error_W_m2": 0.0001924734094706582,
+      "prescribed_mean_flux_error_W_m2": 5.551115123125783e-17,
+      "column_balance_residual_W_m2": 5.0720656633925953e-14,
+      "temperature_and_flux_orders": [
+        2.0034886015745594,
+        2.0012874545699186
+      ],
+      "fixed_wall_row_flux_order": 2.011803645471169,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "cd90c750298d2eed88a22f48d957c0761381bd8c",
+      "file": "sph_harmonic_mixed_wall_modes.py",
+      "source_sha256": "ae6b469e73ce30d156e4bac086f5bb4989e0be66a5a8c7338981567d97286bd8"
+    },
+    {
+      "commit": "8da377020b9d3298e2706032cc98f768271e7ce6",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "360803002532e00f3d22fe5c020200808225a14b254d0f6317274ae625e67b72"
+    }
+  ]
+}
