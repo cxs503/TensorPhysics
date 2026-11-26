@@ -1,0 +1,44 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "56ceabd83fc6559ff46390abed28dd146bc811db",
+  "passed": 230,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_conduction_2d.py --junitxml=results.xml",
+  "reference": "Eight columns of width 0.125 m. The left and right halves have conductivity 1 and 4 W/(m K) and volumetric capacity 2 and 3 J/(m\u00b3 K). T(x,t) equals cumulative thermal resistance to x plus t in SI units, corresponding to a uniform section flux of -1 W/m\u00b2. The bulk source switches from +k to -2k at 0.125 s. The independently prescribed heater power is c minus the bulk source. Two 0.25 s output intervals are compared to exact column heat integrals. A separate insulated uniform test integrates a quadratic heater t\u00b2 through 0.5 s and checks stored heat.",
+  "runs": {
+    "Crank-Nicolson": {
+      "source_J_m2": 0.0,
+      "exchange_J_m2": 5.551115123125783e-17,
+      "section_J_m2": 1.0047518372857667e-14,
+      "field_K": 2.220446049250313e-15,
+      "budget_J_m2": 4.6629367034256575e-15
+    },
+    "Rannacher": {
+      "source_J_m2": 0.0,
+      "exchange_J_m2": 6.245004513516506e-17,
+      "section_J_m2": 7.827072323607354e-15,
+      "field_K": 2.6645352591003757e-15,
+      "budget_J_m2": 4.801714581503802e-15
+    },
+    "SDIRK2": {
+      "source_J_m2": 0.0,
+      "exchange_J_m2": 5.551115123125783e-17,
+      "section_J_m2": 1.0103029524088925e-14,
+      "field_K": 2.220446049250313e-15,
+      "budget_J_m2": 4.884981308350689e-15
+    },
+    "exponential": {
+      "source_J_m2": 0.0,
+      "exchange_J_m2": 4.163336342344337e-17,
+      "section_J_m2": 9.825473767932635e-15,
+      "field_K": 1.3322676295501878e-15,
+      "budget_J_m2": 6.106226635438361e-15
+    },
+    "exponential_quadratic": {
+      "source_J_m2": 0.0,
+      "exchange_J_m2": 2.7755575615628914e-17,
+      "section_J_m2": 9.71445146547012e-15,
+      "field_K": 8.881784197001252e-16,
+      "budget_J_m2": 7.549516567451064e-15
+    }
+  }
+}
