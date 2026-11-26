@@ -16,7 +16,7 @@ from conduction_provenance import provenance
 ROOT = 5/9
 
 
-def fem_power(n):
+def fem_power(n, zero_position=ROOT):
     y = torch.linspace(0., 1., n+1, dtype=torch.float64)
     columns = torch.stack([torch.stack((y*0+x, y), dim=1) for x in (0., .5, .5, 1.)])
     nodes = columns.reshape(-1, 2)
@@ -24,7 +24,7 @@ def fem_power(n):
     elements = torch.cat([torch.stack((ids[i,:-1], ids[i+1,:-1], ids[i+1,1:], ids[i,1:]), dim=1)
                           for i in (0, 2)])
     pairs = ids[1:3].unfold(1, 2, 1).transpose(0, 1)
-    temperature = torch.cat((y-ROOT, y-ROOT, 0*y, 0*y))
+    temperature = torch.cat((y-zero_position, y-zero_position, 0*y, 0*y))
     # TensorFEM takes area-scaled conductances (W/K) at the edge endpoints.
     edge_conductance = (1+y).unfold(0, 2, 1)*y.diff()[:, None]
     model = thermal.ThermalModel(nodes, elements, 1., 1., 1., torch.arange(len(nodes)), temperature,
@@ -35,10 +35,10 @@ def fem_power(n):
     return forward.numpy(), reverse.numpy(), net.numpy()
 
 
-def dg_power(n):
+def dg_power(n, zero_position=ROOT):
     mid = (torch.arange(n, dtype=torch.float64)+.5)/n
     field = mid.new_zeros((2, n, 2, 2))
-    field[0, :, 0, 0] = mid-ROOT
+    field[0, :, 0, 0] = mid-zero_position
     field[0, :, 0, 1] = .5/n
     contacts = {"x": 1/(1+mid[None, :])}
     power = dg.directional_contact_face_powers_2d(field, contacts)["x"]
