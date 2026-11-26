@@ -18,13 +18,17 @@ def recover(measured, position):
     per_tone = -c/(b+np.sqrt(b*b-a*c))
     resistance = per_tone.mean()
     ratios = measured/ref.wall_transfer(position, resistance)
+    return float(resistance), shared_delay(ratios)
+
+
+def shared_delay(ratios):
     omega = 2*np.pi*np.array([1., 2.])
     delays = -np.angle(ratios)/omega
     # The 1 Hz phase fixes the common delay modulo one second. Choose
     # the 2 Hz branch nearest that value before fitting the phase slope.
     delays[1] += .5*np.rint((delays[0]-delays[1])/.5)
     delay = np.average(delays, weights=omega**2)
-    return float(resistance), float(delay)
+    return float(delay)
 
 
 def study(solver, target, position=.25):
