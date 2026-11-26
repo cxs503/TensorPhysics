@@ -3,9 +3,9 @@
   "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/sph_affine_contact_wall_heat.py --balanced --compare-fvm",
   "sources": [
     {
-      "commit": "660e508addced448cc91e46dd39c199d7737687b",
+      "commit": "669172e3e95fe68472ecb0efc99e26e3fa50553a",
       "file": "sph_affine_contact_wall_heat.py",
-      "source_sha256": "fded2a6aabe66e274a4950cc4a25b8532fbe27cbb87cc08d13dcf8005d35cf35"
+      "source_sha256": "960989442b52ece94454903a6af030bbcf5245ecef77d613e9793b87d797c52a"
     },
     {
       "commit": "8da377020b9d3298e2706032cc98f768271e7ce6",
@@ -38,6 +38,11 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.13339196227202765,
+        0.5576146349298756
+      ],
+      "max_quadratic_reversal_error_m": 0.000630984004641455,
       "max_reversal_error_m": 0.000920411793859266,
       "temperature_and_wall_flux_orders": null,
       "solver": "SPH"
@@ -61,6 +66,11 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.13383341953064035,
+        0.5569836509252315
+      ],
+      "max_quadratic_reversal_error_m": 3.3584246494910985e-15,
       "max_reversal_error_m": 0.0007739745633624506,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 0.0005971812436733615
@@ -84,11 +94,17 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.13372299964511353,
+        0.5571413158467808
+      ],
+      "max_quadratic_reversal_error_m": 0.0001576649215466741,
       "max_reversal_error_m": 0.0003050682510916669,
       "temperature_and_wall_flux_orders": [
         1.9638740680509525,
         1.9999999999601474
       ],
+      "quadratic_reversal_order": 2.0007417191399703,
       "solver": "SPH"
     },
     {
@@ -110,6 +126,11 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.1338334195306302,
+        0.5569836509252263
+      ],
+      "max_quadratic_reversal_error_m": 7.882583474838611e-15,
       "max_reversal_error_m": 0.00030759620927922615,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 0.0001542519945556542
@@ -133,11 +154,17 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.13380581108170678,
+        0.5570230620946582
+      ],
+      "max_quadratic_reversal_error_m": 3.9411169424075077e-05,
       "max_reversal_error_m": 9.945741488204263e-05,
       "temperature_and_wall_flux_orders": [
         1.9822706935032244,
         1.9999999993198856
       ],
+      "quadratic_reversal_order": 2.000185250957491,
       "solver": "SPH"
     },
     {
@@ -159,6 +186,11 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.13383341953061065,
+        0.5569836509252064
+      ],
+      "max_quadratic_reversal_error_m": 2.7755575615628914e-14,
       "max_reversal_error_m": 9.09844618686706e-05,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 3.921396083428341e-05
@@ -182,11 +214,17 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.13382651720100472,
+        0.5569935034013942
+      ],
+      "max_quadratic_reversal_error_m": 9.852476160032708e-06,
       "max_reversal_error_m": 2.3687545837702828e-05,
       "temperature_and_wall_flux_orders": [
         1.9912163863981829,
         1.9999999887662505
       ],
+      "quadratic_reversal_order": 2.000046299737627,
       "solver": "SPH"
     },
     {
@@ -208,6 +246,11 @@
         0.133833419530637,
         0.5569836509252342
       ],
+      "quadratic_flux_reversals_m": [
+        0.13383341953053027,
+        0.5569836509251112
+      ],
+      "max_quadratic_reversal_error_m": 1.2301271112846734e-13,
       "max_reversal_error_m": 1.3800607336467152e-05,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 9.886938501235676e-06
@@ -231,6 +274,11 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.19279895903600963,
+        0.4858596638648667
+      ],
+      "max_quadratic_reversal_error_m": 0.0003530435003638033,
       "max_reversal_error_m": 0.0009761158488202915,
       "temperature_and_wall_flux_orders": null,
       "solver": "SPH"
@@ -254,6 +302,11 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.19314726284665154,
+        0.48550662036450204
+      ],
+      "max_quadratic_reversal_error_m": 8.326672684688674e-16,
       "max_reversal_error_m": 0.000658589436421525,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 0.00038513740524886986
@@ -277,11 +330,17 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.19306014468296454,
+        0.48559485927144164
+      ],
+      "max_quadratic_reversal_error_m": 8.823890693876457e-05,
       "max_reversal_error_m": 0.0003158145865240769,
       "temperature_and_wall_flux_orders": [
         1.9675600059386185,
         1.9999999998963496
       ],
+      "quadratic_reversal_order": 2.0003591318245926,
       "solver": "SPH"
     },
     {
@@ -303,6 +362,11 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.19314726284664516,
+        0.4855066203644967
+      ],
+      "max_quadratic_reversal_error_m": 6.161737786669619e-15,
       "max_reversal_error_m": 0.00027871881695476497,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 9.048408917730622e-05
@@ -326,11 +390,17 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.1931254806643482,
+        0.48552867871908545
+      ],
+      "max_quadratic_reversal_error_m": 2.205835458257699e-05,
       "max_reversal_error_m": 8.348491042298178e-05,
       "temperature_and_wall_flux_orders": [
         1.984049542449208,
         1.9999999982042471
       ],
+      "quadratic_reversal_order": 2.0000897408496456,
       "solver": "SPH"
     },
     {
@@ -352,6 +422,11 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.1931472628466226,
+        0.48550662036447834
+      ],
+      "max_quadratic_reversal_error_m": 2.8699265186560297e-14,
       "max_reversal_error_m": 0.00010544449928287514,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 2.233842775711814e-05
@@ -375,11 +450,17 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.19314181713596237,
+        0.4855121348674188
+      ],
+      "max_quadratic_reversal_error_m": 5.514502915915376e-06,
       "max_reversal_error_m": 1.7141670575065993e-05,
       "temperature_and_wall_flux_orders": [
         1.9920904181473194,
         1.9999999760827911
       ],
+      "quadratic_reversal_order": 2.000022428294119,
       "solver": "SPH"
     },
     {
@@ -401,6 +482,11 @@
         0.1931472628466513,
         0.48550662036450287
       ],
+      "quadratic_flux_reversals_m": [
+        0.19314726284652728,
+        0.48550662036441883
+      ],
+      "max_quadratic_reversal_error_m": 1.2401191185062999e-13,
       "max_reversal_error_m": 2.2552462503266923e-05,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 5.543386138673334e-06
@@ -424,6 +510,11 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.24160803772797254,
+        0.8173853650701248
+      ],
+      "max_quadratic_reversal_error_m": 0.0006309840046410109,
       "max_reversal_error_m": 0.0009204117938589329,
       "temperature_and_wall_flux_orders": null,
       "solver": "SPH"
@@ -447,6 +538,11 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.24116658046935857,
+        0.8180163490747672
+      ],
+      "max_quadratic_reversal_error_m": 4.440892098500626e-15,
       "max_reversal_error_m": 0.0007739745633635886,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 0.0005971812436719182
@@ -470,11 +566,17 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.2412770003548875,
+        0.8178586841532206
+      ],
+      "max_quadratic_reversal_error_m": 0.00015766492154523082,
       "max_reversal_error_m": 0.0003050682510901126,
       "temperature_and_wall_flux_orders": [
         1.9546629977398948,
         1.9999999999856586
       ],
+      "quadratic_reversal_order": 2.0007417191521615,
       "solver": "SPH"
     },
     {
@@ -496,6 +598,11 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.24116658046936454,
+        0.8180163490747705
+      ],
+      "max_quadratic_reversal_error_m": 4.6629367034256575e-15,
       "max_reversal_error_m": 0.000307596209284583,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 0.00015425199455099126
@@ -519,11 +626,17 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.24119418891829722,
+        0.8179769379053491
+      ],
+      "max_quadratic_reversal_error_m": 3.9411169416747605e-05,
       "max_reversal_error_m": 9.945741487471516e-05,
       "temperature_and_wall_flux_orders": [
         1.9411319996199399,
         1.9999999997879123
       ],
+      "quadratic_reversal_order": 2.0001852512125153,
       "solver": "SPH"
     },
     {
@@ -545,6 +658,11 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.24116658046936879,
+        0.8180163490747846
+      ],
+      "max_quadratic_reversal_error_m": 1.8762769116165146e-14,
       "max_reversal_error_m": 9.098446188918197e-05,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 3.9213960817963134e-05
@@ -568,11 +686,17 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.24117348279901327,
+        0.8180064965986337
+      ],
+      "max_quadratic_reversal_error_m": 9.85247613216611e-06,
       "max_reversal_error_m": 2.3687545809725208e-05,
       "temperature_and_wall_flux_orders": [
         1.9644689746868633,
         1.9999999965933597
       ],
+      "quadratic_reversal_order": 2.0000463035498925,
       "solver": "SPH"
     },
     {
@@ -594,6 +718,11 @@
         0.241166580469363,
         0.8180163490747658
       ],
+      "quadratic_flux_reversals_m": [
+        0.24116658046938833,
+        0.8180163490748397
+      ],
+      "max_quadratic_reversal_error_m": 7.382983113757291e-14,
       "max_reversal_error_m": 1.3800607385761055e-05,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 9.886938423964153e-06
@@ -617,6 +746,11 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.29411607194729317,
+        0.7274420187854337
+      ],
+      "max_quadratic_reversal_error_m": 0.000507176426490008,
       "max_reversal_error_m": 0.0017542509032147935,
       "temperature_and_wall_flux_orders": null,
       "solver": "SPH"
@@ -640,6 +774,11 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.29386999342294706,
+        0.7279491952119201
+      ],
+      "max_quadratic_reversal_error_m": 3.552713678800501e-15,
       "max_reversal_error_m": 0.0012345153044366342,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 0.0005197355987781593
@@ -663,11 +802,17 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.29393152793743205,
+        0.7278224662245516
+      ],
+      "max_quadratic_reversal_error_m": 0.00012672898737209337,
       "max_reversal_error_m": 0.0003936675294903269,
       "temperature_and_wall_flux_orders": [
         1.897222935042169,
         1.9999999999503075
       ],
+      "quadratic_reversal_order": 2.000741133442455,
       "solver": "SPH"
     },
     {
@@ -689,6 +834,11 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.2938699934229455,
+        0.7279491952119143
+      ],
+      "max_quadratic_reversal_error_m": 9.43689570931383e-15,
       "max_reversal_error_m": 0.0003058348754125806,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 0.00012454692208407891
@@ -712,11 +862,17 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.29388537798234426,
+        0.7279175170298229
+      ],
+      "max_quadratic_reversal_error_m": 3.1678182100813856e-05,
       "max_reversal_error_m": 0.00011188016021956848,
       "temperature_and_wall_flux_orders": [
         1.9436173229881066,
         1.999999999177622
       ],
+      "quadratic_reversal_order": 2.0001851055472293,
       "solver": "SPH"
     },
     {
@@ -738,6 +894,11 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.2938699934229414,
+        0.727949195211883
+      ],
+      "max_quadratic_reversal_error_m": 4.0745185003743245e-14,
       "max_reversal_error_m": 8.008431182982001e-05,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 3.179584838974847e-05
@@ -761,11 +922,17 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.2938738396209851,
+        0.7279412759204078
+      ],
+      "max_quadratic_reversal_error_m": 7.919291515889881e-06,
       "max_reversal_error_m": 1.9811258122670594e-05,
       "temperature_and_wall_flux_orders": [
         1.9702436142880964,
         1.9999999871866
       ],
+      "quadratic_reversal_order": 2.000046273343949,
       "solver": "SPH"
     },
     {
@@ -787,6 +954,11 @@
         0.29386999342294756,
         0.7279491952119237
       ],
+      "quadratic_flux_reversals_m": [
+        0.2938699934229201,
+        0.7279491952117515
+      ],
+      "max_quadratic_reversal_error_m": 1.7219559111936178e-13,
       "max_reversal_error_m": 1.8985198358634214e-05,
       "solver": "FVM",
       "max_reversal_difference_from_SPH_m": 7.865709251486663e-06
