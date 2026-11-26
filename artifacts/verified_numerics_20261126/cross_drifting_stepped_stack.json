@@ -1,0 +1,2830 @@
+{
+  "runs": [
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 5.48172618408671e-16,
+        "face_flux_W_m2": 3.586874387250506e-15,
+        "trace_K": 6.730727086790012e-16,
+        "rate_K_s": 0.0,
+        "face_power_W": 2.456368441983159e-15,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.734723475976807e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.0816681711721685e-16,
+        "face_flux_W_m2": 1.4518301091252047e-15,
+        "trace_K": 2.498001805406602e-16,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 9.43689570931383e-16,
+        "contact_balance_W_m2": 1.6653345369377348e-16,
+        "jump_residual_K": 2.7755575615628914e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 8.548717289613705e-15,
+        "face_flux_W_m2": 2.3256250726358544e-14,
+        "trace_K": 9.381384558082573e-15,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 2.2093438190040615e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 0.0
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 4.440892098500626e-16,
+        "face_flux_W_m2": 2.906172035048204e-15,
+        "trace_K": 4.996003610813204e-16,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 4.9404924595819466e-15,
+        "contact_balance_W_m2": 5.88418203051333e-15,
+        "jump_residual_K": 1.1379786002407855e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.510281037539698e-16,
+        "face_flux_W_m2": 3.586874387250506e-15,
+        "trace_K": 5.759281940243e-16,
+        "rate_K_s": 0.0,
+        "face_power_W": 2.456368441983159e-15,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.636779683484747e-16,
+        "face_flux_W_m2": 1.9642407358752767e-15,
+        "trace_K": 2.914335439641036e-16,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.27675647831893e-15,
+        "contact_balance_W_m2": 8.326672684688674e-16,
+        "jump_residual_K": 6.591949208711867e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 8.548717289613705e-15,
+        "face_flux_W_m2": 2.3256250726358544e-14,
+        "trace_K": 9.381384558082573e-15,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 2.2093438190040615e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 2.7755575615628914e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.0547118733938987e-15,
+        "face_flux_W_m2": 5.253150855487414e-15,
+        "trace_K": 1.1657341758564144e-15,
+        "rate_K_s": 0.0,
+        "face_power_W": 8.930356454328603e-15,
+        "contact_balance_W_m2": 1.1879386363489175e-14,
+        "jump_residual_K": 2.498001805406602e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 5.412337245047638e-16,
+        "face_flux_W_m2": 4.186161651238769e-15,
+        "trace_K": 6.800116025829084e-16,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 3.97685356867683e-15,
+        "contact_balance_W_m2": 0.0,
+        "jump_residual_K": 6.938893903907228e-18
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.8041124150158794e-16,
+        "face_flux_W_m2": 1.3664283380001925e-15,
+        "trace_K": 2.220446049250313e-16,
+        "rate_K_s": 7.763525923045742e-17,
+        "face_power_W": 8.881784197001252e-16,
+        "contact_balance_W_m2": 3.3306690738754696e-16,
+        "jump_residual_K": 2.7755575615628914e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.1796119636642288e-15,
+        "face_flux_W_m2": 8.710980654751227e-15,
+        "trace_K": 1.3600232051658168e-15,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 5.662137425588298e-15,
+        "contact_balance_W_m2": 2.931875384126573e-17,
+        "jump_residual_K": 3.469446951953614e-18
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.6653345369377348e-16,
+        "face_flux_W_m2": 1.0248212535001444e-15,
+        "trace_K": 1.8041124150158794e-16,
+        "rate_K_s": 3.909167178835431e-17,
+        "face_power_W": 6.661338147750939e-16,
+        "contact_balance_W_m2": 2.3846408436793485e-16,
+        "jump_residual_K": 7.28583859910259e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.440892098500626e-16,
+        "face_flux_W_m2": 4.186161651238769e-15,
+        "trace_K": 5.828670879282072e-16,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 3.97685356867683e-15,
+        "contact_balance_W_m2": 0.0,
+        "jump_residual_K": 6.938893903907228e-18
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.498001805406602e-16,
+        "face_flux_W_m2": 1.9642407358752767e-15,
+        "trace_K": 2.7755575615628914e-16,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 1.27675647831893e-15,
+        "contact_balance_W_m2": 8.326672684688674e-16,
+        "jump_residual_K": 6.591949208711867e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.1102230246251565e-15,
+        "face_flux_W_m2": 8.710980654751227e-15,
+        "trace_K": 1.304512053934559e-15,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 5.662137425588298e-15,
+        "contact_balance_W_m2": 2.931875384126573e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 3.191891195797325e-16,
+        "face_flux_W_m2": 1.1102230246251565e-15,
+        "trace_K": 3.608224830031759e-16,
+        "rate_K_s": 2.9318753841265725e-17,
+        "face_power_W": 7.771561172376096e-16,
+        "contact_balance_W_m2": 3.0687450999755485e-16,
+        "jump_residual_K": 4.5102810375396984e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 5.342948306008566e-16,
+        "face_flux_W_m2": 7.344552316751035e-15,
+        "trace_K": 6.730727086790012e-16,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 4.773959005888173e-15,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.734723475976807e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.0816681711721685e-16,
+        "face_flux_W_m2": 1.3664283380001925e-15,
+        "trace_K": 2.498001805406602e-16,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 8.881784197001252e-16,
+        "contact_balance_W_m2": 2.7755575615628914e-16,
+        "jump_residual_K": 7.28583859910259e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.4099832412739488e-14,
+        "face_flux_W_m2": 3.8098179581873797e-14,
+        "trace_K": 1.5765166949677223e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 3.6193270602780103e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 5.551115123125783e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 7.771561172376096e-16,
+        "face_flux_W_m2": 4.963349992441877e-15,
+        "trace_K": 9.43689570931383e-16,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 8.43769498715119e-15,
+        "contact_balance_W_m2": 5.10702591327572e-15,
+        "jump_residual_K": 1.3877787807814457e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.371503159461554e-16,
+        "face_flux_W_m2": 7.344552316751035e-15,
+        "trace_K": 5.759281940243e-16,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 4.773959005888173e-15,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.393918396847994e-16,
+        "face_flux_W_m2": 7.259150545626023e-16,
+        "trace_K": 2.411265631607762e-16,
+        "rate_K_s": 2.220446049250313e-16,
+        "face_power_W": 1.1102230246251565e-15,
+        "contact_balance_W_m2": 9.992007221626409e-16,
+        "jump_residual_K": 6.245004513516506e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.4210854715202004e-14,
+        "face_flux_W_m2": 3.8098179581873797e-14,
+        "trace_K": 1.587618925213974e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 3.6193270602780103e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 3.469446951953614e-18
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 3,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 5.967448757360216e-16,
+        "face_flux_W_m2": 3.4939371657321105e-15,
+        "trace_K": 5.551115123125783e-16,
+        "rate_K_s": 0.0,
+        "face_power_W": 5.9396931817445875e-15,
+        "contact_balance_W_m2": 4.884981308350689e-15,
+        "jump_residual_K": 1.1102230246251565e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.621303340002214e-15,
+        "face_flux_W_m2": 7.848422766388606e-14,
+        "trace_K": 4.649058915617843e-15,
+        "rate_K_s": 0.0,
+        "face_power_W": 5.101474798152594e-14,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.315992008230296e-15,
+        "face_flux_W_m2": 1.5286917031377154e-14,
+        "trace_K": 4.211908599671688e-15,
+        "rate_K_s": 0.0,
+        "face_power_W": 9.936496070395151e-15,
+        "contact_balance_W_m2": 3.3306690738754696e-16,
+        "jump_residual_K": 7.632783294297951e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.1102230246251565e-14,
+        "face_flux_W_m2": 1.249427911558926e-13,
+        "trace_K": 1.2156942119645464e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 8.12128142513302e-14,
+        "contact_balance_W_m2": 3.3306690738754696e-16,
+        "jump_residual_K": 5.551115123125783e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 2.942091015256665e-14,
+        "face_flux_W_m2": 5.691353820973171e-14,
+        "trace_K": 2.9254376698872875e-14,
+        "rate_K_s": 5.551115123125783e-17,
+        "face_power_W": 5.4067861299245124e-14,
+        "contact_balance_W_m2": 1.582067810090848e-14,
+        "jump_residual_K": 3.858025010572419e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.718447854656915e-15,
+        "face_flux_W_m2": 7.848422766388606e-14,
+        "trace_K": 4.746203430272544e-15,
+        "rate_K_s": 0.0,
+        "face_power_W": 5.101474798152594e-14,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.734723475976807e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 5.773159728050814e-15,
+        "face_flux_W_m2": 2.015481798550284e-14,
+        "trace_K": 5.7592819402429996e-15,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.3433698597964394e-14,
+        "contact_balance_W_m2": 6.106226635438361e-16,
+        "jump_residual_K": 1.7694179454963432e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.1102230246251565e-14,
+        "face_flux_W_m2": 1.249427911558926e-13,
+        "trace_K": 1.2156942119645464e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 8.12128142513302e-14,
+        "contact_balance_W_m2": 3.3306690738754696e-16,
+        "jump_residual_K": 2.7755575615628914e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 2.9032332093947844e-14,
+        "face_flux_W_m2": 5.971831216667947e-14,
+        "trace_K": 2.914335439641036e-14,
+        "rate_K_s": 5.551115123125783e-17,
+        "face_power_W": 5.67323965583455e-14,
+        "contact_balance_W_m2": 2.8255175976710234e-14,
+        "jump_residual_K": 3.635980405647388e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.621303340002214e-15,
+        "face_flux_W_m2": 7.848422766388606e-14,
+        "trace_K": 4.649058915617843e-15,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 5.101474798152594e-14,
+        "contact_balance_W_m2": 0.0,
+        "jump_residual_K": 6.938893903907228e-18
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.315992008230296e-15,
+        "face_flux_W_m2": 1.5286917031377154e-14,
+        "trace_K": 4.211908599671688e-15,
+        "rate_K_s": 3.8817629615228714e-17,
+        "face_power_W": 9.936496070395151e-15,
+        "contact_balance_W_m2": 3.3306690738754696e-16,
+        "jump_residual_K": 7.632783294297951e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 8.132383655379272e-15,
+        "face_flux_W_m2": 1.340807806662689e-13,
+        "trace_K": 8.174017018802715e-15,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 8.715250743307479e-14,
+        "contact_balance_W_m2": 2.931875384126573e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 3.490263633665336e-15,
+        "face_flux_W_m2": 1.554312234475219e-14,
+        "trace_K": 3.400058012914542e-15,
+        "rate_K_s": 1.954583589417715e-17,
+        "face_power_W": 1.0103029524088925e-14,
+        "contact_balance_W_m2": 2.23999188514449e-15,
+        "jump_residual_K": 5.863365348801608e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.746203430272544e-15,
+        "face_flux_W_m2": 7.848422766388606e-14,
+        "trace_K": 4.773959005888173e-15,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 5.101474798152594e-14,
+        "contact_balance_W_m2": 0.0,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 5.891120924417237e-15,
+        "face_flux_W_m2": 1.8190577249627564e-14,
+        "trace_K": 5.9396931817445875e-15,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 1.2378986724570495e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-15,
+        "jump_residual_K": 1.3183898417423734e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 8.18789480661053e-15,
+        "face_flux_W_m2": 1.340807806662689e-13,
+        "trace_K": 8.229528170033973e-15,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 8.715250743307479e-14,
+        "contact_balance_W_m2": 2.931875384126573e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 5.592748486549226e-15,
+        "face_flux_W_m2": 2.1777451636878068e-14,
+        "trace_K": 5.6066262743570405e-15,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 1.4155343563970746e-14,
+        "contact_balance_W_m2": 3.1348168663404306e-15,
+        "jump_residual_K": 7.389922007661198e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.6074255521944e-15,
+        "face_flux_W_m2": 7.848422766388606e-14,
+        "trace_K": 4.6351811278100286e-15,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 5.101474798152594e-14,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.734723475976807e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.538036613155327e-15,
+        "face_flux_W_m2": 1.3749685151126938e-14,
+        "trace_K": 4.461708780212348e-15,
+        "rate_K_s": 0.0,
+        "face_power_W": 9.43689570931383e-15,
+        "contact_balance_W_m2": 9.159339953157541e-16,
+        "jump_residual_K": 2.5673907444456745e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.6209256159527285e-14,
+        "face_flux_W_m2": 1.519252560013372e-13,
+        "trace_K": 1.7763568394002505e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.4432899320127035e-13,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 5.551115123125783e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 5.229150445984487e-14,
+        "face_flux_W_m2": 1.079837973424889e-13,
+        "trace_K": 5.229150445984487e-14,
+        "rate_K_s": 0.0,
+        "face_power_W": 1.0413891970983968e-13,
+        "contact_balance_W_m2": 1.9539925233402755e-14,
+        "jump_residual_K": 5.2735593669694936e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 4.718447854656915e-15,
+        "face_flux_W_m2": 7.848422766388606e-14,
+        "trace_K": 4.746203430272544e-15,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 5.101474798152594e-14,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.734723475976807e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 5.891120924417237e-15,
+        "face_flux_W_m2": 1.8190577249627564e-14,
+        "trace_K": 5.9396931817445875e-15,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.2378986724570495e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-15,
+        "jump_residual_K": 1.3183898417423734e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.5987211554602254e-14,
+        "face_flux_W_m2": 1.519252560013372e-13,
+        "trace_K": 1.7763568394002505e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.4432899320127035e-13,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 5.551115123125783e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 8,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 5.395683899678261e-14,
+        "face_flux_W_m2": 1.0599708245631757e-13,
+        "trace_K": 5.395683899678261e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.006972283335017e-13,
+        "contact_balance_W_m2": 2.7200464103316335e-14,
+        "jump_residual_K": 1.8318679906315083e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.2156942119645464e-14,
+        "face_flux_W_m2": 1.5850568720802234e-13,
+        "trace_K": 1.2365108936762681e-14,
+        "rate_K_s": 0.0,
+        "face_power_W": 1.0302869668521453e-13,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.734723475976807e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.6910084443821916e-14,
+        "face_flux_W_m2": 7.361632670976037e-14,
+        "trace_K": 1.6840695504782843e-14,
+        "rate_K_s": 0.0,
+        "face_power_W": 4.785061236134425e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 5.204170427930421e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 4.303501999203263e-14,
+        "face_flux_W_m2": 4.6074255521944e-13,
+        "trace_K": 4.299338662860919e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 2.99482660892636e-13,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 2.7755575615628914e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.1074474670635936e-13,
+        "face_flux_W_m2": 2.0264491838947592e-13,
+        "trace_K": 1.1068923555512811e-13,
+        "rate_K_s": 0.0,
+        "face_power_W": 1.9251267247000214e-13,
+        "contact_balance_W_m2": 6.88338275267597e-14,
+        "jump_residual_K": 1.8346435481930712e-14
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.2254086634300165e-14,
+        "face_flux_W_m2": 1.5850568720802234e-13,
+        "trace_K": 1.2462253451417382e-14,
+        "rate_K_s": 0.0,
+        "face_power_W": 1.0302869668521453e-13,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.3439583607398617e-14,
+        "face_flux_W_m2": 7.182288951613513e-14,
+        "trace_K": 2.3592239273284576e-14,
+        "rate_K_s": 0.0,
+        "face_power_W": 4.668487818548783e-14,
+        "contact_balance_W_m2": 1.8041124150158794e-15,
+        "jump_residual_K": 2.8449465006019636e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 4.3028081098128723e-14,
+        "face_flux_W_m2": 4.6074255521944e-13,
+        "trace_K": 4.298644773470528e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 2.99482660892636e-13,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 8.326672684688674e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": -0.5,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.233457780358549e-13,
+        "face_flux_W_m2": 2.1211103049417463e-13,
+        "trace_K": 1.2340128918708615e-13,
+        "rate_K_s": 0.0,
+        "face_power_W": 2.015054789694659e-13,
+        "contact_balance_W_m2": 1.7541523789077473e-14,
+        "jump_residual_K": 3.0531133177191805e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.2184697695261093e-14,
+        "face_flux_W_m2": 1.5859108897914735e-13,
+        "trace_K": 1.239286451237831e-14,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 1.0308420783644578e-13,
+        "contact_balance_W_m2": 0.0,
+        "jump_residual_K": 0.0
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.6910084443821916e-14,
+        "face_flux_W_m2": 7.361632670976037e-14,
+        "trace_K": 1.6840695504782843e-14,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 4.785061236134425e-14,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 5.204170427930421e-17
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 4.4297898682543746e-14,
+        "face_flux_W_m2": 5.653597248475797e-13,
+        "trace_K": 4.427014310692812e-14,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 3.674838211509268e-13,
+        "contact_balance_W_m2": 2.931875384126573e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 1.3572476476042539e-14,
+        "face_flux_W_m2": 6.823601512888461e-14,
+        "trace_K": 1.3516965324811281e-14,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 4.4353409833775004e-14,
+        "contact_balance_W_m2": 1.0465415185317737e-14,
+        "jump_residual_K": 2.1163626406917047e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.2295719997723609e-14,
+        "face_flux_W_m2": 1.5859108897914735e-13,
+        "trace_K": 1.2503886814840826e-14,
+        "rate_K_s": 5.822644442284307e-17,
+        "face_power_W": 1.0308420783644578e-13,
+        "contact_balance_W_m2": 0.0,
+        "jump_residual_K": 6.938893903907228e-18
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.3439583607398617e-14,
+        "face_flux_W_m2": 7.182288951613513e-14,
+        "trace_K": 2.3592239273284576e-14,
+        "rate_K_s": 1.940881480761436e-17,
+        "face_power_W": 4.668487818548783e-14,
+        "contact_balance_W_m2": 1.8041124150158794e-15,
+        "jump_residual_K": 2.8449465006019636e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 4.427014310692812e-14,
+        "face_flux_W_m2": 5.653597248475797e-13,
+        "trace_K": 4.4228509743504674e-14,
+        "rate_K_s": 2.931875384126573e-17,
+        "face_power_W": 3.674838211509268e-13,
+        "contact_balance_W_m2": 2.931875384126573e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.0,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 2.3397950243975174e-14,
+        "face_flux_W_m2": 9.471056417763834e-14,
+        "trace_K": 2.3550605909861133e-14,
+        "rate_K_s": 9.772917947088577e-18,
+        "face_power_W": 6.156186671546493e-14,
+        "contact_balance_W_m2": 1.0667913954348591e-14,
+        "jump_residual_K": 2.0122792321330962e-15
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.2462253451417382e-14,
+        "face_flux_W_m2": 2.0419563475990377e-13,
+        "trace_K": 1.2656542480726785e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.3272716259393746e-13,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 3.469446951953614e-18
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.684763439868675e-14,
+        "face_flux_W_m2": 7.267690722738524e-14,
+        "trace_K": 1.67990621413594e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 4.723998969780041e-14,
+        "contact_balance_W_m2": 1.7486012637846216e-15,
+        "jump_residual_K": 1.942890293094024e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 4.390932062392494e-14,
+        "face_flux_W_m2": 5.653597248475797e-13,
+        "trace_K": 4.3853809472693683e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 3.852473895449293e-13,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 1.1102230246251565e-16
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.0,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 2.000621890374532e-13,
+        "face_flux_W_m2": 3.8934667455892987e-13,
+        "trace_K": 2.0039525594484076e-13,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 3.2507330161024584e-13,
+        "contact_balance_W_m2": 7.482903185973555e-14,
+        "jump_residual_K": 1.942890293094024e-14
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 1.2573275753879898e-14,
+        "face_flux_W_m2": 2.0419563475990377e-13,
+        "trace_K": 1.27675647831893e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 1.3272716259393746e-13,
+        "contact_balance_W_m2": 2.7755575615628914e-17,
+        "jump_residual_K": 1.0408340855860843e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "right_capacity_J_m2_K": [
+        0.0,
+        0.0
+      ],
+      "errors": {
+        "cell_mean_K": 2.341182803178299e-14,
+        "face_flux_W_m2": 7.16520859738851e-14,
+        "trace_K": 2.3550605909861133e-14,
+        "rate_K_s": 0.0,
+        "face_power_W": 4.657385588302532e-14,
+        "contact_balance_W_m2": 1.2212453270876722e-15,
+        "jump_residual_K": 2.0816681711721685e-16
+      }
+    },
+    {
+      "solver": "DG",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 4.371503159461554e-14,
+        "face_flux_W_m2": 5.653597248475797e-13,
+        "trace_K": 4.368727601899991e-14,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 3.852473895449293e-13,
+        "contact_balance_W_m2": 1.1102230246251565e-16,
+        "jump_residual_K": 5.551115123125783e-17
+      }
+    },
+    {
+      "solver": "FVM",
+      "cells_per_layer": 16,
+      "rate_K_s": 0.75,
+      "resistance": [
+        0.13,
+        0.32
+      ],
+      "area_m2": [
+        0.65,
+        1.7,
+        0.95
+      ],
+      "left_source_W_m2": [
+        0.48,
+        -0.31
+      ],
+      "right_source_W_m2": [
+        -0.48,
+        0.17
+      ],
+      "left_capacity_J_m2_K": [
+        0.2,
+        0.65
+      ],
+      "right_capacity_J_m2_K": [
+        0.8,
+        0.15
+      ],
+      "errors": {
+        "cell_mean_K": 2.2670754162845697e-13,
+        "face_flux_W_m2": 4.106656535297684e-13,
+        "trace_K": 2.26929586233382e-13,
+        "rate_K_s": 1.1102230246251565e-16,
+        "face_power_W": 3.9013237085328e-13,
+        "contact_balance_W_m2": 2.4313884239290928e-14,
+        "jump_residual_K": 4.6074255521944e-15
+      }
+    }
+  ],
+  "sources": [
+    {
+      "commit": "9f0b4ccde6e2a7b22bbdacb0d4925b9564ae796f",
+      "file": "cross_drifting_heat_stack.py",
+      "source_sha256": "27cd2ac7c8ff8479c44ede95ab22dd67a042c03daf0c42f52a8e441a9a2432ed"
+    },
+    {
+      "commit": "ab924ea9f30fcb0dd0f7ee43be3016fb345011a5",
+      "file": "heat_1d.py",
+      "source_sha256": "b3384de29cf791b21148fa4f0f5b18b87bcd3fff43aeea0aa40f87b068a7c4d7"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorDG:../TensorFVM/src python examples/cross_drifting_heat_stack.py --contact-sources --stepped"
+}
