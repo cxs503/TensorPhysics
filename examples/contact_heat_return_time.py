@@ -31,14 +31,17 @@ def reversal_peak(times, increments):
     hits = np.flatnonzero((mean_flux[:-1] < 0) & (mean_flux[1:] >= 0))
     if hits.size != 1:
         raise ValueError("expected exactly one westward-to-eastward flux reversal")
-    i = hits.item()
+    time, signed_heat = extremum(times, cumulative, widths, mean_flux, hits.item())
+    return time, -signed_heat
+
+
+def extremum(times, cumulative, widths, mean_flux, i):
     # The derivative of the quadratic attains each interval mean at its
     # midpoint. Interpolate between the two midpoints to locate zero flux.
     slope = (mean_flux[i+1]-mean_flux[i])/(.5*(widths[i]+widths[i+1]))
     offset = -mean_flux[i]/slope-widths[i]/2
     peak_time = times[i+1]+offset
-    westward_heat = -cumulative[i+1]+.5*slope*offset**2
-    return peak_time, westward_heat
+    return peak_time, cumulative[i+1]-.5*slope*offset**2
 
 
 def run():

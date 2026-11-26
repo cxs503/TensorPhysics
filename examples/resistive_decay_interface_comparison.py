@@ -75,12 +75,13 @@ def particles(n, times, modes):
     return np.column_stack([side[:, n//2-1] for side in traces]), heat[:, n//2].numpy()
 
 
+def contact_condition(w):
+    return 4*np.sin(w/2)/3+RESISTANCE*w*np.cos(w/2)
+
+
 def reversing_modes(crossing):
     # For each mode the contact jump equals R times the rightward flux.
     # The next root of this continuous equation is in (3*pi, 4*pi).
-    def contact_condition(w):
-        return 4*np.sin(w/2)/3+RESISTANCE*w*np.cos(w/2)
-
     fast = brentq(contact_condition, 3*np.pi, 4*np.pi)
     slow_flux = -WAVE*np.cos(WAVE/2)
     fast_flux = -fast*np.cos(fast/2)
