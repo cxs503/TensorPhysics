@@ -1,0 +1,151 @@
+{
+  "command": "python examples/moving_contact_counterflow.py",
+  "reference_forward_reverse_J": [
+    0.2916666666666667,
+    0.20833333333333334
+  ],
+  "runs": [
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 4,
+      "forward_reverse_J": [
+        0.2916666666666667,
+        0.20833333333333337
+      ],
+      "errors_J": [
+        0.0,
+        2.7755575615628914e-17
+      ],
+      "max_face_error_J": 5.551115123125783e-17,
+      "max_face_balance_J": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 8,
+      "forward_reverse_J": [
+        0.2916666666666667,
+        0.20833333333333331
+      ],
+      "errors_J": [
+        0.0,
+        2.7755575615628914e-17
+      ],
+      "max_face_error_J": 5.551115123125783e-17,
+      "max_face_balance_J": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 16,
+      "forward_reverse_J": [
+        0.29166666666666663,
+        0.20833333333333331
+      ],
+      "errors_J": [
+        5.551115123125783e-17,
+        2.7755575615628914e-17
+      ],
+      "max_face_error_J": 5.551115123125783e-17,
+      "max_face_balance_J": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 32,
+      "forward_reverse_J": [
+        0.29166666666666674,
+        0.20833333333333334
+      ],
+      "errors_J": [
+        5.551115123125783e-17,
+        0.0
+      ],
+      "max_face_error_J": 5.898059818321144e-17,
+      "max_face_balance_J": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 4,
+      "forward_reverse_J": [
+        0.2890625,
+        0.2109375
+      ],
+      "errors_J": [
+        0.002604166666666685,
+        0.0026041666666666574
+      ],
+      "max_face_error_J": 0.0011393229166666713,
+      "max_face_balance_J": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 8,
+      "forward_reverse_J": [
+        0.291015625,
+        0.20898437500000003
+      ],
+      "errors_J": [
+        0.0006510416666666852,
+        0.0006510416666666852
+      ],
+      "max_face_error_J": 0.00015258789062500694,
+      "max_face_balance_J": 6.938893903907228e-18,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 16,
+      "forward_reverse_J": [
+        0.29150390625,
+        0.20849609375
+      ],
+      "errors_J": [
+        0.00016276041666668517,
+        0.00016276041666665741
+      ],
+      "max_face_error_J": 1.9709269205730323e-05,
+      "max_face_balance_J": 3.469446951953614e-18,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 32,
+      "forward_reverse_J": [
+        0.2916259765625,
+        0.2083740234375
+      ],
+      "errors_J": [
+        4.069010416668517e-05,
+        4.0690104166657415e-05
+      ],
+      "max_face_error_J": 2.5033950805646715e-06,
+      "max_face_balance_J": 3.469446951953614e-18,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "1c0a31afe3306daa64999a8f6ce53cbbc86c9c8b",
+      "file": "moving_contact_counterflow.py",
+      "source_sha256": "8b2c139b973fc436da6eaeb6dbadfb9a452dc623579c24b56fc9aa6d65c3471c"
+    },
+    {
+      "commit": "1c0a31afe3306daa64999a8f6ce53cbbc86c9c8b",
+      "file": "spatial_contact_counterflow.py",
+      "source_sha256": "3671fe6ce74b277a89b503d623b7d5dcaa822ebae6ce277f2948cf0f555f6c52"
+    },
+    {
+      "commit": "8fb89fbe4751b71f153443f38686e40868954ec8",
+      "file": "thermal.py",
+      "source_sha256": "152882e6a47ec91f55e0f3fa0217a997171f94f16d39c9318da7b8ba8bf585da"
+    },
+    {
+      "commit": "e7b46c6ec25d9f6b780a790148f594e7af971b8d",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "361fa0ab230abe9635176d0a9175af64d1fa179ebb18cb36f3766b300eba9779"
+    }
+  ]
+}
