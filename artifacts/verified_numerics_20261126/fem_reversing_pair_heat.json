@@ -1,0 +1,69 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "4ccd6bfa520152799055e48b1593f8c642c7c893",
+  "passed": 132,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal.py --junitxml=results.xml",
+  "reference": "Capacities (2,3) J/K, initial temperatures (2,0) K and a 3.75 W heater on store 2. Two parallel links have oriented conductances +1 and -0.5 W/K from store 1 to store 2. The exact temperature difference is 3 exp(-1.25 t)-1 and cumulative signed heats are the integral times 1 and -0.5. Compare the maximum cumulative errors over all times and pairs, as well as individual store balances at every step. Dense and sparse BE, CN and SDIRK2 use 16,32,64 graded steps through 1.5 s.",
+  "runs": {
+    "test_reversing_pair_heat_against_two_driven_stores[theta-1.0-1-False]": {
+      "n16_max_cumulative_heat_error_J": 0.046344727768922955,
+      "n16_max_step_balance_J": 1.6653345369377348e-15,
+      "n32_max_cumulative_heat_error_J": 0.023686674745455827,
+      "n32_order": 0.9683295454837663,
+      "n32_max_step_balance_J": 7.216449660063518e-16,
+      "n64_max_cumulative_heat_error_J": 0.01197533521919325,
+      "n64_order": 0.9840096388844307,
+      "n64_max_step_balance_J": 1.096345236817342e-15
+    },
+    "test_reversing_pair_heat_against_two_driven_stores[theta-1.0-1-True]": {
+      "n16_max_cumulative_heat_error_J": 0.0463447277689234,
+      "n16_max_step_balance_J": 1.7763568394002505e-15,
+      "n32_max_cumulative_heat_error_J": 0.023686674745455716,
+      "n32_order": 0.9683295454837869,
+      "n32_max_step_balance_J": 1.3877787807814457e-15,
+      "n64_max_cumulative_heat_error_J": 0.01197533521919214,
+      "n64_order": 0.9840096388845577,
+      "n64_max_step_balance_J": 1.734723475976807e-15
+    },
+    "test_reversing_pair_heat_against_two_driven_stores[theta-0.5-2-False]": {
+      "n16_max_cumulative_heat_error_J": 0.0009405596854761278,
+      "n16_max_step_balance_J": 6.800116025829084e-16,
+      "n32_max_cumulative_heat_error_J": 0.00023529386148790632,
+      "n32_order": 1.999055813327554,
+      "n32_max_step_balance_J": 1.1934897514720433e-15,
+      "n64_max_cumulative_heat_error_J": 5.883992485888889e-05,
+      "n64_order": 1.9995963736850983,
+      "n64_max_step_balance_J": 1.1102230246251565e-15
+    },
+    "test_reversing_pair_heat_against_two_driven_stores[theta-0.5-2-True]": {
+      "n16_max_cumulative_heat_error_J": 0.0009405596854761278,
+      "n16_max_step_balance_J": 1.1657341758564144e-15,
+      "n32_max_cumulative_heat_error_J": 0.00023529386148812836,
+      "n32_order": 1.9990558133261924,
+      "n32_max_step_balance_J": 1.3600232051658168e-15,
+      "n64_max_cumulative_heat_error_J": 5.8839924859444004e-05,
+      "n64_order": 1.999596373672849,
+      "n64_max_step_balance_J": 1.609823385706477e-15
+    },
+    "test_reversing_pair_heat_against_two_driven_stores[sdirk2-0.5-2-False]": {
+      "n16_max_cumulative_heat_error_J": 0.0004612162575203804,
+      "n16_max_step_balance_J": 1.27675647831893e-15,
+      "n32_max_cumulative_heat_error_J": 0.00011479238156497651,
+      "n32_order": 2.006416470047577,
+      "n32_max_step_balance_J": 1.1934897514720433e-15,
+      "n64_max_cumulative_heat_error_J": 2.8631502494325112e-05,
+      "n64_order": 2.003351612043217,
+      "n64_max_step_balance_J": 1.5543122344752192e-15
+    },
+    "test_reversing_pair_heat_against_two_driven_stores[sdirk2-0.5-2-True]": {
+      "n16_max_cumulative_heat_error_J": 0.0004612162575203804,
+      "n16_max_step_balance_J": 1.2212453270876722e-15,
+      "n32_max_cumulative_heat_error_J": 0.00011479238156497651,
+      "n32_order": 2.006416470047577,
+      "n32_max_step_balance_J": 1.1934897514720433e-15,
+      "n64_max_cumulative_heat_error_J": 2.8631502494325112e-05,
+      "n64_order": 2.003351612043217,
+      "n64_max_step_balance_J": 1.5543122344752192e-15
+    }
+  }
+}
