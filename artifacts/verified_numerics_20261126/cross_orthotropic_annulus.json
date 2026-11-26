@@ -2,9 +2,9 @@
   "reference": "Steady source-free unit-depth annulus, T=r^p*cos(3*theta+0.37), p=3*sqrt(k_theta/k_r), k_r=2 and k_theta=0.7 W/(m K). Dirichlet walls at 0.4 and 1 m. Maximum temperature errors at shared radial-edge midpoints. Wall rates are 2*pi*r times increasing-radius flux amplitude, recovered from FEM nodal reaction powers by cosine projection and from FVM boundary faces directly.",
   "reproduce": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/cross_orthotropic_annulus.py",
   "benchmark": {
-    "commit": "a2a048f99462fcdca10df9c7ae1095ee801dbacf",
+    "commit": "f1a8ed39a8e374260d18eccfcd69af9aa9088840",
     "file": "cross_orthotropic_annulus.py",
-    "source_sha256": "839a0639e47d05f9f952c619f0fb3164f5e7cd2ec229320bc2ba2f75fcf39fce"
+    "source_sha256": "657ac1d2514ec5ac07fbb0475b1db4695a1496b91d6d99c01e312973f2d65208"
   },
   "FEM": {
     "commit": "81cab937c50abae09e46fb217fe1ef5be88d0e92",
@@ -17,6 +17,78 @@
     "source_sha256": "a330d6ba1c058fbe8184588da0b7ca1db98ea399961912852332b029072d0cc4"
   },
   "interface_reference": "Perfect contact at r=0.7 m, T amplitude 0.8 K and outward radial rate amplitude 4.5 W/m. Inner (radial, circumferential) conductivity (2, 0.7), outer (0.85, 2.2) W/(m K). Set wall temperatures from the two independent power-law solutions. max_imbalance is the largest inner/outer rate discrepancy in W/m.",
+  "contact_reference": "Same two materials with areal resistance 0.25 m\u00b2 K/W. The outer trace amplitude is 0.8 K, inner minus outer equals R*4.5/(2*pi*0.7) K. FEM contact edges use their chord lengths; FVM uses the circular interface.",
+  "contact_runs": [
+    {
+      "fem_jump_error_K": 0.008539193432844483,
+      "fvm_jump_error_K": 0.005585757744940856,
+      "radial_cells": 8,
+      "sectors": 64,
+      "max_imbalance": 5.861977570020827e-14,
+      "fem_interface_error_K": 0.01185358267745773,
+      "fvm_interface_error_K": 0.004554487186207101,
+      "fem_interface_rate_error_W_per_m": 0.08168122253056254,
+      "fvm_interface_rate_error_W_per_m": 0.09826978277896714,
+      "interface_rate_difference_W_per_m": 0.17995100530952168
+    },
+    {
+      "fem_jump_error_K": 0.0021428011773702016,
+      "fvm_jump_error_K": 0.0014439478994050514,
+      "radial_cells": 16,
+      "sectors": 128,
+      "max_imbalance": 2.0961010704922955e-13,
+      "fem_interface_error_K": 0.002958942686977495,
+      "fvm_interface_error_K": 0.0011455705979606101,
+      "fem_interface_rate_error_W_per_m": 0.020882639617847865,
+      "fvm_interface_rate_error_W_per_m": 0.025403258232552517,
+      "interface_rate_difference_W_per_m": 0.04628589785039505,
+      "fem_jump_error_K_order": 1.9946018130550203,
+      "fvm_jump_error_K_order": 1.951734317323176,
+      "fem_interface_error_K_order": 2.002169513604563,
+      "fvm_interface_error_K_order": 1.9912222523089842,
+      "fem_interface_rate_error_W_per_m_order": 1.9677003756364464,
+      "fvm_interface_rate_error_W_per_m_order": 1.9517343173177621,
+      "interface_rate_difference_W_per_m_order": 1.9589595493766687
+    },
+    {
+      "fem_jump_error_K": 0.0005363965545208127,
+      "fvm_jump_error_K": 0.0003640833432806412,
+      "radial_cells": 32,
+      "sectors": 256,
+      "max_imbalance": 2.3447910280083306e-13,
+      "fem_interface_error_K": 0.0007397016112020705,
+      "fvm_interface_error_K": 0.0002868594323139906,
+      "fem_interface_rate_error_W_per_m": 0.005250876555351169,
+      "fvm_interface_rate_error_W_per_m": 0.0064052887167669326,
+      "interface_rate_difference_W_per_m": 0.011656165272118102,
+      "fem_jump_error_K_order": 1.9981261184591044,
+      "fvm_jump_error_K_order": 1.987678043297358,
+      "fem_interface_error_K_order": 2.000066429278275,
+      "fvm_interface_error_K_order": 1.9976505086145018,
+      "fem_interface_rate_error_W_per_m_order": 1.9916738993262064,
+      "fvm_interface_rate_error_W_per_m_order": 1.9876780432771892,
+      "interface_rate_difference_W_per_m_order": 1.989479468965057
+    },
+    {
+      "fem_jump_error_K": 0.00013413505674680914,
+      "fvm_jump_error_K": 9.121648564802687e-05,
+      "radial_cells": 64,
+      "sectors": 512,
+      "max_imbalance": 3.126388037344441e-13,
+      "fem_interface_error_K": 0.00018491232380346556,
+      "fvm_interface_error_K": 7.174458730685451e-05,
+      "fem_interface_rate_error_W_per_m": 0.0013146295097499205,
+      "fvm_interface_rate_error_W_per_m": 0.001604764230867417,
+      "interface_rate_difference_W_per_m": 0.002919393740583587,
+      "fem_jump_error_K_order": 1.999613629508032,
+      "fvm_jump_error_K_order": 1.9969022465586435,
+      "fem_interface_error_K_order": 2.000102039369363,
+      "fvm_interface_error_K_order": 1.999402058040603,
+      "fem_interface_rate_error_W_per_m_order": 1.9979020042670235,
+      "fvm_interface_rate_error_W_per_m_order": 1.9969022464426966,
+      "interface_rate_difference_W_per_m_order": 1.997352532233621
+    }
+  ],
   "runs": [
     {
       "inner_fem_rate_error_W_per_m": 0.13869962036593364,
