@@ -85,6 +85,25 @@ def harmonic_wall_values(interface, walls, kr, order, omega, traces, rate):
     return np.array(values)
 
 
+def contact_cycle_heat(model, state, fv_rates, exact_rate, omega):
+    # In a period the positive lobe of a sinusoid integrates to 2/omega
+    # times its peak. Around the ring the mean of |cos(m*theta+phi)| is
+    # 2/pi for every nonzero integer mode. Rates already include 2*pi*r.
+    factor = 4/(np.pi*omega)
+    reference = factor*abs(exact_rate)
+    fv_heat = factor*abs(fv_rates)
+    fem_heat = thermal.thermal_contact_edge_harmonic_cycle_heat(model, state, omega).sum().item()
+    net_phasor = thermal.thermal_contact_edge_power(model, state).sum().item()
+    if abs(net_phasor) > 1e-10 or min(fem_heat, min(fv_heat)) <= 0:
+        raise RuntimeError("Expected local cyclic exchange and zero integrated ring power")
+    return dict(exact_each_direction_J_per_m=reference, fem_each_direction_J_per_m=fem_heat,
+                fvm_each_direction_inner_J_per_m=float(fv_heat[0]),
+                fvm_each_direction_outer_J_per_m=float(fv_heat[1]),
+                fem_ring_net_power_amplitude_W_per_m=abs(net_phasor),
+                fem_cycle_error_J_per_m=abs(fem_heat-reference),
+                fvm_cycle_error_J_per_m=float(np.max(abs(fv_heat-reference))))
+
+
 def measure_interface(n, resistance=0., omega=0.):
     mode, interface, temperature, rate = 3, .7, .8, 4.5
     radii = np.linspace(.4, 1., n+1)
@@ -145,6 +164,7 @@ def measure_interface(n, resistance=0., omega=0.):
         jump_errors = dict(fem_jump_error_K=float(np.max(abs(fem_traces[0]-fem_traces[1]-jump*angular))),
                            fvm_jump_error_K=float(abs(fv_traces[0]-fv_traces[1]-jump)))
     if omega and resistance:
+        jump_errors.update(contact_cycle_heat(model, state, fv_rates, rate, omega))
         fem_jump = (fem_traces[0]-fem_traces[1]) @ angular / (angular @ angular)
         for solver, measured_jump, measured_rates in (
                 ("fem", fem_jump, fem_rates), ("fvm", fv_traces[0]-fv_traces[1], fv_rates)):
@@ -161,7 +181,8 @@ def measure_interface(n, resistance=0., omega=0.):
 def refinement(case):
     runs = [case(n) for n in (8, 16, 32, 64)]
     for coarse, fine in zip(runs, runs[1:]):
-        for key in (name for name in tuple(fine) if name.endswith(("_K", "_W_per_m", "_rad"))):
+        metrics = [key for key in fine if "error" in key or "difference" in key]
+        for key in metrics:
             order = float(np.log2(coarse[key]/fine[key]))
             fine[key+"_order"] = order
             if fine["radial_cells"] >= 32 and order < 1.8:
@@ -176,7 +197,7 @@ if __name__ == "__main__":
         benchmark=provenance(__file__), FEM=provenance(thermal.__file__), FVM=provenance(annulus.__file__),
         interface_reference="Perfect contact at r=0.7 m, T amplitude 0.8 K and outward radial rate amplitude 4.5 W/m. Inner (radial, circumferential) conductivity (2, 0.7), outer (0.85, 2.2) W/(m K). Set wall temperatures from the two independent power-law solutions. max_imbalance is the largest inner/outer rate discrepancy in W/m.",
         contact_reference="Same two materials with areal resistance 0.25 m² K/W. The outer trace amplitude is 0.8 K, inner minus outer equals R*4.5/(2*pi*0.7) K. FEM contact edges use their chord lengths; FVM uses the circular interface.",
-        harmonic_reference="Same annulus and contact, unit volumetric heat capacity, omega=6 rad/s, exp(+i*omega*t). Outer trace 0.8-0.2i K, transmitted rate 4.5+1.5i W/m. Derive exterior Dirichlet phasors from independent modified Bessel solutions in each material. Errors in K and W/m are complex absolute errors; phase errors are wrapped differences in radians.",
+        harmonic_reference="Same annulus and contact, unit volumetric heat capacity, omega=6 rad/s, exp(+i*omega*t). Outer trace 0.8-0.2i K, transmitted rate 4.5+1.5i W/m. Derive exterior Dirichlet phasors from independent modified Bessel solutions in each material. Errors in K and W/m are complex absolute errors; phase errors are wrapped differences in radians. For unit axial depth, local forward and reverse heat per period each integrate to 4*abs(rate)/(pi*omega) J/m around the ring. The circumferentially integrated signed power vanishes at every instant.",
         harmonic_runs=refinement(partial(measure_interface, resistance=.25, omega=6.)),
         contact_runs=refinement(partial(measure_interface, resistance=.25)),
         runs=refinement(measure), interface_runs=refinement(measure_interface)), indent=2, allow_nan=False))
