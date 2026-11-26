@@ -1,8 +1,9 @@
 """Compare area-mean Fourier flux on a rotated, flux-driven rectangle.
 
 Run python examples/bem_fem_mean_heat_flux.py with TensorBEM and TensorFEM
-installed. All four walls receive inward flux from two harmonic thermal waves.
+installed. Add --distorted to warp the interior FEM nodes. All four walls receive inward flux from two harmonic thermal waves.
 """
+import argparse
 import json
 
 import numpy as np
@@ -25,9 +26,15 @@ def gradient(points):
     return (np.exp(points @ RATES.T)*AMPLITUDES) @ RATES
 
 
-def measure(n):
+def measure(n, *, distorted=False):
     mesh = thermal_analytic.structured_quad_mesh(n, n, dtype=torch.float64)
-    points = (mesh.nodes.numpy()*SIZE) @ AXES
+    uv = mesh.nodes.numpy().copy()
+    if distorted:
+        # A smooth interior displacement keeps all wall panels and loads fixed.
+        interior = ((uv > 0) & (uv < 1)).all(axis=1)
+        warp = np.sin(np.pi*uv[interior]).prod(axis=1)
+        uv[interior] += warp[:, None]*np.array([.12, -.08])
+    points = (uv*SIZE) @ AXES
     grid = np.arange(len(points)).reshape(n+1, n+1)
     wall = np.r_[grid[0, :-1], grid[:-1, -1], grid[-1, :0:-1], grid[:0:-1, 0]]
     boundary = geometry.PanelMesh(points[wall])
@@ -49,19 +56,18 @@ def measure(n):
                                torch.empty(0, dtype=torch.long), torch.empty(0, dtype=torch.float64),
                                nodal_heat=torch.from_numpy(load), element_type="q4")
     state = thermal.solve_harmonic_thermal(fem, OMEGA, sparse=True)
-    # On these congruent affine cells, center gradients equal cell means.
-    fem_flux = thermal.thermal_element_flux(fem, state.temperature).mean(dim=0).numpy()
+    fem_flux = thermal.thermal_volume_mean_flux(fem, state.temperature).numpy()
     return bem.area_mean_heat_flux(), fem_flux
 
 
-def run():
+def run(*, distorted=False):
     exponents = (RATES @ AXES.T)*SIZE
     modes = AMPLITUDES*np.prod(np.expm1(exponents)/exponents, axis=1)
     exact = -K*(modes @ RATES)
     rows = []
     previous = {}
     for n in (4, 8, 16, 32):
-        for solver, flux in zip(("TensorBEM_quadratic", "TensorFEM_Q4"), measure(n)):
+        for solver, flux in zip(("TensorBEM_quadratic", "TensorFEM_Q4"), measure(n, distorted=distorted)):
             errors = abs(flux-exact)
             passed = solver not in previous or np.all(previous[solver] > 3*errors)
             if n == 32:
@@ -69,13 +75,16 @@ def run():
             rows.append(dict(solver=solver, segments_per_side=n, component_errors_W_m2=errors.tolist(),
                              passed=bool(passed)))
             previous[solver] = errors
-    return dict(command="python examples/bem_fem_mean_heat_flux.py",
+    return dict(command="python examples/bem_fem_mean_heat_flux.py" + (" --distorted" if distorted else ""),
+                fem_mesh="distorted" if distorted else "uniform",
                 reference_flux_W_m2=[[v.real, v.imag] for v in exact], runs=rows,
                 sources=[provenance(p) for p in (__file__, harmonic_conduction.__file__, geometry.__file__,
                                                   thermal.__file__, thermal_analytic.__file__)])
 
 
 if __name__ == "__main__":
-    report = run()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--distorted", action="store_true", help="warp the interior FEM nodes")
+    report = run(distorted=parser.parse_args().distorted)
     print(json.dumps(report, indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in report["runs"]) else 1)
