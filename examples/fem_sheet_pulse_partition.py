@@ -90,15 +90,19 @@ def dem_history(n, heater, faces, k, cv, resistances, capacities, times, injecte
     state = np.zeros_like(capacity)
     power = np.zeros_like(capacity)
     outward, residuals = [], []
-    for duration, energy in zip(np.diff(times), injected):
+    wall_moments = np.zeros((2, 2))
+    for start, duration, energy in zip(times[:-1], np.diff(times), injected):
         power[nodes[heater]] = energy/duration
-        end, heat = contact_chain.constant_contact_interval(
-            links, capacity, duration, state, nodal_power=power, t_left=0., t_right=0.)
+        end, heat, local = contact_chain.constant_contact_interval(
+            links, capacity, duration, state, nodal_power=power, t_left=0., t_right=0., return_heat_moments=True)
         outward.append([-heat[0], heat[-1]])
+        weighted = local[:, [0, -1]]*[-1., 1.]
+        wall_moments[0] += weighted[0]+start*np.asarray(outward[-1])
+        wall_moments[1] += weighted[1]+2*start*weighted[0]+start**2*np.asarray(outward[-1])
         residuals.append(capacity[nodes]*(end[nodes]-state[nodes])
                          -heat[nodes-1]+heat[nodes]-duration*power[nodes])
         state = end
-    return np.asarray(outward), np.abs(residuals).max(axis=0)
+    return np.asarray(outward), np.abs(residuals).max(axis=0), wall_moments
 
 
 def measure(n, heater, method, *, fvm=False, dem=False):
@@ -109,19 +113,25 @@ def measure(n, heater, method, *, fvm=False, dem=False):
     stop = .0625
     times = np.r_[np.linspace(0., stop, n+1), stop+np.geomspace(.016/n, 32., 5*n+1)]
     if dem:
-        # Additional exact interval endpoints reduce midpoint quadrature error
-        # in the wall time moments without changing the contact-chain model.
-        times = np.sort(np.r_[times, (times[:-1]+times[1:])/2])
+        times = np.array([0., stop, times[-1]])
     injected = np.diff(np.minimum(times, stop))
     if dem:
-        outward, sheet_errors = dem_history(n, heater, faces, k, cv, resistances, capacities, times, injected)
+        outward, sheet_errors, moments = dem_history(n, heater, faces, k, cv, resistances, capacities, times, injected)
     else:
         history = fvm_history if fvm else fem_history
         outward, sheet_errors = history(n, heater, method, faces, k, cv, resistances, capacities, times, injected)
     total = outward.sum(axis=0)
-    mid = (times[:-1]+times[1:])/2
-    centroid = mid@outward/total
-    spread = np.sqrt((((mid[:, None]-centroid)**2)*outward).sum(axis=0)/total)
+    if dem:
+        centroid = moments[0]/total
+        spread = np.sqrt(moments[1]/total-centroid**2)
+        fine = np.r_[np.linspace(0., stop, 9), stop+np.geomspace(.001, 32., 21)]
+        _, _, check = dem_history(n, heater, faces, k, cv, resistances, capacities, fine,
+                                  np.diff(np.minimum(fine, stop)))
+        np.testing.assert_allclose(moments, check, atol=1e-10, rtol=0.)
+    else:
+        mid = (times[:-1]+times[1:])/2
+        centroid = mid@outward/total
+        spread = np.sqrt((((mid[:, None]-centroid)**2)*outward).sum(axis=0)/total)
     total_r = (dx/k).sum()+resistances.sum()
     j = 2*heater
     west_r = (dx/k[:faces[j]]).sum()+resistances[:j].sum()+resistances[j]/2
