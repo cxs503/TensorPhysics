@@ -1,0 +1,23 @@
+{
+  "repository": "cxs503/TensorLBM",
+  "commit": "6abb07094620e2269ac54725f4384f7609eb09c3",
+  "passed": 127,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q tests/test_thermal3d.py tests/test_thermal3d_budget.py tests/test_thermal_common.py -o junit_family=legacy --junitxml=results.xml",
+  "reference": "Unit-length slab with insulated transverse walls, D3Q7 BGK alpha=0.075 and C=2.3. Two time-dependent Dirichlet walls have complex amplitudes 0.4+0.15i and -0.2+0.3i K about a 1 K offset, period 0.5 s. Start in local equilibrium at the analytic initial temperature. Project the second simulated period onto its fundamental, sampling temperature at step ends and link flux at step midpoints. Compare with the continuum sinh solution and its Fourier flux on 12, 24, 48 and 96 intervals.",
+  "metrics": {
+    "n12_temperature_K_error": 0.03500720227590318,
+    "n12_flux_W_m2_error": 0.06696446174306354,
+    "n24_temperature_K_error": 0.014557155313170297,
+    "n24_temperature_K_order": 1.2659233095128917,
+    "n24_flux_W_m2_error": 0.02411553955487408,
+    "n24_flux_W_m2_order": 1.473432566779568,
+    "n48_temperature_K_error": 0.004743976462774242,
+    "n48_temperature_K_order": 1.617559701708638,
+    "n48_flux_W_m2_error": 0.007316018373831248,
+    "n48_flux_W_m2_order": 1.720832485484759,
+    "n96_temperature_K_error": 0.001356792622940662,
+    "n96_temperature_K_order": 1.8058966210612921,
+    "n96_flux_W_m2_error": 0.0020188805995697027,
+    "n96_flux_W_m2_order": 1.8575031088813956
+  }
+}
