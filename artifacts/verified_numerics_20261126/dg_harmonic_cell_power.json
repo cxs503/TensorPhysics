@@ -1,0 +1,13 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "e893b13dec02668cc9458bbd5f661c87a729172c",
+  "passed": 81,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Unit-length slab, nine P2 SIPG cells, complex quadratic temperature, linear volumetric exchange coefficient and ambient, two Robin walls with unequal film coefficients and heat capacities. Independently integrate source, exchange and storage polynomials cell by cell and check numerical face flux divergence. Two additional insulated cases check common heating at zero and 1e-16 rad/s.",
+  "metrics": {
+    "bulk_max_error_W_m2": 9.12668998568199e-17,
+    "source_max_error_W_m2": 7.850462293418876e-16,
+    "storage_max_error_W_m2": 3.433175098891678e-16,
+    "max_balance_error_W_m2": 2.1626061804299406e-13
+  }
+}
