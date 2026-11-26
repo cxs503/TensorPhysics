@@ -1,0 +1,41 @@
+{
+  "repository": "cxs503/TensorDEM",
+  "commit": "1e6257f23de41c3a8d08e9857bcc9168b4eb4b13",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal_contact_chain.py --junitxml=heat-moments.xml",
+  "reference": "Quadrature of the analytic two-store temperature difference and driven massless-junction flux. Orders 0, 1 and 2 use J, J s and J s\u00b2.",
+  "tests_passed": 87,
+  "runs": [
+    {
+      "omega_rad_s": 0.0,
+      "max_absolute_errors": {
+        "order_0_max_error": 1.1102230246251565e-16,
+        "order_1_max_error": 2.7755575615628914e-17,
+        "order_2_max_error": 1.3877787807814457e-17
+      }
+    },
+    {
+      "omega_rad_s": 1e-08,
+      "max_absolute_errors": {
+        "order_0_max_error": 1.1102230246251565e-16,
+        "order_1_max_error": 0.0,
+        "order_2_max_error": 2.7755575615628914e-17
+      }
+    },
+    {
+      "omega_rad_s": 2.0,
+      "max_absolute_errors": {
+        "order_0_max_error": 1.1102230246251565e-16,
+        "order_1_max_error": 1.3877787807814457e-17,
+        "order_2_max_error": 1.3877787807814457e-17
+      }
+    },
+    {
+      "omega_rad_s": 30.0,
+      "max_absolute_errors": {
+        "order_0_max_error": 5.551115123125783e-17,
+        "order_1_max_error": 4.163336342344337e-17,
+        "order_2_max_error": 2.7755575615628914e-17
+      }
+    }
+  ]
+}
