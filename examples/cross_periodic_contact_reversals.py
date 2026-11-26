@@ -33,6 +33,16 @@ def directional_heat(times, heat, roots):
     return np.array([east_before+east_after, -west_signed])
 
 
+def fit_flux_phasor(times, heat, omega):
+    """Fit interval integrals of offset + Re(Q exp(i omega t)) to signed heat."""
+    dt = np.diff(times)
+    angles = omega*(times[1:]+times[:-1])/2
+    scale = dt*np.sinc(omega*dt/(2*np.pi))
+    basis = np.column_stack((dt, scale*np.cos(angles), -scale*np.sin(angles)))
+    _, real, imag = np.linalg.lstsq(basis, heat, rcond=None)[0]
+    return complex(real, imag)
+
+
 def measure(steps, method, solver):
     n = 40
     cut, k, cv, resistance, total, weight = case.slab_geometry(n)
@@ -67,9 +77,18 @@ def measure(steps, method, solver):
     parts = np.diff(exact_heat(np.r_[0., expected, 1.]))
     target = np.array([parts[0]+parts[2], -parts[1]])
     exact_intervals = np.diff(exact_heat(times))
+    exact_phasor = (1+.15j)/total
+    measured_phasor = fit_flux_phasor(times, heat, frequency)
+    control_phasor = fit_flux_phasor(times, exact_intervals, frequency)
     control_events = events(times, exact_intervals)
     control = directional_heat(times, exact_intervals, [t for _, t in control_events])
-    diagnostics = dict(reconstruction_only_errors_J_m2=abs(control-target).tolist())
+    diagnostics = dict(reconstruction_only_errors_J_m2=abs(control-target).tolist(),
+                       fundamental_amplitude_W_m2=abs(measured_phasor),
+                       fundamental_phase_rad=float(np.angle(measured_phasor)),
+                       exact_amplitude_W_m2=abs(exact_phasor), exact_phase_rad=float(np.angle(exact_phasor)),
+                       amplitude_error_W_m2=abs(abs(measured_phasor)-abs(exact_phasor)),
+                       phase_error_rad=float(abs(np.angle(measured_phasor/exact_phasor))),
+                       exact_heat_fit_error_W_m2=abs(control_phasor-exact_phasor))
     if errors is not None:
         measured = directional_heat(times, heat, roots)
         diagnostics.update(east_west_heat_J_m2=measured.tolist(),
@@ -85,9 +104,15 @@ if __name__ == "__main__":
     for solver in ("fvm", "sph"):
         for method in ("theta", "sdirk2"):
             previous = None
+            previous_phasor_errors = None
             for steps in (16, 32, 64, 128):
                 row = measure(steps, method, solver)
                 passed = row["errors_s"] is not None
+                phasor_errors = np.array([row["amplitude_error_W_m2"], row["phase_error_rad"]])
+                if previous_phasor_errors is not None:
+                    row["amplitude_phase_orders"] = np.log2(previous_phasor_errors/phasor_errors).tolist()
+                previous_phasor_errors = phasor_errors
+                passed &= row["exact_heat_fit_error_W_m2"] < 1e-12
                 if passed:
                     magnitude_errors = np.asarray(row["east_west_errors_J_m2"])
                     if previous is not None:
@@ -96,6 +121,8 @@ if __name__ == "__main__":
                     passed &= min(row["east_west_heat_J_m2"]) > 0 and row["partition_residual_J_m2"] < 1e-12
                 if passed and steps == 128:
                     passed = max(row["errors_s"]) < 1e-4 and row["cycle_heat_error_J_m2"] < 1e-4
+                    passed &= row["amplitude_error_W_m2"] < 5e-4 and row["phase_error_rad"] < 2e-4
+                    passed &= min(row["amplitude_phase_orders"]) > 1.8
                     passed &= max(row["reconstruction_only_errors_J_m2"]) < 1e-6
                     passed &= max(magnitude_errors) < 2e-4 and min(row["east_west_orders"]) > 1.8
                 row["passed"] = bool(passed)
