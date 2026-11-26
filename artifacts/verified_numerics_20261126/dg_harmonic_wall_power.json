@@ -1,0 +1,39 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "2c1a2df8fc14561ff381ed7d5f44e3718c199a26",
+  "passed": 83,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Manufactured quadratic complex temperature profile on a unit slab, nine P2 cells, omega=3 rad/s. Compute inward material flux from the analytical gradient, storage from wall capacity times i*omega*T and external input from their sum. Runs in order: Robin/Robin, Dirichlet/Neumann and Neumann/Dirichlet. Two floating slab cases additionally verify uniform heating of both wall masses at zero and 1e-16 rad/s.",
+  "runs": {
+    "test_harmonic_cell_powers_against_polynomial_slab[kinds0]": {
+      "wall_external_error_W_m2": 4.965068306494546e-16,
+      "wall_storage_error_W_m2": 2.482534153247273e-16,
+      "wall_material_error_W_m2": 4.440892098500626e-16,
+      "wall_balance_W_m2": 1.1102230246251565e-16,
+      "bulk_max_error_W_m2": 9.12668998568199e-17,
+      "source_max_error_W_m2": 7.850462293418876e-16,
+      "storage_max_error_W_m2": 3.433175098891678e-16,
+      "max_balance_error_W_m2": 2.1626061804299406e-13
+    },
+    "test_harmonic_cell_powers_against_polynomial_slab[kinds1]": {
+      "wall_external_error_W_m2": 4.897090440071043e-14,
+      "wall_storage_error_W_m2": 1.4043333874306805e-15,
+      "wall_material_error_W_m2": 4.897090440071043e-14,
+      "wall_balance_W_m2": 0.0,
+      "bulk_max_error_W_m2": 1.9800179653334632e-16,
+      "source_max_error_W_m2": 7.850462293418876e-16,
+      "storage_max_error_W_m2": 1.2551536537447354e-15,
+      "max_balance_error_W_m2": 3.0569990983053685e-13
+    },
+    "test_harmonic_cell_powers_against_polynomial_slab[kinds2]": {
+      "wall_external_error_W_m2": 1.4755060310793645e-13,
+      "wall_storage_error_W_m2": 3.1401849173675502e-15,
+      "wall_material_error_W_m2": 1.4755060310793645e-13,
+      "wall_balance_W_m2": 5.551115123125783e-17,
+      "bulk_max_error_W_m2": 1.0642779470339238e-15,
+      "source_max_error_W_m2": 7.850462293418876e-16,
+      "storage_max_error_W_m2": 4.514186477713617e-15,
+      "max_balance_error_W_m2": 3.181262761050402e-13
+    }
+  }
+}
