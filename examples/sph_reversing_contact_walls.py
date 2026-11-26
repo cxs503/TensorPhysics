@@ -32,10 +32,31 @@ def measure(n, steps, method, solver="sph"):
     if solver == "fvm":
         from tensorfvm.cht import rod
 
-        field, _, _, _, ledger = rod.solve_transient_stepped_rod(
+        field, _, _, _, traces, ledger, means = rod.solve_transient_stepped_rod(
             np.full(n, 1/n), 1., k, capacity, lambda t: (west(t), east(t)), times, exact[0],
-            source=source, contact_resistance=resistance, method=method, flux_order=2, return_step_heat=True)
+            source=source, contact_resistance=resistance, method=method, flux_order=2, return_step_heat=True,
+            return_traces=True, return_interval_temperatures=True)
         cuts = np.column_stack((ledger["left"][:, 0], ledger["contact"][:, cut-1], ledger["right"][:, -1]))
+        face = cut-1
+        left_path = cut/(n*k[0])
+        weights = np.array([left_path, left_path+resistance[face]])/total
+        endpoint = np.column_stack([side[:, face] for side in traces])
+        expected = west(times[:, None])*(1-weights) + east(times[:, None])*weights
+        # Analytical interval means of the quadratic and linear wall histories.
+        a, b = times[:-1, None], times[1:, None]
+        west_mean = 1-2*(a*a+a*b+b*b)/3
+        east_mean = -.5+(a+b)/2
+        exact_mean = west_mean*(1-weights)+east_mean*weights
+        trace_mean = np.column_stack([means[key][:, face] for key in ("trace_left", "trace_right")])
+        mean_flux = cuts[:, 1]/np.diff(times)
+        exact_flux = ((west_mean-east_mean)/total).ravel()
+        jump = trace_mean[:, 0]-trace_mean[:, 1]
+        diagnostics.update(
+            endpoint_trace_errors_left_right_K=np.max(abs(endpoint-expected), axis=0).tolist(),
+            interval_trace_errors_left_right_K=np.max(abs(trace_mean-exact_mean), axis=0).tolist(),
+            interval_jump_error_K=float(max(abs(jump-(exact_mean[:, 0]-exact_mean[:, 1])))),
+            interval_flux_error_W_m2=float(max(abs(mean_flux-exact_flux))),
+            interval_contact_law_residual_K=float(max(abs(jump-resistance[face]*mean_flux))))
         balance = np.diff(field, axis=0)*capacity/n + ledger["right"]-ledger["left"]-ledger["source"]
         diagnostics["cell_balance_J_m2"] = float(np.max(abs(balance)))
     else:
@@ -75,6 +96,7 @@ if __name__ == "__main__":
     rows = []
     for method in methods:
         previous = None
+        previous_interface = None
         for steps in (8, 16, 32, 64):
             row = measure(40, steps, method, solver)
             errors = np.r_[row["temperature_error_K"], row["west_contact_east_heat_errors_J_m2"]]
@@ -95,6 +117,17 @@ if __name__ == "__main__":
                         passed &= max(errors) < 1e-4 and min(heat_orders) > 1.8
                         passed &= row["max_step_heat_error_J_m2"] < 1e-5
                         passed &= t_order is None or t_order > 1.8
+            if solver == "fvm":
+                interface_errors = np.r_[row["interval_trace_errors_left_right_K"],
+                                         row["interval_jump_error_K"], row["interval_flux_error_W_m2"]]
+                passed &= row["interval_contact_law_residual_K"] < 1e-10
+                endpoint_limit = 1e-10 if method == "theta" else 2e-5
+                if previous_interface is not None:
+                    row["interval_orders_left_right_jump_flux"] = np.log2(previous_interface/interface_errors).tolist()
+                if steps == 64:
+                    passed &= max(row["endpoint_trace_errors_left_right_K"]) < endpoint_limit
+                    passed &= max(interface_errors) < 1e-4 and min(row["interval_orders_left_right_jump_flux"]) > 1.8
+                previous_interface = interface_errors
             row.update(orders=orders, passed=bool(passed))
             rows.append(row)
             previous = errors
