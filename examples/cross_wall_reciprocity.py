@@ -11,8 +11,8 @@ def cold_phasor(row, prefix=""):
     return np.array(row[prefix+"cold_gain_W_m2_K"])*np.exp(1j*np.array(row[prefix+"cold_phase_rad"]))
 
 
-def wall_transfer(position, resistance=.3, *, with_sensitivity=False):
-    """Cross-wall flux per unit drive from the two layer transfer matrices."""
+def impedance_terms(position):
+    """Return bulk impedance and its multiplier for a unit contact resistance."""
     omega = 2*np.pi*np.array([1., 2.])[:, None]
     k = np.array([1., 4.])
     wave = np.sqrt(1j*omega*np.array([1., 2.])/k)
@@ -20,7 +20,13 @@ def wall_transfer(position, resistance=.3, *, with_sensitivity=False):
     c = np.cosh(z)
     impedance = np.sinh(z)/(wave*k)
     contact_weight = c[:, 0]*c[:, 1]
-    gain = 1/(impedance[:, 0]*c[:, 1] + impedance[:, 1]*c[:, 0] + resistance*contact_weight)
+    return impedance[:, 0]*c[:, 1] + impedance[:, 1]*c[:, 0], contact_weight
+
+
+def wall_transfer(position, resistance=.3, *, with_sensitivity=False):
+    """Cross-wall flux per unit drive from the two layer transfer matrices."""
+    bulk, contact_weight = impedance_terms(position)
+    gain = 1/(bulk + resistance*contact_weight)
     if with_sensitivity:
         # R*d(log G)/dR for the complex transfer gain G.
         return gain, -resistance*contact_weight*gain
