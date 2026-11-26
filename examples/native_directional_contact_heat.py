@@ -1,12 +1,13 @@
 """Run python examples/native_directional_contact_heat.py from TensorPhysics.
 
-Compare the native directional heat ledgers of a unit-area finite-volume rod
-and a fixed DEM thermal chain against the two-reversal continuum solution.
+Compare native directional contact heat from finite-volume and finite-element
+rods and a fixed DEM thermal chain against the two-reversal continuum solution.
 """
 import json
 
 import numpy as np
 from tensordem.thermal import contact_chain
+from tensorfem import thermal
 from tensorfvm.cht import rod
 
 import contact_heat_double_reversal as double
@@ -33,6 +34,17 @@ def dem(n, times, modes):
     return parts["rightward"][:, cut], parts["leftward"][:, cut], net[:, cut]
 
 
+def fem(n, times, modes):
+    model, initial = case.fem_initial_problem(n, modes)
+    time = initial.new_tensor(times)
+    # Piecewise-linear integration of contact power matches the solver's
+    # native net heat for Crank-Nicolson on each individual time interval.
+    result = thermal.solve_transient_thermal(model, time, initial, theta=.5)
+    forward, reverse = thermal.thermal_contact_pair_directional_heat(model, time, result.temperature)
+    net = thermal.thermal_contact_pair_heat_steps(model, result)
+    return forward[:, 0].numpy(), reverse[:, 0].numpy(), net[:, 0].numpy()
+
+
 def run():
     roots, end, waves, weights, modes = double.reference_modes()
 
@@ -42,7 +54,8 @@ def run():
     phases = np.diff(integral(np.r_[0., roots, end]))
     reference = np.array([phases[0]+phases[2], -phases[1]])
     rows = []
-    for solver, solve in (("TensorFVM_SDIRK2", fvm), ("TensorDEM_Crank_Nicolson", dem)):
+    for solver, solve in (("TensorFVM_SDIRK2", fvm), ("TensorDEM_Crank_Nicolson", dem),
+                          ("TensorFEM_Crank_Nicolson", fem)):
         previous = None
         for n in (24, 48, 96, 192):
             times = np.linspace(0., end, 2*n+1)
@@ -66,7 +79,7 @@ def run():
             previous = total_error
     return dict(reference_right_left_heat_J=reference.tolist(), analytic_reversals_s=roots.tolist(),
                 end_s=end, runs=rows, sources=[provenance(p) for p in
-                (__file__, double.__file__, case.__file__, rod.__file__, contact_chain.__file__)])
+                (__file__, double.__file__, case.__file__, rod.__file__, contact_chain.__file__, thermal.__file__)])
 
 
 if __name__ == "__main__":

@@ -36,7 +36,7 @@ def cell_data(n, modes, cell_averages=False):
     return k, samples, contacts
 
 
-def fem(n, times, modes):
+def fem_initial_problem(n, modes):
     mid = n//2
     x = torch.linspace(0., .5, mid+1, dtype=torch.float64)
     edge = torch.arange(mid)
@@ -49,7 +49,13 @@ def fem(n, times, modes):
         contact_conductance=1/RESISTANCE)
     mode = sum(amplitude*torch.sin(wave*x) for wave, amplitude in modes)
     initial = torch.cat((mode, -mode.flip((0,))/3))
-    result = thermal.solve_transient_thermal(model, x.new_tensor(times), initial, method="sdirk2")
+    return model, initial
+
+
+def fem(n, times, modes):
+    model, initial = fem_initial_problem(n, modes)
+    pair = model.contact_pairs[0]
+    result = thermal.solve_transient_thermal(model, initial.new_tensor(times), initial, method="sdirk2")
     return (result.interval_temperature[:, pair].numpy(),
             thermal.thermal_contact_pair_heat_steps(model, result)[:, 0].numpy())
 
