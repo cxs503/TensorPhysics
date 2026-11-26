@@ -1,0 +1,396 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "steps": 16,
+      "method": "theta",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.26090052197443114,
+        0.6957086537218284
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.0029093309479860663,
+        0.0010929870257631036
+      ],
+      "cycle_heat_error_J_m2": 0.001627132561900807,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "theta",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.2585986415179935,
+        0.6947905626687427
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.0006074504915484225,
+        0.00017489597267739132
+      ],
+      "cycle_heat_error_J_m2": 0.0004026749072915392,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "theta",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.2581177555808809,
+        0.6946419425919754
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.00012656455443582626,
+        2.6275895910088387e-05
+      ],
+      "cycle_heat_error_J_m2": 0.0001004140958177635,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "theta",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25802426638834985,
+        0.6946216551918478
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        3.3075361904777445e-05,
+        5.98849578248295e-06
+      ],
+      "cycle_heat_error_J_m2": 2.508764250869211e-05,
+      "passed": true
+    },
+    {
+      "steps": 16,
+      "method": "sdirk2",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.2595149081087378,
+        0.695725137329179
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.0015237170822927082,
+        0.0011094706331136184
+      ],
+      "cycle_heat_error_J_m2": 0.00024236067866587052,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "sdirk2",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25825491049914273,
+        0.6947941981418516
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.0002637194726976544,
+        0.00017853144578627855
+      ],
+      "cycle_heat_error_J_m2": 6.741309391189443e-05,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "sdirk2",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25803140242840095,
+        0.6946428585057636
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        4.02114019558697e-05,
+        2.719180969823487e-05
+      ],
+      "cycle_heat_error_J_m2": 1.7667346875444023e-05,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "sdirk2",
+      "solver": "fvm",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25800270694820826,
+        0.6946218896294574
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        1.1515921763183279e-05,
+        6.222933392030505e-06
+      ],
+      "cycle_heat_error_J_m2": 4.516909228508004e-06,
+      "passed": true
+    },
+    {
+      "steps": 16,
+      "method": "theta",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.260898002249899,
+        0.6957051087233558
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.002906811223453931,
+        0.0010894420272904437
+      ],
+      "cycle_heat_error_J_m2": 0.0016309684692771553,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "theta",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25859802230744133,
+        0.6947896922799457
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.0006068312809962562,
+        0.00017402558388035505
+      ],
+      "cycle_heat_error_J_m2": 0.0004036321514676866,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "theta",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.2581176005090624,
+        0.6946417258433932
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.00012640948261732898,
+        2.6059147327894827e-05
+      ],
+      "cycle_heat_error_J_m2": 0.00010065329190553363,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "theta",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.2580242277278102,
+        0.6946216009137303
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        3.303670136511894e-05,
+        5.934217664926855e-06
+      ],
+      "cycle_heat_error_J_m2": 2.5147434254413348e-05,
+      "passed": true
+    },
+    {
+      "steps": 16,
+      "method": "sdirk2",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25951327009752134,
+        0.6957235780745926
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.0015220790710762655,
+        0.001107911378527282
+      ],
+      "cycle_heat_error_J_m2": 0.00024045698552607742,
+      "passed": true
+    },
+    {
+      "steps": 32,
+      "method": "sdirk2",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25825451199410043,
+        0.6947938087963582
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        0.00026332096765535606,
+        0.00017814210029287736
+      ],
+      "cycle_heat_error_J_m2": 6.693720449438278e-05,
+      "passed": true
+    },
+    {
+      "steps": 64,
+      "method": "sdirk2",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25803130258409346,
+        0.6946427609989518
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        4.011155764838126e-05,
+        2.7094302886498944e-05
+      ],
+      "cycle_heat_error_J_m2": 1.7548319891175224e-05,
+      "passed": true
+    },
+    {
+      "steps": 128,
+      "method": "sdirk2",
+      "solver": "sph",
+      "initial_signs": [
+        1,
+        -1
+      ],
+      "reversal_times_s": [
+        0.25800268203839427,
+        0.6946218651572156
+      ],
+      "exact_times_s": [
+        0.2579911910264451,
+        0.6946156666960653
+      ],
+      "errors_s": [
+        1.1491011949193997e-05,
+        6.1984611502419185e-06
+      ],
+      "cycle_heat_error_J_m2": 4.487140229963993e-06,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "c9e5c50c55023a7185b6b69e9586f444d179d355",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "99a56abe64d28c41762aae15484bbe647c4b8e2b12e692105620514e76a41ba1"
+    },
+    {
+      "commit": "c9e5c50c55023a7185b6b69e9586f444d179d355",
+      "file": "sph_reversing_contact_walls.py",
+      "source_sha256": "a0698cb34da30e21068945bfeff9b3ece5309f56357ac6b7b6f8455ebe2d6f88"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_periodic_contact_reversals.py"
+}
