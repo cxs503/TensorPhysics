@@ -1,0 +1,153 @@
+{
+  "reversal_time_s": 0.01,
+  "reference_return_time_s": 0.027582907643993078,
+  "end_time_s": 0.053,
+  "modes_wave_amplitude": [
+    [
+      4.71238898038469,
+      1.0
+    ],
+    [
+      10.28411545077647,
+      1.7937109446605306
+    ]
+  ],
+  "contact_resistance_m2K_W": 0.2829421210522584,
+  "runs": [
+    {
+      "solver": "TensorFEM",
+      "resolution": 24,
+      "time_steps": 48,
+      "return_time_s": 0.02700460681184292,
+      "absolute_error_s": 0.0005783008321501582,
+      "reference_interpolation_error_s": 4.334676441050678e-08,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "resolution": 48,
+      "time_steps": 96,
+      "return_time_s": 0.027437419236452033,
+      "absolute_error_s": 0.00014548840754104522,
+      "reference_interpolation_error_s": 1.8269631859441082e-08,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "resolution": 96,
+      "time_steps": 192,
+      "return_time_s": 0.027546483082902105,
+      "absolute_error_s": 3.6424561090972474e-05,
+      "reference_interpolation_error_s": 8.074606844266086e-09,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM",
+      "resolution": 192,
+      "time_steps": 384,
+      "return_time_s": 0.0275737977692882,
+      "absolute_error_s": 9.109874704878174e-06,
+      "reference_interpolation_error_s": 3.543577393322339e-09,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 24,
+      "time_steps": 48,
+      "return_time_s": 0.027272928168120134,
+      "absolute_error_s": 0.00030997947587294364,
+      "reference_interpolation_error_s": 4.334676441050678e-08,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 48,
+      "time_steps": 96,
+      "return_time_s": 0.02750576182904363,
+      "absolute_error_s": 7.714581494944889e-05,
+      "reference_interpolation_error_s": 1.8269631859441082e-08,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 96,
+      "time_steps": 192,
+      "return_time_s": 0.02756364362411735,
+      "absolute_error_s": 1.926401987572754e-05,
+      "reference_interpolation_error_s": 8.074606844266086e-09,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM",
+      "resolution": 192,
+      "time_steps": 384,
+      "return_time_s": 0.027578092151678394,
+      "absolute_error_s": 4.815492314683839e-06,
+      "reference_interpolation_error_s": 3.543577393322339e-09,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 24,
+      "time_steps": 48,
+      "return_time_s": 0.027505213411901958,
+      "absolute_error_s": 7.769423209112031e-05,
+      "reference_interpolation_error_s": 4.334676441050678e-08,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 48,
+      "time_steps": 96,
+      "return_time_s": 0.027568482255491873,
+      "absolute_error_s": 1.4425388501205366e-05,
+      "reference_interpolation_error_s": 1.8269631859441082e-08,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 96,
+      "time_steps": 192,
+      "return_time_s": 0.027579814308397982,
+      "absolute_error_s": 3.093335595096003e-06,
+      "reference_interpolation_error_s": 8.074606844266086e-09,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH",
+      "resolution": 192,
+      "time_steps": 384,
+      "return_time_s": 0.02758219138319013,
+      "absolute_error_s": 7.162608029465112e-07,
+      "reference_interpolation_error_s": 3.543577393322339e-09,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "4bb6bb746b7640c364a5de393fba36d517fe7580",
+      "file": "contact_heat_return_time.py",
+      "source_sha256": "e99e359030e3bdb85650169758c7f40fa8f9a517555ed0bc25013dd146734e5e"
+    },
+    {
+      "commit": "4bb6bb746b7640c364a5de393fba36d517fe7580",
+      "file": "resistive_decay_interface_comparison.py",
+      "source_sha256": "2af141a13c33cd1f2bde51559e889253f69652b0694ca35d9b2daa232a1cd301"
+    },
+    {
+      "commit": "833974519364dec3644153e9b2d03dc34901de2e",
+      "file": "thermal.py",
+      "source_sha256": "68aacf922b93a8c8fcf92952f7749a4d8d509efd96325725c9ef0b4dac9bc97d"
+    },
+    {
+      "commit": "86ed5776ea273f05ac98630607fbeffff17ecacb",
+      "file": "rod.py",
+      "source_sha256": "c06d7899faf606a036b330f0ce0b906bb163a9706277e4bfbd3c08ec26182ed8"
+    },
+    {
+      "commit": "d2dad6c7caff2551f26a57d3617f8bcad17c92f0",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "692ac6cd1c428e493c24ef7b410053d10be86d237c191abf9c1e5ecd32b8a1e6"
+    }
+  ]
+}
