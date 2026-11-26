@@ -1,0 +1,49 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "88a0da04aaf516d86511104c31e5fbb35320b78e",
+  "passed": 135,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal.py --junitxml=results.xml",
+  "reference": "Two stores (2,3 J/K), 1.5 W/K contact, initial temperatures (2,0 K), 3.75 W heating on store 2. Exact q=1.5*(3 exp(-1.25t)-1) W. Integrate on either side of t=log(3)/1.25 up to 1.5 s. Dense and sparse CN, 16 to 128 steps. Compare both directional totals and stepwise net residual. A separate exact piecewise-linear test uses unequal steps, reversed contacts and 2^-600 K scale. The diagnostic assumes linear interpolation between supplied snapshots.",
+  "runs": {
+    "test_directional_heat_across_two_store_reversal[False]": {
+      "n16_net_residual_J": 4.163336342344337e-17,
+      "n16_forward_error_J": 0.0014999504804378283,
+      "n16_reverse_error_J": 0.0003141489126440855,
+      "n32_net_residual_J": 2.0816681711721685e-17,
+      "n32_forward_error_J": 0.00037913644437770344,
+      "n32_forward_order": 1.9841258252661766,
+      "n32_reverse_error_J": 8.290568397767428e-05,
+      "n32_reverse_order": 1.9219056657580933,
+      "n64_net_residual_J": 1.3877787807814457e-17,
+      "n64_forward_error_J": 9.429579176800651e-05,
+      "n64_forward_order": 2.007451848940412,
+      "n64_reverse_error_J": 2.025181039427837e-05,
+      "n64_reverse_order": 2.033420133333735,
+      "n128_net_residual_J": 6.938893903907228e-18,
+      "n128_forward_error_J": 2.3574854387087285e-05,
+      "n128_forward_order": 1.9999445278028083,
+      "n128_reverse_error_J": 5.064715559888189e-06,
+      "n128_reverse_order": 1.9994977292822962
+    },
+    "test_directional_heat_across_two_store_reversal[True]": {
+      "n16_net_residual_J": 5.551115123125783e-17,
+      "n16_forward_error_J": 0.0014999504804376063,
+      "n16_reverse_error_J": 0.0003141489126451402,
+      "n32_net_residual_J": 2.0816681711721685e-17,
+      "n32_forward_error_J": 0.0003791364443765932,
+      "n32_forward_order": 1.9841258252701879,
+      "n32_reverse_error_J": 8.290568397983922e-05,
+      "n32_reverse_order": 1.9219056657252636,
+      "n64_net_residual_J": 1.3877787807814457e-17,
+      "n64_forward_error_J": 9.429579176800651e-05,
+      "n64_forward_order": 2.007451848936187,
+      "n64_reverse_error_J": 2.0251810390670144e-05,
+      "n64_reverse_order": 2.0334201336284505,
+      "n128_net_residual_J": 6.938893903907228e-18,
+      "n128_forward_error_J": 2.3574854387975464e-05,
+      "n128_forward_order": 1.999944527748455,
+      "n128_reverse_error_J": 5.064715554392585e-06,
+      "n128_reverse_order": 1.9994977305906885
+    }
+  }
+}
