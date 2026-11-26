@@ -1,0 +1,38 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "6f529dc9010fd4a246369fb4d4965a28dad4e220",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "passed": 141,
+  "reference": "Insulated cell and storing wall, each with capacity 1 J/K, linked by conductance 2 W/K. Relative to 305 K, initial deviations are +A and -A, A=2^-50 K. Exact cell/wall deviations at time t are +/-A*exp(-4t), integral heat into the cell is A*(exp(-4t)-1) in SI units. Compare full run to individual CN steps using both returned states; fields must match bit-for-bit. A separate test checks absolute coordinates and active-face order for mixed boundary types.",
+  "runs": {
+    "4": {
+      "continuum_end_scaled": 0.005735283236612793,
+      "continuum_heat_scaled": 0.005735283236612765,
+      "restart_heat_scaled": 0.0,
+      "storage_balance_scaled": 8.326672684688674e-17
+    },
+    "8": {
+      "continuum_end_scaled": 0.0014156520526255045,
+      "continuum_heat_scaled": 0.0014156520526252825,
+      "restart_heat_scaled": 1.1102230246251565e-16,
+      "storage_balance_scaled": 8.326672684688674e-17
+    },
+    "16": {
+      "continuum_end_scaled": 0.00035280330690451445,
+      "continuum_heat_scaled": 0.00035280330690412587,
+      "restart_heat_scaled": 2.220446049250313e-16,
+      "storage_balance_scaled": 3.3306690738754696e-16
+    },
+    "32": {
+      "continuum_end_scaled": 8.81318620146454e-05,
+      "continuum_heat_scaled": 8.813186201472867e-05,
+      "restart_heat_scaled": 0.0,
+      "storage_balance_scaled": 6.661338147750939e-16
+    }
+  },
+  "orders": [
+    2.0183980205769854,
+    2.0045307260544374,
+    2.0011284924314
+  ]
+}
