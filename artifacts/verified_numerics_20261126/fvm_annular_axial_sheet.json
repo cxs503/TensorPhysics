@@ -1,0 +1,36 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "017cc0b54de092003a5016558c2a110a682f1718",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_annular_conduction.py --junitxml=results.xml",
+  "passed": 59,
+  "reference": "Harmonic two-material annulus with finite contact resistance on each side of an isotropic storing sheet. Independent radial modified Bessel solutions prescribe sheet temperature and two material fluxes, at axial wavenumber -1.25 rad/m and azimuthal order 2. Mesh counts refer to each material separately. Transient insulated annulus with matched material and sheet diffusivities has analytic temperature exp(-2.4*t) and zero radial exchange.",
+  "runs": {
+    "test_harmonic_two_material_sheet_traces_against_bessel_modes[-1.25-0.35]": {
+      "max_error_12_field_K": 0.0002231563625718343,
+      "max_error_12_radial_rate_W_per_m": 0.02282519673697727,
+      "max_error_12_trace_K": 0.00023422666477422794,
+      "max_error_12_sheet_K": 0.00014574076864248166,
+      "balance_12_W_per_m": 1.1506967582354041e-13,
+      "max_error_24_field_K": 5.7204574557743366e-05,
+      "max_error_24_radial_rate_W_per_m": 0.0057105339533421035,
+      "max_error_24_trace_K": 5.859848600853106e-05,
+      "max_error_24_sheet_K": 3.6459669775807506e-05,
+      "balance_24_W_per_m": 3.246920835122816e-13,
+      "max_error_48_field_K": 1.4477301505729863e-05,
+      "max_error_48_radial_rate_W_per_m": 0.0014278983863335046,
+      "max_error_48_trace_K": 1.4652238721640608e-05,
+      "max_error_48_sheet_K": 9.1164495854107e-06,
+      "balance_48_W_per_m": 3.4349891312159516e-13
+    },
+    "test_axial_decay_across_storing_sheet[theta]": {
+      "steps10_temperature_K": 0.0004417927487317397,
+      "steps20_temperature_K": 0.00011038477587332896,
+      "steps40_temperature_K": 2.759226998499953e-05
+    },
+    "test_axial_decay_across_storing_sheet[sdirk2]": {
+      "steps10_temperature_K": 0.00021658773205995852,
+      "steps20_temperature_K": 5.3851177182040466e-05,
+      "steps40_temperature_K": 1.3425998081184609e-05
+    }
+  }
+}
