@@ -1,0 +1,146 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "method": "theta",
+      "elements": 20,
+      "time_steps": 20,
+      "layer_temperature_errors_K": [
+        0.0009212877588626045,
+        0.0029212737528599986
+      ],
+      "contact_heat_error_J_m2": 0.0008246888556502907,
+      "max_step_contact_imbalance_J_m2": 6.938893903907228e-17,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "method": "theta",
+      "elements": 40,
+      "time_steps": 40,
+      "layer_temperature_errors_K": [
+        0.00022989386757013563,
+        0.0007292969133910754
+      ],
+      "contact_heat_error_J_m2": 0.0002058812491745332,
+      "max_step_contact_imbalance_J_m2": 1.1796119636642288e-16,
+      "orders": [
+        2.0026838614832783,
+        2.0020193663167687,
+        2.0020374708236544
+      ],
+      "passed": true
+    },
+    {
+      "method": "theta",
+      "elements": 80,
+      "time_steps": 80,
+      "layer_temperature_errors_K": [
+        5.74433497734228e-05,
+        0.00018226061792980808
+      ],
+      "contact_heat_error_J_m2": 5.1452128557283316e-05,
+      "max_step_contact_imbalance_J_m2": 1.8735013540549517e-16,
+      "orders": [
+        2.000756196014523,
+        2.0005034242997706,
+        2.000509773890184
+      ],
+      "passed": true
+    },
+    {
+      "method": "theta",
+      "elements": 160,
+      "time_steps": 160,
+      "layer_temperature_errors_K": [
+        1.4358987254603495e-05,
+        4.5570925682247854e-05
+      ],
+      "contact_heat_error_J_m2": 1.2861895646032462e-05,
+      "max_step_contact_imbalance_J_m2": 1.726049858596923e-16,
+      "orders": [
+        2.000185882620753,
+        1.999817282434761,
+        2.0001274727179705
+      ],
+      "passed": true
+    },
+    {
+      "method": "sdirk2",
+      "elements": 20,
+      "time_steps": 20,
+      "layer_temperature_errors_K": [
+        0.00081054610914566,
+        0.0026059597694051417
+      ],
+      "contact_heat_error_J_m2": 0.0008779928728657738,
+      "max_step_contact_imbalance_J_m2": 5.204170427930421e-17,
+      "orders": null,
+      "passed": true
+    },
+    {
+      "method": "sdirk2",
+      "elements": 40,
+      "time_steps": 40,
+      "layer_temperature_errors_K": [
+        0.00020219580445043905,
+        0.0006505858894847449
+      ],
+      "contact_heat_error_J_m2": 0.0002192585601290542,
+      "max_step_contact_imbalance_J_m2": 6.591949208711867e-17,
+      "orders": [
+        2.003141196249468,
+        2.0020033745576957,
+        2.0015760602941577
+      ],
+      "passed": true
+    },
+    {
+      "method": "sdirk2",
+      "elements": 80,
+      "time_steps": 80,
+      "layer_temperature_errors_K": [
+        5.0514045781657746e-05,
+        0.000162568997021606
+      ],
+      "contact_heat_error_J_m2": 5.480324288670291e-05,
+      "max_step_contact_imbalance_J_m2": 1.474514954580286e-16,
+      "orders": [
+        2.0009965615787175,
+        2.000687380000427,
+        2.000299998595157
+      ],
+      "passed": true
+    },
+    {
+      "method": "sdirk2",
+      "elements": 160,
+      "time_steps": 160,
+      "layer_temperature_errors_K": [
+        1.2626181597974462e-05,
+        4.064638140932608e-05
+      ],
+      "contact_heat_error_J_m2": 1.37005480427832e-05,
+      "max_step_contact_imbalance_J_m2": 1.2836953722228372e-16,
+      "orders": [
+        2.0002661888902344,
+        1.9998533266477347,
+        2.0000276603462526
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "0d12955a9f0f0f1ab0c598609eebe1a43401e7a9",
+      "file": "fem_contact_decay_mode.py",
+      "source_sha256": "64837e988bdef97b04479ca103bc5ea2d41c87f070cd7017a1b898f7fd561528"
+    },
+    {
+      "commit": "f6b1c692d140849079c4b722bbd5d2a35d389f1d",
+      "file": "thermal.py",
+      "source_sha256": "1880c1c184bc7f7c2356ce612203d5ae595ff907cd3d71d3da7dd56eb8ddf133"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src python examples/fem_contact_decay_mode.py"
+}
