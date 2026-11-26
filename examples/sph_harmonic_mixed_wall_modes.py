@@ -39,9 +39,15 @@ def measure(n, omega, fixed_left):
     t, q = sph.solve_harmonic_slab_2d(source, dx, walls, omega, conductivity=K,
         volumetric_heat_capacity=CAPACITY, heat_loss_coefficient=LOSS,
         x_wall_inward_flux=inward, return_x_flux=True)
+    side = "left" if fixed_left else "right"
+    index, sign = (0, 1) if fixed_left else (-1, -1)
+    wall_flux = sph.recover_dirichlet_wall_flux_2d(
+        t, dx, K, sign*q[index], x_wall_temperatures=walls, side=side).numpy()
+    exact_wall_flux = sign*face_q[:, index]
     t, q = t.numpy(), q.numpy()
     balance = dx*((LOSS+1j*omega*CAPACITY)*t-source).mean(axis=0)+np.diff(q)
     return dict(columns=n, omega_rad_s=omega, fixed_wall="left" if fixed_left else "right",
+                fixed_wall_row_flux_error_W_m2=float(abs(wall_flux-exact_wall_flux).max()),
                 temperature_error_K=float(abs(t-exact).max()),
                 section_flux_error_W_m2=float(abs(q-face_q.mean(axis=0)).max()),
                 prescribed_mean_flux_error_W_m2=float(abs(q-face_q.mean(axis=0))[-1 if fixed_left else 0]),
@@ -55,9 +61,11 @@ if __name__ == "__main__":
             previous = None
             for n in (8, 16, 32, 64):
                 row = measure(n, omega, fixed_left)
-                errors = np.array([row["temperature_error_K"], row["section_flux_error_W_m2"]])
+                errors = np.array([row["temperature_error_K"], row["section_flux_error_W_m2"],
+                                   row["fixed_wall_row_flux_error_W_m2"]])
                 orders = np.log2(previous/errors).tolist() if previous is not None else []
-                row.update(temperature_and_flux_orders=orders,
+                row.update(temperature_and_flux_orders=orders[:2],
+                           fixed_wall_row_flux_order=orders[2] if orders else None,
                            passed=bool(row["column_balance_residual_W_m2"] < 1e-10 and
                                        row["prescribed_mean_flux_error_W_m2"] < 1e-10 and
                                        (not orders or min(orders) > 0) and
