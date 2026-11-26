@@ -1,13 +1,13 @@
 """Verify reversing conductive heat flow with independently driven Dirichlet walls."""
+import argparse
 import json
 
 import numpy as np
-from tensorsph import heat_conduction_2d as sph
 
 from conduction_provenance import provenance
 
 
-def measure(n, steps, method):
+def measure(n, steps, method, solver="sph"):
     cut = 2*n//5
     k = np.repeat([1., 3.], [cut, n-cut])
     capacity = np.repeat([4., 2.], [cut, n-cut])
@@ -28,33 +28,58 @@ def measure(n, steps, method):
         return capacity*((1-weight)*(-4*t)+weight)
     times = np.linspace(0, 1., steps+1)
     exact = (1-weight)*west(times[:, None])+weight*east(times[:, None])
-    field, heats = sph.solve_transient_layered_slab(
-        exact[0], times, 1/n, (west, east), conductivity=k, volumetric_heat_capacity=capacity,
-        heat_source=source, contact_resistance_x=resistance, h_factor=.9,
-        method=method, return_x_heat=True)
-    cuts = heats.numpy()[:, [0, cut, n]]
+    diagnostics = {}
+    if solver == "fvm":
+        from tensorfvm.cht import rod
+
+        field, _, _, _, ledger = rod.solve_transient_stepped_rod(
+            np.full(n, 1/n), 1., k, capacity, lambda t: (west(t), east(t)), times, exact[0],
+            source=source, contact_resistance=resistance, method=method, flux_order=2, return_step_heat=True)
+        cuts = np.column_stack((ledger["left"][:, 0], ledger["contact"][:, cut-1], ledger["right"][:, -1]))
+        balance = np.diff(field, axis=0)*capacity/n + ledger["right"]-ledger["left"]-ledger["source"]
+        diagnostics["cell_balance_J_m2"] = float(np.max(abs(balance)))
+    else:
+        from tensorsph import heat_conduction_2d as sph
+
+        particles, heats = sph.solve_transient_layered_slab(
+            exact[0], times, 1/n, (west, east), conductivity=k, volumetric_heat_capacity=capacity,
+            heat_source=source, contact_resistance_x=resistance, h_factor=.9,
+            method=method, return_x_heat=True)
+        field = particles.numpy()
+        cuts = heats.numpy()[:, [0, cut, n]]
     # Positive heat points east. Integrate q=(west-east)/total analytically.
     primitive = (1.5*times-times**2/2-2*times**3/3)/total
     cumulative = np.cumsum(cuts, axis=0)
     step_error = np.max(abs(cuts-np.diff(primitive)[:, None]))
-    t_error = float(np.max(abs(field.numpy()-exact)))
+    t_error = float(np.max(abs(field-exact)))
     h_errors = np.max(abs(cumulative-primitive[1:, None]), axis=0)
     exact_sign = np.sign(np.diff(primitive))[:, None]
     reversed_flow = bool(np.all(np.sign(cuts) == exact_sign))
-    return dict(columns=n, steps=steps, method=method, temperature_error_K=t_error,
+    return dict(**diagnostics, solver=solver, columns=n, steps=steps, method=method, temperature_error_K=t_error,
                 west_contact_east_heat_errors_J_m2=h_errors.tolist(), max_step_heat_error_J_m2=float(step_error),
                 reversed_flow=reversed_flow)
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--solver", choices=("sph", "fvm"), default="sph")
+    solver = parser.parse_args().solver
+    if solver == "fvm":
+        from tensorfvm.cht import rod as implementation
+        methods = ("theta", "sdirk2")
+        repo = "TensorFVM"
+    else:
+        from tensorsph import heat_conduction_2d as implementation
+        methods = ("theta", "sdirk2", "exponential_quadratic")
+        repo = "TensorSPH"
     rows = []
-    for method in ("theta", "sdirk2", "exponential_quadratic"):
+    for method in methods:
         previous = None
         for steps in (8, 16, 32, 64):
-            row = measure(40, steps, method)
+            row = measure(40, steps, method, solver)
             errors = np.r_[row["temperature_error_K"], row["west_contact_east_heat_errors_J_m2"]]
             orders = None
-            passed = row["reversed_flow"]
+            passed = row["reversed_flow"] and row.get("cell_balance_J_m2", 0.) < 1e-10
             if method == "exponential_quadratic":
                 passed &= max(errors) < 1e-10 and row["max_step_heat_error_J_m2"] < 1e-10
             else:
@@ -68,12 +93,13 @@ if __name__ == "__main__":
                     orders = [t_order, *heat_orders]
                     if steps == 64:
                         passed &= max(errors) < 1e-4 and min(heat_orders) > 1.8
+                        passed &= row["max_step_heat_error_J_m2"] < 1e-5
                         passed &= t_order is None or t_order > 1.8
             row.update(orders=orders, passed=bool(passed))
             rows.append(row)
             previous = errors
     passed = all(row["passed"] for row in rows)
-    print(json.dumps(dict(passed=passed, runs=rows, sources=[provenance(p) for p in (__file__, sph.__file__)],
-        reproduction="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src python examples/sph_reversing_contact_walls.py"),
+    print(json.dumps(dict(passed=passed, runs=rows, sources=[provenance(p) for p in (__file__, implementation.__file__)],
+        reproduction=f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../{repo}/src python examples/sph_reversing_contact_walls.py --solver {solver}"),
         indent=2, allow_nan=False))
     raise SystemExit(0 if passed else 1)
