@@ -11,10 +11,14 @@ def reference(n, resistance, omega, transverse_wavenumber=0., *,
     width = cut/n
     waves = np.sqrt(transverse_wavenumber**2 + 1j*omega*np.asarray(capacity)/np.asarray(conductivity))
 
+    def sinhc(z):
+        # np.sinc includes the removable singularity at zero.
+        return np.sinc(z/(1j*np.pi))
+
     def propagate(length, layer, temperature, flux):
         z = length*waves[layer]
         admittance = conductivity[layer]*waves[layer]
-        return (np.cosh(z)*temperature + np.sinh(z)*flux/admittance,
+        return (np.cosh(z)*temperature + length*sinhc(z)*flux/conductivity[layer],
                 admittance*np.sinh(z)*temperature + np.cosh(z)*flux)
 
     # Start with unit flux at x=1, then normalize the left boundary to one kelvin.
@@ -28,7 +32,7 @@ def reference(n, resistance, omega, transverse_wavenumber=0., *,
     nodes = np.r_[left, right]/scale
     # On a uniform cell the average is the midpoint value times sinh(z)/z.
     z = waves/(2*n)
-    avg = np.concatenate([propagate(.5*(back[:-1]+back[1:]), layer, temp, q)[0]*np.sinh(z[layer])/z[layer]
+    avg = np.concatenate([propagate(.5*(back[:-1]+back[1:]), layer, temp, q)[0]*sinhc(z[layer])
                           for layer, back, temp, q in ((0, left_back, hot_trace, contact_flux), (1, right_back, 0., 1.))])/scale
     result = (nodes, avg, contact_flux/scale, np.array([hot_flux, -1.])/scale)
     if return_face_flux:
