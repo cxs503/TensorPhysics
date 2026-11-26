@@ -1,0 +1,795 @@
+{
+  "reference": "Piecewise cubic Fourier temperatures with two zero-temperature walls",
+  "reproduction": "OMP_NUM_THREADS=1 PYTHONPATH=../TensorSPH/src:../TensorFVM/src python examples/sph_affine_contact_wall_heat.py --balanced --compare-fvm",
+  "sources": [
+    {
+      "commit": "660e508addced448cc91e46dd39c199d7737687b",
+      "file": "sph_affine_contact_wall_heat.py",
+      "source_sha256": "fded2a6aabe66e274a4950cc4a25b8532fbe27cbb87cc08d13dcf8005d35cf35"
+    },
+    {
+      "commit": "8da377020b9d3298e2706032cc98f768271e7ce6",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "360803002532e00f3d22fe5c020200808225a14b254d0f6317274ae625e67b72"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    }
+  ],
+  "runs": [
+    {
+      "columns": 16,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.21118829900568228,
+      "east_outward_W_m2": -0.2111882990056808,
+      "temperature_error_K": 0.0009857599422441058,
+      "wall_flux_error_W_m2": 0.0005807587594707786,
+      "all_face_flux_error_W_m2": 0.0005807587594708341,
+      "max_cell_balance_W_m2": 3.3306690738754696e-16,
+      "wall_balance_W_m2": 1.4710455076283324e-15,
+      "flux_reversals_m": [
+        0.13413330531076093,
+        0.5579040627190934
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 0.000920411793859266,
+      "temperature_and_wall_flux_orders": null,
+      "solver": "SPH"
+    },
+    {
+      "columns": 16,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.21176905776514945,
+      "east_outward_W_m2": -0.21176905776515959,
+      "temperature_error_K": 6.956241138666996e-16,
+      "wall_flux_error_W_m2": 7.993605777301127e-15,
+      "all_face_flux_error_W_m2": 7.993605777301127e-15,
+      "max_cell_balance_W_m2": 1.9914625504213745e-15,
+      "wall_balance_W_m2": 1.0130785099704553e-14,
+      "flux_reversals_m": [
+        0.13460739409399944,
+        0.5573068814754201
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 0.0007739745633624506,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 0.0005971812436733615
+    },
+    {
+      "columns": 32,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.21162386807528605,
+      "east_outward_W_m2": -0.2116238680752799,
+      "temperature_error_K": 0.00025268889939501814,
+      "wall_flux_error_W_m2": 0.00014518968987170533,
+      "all_face_flux_error_W_m2": 0.00014518968987170533,
+      "max_cell_balance_W_m2": 7.077671781985373e-16,
+      "wall_balance_W_m2": 6.161737786669619e-15,
+      "flux_reversals_m": [
+        0.13402824704876548,
+        0.5572887191763258
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 0.0003050682510916669,
+      "temperature_and_wall_flux_orders": [
+        1.9638740680509525,
+        1.9999999999601474
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 32,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.2117690577651426,
+      "east_outward_W_m2": -0.21176905776518606,
+      "temperature_error_K": 2.949029909160572e-15,
+      "wall_flux_error_W_m2": 3.447242491461111e-14,
+      "all_face_flux_error_W_m2": 3.447242491461111e-14,
+      "max_cell_balance_W_m2": 4.739264536368637e-15,
+      "wall_balance_W_m2": 4.346523141407488e-14,
+      "flux_reversals_m": [
+        0.13414101573991621,
+        0.5571344671817702
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 0.00030759620927922615,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 0.0001542519945556542
+    },
+    {
+      "columns": 64,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.2117327603426924,
+      "east_outward_W_m2": -0.21173276034266655,
+      "temperature_error_K": 6.395333924272858e-05,
+      "wall_flux_error_W_m2": 3.6297422485037645e-05,
+      "all_face_flux_error_W_m2": 3.6297422485037645e-05,
+      "max_cell_balance_W_m2": 1.734723475976807e-15,
+      "wall_balance_W_m2": 2.584044089815052e-14,
+      "flux_reversals_m": [
+        0.13389687988071336,
+        0.5570831083401162
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 9.945741488204263e-05,
+      "temperature_and_wall_flux_orders": [
+        1.9822706935032244,
+        1.9999999993198856
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 64,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.21176905776512028,
+      "east_outward_W_m2": -0.2117690577652765,
+      "temperature_error_K": 1.086630785351872e-14,
+      "wall_flux_error_W_m2": 1.249000902703301e-13,
+      "all_face_flux_error_W_m2": 1.249000902703301e-13,
+      "max_cell_balance_W_m2": 9.76302372279747e-15,
+      "wall_balance_W_m2": 1.5620837956475953e-13,
+      "flux_reversals_m": [
+        0.13392440399250566,
+        0.5570438943792819
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 9.09844618686706e-05,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 3.921396083428341e-05
+    },
+    {
+      "columns": 128,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.21175998340956514,
+      "east_outward_W_m2": -0.21175998340945967,
+      "temperature_error_K": 1.6085974110003156e-05,
+      "wall_flux_error_W_m2": 9.074355691918168e-06,
+      "all_face_flux_error_W_m2": 9.074355691973679e-06,
+      "max_cell_balance_W_m2": 4.503342143635791e-15,
+      "wall_balance_W_m2": 1.0547118733938987e-13,
+      "flux_reversals_m": [
+        0.1338370975804763,
+        0.5570073384710719
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 2.3687545837702828e-05,
+      "temperature_and_wall_flux_orders": [
+        1.9912163863981829,
+        1.9999999887662505
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 128,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.21176905776502633,
+      "east_outward_W_m2": -0.21176905776564733,
+      "temperature_error_K": 4.3201553445726404e-14,
+      "wall_flux_error_W_m2": 4.95742336070748e-13,
+      "all_face_flux_error_W_m2": 4.95742336070748e-13,
+      "max_cell_balance_W_m2": 2.0483614804334138e-14,
+      "wall_balance_W_m2": 6.210032488240813e-13,
+      "flux_reversals_m": [
+        0.1338440611146377,
+        0.5569974515325706
+      ],
+      "analytical_flux_reversals_m": [
+        0.133833419530637,
+        0.5569836509252342
+      ],
+      "max_reversal_error_m": 1.3800607336467152e-05,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 9.886938501235676e-06
+    },
+    {
+      "columns": 16,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2823351970058788,
+      "east_outward_W_m2": -0.2823351970058766,
+      "temperature_error_K": 0.0009906937704620032,
+      "wall_flux_error_W_m2": 0.0003755089701215075,
+      "all_face_flux_error_W_m2": 0.00037550897012161855,
+      "max_cell_balance_W_m2": 6.938893903907228e-16,
+      "wall_balance_W_m2": 2.1649348980190553e-15,
+      "flux_reversals_m": [
+        0.19342071487782395,
+        0.48648273621332316
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 0.0009761158488202915,
+      "temperature_and_wall_flux_orders": null,
+      "solver": "SPH"
+    },
+    {
+      "columns": 16,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.28271070597599673,
+      "east_outward_W_m2": -0.282710705976011,
+      "temperature_error_K": 1.1657341758564144e-15,
+      "wall_flux_error_W_m2": 1.2878587085651816e-14,
+      "all_face_flux_error_W_m2": 1.2878587085651816e-14,
+      "max_cell_balance_W_m2": 3.011479954295737e-15,
+      "wall_balance_W_m2": 1.426636586643326e-14,
+      "flux_reversals_m": [
+        0.19380585228307282,
+        0.4861405868100233
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 0.000658589436421525,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 0.00038513740524886986
+    },
+    {
+      "columns": 32,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.28261682873347105,
+      "east_outward_W_m2": -0.282616828733461,
+      "temperature_error_K": 0.00025330563554091254,
+      "wall_flux_error_W_m2": 9.387724253712149e-05,
+      "all_face_flux_error_W_m2": 9.3877242537177e-05,
+      "max_cell_balance_W_m2": 1.2073675392798577e-15,
+      "wall_balance_W_m2": 1.0047518372857667e-14,
+      "flux_reversals_m": [
+        0.19333549757442875,
+        0.48582243495102695
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 0.0003158145865240769,
+      "temperature_and_wall_flux_orders": [
+        1.9675600059386185,
+        1.9999999998963496
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 32,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.28271070597599324,
+      "east_outward_W_m2": -0.2827107059760459,
+      "temperature_error_K": 4.520689378395559e-15,
+      "wall_flux_error_W_m2": 4.779510121011299e-14,
+      "all_face_flux_error_W_m2": 4.779510121011299e-14,
+      "max_cell_balance_W_m2": 7.577272143066693e-15,
+      "wall_balance_W_m2": 5.268008251846368e-14,
+      "flux_reversals_m": [
+        0.19342598166360606,
+        0.4857343906438408
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 0.00027871881695476497,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 9.048408917730622e-05
+    },
+    {
+      "columns": 64,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.28268723666537826,
+      "east_outward_W_m2": -0.28268723666533463,
+      "temperature_error_K": 6.403043126099357e-05,
+      "wall_flux_error_W_m2": 2.3469310663493115e-05,
+      "all_face_flux_error_W_m2": 2.3469310663493115e-05,
+      "max_cell_balance_W_m2": 2.3522850334245504e-15,
+      "wall_balance_W_m2": 4.363176486776865e-14,
+      "flux_reversals_m": [
+        0.19323074775707427,
+        0.48554456950352276
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 8.348491042298178e-05,
+      "temperature_and_wall_flux_orders": [
+        1.984049542449208,
+        1.9999999982042471
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 64,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2827107059759763,
+      "east_outward_W_m2": -0.28271070597620857,
+      "temperature_error_K": 1.950523076388322e-14,
+      "wall_flux_error_W_m2": 2.1044277431769842e-13,
+      "all_face_flux_error_W_m2": 2.1049828546892968e-13,
+      "max_cell_balance_W_m2": 1.6417422976644502e-14,
+      "wall_balance_W_m2": 2.3225865675158275e-13,
+      "flux_reversals_m": [
+        0.19325270734593417,
+        0.48552223107576564
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 0.00010544449928287514,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 2.233842775711814e-05
+    },
+    {
+      "columns": 128,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.28270483864838475,
+      "east_outward_W_m2": -0.282704838648235,
+      "temperature_error_K": 1.6095610612326368e-05,
+      "wall_flux_error_W_m2": 5.8673277631426934e-06,
+      "all_face_flux_error_W_m2": 5.8673277631426934e-06,
+      "max_cell_balance_W_m2": 5.495603971894525e-15,
+      "wall_balance_W_m2": 1.4976908602193362e-13,
+      "flux_reversals_m": [
+        0.19316440451722636,
+        0.4855193065619639
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 1.7141670575065993e-05,
+      "temperature_and_wall_flux_orders": [
+        1.9920904181473194,
+        1.9999999760827911
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 128,
+      "gradient_sign": -1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2827107059759046,
+      "east_outward_W_m2": -0.28271070597684217,
+      "temperature_error_K": 7.913461552710999e-14,
+      "wall_flux_error_W_m2": 8.440470544712753e-13,
+      "all_face_flux_error_W_m2": 8.440470544712753e-13,
+      "max_cell_balance_W_m2": 3.563122019656362e-14,
+      "wall_balance_W_m2": 9.375833442959447e-13,
+      "flux_reversals_m": [
+        0.19316981530915456,
+        0.48551376317582523
+      ],
+      "analytical_flux_reversals_m": [
+        0.1931472628466513,
+        0.48550662036450287
+      ],
+      "max_reversal_error_m": 2.2552462503266923e-05,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 5.543386138673334e-06
+    },
+    {
+      "columns": 16,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.20131170099431858,
+      "east_outward_W_m2": -0.20131170099431786,
+      "temperature_error_K": 0.0007009553506468515,
+      "wall_flux_error_W_m2": 0.000580758759470057,
+      "all_face_flux_error_W_m2": 0.000580758759470057,
+      "max_cell_balance_W_m2": 2.0816681711721685e-16,
+      "wall_balance_W_m2": 7.216449660063518e-16,
+      "flux_reversals_m": [
+        0.2408666946892393,
+        0.8170959372809069
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 0.0009204117938589329,
+      "temperature_and_wall_flux_orders": null,
+      "solver": "SPH"
+    },
+    {
+      "columns": 16,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.20073094223484983,
+      "east_outward_W_m2": -0.2007309422348477,
+      "temperature_error_K": 2.393918396847994e-16,
+      "wall_flux_error_W_m2": 1.304512053934559e-15,
+      "all_face_flux_error_W_m2": 2.1094237467877974e-15,
+      "max_cell_balance_W_m2": 1.0408340855860843e-15,
+      "wall_balance_W_m2": 2.1371793224034263e-15,
+      "flux_reversals_m": [
+        0.24039260590599942,
+        0.8176931185245788
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 0.0007739745633635886,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 0.0005971812436719182
+    },
+    {
+      "columns": 32,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.20087613192471748,
+      "east_outward_W_m2": -0.20087613192471493,
+      "temperature_error_K": 0.00018083319746104408,
+      "wall_flux_error_W_m2": 0.00014518968986895753,
+      "all_face_flux_error_W_m2": 0.00014518968986901304,
+      "max_cell_balance_W_m2": 5.412337245047638e-16,
+      "wall_balance_W_m2": 2.55351295663786e-15,
+      "flux_reversals_m": [
+        0.24097175295123555,
+        0.8177112808236757
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 0.0003050682510901126,
+      "temperature_and_wall_flux_orders": [
+        1.9546629977398948,
+        1.9999999999856586
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 32,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.20073094223485385,
+      "east_outward_W_m2": -0.20073094223484678,
+      "temperature_error_K": 9.52363188311267e-16,
+      "wall_flux_error_W_m2": 5.329070518200751e-15,
+      "all_face_flux_error_W_m2": 8.909539772616881e-15,
+      "max_cell_balance_W_m2": 2.1892210266827306e-15,
+      "wall_balance_W_m2": 7.077671781985373e-15,
+      "flux_reversals_m": [
+        0.24085898426007843,
+        0.8178655328182267
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 0.000307596209284583,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 0.00015425199455099126
+    },
+    {
+      "columns": 64,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.2007672396573211,
+      "east_outward_W_m2": -0.20076723965731177,
+      "temperature_error_K": 4.7091139991687486e-05,
+      "wall_flux_error_W_m2": 3.629742247257539e-05,
+      "all_face_flux_error_W_m2": 3.62974224726309e-05,
+      "max_cell_balance_W_m2": 8.344019919448442e-16,
+      "wall_balance_W_m2": 9.325873406851315e-15,
+      "flux_reversals_m": [
+        0.24110312011929064,
+        0.8179168916598911
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 9.945741487471516e-05,
+      "temperature_and_wall_flux_orders": [
+        1.9411319996199399,
+        1.9999999997879123
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 64,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.2007309422348688,
+      "east_outward_W_m2": -0.20073094223484247,
+      "temperature_error_K": 3.3237301799715624e-15,
+      "wall_flux_error_W_m2": 2.0261570199409107e-14,
+      "all_face_flux_error_W_m2": 3.111400026512001e-14,
+      "max_cell_balance_W_m2": 4.355890648177763e-15,
+      "wall_balance_W_m2": 2.631228568361621e-14,
+      "flux_reversals_m": [
+        0.24107559600747383,
+        0.8179561056207091
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 9.098446188918197e-05,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 3.9213960817963134e-05
+    },
+    {
+      "columns": 128,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.2007400165904881,
+      "east_outward_W_m2": -0.20074001659044802,
+      "temperature_error_K": 1.2066327736644927e-05,
+      "wall_flux_error_W_m2": 9.074355639571152e-06,
+      "all_face_flux_error_W_m2": 9.074355639626663e-06,
+      "max_cell_balance_W_m2": 2.4945323584546486e-15,
+      "wall_balance_W_m2": 4.007905118896815e-14,
+      "flux_reversals_m": [
+        0.24116290241954186,
+        0.8179926615289561
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 2.3687545809725208e-05,
+      "temperature_and_wall_flux_orders": [
+        1.9644689746868633,
+        1.9999999965933597
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 128,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.0,
+      "west_outward_W_m2": 0.2007309422349268,
+      "east_outward_W_m2": -0.200730942234831,
+      "temperature_error_K": 1.2696441120674251e-14,
+      "wall_flux_error_W_m2": 7.827072323607354e-14,
+      "all_face_flux_error_W_m2": 1.2131962101591398e-13,
+      "max_cell_balance_W_m2": 1.024094004042908e-14,
+      "wall_balance_W_m2": 9.578449144953538e-14,
+      "flux_reversals_m": [
+        0.2411559388852802,
+        0.8180025484673801
+      ],
+      "analytical_flux_reversals_m": [
+        0.241166580469363,
+        0.8180163490747658
+      ],
+      "max_reversal_error_m": 1.3800607385761055e-05,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 9.886938423964153e-06
+    },
+    {
+      "columns": 16,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2759491527369588,
+      "east_outward_W_m2": -0.2759491527369575,
+      "temperature_error_K": 0.000918838707623007,
+      "wall_flux_error_W_m2": 0.00037550897012067486,
+      "all_face_flux_error_W_m2": 0.0003755089701207026,
+      "max_cell_balance_W_m2": 3.0531133177191805e-16,
+      "wall_balance_W_m2": 1.27675647831893e-15,
+      "flux_reversals_m": [
+        0.29301637473692066,
+        0.7261949443087089
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 0.0017542509032147935,
+      "temperature_and_wall_flux_orders": null,
+      "solver": "SPH"
+    },
+    {
+      "columns": 16,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2755736437668389,
+      "east_outward_W_m2": -0.27557364376684246,
+      "temperature_error_K": 2.7755575615628914e-16,
+      "wall_flux_error_W_m2": 4.3298697960381105e-15,
+      "all_face_flux_error_W_m2": 4.3298697960381105e-15,
+      "max_cell_balance_W_m2": 1.4641066137244252e-15,
+      "wall_balance_W_m2": 3.552713678800501e-15,
+      "flux_reversals_m": [
+        0.2927617923842965,
+        0.7267146799074871
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 0.0012345153044366342,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 0.0005197355987781593
+    },
+    {
+      "columns": 32,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.27566752100937153,
+      "east_outward_W_m2": -0.27566752100936476,
+      "temperature_error_K": 0.0002466710999312477,
+      "wall_flux_error_W_m2": 9.387724253340224e-05,
+      "all_face_flux_error_W_m2": 9.387724253340224e-05,
+      "max_cell_balance_W_m2": 6.938893903907228e-16,
+      "wall_balance_W_m2": 6.772360450213455e-15,
+      "flux_reversals_m": [
+        0.29362521691666216,
+        0.7275555276824334
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 0.0003936675294903269,
+      "temperature_and_wall_flux_orders": [
+        1.897222935042169,
+        1.9999999999503075
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 32,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2755736437668425,
+      "east_outward_W_m2": -0.27557364376685295,
+      "temperature_error_K": 9.697104230710352e-16,
+      "wall_flux_error_W_m2": 1.482147737874584e-14,
+      "all_face_flux_error_W_m2": 1.482147737874584e-14,
+      "max_cell_balance_W_m2": 2.2690183065776637e-15,
+      "wall_balance_W_m2": 1.0436096431476471e-14,
+      "flux_reversals_m": [
+        0.293564158547535,
+        0.7276800746045174
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 0.0003058348754125806,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 0.00012454692208407891
+    },
+    {
+      "columns": 64,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.27559711307748486,
+      "east_outward_W_m2": -0.27559711307745643,
+      "temperature_error_K": 6.412555782934343e-05,
+      "wall_flux_error_W_m2": 2.3469310646728747e-05,
+      "all_face_flux_error_W_m2": 2.3469310646784258e-05,
+      "max_cell_balance_W_m2": 1.8908485888147197e-15,
+      "wall_balance_W_m2": 2.842170943040401e-14,
+      "flux_reversals_m": [
+        0.2938352203003958,
+        0.7278373150517041
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 0.00011188016021956848,
+      "temperature_and_wall_flux_orders": [
+        1.9436173229881066,
+        1.999999999177622
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 64,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.27557364376685606,
+      "east_outward_W_m2": -0.2755736437669072,
+      "temperature_error_K": 4.40619762898109e-15,
+      "wall_flux_error_W_m2": 6.905587213168474e-14,
+      "all_face_flux_error_W_m2": 6.905587213168474e-14,
+      "max_cell_balance_W_m2": 7.011752289898254e-15,
+      "wall_balance_W_m2": 5.112577028398846e-14,
+      "flux_reversals_m": [
+        0.293819639015322,
+        0.7278691109000939
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 8.008431182982001e-05,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 3.179584838974847e-05
+    },
+    {
+      "columns": 128,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2755795110945519,
+      "east_outward_W_m2": -0.2755795110944426,
+      "temperature_error_K": 1.636547931058857e-05,
+      "wall_flux_error_W_m2": 5.86732771379328e-06,
+      "all_face_flux_error_W_m2": 5.86732771379328e-06,
+      "max_cell_balance_W_m2": 4.683753385137379e-15,
+      "wall_balance_W_m2": 1.0930145677434666e-13,
+      "flux_reversals_m": [
+        0.29385486355285795,
+        0.727929383953801
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 1.9811258122670594e-05,
+      "temperature_and_wall_flux_orders": [
+        1.9702436142880964,
+        1.9999999871866
+      ],
+      "solver": "SPH"
+    },
+    {
+      "columns": 128,
+      "gradient_sign": 1.0,
+      "resistance_m2_K_W": 0.25,
+      "west_outward_W_m2": 0.2755736437668931,
+      "east_outward_W_m2": -0.27557364376712107,
+      "temperature_error_K": 1.8900679632505302e-14,
+      "wall_flux_error_W_m2": 2.8294033782572114e-13,
+      "all_face_flux_error_W_m2": 2.8294033782572114e-13,
+      "max_cell_balance_W_m2": 1.1738006400197065e-14,
+      "wall_balance_W_m2": 2.279842981067759e-13,
+      "flux_reversals_m": [
+        0.2938510082245889,
+        0.7279372496630525
+      ],
+      "analytical_flux_reversals_m": [
+        0.29386999342294756,
+        0.7279491952119237
+      ],
+      "max_reversal_error_m": 1.8985198358634214e-05,
+      "solver": "FVM",
+      "max_reversal_difference_from_SPH_m": 7.865709251486663e-06
+    }
+  ]
+}
