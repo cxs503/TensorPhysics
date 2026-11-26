@@ -1,7 +1,7 @@
 """Run python examples/native_directional_contact_heat.py from TensorPhysics.
 
 Compare native directional contact heat from finite-volume and finite-element
-rods and a fixed DEM thermal chain against the two-reversal continuum solution.
+rods, a fixed DEM thermal chain and an SPH slab against the two-reversal continuum solution.
 """
 import json
 
@@ -9,6 +9,7 @@ import numpy as np
 from tensordem.thermal import contact_chain
 from tensorfem import thermal
 from tensorfvm.cht import rod
+from tensorsph import heat_conduction_2d as sph
 
 import contact_heat_double_reversal as double
 import resistive_decay_interface_comparison as case
@@ -45,6 +46,17 @@ def fem(n, times, modes):
     return forward[:, 0].numpy(), reverse[:, 0].numpy(), net[:, 0].numpy()
 
 
+def particles(n, times, modes):
+    k, initial, contacts = case.cell_data(n, modes, cell_averages=False)
+    _, net, parts = sph.solve_transient_layered_slab(
+        initial, times, 1/n, (0., 0.), conductivity=k, volumetric_heat_capacity=k,
+        contact_resistance_x=contacts, method="exponential", return_x_heat=True,
+        return_directional_x_heat=True)
+    # Section heats are per area; the unit-area slab gives the same numeric value in joules.
+    cut = n//2
+    return parts["rightward"][:, cut].numpy(), parts["leftward"][:, cut].numpy(), net[:, cut].numpy()
+
+
 def run():
     roots, end, waves, weights, modes = double.reference_modes()
 
@@ -55,7 +67,7 @@ def run():
     reference = np.array([phases[0]+phases[2], -phases[1]])
     rows = []
     for solver, solve in (("TensorFVM_SDIRK2", fvm), ("TensorDEM_Crank_Nicolson", dem),
-                          ("TensorFEM_Crank_Nicolson", fem)):
+                          ("TensorFEM_Crank_Nicolson", fem), ("TensorSPH_exponential", particles)):
         previous = None
         for n in (24, 48, 96, 192):
             times = np.linspace(0., end, 2*n+1)
@@ -79,7 +91,7 @@ def run():
             previous = total_error
     return dict(reference_right_left_heat_J=reference.tolist(), analytic_reversals_s=roots.tolist(),
                 end_s=end, runs=rows, sources=[provenance(p) for p in
-                (__file__, double.__file__, case.__file__, rod.__file__, contact_chain.__file__, thermal.__file__)])
+                (__file__, double.__file__, case.__file__, rod.__file__, contact_chain.__file__, thermal.__file__, sph.__file__)])
 
 
 if __name__ == "__main__":
