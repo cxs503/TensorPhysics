@@ -6,8 +6,19 @@
       "time_steps": 20,
       "method": "theta",
       "temperature_error_K": 0.0030036345612936,
+      "trace_errors_left_right_K": [
+        0.0014504733790249302,
+        0.004882228247235387
+      ],
+      "jump_error_K": 0.004337126839140226,
+      "final_trace_errors_left_right_K": [
+        0.00047242713425246774,
+        0.000761306045029303
+      ],
+      "max_interval_contact_law_residual_K": 5.551115123125783e-17,
       "contact_heat_error_J_m2": 0.0007088787274419084,
       "layer_balance_J_m2": 2.2037927038809357e-14,
+      "trace_orders_left_right_jump": null,
       "orders": null,
       "passed": true
     },
@@ -16,8 +27,23 @@
       "time_steps": 40,
       "method": "theta",
       "temperature_error_K": 0.000751055593525285,
+      "trace_errors_left_right_K": [
+        0.0003258623558843876,
+        0.0011793739091532363
+      ],
+      "jump_error_K": 0.001040210319530277,
+      "final_trace_errors_left_right_K": [
+        0.00011035127448565107,
+        0.0002054351411734101
+      ],
+      "max_interval_contact_law_residual_K": 5.551115123125783e-17,
       "contact_heat_error_J_m2": 0.00017695021289038104,
       "layer_balance_J_m2": 4.113376306236205e-14,
+      "trace_orders_left_right_jump": [
+        2.1541892130753117,
+        2.0495185601704526,
+        2.0598643798442065
+      ],
       "orders": [
         1.9997176914716066,
         2.00219533973728
@@ -29,8 +55,23 @@
       "time_steps": 80,
       "method": "theta",
       "temperature_error_K": 0.00018765725901037644,
+      "trace_errors_left_right_K": [
+        7.54509421126981e-05,
+        0.00028947740352358586
+      ],
+      "jump_error_K": 0.0002543316773493398,
+      "final_trace_errors_left_right_K": [
+        2.6727417745481263e-05,
+        5.348977968747115e-05
+      ],
+      "max_interval_contact_law_residual_K": 1.1102230246251565e-16,
       "contact_heat_error_J_m2": 4.421866734355406e-05,
       "layer_balance_J_m2": 7.51620987671231e-14,
+      "trace_orders_left_right_jump": [
+        2.110651879290348,
+        2.0264985418302386,
+        2.03209218762383
+      ],
       "orders": [
         2.0008196026927854,
         2.000616046317041
@@ -42,8 +83,23 @@
       "time_steps": 160,
       "method": "theta",
       "temperature_error_K": 4.6905543281350326e-05,
+      "trace_errors_left_right_K": [
+        1.819112013867752e-05,
+        7.168535033197365e-05
+      ],
+      "jump_error_K": 6.285495949620579e-05,
+      "final_trace_errors_left_right_K": [
+        6.580960541902048e-06,
+        1.3653480613634583e-05
+      ],
+      "max_interval_contact_law_residual_K": 1.1102230246251565e-16,
       "contact_heat_error_J_m2": 1.1053427239560154e-05,
       "layer_balance_J_m2": 6.816769371198461e-14,
+      "trace_orders_left_right_jump": [
+        2.052304533677102,
+        2.013700512481088,
+        2.016612674414375
+      ],
       "orders": [
         2.000269762891711,
         2.0001617832339056
@@ -55,8 +111,19 @@
       "time_steps": 20,
       "method": "sdirk2",
       "temperature_error_K": 0.0026791318008501097,
+      "trace_errors_left_right_K": [
+        0.0012274824121145667,
+        0.004882228247235387
+      ],
+      "jump_error_K": 0.004337126839140226,
+      "final_trace_errors_left_right_K": [
+        0.00033507496962661976,
+        0.0007324806256373273
+      ],
+      "max_interval_contact_law_residual_K": 1.1102230246251565e-16,
       "contact_heat_error_J_m2": 0.0006361981866168653,
       "layer_balance_J_m2": 1.637578961322106e-14,
+      "trace_orders_left_right_jump": null,
       "orders": null,
       "passed": true
     },
@@ -65,8 +132,23 @@
       "time_steps": 40,
       "method": "sdirk2",
       "temperature_error_K": 0.0006715817270814828,
+      "trace_errors_left_right_K": [
+        0.0002878864724289443,
+        0.0011793739091532363
+      ],
+      "jump_error_K": 0.001040210319530277,
+      "final_trace_errors_left_right_K": [
+        8.340645919296952e-05,
+        0.00018241171641250609
+      ],
+      "max_interval_contact_law_residual_K": 5.551115123125783e-17,
       "contact_heat_error_J_m2": 0.00015874485392924909,
       "layer_balance_J_m2": 1.1318723736053471e-13,
+      "trace_orders_left_right_jump": [
+        2.092130448704824,
+        2.0495185601704526,
+        2.0598643798442065
+      ],
       "orders": [
         1.9961306748746042,
         2.0027664352624956
@@ -78,8 +160,23 @@
       "time_steps": 80,
       "method": "sdirk2",
       "temperature_error_K": 0.00016792513240948548,
+      "trace_errors_left_right_K": [
+        7.220182210387893e-05,
+        0.00028947740352358586
+      ],
+      "jump_error_K": 0.0002543316773493398,
+      "final_trace_errors_left_right_K": [
+        2.0823510078177287e-05,
+        4.554770495621141e-05
+      ],
+      "max_interval_contact_law_residual_K": 1.1102230246251565e-16,
       "contact_heat_error_J_m2": 3.9662281393126886e-05,
       "layer_balance_J_m2": 2.831623824306462e-13,
+      "trace_orders_left_right_jump": [
+        1.9953928484177752,
+        2.0264985418302386,
+        2.03209218762383
+      ],
       "orders": [
         1.9997448103574091,
         2.0008702548797426
@@ -91,8 +188,23 @@
       "time_steps": 160,
       "method": "sdirk2",
       "temperature_error_K": 4.197930383853521e-05,
+      "trace_errors_left_right_K": [
+        1.8047422855382855e-05,
+        7.168535033197365e-05
+      ],
+      "jump_error_K": 6.285495949620579e-05,
+      "final_trace_errors_left_right_K": [
+        5.203433473793817e-06,
+        1.1382099086826303e-05
+      ],
+      "max_interval_contact_law_residual_K": 1.1102230246251565e-16,
       "contact_heat_error_J_m2": 9.913464001531924e-06,
       "layer_balance_J_m2": 2.38448150113868e-12,
+      "trace_orders_left_right_jump": [
+        2.0002424086413284,
+        2.013700512481088,
+        2.016612674414375
+      ],
       "orders": [
         2.0000680193939946,
         2.0003065016649977
@@ -102,12 +214,12 @@
   ],
   "sources": [
     {
-      "commit": "e16b0ab1895e232b50324077f61ab879e1bbd10b",
+      "commit": "73cbd4b20d8b6ce8e386961b16fa72408fe4f5af",
       "file": "dg_contact_decay_mode.py",
-      "source_sha256": "5c4e59e65cb1178162c47e768ee345aa412e5023225d73e189ff9827ecc2787d"
+      "source_sha256": "383c79c79f935c03de59fe338469299efa30bd5e33c535c29eac5089f4cf1c72"
     },
     {
-      "commit": "e16b0ab1895e232b50324077f61ab879e1bbd10b",
+      "commit": "73cbd4b20d8b6ce8e386961b16fa72408fe4f5af",
       "file": "fem_contact_decay_mode.py",
       "source_sha256": "e0f5b6d7d1a25f27905187b1944761d5af8e58849fd01b8ed4b53f2ff2363d84"
     },
