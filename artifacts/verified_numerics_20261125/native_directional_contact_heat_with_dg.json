@@ -1,0 +1,460 @@
+{
+  "reference_right_left_heat_J": [
+    0.016312862694575624,
+    0.0030719372943027205
+  ],
+  "analytic_reversals_s": [
+    0.005,
+    0.018
+  ],
+  "end_s": 0.053,
+  "runs": [
+    {
+      "solver": "TensorFVM_SDIRK2",
+      "resolution": 24,
+      "intervals": 48,
+      "right_left_heat_J": [
+        0.016363048936640798,
+        0.003281892576366844
+      ],
+      "total_errors_J": [
+        5.0186242065174136e-05,
+        0.0002099552820641233
+      ],
+      "max_interval_errors_J": [
+        7.153402929859084e-05,
+        5.975489320308986e-05
+      ],
+      "net_balance_J": 1.0842021724855044e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM_SDIRK2",
+      "resolution": 48,
+      "intervals": 96,
+      "right_left_heat_J": [
+        0.016326771856200344,
+        0.0031254185436877828
+      ],
+      "total_errors_J": [
+        1.3909161624720001e-05,
+        5.348124938506227e-05
+      ],
+      "max_interval_errors_J": [
+        8.784481409968248e-06,
+        8.128469648156581e-06
+      ],
+      "net_balance_J": 2.168404344971009e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM_SDIRK2",
+      "resolution": 96,
+      "intervals": 192,
+      "right_left_heat_J": [
+        0.01631635418456047,
+        0.003085299216824932
+      ],
+      "total_errors_J": [
+        3.4914899848456638e-06,
+        1.3361922522211328e-05
+      ],
+      "max_interval_errors_J": [
+        1.0937258752041664e-06,
+        1.0148368108665354e-06
+      ],
+      "net_balance_J": 5.421010862427522e-20,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFVM_SDIRK2",
+      "resolution": 192,
+      "intervals": 384,
+      "right_left_heat_J": [
+        0.01631373598510332,
+        0.003075276785518747
+      ],
+      "total_errors_J": [
+        8.732905276975789e-07,
+        3.3394912160263947e-06
+      ],
+      "max_interval_errors_J": [
+        1.3657319634574811e-07,
+        1.2934364788022924e-07
+      ],
+      "net_balance_J": 1.0842021724855044e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDEM_Crank_Nicolson",
+      "resolution": 24,
+      "intervals": 48,
+      "right_left_heat_J": [
+        0.0157357104762723,
+        0.0027306063923230174
+      ],
+      "total_errors_J": [
+        0.0005771522183033242,
+        0.0003413309019797031
+      ],
+      "max_interval_errors_J": [
+        0.0003028255576839837,
+        4.474667607105799e-05
+      ],
+      "net_balance_J": 6.776263578034403e-21,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDEM_Crank_Nicolson",
+      "resolution": 48,
+      "intervals": 96,
+      "right_left_heat_J": [
+        0.016167723787956736,
+        0.002985319688145612
+      ],
+      "total_errors_J": [
+        0.00014513890661888712,
+        8.661760615710865e-05
+      ],
+      "max_interval_errors_J": [
+        4.451276957902358e-05,
+        5.7493836329577735e-06
+      ],
+      "net_balance_J": 3.3881317890172014e-21,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDEM_Crank_Nicolson",
+      "resolution": 96,
+      "intervals": 192,
+      "right_left_heat_J": [
+        0.016276549697139733,
+        0.0030502279582402137
+      ],
+      "total_errors_J": [
+        3.6312997435890976e-05,
+        2.170933606250678e-05
+      ],
+      "max_interval_errors_J": [
+        6.043574406148144e-06,
+        7.239201852306113e-07
+      ],
+      "net_balance_J": 0.0,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDEM_Crank_Nicolson",
+      "resolution": 192,
+      "intervals": 384,
+      "right_left_heat_J": [
+        0.016303784078406193,
+        0.003066507934076961
+      ],
+      "total_errors_J": [
+        9.07861616943062e-06,
+        5.429360225759315e-06
+      ],
+      "max_interval_errors_J": [
+        7.886542841982111e-07,
+        9.066108171632009e-08
+      ],
+      "net_balance_J": 0.0,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 24,
+      "intervals": 48,
+      "right_left_heat_J": [
+        0.016234148783010615,
+        0.0034336851360666112
+      ],
+      "total_errors_J": [
+        7.871391156500859e-05,
+        0.00036174784176389073
+      ],
+      "max_interval_errors_J": [
+        9.910896248688694e-05,
+        8.364985169866877e-05
+      ],
+      "net_balance_J": 1.0842021724855044e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 48,
+      "intervals": 96,
+      "right_left_heat_J": [
+        0.016291812011972134,
+        0.003161895925372407
+      ],
+      "total_errors_J": [
+        2.1050682603489246e-05,
+        8.995863106968632e-05
+      ],
+      "max_interval_errors_J": [
+        1.2273748499509914e-05,
+        1.1376355254985017e-05
+      ],
+      "net_balance_J": 2.168404344971009e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 96,
+      "intervals": 192,
+      "right_left_heat_J": [
+        0.016307447162135766,
+        0.003094328909055171
+      ],
+      "total_errors_J": [
+        5.415532439857762e-06,
+        2.239161475245041e-05
+      ],
+      "max_interval_errors_J": [
+        1.5340172884403217e-06,
+        1.4165436006628538e-06
+      ],
+      "net_balance_J": 1.0842021724855044e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Crank_Nicolson",
+      "resolution": 192,
+      "intervals": 384,
+      "right_left_heat_J": [
+        0.016311500526151563,
+        0.0030775303228983497
+      ],
+      "total_errors_J": [
+        1.3621684240607002e-06,
+        5.593028595629254e-06
+      ],
+      "max_interval_errors_J": [
+        1.9169617910360146e-07,
+        1.8053997690009233e-07
+      ],
+      "net_balance_J": 5.421010862427522e-20,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH_exponential",
+      "resolution": 24,
+      "intervals": 48,
+      "right_left_heat_J": [
+        0.015630114099530464,
+        0.002415321176703179
+      ],
+      "total_errors_J": [
+        0.0006827485950451594,
+        0.0006566161175995417
+      ],
+      "max_interval_errors_J": [
+        0.00041146335211693927,
+        9.792208843395646e-05
+      ],
+      "net_balance_J": 1.3552527156068805e-20,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH_exponential",
+      "resolution": 48,
+      "intervals": 96,
+      "right_left_heat_J": [
+        0.016146024725421308,
+        0.002910334571552633
+      ],
+      "total_errors_J": [
+        0.00016683796915431537,
+        0.00016160272275008748
+      ],
+      "max_interval_errors_J": [
+        6.248725009398476e-05,
+        1.2516057507452942e-05
+      ],
+      "net_balance_J": 0.0,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH_exponential",
+      "resolution": 96,
+      "intervals": 192,
+      "right_left_heat_J": [
+        0.016272468216961475,
+        0.0030327067617003122
+      ],
+      "total_errors_J": [
+        4.039447761414877e-05,
+        3.9230532602408264e-05
+      ],
+      "max_interval_errors_J": [
+        8.406506545996528e-06,
+        1.5354732903736807e-06
+      ],
+      "net_balance_J": 8.470329472543003e-22,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorSPH_exponential",
+      "resolution": 192,
+      "intervals": 384,
+      "right_left_heat_J": [
+        0.01630296809270979,
+        0.0030623166398626852
+      ],
+      "total_errors_J": [
+        9.894601865834823e-06,
+        9.620654440035264e-06
+      ],
+      "max_interval_errors_J": [
+        1.0720383201291532e-06,
+        1.8868153771475164e-07
+      ],
+      "net_balance_J": 2.117582368135751e-22,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_SDIRK2",
+      "resolution": 24,
+      "intervals": 48,
+      "right_left_heat_J": [
+        0.016681579822632134,
+        0.0034023299212932977
+      ],
+      "total_errors_J": [
+        0.0003687171280565109,
+        0.0003303926269905772
+      ],
+      "max_interval_errors_J": [
+        0.00019487470766634506,
+        5.783991043515642e-05
+      ],
+      "net_balance_J": 4.336808689942018e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_SDIRK2",
+      "resolution": 48,
+      "intervals": 96,
+      "right_left_heat_J": [
+        0.016404391810110264,
+        0.003154010699283609
+      ],
+      "total_errors_J": [
+        9.15291155346408e-05,
+        8.207340498088845e-05
+      ],
+      "max_interval_errors_J": [
+        2.8292376810071284e-05,
+        7.0591132137556595e-06
+      ],
+      "net_balance_J": 4.336808689942018e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_SDIRK2",
+      "resolution": 96,
+      "intervals": 192,
+      "right_left_heat_J": [
+        0.016335634616360763,
+        0.0030923532468654924
+      ],
+      "total_errors_J": [
+        2.2771921785139093e-05,
+        2.0415952562771907e-05
+      ],
+      "max_interval_errors_J": [
+        3.824840922278137e-06,
+        8.778165595648362e-07
+      ],
+      "net_balance_J": 3.2526065174565133e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_SDIRK2",
+      "resolution": 192,
+      "intervals": 384,
+      "right_left_heat_J": [
+        0.016318549124095222,
+        0.0030770352282737745
+      ],
+      "total_errors_J": [
+        5.686429519598246e-06,
+        5.0979339710540555e-06
+      ],
+      "max_interval_errors_J": [
+        4.978740033863933e-07,
+        1.0953684741666134e-07
+      ],
+      "net_balance_J": 1.6263032587282567e-19,
+      "mixed_intervals": 2,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "65fd93094f4b81b197efbfcea45e822ab339e1f1",
+      "file": "native_directional_contact_heat.py",
+      "source_sha256": "e5ebddd8a61b180b06bfb11ffc70976bd030f0cecebe4de0b845769bfe2ff626"
+    },
+    {
+      "commit": "65fd93094f4b81b197efbfcea45e822ab339e1f1",
+      "file": "contact_heat_double_reversal.py",
+      "source_sha256": "cb156b33e583bb639cd6a946fc1eb1c4b2bf896e5e215dd21cc5896654d85b5c"
+    },
+    {
+      "commit": "65fd93094f4b81b197efbfcea45e822ab339e1f1",
+      "file": "resistive_decay_interface_comparison.py",
+      "source_sha256": "528e09a6c91d23e019098549cae439861edf495bdb89cadd83db6c09a75ec4a8"
+    },
+    {
+      "commit": "2622358c1efa051b80059de99d25264fec6cd115",
+      "file": "rod.py",
+      "source_sha256": "9adb370a331a8011a7cf041f821ce5ea934b03e241b7621c2365b4137b009e2a"
+    },
+    {
+      "commit": "9a51948a44f6f95e0bdbe81b57b43e3aec38f242",
+      "file": "contact_chain.py",
+      "source_sha256": "6f9fcd7d8a5155c27dc9319dc18b0838553726baf498bb733ce8bf056e7e45ec"
+    },
+    {
+      "commit": "833974519364dec3644153e9b2d03dc34901de2e",
+      "file": "thermal.py",
+      "source_sha256": "68aacf922b93a8c8fcf92952f7749a4d8d509efd96325725c9ef0b4dac9bc97d"
+    },
+    {
+      "commit": "e7b26f78d9e1a877a4026cbfbfe25f235aa0b7d4",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "c9fba6512e485954ddc01544a45a2a9b9e555110d787403fdeb77f975e83e577"
+    },
+    {
+      "commit": "111bcc8f74e843e75feef90e1d7f6779653dc217",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "a867468ba481ca7035caf28828b88d170209684b89c48d7ffd9ab7731d5d9e86"
+    },
+    {
+      "commit": "111bcc8f74e843e75feef90e1d7f6779653dc217",
+      "file": "transient_diffusion_2d.py",
+      "source_sha256": "e20b16458d6b55724f38106365edaff2f94db77f3414aa8b64e1601c406f6884"
+    }
+  ]
+}
