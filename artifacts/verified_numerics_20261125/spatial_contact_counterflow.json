@@ -1,0 +1,187 @@
+{
+  "reference_forward_reverse_W": [
+    0.1828989483310471,
+    0.1828989483310471
+  ],
+  "reference_net_W": 0.0,
+  "zero_position_m": 0.5555555555555556,
+  "runs": [
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 4,
+      "forward_reverse_W": [
+        0.18289894833104708,
+        0.1828989483310471
+      ],
+      "total_errors_W": [
+        2.7755575615628914e-17,
+        0.0
+      ],
+      "max_face_error_W": 2.7755575615628914e-17,
+      "net_power_W": -5.551115123125783e-17,
+      "max_face_balance_W": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 8,
+      "forward_reverse_W": [
+        0.18289894833104706,
+        0.1828989483310471
+      ],
+      "total_errors_W": [
+        5.551115123125783e-17,
+        0.0
+      ],
+      "max_face_error_W": 9.71445146547012e-17,
+      "net_power_W": -5.551115123125783e-17,
+      "max_face_balance_W": 1.3877787807814457e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 16,
+      "forward_reverse_W": [
+        0.18289894833104708,
+        0.1828989483310471
+      ],
+      "total_errors_W": [
+        2.7755575615628914e-17,
+        0.0
+      ],
+      "max_face_error_W": 5.551115123125783e-17,
+      "net_power_W": -4.163336342344337e-17,
+      "max_face_balance_W": 6.938893903907228e-18,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 32,
+      "forward_reverse_W": [
+        0.18289894833104708,
+        0.1828989483310471
+      ],
+      "total_errors_W": [
+        2.7755575615628914e-17,
+        0.0
+      ],
+      "max_face_error_W": 1.0061396160665481e-16,
+      "net_power_W": -3.469446951953614e-17,
+      "max_face_balance_W": 6.938893903907228e-18,
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "faces": 64,
+      "forward_reverse_W": [
+        0.18289894833104708,
+        0.1828989483310471
+      ],
+      "total_errors_W": [
+        2.7755575615628914e-17,
+        2.7755575615628914e-17
+      ],
+      "max_face_error_W": 7.979727989493313e-17,
+      "net_power_W": -4.163336342344337e-17,
+      "max_face_balance_W": 1.734723475976807e-18,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 4,
+      "forward_reverse_W": [
+        0.18045910493827158,
+        0.18566743827160498
+      ],
+      "total_errors_W": [
+        0.0024398433927755314,
+        0.0027684899405578667
+      ],
+      "max_face_error_W": 0.0013020833333333703,
+      "net_power_W": -0.00520833333333337,
+      "max_face_balance_W": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 8,
+      "forward_reverse_W": [
+        0.18231577932098764,
+        0.183617862654321
+      ],
+      "total_errors_W": [
+        0.0005831690100594755,
+        0.0007189143232738948
+      ],
+      "max_face_error_W": 0.00016276041666676844,
+      "net_power_W": -0.0013020833333333703,
+      "max_face_balance_W": 2.7755575615628914e-17,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 16,
+      "forward_reverse_W": [
+        0.18275583526234565,
+        0.18308135609567905
+      ],
+      "total_errors_W": [
+        0.00014311306870146145,
+        0.00018240776463193664
+      ],
+      "max_face_error_W": 2.034505208338422e-05,
+      "net_power_W": -0.0003255208333333842,
+      "max_face_balance_W": 6.938893903907228e-18,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 32,
+      "forward_reverse_W": [
+        0.18286302354600692,
+        0.1829444037543403
+      ],
+      "total_errors_W": [
+        3.592478504019225e-05,
+        4.545542329317809e-05
+      ],
+      "max_face_error_W": 2.543131510518437e-06,
+      "net_power_W": -8.138020833337728e-05,
+      "max_face_balance_W": 3.469446951953614e-18,
+      "passed": true
+    },
+    {
+      "solver": "TensorDG_P1",
+      "faces": 64,
+      "forward_reverse_W": [
+        0.1828899148069782,
+        0.18291025985906156
+      ],
+      "total_errors_W": [
+        9.033524068918775e-06,
+        1.1311528014479322e-05
+      ],
+      "max_face_error_W": 3.1789143888245885e-07,
+      "net_power_W": -2.034505208337381e-05,
+      "max_face_balance_W": 1.734723475976807e-18,
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "2ce29e5d26ca33942e2ad0b23873e718d7f88ed5",
+      "file": "spatial_contact_counterflow.py",
+      "source_sha256": "bdc7f46bda171e9a67ec3c3f0026bfb8bd20deef47b9448f65a427d3d2b588cc"
+    },
+    {
+      "commit": "833974519364dec3644153e9b2d03dc34901de2e",
+      "file": "thermal.py",
+      "source_sha256": "68aacf922b93a8c8fcf92952f7749a4d8d509efd96325725c9ef0b4dac9bc97d"
+    },
+    {
+      "commit": "dd1456a75bdaebf61768fce636850c3e70f1b1aa",
+      "file": "poisson_2d_bc.py",
+      "source_sha256": "69d7daacf25d0d4ddf3adc2082698dd30ddd86f8136b97d21b61dd86b368825a"
+    }
+  ]
+}
