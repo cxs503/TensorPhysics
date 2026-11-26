@@ -1,0 +1,25 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "8f0fc506fd6266770957d53d49095a4ef6fca497",
+  "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_annular_conduction.py --junitxml=results.xml",
+  "passed": 55,
+  "reference": "Uniform annulus 0.4 <= r <= 1 m, T=I_m(lambda*r), lambda^2=q^2+i*omega*C/k, k=2 and C=1.5. Inner prescribed flux and outer fixed temperature. Measure maximum absolute error over all temperature points and radial face rates against the Bessel function and its derivative. Test IDs give axial wavenumber q, azimuthal order m and angular frequency omega.",
+  "runs": {
+    "test_axial_fourier_mode_matches_bessel_field_and_face_rates[1.75-0-0.0]": {
+      "n16_temperature_K": 0.00010812916120905847,
+      "n16_rate_W_per_m": 0.006959829404770801,
+      "n32_temperature_K": 2.758349449960562e-05,
+      "n32_rate_W_per_m": 0.0017404995595668993,
+      "n64_temperature_K": 6.964508006745973e-06,
+      "n64_rate_W_per_m": 0.0004351587898625553
+    },
+    "test_axial_fourier_mode_matches_bessel_field_and_face_rates[-1.75-2-3.0]": {
+      "n16_temperature_K": 8.915335975626007e-05,
+      "n16_rate_W_per_m": 0.00785714949104249,
+      "n32_temperature_K": 2.277370995674833e-05,
+      "n32_rate_W_per_m": 0.001965540025712672,
+      "n64_temperature_K": 5.757771547586114e-06,
+      "n64_rate_W_per_m": 0.0004914633705766817
+    }
+  }
+}
