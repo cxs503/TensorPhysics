@@ -5,6 +5,7 @@ import json
 
 import numpy as np
 import torch
+from scipy.special import iv, ivp, kv, kvp
 
 from conduction_provenance import provenance
 from tensorfem import thermal
@@ -70,9 +71,25 @@ def measure(n):
                 fvm_modal_rate_error_W_per_m=float(np.max(abs(rates-exact_rate))))
 
 
-def measure_interface(n, resistance=0.):
+def harmonic_wall_values(interface, walls, kr, order, omega, traces, rate):
+    # The continuum solution in each material is A*I_order(w*r)+B*K_order(w*r),
+    # with unit volumetric heat capacity and a prescribed interface flux.
+    values = []
+    for radius, k, nu, trace in zip(walls, kr, order, traces):
+        w = np.sqrt(1j*omega/k)
+        z = w*interface
+        scale = -2*np.pi*interface*k*w
+        coeff = np.linalg.solve([[iv(nu, z), kv(nu, z)],
+                                 [scale*ivp(nu, z), scale*kvp(nu, z)]], [trace, rate])
+        values.append(np.array([iv(nu, w*radius), kv(nu, w*radius)]) @ coeff)
+    return np.array(values)
+
+
+def measure_interface(n, resistance=0., omega=0.):
     mode, interface, temperature, rate = 3, .7, .8, 4.5
     radii = np.linspace(.4, 1., n+1)
+    if omega:
+        temperature, rate = .8-.2j, 4.5+1.5j
     j = n//2
     kr = np.array([2., .85])
     kt = np.array([.7, 2.2])
@@ -83,7 +100,10 @@ def measure_interface(n, resistance=0.):
     argument = power*np.log(radii[[0, -1]]/interface)
     jump = resistance*rate/(2*np.pi*interface)
     exact_traces = np.array([temperature+jump, temperature])
-    walls = exact_traces*np.cosh(argument) - rate*np.sinh(argument)/(2*np.pi*kr*power)
+    if omega:
+        walls = harmonic_wall_values(interface, radii[[0, -1]], kr, power, omega, exact_traces, rate)
+    else:
+        walls = exact_traces*np.cosh(argument) - rate*np.sinh(argument)/(2*np.pi*kr*power)
     radial, circumferential = np.repeat(kr, j), np.repeat(kt, j)
     model, ids, angular = fem_model(radii, radial, circumferential, mode, walls)
     inner_nodes = torch.from_numpy(ids[j])
@@ -102,15 +122,18 @@ def measure_interface(n, resistance=0.):
                         elements=elements.reshape(-1, 4),
                         contact_edge_pairs=torch.stack((inner_edges, outer_edges), dim=1),
                         contact_edge_conductance=length/resistance)
-    state = thermal.solve_steady_thermal(model, sparse=True)
-    nodal = thermal.thermal_element_nodal_power(model, state).numpy().reshape(n, len(angular), 4)
+    if omega:
+        state = thermal.solve_harmonic_thermal(model, omega, sparse=True).temperature
+    else:
+        state = thermal.solve_steady_thermal(model, sparse=True)
+    nodal = thermal.thermal_element_nodal_power(model, state, omega).numpy().reshape(n, len(angular), 4)
     # On a sector, local nodes 0 and 1 have its starting angle, 2 and 3
     # its ending angle. Recover the interface reaction from each side.
     following = np.roll(angular, -1)
     fem_rates = np.array([-2*(nodal[j-1, :, 1] @ angular + nodal[j-1, :, 2] @ following),
                            2*(nodal[j, :, 0] @ angular + nodal[j, :, 3] @ following)])
     _, inner, outer, _, fv_traces = annulus.solve_annular_sheet(
-        radii, radial, 1., walls, 0., j, circumferential_conductivity=circumferential,
+        radii, radial, 1., walls, omega, j, circumferential_conductivity=circumferential,
         azimuthal_mode=mode, distributed_source=True, resistance=resistance, return_contact_temperatures=True)
     fv_rates = np.array([inner[-1], outer[0]])
     balance = max(abs(np.diff(fem_rates)).item(), abs(np.diff(fv_rates)).item())
@@ -121,6 +144,12 @@ def measure_interface(n, resistance=0.):
     if resistance:
         jump_errors = dict(fem_jump_error_K=float(np.max(abs(fem_traces[0]-fem_traces[1]-jump*angular))),
                            fvm_jump_error_K=float(abs(fv_traces[0]-fv_traces[1]-jump)))
+    if omega and resistance:
+        fem_jump = (fem_traces[0]-fem_traces[1]) @ angular / (angular @ angular)
+        for solver, measured_jump, measured_rates in (
+                ("fem", fem_jump, fem_rates), ("fvm", fv_traces[0]-fv_traces[1], fv_rates)):
+            jump_errors[f"{solver}_jump_phase_error_rad"] = float(abs(np.angle(measured_jump/jump)))
+            jump_errors[f"{solver}_rate_phase_error_rad"] = float(np.max(abs(np.angle(measured_rates/rate))))
     return dict(**jump_errors, radial_cells=n, sectors=len(angular), max_imbalance=float(balance),
                 fem_interface_error_K=float(np.max(abs(fem_traces-exact_traces[:, None]*angular))),
                 fvm_interface_error_K=float(np.max(abs(fv_traces-exact_traces))),
@@ -132,7 +161,7 @@ def measure_interface(n, resistance=0.):
 def refinement(case):
     runs = [case(n) for n in (8, 16, 32, 64)]
     for coarse, fine in zip(runs, runs[1:]):
-        for key in (name for name in tuple(fine) if name.endswith(("_K", "_W_per_m"))):
+        for key in (name for name in tuple(fine) if name.endswith(("_K", "_W_per_m", "_rad"))):
             order = float(np.log2(coarse[key]/fine[key]))
             fine[key+"_order"] = order
             if fine["radial_cells"] >= 32 and order < 1.8:
@@ -147,5 +176,7 @@ if __name__ == "__main__":
         benchmark=provenance(__file__), FEM=provenance(thermal.__file__), FVM=provenance(annulus.__file__),
         interface_reference="Perfect contact at r=0.7 m, T amplitude 0.8 K and outward radial rate amplitude 4.5 W/m. Inner (radial, circumferential) conductivity (2, 0.7), outer (0.85, 2.2) W/(m K). Set wall temperatures from the two independent power-law solutions. max_imbalance is the largest inner/outer rate discrepancy in W/m.",
         contact_reference="Same two materials with areal resistance 0.25 m² K/W. The outer trace amplitude is 0.8 K, inner minus outer equals R*4.5/(2*pi*0.7) K. FEM contact edges use their chord lengths; FVM uses the circular interface.",
+        harmonic_reference="Same annulus and contact, unit volumetric heat capacity, omega=6 rad/s, exp(+i*omega*t). Outer trace 0.8-0.2i K, transmitted rate 4.5+1.5i W/m. Derive exterior Dirichlet phasors from independent modified Bessel solutions in each material. Errors in K and W/m are complex absolute errors; phase errors are wrapped differences in radians.",
+        harmonic_runs=refinement(partial(measure_interface, resistance=.25, omega=6.)),
         contact_runs=refinement(partial(measure_interface, resistance=.25)),
         runs=refinement(measure), interface_runs=refinement(measure_interface)), indent=2, allow_nan=False))
