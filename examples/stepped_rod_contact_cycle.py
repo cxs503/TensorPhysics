@@ -37,19 +37,27 @@ def transient_contact_refinement(model,dc_model,dc,state,omega):
         return dc_model.fixed_temperatures+(model.fixed_temperatures*torch.exp(1j*omega*t)).real
     def load(t):
         return (source*torch.exp(1j*omega*t)).real
+    def advance(times,method):
+        time = torch.from_numpy(times)
+        history = thermal.solve_transient_thermal(dc_model,time,initial,theta=.5,method=method,
+            sparse=True,fixed_temperature_history=ends,nodal_heat_history=load)
+        step_heat = thermal.thermal_contact_pair_heat_steps(dc_model,history)[:,0]
+        return history.temperature.numpy(),step_heat.numpy()
+    return temporal_refinement(advance,dc.numpy(),state.numpy(),dc_power,ac_power,omega)
+
+
+def temporal_refinement(advance,dc,phasor,dc_power,ac_power,omega):
+    """Time integration versus each solver's own fixed-mesh frequency response."""
     runs = []
     for method in ("theta","sdirk2"):
         previous = None
         for steps in (32,64,128):
-            time = torch.linspace(0.,2*math.pi/omega,steps+1,dtype=dc.dtype)
-            history = thermal.solve_transient_thermal(dc_model,time,initial,theta=.5,method=method,
-                sparse=True,fixed_temperature_history=ends,nodal_heat_history=load)
-            heat = thermal.thermal_contact_pair_heat_steps(dc_model,history)[:,0].cumsum(0)
-            # Integrate the frequency-domain contact power from phase zero.
-            exact_heat = dc_power*time+(ac_power*torch.expm1(1j*omega*time)/(1j*omega)).real
-            exact_state = dc+(torch.exp(1j*omega*time[:,None])*state).real
-            errors = dict(cumulative_heat_J=float((heat-exact_heat[1:]).abs().max()),
-                          temperature_K=float((history.temperature-exact_state).abs().max()))
+            time = np.linspace(0.,2*math.pi/omega,steps+1)
+            temperature,step_heat = advance(time,method)
+            exact_heat = dc_power*time+(ac_power*np.expm1(1j*omega*time)/(1j*omega)).real
+            exact_state = dc+(np.exp(1j*omega*time[:,None])*phasor).real
+            errors = dict(cumulative_heat_J=float(np.max(abs(step_heat.cumsum()-exact_heat[1:]))),
+                          temperature_K=float(np.max(abs(temperature-exact_state))))
             row = dict(method="Crank-Nicolson" if method=="theta" else "SDIRK2",steps=steps,**errors)
             if previous is not None:
                 for name,error in errors.items():
@@ -58,7 +66,7 @@ def transient_contact_refinement(model,dc_model,dc,state,omega):
                     assert 1.8 < order < 2.2,(method,steps,name,order)
             runs.append(row)
             previous = errors
-    return dict(reference="At 16 elements per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and nodes for temperature).",runs=runs)
+    return dict(reference="At 16 elements or cells per layer, initialize from the steady field plus the real part of the same-mesh harmonic field. Compare all output times over one period against that field and its analytically integrated signed interface power. Errors are maxima over time (and all spatial temperature degrees of freedom).",runs=runs)
 
 
 def measure(n):
@@ -97,10 +105,10 @@ def measure(n):
     resistance = np.zeros(2*n-1)
     resistance[n-1] = min(areas)/conductance  # FVM takes areal resistance.
     widths = np.full(2*n,1/n)
-    _,_,west,east = rod.solve_harmonic_stepped_rod(widths,areas,k,c,endpoints,omega,
+    cell_ac,_,west,east = rod.solve_harmonic_stepped_rod(widths,areas,k,c,endpoints,omega,
         source=sources,contact_resistance=resistance,flux_order=2)
     fvm_power = east[n-1]
-    _,_,_,steady_east = rod.solve_steady_stepped_rod(widths,areas,k,c,steady_ends,
+    cell_dc,_,_,steady_east = rod.solve_steady_stepped_rod(widths,areas,k,c,steady_ends,
         contact_resistance=resistance,flux_order=2)
     fvm_bias = steady_east[n-1]
     fvm_cycle = np.asarray(rod.harmonic_face_cycle_heat(fvm_power,omega,steady_power=fvm_bias))
@@ -129,6 +137,17 @@ def measure(n):
                          contact_power_W=[float(power.real),float(power.imag)]))
     if n==16:
         rows[0]["transient_refinement"] = transient_contact_refinement(model,dc_model,dc,state,omega)
+        def advance_fvm(time,method):
+            def ends(t):
+                return steady_ends+(np.asarray(endpoints)*np.exp(1j*omega*t)).real
+            def load(t):
+                return (sources*np.exp(1j*omega*t)).real
+            cell,_,_,_,ledger = rod.solve_transient_stepped_rod(widths,areas,k,c,ends,time,
+                cell_dc+cell_ac.real,source=load,contact_resistance=resistance,flux_order=2,
+                method=method,return_step_heat=True)
+            return cell,ledger["contact"][:,n-1]
+        rows[1]["transient_refinement"] = temporal_refinement(
+            advance_fvm,cell_dc,cell_ac,fvm_bias,fvm_power,omega)
     return rows,float(abs(fvm_power-west[n]))
 
 
