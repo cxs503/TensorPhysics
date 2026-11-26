@@ -8,20 +8,21 @@ import periodic_contact_reference as continuum
 from conduction_provenance import provenance
 
 
-def solve_wall_histories(solver, k, cv, resistance, initial, times, west, east):
+def solve_wall_histories(solver, k, cv, resistance, initial, times, west, east, *, all_faces=False):
     n = len(initial)
     if solver == "fvm":
         field, _, _, _, ledger = periodic.rod.solve_transient_stepped_rod(
             np.full(n, 1/n), 1., k, cv, lambda t: (west(t), east(t)), times, initial,
             contact_resistance=resistance, method="sdirk2", flux_order=2, return_step_heat=True)
-        cuts = np.column_stack((ledger["left"][:, 0], ledger["contact"][:, n//2-1], ledger["right"][:, -1]))
+        cuts = np.column_stack((ledger["left"][:, 0], ledger["right"]))
+        cuts[:, n//2] = ledger["contact"][:, n//2-1]
     else:
         field, cuts = periodic.sph.solve_transient_layered_slab(
             initial, times, 1/n, (west, east), conductivity=k, volumetric_heat_capacity=cv,
             contact_resistance_x=resistance, h_factor=.9, method="sdirk2", return_x_heat=True)
-        cuts = cuts[:, [0, n//2, n]].numpy()
+        cuts = cuts.numpy()
         field = field.numpy()
-    return field, cuts
+    return field, cuts if all_faces else cuts[:, [0, n//2, n]]
 
 
 def measure(n, solver, *, reverse=False):
@@ -40,8 +41,11 @@ def measure(n, solver, *, reverse=False):
     cold_reference = []
     storage_reference = []
     field_reference = []
+    flux_reference = []
     for omega, amplitude in zip(omegas, drive):
-        _, means, q, inward_walls = continuum.reference(n, .3, omega, conductivity=materials, capacity=capacities)
+        _, means, q, inward_walls, face_flux = continuum.reference(
+            n, .3, omega, conductivity=materials, capacity=capacities, return_face_flux=True)
+        flux_reference.append(face_flux)
         cold_reference.append(-inward_walls[1])  # positive out through the cold wall
         energy = (cv*means/n).reshape(2, n//2).sum(axis=1)
         storage_reference.append(1j*omega*energy)
@@ -54,7 +58,7 @@ def measure(n, solver, *, reverse=False):
     def west(t):
         return float(np.real(drive @ np.exp(1j*omegas*t)))
     times = np.linspace(0., 1., 4*n+1)
-    field, cuts = solve_wall_histories(solver, k, cv, resistance, initial, times, west, lambda t: 0.)
+    field, cuts = solve_wall_histories(solver, k, cv, resistance, initial, times, west, lambda t: 0., all_faces=True)
     # Endpoint temperatures are instantaneous samples. Project the uniformly
     # spaced samples over one period, counting the common endpoint only once.
     basis = np.exp(-1j*omegas[:, None]*times[None, :-1])
@@ -66,7 +70,10 @@ def measure(n, solver, *, reverse=False):
     # Fit the signed interval storage increments with the same basis as the
     # transmitted heats. Each result is a storage-rate phasor per kelvin of drive.
     changes = (np.diff(field, axis=0)*cv/n).reshape(len(times)-1, 2, n//2).sum(axis=2)
-    cut_gains = periodic.fit_flux_phasors(times, cuts, omegas)/drive[:, None]
+    face_gains = periodic.fit_flux_phasors(times, cuts, omegas)/drive[:, None]
+    face_ratio = face_gains/np.array(flux_reference)
+    face_complex_errors = abs(face_ratio-1)
+    cut_gains = face_gains[:, [0, n//2, n]]
     storage = periodic.fit_flux_phasors(times, changes, omegas)/drive[:, None]
     balance = storage + np.diff(cut_gains, axis=1)
     cold_ratio = cut_gains[:, 2]/cold_reference
@@ -74,6 +81,10 @@ def measure(n, solver, *, reverse=False):
     gain = cut_gains[:, 1]
     exact_gain = np.array(expected)/drive
     return dict(columns=n, steps=len(times)-1, solver=solver,
+                max_face_relative_amplitude_errors=abs(abs(face_ratio)-1).max(axis=1).tolist(),
+                max_face_phase_errors_rad=abs(np.angle(face_ratio)).max(axis=1).tolist(),
+                max_face_relative_complex_errors=face_complex_errors.max(axis=1).tolist(),
+                worst_complex_error_distance_from_drive_m=(np.argmax(face_complex_errors, axis=1)/n).tolist(),
                 temperature_sampling="cell mean" if solver == "fvm" else "particle centre",
                 layer_amplitude_errors_K=layer_max(abs(abs(temperature_modes)-abs(exact_modes))),
                 layer_relative_amplitude_errors=layer_max(abs(abs(mode_ratio)-1)),
@@ -113,6 +124,12 @@ if __name__ == "__main__":
             profile_orders = None if previous is None else np.log2(previous_profile/profile_errors)
             if n == 128:
                 passed &= profile_errors.max() < .001 and profile_orders.min() > 1.8
+            face_errors = np.array([row["max_face_relative_amplitude_errors"], row["max_face_phase_errors_rad"]])
+            face_orders = None if previous is None else np.log2(previous_faces/face_errors)
+            if n == 128:
+                passed &= face_errors.max() < .001 and face_orders.min() > 1.8
+            previous_faces = face_errors
+            row["face_amplitude_phase_orders"] = None if face_orders is None else face_orders.tolist()
             previous_profile = profile_errors
             row["layer_amplitude_phase_orders"] = None if profile_orders is None else profile_orders.tolist()
             previous_transfer = transfer_errors
