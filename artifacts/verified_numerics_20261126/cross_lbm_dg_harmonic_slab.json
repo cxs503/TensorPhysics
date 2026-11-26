@@ -10,9 +10,21 @@
         "cross_temperature_K": 0.03454754656890174,
         "lbm_flux_W_m2": 0.06702138705974342,
         "dg_flux_W_m2": 0.030281786643577932,
-        "cross_flux_W_m2": 0.0398093102382275
+        "cross_flux_W_m2": 0.0398093102382275,
+        "lbm_energy_J_m2": 0.0010902024736474687,
+        "dg_energy_J_m2": 0.0003712075999451857,
+        "cross_energy_J_m2": 0.0014614100735926543
       },
-      "orders": {}
+      "orders": {},
+      "control_volume": {
+        "reference_J_m2": 0.005813236433807793,
+        "lbm_storage_J_m2": 0.0069034389074552616,
+        "lbm_inward_J_m2": 0.006903438907455582,
+        "dg_storage_J_m2": 0.005442028833862607,
+        "dg_inward_J_m2": 0.005442028833862489,
+        "lbm_balance_J_m2": 3.200564813177209e-16,
+        "dg_balance_J_m2": 1.1796119636642288e-16
+      }
     },
     {
       "lbm_intervals": 24,
@@ -23,7 +35,10 @@
         "cross_temperature_K": 0.014564793103503492,
         "lbm_flux_W_m2": 0.02411809593387647,
         "dg_flux_W_m2": 0.00911735934031847,
-        "cross_flux_W_m2": 0.015261710006103024
+        "cross_flux_W_m2": 0.015261710006103024,
+        "lbm_energy_J_m2": 0.0002697238017763965,
+        "dg_energy_J_m2": 2.6846245020312708e-05,
+        "cross_energy_J_m2": 0.0002965700467967092
       },
       "orders": {
         "lbm_temperature_K": 1.2659233095128928,
@@ -31,7 +46,19 @@
         "cross_temperature_K": 1.2460980519314644,
         "lbm_flux_W_m2": 1.4745055301447514,
         "dg_flux_W_m2": 1.731762385296107,
-        "cross_flux_W_m2": 1.3831892558487358
+        "cross_flux_W_m2": 1.3831892558487358,
+        "lbm_energy_J_m2": 2.015041355930542,
+        "dg_energy_J_m2": 3.78943402996116,
+        "cross_energy_J_m2": 2.300916257207937
+      },
+      "control_volume": {
+        "reference_J_m2": 0.005813236433807793,
+        "lbm_storage_J_m2": 0.006082960235584189,
+        "lbm_inward_J_m2": 0.006082960235584152,
+        "dg_storage_J_m2": 0.00578639018878748,
+        "dg_inward_J_m2": 0.005786390188787314,
+        "lbm_balance_J_m2": 3.729655473350135e-17,
+        "dg_balance_J_m2": 1.6653345369377348e-16
       }
     },
     {
@@ -43,7 +70,10 @@
         "cross_temperature_K": 0.0047434506607044015,
         "lbm_flux_W_m2": 0.007316115205817562,
         "dg_flux_W_m2": 0.002457569275978698,
-        "cross_flux_W_m2": 0.004882279821379377
+        "cross_flux_W_m2": 0.004882279821379377,
+        "lbm_energy_J_m2": 6.647473821600088e-05,
+        "dg_energy_J_m2": 1.7256554607205862e-06,
+        "cross_energy_J_m2": 6.820039367672146e-05
       },
       "orders": {
         "lbm_temperature_K": 1.617559701708632,
@@ -51,7 +81,19 @@
         "cross_temperature_K": 1.6184763617088336,
         "lbm_flux_W_m2": 1.7209663161126227,
         "dg_flux_W_m2": 1.8913839522886287,
-        "cross_flux_W_m2": 1.6442897299825265
+        "cross_flux_W_m2": 1.6442897299825265,
+        "lbm_energy_J_m2": 2.0206047420793043,
+        "dg_energy_J_m2": 3.9595039586694143,
+        "cross_energy_J_m2": 2.120520922627461
+      },
+      "control_volume": {
+        "reference_J_m2": 0.005813236433807793,
+        "lbm_storage_J_m2": 0.005879711172023794,
+        "lbm_inward_J_m2": 0.005879711172023676,
+        "dg_storage_J_m2": 0.005811510778347072,
+        "dg_inward_J_m2": 0.005811510778347133,
+        "lbm_balance_J_m2": 1.1796119636642288e-16,
+        "dg_balance_J_m2": 6.071532165918825e-17
       }
     },
     {
@@ -63,7 +105,10 @@
         "cross_temperature_K": 0.0013565539780338977,
         "lbm_flux_W_m2": 0.00201888389566323,
         "dg_flux_W_m2": 0.0006326072468968547,
-        "cross_flux_W_m2": 0.0013881179871079526
+        "cross_flux_W_m2": 0.0013881179871079526,
+        "lbm_energy_J_m2": 1.641032836721852e-05,
+        "dg_energy_J_m2": 1.0861165804839507e-07,
+        "cross_energy_J_m2": 1.6518940025266916e-05
       },
       "orders": {
         "lbm_temperature_K": 1.8058966210612533,
@@ -71,17 +116,29 @@
         "cross_temperature_K": 1.805990486565268,
         "lbm_flux_W_m2": 1.8575198483166044,
         "dg_flux_W_m2": 1.9578500970074821,
-        "cross_flux_W_m2": 1.8144247844669699
+        "cross_flux_W_m2": 1.8144247844669699,
+        "lbm_energy_J_m2": 2.018202083455692,
+        "dg_energy_J_m2": 3.989893577922768,
+        "cross_energy_J_m2": 2.0456589510446963
+      },
+      "control_volume": {
+        "reference_J_m2": 0.005813236433807793,
+        "lbm_storage_J_m2": 0.005829646762175011,
+        "lbm_inward_J_m2": 0.005829646762174695,
+        "dg_storage_J_m2": 0.0058131278221497445,
+        "dg_inward_J_m2": 0.005813127822150113,
+        "lbm_balance_J_m2": 3.165870343657673e-16,
+        "dg_balance_J_m2": 3.686287386450715e-16
       }
     }
   ],
-  "reference": "Unit slab, period 0.5 s, alpha=0.075, capacity=2.3, wall phasors 0.4+0.15i and -0.2+0.3i about 1 K. Project the second LBM period, compare DG center temperatures and quarter-cell Fourier fluxes to the exact sinh solution. Errors are maxima over shared samples.",
+  "reference": "Unit slab, period 0.5 s, alpha=0.075, capacity=2.3, wall phasors 0.4+0.15i and -0.2+0.3i about 1 K. Project the second LBM period, compare DG center temperatures and quarter-cell Fourier fluxes to the exact sinh solution. Field errors are maxima over shared samples. For the middle third of the slab, compare stored energy change and net inward heat from t=0.5 to 0.625 s. Each end cuts a DG face and bisects an LBM nodal volume.",
   "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src:../TensorDG python examples/cross_lbm_dg_harmonic_slab.py",
   "sources": [
     {
-      "commit": "244bea61097c25d1a99087dcf39f64b9ea34cf99",
+      "commit": "8ac7262374b8365bf1d8c7be50b407530b980eda",
       "file": "cross_lbm_dg_harmonic_slab.py",
-      "source_sha256": "055eb8fe9b030a9972a6672ca1b744869c800c4e595ef35faa7097a33f095ed3"
+      "source_sha256": "56f06028d048b7c168cde94bcf4d184b0ce377035ffe372b9ee69bf6f8f12288"
     },
     {
       "commit": "6abb07094620e2269ac54725f4384f7609eb09c3",
