@@ -1,0 +1,23 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "c9f61e6135509f11be4a6eff6824c1a707c8512e",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "passed": 127,
+  "reference": "Unit depth, unequal widths (0.25,0.75) m and row heights (0.25,0.5) m. k=(1,3), contact resistance 0.125, capacity=(2,4), H=(0.5,2) in SI units. Rightward flux -1 W/m\u00b2, starting center temperatures (0.125,0.5) K. Both walls rise at 1 K/s until 0.125 s and cool at 2 K/s until 0.5 s. Source = capacity*dT/dt + H*T. Compare step-integrated source, sink, interface flux, final temperature and energy residual directly. CN uses exact piecewise-linear temperature integral; Rannacher uses its analytical endpoint-quadrature value. Separate one-cell test verifies monotone theta and a static heater.",
+  "runs": {
+    "test_layered_plate_cell_heat_at_switched_heating_rate[False]": {
+      "final_K": 1.1102230246251565e-16,
+      "interface_J": 0.0,
+      "bulk_J": 2.7755575615628914e-17,
+      "source_J": 0.0,
+      "budget_J": 1.3877787807814457e-16
+    },
+    "test_layered_plate_cell_heat_at_switched_heating_rate[True]": {
+      "final_K": 0.0,
+      "interface_J": 0.0,
+      "bulk_J": 2.7755575615628914e-17,
+      "source_J": 0.0,
+      "budget_J": 1.3877787807814457e-16
+    }
+  }
+}
