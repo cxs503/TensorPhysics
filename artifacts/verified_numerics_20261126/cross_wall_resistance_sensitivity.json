@@ -1,0 +1,718 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "solver": "fvm",
+      "columns": 16,
+      "steps": 64,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.19847042742978616,
+        -0.2178564291349817
+      ],
+      "phase_derivative_rad": [
+        -0.04329212553147202,
+        -0.06970498733219066
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          4.902420353042336e-05,
+          0.0001499381692043611
+        ],
+        [
+          0.00022693106763260057,
+          0.0003751597460487366
+        ]
+      ],
+      "amplitude_phase_orders": null,
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.19843362499125478,
+        -0.2177438163234774
+      ],
+      "phase_derivative_rad": [
+        -0.043462340381950015,
+        -0.06998657498413535
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          1.2221764999043039e-05,
+          3.732535770004097e-05
+        ],
+        [
+          5.671621715460512e-05,
+          9.35720941040441e-05
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          2.0040415457634158,
+          2.0061397002569166
+        ],
+        [
+          2.0004209160220157,
+          2.00335479181671
+        ]
+      ],
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.19842445585140628,
+        -0.21771580251581407
+      ],
+      "phase_derivative_rad": [
+        -0.043504879507994795,
+        -0.07005677747913353
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          3.052625150545829e-06,
+          9.31155003672246e-06
+        ],
+        [
+          1.417709110982518e-05,
+          2.336959910587133e-05
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          2.001330297476692,
+          2.003062836705309
+        ],
+        [
+          2.0001997639891824,
+          2.001445355101824
+        ]
+      ],
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.1984221668716728,
+        -0.21770881667144243
+      ],
+      "phase_derivative_rad": [
+        -0.043515512282765345,
+        -0.07007430695269964
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          7.636454170678597e-07,
+          2.3257056650793917e-06
+        ],
+        [
+          3.5443163392753774e-06,
+          5.840125539752217e-06
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          1.999075630283875,
+          2.001352819542922
+        ],
+        [
+          1.9999822682851753,
+          2.000561698773863
+        ]
+      ],
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 16,
+      "steps": 64,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.6047513713213392,
+        -0.641191275807301
+      ],
+      "phase_derivative_rad": [
+        -0.06469768161818638,
+        -0.09338391225300356
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          2.6473840841978458e-05,
+          2.7284393064319623e-05
+        ],
+        [
+          0.0003234509535310487,
+          0.0003740506260439813
+        ]
+      ],
+      "amplitude_phase_orders": null,
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.604731442296621,
+        -0.6411707075866347
+      ],
+      "phase_derivative_rad": [
+        -0.06494030498769374,
+        -0.09366473221474217
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          6.544816123832398e-06,
+          6.716172398113507e-06
+        ],
+        [
+          8.082758402369605e-05,
+          9.32306643053743e-05
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          2.016142951716416,
+          2.0223647830658407
+        ],
+        [
+          2.00062733526082,
+          2.0043570936199018
+        ]
+      ],
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.6047265278663132,
+        -0.6411656546605133
+      ],
+      "phase_derivative_rad": [
+        -0.06500092911599345,
+        -0.09373468723319406
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          1.6303858160204854e-06,
+          1.6632462767063316e-06
+        ],
+        [
+          2.0203455723982744e-05,
+          2.327564585348496e-05
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          2.005139254762229,
+          2.013637459286795
+        ],
+        [
+          2.000245643875663,
+          2.0019833464856003
+        ]
+      ],
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    },
+    {
+      "solver": "fvm",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.6047253047489645,
+        -0.6411644048289772
+      ],
+      "phase_derivative_rad": [
+        -0.06501608193478711,
+        -0.09375214748976439
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          4.0726846728400545e-07,
+          4.1341474055212046e-07
+        ],
+        [
+          5.0506369303204846e-06,
+          5.815389283153616e-06
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          2.0011613822836707,
+          2.008340069193826
+        ],
+        [
+          2.0000648404139034,
+          2.0008735259985166
+        ]
+      ],
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 16,
+      "steps": 64,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.19855046915931837,
+        -0.21814654233657055
+      ],
+      "phase_derivative_rad": [
+        -0.04324653075879972,
+        -0.06949523160714238
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          0.0001290659330626387,
+          0.00044005137079319856
+        ],
+        [
+          0.00027252584030489774,
+          0.0005849154710970139
+        ]
+      ],
+      "amplitude_phase_orders": null,
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.1984537526584306,
+        -0.21781704275059813
+      ],
+      "phase_derivative_rad": [
+        -0.04345098909729961,
+        -0.06993442402612851
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          3.23494321748663e-05,
+          0.00011055178482077821
+        ],
+        [
+          6.806750180501225e-05,
+          0.00014572305211088543
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          1.996295957586294,
+          1.9929496340043613
+        ],
+        [
+          2.0013549631540464,
+          2.0049990318924817
+        ]
+      ],
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.19842949534839438,
+        -0.21773415254119677
+      ],
+      "phase_derivative_rad": [
+        -0.04350204459528879,
+        -0.07004375800478845
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          8.092122138647628e-06,
+          2.7661575419418716e-05
+        ],
+        [
+          1.7012003815833343e-05,
+          3.638907345095144e-05
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          1.9991503884855972,
+          1.9987670869022185
+        ],
+        [
+          2.0004130776246787,
+          2.0016518947347928
+        ]
+      ],
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.1,
+      "log_amplitude_derivative": [
+        -0.19842342655467282,
+        -0.2177134067043295
+      ],
+      "phase_derivative_rad": [
+        -0.04351480402740947,
+        -0.07007105363924672
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.19842140322625573,
+        -0.21770649096577735
+      ],
+      "exact_phase_derivative_rad": [
+        -0.04351905659910462,
+        -0.0700801470782394
+      ],
+      "amplitude_phase_errors": [
+        [
+          2.0233284170889654e-06,
+          6.9157385521601e-06
+        ],
+        [
+          4.2525716951527515e-06,
+          9.093438992677227e-06
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          1.999787585082695,
+          1.9999280907624035
+        ],
+        [
+          2.000145619719247,
+          2.0006074104948057
+        ]
+      ],
+      "finite_difference_control": 1.7490779022546356e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 16,
+      "steps": 64,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.6048695465679831,
+        -0.6414992954667705
+      ],
+      "phase_derivative_rad": [
+        -0.06460802605332305,
+        -0.09303839046622656
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          0.0001446490874859041,
+          0.0003353040525339024
+        ],
+        [
+          0.0004131065183943794,
+          0.0007195724128209874
+        ]
+      ],
+      "amplitude_phase_orders": null,
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 32,
+      "steps": 128,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.604761163941564,
+        -0.6412484048286751
+      ],
+      "phase_derivative_rad": [
+        -0.06491789457645225,
+        -0.09357810490386922
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          3.626646106680287e-05,
+          8.441341443843342e-05
+        ],
+        [
+          0.00010323799526518185,
+          0.00017985797517831859
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          1.9958493450597414,
+          1.989925733753986
+        ],
+        [
+          2.0005397928782043,
+          2.0002817449811934
+        ]
+      ],
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 64,
+      "steps": 256,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.6047339694139285,
+        -0.6411851222017482
+      ],
+      "phase_derivative_rad": [
+        -0.06499532670929413,
+        -0.09371301546995285
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          9.071933431359369e-06,
+          2.1130787511536298e-05
+        ],
+        [
+          2.5805862423303183e-05,
+          4.494740909469219e-05
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          1.9991540128014385,
+          1.9981257457223183
+        ],
+        [
+          2.000203280807084,
+          2.000548270280292
+        ]
+      ],
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    },
+    {
+      "solver": "sph",
+      "columns": 128,
+      "steps": 512,
+      "resistance_m2_K_W": 0.6,
+      "log_amplitude_derivative": [
+        -0.6047271656044408,
+        -0.6411692746107066
+      ],
+      "phase_derivative_rad": [
+        -0.06501468145450451,
+        -0.09374672884641133
+      ],
+      "exact_log_amplitude_derivative": [
+        -0.6047248974804972,
+        -0.6411639914142366
+      ],
+      "exact_phase_derivative_rad": [
+        -0.06502113257171743,
+        -0.09375796287904754
+      ],
+      "amplitude_phase_errors": [
+        [
+          2.268123943660605e-06,
+          5.283196469973994e-06
+        ],
+        [
+          6.451117212924462e-06,
+          1.1234032636212032e-05
+        ]
+      ],
+      "amplitude_phase_orders": [
+        [
+          1.999910574220133,
+          1.9998635687475914
+        ],
+        [
+          2.000077910712641,
+          2.000362057570921
+        ]
+      ],
+      "finite_difference_control": 1.3665668450144795e-10,
+      "passed": true
+    }
+  ],
+  "frequencies_Hz": [
+    1,
+    2
+  ],
+  "interface_position_m": 0.25,
+  "differentiation_variable": "natural logarithm of contact resistance",
+  "log_resistance_half_step": 0.0001,
+  "sources": [
+    {
+      "commit": "8eeebe80fb2d8003bf3aba703c6b94f1e81c61e0",
+      "file": "cross_wall_resistance_sensitivity.py",
+      "source_sha256": "7fad9bd79fba086c157ec9720557e7c9c7e0cdd72eefdc9c290edeaef4539cee"
+    },
+    {
+      "commit": "8eeebe80fb2d8003bf3aba703c6b94f1e81c61e0",
+      "file": "cross_wall_reciprocity.py",
+      "source_sha256": "e31647b0a8027ec8efa8991802889ebe400312dbefea64658ce80c2e4b966800"
+    },
+    {
+      "commit": "8eeebe80fb2d8003bf3aba703c6b94f1e81c61e0",
+      "file": "cross_wall_driven_harmonics.py",
+      "source_sha256": "61ff3c3bb0acdb17c96cc7ed77c1ec9c6951ff20c852f2d68bcabbe1d0f7617c"
+    },
+    {
+      "commit": "8eeebe80fb2d8003bf3aba703c6b94f1e81c61e0",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "35b17bea96024065ca93c2ac8157082003a689bd63e04f44d1caf3ba80f68a9c"
+    },
+    {
+      "commit": "8eeebe80fb2d8003bf3aba703c6b94f1e81c61e0",
+      "file": "periodic_contact_reference.py",
+      "source_sha256": "c137848ae4d852048cae7839d1effe3b4cab738f917576794ec0288c69c99e1d"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_wall_resistance_sensitivity.py"
+}
