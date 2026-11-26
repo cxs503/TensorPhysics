@@ -1,0 +1,372 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 0.0006883615451524469,
+      "residual_over_west_only": 0.0026741079847146408,
+      "retained_relative_error": 0.001421961664458725,
+      "columns": 16,
+      "steps": 64,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 4.829470157119431e-15,
+      "step_heat_superposition_error_J_m2": 1.3600232051658168e-15,
+      "contact_flux_W_m2": [
+        [
+          0.4173549513818002,
+          -0.7323609892254463
+        ],
+        [
+          -0.0004975091427223676,
+          -0.000475737605989183
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 0.0001721305409556316,
+      "residual_over_west_only": 0.0006686829867591838,
+      "retained_relative_error": 0.000355550312997362,
+      "columns": 32,
+      "steps": 128,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 7.66053886991358e-15,
+      "step_heat_superposition_error_J_m2": 1.394717674685353e-15,
+      "contact_flux_W_m2": [
+        [
+          0.4176279345638444,
+          -0.731505434096474
+        ],
+        [
+          -0.00012485112388584404,
+          -0.00011849523194677493
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": [
+        1.9996634083788798,
+        1.9997569395611963
+      ],
+      "passed": true
+    },
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 4.305260678420015e-05,
+      "residual_over_west_only": 0.00016724833101900373,
+      "retained_relative_error": 8.888106127259398e-05,
+      "columns": 64,
+      "steps": 256,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 1.687538997430238e-14,
+      "step_heat_superposition_error_J_m2": 1.902124291408569e-15,
+      "contact_flux_W_m2": [
+        [
+          0.41769633924427163,
+          -0.731291537368664
+        ],
+        [
+          -3.1264930983583e-05,
+          -2.959782156691179e-05
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": [
+        1.9993305972268463,
+        2.000105778050204
+      ],
+      "passed": true
+    },
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 1.0766605771313248e-05,
+      "residual_over_west_only": 4.182550095090992e-05,
+      "retained_relative_error": 2.221859185707327e-05,
+      "columns": 128,
+      "steps": 512,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 3.8663516832571077e-14,
+      "step_heat_superposition_error_J_m2": 2.600350490489234e-15,
+      "contact_flux_W_m2": [
+        [
+          0.41771344403590327,
+          -0.7312380686275198
+        ],
+        [
+          -7.822331893264715e-06,
+          -7.398035116602881e-06
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": [
+        1.999537089323612,
+        2.0001086568894415
+      ],
+      "passed": true
+    },
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 0.000813887819500265,
+      "residual_over_west_only": 0.003161745353316691,
+      "retained_relative_error": 0.0017208742693176704,
+      "columns": 16,
+      "steps": 64,
+      "solver": "sph",
+      "temperature_superposition_error_K": 7.216449660063518e-16,
+      "step_heat_superposition_error_J_m2": 3.3306690738754696e-16,
+      "contact_flux_W_m2": [
+        [
+          0.4162849241098437,
+          -0.7310124971407853
+        ],
+        [
+          0.0006676960446304661,
+          0.0004653980819854403
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 0.00020325522827676162,
+      "residual_over_west_only": 0.0007895944111019653,
+      "retained_relative_error": 0.0004307035567839408,
+      "columns": 32,
+      "steps": 128,
+      "solver": "sph",
+      "temperature_superposition_error_K": 2.9837243786801082e-15,
+      "step_heat_superposition_error_J_m2": 3.400058012914542e-16,
+      "contact_flux_W_m2": [
+        [
+          0.41736006789298385,
+          -0.731169068587982
+        ],
+        [
+          0.0001655220862511697,
+          0.000117962395639029
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": [
+        2.001537494572025,
+        1.9983745522728664
+      ],
+      "passed": true
+    },
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 5.078100185615889e-05,
+      "residual_over_west_only": 0.00019727116293994908,
+      "retained_relative_error": 0.00010769879953954862,
+      "columns": 64,
+      "steps": 256,
+      "solver": "sph",
+      "temperature_superposition_error_K": 1.1685097334179773e-14,
+      "step_heat_superposition_error_J_m2": 6.002143226879753e-16,
+      "contact_flux_W_m2": [
+        [
+          0.4176293502203812,
+          -0.7312074932632231
+        ],
+        [
+          4.1269535302282583e-05,
+          2.9589450914960627e-05
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": [
+        2.000931699568145,
+        1.999693068490427
+      ],
+      "passed": true
+    },
+    {
+      "cancelled_frequency_Hz": 2,
+      "east_drive_at_null_K": [
+        0.10957834966415944,
+        -0.18101504179419214
+      ],
+      "west_only_reference_amplitude_W_m2": 0.2574172580490998,
+      "continuum_null_residual_W_m2": 0.0,
+      "numerical_null_residual_W_m2": 1.2690779018364787e-05,
+      "residual_over_west_only": 4.930042031581327e-05,
+      "retained_relative_error": 2.6925213897772477e-05,
+      "columns": 128,
+      "steps": 512,
+      "solver": "sph",
+      "temperature_superposition_error_K": 4.701794509287538e-14,
+      "step_heat_superposition_error_J_m2": 1.083334810747516e-15,
+      "contact_flux_W_m2": [
+        [
+          0.4176966953856983,
+          -0.7312170605479824
+        ],
+        [
+          1.0307597604116893e-05,
+          7.4033305832288475e-06
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.41771914467823673,
+          -0.7312202473811635
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "orders": [
+        2.00050822698146,
+        1.9999724581233826
+      ],
+      "passed": true
+    }
+  ],
+  "frequencies_Hz": [
+    1,
+    2
+  ],
+  "sources": [
+    {
+      "commit": "3782b7fbdb7929c197f6a918363885c3e227fe59",
+      "file": "cross_dual_wall_harmonics.py",
+      "source_sha256": "85f9420e201169f5516cd862161b7f86410e85988336cb6540913579b5f85828"
+    },
+    {
+      "commit": "3782b7fbdb7929c197f6a918363885c3e227fe59",
+      "file": "cross_wall_driven_harmonics.py",
+      "source_sha256": "8bbfed6dfa5bc863cdc41c720f0c71da2feca0d4fed0f1b9f577a905faa80c97"
+    },
+    {
+      "commit": "3782b7fbdb7929c197f6a918363885c3e227fe59",
+      "file": "periodic_contact_reference.py",
+      "source_sha256": "e7e59f4710c693e3dbfa00a28b5e5ee1c1ed9bcf3f474c96cc07c22537319c62"
+    },
+    {
+      "commit": "3782b7fbdb7929c197f6a918363885c3e227fe59",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "35b17bea96024065ca93c2ac8157082003a689bd63e04f44d1caf3ba80f68a9c"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_dual_wall_harmonics.py --cancel-hz 2"
+}
