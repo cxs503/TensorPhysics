@@ -1,0 +1,30 @@
+{
+  "repository": "cxs503/TensorSPH",
+  "commit": "6824cad06495a3b41f4cd645afb03c227434d504",
+  "passed": 221,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_conduction_2d.py --junitxml=results.xml",
+  "reference": "Manufactured field T=305+x+t, rightward heat flux -1 W/m\u00b2, capacity 2 and volumetric exchange coefficient 4 in SI units. On a 2 by 8 lattice the two rows exchange +x and -x W/m\u00b3 until 0.125 s, then -2x and +2x through 0.5 s. Independent external source equals 2 minus the exchange. Expected integrated exchange is -0.625 times the original signed row pattern. Endpoint quadrature for Rannacher stage-mean temperature includes the analytically known backward-Euler bias. Maximum absolute errors in indicated units.",
+  "runs": {
+    "Crank-Nicolson": {
+      "bulk_J_m3": 2.498001805406602e-16,
+      "final_K": 3.3306690738754696e-16,
+      "mean_K": 1.1102230246251565e-16,
+      "section_J_m2": 4.440892098500626e-16,
+      "budget_J_m3": 7.549516567451064e-15
+    },
+    "Rannacher": {
+      "bulk_J_m3": 2.914335439641036e-16,
+      "final_K": 2.220446049250313e-16,
+      "mean_K": 1.1102230246251565e-16,
+      "section_J_m2": 4.440892098500626e-16,
+      "budget_J_m3": 7.438494264988549e-15
+    },
+    "SDIRK2": {
+      "bulk_J_m3": 5.329070518200751e-15,
+      "final_K": 7.882583474838611e-15,
+      "mean_K": 3.1086244689504383e-15,
+      "section_J_m2": 5.329070518200751e-15,
+      "budget_J_m3": 1.0658141036401503e-14
+    }
+  }
+}
