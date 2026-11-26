@@ -39,6 +39,7 @@ def measure(n, solver, *, reverse=False):
     expected = []
     cold_reference = []
     storage_reference = []
+    field_reference = []
     for omega, amplitude in zip(omegas, drive):
         _, means, q, inward_walls = continuum.reference(n, .3, omega, conductivity=materials, capacity=capacities)
         cold_reference.append(-inward_walls[1])  # positive out through the cold wall
@@ -47,12 +48,21 @@ def measure(n, solver, *, reverse=False):
         if solver == "sph":
             z = np.sqrt(1j*omega*cv/k)/(2*n)
             means = means*z/np.sinh(z)  # convert exact cell means to particle-centre values
+        field_reference.append(amplitude*means)
         initial += np.real(amplitude*means)
         expected.append(amplitude*q)
     def west(t):
         return float(np.real(drive @ np.exp(1j*omegas*t)))
     times = np.linspace(0., 1., 4*n+1)
     field, cuts = solve_wall_histories(solver, k, cv, resistance, initial, times, west, lambda t: 0.)
+    # Endpoint temperatures are instantaneous samples. Project the uniformly
+    # spaced samples over one period, counting the common endpoint only once.
+    basis = np.exp(-1j*omegas[:, None]*times[None, :-1])
+    temperature_modes = (2/len(times[:-1]))*(basis @ field[:-1])
+    exact_modes = np.array(field_reference)
+    mode_ratio = temperature_modes/exact_modes
+    def layer_max(values):
+        return values.reshape(len(omegas), 2, n//2).max(axis=2).tolist()
     # Fit the signed interval storage increments with the same basis as the
     # transmitted heats. Each result is a storage-rate phasor per kelvin of drive.
     changes = (np.diff(field, axis=0)*cv/n).reshape(len(times)-1, 2, n//2).sum(axis=2)
@@ -64,6 +74,10 @@ def measure(n, solver, *, reverse=False):
     gain = cut_gains[:, 1]
     exact_gain = np.array(expected)/drive
     return dict(columns=n, steps=len(times)-1, solver=solver,
+                temperature_sampling="cell mean" if solver == "fvm" else "particle centre",
+                layer_amplitude_errors_K=layer_max(abs(abs(temperature_modes)-abs(exact_modes))),
+                layer_relative_amplitude_errors=layer_max(abs(abs(mode_ratio)-1)),
+                layer_phase_errors_rad=layer_max(abs(np.angle(mode_ratio))),
                 physical_drive_wall="east" if reverse else "west",
                 cold_phase_rad=np.angle(cut_gains[:, 2]).tolist(),
                 exact_cold_phase_rad=np.angle(cold_reference).tolist(),
@@ -95,6 +109,12 @@ if __name__ == "__main__":
             if n == 128:
                 passed &= transfer_errors.max() < .001 and transfer_orders.min() > 1.8
                 passed &= errors.max() < .001 and orders.min() > 1.8
+            profile_errors = np.array([row["layer_relative_amplitude_errors"], row["layer_phase_errors_rad"]])
+            profile_orders = None if previous is None else np.log2(previous_profile/profile_errors)
+            if n == 128:
+                passed &= profile_errors.max() < .001 and profile_orders.min() > 1.8
+            previous_profile = profile_errors
+            row["layer_amplitude_phase_orders"] = None if profile_orders is None else profile_orders.tolist()
             previous_transfer = transfer_errors
             row.update(cold_and_storage_orders=None if transfer_orders is None else transfer_orders.tolist(),
                        orders=None if orders is None else orders.tolist(), passed=bool(passed))
