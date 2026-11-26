@@ -65,7 +65,7 @@ def dg(n, times, modes):
     return means, np.diff(times)*powers
 
 
-def dem(n, times, modes):
+def dem_chain(n, modes):
     from tensordem.thermal import contact_chain
 
     # Unit area, cell heat stores and half-cell conduction resistances.
@@ -75,6 +75,13 @@ def dem(n, times, modes):
         np.full(n, 1/n), k, k, contact_resistance=contacts, resolve_contacts=True)
     initial = np.zeros_like(capacity)
     initial[capacity > 0] = averages
+    return links, capacity, initial
+
+
+def dem(n, times, modes):
+    from tensordem.thermal import contact_chain
+
+    links, capacity, initial = dem_chain(n, modes)
     states, heats = contact_chain.transient_contact_temperatures(
         links, capacity, times, initial, t_left=0., t_right=0., theta=.5,
         allow_massless=True, return_link_heat=True)
@@ -84,7 +91,7 @@ def dem(n, times, modes):
     return balance, heats[:, cut]
 
 
-def run(with_dg=False, with_dem=False, alternating_steps=False):
+def reference_modes():
     exact_times = np.array([.005, .018])
     end = .053
     waves = np.array([case.WAVE]+[brentq(case.contact_condition, i*np.pi, (i+1)*np.pi)
@@ -94,6 +101,11 @@ def run(with_dg=False, with_dem=False, alternating_steps=False):
     decay = np.exp(-exact_times[:, None]*waves**2)
     flux_weights = np.r_[1., np.linalg.solve(decay[:, 1:], -decay[:, 0])]
     modes = list(zip(waves, flux_weights/(-waves*np.cos(waves/2))))
+    return exact_times, end, waves, flux_weights, modes
+
+
+def run(with_dg=False, with_dem=False, alternating_steps=False):
+    exact_times, end, waves, flux_weights, modes = reference_modes()
     boundaries = np.r_[0., exact_times, end]
     exact_heat = np.diff((-np.expm1(-boundaries[:, None]*waves**2)/waves**2) @ flux_weights)
     rows = []
