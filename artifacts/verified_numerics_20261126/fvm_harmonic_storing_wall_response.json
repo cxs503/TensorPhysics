@@ -1,0 +1,57 @@
+{
+  "repository": "cxs503/TensorFVM",
+  "commit": "2bf3f811fcb1d72f89c04c71fe3b38e0aa7e1c9e",
+  "passed": 163,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_*conduction.py --junitxml=results.xml",
+  "reference": "One cell and one storing north wall, area 0.5 m\u00b2. With s=i*omega the cell and surface satisfy s*T=2*(Tw-T) and 2*s*Tw=P+h*(Ta-Tw)-2*(Tw-T). Compare complex surface temperature and each independent wall power in watts against the analytical solution for h=0,3 and omega=0.03125,1,32 rad/s. Absolute complex errors; energy balance is the modulus of ambient+heater-material-storage. A mixed-face test checks ordering and zero heater.",
+  "runs": {
+    "test_harmonic_storing_wall_response[0.0-0.03125]": {
+      "temperature_error": 0.0,
+      "heater_error": 0.0,
+      "ambient_error": 0.0,
+      "material_error": 6.938893903907228e-17,
+      "storage_error": 0.0,
+      "energy_balance_W": 5.551115123125783e-17
+    },
+    "test_harmonic_storing_wall_response[0.0-1.0]": {
+      "temperature_error": 0.0,
+      "heater_error": 0.0,
+      "ambient_error": 0.0,
+      "material_error": 0.0,
+      "storage_error": 0.0,
+      "energy_balance_W": 0.0
+    },
+    "test_harmonic_storing_wall_response[0.0-32.0]": {
+      "temperature_error": 0.0,
+      "heater_error": 0.0,
+      "ambient_error": 0.0,
+      "material_error": 0.0,
+      "storage_error": 0.0,
+      "energy_balance_W": 0.0
+    },
+    "test_harmonic_storing_wall_response[3.0-0.03125]": {
+      "temperature_error": 2.7755575615628914e-17,
+      "heater_error": 0.0,
+      "ambient_error": 1.1102230246251565e-16,
+      "material_error": 3.17061944866176e-17,
+      "storage_error": 8.673617379884035e-19,
+      "energy_balance_W": 1.526778411379539e-16
+    },
+    "test_harmonic_storing_wall_response[3.0-1.0]": {
+      "temperature_error": 6.206335383118183e-17,
+      "heater_error": 0.0,
+      "ambient_error": 8.326672684688674e-17,
+      "material_error": 5.551115123125783e-17,
+      "storage_error": 6.206335383118183e-17,
+      "energy_balance_W": 6.206335383118183e-17
+    },
+    "test_harmonic_storing_wall_response[3.0-32.0]": {
+      "temperature_error": 1.734723475976807e-18,
+      "heater_error": 0.0,
+      "ambient_error": 0.0,
+      "material_error": 3.469446951953614e-18,
+      "storage_error": 5.551115123125783e-17,
+      "energy_balance_W": 1.2412670766236366e-16
+    }
+  }
+}
