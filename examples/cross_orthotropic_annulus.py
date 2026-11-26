@@ -9,12 +9,8 @@ from tensorfem import thermal
 from tensorfvm.cht import annulus
 
 
-def measure(n):
-    radial, circumferential, mode = 2., .7, 3
-    power = mode*np.sqrt(circumferential/radial)
-    radii = np.linspace(.4, 1., n+1)
-    centers = .5*(radii[:-1]+radii[1:])
-    angles = 2*np.pi*np.arange(8*n)/(8*n)
+def fem_model(radii, radial, circumferential, mode, wall_values):
+    angles = 2*np.pi*np.arange(8*(len(radii)-1))/(8*(len(radii)-1))
     angular = np.cos(mode*angles + .37)
     directions = np.column_stack((np.cos(angles), np.sin(angles)))
     nodes = (radii[:, None, None]*directions).reshape(-1, 2)
@@ -25,13 +21,25 @@ def measure(n):
     # boundary edges and its piecewise-constant orientation refine with n.
     middle = angles + np.pi/len(angles)
     direction = np.column_stack((np.cos(middle), np.sin(middle)))
-    tensors = circumferential*np.eye(2) + (radial-circumferential)*direction[:, :, None]*direction[:, None, :]
+    projector = direction[:, :, None]*direction[:, None, :]
+    kr, kt = (np.broadcast_to(k, (len(radii)-1,))[:, None, None, None] for k in (radial, circumferential))
+    tensors = kt*np.eye(2) + (kr-kt)*projector
     boundary = ids[[0, -1]].ravel()
-    wall_values = radii[[0, -1]]**power
     model = thermal.ThermalModel(
-        torch.from_numpy(nodes), torch.from_numpy(conn), torch.from_numpy(np.tile(tensors, (n, 1, 1))),
+        torch.from_numpy(nodes), torch.from_numpy(conn), torch.from_numpy(tensors.reshape(-1, 2, 2)),
         1., 1., torch.from_numpy(boundary), torch.from_numpy((wall_values[:, None]*angular).ravel()),
         element_type="q4")
+    return model, ids, angular
+
+
+def measure(n):
+    radial, circumferential, mode = 2., .7, 3
+    power = mode*np.sqrt(circumferential/radial)
+    radii = np.linspace(.4, 1., n+1)
+    centers = .5*(radii[:-1]+radii[1:])
+    wall_values = radii[[0, -1]]**power
+    model, ids, angular = fem_model(radii, radial, circumferential, mode, wall_values)
+    boundary = ids[[0, -1]].ravel()
     state = thermal.solve_steady_thermal(model, sparse=True)
     fem = state.numpy().reshape(ids.shape)
     matrices = thermal.assemble_thermal(model, sparse=True)
@@ -53,23 +61,64 @@ def measure(n):
                       difference=abs(fem_rate-rates[index]))
         for metric, error in errors.items():
             walls[f"{side}_{metric}_rate_error_W_per_m"] = float(error)
-    return dict(**walls, radial_cells=n, sectors=len(angles),
+    return dict(**walls, radial_cells=n, sectors=len(angular),
                 fem_error_K=float(np.max(abs(fem_mid-exact))),
                 fvm_error_K=float(np.max(abs(fv_mid-exact))),
                 solver_difference_K=float(np.max(abs(fem_mid-fv_mid))),
                 fvm_modal_rate_error_W_per_m=float(np.max(abs(rates-exact_rate))))
 
 
-if __name__ == "__main__":
-    runs = [measure(n) for n in (8, 16, 32, 64)]
+def measure_interface(n):
+    mode, interface, temperature, rate = 3, .7, .8, 4.5
+    radii = np.linspace(.4, 1., n+1)
+    j = n//2
+    kr = np.array([2., .85])
+    kt = np.array([.7, 2.2])
+    # Within a homogeneous ring T is a combination of r^p and r^-p.
+    # Extend the prescribed continuous temperature and radial rate from the
+    # interface to obtain the two independent Dirichlet boundary amplitudes.
+    power = mode*np.sqrt(kt/kr)
+    argument = power*np.log(radii[[0, -1]]/interface)
+    walls = temperature*np.cosh(argument) - rate*np.sinh(argument)/(2*np.pi*kr*power)
+    radial, circumferential = np.repeat(kr, j), np.repeat(kt, j)
+    model, ids, angular = fem_model(radii, radial, circumferential, mode, walls)
+    state = thermal.solve_steady_thermal(model, sparse=True)
+    nodal = thermal.thermal_element_nodal_power(model, state).numpy().reshape(n, len(angular), 4)
+    # On a sector, local nodes 0 and 1 have its starting angle, 2 and 3
+    # its ending angle. Recover the interface reaction from each side.
+    following = np.roll(angular, -1)
+    fem_rates = np.array([-2*(nodal[j-1, :, 1] @ angular + nodal[j-1, :, 2] @ following),
+                           2*(nodal[j, :, 0] @ angular + nodal[j, :, 3] @ following)])
+    _, inner, outer, fv_temperature = annulus.solve_annular_sheet(
+        radii, radial, 1., walls, 0., j, circumferential_conductivity=circumferential,
+        azimuthal_mode=mode, distributed_source=True)
+    fv_rates = np.array([inner[-1], outer[0]])
+    balance = max(abs(np.diff(fem_rates)).item(), abs(np.diff(fv_rates)).item())
+    if balance > 1e-9:
+        raise RuntimeError(f"Interface rate imbalance {balance}")
+    return dict(radial_cells=n, sectors=len(angular), max_imbalance=float(balance),
+                fem_interface_error_K=float(np.max(abs(state.numpy()[ids[j]]-temperature*angular))),
+                fvm_interface_error_K=float(abs(fv_temperature-temperature)),
+                fem_interface_rate_error_W_per_m=float(np.max(abs(fem_rates-rate))),
+                fvm_interface_rate_error_W_per_m=float(np.max(abs(fv_rates-rate))),
+                interface_rate_difference_W_per_m=float(np.max(abs(fem_rates-fv_rates))))
+
+
+def refinement(case):
+    runs = [case(n) for n in (8, 16, 32, 64)]
     for coarse, fine in zip(runs, runs[1:]):
         for key in (name for name in tuple(fine) if name.endswith(("_K", "_W_per_m"))):
             order = float(np.log2(coarse[key]/fine[key]))
             fine[key+"_order"] = order
             if fine["radial_cells"] >= 32 and order < 1.8:
                 raise RuntimeError(f"{key} convergence order {order} on {fine['radial_cells']} cells")
+    return runs
+
+
+if __name__ == "__main__":
     print(json.dumps(dict(
         reference="Steady source-free unit-depth annulus, T=r^p*cos(3*theta+0.37), p=3*sqrt(k_theta/k_r), k_r=2 and k_theta=0.7 W/(m K). Dirichlet walls at 0.4 and 1 m. Maximum temperature errors at shared radial-edge midpoints. Wall rates are 2*pi*r times increasing-radius flux amplitude, recovered from FEM nodal reaction powers by cosine projection and from FVM boundary faces directly.",
         reproduce="OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFEM/src:../TensorFVM/src python examples/cross_orthotropic_annulus.py",
         benchmark=provenance(__file__), FEM=provenance(thermal.__file__), FVM=provenance(annulus.__file__),
-        runs=runs), indent=2, allow_nan=False))
+        interface_reference="Perfect contact at r=0.7 m, T amplitude 0.8 K and outward radial rate amplitude 4.5 W/m. Inner (radial, circumferential) conductivity (2, 0.7), outer (0.85, 2.2) W/(m K). Set wall temperatures from the two independent power-law solutions. max_imbalance is the largest inner/outer rate discrepancy in W/m.",
+        runs=refinement(measure), interface_runs=refinement(measure_interface)), indent=2, allow_nan=False))
