@@ -2,7 +2,9 @@
 
 Three decaying contact eigenmodes drive two reversals on a uniform output grid.
 Positive interval heat denotes transfer from the west material to the east.
+Pass --with-dg to include the TensorDG SIPG strip with insulated transverse walls.
 """
+import argparse
 import json
 
 import numpy as np
@@ -24,7 +26,32 @@ def detect_phases(times, heat):
     return np.asarray(turns), np.diff([0., *amounts, cumulative[-1]])
 
 
-def run():
+def dg(n, times, modes):
+    from tensordg import poisson_2d_bc as poisson
+    from tensordg import transient_diffusion_2d as diffusion
+    import torch
+
+    mid = n//2
+    k = np.repeat([1., 3.], mid)[:, None]*np.ones((1, 2))
+    resistance = np.zeros((n-1, 2))
+    resistance[mid-1] = case.RESISTANCE
+    options = dict(bc=dict(left="dirichlet", right="dirichlet", bottom="neumann", top="neumann"),
+                   conductivity=k, contact_resistance={"x": resistance})
+
+    def initial(x, y):
+        return sum(a*torch.where(x < .5, torch.sin(w*x), -torch.sin(w*(1-x))/3)
+                   for w, a in modes)
+
+    _, _, _, means = diffusion.solve_transient_diffusion_2d(
+        initial, times, ncells=(n, 2), degree=1, capacity=k, method="sdirk2",
+        return_interval_means=True, **options)
+    # Two transverse faces span the unit cross section. Use the integrator's
+    # interval-average field in the same numerical face flux as the solve.
+    powers = [poisson.poisson_face_powers_2d(field, **options)[0][mid].sum().item() for field in means]
+    return means, np.diff(times)*powers
+
+
+def run(with_dg=False):
     exact_times = np.array([.005, .018])
     end = .053
     waves = np.array([case.WAVE]+[brentq(case.contact_condition, i*np.pi, (i+1)*np.pi)
@@ -37,7 +64,13 @@ def run():
     boundaries = np.r_[0., exact_times, end]
     exact_heat = np.diff((-np.expm1(-boundaries[:, None]*waves**2)/waves**2) @ flux_weights)
     rows = []
-    for name, solve in (("TensorFEM", case.fem), ("TensorFVM", case.fvm), ("TensorSPH", case.particles)):
+    solvers = [("TensorFEM", case.fem), ("TensorFVM", case.fvm), ("TensorSPH", case.particles)]
+    sources = [__file__, events.__file__, case.__file__, case.thermal.__file__, case.rod.__file__, case.sph.__file__]
+    if with_dg:
+        from tensordg import poisson_2d_bc, transient_diffusion_2d
+        sources.extend([poisson_2d_bc.__file__, transient_diffusion_2d.__file__])
+        solvers.append(("TensorDG", dg))
+    for name, solve in solvers:
         previous = None
         for n in (24, 48, 96, 192):
             times = np.linspace(0., end, 2*n+1)
@@ -54,11 +87,12 @@ def run():
             previous = errors
     return dict(reference_reversals_s=exact_times.tolist(), reference_phase_heat_J_m2=exact_heat.tolist(),
                 end_s=end, modes_wave_amplitude=modes, contact_resistance_m2K_W=case.RESISTANCE,
-                runs=rows, sources=[provenance(p) for p in (__file__, events.__file__, case.__file__,
-                                                            case.thermal.__file__, case.rod.__file__, case.sph.__file__)])
+                runs=rows, sources=[provenance(p) for p in sources])
 
 
 if __name__ == "__main__":
-    report = run()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--with-dg", action="store_true")
+    report = run(with_dg=parser.parse_args().with_dg)
     print(json.dumps(report, indent=2, allow_nan=False))
     raise SystemExit(0 if all(row["passed"] for row in report["runs"]) else 1)
