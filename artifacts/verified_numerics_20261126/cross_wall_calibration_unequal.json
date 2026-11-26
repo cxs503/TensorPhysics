@@ -1,0 +1,1060 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "optimal_weights": [
+        0.8623321692651873,
+        0.13766783073481262
+      ],
+      "optimal_sd_m2_K_W": 0.002022629608367988,
+      "optimal_expected_sd_m2_K_W": 0.0020214202916219856,
+      "optimal_mean_m2_K_W": -7.196327835668217e-06,
+      "optimal_expected_mean_m2_K_W": -1.6443373562750237e-05,
+      "optimal_relative_sd_error": 0.0005982510173736522,
+      "optimal_mean_z": 1.4465930834128224,
+      "solver": "fvm",
+      "target_m2_K_W": 0.0,
+      "shared_frequency_noise": false,
+      "noiseless_estimates_m2_K_W": [
+        -1.1503068551555769e-06,
+        4.88732567702695e-06,
+        3.011058424525436e-06
+      ],
+      "mean_m2_K_W": [
+        -4.320264443976748e-06,
+        -2.5211589427745368e-05,
+        -1.8719357792336223e-05
+      ],
+      "expected_mean_m2_K_W": [
+        -1.5431765126599033e-05,
+        -2.2779948291479812e-05,
+        -2.0496411596565246e-05
+      ],
+      "sd_m2_K_W": [
+        0.0021740079544177353,
+        0.005454534308561923,
+        0.003822667567152328
+      ],
+      "expected_sd_m2_K_W": [
+        0.0021768040014112744,
+        0.005448041239734664,
+        0.0038154434404186147
+      ],
+      "negative_fraction": [
+        0.5009,
+        0.50455,
+        0.50398
+      ],
+      "max_mean_error_in_standard_errors": 1.614185308223504,
+      "max_relative_sd_error": 0.0018933911212482002,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8603343621864517,
+          "median_heldout_sd_m2_K_W": 0.0021039385515812846,
+          "median_heldout_rmse_m2_K_W": 0.0021039482562006124,
+          "median_sd_over_oracle": 1.0408219212507688,
+          "p95_sd_over_oracle": 1.3453723309367258,
+          "max_relative_sd_prediction_error": 0.0026050987647209256,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8566665822258216,
+          "median_heldout_sd_m2_K_W": 0.0020418791842072995,
+          "median_heldout_rmse_m2_K_W": 0.002041881763098201,
+          "median_sd_over_oracle": 1.0101210483886542,
+          "p95_sd_over_oracle": 1.0823469473455913,
+          "max_relative_sd_prediction_error": 0.0022617354753728947,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8609207613505752,
+          "median_heldout_sd_m2_K_W": 0.0020258921375496024,
+          "median_heldout_rmse_m2_K_W": 0.002025894713685742,
+          "median_sd_over_oracle": 1.0022122296615656,
+          "p95_sd_over_oracle": 1.0176486843658403,
+          "max_relative_sd_prediction_error": 0.0017202991770417508,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        1.6652447499543974,
+        -0.6652447499543973
+      ],
+      "optimal_sd_m2_K_W": 4.39872351293792e-05,
+      "optimal_expected_sd_m2_K_W": 4.428933587747671e-05,
+      "optimal_mean_m2_K_W": -1.0436574220375215e-05,
+      "optimal_expected_mean_m2_K_W": -1.054342485445881e-05,
+      "optimal_relative_sd_error": 0.006821071982954341,
+      "optimal_mean_z": 0.7629181301614673,
+      "solver": "fvm",
+      "target_m2_K_W": 0.0,
+      "shared_frequency_noise": true,
+      "noiseless_estimates_m2_K_W": [
+        -1.1503068551555769e-06,
+        4.88732567702695e-06,
+        3.011058424525436e-06
+      ],
+      "mean_m2_K_W": [
+        -4.320264443976748e-06,
+        4.873810032849654e-06,
+        2.016640311774647e-06
+      ],
+      "expected_mean_m2_K_W": [
+        -1.5431765126599033e-05,
+        -2.2779948291479812e-05,
+        -2.0496411596565246e-05
+      ],
+      "sd_m2_K_W": [
+        0.0021740079544177353,
+        0.005441156340017504,
+        0.004425808250562556
+      ],
+      "expected_sd_m2_K_W": [
+        0.0021768040014112744,
+        0.005448041239734664,
+        0.004431421963612677
+      ],
+      "negative_fraction": [
+        0.5009,
+        0.50146,
+        0.50134
+      ],
+      "max_mean_error_in_standard_errors": 1.614185308223504,
+      "max_relative_sd_error": 0.0012844734719921203,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6645306296027909,
+          "median_heldout_sd_m2_K_W": 4.631493362303116e-05,
+          "median_heldout_rmse_m2_K_W": 4.748497557564961e-05,
+          "median_sd_over_oracle": 1.0457355637744967,
+          "p95_sd_over_oracle": 1.4089281768375654,
+          "max_relative_sd_prediction_error": 0.006926337152746154,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 1.665035975772149,
+          "median_heldout_sd_m2_K_W": 4.459983166025166e-05,
+          "median_heldout_rmse_m2_K_W": 4.5799682439099995e-05,
+          "median_sd_over_oracle": 1.0070106217811419,
+          "p95_sd_over_oracle": 1.1068514582472937,
+          "max_relative_sd_prediction_error": 0.006926326170590191,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6652781631714406,
+          "median_heldout_sd_m2_K_W": 4.419303609567595e-05,
+          "median_heldout_rmse_m2_K_W": 4.540839852829928e-05,
+          "median_sd_over_oracle": 0.997825666610419,
+          "p95_sd_over_oracle": 1.0279143193632474,
+          "max_relative_sd_prediction_error": 0.006926368245115944,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        0.8700852583778327,
+        0.12991474162216726
+      ],
+      "optimal_sd_m2_K_W": 0.0024507059924059353,
+      "optimal_expected_sd_m2_K_W": 0.002448970288072173,
+      "optimal_mean_m2_K_W": 0.09998919432188734,
+      "optimal_expected_mean_m2_K_W": 0.09997795970754428,
+      "optimal_relative_sd_error": 0.0007087486288486211,
+      "optimal_mean_z": 1.4506901178305875,
+      "solver": "fvm",
+      "target_m2_K_W": 0.1,
+      "shared_frequency_noise": false,
+      "noiseless_estimates_m2_K_W": [
+        0.0999976869388304,
+        0.10000301847690438,
+        0.10000136163703538
+      ],
+      "mean_m2_K_W": [
+        0.09999375206166569,
+        0.09995866951660262,
+        0.09996957184132796
+      ],
+      "expected_mean_m2_K_W": [
+        0.09997965559447305,
+        0.09996660174925431,
+        0.09997065838936492
+      ],
+      "sd_m2_K_W": [
+        0.0026213081138905746,
+        0.006804512517156334,
+        0.004764647258421161
+      ],
+      "expected_sd_m2_K_W": [
+        0.0026254431021747134,
+        0.006794449876656793,
+        0.0047535347021771006
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.6978826642119222,
+      "max_relative_sd_error": 0.0023377458965367914,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8767891012098364,
+          "median_heldout_sd_m2_K_W": 0.002536778974014695,
+          "median_heldout_rmse_m2_K_W": 0.0025367775949938056,
+          "median_sd_over_oracle": 1.0358553496423368,
+          "p95_sd_over_oracle": 1.341952468659465,
+          "max_relative_sd_prediction_error": 0.0032421187792807116,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8657159586091484,
+          "median_heldout_sd_m2_K_W": 0.002475982386594193,
+          "median_heldout_rmse_m2_K_W": 0.0024759864722966604,
+          "median_sd_over_oracle": 1.0110299821331374,
+          "p95_sd_over_oracle": 1.0784910231606613,
+          "max_relative_sd_prediction_error": 0.0027651052033788037,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8681930825697958,
+          "median_heldout_sd_m2_K_W": 0.002454523329992707,
+          "median_heldout_rmse_m2_K_W": 0.0024545317087838014,
+          "median_sd_over_oracle": 1.0022675007318709,
+          "p95_sd_over_oracle": 1.0189713191722503,
+          "max_relative_sd_prediction_error": 0.0020758361489139343,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        1.6295893151168528,
+        -0.6295893151168528
+      ],
+      "optimal_sd_m2_K_W": 5.048352706563069e-05,
+      "optimal_expected_sd_m2_K_W": 5.078444786988929e-05,
+      "optimal_mean_m2_K_W": 0.09998781649648099,
+      "optimal_expected_mean_m2_K_W": 0.09998787415594396,
+      "optimal_relative_sd_error": 0.0059254519223989055,
+      "optimal_mean_z": 0.3590375386347848,
+      "solver": "fvm",
+      "target_m2_K_W": 0.1,
+      "shared_frequency_noise": true,
+      "noiseless_estimates_m2_K_W": [
+        0.0999976869388304,
+        0.10000301847690438,
+        0.10000136163703538
+      ],
+      "mean_m2_K_W": [
+        0.09999375206166569,
+        0.10000317973942316,
+        0.10000024997466009
+      ],
+      "expected_mean_m2_K_W": [
+        0.09997965559447305,
+        0.09996660174925431,
+        0.09997065838936492
+      ],
+      "sd_m2_K_W": [
+        0.0026213081138905746,
+        0.006783552193967758,
+        0.005490036115869163
+      ],
+      "expected_sd_m2_K_W": [
+        0.0026254431021747134,
+        0.006794449876656793,
+        0.005498831705126798
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.7024154017560362,
+      "max_relative_sd_error": 0.0016039094977322588,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6296379576400073,
+          "median_heldout_sd_m2_K_W": 5.270521700952003e-05,
+          "median_heldout_rmse_m2_K_W": 5.409490264919633e-05,
+          "median_sd_over_oracle": 1.0378219951224397,
+          "p95_sd_over_oracle": 1.4411382432269448,
+          "max_relative_sd_prediction_error": 0.006278248776224626,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6298195620132203,
+          "median_heldout_sd_m2_K_W": 5.1273163338090634e-05,
+          "median_heldout_rmse_m2_K_W": 5.270532306434782e-05,
+          "median_sd_over_oracle": 1.0096233293596781,
+          "p95_sd_over_oracle": 1.1363447413517505,
+          "max_relative_sd_prediction_error": 0.006278203624733303,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6298210837083797,
+          "median_heldout_sd_m2_K_W": 5.075721027245269e-05,
+          "median_heldout_rmse_m2_K_W": 5.2199387019881135e-05,
+          "median_sd_over_oracle": 0.9994636626254876,
+          "p95_sd_over_oracle": 1.0336676766215647,
+          "max_relative_sd_prediction_error": 0.0062782092431638015,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        0.886262099712989,
+        0.11373790028701099
+      ],
+      "optimal_sd_m2_K_W": 0.0047255361721288275,
+      "optimal_expected_sd_m2_K_W": 0.004722696115386546,
+      "optimal_mean_m2_K_W": 0.5999726787812858,
+      "optimal_expected_mean_m2_K_W": 0.5999509886508141,
+      "optimal_relative_sd_error": 0.0006013634315849004,
+      "optimal_mean_z": 1.452352922165616,
+      "solver": "fvm",
+      "target_m2_K_W": 0.6,
+      "shared_frequency_noise": false,
+      "noiseless_estimates_m2_K_W": [
+        0.5999924983450916,
+        0.5999943044629558,
+        0.599993743190009
+      ],
+      "mean_m2_K_W": [
+        0.5999847388661105,
+        0.599878704863353,
+        0.5999116562107553
+      ],
+      "expected_mean_m2_K_W": [
+        0.599955717546861,
+        0.5999141404117553,
+        0.5999270610087998
+      ],
+      "sd_m2_K_W": [
+        0.005005191091918249,
+        0.014029871937239449,
+        0.009805821030300461
+      ],
+      "expected_sd_m2_K_W": [
+        0.00501659351988075,
+        0.014003525878368405,
+        0.009776853748036331
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.8293981596817996,
+      "max_relative_sd_error": 0.0029628429565029535,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8988171565674725,
+          "median_heldout_sd_m2_K_W": 0.0048785215426884,
+          "median_heldout_rmse_m2_K_W": 0.004878579659903234,
+          "median_sd_over_oracle": 1.032995014604936,
+          "p95_sd_over_oracle": 1.3237250250513464,
+          "max_relative_sd_prediction_error": 0.004513394755628064,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8853490214519888,
+          "median_heldout_sd_m2_K_W": 0.00477313389286901,
+          "median_heldout_rmse_m2_K_W": 0.0047731891661469145,
+          "median_sd_over_oracle": 1.010679869347964,
+          "p95_sd_over_oracle": 1.073606883291409,
+          "max_relative_sd_prediction_error": 0.003951388580150539,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8835530111262273,
+          "median_heldout_sd_m2_K_W": 0.004734051541280329,
+          "median_heldout_rmse_m2_K_W": 0.004734105601241197,
+          "median_sd_over_oracle": 1.0024044371300511,
+          "p95_sd_over_oracle": 1.0185958326198885,
+          "max_relative_sd_prediction_error": 0.0024716553457269086,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        1.5577989381162243,
+        -0.5577989381162244
+      ],
+      "optimal_sd_m2_K_W": 0.0001649140694982282,
+      "optimal_expected_sd_m2_K_W": 0.0001651389476072538,
+      "optimal_mean_m2_K_W": 0.5999788257714883,
+      "optimal_expected_mean_m2_K_W": 0.5999789092286727,
+      "optimal_relative_sd_error": 0.0013617508908947418,
+      "optimal_mean_z": 0.15981377717783007,
+      "solver": "fvm",
+      "target_m2_K_W": 0.6,
+      "shared_frequency_noise": true,
+      "noiseless_estimates_m2_K_W": [
+        0.5999924983450916,
+        0.5999943044629558,
+        0.599993743190009
+      ],
+      "mean_m2_K_W": [
+        0.5999847388661105,
+        0.5999953396296313,
+        0.5999920453142946
+      ],
+      "expected_mean_m2_K_W": [
+        0.599955717546861,
+        0.5999141404117553,
+        0.5999270610087998
+      ],
+      "sd_m2_K_W": [
+        0.005005191091918249,
+        0.013970873603863456,
+        0.01118437994186424
+      ],
+      "expected_sd_m2_K_W": [
+        0.00501659351988075,
+        0.014003525878368405,
+        0.011210428410938075
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.833641576718724,
+      "max_relative_sd_error": 0.0023317180821859074,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 1.557953158848715,
+          "median_heldout_sd_m2_K_W": 0.00017153042635338503,
+          "median_heldout_rmse_m2_K_W": 0.00017282478400492784,
+          "median_sd_over_oracle": 1.0387036422281917,
+          "p95_sd_over_oracle": 1.3683822464760929,
+          "max_relative_sd_prediction_error": 0.0033185197351885964,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 1.558141384705679,
+          "median_heldout_sd_m2_K_W": 0.00016654295653409829,
+          "median_heldout_rmse_m2_K_W": 0.00016788284947577564,
+          "median_sd_over_oracle": 1.0085019854321926,
+          "p95_sd_over_oracle": 1.0860948053364963,
+          "max_relative_sd_prediction_error": 0.0027971203024032,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 1.5580192151366854,
+          "median_heldout_sd_m2_K_W": 0.00016523947463730637,
+          "median_heldout_rmse_m2_K_W": 0.0001665894087856366,
+          "median_sd_over_oracle": 1.0006087421017824,
+          "p95_sd_over_oracle": 1.0216236958317573,
+          "max_relative_sd_prediction_error": 0.0022545863225309493,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        0.8623444772604388,
+        0.13765552273956122
+      ],
+      "optimal_sd_m2_K_W": 0.0020226912499890573,
+      "optimal_expected_sd_m2_K_W": 0.002021482422420741,
+      "optimal_mean_m2_K_W": -4.5571502253563103e-07,
+      "optimal_expected_mean_m2_K_W": -9.703378544903716e-06,
+      "optimal_relative_sd_error": 0.0005979906403879021,
+      "optimal_mean_z": 1.4466452659291043,
+      "solver": "sph",
+      "target_m2_K_W": 0.0,
+      "shared_frequency_noise": false,
+      "noiseless_estimates_m2_K_W": [
+        4.768543572556783e-06,
+        1.677316303746097e-05,
+        1.3042582505988997e-05
+      ],
+      "mean_m2_K_W": [
+        1.5985279013448628e-06,
+        -1.3324541533123577e-05,
+        -8.687017414613329e-06
+      ],
+      "expected_mean_m2_K_W": [
+        -9.51313665161607e-06,
+        -1.0895150896315676e-05,
+        -1.0465673273091867e-05
+      ],
+      "sd_m2_K_W": [
+        0.0021740593547028694,
+        0.0054549447654764155,
+        0.0038229485571428514
+      ],
+      "expected_sd_m2_K_W": [
+        0.0021768553731340654,
+        0.005448452252854135,
+        0.003815725068839425
+      ],
+      "negative_fraction": [
+        0.49996,
+        0.50356,
+        0.50292
+      ],
+      "max_mean_error_in_standard_errors": 1.6141710201226667,
+      "max_relative_sd_error": 0.001893084059545025,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8603447944361042,
+          "median_heldout_sd_m2_K_W": 0.0021040101224854913,
+          "median_heldout_rmse_m2_K_W": 0.0021040004647162555,
+          "median_sd_over_oracle": 1.04082533647061,
+          "p95_sd_over_oracle": 1.3454346567196036,
+          "max_relative_sd_prediction_error": 0.002604880067398563,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8566810600167809,
+          "median_heldout_sd_m2_K_W": 0.002041940745376015,
+          "median_heldout_rmse_m2_K_W": 0.0020419307047674223,
+          "median_sd_over_oracle": 1.0101204555272736,
+          "p95_sd_over_oracle": 1.0823447104060362,
+          "max_relative_sd_prediction_error": 0.0022613957265027462,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8609331063121641,
+          "median_heldout_sd_m2_K_W": 0.002025953287615779,
+          "median_heldout_rmse_m2_K_W": 0.0020259432251611064,
+          "median_sd_over_oracle": 1.002211676512964,
+          "p95_sd_over_oracle": 1.0176468355509274,
+          "max_relative_sd_prediction_error": 0.0017199906608791338,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        1.6651861929754557,
+        -0.6651861929754557
+      ],
+      "optimal_sd_m2_K_W": 4.4117849570165396e-05,
+      "optimal_expected_sd_m2_K_W": 4.441982043818773e-05,
+      "optimal_mean_m2_K_W": -8.486380166991444e-06,
+      "optimal_expected_mean_m2_K_W": -8.593839857546489e-06,
+      "optimal_relative_sd_error": 0.006798110956854009,
+      "optimal_mean_z": 0.765012950206986,
+      "solver": "sph",
+      "target_m2_K_W": 0.0,
+      "shared_frequency_noise": true,
+      "noiseless_estimates_m2_K_W": [
+        4.768543572556783e-06,
+        1.677316303746097e-05,
+        1.3042582505988997e-05
+      ],
+      "mean_m2_K_W": [
+        1.5985279013448628e-06,
+        1.6759558263723762e-05,
+        1.2048084911961501e-05
+      ],
+      "expected_mean_m2_K_W": [
+        -9.51313665161607e-06,
+        -1.0895150896315676e-05,
+        -1.0465673273091867e-05
+      ],
+      "sd_m2_K_W": [
+        0.0021740593547028694,
+        0.005441567911530331,
+        0.0044261076408657965
+      ],
+      "expected_sd_m2_K_W": [
+        0.0021768553731340654,
+        0.005448452252854135,
+        0.0044317209590116185
+      ],
+      "negative_fraction": [
+        0.49996,
+        0.50065,
+        0.5005
+      ],
+      "max_mean_error_in_standard_errors": 1.6141710201226667,
+      "max_relative_sd_error": 0.0012844300387170327,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6644880941415883,
+          "median_heldout_sd_m2_K_W": 4.6444117153901195e-05,
+          "median_heldout_rmse_m2_K_W": 4.722494203532218e-05,
+          "median_sd_over_oracle": 1.045571924779173,
+          "p95_sd_over_oracle": 1.4080742752675073,
+          "max_relative_sd_prediction_error": 0.006904856869402454,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6649666540787194,
+          "median_heldout_sd_m2_K_W": 4.474495707840844e-05,
+          "median_heldout_rmse_m2_K_W": 4.5535895508479386e-05,
+          "median_sd_over_oracle": 1.0073196297736762,
+          "p95_sd_over_oracle": 1.106057647640011,
+          "max_relative_sd_prediction_error": 0.006904792657317804,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6652194893503944,
+          "median_heldout_sd_m2_K_W": 4.4323044570282485e-05,
+          "median_heldout_rmse_m2_K_W": 4.512787263313531e-05,
+          "median_sd_over_oracle": 0.9978213359047701,
+          "p95_sd_over_oracle": 1.0278736793070022,
+          "max_relative_sd_prediction_error": 0.006904869267070568,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        0.8700977518445847,
+        0.12990224815541526
+      ],
+      "optimal_sd_m2_K_W": 0.0024507838556472785,
+      "optimal_expected_sd_m2_K_W": 0.002449048774252239,
+      "optimal_mean_m2_K_W": 0.09999909723667384,
+      "optimal_expected_mean_m2_K_W": 0.09998786179351785,
+      "optimal_relative_sd_error": 0.0007084715556837651,
+      "optimal_mean_z": 1.4507506452233514,
+      "solver": "sph",
+      "target_m2_K_W": 0.1,
+      "shared_frequency_noise": false,
+      "noiseless_estimates_m2_K_W": [
+        0.10000607448056716,
+        0.10002306773134059,
+        0.10001778687336027
+      ],
+      "mean_m2_K_W": [
+        0.10000213952294447,
+        0.09997871971063314,
+        0.09998599770025433
+      ],
+      "expected_mean_m2_K_W": [
+        0.09998804282168289,
+        0.09998664924945752,
+        0.09998708231886286
+      ],
+      "sd_m2_K_W": [
+        0.002621373449381722,
+        0.006805056579855689,
+        0.004765019864882117
+      ],
+      "expected_sd_m2_K_W": [
+        0.002625508394431524,
+        0.006794994363381602,
+        0.004753907896732856
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.6978686328374573,
+      "max_relative_sd_error": 0.0023374386695411697,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8767930255825136,
+          "median_heldout_sd_m2_K_W": 0.0025368508637931015,
+          "median_heldout_rmse_m2_K_W": 0.0025368384898715422,
+          "median_sd_over_oracle": 1.0358515071091923,
+          "p95_sd_over_oracle": 1.3420964681879415,
+          "max_relative_sd_prediction_error": 0.003241876014952627,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8657355634399923,
+          "median_heldout_sd_m2_K_W": 0.0024760632894570487,
+          "median_heldout_rmse_m2_K_W": 0.0024760509252540626,
+          "median_sd_over_oracle": 1.0110306154327442,
+          "p95_sd_over_oracle": 1.0784954096874408,
+          "max_relative_sd_prediction_error": 0.002764789209187102,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8682028053286024,
+          "median_heldout_sd_m2_K_W": 0.0024546007222294042,
+          "median_heldout_rmse_m2_K_W": 0.0024545884835786083,
+          "median_sd_over_oracle": 1.0022669813829497,
+          "p95_sd_over_oracle": 1.0189694826363713,
+          "max_relative_sd_prediction_error": 0.0020755338616806895,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        1.6295336911413798,
+        -0.6295336911413798
+      ],
+      "optimal_sd_m2_K_W": 5.03169252151769e-05,
+      "optimal_expected_sd_m2_K_W": 5.061814582551821e-05,
+      "optimal_mean_m2_K_W": 0.0999888630588616,
+      "optimal_expected_mean_m2_K_W": 0.09998892012234978,
+      "optimal_relative_sd_error": 0.005950842438591564,
+      "optimal_mean_z": 0.35649388367508145,
+      "solver": "sph",
+      "target_m2_K_W": 0.1,
+      "shared_frequency_noise": true,
+      "noiseless_estimates_m2_K_W": [
+        0.10000607448056716,
+        0.10002306773134059,
+        0.10001778687336027
+      ],
+      "mean_m2_K_W": [
+        0.10000213952294447,
+        0.1000232288852277,
+        0.10001667511110947
+      ],
+      "expected_mean_m2_K_W": [
+        0.09998804282168289,
+        0.09998664924945752,
+        0.09998708231886286
+      ],
+      "sd_m2_K_W": [
+        0.002621373449381722,
+        0.006784097466023897,
+        0.005490432558555933
+      ],
+      "expected_sd_m2_K_W": [
+        0.002625508394431524,
+        0.006794994363381602,
+        0.005499227593923824
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.7023555698076247,
+      "max_relative_sd_error": 0.0016036654005820994,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6295785996243028,
+          "median_heldout_sd_m2_K_W": 5.2520979926564974e-05,
+          "median_heldout_rmse_m2_K_W": 5.370083841993281e-05,
+          "median_sd_over_oracle": 1.0375919360540364,
+          "p95_sd_over_oracle": 1.4426796836058886,
+          "max_relative_sd_prediction_error": 0.006299894297668196,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 1.629750163752135,
+          "median_heldout_sd_m2_K_W": 5.1107603522727356e-05,
+          "median_heldout_rmse_m2_K_W": 5.231456087591618e-05,
+          "median_sd_over_oracle": 1.0096696093708433,
+          "p95_sd_over_oracle": 1.136735711038076,
+          "max_relative_sd_prediction_error": 0.006299847412792325,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 1.6297671629236405,
+          "median_heldout_sd_m2_K_W": 5.05917482804568e-05,
+          "median_heldout_rmse_m2_K_W": 5.1804686944296464e-05,
+          "median_sd_over_oracle": 0.9994784964041867,
+          "p95_sd_over_oracle": 1.0337694528180366,
+          "max_relative_sd_prediction_error": 0.006299894961036556,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        0.8862739015260026,
+        0.11372609847399741
+      ],
+      "optimal_sd_m2_K_W": 0.004725690687812983,
+      "optimal_expected_sd_m2_K_W": 0.004722851779098749,
+      "optimal_mean_m2_K_W": 0.5999983254874517,
+      "optimal_expected_mean_m2_K_W": 0.599976633523803,
+      "optimal_relative_sd_error": 0.0006011005314199291,
+      "optimal_mean_z": 1.4524277970121764,
+      "solver": "sph",
+      "target_m2_K_W": 0.6,
+      "shared_frequency_noise": false,
+      "noiseless_estimates_m2_K_W": [
+        0.6000135261985451,
+        0.6000559372527275,
+        0.6000427575052548
+      ],
+      "mean_m2_K_W": [
+        0.6000057665249537,
+        0.5999403370623846,
+        0.5999606700583581
+      ],
+      "expected_mean_m2_K_W": [
+        0.5999767446117847,
+        0.5999757678088938,
+        0.5999760713621932
+      ],
+      "sd_m2_K_W": [
+        0.005005323143111987,
+        0.014031060735034372,
+        0.009806636048137165
+      ],
+      "expected_sd_m2_K_W": [
+        0.005016725468449664,
+        0.01400471405149891,
+        0.009777668742730143
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.8293874808749657,
+      "max_relative_sd_error": 0.002962598362575841,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8988241417895638,
+          "median_heldout_sd_m2_K_W": 0.004878716711850327,
+          "median_heldout_rmse_m2_K_W": 0.00487869546858042,
+          "median_sd_over_oracle": 1.0330022918443826,
+          "p95_sd_over_oracle": 1.3236849047299022,
+          "max_relative_sd_prediction_error": 0.0045131365068871165,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8853622691997245,
+          "median_heldout_sd_m2_K_W": 0.004773295506932055,
+          "median_heldout_rmse_m2_K_W": 0.00477327280218981,
+          "median_sd_over_oracle": 1.0106807772491502,
+          "p95_sd_over_oracle": 1.0736112901126047,
+          "max_relative_sd_prediction_error": 0.003951225423655891,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 0.8835680434757691,
+          "median_heldout_sd_m2_K_W": 0.004734205489096824,
+          "median_heldout_rmse_m2_K_W": 0.004734182226459507,
+          "median_sd_over_oracle": 1.0024039945628447,
+          "p95_sd_over_oracle": 1.0185934733861621,
+          "max_relative_sd_prediction_error": 0.002471259002595927,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "optimal_weights": [
+        1.5577504866153407,
+        -0.5577504866153405
+      ],
+      "optimal_sd_m2_K_W": 0.00016443117955183687,
+      "optimal_expected_sd_m2_K_W": 0.0001646557483518335,
+      "optimal_mean_m2_K_W": 0.5999772065252313,
+      "optimal_expected_mean_m2_K_W": 0.5999772894240726,
+      "optimal_relative_sd_error": 0.0013638685696947261,
+      "optimal_mean_z": 0.15921044744478993,
+      "solver": "sph",
+      "target_m2_K_W": 0.6,
+      "shared_frequency_noise": true,
+      "noiseless_estimates_m2_K_W": [
+        0.6000135261985451,
+        0.6000559372527275,
+        0.6000427575052548
+      ],
+      "mean_m2_K_W": [
+        0.6000057665249537,
+        0.6000569722171205,
+        0.6000410594296349
+      ],
+      "expected_mean_m2_K_W": [
+        0.5999767446117847,
+        0.5999757678088938,
+        0.5999760713621932
+      ],
+      "sd_m2_K_W": [
+        0.005005323143111987,
+        0.013972063375169368,
+        0.011185242752055057
+      ],
+      "expected_sd_m2_K_W": [
+        0.005016725468449664,
+        0.01400471405149891,
+        0.011211290087439383
+      ],
+      "negative_fraction": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mean_error_in_standard_errors": 1.8336032074494732,
+      "max_relative_sd_error": 0.002331406140066661,
+      "passed": true,
+      "calibration_trials": [
+        {
+          "calibration_readings": 8,
+          "batches": 256,
+          "median_first_frequency_weight": 1.5579019758773653,
+          "median_heldout_sd_m2_K_W": 0.0001710504567837193,
+          "median_heldout_rmse_m2_K_W": 0.0001725266188269291,
+          "median_sd_over_oracle": 1.0388368368301464,
+          "p95_sd_over_oracle": 1.3675042513877056,
+          "max_relative_sd_prediction_error": 0.0033177207336713144,
+          "passed": true
+        },
+        {
+          "calibration_readings": 32,
+          "batches": 256,
+          "median_first_frequency_weight": 1.5580940497908597,
+          "median_heldout_sd_m2_K_W": 0.0001660680600320532,
+          "median_heldout_rmse_m2_K_W": 0.00016761678179611584,
+          "median_sd_over_oracle": 1.0085773603069228,
+          "p95_sd_over_oracle": 1.0861248750382737,
+          "max_relative_sd_prediction_error": 0.00279832583710915,
+          "passed": true
+        },
+        {
+          "calibration_readings": 128,
+          "batches": 256,
+          "median_first_frequency_weight": 1.5579663829687544,
+          "median_heldout_sd_m2_K_W": 0.00016475696027143548,
+          "median_heldout_rmse_m2_K_W": 0.00016632331852970973,
+          "median_sd_over_oracle": 1.0006146880422646,
+          "p95_sd_over_oracle": 1.0216755526066748,
+          "max_relative_sd_prediction_error": 0.0022563287592817227,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "draws": 100000,
+  "seed": 261126,
+  "log_amplitude_sd": [
+    0.005,
+    0.015
+  ],
+  "phase_sd_rad": [
+    0.01,
+    0.02
+  ],
+  "calibration_seed": 261127,
+  "columns": [
+    "1 Hz",
+    "2 Hz",
+    "joint"
+  ],
+  "sources": [
+    {
+      "commit": "5a6f4863cdbdc9cbf37c7072b311ce1584b6a44a",
+      "file": "cross_wall_inversion_noise.py",
+      "source_sha256": "f754ff793626c428bcc0ec354103bf021fa0d54402f94db090212505df4dcfeb"
+    },
+    {
+      "commit": "5a6f4863cdbdc9cbf37c7072b311ce1584b6a44a",
+      "file": "cross_wall_resistance_inversion.py",
+      "source_sha256": "d243b0050dac82c2ce4c7bc03b4b954a3a8b84abc2dd946e2f7bd229c9baaba5"
+    },
+    {
+      "commit": "5a6f4863cdbdc9cbf37c7072b311ce1584b6a44a",
+      "file": "cross_wall_reciprocity.py",
+      "source_sha256": "7b6cedd083b2d14eb19676957b7283f5aa9260e21d05646cb159424c83c0de5b"
+    },
+    {
+      "commit": "5a6f4863cdbdc9cbf37c7072b311ce1584b6a44a",
+      "file": "cross_wall_driven_harmonics.py",
+      "source_sha256": "61ff3c3bb0acdb17c96cc7ed77c1ec9c6951ff20c852f2d68bcabbe1d0f7617c"
+    },
+    {
+      "commit": "5a6f4863cdbdc9cbf37c7072b311ce1584b6a44a",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "35b17bea96024065ca93c2ac8157082003a689bd63e04f44d1caf3ba80f68a9c"
+    },
+    {
+      "commit": "5a6f4863cdbdc9cbf37c7072b311ce1584b6a44a",
+      "file": "periodic_contact_reference.py",
+      "source_sha256": "c137848ae4d852048cae7839d1effe3b4cab738f917576794ec0288c69c99e1d"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_wall_inversion_noise.py --unequal --calibration"
+}
