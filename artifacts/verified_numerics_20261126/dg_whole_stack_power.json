@@ -1,0 +1,19 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "e38381f182c27a0246975201171208169e7720a3",
+  "passed": 88,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Manufactured complex linear fields in three materials at 3.2 rad/s. Both exterior Robin walls have independent heaters and heat capacities. Two internal contacts support generation, film exchange and storage on both traces. Recover the three layers with the computed wall and contact temperatures. Compare total generation and exchange in materials, contacts and exterior walls to independently accumulated harmonic storage across all three regions.",
+  "metrics": {
+    "outer_storage_error_W_m2": 2.5523542001313745e-14,
+    "outer_film_error_W_m2": 1.2163910700737489e-14,
+    "outer_material_error_W_m2": 2.7387103111530595e-14,
+    "outer_external_error_W_m2": 1.1657341758564144e-14,
+    "source_max_error_W_m2": 0.0,
+    "film_max_error_W_m2": 1.3715820411409127e-14,
+    "storage_max_error_W_m2": 2.559009884597151e-14,
+    "through_max_error_W_m2": 5.366680326196139e-14,
+    "interface_balance_W_m2": 1.4602703977091186e-15,
+    "whole_stack_balance_W_m2": 1.2126156552395182e-13
+  }
+}
