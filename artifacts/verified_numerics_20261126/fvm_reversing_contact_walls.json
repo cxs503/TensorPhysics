@@ -2,6 +2,17 @@
   "passed": true,
   "runs": [
     {
+      "endpoint_trace_errors_left_right_K": [
+        1.1102230246251565e-14,
+        9.353628982466944e-15
+      ],
+      "interval_trace_errors_left_right_K": [
+        0.0028935185185265944,
+        0.0011574074074153229
+      ],
+      "interval_jump_error_K": 0.0017361111111168503,
+      "interval_flux_error_W_m2": 0.005787037037056519,
+      "interval_contact_law_residual_K": 0.0,
       "cell_balance_J_m2": 1.025525150910589e-14,
       "solver": "fvm",
       "columns": 40,
@@ -19,6 +30,17 @@
       "passed": true
     },
     {
+      "endpoint_trace_errors_left_right_K": [
+        1.0547118733938987e-14,
+        8.076872504148014e-15
+      ],
+      "interval_trace_errors_left_right_K": [
+        0.0007233796296316486,
+        0.00028935185185480217
+      ],
+      "interval_jump_error_K": 0.00043402777778189794,
+      "interval_flux_error_W_m2": 0.001446759259272179,
+      "interval_contact_law_residual_K": 5.551115123125783e-17,
       "cell_balance_J_m2": 5.2262881522491256e-15,
       "solver": "fvm",
       "columns": 40,
@@ -32,6 +54,12 @@
       ],
       "max_step_heat_error_J_m2": 9.042245370988189e-05,
       "reversed_flow": true,
+      "interval_orders_left_right_jump_flux": [
+        2.0,
+        1.9999999999951563,
+        1.999999999991074,
+        1.9999999999919735
+      ],
       "orders": [
         null,
         1.999999999958013,
@@ -41,6 +69,17 @@
       "passed": true
     },
     {
+      "endpoint_trace_errors_left_right_K": [
+        1.5654144647214707e-14,
+        2.67841304690819e-14
+      ],
+      "interval_trace_errors_left_right_K": [
+        0.00018084490742159565,
+        7.233796298874995e-05
+      ],
+      "interval_jump_error_K": 0.00010850694445213582,
+      "interval_flux_error_W_m2": 0.000361689814841748,
+      "interval_contact_law_residual_K": 2.7755575615628914e-17,
       "cell_balance_J_m2": 2.744766219864303e-15,
       "solver": "fvm",
       "columns": 40,
@@ -54,6 +93,12 @@
       ],
       "max_step_heat_error_J_m2": 1.130280672456685e-05,
       "reversed_flow": true,
+      "interval_orders_left_right_jump_flux": [
+        1.9999999998908395,
+        1.9999999995004192,
+        1.9999999999114317,
+        1.9999999999054532
+      ],
       "orders": [
         null,
         1.9999999998926108,
@@ -63,6 +108,17 @@
       "passed": true
     },
     {
+      "endpoint_trace_errors_left_right_K": [
+        2.3370194668359545e-14,
+        3.81084053202585e-14
+      ],
+      "interval_trace_errors_left_right_K": [
+        4.5211226874453114e-05,
+        1.8084490778336182e-05
+      ],
+      "interval_jump_error_K": 2.7126736121318995e-05,
+      "interval_flux_error_W_m2": 9.04224537388032e-05,
+      "interval_contact_law_residual_K": 5.551115123125783e-17,
       "cell_balance_J_m2": 2.1658022597570437e-15,
       "solver": "fvm",
       "columns": 40,
@@ -76,6 +132,12 @@
       ],
       "max_step_heat_error_J_m2": 1.4128508474819945e-06,
       "reversed_flow": true,
+      "interval_orders_left_right_jump_flux": [
+        1.9999999993919784,
+        1.9999999975151046,
+        1.9999999995593725,
+        1.9999999995474158
+      ],
       "orders": [
         null,
         1.9999999997466944,
@@ -85,6 +147,17 @@
       "passed": true
     },
     {
+      "endpoint_trace_errors_left_right_K": [
+        0.001046682878009464,
+        0.00041821315856488406
+      ],
+      "interval_trace_errors_left_right_K": [
+        0.001266041128044404,
+        0.0005299056122014395
+      ],
+      "interval_jump_error_K": 0.0007361355158430061,
+      "interval_flux_error_W_m2": 0.0024537850528110194,
+      "interval_contact_law_residual_K": 0.0,
       "cell_balance_J_m2": 1.9551200935996604e-14,
       "solver": "fvm",
       "columns": 40,
@@ -102,6 +175,17 @@
       "passed": true
     },
     {
+      "endpoint_trace_errors_left_right_K": [
+        0.0002618370095304745,
+        0.00010450510238171895
+      ],
+      "interval_trace_errors_left_right_K": [
+        0.00034284897923980706,
+        0.00013900874812999842
+      ],
+      "interval_jump_error_K": 0.00020384023110975313,
+      "interval_flux_error_W_m2": 0.0006794674370331766,
+      "interval_contact_law_residual_K": 5.551115123125783e-17,
       "cell_balance_J_m2": 8.876146345704328e-15,
       "solver": "fvm",
       "columns": 40,
@@ -115,6 +199,12 @@
       ],
       "max_step_heat_error_J_m2": 0.0001762250908292906,
       "reversed_flow": true,
+      "interval_orders_left_right_jump_flux": [
+        1.8846791402677203,
+        1.9305597291500547,
+        1.8525325593419024,
+        1.8525325593410755
+      ],
       "orders": [
         1.9054407721513043,
         1.8820728023932185,
@@ -124,6 +214,17 @@
       "passed": true
     },
     {
+      "endpoint_trace_errors_left_right_K": [
+        6.544957983251054e-05,
+        2.6119398027768526e-05
+      ],
+      "interval_trace_errors_left_right_K": [
+        8.752894241825793e-05,
+        3.5075299170017615e-05
+      ],
+      "interval_jump_error_K": 5.245364324824031e-05,
+      "interval_flux_error_W_m2": 0.00017484547749502255,
+      "interval_contact_law_residual_K": 5.551115123125783e-17,
       "cell_balance_J_m2": 3.6786979712433165e-15,
       "solver": "fvm",
       "columns": 40,
@@ -137,6 +238,12 @@
       ],
       "max_step_heat_error_J_m2": 3.363285816289363e-05,
       "reversed_flow": true,
+      "interval_orders_left_right_jump_flux": [
+        1.9697411827864506,
+        1.9866483635341996,
+        1.958323932412966,
+        1.9583239324070516
+      ],
       "orders": [
         1.9292809174175252,
         1.9152810581024136,
@@ -146,6 +253,17 @@
       "passed": true
     },
     {
+      "endpoint_trace_errors_left_right_K": [
+        1.636125697634938e-05,
+        6.5292063396726885e-06
+      ],
+      "interval_trace_errors_left_right_K": [
+        2.1938012641553595e-05,
+        8.775873029942538e-06
+      ],
+      "interval_jump_error_K": 1.3162139611555546e-05,
+      "interval_flux_error_W_m2": 4.3873798706295375e-05,
+      "interval_contact_law_residual_K": 5.551115123125783e-17,
       "cell_balance_J_m2": 2.476317761956892e-15,
       "solver": "fvm",
       "columns": 40,
@@ -159,6 +277,12 @@
       ],
       "max_step_heat_error_J_m2": 6.2962386426397565e-06,
       "reversed_flow": true,
+      "interval_orders_left_right_jump_flux": [
+        1.99632730067316,
+        1.9988408511963067,
+        1.9946489510710823,
+        1.9946489510419037
+      ],
       "orders": [
         1.9469464026281185,
         1.9394411924480093,
@@ -170,9 +294,9 @@
   ],
   "sources": [
     {
-      "commit": "edd2f7a853ff6b842045280cc09ff8500c9d120a",
+      "commit": "4096ee06326ba17b0015e0cd05aa092100372088",
       "file": "sph_reversing_contact_walls.py",
-      "source_sha256": "1424babf101bb65e785b16ce84e3d57b226109d4741454b6e7ef5a5c5399456b"
+      "source_sha256": "aafd4ca8c1548d35ced2f77b7c86b1385d6b4448db2415af498048df060ffa15"
     },
     {
       "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
