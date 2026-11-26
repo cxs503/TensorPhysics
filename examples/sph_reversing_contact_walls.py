@@ -31,7 +31,7 @@ def contact_reversal_time(times, heat):
     return float(origin+scale*candidates[0])
 
 
-def measure(n, steps, method, solver="sph"):
+def measure(n, steps, method, solver="sph", *, grading=0.):
     cut = 2*n//5
     k = np.repeat([1., 3.], [cut, n-cut])
     capacity = np.repeat([4., 2.], [cut, n-cut])
@@ -51,6 +51,8 @@ def measure(n, steps, method, solver="sph"):
     def source(t):
         return capacity*((1-weight)*(-4*t)+weight)
     times = np.linspace(0, 1., steps+1)
+    # A smooth mapping preserves nested report times under step doubling.
+    times += grading*times*(1-times)
     exact = (1-weight)*west(times[:, None])+weight*east(times[:, None])
     diagnostics = {}
     if solver == "fvm":
@@ -102,7 +104,10 @@ def measure(n, steps, method, solver="sph"):
     reversed_flow = bool(np.all(np.sign(cuts) == exact_sign))
     reversal = contact_reversal_time(times, cuts[:, 1])
     exact_reversal = (np.sqrt(13.)-1)/4
-    return dict(contact_reversal_s=reversal, exact_reversal_s=exact_reversal,
+    i = np.searchsorted(times, exact_reversal)-1
+    return dict(crossing_interval_s=times[i:i+2].tolist(),
+                reconstruction_only_error_s=abs(contact_reversal_time(times, np.diff(primitive))-exact_reversal),
+                contact_reversal_s=reversal, exact_reversal_s=exact_reversal,
                 contact_reversal_error_s=abs(reversal-exact_reversal), **diagnostics, solver=solver, columns=n, steps=steps, method=method, temperature_error_K=t_error,
                 west_contact_east_heat_errors_J_m2=h_errors.tolist(), max_step_heat_error_J_m2=float(step_error),
                 reversed_flow=reversed_flow)
