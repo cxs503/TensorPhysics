@@ -4,6 +4,7 @@ import json
 
 import numpy as np
 from numpy.polynomial import Polynomial
+from scipy.optimize import brentq
 from tensorsph import heat_conduction_2d as sph
 
 from conduction_provenance import provenance
@@ -67,6 +68,7 @@ def measure(n, sign, resistance, balanced=False, *, fvm=False):
         # Both walls have the same temperature and the net source vanishes.
         # Each layer has a fixed source sign, so a flux reversal is unique there.
         roots = []
+        quadratic_roots = []
         exact_roots = []
         for i, (width, polynomial, face_x) in enumerate(zip(lengths, fluxes, local_faces)):
             origin = 0. if i == 0 else lengths[0]
@@ -76,11 +78,24 @@ def measure(n, sign, resistance, balanced=False, *, fvm=False):
             assert np.all(direction*np.diff(numerical) > 0)
             assert numerical[0]*numerical[-1] < 0
             roots.append(origin+np.interp(0., direction*numerical, face_x))
+            # Recover q within the bracketing cell from its numerical face
+            # values and the slope of the sampled source inside this material.
+            layer_source = source[:cut] if i == 0 else source[cut:]
+            dx = 1/n
+            curvature = .5*dx*(layer_source[-1]-layer_source[0])/(len(layer_source)-1)
+            cell = np.searchsorted(direction*numerical, 0.)-1
+            left, right = numerical[cell:cell+2]
+            def local_flux(f):
+                return (1-f)*left+f*right+curvature*f*(f-1)
+            fraction = brentq(local_flux, 0., 1.)
+            quadratic_roots.append(origin+face_x[cell]+dx*fraction)
             valid = [v.real for v in (polynomial+correction).roots() if v.imag == 0 and 0 < v.real < width]
             assert len(valid) == 1
             exact_roots.append(origin+valid[0])
         row.update(wall_balance_W_m2=float(abs(q[-1]-q[0])),
                    flux_reversals_m=roots, analytical_flux_reversals_m=exact_roots,
+                   quadratic_flux_reversals_m=quadratic_roots,
+                   max_quadratic_reversal_error_m=float(np.max(np.abs(np.subtract(quadratic_roots, exact_roots)))),
                    max_reversal_error_m=float(np.max(np.abs(np.subtract(roots, exact_roots)))))
     return row
 
@@ -102,6 +117,7 @@ if __name__ == "__main__":
     for sign in (-1., 1.):
         for resistance in (0., .25):
             previous = None
+            previous_root_error = None
             for n in (16, 32, 64, 128):
                 row = measure(n, sign, resistance, balanced)
                 errors = np.array([row["temperature_error_K"], row["wall_flux_error_W_m2"]])
@@ -111,7 +127,13 @@ if __name__ == "__main__":
                 if balanced:
                     assert row["wall_balance_W_m2"] < 1e-10
                     assert row["west_outward_W_m2"] > 0 > row["east_outward_W_m2"]
+                    root_error = row["max_quadratic_reversal_error_m"]
+                    if previous_root_error is not None:
+                        row["quadratic_reversal_order"] = float(np.log2(previous_root_error/root_error))
+                    previous_root_error = root_error
                     if n == 128:
+                        assert row["quadratic_reversal_order"] > 1.8
+                        assert root_error < 1.1e-5
                         assert row["max_reversal_error_m"] < 2e-4
                 if n == 128:
                     np.testing.assert_array_less(1.7, orders)
@@ -127,6 +149,7 @@ if __name__ == "__main__":
                     if balanced:
                         assert fv["wall_balance_W_m2"] < 1e-10
                         assert fv["west_outward_W_m2"] > 0 > fv["east_outward_W_m2"]
+                        assert fv["max_quadratic_reversal_error_m"] < 1e-10
                         if n == 128:
                             assert fv["max_reversal_error_m"] < 2e-4
                         fv["max_reversal_difference_from_SPH_m"] = float(np.max(np.abs(
