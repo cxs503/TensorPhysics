@@ -1,0 +1,14 @@
+{
+  "repository": "cxs503/TensorDG",
+  "commit": "3657c322cd06e6b0eebd83704a650ae9ae04018c",
+  "passed": 88,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q -o junit_family=legacy tests/test_heat_1d.py --junitxml=results.xml",
+  "reference": "Three layers with manufactured linear complex temperature fields and distinct constant material fluxes. At 3.2 rad/s both sides of a perfect and a resistive contact store heat, exchange with independent ambient reservoirs, and have independent sources. Contact crossing rates are prescribed in the analytic reference and recovered from the composed response. Errors are maxima across the two contacts and both traces where applicable.",
+  "metrics": {
+    "source_max_error_W_m2": 0.0,
+    "film_max_error_W_m2": 4.2919131438663607e-14,
+    "storage_max_error_W_m2": 9.715942222004933e-14,
+    "through_max_error_W_m2": 1.1529976135141015e-13,
+    "interface_balance_W_m2": 1.2412670766236366e-15
+  }
+}
