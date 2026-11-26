@@ -1,0 +1,114 @@
+{
+  "command": "python examples/bem_fem_mean_heat_flux.py",
+  "reference_flux_W_m2": [
+    [
+      0.4464645750518268,
+      1.2444485263201845
+    ],
+    [
+      2.0423653651349323,
+      2.0994897768022986
+    ]
+  ],
+  "runs": [
+    {
+      "solver": "TensorBEM_quadratic",
+      "segments_per_side": 4,
+      "component_errors_W_m2": [
+        0.0001246784044505805,
+        6.064762441086741e-05
+      ],
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "segments_per_side": 4,
+      "component_errors_W_m2": [
+        0.02511016739127736,
+        0.013386259111039018
+      ],
+      "passed": true
+    },
+    {
+      "solver": "TensorBEM_quadratic",
+      "segments_per_side": 8,
+      "component_errors_W_m2": [
+        9.820729368528208e-06,
+        4.910559965046614e-06
+      ],
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "segments_per_side": 8,
+      "component_errors_W_m2": [
+        0.006457156942443813,
+        0.0034502790223929418
+      ],
+      "passed": true
+    },
+    {
+      "solver": "TensorBEM_quadratic",
+      "segments_per_side": 16,
+      "component_errors_W_m2": [
+        7.726417915192923e-07,
+        3.9255381303064996e-07
+      ],
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "segments_per_side": 16,
+      "component_errors_W_m2": [
+        0.001625081235432352,
+        0.0008688694565057643
+      ],
+      "passed": true
+    },
+    {
+      "solver": "TensorBEM_quadratic",
+      "segments_per_side": 32,
+      "component_errors_W_m2": [
+        6.071440149002814e-08,
+        3.11214594103307e-08
+      ],
+      "passed": true
+    },
+    {
+      "solver": "TensorFEM_Q4",
+      "segments_per_side": 32,
+      "component_errors_W_m2": [
+        0.0004069379843857978,
+        0.0002176082222214416
+      ],
+      "passed": true
+    }
+  ],
+  "sources": [
+    {
+      "commit": "cad1f3baf02b65dd1e61db5f29acbfb35fc1d672",
+      "file": "bem_fem_mean_heat_flux.py",
+      "source_sha256": "c48ebd9fcc0198ca4da39199ce4d9114a8a6c7c9f1576b4d52307d87590b7de9"
+    },
+    {
+      "commit": "7a8aae9655536f4b421a3271ae910041f681a8c6",
+      "file": "harmonic_conduction.py",
+      "source_sha256": "d14dc424f64b060e3efc8f0b8beb41bee1f5bed9c148c13da5588a68f44855a2"
+    },
+    {
+      "commit": "7a8aae9655536f4b421a3271ae910041f681a8c6",
+      "file": "geometry.py",
+      "source_sha256": "f0e40cc73a762ed9900d4cd4bfac72e137a0aeb14a11752cb78544840cd9ba6b"
+    },
+    {
+      "commit": "8fb89fbe4751b71f153443f38686e40868954ec8",
+      "file": "thermal.py",
+      "source_sha256": "152882e6a47ec91f55e0f3fa0217a997171f94f16d39c9318da7b8ba8bf585da"
+    },
+    {
+      "commit": "8fb89fbe4751b71f153443f38686e40868954ec8",
+      "file": "thermal_analytic.py",
+      "source_sha256": "f0729ba4a97aff1cd4eb6cccc8da1980eeb80944c04afcbc61f84aa2181d5669"
+    }
+  ]
+}
