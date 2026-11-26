@@ -7,6 +7,30 @@ import numpy as np
 from conduction_provenance import provenance
 
 
+def contact_reversal_time(times, heat):
+    """Locate a single east-to-west crossing using three interval heat integrals."""
+    mean_flux = heat/np.diff(times)
+    crossings = np.flatnonzero((mean_flux[:-1] > 0) & (mean_flux[1:] <= 0))
+    if len(crossings) != 1 or len(heat) < 3:
+        raise ValueError("expected a single positive-to-negative crossing and at least three intervals")
+    i = crossings[0]
+    start = max(0, i-1)
+    # Fit the interval averages of 1, u and u² in local time coordinates.
+    # This preserves each measured heat even when a step straddles the zero.
+    origin = times[i+1]
+    scale = times[i+1]-times[i]
+    u = (times[start:start+4]-origin)/scale
+    a, b = u[:-1], u[1:]
+    moments = np.column_stack((np.ones(3), (a+b)/2, (a*a+a*b+b*b)/3))
+    coefficients = np.linalg.solve(moments, mean_flux[start:start+3])
+    roots = np.polynomial.polynomial.polyroots(coefficients)
+    candidates = [r.real for r in roots if np.isreal(r) and u[0] <= r.real <= u[-1]
+                  and coefficients[1]+2*coefficients[2]*r.real < 0]
+    if len(candidates) != 1:
+        raise ValueError("no unique decreasing zero in the local reconstruction")
+    return float(origin+scale*candidates[0])
+
+
 def measure(n, steps, method, solver="sph"):
     cut = 2*n//5
     k = np.repeat([1., 3.], [cut, n-cut])
@@ -76,7 +100,10 @@ def measure(n, steps, method, solver="sph"):
     h_errors = np.max(abs(cumulative-primitive[1:, None]), axis=0)
     exact_sign = np.sign(np.diff(primitive))[:, None]
     reversed_flow = bool(np.all(np.sign(cuts) == exact_sign))
-    return dict(**diagnostics, solver=solver, columns=n, steps=steps, method=method, temperature_error_K=t_error,
+    reversal = contact_reversal_time(times, cuts[:, 1])
+    exact_reversal = (np.sqrt(13.)-1)/4
+    return dict(contact_reversal_s=reversal, exact_reversal_s=exact_reversal,
+                contact_reversal_error_s=abs(reversal-exact_reversal), **diagnostics, solver=solver, columns=n, steps=steps, method=method, temperature_error_K=t_error,
                 west_contact_east_heat_errors_J_m2=h_errors.tolist(), max_step_heat_error_J_m2=float(step_error),
                 reversed_flow=reversed_flow)
 
@@ -97,6 +124,7 @@ if __name__ == "__main__":
     for method in methods:
         previous = None
         previous_interface = None
+        previous_reversal = None
         for steps in (8, 16, 32, 64):
             row = measure(40, steps, method, solver)
             errors = np.r_[row["temperature_error_K"], row["west_contact_east_heat_errors_J_m2"]]
@@ -128,6 +156,14 @@ if __name__ == "__main__":
                     passed &= max(row["endpoint_trace_errors_left_right_K"]) < endpoint_limit
                     passed &= max(interface_errors) < 1e-4 and min(row["interval_orders_left_right_jump_flux"]) > 1.8
                 previous_interface = interface_errors
+            reversal_error = row["contact_reversal_error_s"]
+            if method == "exponential_quadratic":
+                passed &= reversal_error < 1e-10
+            elif previous_reversal is not None:
+                row["reversal_order"] = np.log2(previous_reversal/reversal_error)
+                if steps == 64:
+                    passed &= row["reversal_order"] > 1.8 and reversal_error < 1e-4
+            previous_reversal = reversal_error
             row.update(orders=orders, passed=bool(passed))
             rows.append(row)
             previous = errors
