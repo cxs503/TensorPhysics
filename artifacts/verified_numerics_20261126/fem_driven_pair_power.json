@@ -1,0 +1,45 @@
+{
+  "repository": "cxs503/TensorFEM",
+  "commit": "3dd95a760d75fa91383f1e38c3103fb479b69106",
+  "passed": 124,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m pytest -q -o junit_family=legacy tests/test_thermal.py --junitxml=results.xml",
+  "reference": "Manufactured piecewise affine temperature phasor for a stepped two-material LINE2 rod. Prescribe rightward interface power q=0.75-0.25i W, G=2.5 W/K, temperature jump q/G and slopes -q/(k*A). The volumetric source i*omega*C*T balances local storage. Compare solved nodal temperatures, signed contact power and the adjacent element weak-form power balances. Three angular frequencies on CPU dense and sparse solves. This checks a representable field and does not measure mesh convergence.",
+  "runs": {
+    "test_driven_two_material_rod_contact_pair_power[0.125-False]": {
+      "temperature_K": 3.554447978966673e-16,
+      "contact_W": 6.473657049138938e-16,
+      "left_balance_W": 1.5700924586837752e-16,
+      "right_balance_W": 2.7755575615628914e-17
+    },
+    "test_driven_two_material_rod_contact_pair_power[0.125-True]": {
+      "temperature_K": 2.2887833992611187e-16,
+      "contact_W": 1.2412670766236366e-16,
+      "left_balance_W": 2.0014830212433605e-16,
+      "right_balance_W": 2.220446049250313e-16
+    },
+    "test_driven_two_material_rod_contact_pair_power[2.0-False]": {
+      "temperature_K": 2.3714374201337736e-16,
+      "contact_W": 2.482534153247273e-16,
+      "left_balance_W": 7.021666937153402e-16,
+      "right_balance_W": 4.440892098500626e-16
+    },
+    "test_driven_two_material_rod_contact_pair_power[2.0-True]": {
+      "temperature_K": 2.7755575615628914e-16,
+      "contact_W": 3.510833468576701e-16,
+      "left_balance_W": 8.08254562088053e-16,
+      "right_balance_W": 3.3422138886441676e-16
+    },
+    "test_driven_two_material_rod_contact_pair_power[16.0-False]": {
+      "temperature_K": 2.482534153247273e-16,
+      "contact_W": 4.847302891456678e-16,
+      "left_balance_W": 1.2710114229825055e-15,
+      "right_balance_W": 4.718447854656915e-16
+    },
+    "test_driven_two_material_rod_contact_pair_power[16.0-True]": {
+      "temperature_K": 1.1102230246251565e-16,
+      "contact_W": 5.881301029635769e-16,
+      "left_balance_W": 8.010741897413915e-16,
+      "right_balance_W": 1.023951298512e-15
+    }
+  }
+}
