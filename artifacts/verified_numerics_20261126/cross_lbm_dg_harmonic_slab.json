@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "lbm_intervals": 12,
+      "dg_cells": 6,
+      "errors": {
+        "lbm_temperature_K": 0.03500720227590317,
+        "dg_temperature_K": 0.0012457810751417967,
+        "cross_temperature_K": 0.03454754656890174,
+        "lbm_flux_W_m2": 0.06702138705974342,
+        "dg_flux_W_m2": 0.030281786643577932,
+        "cross_flux_W_m2": 0.0398093102382275
+      },
+      "orders": {}
+    },
+    {
+      "lbm_intervals": 24,
+      "dg_cells": 12,
+      "errors": {
+        "lbm_temperature_K": 0.014557155313170282,
+        "dg_temperature_K": 0.00012639041689163193,
+        "cross_temperature_K": 0.014564793103503492,
+        "lbm_flux_W_m2": 0.02411809593387647,
+        "dg_flux_W_m2": 0.00911735934031847,
+        "cross_flux_W_m2": 0.015261710006103024
+      },
+      "orders": {
+        "lbm_temperature_K": 1.2659233095128928,
+        "dg_temperature_K": 3.3010915759915678,
+        "cross_temperature_K": 1.2460980519314644,
+        "lbm_flux_W_m2": 1.4745055301447514,
+        "dg_flux_W_m2": 1.731762385296107,
+        "cross_flux_W_m2": 1.3831892558487358
+      }
+    },
+    {
+      "lbm_intervals": 48,
+      "dg_cells": 24,
+      "errors": {
+        "lbm_temperature_K": 0.004743976462774257,
+        "dg_temperature_K": 9.164136540728093e-06,
+        "cross_temperature_K": 0.0047434506607044015,
+        "lbm_flux_W_m2": 0.007316115205817562,
+        "dg_flux_W_m2": 0.002457569275978698,
+        "cross_flux_W_m2": 0.004882279821379377
+      },
+      "orders": {
+        "lbm_temperature_K": 1.617559701708632,
+        "dg_temperature_K": 3.7857443159779858,
+        "cross_temperature_K": 1.6184763617088336,
+        "lbm_flux_W_m2": 1.7209663161126227,
+        "dg_flux_W_m2": 1.8913839522886287,
+        "cross_flux_W_m2": 1.6442897299825265
+      }
+    },
+    {
+      "lbm_intervals": 96,
+      "dg_cells": 48,
+      "errors": {
+        "lbm_temperature_K": 0.0013567926229407026,
+        "dg_temperature_K": 5.934335266615912e-07,
+        "cross_temperature_K": 0.0013565539780338977,
+        "lbm_flux_W_m2": 0.00201888389566323,
+        "dg_flux_W_m2": 0.0006326072468968547,
+        "cross_flux_W_m2": 0.0013881179871079526
+      },
+      "orders": {
+        "lbm_temperature_K": 1.8058966210612533,
+        "dg_temperature_K": 3.9488406133542546,
+        "cross_temperature_K": 1.805990486565268,
+        "lbm_flux_W_m2": 1.8575198483166044,
+        "dg_flux_W_m2": 1.9578500970074821,
+        "cross_flux_W_m2": 1.8144247844669699
+      }
+    }
+  ],
+  "reference": "Unit slab, period 0.5 s, alpha=0.075, capacity=2.3, wall phasors 0.4+0.15i and -0.2+0.3i about 1 K. Project the second LBM period, compare DG center temperatures and quarter-cell Fourier fluxes to the exact sinh solution. Errors are maxima over shared samples.",
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorLBM/src:../TensorDG python examples/cross_lbm_dg_harmonic_slab.py",
+  "sources": [
+    {
+      "commit": "244bea61097c25d1a99087dcf39f64b9ea34cf99",
+      "file": "cross_lbm_dg_harmonic_slab.py",
+      "source_sha256": "055eb8fe9b030a9972a6672ca1b744869c800c4e595ef35faa7097a33f095ed3"
+    },
+    {
+      "commit": "6abb07094620e2269ac54725f4384f7609eb09c3",
+      "file": "thermal3d.py",
+      "source_sha256": "91e106c50a972b30b2054e3b40744b6cdefe547d30387ab92f13569fd8ef3f06"
+    },
+    {
+      "commit": "6abb07094620e2269ac54725f4384f7609eb09c3",
+      "file": "thermal_common.py",
+      "source_sha256": "af43d1f5927b40f249df3e18a16dd29ea40188d67c9038513d042b4b3111c944"
+    },
+    {
+      "commit": "e38381f182c27a0246975201171208169e7720a3",
+      "file": "heat_1d.py",
+      "source_sha256": "6ab143a3f5a566a7392861ad503d6d3ec9c80d5bb43db5061620c82bc46cf050"
+    }
+  ]
+}
