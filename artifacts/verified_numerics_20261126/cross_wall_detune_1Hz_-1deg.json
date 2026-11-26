@@ -1,0 +1,404 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        0.0009146934681035052,
+        0.016857780996349287
+      ],
+      "amplitude_relative_error": 0.032687248476560904,
+      "signal_phase_error_rad": 0.04547962237779322,
+      "weak_signal_complex_relative_error": 0.05539762851016638,
+      "retained_relative_error": 0.0036104278672805736,
+      "columns": 16,
+      "steps": 64,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 5.773159728050814e-15,
+      "step_heat_superposition_error_J_m2": 2.2724877535296173e-15,
+      "contact_flux_W_m2": [
+        [
+          0.008290671687151878,
+          0.015022674275957404
+        ],
+        [
+          0.23779918047835874,
+          -0.449773937599252
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        0.0003421841892708082,
+        0.01730340418981774
+      ],
+      "amplitude_relative_error": 0.008381544935614382,
+      "signal_phase_error_rad": 0.011046318051419436,
+      "weak_signal_complex_relative_error": 0.013829225645465007,
+      "retained_relative_error": 0.0009008417775898566,
+      "columns": 32,
+      "steps": 128,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 1.1546319456101628e-14,
+      "step_heat_superposition_error_J_m2": 2.3037127760972e-15,
+      "contact_flux_W_m2": [
+        [
+          0.007963780520591145,
+          0.015683611402944494
+        ],
+        [
+          0.23896662397110133,
+          -0.44904148568555735
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": [
+        2.0021038415812042,
+        2.002824178474604
+      ],
+      "passed": true
+    },
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        0.0001997063894387603,
+        0.017415126227419208
+      ],
+      "amplitude_relative_error": 0.0021084970932622182,
+      "signal_phase_error_rad": 0.002740260934716891,
+      "weak_signal_complex_relative_error": 0.003455278936039349,
+      "retained_relative_error": 0.00022501654657617964,
+      "columns": 64,
+      "steps": 256,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 3.6193270602780103e-14,
+      "step_heat_superposition_error_J_m2": 2.9950000812739574e-15,
+      "contact_flux_W_m2": [
+        [
+          0.007882791949691572,
+          0.015848847902650995
+        ],
+        [
+          0.23925757605692594,
+          -0.44885842865713044
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": [
+        2.0008462907975875,
+        2.0012426418145033
+      ],
+      "passed": true
+    },
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        0.00016414802638304576,
+        0.017443083511448992
+      ],
+      "amplitude_relative_error": 0.0005279956415960019,
+      "signal_phase_error_rad": 0.0006835696015644698,
+      "weak_signal_complex_relative_error": 0.0008635971655762358,
+      "retained_relative_error": 5.6231676673182965e-05,
+      "columns": 128,
+      "steps": 512,
+      "solver": "fvm",
+      "temperature_superposition_error_K": 6.350475700855895e-14,
+      "step_heat_superposition_error_J_m2": 3.745701665502921e-15,
+      "contact_flux_W_m2": [
+        [
+          0.007862612547878144,
+          0.015890154520560505
+        ],
+        [
+          0.23933020792523113,
+          -0.4488126594741676
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": [
+        2.0003717670902366,
+        2.000576124011661
+      ],
+      "passed": true
+    },
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        -0.00019298419143130572,
+        0.017923561504035703
+      ],
+      "amplitude_relative_error": 0.027016988250762708,
+      "signal_phase_error_rad": 0.019493297428661616,
+      "weak_signal_complex_relative_error": 0.033468792777589074,
+      "retained_relative_error": 0.002764707578603554,
+      "columns": 16,
+      "steps": 64,
+      "solver": "sph",
+      "temperature_superposition_error_K": 9.992007221626409e-16,
+      "step_heat_superposition_error_J_m2": 3.8510861166685117e-16,
+      "contact_flux_W_m2": [
+        [
+          0.007748230843057105,
+          0.016487760228578098
+        ],
+        [
+          0.23802148417424365,
+          -0.44834927940467373
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": null,
+      "passed": true
+    },
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        6.459262350722722e-05,
+        0.017569667873668128
+      ],
+      "amplitude_relative_error": 0.00668739672094909,
+      "signal_phase_error_rad": 0.005050291478022867,
+      "weak_signal_complex_relative_error": 0.008390305677738352,
+      "retained_relative_error": 0.0006908832850564155,
+      "columns": 32,
+      "steps": 128,
+      "solver": "sph",
+      "temperature_superposition_error_K": 2.886579864025407e-15,
+      "step_heat_superposition_error_J_m2": 6.106226635438361e-16,
+      "contact_flux_W_m2": [
+        [
+          0.007827474978089494,
+          0.01605001403569991
+        ],
+        [
+          0.23902097486607926,
+          -0.4486864256853799
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": [
+        1.9960212364553023,
+        2.0006129821530143
+      ],
+      "passed": true
+    },
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        0.00013026644424015888,
+        0.01748168070838884
+      ],
+      "amplitude_relative_error": 0.0016670448111588687,
+      "signal_phase_error_rad": 0.001275186905341572,
+      "weak_signal_complex_relative_error": 0.002099488177998496,
+      "retained_relative_error": 0.00017258971361148873,
+      "columns": 64,
+      "steps": 256,
+      "solver": "sph",
+      "temperature_superposition_error_K": 1.0769163338864018e-14,
+      "step_heat_superposition_error_J_m2": 7.563394355258879e-16,
+      "contact_flux_W_m2": [
+        [
+          0.007848672021156404,
+          0.01594045668564555
+        ],
+        [
+          0.23927108805292538,
+          -0.44876973305384504
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": [
+        1.9986857077244118,
+        2.0010955262016994
+      ],
+      "passed": true
+    },
+    {
+      "detuned_frequency_Hz": 1,
+      "phase_offset_deg": -1.0,
+      "normalized_target": [
+        0.00015230484360876083,
+        0.01745240643728351
+      ],
+      "normalized_measured": [
+        0.000146785410468468,
+        0.017459721420500833
+      ],
+      "amplitude_relative_error": 0.0004163984531371234,
+      "signal_phase_error_rad": 0.00031975654744063973,
+      "weak_signal_complex_relative_error": 0.0005250471358669197,
+      "retained_relative_error": 4.312527773102965e-05,
+      "columns": 128,
+      "steps": 512,
+      "solver": "sph",
+      "temperature_superposition_error_K": 4.196643033083092e-14,
+      "step_heat_superposition_error_J_m2": 1.4714791884973266e-15,
+      "contact_flux_W_m2": [
+        [
+          0.007854079844848068,
+          0.015913057228150156
+        ],
+        [
+          0.2393335812171325,
+          -0.44879048990915044
+        ]
+      ],
+      "exact_contact_flux_W_m2": [
+        [
+          0.007855896564305076,
+          0.015903922652437952
+        ],
+        [
+          0.2393543991141932,
+          -0.44879740081689734
+        ]
+      ],
+      "orders": [
+        1.9995188135346695,
+        2.0007408290884534
+      ],
+      "passed": true
+    }
+  ],
+  "frequencies_Hz": [
+    1,
+    2
+  ],
+  "sources": [
+    {
+      "commit": "9b0fbbebbfc0f3c848828fc93dd145bbf36f99f4",
+      "file": "cross_dual_wall_harmonics.py",
+      "source_sha256": "19cbe70f1a2a805736eebe8326a59bdecd9d00c6d2e3ef103561f16e0dc53e8e"
+    },
+    {
+      "commit": "9b0fbbebbfc0f3c848828fc93dd145bbf36f99f4",
+      "file": "cross_wall_driven_harmonics.py",
+      "source_sha256": "8bbfed6dfa5bc863cdc41c720f0c71da2feca0d4fed0f1b9f577a905faa80c97"
+    },
+    {
+      "commit": "9b0fbbebbfc0f3c848828fc93dd145bbf36f99f4",
+      "file": "periodic_contact_reference.py",
+      "source_sha256": "e7e59f4710c693e3dbfa00a28b5e5ee1c1ed9bcf3f474c96cc07c22537319c62"
+    },
+    {
+      "commit": "9b0fbbebbfc0f3c848828fc93dd145bbf36f99f4",
+      "file": "cross_periodic_contact_reversals.py",
+      "source_sha256": "35b17bea96024065ca93c2ac8157082003a689bd63e04f44d1caf3ba80f68a9c"
+    },
+    {
+      "commit": "d6fc441321ed04b0c0a6f54e15878531279da82f",
+      "file": "rod.py",
+      "source_sha256": "4f49f6ad5be9776a2b2c62eeda410a007c5ab9d40710dc7d8d8e516717c55496"
+    },
+    {
+      "commit": "30b90e9bdb5dfdac0250a1ee300e9871dd5eefe1",
+      "file": "heat_conduction_2d.py",
+      "source_sha256": "4e739dd207dc8cbcbeac8fa21ce17b0b7d91e933b30229a2d89a768d75cc5be3"
+    }
+  ],
+  "reproduction": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=../TensorFVM/src:../TensorSPH/src python examples/cross_dual_wall_harmonics.py --cancel-hz 1 --phase-offset-deg -1.0"
+}
